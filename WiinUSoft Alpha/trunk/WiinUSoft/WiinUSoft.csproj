@@ -47,16 +47,12 @@
     <StartupObject>WiinUSoft.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyHook, Version=2.7.5159.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\WiiUSoft\EasyHook NetFX4.0\EasyHook.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Nintroller">
-      <HintPath>..\..\WiiUSoft\Nintroller.dll</HintPath>
+      <HintPath>..\..\Personal\Library Files\Nintroller.dll</HintPath>
     </Reference>
     <Reference Include="ScpControl">
-      <HintPath>..\..\..\..\Visual Studio 2013\Projects\SCP_Driver_Test\SCP_Driver_Test\Libraries\ScpControl.dll</HintPath>
+      <HintPath>..\..\Personal\Library Files\ScpControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -70,10 +66,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="XAgentCS">
-      <HintPath>..\XAgentCS\obj\Debug\XAgentCS.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Forms\Configure.cs">
@@ -87,12 +79,6 @@
     </Compile>
     <Compile Include="Controls\DeviceControl.Designer.cs">
       <DependentUpon>DeviceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\LogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\LogForm.Designer.cs">
-      <DependentUpon>LogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
@@ -114,9 +100,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DeviceControl.resx">
       <DependentUpon>DeviceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LogForm.resx">
-      <DependentUpon>LogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

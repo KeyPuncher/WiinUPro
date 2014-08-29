@@ -34,7 +34,6 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.controllerIcons = new System.Windows.Forms.ImageList(this.components);
-            this.timer = new System.Windows.Forms.Timer(this.components);
             this.flowPanelConnected = new System.Windows.Forms.FlowLayoutPanel();
             this.flowPanelAvailable = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
@@ -62,11 +61,6 @@
             this.controllerIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("controllerIcons.ImageStream")));
             this.controllerIcons.TransparentColor = System.Drawing.Color.Transparent;
             this.controllerIcons.Images.SetKeyName(0, "ProController_white_24.png");
-            // 
-            // timer
-            // 
-            this.timer.Interval = 2000;
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // flowPanelConnected
             // 
@@ -113,7 +107,6 @@
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ImageList controllerIcons;
-        private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.FlowLayoutPanel flowPanelConnected;
         private System.Windows.Forms.FlowLayoutPanel flowPanelAvailable;
     }

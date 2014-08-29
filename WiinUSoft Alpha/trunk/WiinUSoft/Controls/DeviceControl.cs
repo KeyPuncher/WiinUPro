@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Diagnostics;
 using NintrollerLib;
-using XAgentCS.Interface;
 using ScpControl;
 
 namespace WiinUSoft
@@ -149,46 +148,6 @@ namespace WiinUSoft
         private void ControllerUpdate(NintrollerLib.StateChangeEventArgs args)
         {
             if (playerNum > 3) return;
-
-            #region IPC
-            if (Main.useIPC)
-            {
-                XControllers newState = new XControllers();
-
-                newState.SetValueOR(assignments["A"], args.ProController.A);
-                newState.SetValueOR(assignments["B"], args.ProController.B);
-                newState.SetValueOR(assignments["X"], args.ProController.X);
-                newState.SetValueOR(assignments["Y"], args.ProController.Y);
-                newState.SetValueOR(assignments["L"], args.ProController.L);
-                newState.SetValueOR(assignments["R"], args.ProController.R);
-                newState.SetValueOR(assignments["ZL"], args.ProController.ZL);
-                newState.SetValueOR(assignments["ZR"], args.ProController.ZR);
-                newState.SetValueOR(assignments["LS"], args.ProController.LS);
-                newState.SetValueOR(assignments["RS"], args.ProController.RS);
-                newState.SetValueOR(assignments["Up"], args.ProController.Up);
-                newState.SetValueOR(assignments["Down"], args.ProController.Down);
-                newState.SetValueOR(assignments["Left"], args.ProController.Left);
-                newState.SetValueOR(assignments["Right"], args.ProController.Right);
-                newState.SetValueOR(assignments["Start"], args.ProController.Start);
-                newState.SetValueOR(assignments["Select"], args.ProController.Select);
-                newState.SetValueOR(assignments["Home"], args.ProController.Home);
-
-                newState.LX = (short)((args.ProController.LeftJoy.X > 1 ? 1 : (args.ProController.LeftJoy.X < -1 ? -1 : args.ProController.LeftJoy.X)) * (float)xValue.Axis);
-                newState.LY = (short)((args.ProController.LeftJoy.Y > 1 ? 1 : (args.ProController.LeftJoy.Y < -1 ? -1 : args.ProController.LeftJoy.Y)) * (float)xValue.Axis);
-                newState.RX = (short)((args.ProController.RightJoy.X > 1 ? 1 : (args.ProController.RightJoy.X < -1 ? -1 : args.ProController.RightJoy.X)) * (float)xValue.Axis);
-                newState.RY = (short)((args.ProController.RightJoy.Y > 1 ? 1 : (args.ProController.RightJoy.Y < -1 ? -1 : args.ProController.RightJoy.Y)) * (float)xValue.Axis);
-
-                newState.rumble = Main.xDevices[playerNum].rumble;
-
-                Main.xDevices[playerNum] = newState;
-
-                if (Main.serverInterface != null)
-                    Main.serverInterface.SetState(playerNum, newState);
-
-                if (Main.xDevices[playerNum].rumble != args.ProController.Rumble)
-                    controller.SetRumble(Main.xDevices[playerNum].rumble);
-            }
-            #endregion
 
             #region SCP_Driver
             /*if (report != null)
