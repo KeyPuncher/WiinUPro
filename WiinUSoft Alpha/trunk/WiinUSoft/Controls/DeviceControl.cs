@@ -43,8 +43,9 @@ namespace WiinUSoft
         private delegate void UpdateStateDelegate(NintrollerLib.StateChangeEventArgs args);
         private XBus bus;
         private XReport report;
-        private XDevice device;
-        private XHandler handler;
+//        private XDevice device;
+//        private XHandler handler;
+        private bool xConnected = false;
 
         public DeviceControl()
         {
@@ -96,30 +97,13 @@ namespace WiinUSoft
                     playerNum = ((Main)Parent.Parent).ControllerConnected(this);
 
                     #region SCP_Driver
-                    /*if (ConnectXInput())
+                    if (ConnectXInput(playerNum + 1))
                     {
                         Debug.WriteLine("Xinput Connected");
                     }
                     else
                     {
                         Debug.WriteLine("Xinput not connected");
-                    }
-
-                    report = new XReport(playerNum + 1);*/
-
-                    // Test 2
-                    handler = new XHandler(playerNum + 1);
-
-                    if (handler.Connect())
-                    {
-                        Debug.WriteLine("XInput Handle Connected!");
-                        handler.StartUpdate();
-                        handler.Reset();
-                        handler.EndUpdate();
-                    }
-                    else
-                    {
-                        Debug.WriteLine("Failed to connect handler");
                     }
                     #endregion
 
@@ -150,7 +134,7 @@ namespace WiinUSoft
             if (playerNum > 3) return;
 
             #region SCP_Driver
-            /*if (report != null)
+            if (report != null)
             {
                 // TODO: update xinput handler
                 report.SetButton(assignments["A"], args.ProController.A);
@@ -177,10 +161,10 @@ namespace WiinUSoft
                 report.RY = args.ProController.RightJoy.Y;
 
                 UpdateXInput(report);
-            }*/
+            }
 
             // Test 2
-            handler.StartUpdate(); // does nothing really
+            /*handler.StartUpdate(); // does nothing really
 
             handler.SetButton(assignments["A"], args.ProController.A);
             handler.SetButton(assignments["B"], args.ProController.B);
@@ -205,7 +189,7 @@ namespace WiinUSoft
             handler.SetAxis("rx", (args.ProController.RightJoy.X + 1) * 0.5);
             handler.SetAxis("ry", (args.ProController.RightJoy.Y + 1) * 0.5);
 
-            handler.EndUpdate();
+            handler.EndUpdate();*/
             #endregion
         }
 
@@ -229,52 +213,75 @@ namespace WiinUSoft
 
         public void SetPlayerNum (int num)
         {
+            int previousNum = playerNum;
+
             playerNum = num;
             cPlayerNum.Text = (playerNum + 1).ToString();
             controller.SetPlayerLED(playerNum + 1);
 
             // TODO: change handle device
+            if (xConnected)
+            {
+                RemoveXInput(previousNum + 1);
+                ConnectXInput(playerNum + 1);
+            }
         }
 
         #region SCP_Driver
         public bool UpdateXInput(XReport r)
         {
-            Byte[] input = r.ToBytes();
-            Byte[] rumble = new Byte[8];
-            Byte[] report = new Byte[28];
-
-            bus.Parse(input, report);
-
-            if (bus.Report(input, rumble))
+            if (report != null)
             {
-                if (rumble[1] == 0x08)
+                Byte[] input = r.ToBytes();
+                Byte[] rumble = new Byte[8];
+                Byte[] reportB = new Byte[28];
+
+                bus.Parse(input, reportB);
+
+                if (bus.Report(reportB, rumble))
                 {
-                    Byte big = (Byte)rumble[3];
-                    Byte small = (Byte)rumble[4];
+                    if (rumble[1] == 0x08)
+                    {
+                        Byte big = (Byte)rumble[3];
+                        Byte small = (Byte)rumble[4];
 
-                    // TODO: Rumble
-                    Debug.WriteLine("Big Rumble: " + big.ToString());
-                    Debug.WriteLine("Small Rumble: " + small.ToString());
+                        // TODO: Rumble
+                        Debug.WriteLine("Big Rumble: " + big.ToString());
+                        Debug.WriteLine("Small Rumble: " + small.ToString());
+                    }
+
+                    return true;
                 }
-
-                return true;
             }
 
             return false;
         }
 
-        public bool ConnectXInput()
+        public bool ConnectXInput(int id)
         {
-            return bus.Plugin(playerNum);
+            bus = XBus.Default;
+
+            if (xConnected)
+            {
+                bus.Unplug(id);
+            }
+
+            report = new XReport(id);
+            // TODO: set rumble event
+
+            xConnected = bus.Plugin(id);
+            return xConnected;
         }
 
-        public bool RemoveXInput()
+        public bool RemoveXInput(int id)
         {
-            return handler.Disconnect();
+            if (bus.Unplug(id))
+            {
+                xConnected = false;
+                return true;
+            }
 
-            bus.Stop();
-            bus.Close();
-            return bus.Unplug(playerNum);
+            return false;
         }
         #endregion
     }

@@ -85,7 +85,7 @@ namespace WiinUSoft
         {
             foreach (DeviceControl d in availableDevices)
             {
-                d.RemoveXInput();
+                d.RemoveXInput(d.playerNum + 1);
             }
         }
     }
