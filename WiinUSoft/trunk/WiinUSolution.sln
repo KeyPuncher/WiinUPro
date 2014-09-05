@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nintroller", "Nintroller\Nintroller\Nintroller.csproj", "{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiinUSoft", "WiinUSoft\WiinUSoft.csproj", "{8B9CA7A8-0AB0-4D94-B2B2-4E0918BDAA54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B9CA7A8-0AB0-4D94-B2B2-4E0918BDAA54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B9CA7A8-0AB0-4D94-B2B2-4E0918BDAA54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B9CA7A8-0AB0-4D94-B2B2-4E0918BDAA54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B9CA7A8-0AB0-4D94-B2B2-4E0918BDAA54}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
