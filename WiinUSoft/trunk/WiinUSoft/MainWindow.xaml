@@ -2,11 +2,49 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:WiinUSoft" x:Class="WiinUSoft.MainWindow"
-        Title="WiinUSoft" Height="451" Width="738">
+        Title="WiinUSoft" Height="436" Width="916" Loaded="Window_Loaded">
     <Grid>
-        <local:DragCanvas x:Name="dragCanvas" HorizontalAlignment="Left" Height="387" Margin="23,10,0,0" VerticalAlignment="Top" Width="681" Background="#FF787070">
-            <Rectangle x:Name="dest" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="340" Stroke="Black" VerticalAlignment="Top" Width="240" AllowDrop="True" DragEnter="Rectangle_DragEnter" Drop="Rectangle_Drop" Canvas.Left="421" Canvas.Top="24"/>
-            <Rectangle x:Name="testRect" Fill="#FFF4F4F5" Height="64" Canvas.Left="10" Stroke="Black" Canvas.Top="10" Width="180" RadiusY="18" RadiusX="18" StrokeThickness="3" GotMouseCapture="testRect_GotMouseCapture" IsMouseCapturedChanged="testRect_IsMouseCapturedChanged" IsMouseCaptureWithinChanged="testRect_IsMouseCaptureWithinChanged" IsMouseDirectlyOverChanged="testRect_IsMouseDirectlyOverChanged"/>
-        </local:DragCanvas>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFEDEDED" Offset="1"/>
+                <GradientStop Color="White"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2" Margin="8,42,0,8" HorizontalAlignment="Left" Width="292">
+            <StackPanel x:Name="groupAvailable" HorizontalAlignment="Left" Width="280" Margin="4,4,0,0"/>
+        </Border>
+        <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2" Margin="308,42,0,8" HorizontalAlignment="Left" Width="292">
+            <StackPanel x:Name="groupXinput" HorizontalAlignment="Left" Margin="4,4,0,0" Width="280"/>
+        </Border>
+        <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2" Margin="608,42,0,8" HorizontalAlignment="Left" Width="292">
+            <StackPanel HorizontalAlignment="Left" Margin="4,4,0,0" Width="280"/>
+        </Border>
+        <Label Content="Available Devices" HorizontalAlignment="Left" Margin="39,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Connected as Xbox 360 Controller (XInput)" HorizontalAlignment="Left" Margin="337,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnIdentify" Content="R" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFC7C7C7"/>
+                    <GradientStop Color="#FF616161" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnIdentify_Copy" Content="D" HorizontalAlignment="Left" Margin="308,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFC7C7C7"/>
+                    <GradientStop Color="#FF616161" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnIdentify_Copy1" Content="D" HorizontalAlignment="Left" Margin="608,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFC7C7C7"/>
+                    <GradientStop Color="#FF616161" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
     </Grid>
 </Window>

@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using NintrollerLib;
 
 namespace WiinUSoft
 {
@@ -20,86 +21,65 @@ namespace WiinUSoft
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Point dragStart;
+        private List<string> hidList;
+        private List<DeviceControl> deviceList;
+
         public MainWindow()
         {
+            hidList = new List<string>();
+            deviceList = new List<DeviceControl>();
+
             InitializeComponent();
-
-            DragCanvas.SetCanBeDragged(dest, false);
         }
 
-        private void Rectangle_DragEnter(object sender, DragEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // When the mouse is over this control while dragging
-            Debug.WriteLine("Drag Enter");
-        }
+            // TODO: move out into a method that will be the refresh method
+            hidList = Nintroller.FindControllers();
 
-        private void Rectangle_Drop(object sender, DragEventArgs e)
-        {
-            // When dragging is dropped/stopped over this control
-            Debug.WriteLine("Dropped");
-        }
-
-        private void Rectangle_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            // When the mouse button is clicked on this control
-            Debug.WriteLine("Mouse Left Down");
-            dragStart = e.GetPosition(null);
-        }
-
-        private void Rectangle_PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            // when the mouse is moving over this control before dragging has started
-            if (e.LeftButton == MouseButtonState.Pressed)
+            foreach (string hid in hidList)
             {
-                DragDrop.DoDragDrop(sender as Rectangle, "test", DragDropEffects.Move);
-            } 
-        }
-
-        private void Rectangle_GiveFeedback(object sender, GiveFeedbackEventArgs e)
-        {
-            // Called while dragging this ojbect
-            Debug.WriteLine("dragging");
-            Debug.WriteLine(Mouse.GetPosition(null));
-        }
-
-        private void Rectangle_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
-        {
-            Debug.WriteLine("Continue Dragging");
-            Debug.WriteLine(Mouse.GetPosition(null));
-        }
-
-
-
-
-        private void testRect_GotMouseCapture(object sender, MouseEventArgs e)
-        {
-            Debug.WriteLine("Got Mouse Capture");
-        }
-
-        private bool dragging = false;
-        private void testRect_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            Debug.WriteLine("Mouse Capture state changed: " + e.NewValue.ToString());
-
-            dragging = (bool)e.NewValue;
-
-            Debug.WriteLine(dragging);
-            if (!dragging)
-            {
-                DragCanvas.SetLeft((UIElement)sender, 0);
+                Nintroller n = new Nintroller(hid);
+                deviceList.Add(new DeviceControl(n));
+                deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
+                groupAvailable.Children.Add(deviceList[deviceList.Count - 1]);
             }
         }
 
-        private void testRect_IsMouseCaptureWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void DeviceControl_OnConnectStateChange(DeviceControl sender, DeviceState oldState, DeviceState newState)
         {
-            Debug.WriteLine("Mouse Capture Within state changed: " + e.NewValue.ToString());
-        }
+            if (oldState == newState)
+                return;
 
-        private void testRect_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            Debug.WriteLine("mouse over");
-        }
+            switch (oldState)
+            {
+                case DeviceState.Discovered:
+                    groupAvailable.Children.Remove(sender);
+                    break;
 
+                case DeviceState.Connected_XInput:
+                    groupXinput.Children.Remove(sender);
+                    break;
+
+                case DeviceState.Connected_VJoy:
+                    groupXinput.Children.Remove(sender);
+                    break;
+            }
+
+            switch (newState)
+            {
+                case DeviceState.Discovered:
+                    groupAvailable.Children.Add(sender);
+                    break;
+
+                case DeviceState.Connected_XInput:
+                    groupXinput.Children.Add(sender);
+                    break;
+
+                case DeviceState.Connected_VJoy:
+                    groupXinput.Children.Add(sender);
+                    break;
+            }
+        }
     }
 }

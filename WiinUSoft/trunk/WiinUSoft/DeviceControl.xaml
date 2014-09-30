@@ -4,19 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="350" d:DesignWidth="300" Width="350" Height="100" HorizontalAlignment="Left" VerticalAlignment="Top">
-    <Grid Width="350" Height="100" Margin="0,0,-50,0" VerticalAlignment="Top">
-        <Rectangle Height="100" Margin="0" Stroke="#FF122B57" VerticalAlignment="Top" Width="350" StrokeThickness="4" RadiusX="16" RadiusY="16" HorizontalAlignment="Left">
+             d:DesignHeight="350" d:DesignWidth="300" Width="280" Height="80">
+    <Grid Width="280" Height="80">
+        <Rectangle Height="80" Margin="0" Stroke="#FF122B57" Width="280" StrokeThickness="4" RadiusX="16" RadiusY="16" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF57ADDE" Offset="0"/>
+                    <GradientStop Color="#FF57ADDE" Offset="0.5"/>
                     <GradientStop Color="#FF404776" Offset="1"/>
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Image HorizontalAlignment="Left" Height="100" Margin="10,0,0,0" VerticalAlignment="Top" Width="100"/>
-        <Label Content="Device Name" HorizontalAlignment="Left" Margin="115,10,0,0" VerticalAlignment="Top" Width="200" FontSize="16"/>
-        <Button x:Name="btnIdentify" Content="ID" HorizontalAlignment="Left" Margin="115,46,0,0" VerticalAlignment="Top" Width="48" Height="48" BorderBrush="#FF3E3E3E" BorderThickness="2">
+        <Image HorizontalAlignment="Left" Height="80" Margin="10,0,0,0" VerticalAlignment="Top" Width="80"/>
+        <Label x:Name="labelName" Content="Device Name" HorizontalAlignment="Left" Margin="100,8,0,0" VerticalAlignment="Top" Width="160" FontSize="14" Height="26"/>
+        <Button x:Name="btnIdentify" Content="ID" HorizontalAlignment="Left" Margin="100,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFC7C7C7"/>
+                    <GradientStop Color="#FF616161" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnProperties" Content="Prop" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF616161" Offset="1"/>
@@ -24,7 +32,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnProperties" Content="Prop" HorizontalAlignment="Left" Margin="168,46,0,0" VerticalAlignment="Top" Width="48" Height="48" BorderBrush="#FF3E3E3E" BorderThickness="2">
+        <Button x:Name="btnXinput" Content="X" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF616161" Offset="1"/>
@@ -32,7 +40,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnXinput" Content="X" HorizontalAlignment="Left" Margin="221,46,0,0" VerticalAlignment="Top" Width="48" Height="48" BorderBrush="#FF3E3E3E" BorderThickness="2">
+        <Button x:Name="btnVjoy" Content="VJ" HorizontalAlignment="Left" Margin="226,36,-22,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF616161" Offset="1"/>
@@ -40,7 +48,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnVjoy" Content="VJ" HorizontalAlignment="Left" Margin="274,46,-22,0" VerticalAlignment="Top" Width="48" Height="48" BorderBrush="#FF3E3E3E" BorderThickness="2">
+        <Button x:Name="btnConfig" Content="Config" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF616161" Offset="1"/>
@@ -48,15 +56,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnConfig" Content="Config" HorizontalAlignment="Left" Margin="221,46,0,0" VerticalAlignment="Top" Width="48" Height="48" BorderBrush="#FF3E3E3E" BorderThickness="2">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                    <GradientStop Color="#FFC7C7C7"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="btnDetatch" Content="Detatch" HorizontalAlignment="Left" Margin="274,46,0,0" VerticalAlignment="Top" Width="48" Height="48" BorderBrush="#FF3E3E3E" BorderThickness="2">
+        <Button x:Name="btnDetatch" Content="Detatch" HorizontalAlignment="Left" Margin="226,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="10">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF616161" Offset="1"/>
