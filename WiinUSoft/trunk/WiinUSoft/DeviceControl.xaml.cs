@@ -125,6 +125,7 @@ namespace WiinUSoft
                     btnVjoy.IsEnabled       = false;
                     btnConfig.IsEnabled     = true;
                     btnDetatch.IsEnabled    = true;
+                    // TODO: instantiate holder, load mapping
                     break;
 
                 case DeviceState.Connected_VJoy:

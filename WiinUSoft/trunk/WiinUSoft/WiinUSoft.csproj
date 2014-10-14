@@ -73,6 +73,8 @@
     <Compile Include="Holders\XInputHolder.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Inputs\Flags.cs" />
+    <Compile Include="Inputs\Xbox360.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
