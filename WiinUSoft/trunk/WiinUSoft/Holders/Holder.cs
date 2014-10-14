@@ -8,7 +8,7 @@ namespace WiinUSoft.Holders
     public abstract class Holder
     {
         public Dictionary<string, float> Values { get; protected set; }
-        public Dictionary<string, IConvertible> Mappings { get; protected set; }
+        public Dictionary<string, string> Mappings { get; protected set; }
         public Dictionary<string, bool> Flags { get; protected set; }
 
         public void SetValue(string name, bool value)
@@ -31,7 +31,7 @@ namespace WiinUSoft.Holders
             }
         }
 
-        public void SetMapping<T>(string name, T mapping) where T : IConvertible
+        public void SetMapping<T>(string name, string mapping)
         {
             if (Mappings.ContainsKey(name))
             {
