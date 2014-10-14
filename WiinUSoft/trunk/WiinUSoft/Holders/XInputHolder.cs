@@ -15,7 +15,7 @@ namespace WiinUSoft.Holders
         private bool connected;
         private int ID;
 
-        public static Dictionary<string, string> GetDefaultMapping(NintrollerLib.ControllerType)
+        public static Dictionary<string, string> GetDefaultMapping(NintrollerLib.ControllerType type)
         {
             throw new NotImplementedException();
 
