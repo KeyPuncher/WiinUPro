@@ -131,7 +131,7 @@ namespace WiinUSoft.Holders
                     System.Diagnostics.Debug.WriteLine("Small Rumble: " + small.ToString());
                     
                     // Check if it's strong enough to rumble
-                    int strength = BitConverter.ToInt32(new byte[] { rumble[3], rumble[4] }, 0);
+                    int strength = BitConverter.ToInt32(new byte[] { rumble[4], rumble[3], 0x00, 0x00 }, 0);
                     Flags[Inputs.Flags.RUMBLE] = (strength > minRumble);
                 }
                 else
