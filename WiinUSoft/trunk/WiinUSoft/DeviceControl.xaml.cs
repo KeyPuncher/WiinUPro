@@ -116,6 +116,8 @@ namespace WiinUSoft
                     btnVjoy.IsEnabled       = true;
                     btnConfig.IsEnabled     = false;
                     btnDetatch.IsEnabled    = false;
+                    btnConfig.Visibility = System.Windows.Visibility.Hidden;
+                    btnDetatch.Visibility = System.Windows.Visibility.Hidden;
                     break;
 
                 case DeviceState.Connected_XInput:
@@ -124,8 +126,13 @@ namespace WiinUSoft
                     btnXinput.IsEnabled     = false;
                     btnVjoy.IsEnabled       = false;
                     btnConfig.IsEnabled     = true;
+                    btnConfig.Visibility = System.Windows.Visibility.Visible;
                     btnDetatch.IsEnabled    = true;
+                    btnDetatch.Visibility = System.Windows.Visibility.Visible;
                     // TODO: instantiate holder, load mapping
+                    var xHolder = new Holders.XInputHolder(device.Type);
+                    xHolder.ConnectXInput(1);
+                    holder = xHolder;
                     break;
 
                 case DeviceState.Connected_VJoy:
@@ -153,26 +160,26 @@ namespace WiinUSoft
             
             if (DeviceType == ControllerType.ProController)
             {
-                holder.SetValue("A", e.ProController.A);
-                holder.SetValue("B", e.ProController.B);
-                holder.SetValue("X", e.ProController.X);
-                holder.SetValue("Y", e.ProController.Y);
-
-                holder.SetValue("UP", e.ProController.Up);
-                holder.SetValue("DOWN", e.ProController.Down);
-                holder.SetValue("LEFT", e.ProController.Left);
-                holder.SetValue("RIGHT", e.ProController.Right);
-
-                holder.SetValue("L", e.ProController.L);
-                holder.SetValue("R", e.ProController.R);
-                holder.SetValue("ZL", e.ProController.ZL);
-                holder.SetValue("ZR", e.ProController.ZR);
-
-                holder.SetValue("START", e.ProController.Start);
-                holder.SetValue("SELECT", e.ProController.Select);
-                holder.SetValue("HOME", e.ProController.Home);
-                holder.SetValue("LS", e.ProController.LS);
-                holder.SetValue("RS", e.ProController.RS);
+                holder.SetValue(Inputs.ProController.A, e.ProController.A);
+                holder.SetValue(Inputs.ProController.B, e.ProController.B);
+                holder.SetValue(Inputs.ProController.X, e.ProController.X);
+                holder.SetValue(Inputs.ProController.Y, e.ProController.Y);
+                                
+                holder.SetValue(Inputs.ProController.UP, e.ProController.Up);
+                holder.SetValue(Inputs.ProController.DOWN, e.ProController.Down);
+                holder.SetValue(Inputs.ProController.LEFT, e.ProController.Left);
+                holder.SetValue(Inputs.ProController.RIGHT, e.ProController.Right);
+                                
+                holder.SetValue(Inputs.ProController.L, e.ProController.L);
+                holder.SetValue(Inputs.ProController.R, e.ProController.R);
+                holder.SetValue(Inputs.ProController.ZL, e.ProController.ZL);
+                holder.SetValue(Inputs.ProController.ZR, e.ProController.ZR);
+                                
+                holder.SetValue(Inputs.ProController.START, e.ProController.Start);
+                holder.SetValue(Inputs.ProController.SELECT, e.ProController.Select);
+                holder.SetValue(Inputs.ProController.HOME, e.ProController.Home);
+                holder.SetValue(Inputs.ProController.LS, e.ProController.LS);
+                holder.SetValue(Inputs.ProController.RS, e.ProController.RS);
 
                 //holder.SetValue("LRIGHT", e.ProController.LeftJoy.X > 0.1f);
                 //holder.SetValue("LLEFT", e.ProController.LeftJoy.X < -0.1f);
@@ -184,15 +191,15 @@ namespace WiinUSoft
                 //holder.SetValue("RUP", e.ProController.RightJoy.Y > 0.1f);
                 //holder.SetValue("RDOWN", e.ProController.RightJoy.Y < -0.1f);
 
-                holder.SetValue("LRIGHT", e.ProController.LeftJoy.X > 0 ? e.ProController.LeftJoy.X : 0f);
-                holder.SetValue("LLEFT" , e.ProController.LeftJoy.X < 0 ? e.ProController.LeftJoy.X * -1 : 0f);
-                holder.SetValue("LUP"   , e.ProController.LeftJoy.Y > 0 ? e.ProController.LeftJoy.Y : 0f);
-                holder.SetValue("LDOWN" , e.ProController.LeftJoy.Y < 0 ? e.ProController.LeftJoy.Y * -1 : 0f);
-
-                holder.SetValue("RRIGHT", e.ProController.RightJoy.X > 0 ? e.ProController.RightJoy.X : 0f);
-                holder.SetValue("RLEFT" , e.ProController.RightJoy.X < 0 ? e.ProController.RightJoy.X * -1 : 0f);
-                holder.SetValue("RUP"   , e.ProController.RightJoy.Y > 0 ? e.ProController.RightJoy.Y : 0f);
-                holder.SetValue("RDOWN" , e.ProController.RightJoy.Y < 0 ? e.ProController.RightJoy.Y * -1 : 0f);
+                holder.SetValue(Inputs.ProController.LRIGHT, e.ProController.LeftJoy.X > 0 ? e.ProController.LeftJoy.X : 0f);
+                holder.SetValue(Inputs.ProController.LLEFT , e.ProController.LeftJoy.X < 0 ? e.ProController.LeftJoy.X * -1 : 0f);
+                holder.SetValue(Inputs.ProController.LUP   , e.ProController.LeftJoy.Y > 0 ? e.ProController.LeftJoy.Y : 0f);
+                holder.SetValue(Inputs.ProController.LDOWN , e.ProController.LeftJoy.Y < 0 ? e.ProController.LeftJoy.Y * -1 : 0f);
+                                
+                holder.SetValue(Inputs.ProController.RRIGHT, e.ProController.RightJoy.X > 0 ? e.ProController.RightJoy.X : 0f);
+                holder.SetValue(Inputs.ProController.RLEFT , e.ProController.RightJoy.X < 0 ? e.ProController.RightJoy.X * -1 : 0f);
+                holder.SetValue(Inputs.ProController.RUP   , e.ProController.RightJoy.Y > 0 ? e.ProController.RightJoy.Y : 0f);
+                holder.SetValue(Inputs.ProController.RDOWN , e.ProController.RightJoy.Y < 0 ? e.ProController.RightJoy.Y * -1 : 0f);
             }
             else if (DeviceType == ControllerType.BalanceBoard)
             {
@@ -309,6 +316,15 @@ namespace WiinUSoft
             }
 
             holder.Update();
+        }
+
+        private void btnXinput_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Select which device number to connect to & if available
+            if (device.Connect())
+            {
+                ConnectionState = DeviceState.Connected_XInput;
+            }
         }
     }
 }

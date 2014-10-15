@@ -7,7 +7,8 @@ namespace WiinUSoft.Holders
 {
     public abstract class Holder
     {
-        public Dictionary<string, float> Values { get; protected set; }
+        public System.Collections.Concurrent.ConcurrentDictionary<string, float> Values { get; protected set; }
+        //public Dictionary<string, float> Values { get; protected set; }
         public Dictionary<string, string> Mappings { get; protected set; }
         public Dictionary<string, bool> Flags { get; protected set; }
 
@@ -24,9 +25,10 @@ namespace WiinUSoft.Holders
                 {
                     Values[name] = Math.Abs(value);
                 }
-                else
+                else if (!Values.ContainsKey(name))
                 {
-                    Values.Add(name, Math.Abs(value));
+                    //Values.Add(name, Math.Abs(value));
+                    Values.TryAdd(name, Math.Abs(value));
                 }
             }
         }
