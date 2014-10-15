@@ -47,6 +47,7 @@ namespace NintrollerLib
         /// The ID of instance of the controller.
         /// </summary>
         public Guid ID { get { return mID; } }
+        public ControllerType Type { get { return currentType; } }
 
         private ControllerType currentType = ControllerType.Wiimote;
         private bool connected;
