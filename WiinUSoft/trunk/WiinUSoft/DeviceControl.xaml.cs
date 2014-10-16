@@ -116,8 +116,8 @@ namespace WiinUSoft
                     btnVjoy.IsEnabled       = true;
                     btnConfig.IsEnabled     = false;
                     btnDetatch.IsEnabled    = false;
-                    btnConfig.Visibility = System.Windows.Visibility.Hidden;
-                    btnDetatch.Visibility = System.Windows.Visibility.Hidden;
+                    btnConfig.Visibility    = System.Windows.Visibility.Hidden;
+                    btnDetatch.Visibility   = System.Windows.Visibility.Hidden;
                     break;
 
                 case DeviceState.Connected_XInput:
@@ -126,10 +126,11 @@ namespace WiinUSoft
                     btnXinput.IsEnabled     = false;
                     btnVjoy.IsEnabled       = false;
                     btnConfig.IsEnabled     = true;
-                    btnConfig.Visibility = System.Windows.Visibility.Visible;
                     btnDetatch.IsEnabled    = true;
-                    btnDetatch.Visibility = System.Windows.Visibility.Visible;
-                    // TODO: instantiate holder, load mapping
+                    btnConfig.Visibility    = System.Windows.Visibility.Visible;
+                    btnDetatch.Visibility   = System.Windows.Visibility.Visible;
+
+                    // TODO: Instantiate holder
                     var xHolder = new Holders.XInputHolder(device.Type);
                     xHolder.ConnectXInput(1);
                     holder = xHolder;
@@ -142,6 +143,10 @@ namespace WiinUSoft
                     btnVjoy.IsEnabled       = false;
                     btnConfig.IsEnabled     = true;
                     btnDetatch.IsEnabled    = true;
+                    btnConfig.Visibility    = System.Windows.Visibility.Visible;
+                    btnDetatch.Visibility   = System.Windows.Visibility.Visible;
+
+                    // TODO: Instantiate VJoy Holder
                     break;
             }
         }
@@ -200,6 +205,12 @@ namespace WiinUSoft
                 holder.SetValue(Inputs.ProController.RLEFT , e.ProController.RightJoy.X < 0 ? e.ProController.RightJoy.X * -1 : 0f);
                 holder.SetValue(Inputs.ProController.RUP   , e.ProController.RightJoy.Y > 0 ? e.ProController.RightJoy.Y : 0f);
                 holder.SetValue(Inputs.ProController.RDOWN , e.ProController.RightJoy.Y < 0 ? e.ProController.RightJoy.Y * -1 : 0f);
+
+                bool doRumble = holder.GetFlag(Inputs.Flags.RUMBLE);
+                if (doRumble != e.ProController.Rumble)
+                {
+                    device.SetRumble(doRumble);
+                }
             }
             else if (DeviceType == ControllerType.BalanceBoard)
             {

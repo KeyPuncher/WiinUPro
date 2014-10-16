@@ -10,6 +10,8 @@ namespace WiinUSoft.Holders
     public class XInputHolder : Holder
     {
         internal int minRumble = 20;
+        internal int rumbleLeft = 0;
+        internal int rumbleDecrement = 10;
 
         private XBus bus;
         private bool connected;
@@ -38,11 +40,6 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.ProController.R, Inputs.Xbox360.RB);
                     result.Add(Inputs.ProController.ZL, Inputs.Xbox360.LT);
                     result.Add(Inputs.ProController.ZR, Inputs.Xbox360.RT);
-
-                    //result.Add(Inputs.ProController.LX, Inputs.Xbox360.LX);
-                    //result.Add(Inputs.ProController.LY, Inputs.Xbox360.LY);
-                    //result.Add(Inputs.ProController.RX, Inputs.Xbox360.RX);
-                    //result.Add(Inputs.ProController.RY, Inputs.Xbox360.RY);
 
                     result.Add(Inputs.ProController.LUP,    Inputs.Xbox360.LUP);
                     result.Add(Inputs.ProController.LDOWN,  Inputs.Xbox360.LDOWN);
@@ -244,8 +241,8 @@ namespace WiinUSoft.Holders
                         case Inputs.Xbox360.RRIGHT: RX += Values[map.Key]; break;
                         case Inputs.Xbox360.RUP   : RY += Values[map.Key]; break;
                         case Inputs.Xbox360.RDOWN : RY -= Values[map.Key]; break;
-                        case Inputs.Xbox360.LT: LT = Values[map.Key]; break;
-                        case Inputs.Xbox360.RT: RT = Values[map.Key]; break;
+                        case Inputs.Xbox360.LT: LT += Values[map.Key]; break;
+                        case Inputs.Xbox360.RT: RT += Values[map.Key]; break;
                     }
                 }
             }
@@ -286,22 +283,24 @@ namespace WiinUSoft.Holders
 
             if (bus.Report(reportB, rumble))
             {
+                // This is set on a rumble state change
                 if (rumble[1] == 0x08)
                 {
                     byte big = (byte)rumble[3];
                     byte small = (byte)rumble[4];
                     // TODO: Revise Rumble
-                    System.Diagnostics.Debug.WriteLine("Big Rumble: " + big.ToString());
-                    System.Diagnostics.Debug.WriteLine("Small Rumble: " + small.ToString());
+                    //System.Diagnostics.Debug.WriteLine("Big Rumble: " + big.ToString());
+                    //System.Diagnostics.Debug.WriteLine("Small Rumble: " + small.ToString());
                     
                     // Check if it's strong enough to rumble
                     int strength = BitConverter.ToInt32(new byte[] { rumble[4], rumble[3], 0x00, 0x00 }, 0);
                     Flags[Inputs.Flags.RUMBLE] = (strength > minRumble);
+                    System.Diagnostics.Debug.WriteLine("Rumble Changed to: " + strength.ToString());
                 }
-                else
-                {
-                    Flags[Inputs.Flags.RUMBLE] = false;
-                }
+                //else
+                //{
+                //    Flags[Inputs.Flags.RUMBLE] = false;
+                //}
             }
         }
 
@@ -321,6 +320,7 @@ namespace WiinUSoft.Holders
 
         public bool RemoveXInput(int id)
         {
+            Flags[Inputs.Flags.RUMBLE] = false;
             if (bus.Unplug(id))
             {
                 ID = 0;
