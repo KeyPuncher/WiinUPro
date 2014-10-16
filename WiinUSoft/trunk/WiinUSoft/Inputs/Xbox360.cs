@@ -7,41 +7,41 @@ namespace WiinUSoft.Inputs
 {
     public static class Xbox360
     {
-        public const string A = "A";
-        public const string B = "B";
-        public const string X = "X";
-        public const string Y = "Y";
+        public const string A      = "xA";
+        public const string B      = "xB";
+        public const string X      = "xX";
+        public const string Y      = "xY";
 
-        public const string UP    = "UP";
-        public const string DOWN  = "DOWN";
-        public const string LEFT  = "LEFT";
-        public const string RIGHT = "RIGHT";
+        public const string UP     = "xUP";
+        public const string DOWN   = "xDOWN";
+        public const string LEFT   = "xLEFT";
+        public const string RIGHT  = "xRIGHT";
 
-        public const string LB = "LB";
-        public const string RB = "RB";
-        public const string LT = "LT";
-        public const string RT = "RT";
+        public const string LB     = "xLB";
+        public const string RB     = "xRB";
+        public const string LT     = "xLT";
+        public const string RT     = "xRT";
 
-        //public const string LX = "LX";
-        //public const string LY = "LY";
-        //public const string RX = "RX";
-        //public const string RY = "RY";
+        //public const string LX   = "LX";
+        //public const string LY   = "LY";
+        //public const string RX   = "RX";
+        //public const string RY   = "RY";
 
-        public const string LUP    = "LUP";
-        public const string LDOWN  = "LDOWN";
-        public const string LLEFT  = "LLEFT";
-        public const string LRIGHT = "LRIGHT";
+        public const string LUP    = "xLUP";
+        public const string LDOWN  = "xLDOWN";
+        public const string LLEFT  = "xLLEFT";
+        public const string LRIGHT = "xLRIGHT";
 
-        public const string RUP    = "RUP";
-        public const string RDOWN  = "RDOWN";
-        public const string RLEFT  = "RLEFT";
-        public const string RRIGHT = "RRIGHT";
+        public const string RUP    = "xRUP";
+        public const string RDOWN  = "xRDOWN";
+        public const string RLEFT  = "xRLEFT";
+        public const string RRIGHT = "xRRIGHT";
 
-        public const string LS = "LS";
-        public const string RS = "RS";
+        public const string LS     = "xLS";
+        public const string RS     = "xRS";
 
-        public const string BACK = "BACK";
-        public const string START = "START";
-        public const string GUIDE = "GUIDE";
+        public const string BACK   = "xBACK";
+        public const string START  = "xSTART";
+        public const string GUIDE  = "xGUIDE";
     }
 }
