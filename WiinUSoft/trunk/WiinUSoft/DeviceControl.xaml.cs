@@ -218,19 +218,19 @@ namespace WiinUSoft
             else
             {
                 // TODO: Wiimote & extension Reading
-                holder.SetValue("A", e.Wiimote.A);
-                holder.SetValue("B", e.Wiimote.B);
-                holder.SetValue("ONE", e.Wiimote.One);
-                holder.SetValue("TWO", e.Wiimote.Two);
+                holder.SetValue(Inputs.Wiimote.A, e.Wiimote.A);
+                holder.SetValue(Inputs.Wiimote.B, e.Wiimote.B);
+                holder.SetValue(Inputs.Wiimote.ONE, e.Wiimote.One);
+                holder.SetValue(Inputs.Wiimote.TWO, e.Wiimote.Two);
 
-                holder.SetValue("UP", e.Wiimote.Up);
-                holder.SetValue("DOWN", e.Wiimote.Down);
-                holder.SetValue("LEFT", e.Wiimote.Left);
-                holder.SetValue("RIGHT", e.Wiimote.Right);
+                holder.SetValue(Inputs.Wiimote.UP, e.Wiimote.Up);
+                holder.SetValue(Inputs.Wiimote.DOWN, e.Wiimote.Down);
+                holder.SetValue(Inputs.Wiimote.LEFT, e.Wiimote.Left);
+                holder.SetValue(Inputs.Wiimote.RIGHT, e.Wiimote.Right);
 
-                holder.SetValue("MINUS", e.Wiimote.Minus);
-                holder.SetValue("PLUS", e.Wiimote.Plus);
-                holder.SetValue("HOME", e.Wiimote.Home);
+                holder.SetValue(Inputs.Wiimote.MINUS, e.Wiimote.Minus);
+                holder.SetValue(Inputs.Wiimote.PLUS, e.Wiimote.Plus);
+                holder.SetValue(Inputs.Wiimote.HOME, e.Wiimote.Home);
 
                 // Accelerometer and IR sensor
 
@@ -239,82 +239,82 @@ namespace WiinUSoft
                     case ControllerType.Nunchuk:
                     case ControllerType.NunchukB:
                         // TODO: Nunchuck Reading
-                        holder.SetValue("eC", e.Wiimote.Nunchuck.C);
-                        holder.SetValue("eZ", e.Wiimote.Nunchuck.Z);
+                        holder.SetValue(Inputs.Nunchuk.C, e.Wiimote.Nunchuck.C);
+                        holder.SetValue(Inputs.Nunchuk.Z, e.Wiimote.Nunchuck.Z);
 
-                        holder.SetValue("eJRIGHT", e.Wiimote.Nunchuck.Joy.X > 0 ? e.Wiimote.Nunchuck.Joy.X : 0f);
-                        holder.SetValue("eJLEFT" , e.Wiimote.Nunchuck.Joy.X < 0 ? e.Wiimote.Nunchuck.Joy.X * -1 : 0f);
-                        holder.SetValue("eJUP"   , e.Wiimote.Nunchuck.Joy.Y > 0 ? e.Wiimote.Nunchuck.Joy.Y : 0f);
-                        holder.SetValue("eJDOWN" , e.Wiimote.Nunchuck.Joy.Y < 0 ? e.Wiimote.Nunchuck.Joy.Y * -1 : 0f);
+                        holder.SetValue(Inputs.Nunchuk.RIGHT, e.Wiimote.Nunchuck.Joy.X > 0 ? e.Wiimote.Nunchuck.Joy.X : 0f);
+                        holder.SetValue(Inputs.Nunchuk.LEFT , e.Wiimote.Nunchuck.Joy.X < 0 ? e.Wiimote.Nunchuck.Joy.X * -1 : 0f);
+                        holder.SetValue(Inputs.Nunchuk.UP   , e.Wiimote.Nunchuck.Joy.Y > 0 ? e.Wiimote.Nunchuck.Joy.Y : 0f);
+                        holder.SetValue(Inputs.Nunchuk.DOWN , e.Wiimote.Nunchuck.Joy.Y < 0 ? e.Wiimote.Nunchuck.Joy.Y * -1 : 0f);
 
                         // Accelerometer
                         break;
 
                     case ControllerType.ClassicController:
-                        holder.SetValue("eA", e.Wiimote.ClassicController.A);
-                        holder.SetValue("eB", e.Wiimote.ClassicController.B);
-                        holder.SetValue("eX", e.Wiimote.ClassicController.X);
-                        holder.SetValue("eY", e.Wiimote.ClassicController.Y);
-
-                        holder.SetValue("eUP", e.Wiimote.ClassicController.Up);
-                        holder.SetValue("eDOWN", e.Wiimote.ClassicController.Down);
-                        holder.SetValue("eLEFT", e.Wiimote.ClassicController.Left);
-                        holder.SetValue("eRIGHT", e.Wiimote.ClassicController.Right);
-
-                        holder.SetValue("eL", e.Wiimote.ClassicController.L);
-                        holder.SetValue("eR", e.Wiimote.ClassicController.R);
-                        holder.SetValue("eZL", e.Wiimote.ClassicController.ZL);
-                        holder.SetValue("eZR", e.Wiimote.ClassicController.ZR);
-
-                        holder.SetValue("eSTART", e.Wiimote.ClassicController.Start);
-                        holder.SetValue("eSELECT", e.Wiimote.ClassicController.Select);
-                        holder.SetValue("eHOME", e.Wiimote.ClassicController.Home);
-
-                        holder.SetValue("eLFULL", e.Wiimote.ClassicController.LFull);
-                        holder.SetValue("eRFULL", e.Wiimote.ClassicController.RFull);
-                        holder.SetValue("eLTRIGGER", e.Wiimote.ClassicController.LTrigger);
-                        holder.SetValue("eRTRIGGER", e.Wiimote.ClassicController.RTrigger);
-
-                        holder.SetValue("eLRIGHT", e.Wiimote.ClassicController.LeftJoy.X > 0 ? e.Wiimote.ClassicController.LeftJoy.X : 0f);
-                        holder.SetValue("eLLEFT" , e.Wiimote.ClassicController.LeftJoy.X < 0 ? e.Wiimote.ClassicController.LeftJoy.X * -1 : 0f);
-                        holder.SetValue("eLUP"   , e.Wiimote.ClassicController.LeftJoy.Y > 0 ? e.Wiimote.ClassicController.LeftJoy.Y : 0f);
-                        holder.SetValue("eLDOWN" , e.Wiimote.ClassicController.LeftJoy.Y < 0 ? e.Wiimote.ClassicController.LeftJoy.Y * -1 : 0f);
-
-                        holder.SetValue("eRRIGHT", e.Wiimote.ClassicController.RightJoy.X > 0 ? e.Wiimote.ClassicController.RightJoy.X : 0f);
-                        holder.SetValue("eRLEFT" , e.Wiimote.ClassicController.RightJoy.X < 0 ? e.Wiimote.ClassicController.RightJoy.X * -1 : 0f);
-                        holder.SetValue("eRUP"   , e.Wiimote.ClassicController.RightJoy.Y > 0 ? e.Wiimote.ClassicController.RightJoy.Y : 0f);
-                        holder.SetValue("eRDOWN" , e.Wiimote.ClassicController.RightJoy.Y < 0 ? e.Wiimote.ClassicController.RightJoy.Y * -1 : 0f);
+                        holder.SetValue(Inputs.ClassicController.A, e.Wiimote.ClassicController.A);
+                        holder.SetValue(Inputs.ClassicController.B, e.Wiimote.ClassicController.B);
+                        holder.SetValue(Inputs.ClassicController.X, e.Wiimote.ClassicController.X);
+                        holder.SetValue(Inputs.ClassicController.Y, e.Wiimote.ClassicController.Y);
+                                        
+                        holder.SetValue(Inputs.ClassicController.UP, e.Wiimote.ClassicController.Up);
+                        holder.SetValue(Inputs.ClassicController.DOWN, e.Wiimote.ClassicController.Down);
+                        holder.SetValue(Inputs.ClassicController.LEFT, e.Wiimote.ClassicController.Left);
+                        holder.SetValue(Inputs.ClassicController.RIGHT, e.Wiimote.ClassicController.Right);
+                                        
+                        holder.SetValue(Inputs.ClassicController.L, e.Wiimote.ClassicController.L);
+                        holder.SetValue(Inputs.ClassicController.R, e.Wiimote.ClassicController.R);
+                        holder.SetValue(Inputs.ClassicController.ZL, e.Wiimote.ClassicController.ZL);
+                        holder.SetValue(Inputs.ClassicController.ZR, e.Wiimote.ClassicController.ZR);
+                                       
+                        holder.SetValue(Inputs.ClassicController.START, e.Wiimote.ClassicController.Start);
+                        holder.SetValue(Inputs.ClassicController.SELECT, e.Wiimote.ClassicController.Select);
+                        holder.SetValue(Inputs.ClassicController.HOME, e.Wiimote.ClassicController.Home);
+                                        
+                        holder.SetValue(Inputs.ClassicController.LFULL, e.Wiimote.ClassicController.LFull);
+                        holder.SetValue(Inputs.ClassicController.RFULL, e.Wiimote.ClassicController.RFull);
+                        holder.SetValue(Inputs.ClassicController.LT, e.Wiimote.ClassicController.LTrigger);
+                        holder.SetValue(Inputs.ClassicController.LT, e.Wiimote.ClassicController.RTrigger);
+                                        
+                        holder.SetValue(Inputs.ClassicController.LRIGHT, e.Wiimote.ClassicController.LeftJoy.X > 0 ? e.Wiimote.ClassicController.LeftJoy.X : 0f);
+                        holder.SetValue(Inputs.ClassicController.LLEFT , e.Wiimote.ClassicController.LeftJoy.X < 0 ? e.Wiimote.ClassicController.LeftJoy.X * -1 : 0f);
+                        holder.SetValue(Inputs.ClassicController.LUP   , e.Wiimote.ClassicController.LeftJoy.Y > 0 ? e.Wiimote.ClassicController.LeftJoy.Y : 0f);
+                        holder.SetValue(Inputs.ClassicController.LDOWN , e.Wiimote.ClassicController.LeftJoy.Y < 0 ? e.Wiimote.ClassicController.LeftJoy.Y * -1 : 0f);
+                                        
+                        holder.SetValue(Inputs.ClassicController.RRIGHT, e.Wiimote.ClassicController.RightJoy.X > 0 ? e.Wiimote.ClassicController.RightJoy.X : 0f);
+                        holder.SetValue(Inputs.ClassicController.RLEFT , e.Wiimote.ClassicController.RightJoy.X < 0 ? e.Wiimote.ClassicController.RightJoy.X * -1 : 0f);
+                        holder.SetValue(Inputs.ClassicController.RUP   , e.Wiimote.ClassicController.RightJoy.Y > 0 ? e.Wiimote.ClassicController.RightJoy.Y : 0f);
+                        holder.SetValue(Inputs.ClassicController.RDOWN , e.Wiimote.ClassicController.RightJoy.Y < 0 ? e.Wiimote.ClassicController.RightJoy.Y * -1 : 0f);
                         break;
 
                     case ControllerType.ClassicControllerPro:
-                        holder.SetValue("eA", e.Wiimote.ClassicControllerPro.A);
-                        holder.SetValue("eB", e.Wiimote.ClassicControllerPro.B);
-                        holder.SetValue("eX", e.Wiimote.ClassicControllerPro.X);
-                        holder.SetValue("eY", e.Wiimote.ClassicControllerPro.Y);
+                        holder.SetValue(Inputs.ClassicControllerPro.A, e.Wiimote.ClassicControllerPro.A);
+                        holder.SetValue(Inputs.ClassicControllerPro.B, e.Wiimote.ClassicControllerPro.B);
+                        holder.SetValue(Inputs.ClassicControllerPro.X, e.Wiimote.ClassicControllerPro.X);
+                        holder.SetValue(Inputs.ClassicControllerPro.Y, e.Wiimote.ClassicControllerPro.Y);
 
-                        holder.SetValue("eUP", e.Wiimote.ClassicControllerPro.Up);
-                        holder.SetValue("eDOWN", e.Wiimote.ClassicControllerPro.Down);
-                        holder.SetValue("eLEFT", e.Wiimote.ClassicControllerPro.Left);
-                        holder.SetValue("eRIGHT", e.Wiimote.ClassicControllerPro.Right);
+                        holder.SetValue(Inputs.ClassicControllerPro.UP, e.Wiimote.ClassicControllerPro.Up);
+                        holder.SetValue(Inputs.ClassicControllerPro.DOWN, e.Wiimote.ClassicControllerPro.Down);
+                        holder.SetValue(Inputs.ClassicControllerPro.LEFT, e.Wiimote.ClassicControllerPro.Left);
+                        holder.SetValue(Inputs.ClassicControllerPro.RIGHT, e.Wiimote.ClassicControllerPro.Right);
 
-                        holder.SetValue("eL", e.Wiimote.ClassicControllerPro.L);
-                        holder.SetValue("eR", e.Wiimote.ClassicControllerPro.R);
-                        holder.SetValue("eZL", e.Wiimote.ClassicControllerPro.ZL);
-                        holder.SetValue("eZR", e.Wiimote.ClassicControllerPro.ZR);
+                        holder.SetValue(Inputs.ClassicControllerPro.L, e.Wiimote.ClassicControllerPro.L);
+                        holder.SetValue(Inputs.ClassicControllerPro.R, e.Wiimote.ClassicControllerPro.R);
+                        holder.SetValue(Inputs.ClassicControllerPro.ZL, e.Wiimote.ClassicControllerPro.ZL);
+                        holder.SetValue(Inputs.ClassicControllerPro.ZR, e.Wiimote.ClassicControllerPro.ZR);
 
-                        holder.SetValue("eSTART", e.Wiimote.ClassicControllerPro.Start);
-                        holder.SetValue("eSELECT", e.Wiimote.ClassicControllerPro.Select);
-                        holder.SetValue("eHOME", e.Wiimote.ClassicControllerPro.Home);
+                        holder.SetValue(Inputs.ClassicControllerPro.START, e.Wiimote.ClassicControllerPro.Start);
+                        holder.SetValue(Inputs.ClassicControllerPro.SELECT, e.Wiimote.ClassicControllerPro.Select);
+                        holder.SetValue(Inputs.ClassicControllerPro.HOME, e.Wiimote.ClassicControllerPro.Home);
 
-                        holder.SetValue("eLRIGHT", e.Wiimote.ClassicControllerPro.LeftJoy.X > 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.X : 0f);
-                        holder.SetValue("eLLEFT" , e.Wiimote.ClassicControllerPro.LeftJoy.X < 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.X * -1 : 0f);
-                        holder.SetValue("eLUP"   , e.Wiimote.ClassicControllerPro.LeftJoy.Y > 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.Y : 0f);
-                        holder.SetValue("eLDOWN" , e.Wiimote.ClassicControllerPro.LeftJoy.Y < 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.Y * -1 : 0f);
+                        holder.SetValue(Inputs.ClassicControllerPro.LRIGHT, e.Wiimote.ClassicControllerPro.LeftJoy.X > 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.X : 0f);
+                        holder.SetValue(Inputs.ClassicControllerPro.LLEFT , e.Wiimote.ClassicControllerPro.LeftJoy.X < 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.X * -1 : 0f);
+                        holder.SetValue(Inputs.ClassicControllerPro.LUP   , e.Wiimote.ClassicControllerPro.LeftJoy.Y > 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.Y : 0f);
+                        holder.SetValue(Inputs.ClassicControllerPro.LDOWN , e.Wiimote.ClassicControllerPro.LeftJoy.Y < 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.Y * -1 : 0f);
 
-                        holder.SetValue("eRRIGHT", e.Wiimote.ClassicControllerPro.RightJoy.X > 0 ? e.Wiimote.ClassicControllerPro.RightJoy.X : 0f);
-                        holder.SetValue("eRLEFT" , e.Wiimote.ClassicControllerPro.RightJoy.X < 0 ? e.Wiimote.ClassicControllerPro.RightJoy.X * -1 : 0f);
-                        holder.SetValue("eRUP"   , e.Wiimote.ClassicControllerPro.RightJoy.Y > 0 ? e.Wiimote.ClassicControllerPro.RightJoy.Y : 0f);
-                        holder.SetValue("eRDOWN" , e.Wiimote.ClassicControllerPro.RightJoy.Y < 0 ? e.Wiimote.ClassicControllerPro.RightJoy.Y * -1 : 0f);
+                        holder.SetValue(Inputs.ClassicControllerPro.RRIGHT, e.Wiimote.ClassicControllerPro.RightJoy.X > 0 ? e.Wiimote.ClassicControllerPro.RightJoy.X : 0f);
+                        holder.SetValue(Inputs.ClassicControllerPro.RLEFT , e.Wiimote.ClassicControllerPro.RightJoy.X < 0 ? e.Wiimote.ClassicControllerPro.RightJoy.X * -1 : 0f);
+                        holder.SetValue(Inputs.ClassicControllerPro.RUP   , e.Wiimote.ClassicControllerPro.RightJoy.Y > 0 ? e.Wiimote.ClassicControllerPro.RightJoy.Y : 0f);
+                        holder.SetValue(Inputs.ClassicControllerPro.RDOWN , e.Wiimote.ClassicControllerPro.RightJoy.Y < 0 ? e.Wiimote.ClassicControllerPro.RightJoy.Y * -1 : 0f);
                         break;
                         
                     case ControllerType.MotionPlus:
@@ -359,6 +359,11 @@ namespace WiinUSoft
         private void btnDetatch_Click(object sender, RoutedEventArgs e)
         {
             Detatch();
+        }
+
+        private void btnConfig_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Open mapping screen
         }
     }
 }

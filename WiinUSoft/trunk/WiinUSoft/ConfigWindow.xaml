@@ -1,0 +1,13 @@
+﻿<Window x:Class="WiinUSoft.ConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ConfigWindow" Height="378" Width="696">
+    <Canvas>
+        <Image Canvas.Left="329" Canvas.Top="94" Source="Images/xbox_360_controller-small.png" Height="200"/>
+        <Ellipse x:Name="selectionDevice_" Height="36" Canvas.Left="112" Stroke="#FF0D31E6" Canvas.Top="178" Width="36" StrokeThickness="5"/>
+        <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="472" Stroke="#FF0D31E6" Canvas.Top="178" Width="36" StrokeThickness="5"/>
+        <Line x:Name="guideMeet" X1="0" X2="360" Canvas.Left="127" Canvas.Top="30" Stroke="#FF0D31E6" StrokeThickness="5"/>
+        <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="129" Canvas.Top="28" Stroke="#FF0D31E6" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
+        <Line x:Name="guideDevice_Copy" X1="0" Y2="150" Canvas.Left="490" Canvas.Top="28" Stroke="#FF0D31E6" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
+    </Canvas>
+</Window>

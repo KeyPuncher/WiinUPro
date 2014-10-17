@@ -53,6 +53,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DeviceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -64,6 +68,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfigWindow.xaml.cs">
+      <DependentUpon>ConfigWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="DeviceControl.xaml.cs">
       <DependentUpon>DeviceControl.xaml</DependentUpon>
@@ -122,6 +129,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Handlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\xbox_360_controller-small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

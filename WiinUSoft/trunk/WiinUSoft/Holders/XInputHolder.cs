@@ -59,6 +59,92 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.ProController.START, Inputs.Xbox360.START);
                     result.Add(Inputs.ProController.HOME, Inputs.Xbox360.GUIDE);
                     break;
+
+                case NintrollerLib.ControllerType.ClassicControllerPro:
+                    result.Add(Inputs.ClassicControllerPro.A, Inputs.Xbox360.A);
+                    result.Add(Inputs.ClassicControllerPro.B, Inputs.Xbox360.B);
+                    result.Add(Inputs.ClassicControllerPro.Y, Inputs.Xbox360.X);
+                    result.Add(Inputs.ClassicControllerPro.X, Inputs.Xbox360.Y);
+
+                    result.Add(Inputs.ClassicControllerPro.UP, Inputs.Xbox360.UP);
+                    result.Add(Inputs.ClassicControllerPro.DOWN, Inputs.Xbox360.DOWN);
+                    result.Add(Inputs.ClassicControllerPro.LEFT, Inputs.Xbox360.LEFT);
+                    result.Add(Inputs.ClassicControllerPro.RIGHT, Inputs.Xbox360.RIGHT);
+                                      
+                    result.Add(Inputs.ClassicControllerPro.L, Inputs.Xbox360.LB);
+                    result.Add(Inputs.ClassicControllerPro.R, Inputs.Xbox360.RB);
+                    result.Add(Inputs.ClassicControllerPro.ZL, Inputs.Xbox360.LT);
+                    result.Add(Inputs.ClassicControllerPro.ZR, Inputs.Xbox360.RT);
+                                      
+                    result.Add(Inputs.ClassicControllerPro.LUP,    Inputs.Xbox360.LUP);
+                    result.Add(Inputs.ClassicControllerPro.LDOWN,  Inputs.Xbox360.LDOWN);
+                    result.Add(Inputs.ClassicControllerPro.LLEFT,  Inputs.Xbox360.LLEFT);
+                    result.Add(Inputs.ClassicControllerPro.LRIGHT, Inputs.Xbox360.LRIGHT);
+                                      
+                    result.Add(Inputs.ClassicControllerPro.RUP,    Inputs.Xbox360.RUP);
+                    result.Add(Inputs.ClassicControllerPro.RDOWN,  Inputs.Xbox360.RDOWN);
+                    result.Add(Inputs.ClassicControllerPro.RLEFT,  Inputs.Xbox360.RLEFT);
+                    result.Add(Inputs.ClassicControllerPro.RRIGHT, Inputs.Xbox360.RRIGHT);
+                                      
+                    result.Add(Inputs.ClassicControllerPro.SELECT, Inputs.Xbox360.BACK);
+                    result.Add(Inputs.ClassicControllerPro.START, Inputs.Xbox360.START);
+                    result.Add(Inputs.ClassicControllerPro.HOME, Inputs.Xbox360.GUIDE);
+
+                    result.Add(Inputs.Wiimote.UP, Inputs.Xbox360.UP);
+                    result.Add(Inputs.Wiimote.DOWN, Inputs.Xbox360.DOWN);
+                    result.Add(Inputs.Wiimote.LEFT, Inputs.Xbox360.LEFT);
+                    result.Add(Inputs.Wiimote.RIGHT, Inputs.Xbox360.RIGHT);
+                    result.Add(Inputs.Wiimote.A, Inputs.Xbox360.A);
+                    result.Add(Inputs.Wiimote.B, Inputs.Xbox360.B);
+                    result.Add(Inputs.Wiimote.ONE, Inputs.Xbox360.LS);
+                    result.Add(Inputs.Wiimote.TWO, Inputs.Xbox360.RS);
+                    result.Add(Inputs.Wiimote.PLUS, Inputs.Xbox360.BACK);
+                    result.Add(Inputs.Wiimote.MINUS, Inputs.Xbox360.START);
+                    result.Add(Inputs.Wiimote.HOME, Inputs.Xbox360.GUIDE);
+                    break;
+
+                case NintrollerLib.ControllerType.ClassicController:
+                    result.Add(Inputs.ClassicController.B, Inputs.Xbox360.B);
+                    result.Add(Inputs.ClassicController.A, Inputs.Xbox360.A);
+                    result.Add(Inputs.ClassicController.Y, Inputs.Xbox360.X);
+                    result.Add(Inputs.ClassicController.X, Inputs.Xbox360.Y);
+
+                    result.Add(Inputs.ClassicController.UP, Inputs.Xbox360.UP);
+                    result.Add(Inputs.ClassicController.DOWN, Inputs.Xbox360.DOWN);
+                    result.Add(Inputs.ClassicController.LEFT, Inputs.Xbox360.LEFT);
+                    result.Add(Inputs.ClassicController.RIGHT, Inputs.Xbox360.RIGHT);
+
+                    result.Add(Inputs.ClassicController.ZL, Inputs.Xbox360.LB);
+                    result.Add(Inputs.ClassicController.ZR, Inputs.Xbox360.RB);
+                    result.Add(Inputs.ClassicController.LT, Inputs.Xbox360.LT);
+                    result.Add(Inputs.ClassicController.RT, Inputs.Xbox360.RT);
+
+                    result.Add(Inputs.ClassicController.LUP, Inputs.Xbox360.LUP);
+                    result.Add(Inputs.ClassicController.LDOWN, Inputs.Xbox360.LDOWN);
+                    result.Add(Inputs.ClassicController.LLEFT, Inputs.Xbox360.LLEFT);
+                    result.Add(Inputs.ClassicController.LRIGHT, Inputs.Xbox360.LRIGHT);
+
+                    result.Add(Inputs.ClassicController.RUP, Inputs.Xbox360.RUP);
+                    result.Add(Inputs.ClassicController.RDOWN, Inputs.Xbox360.RDOWN);
+                    result.Add(Inputs.ClassicController.RLEFT, Inputs.Xbox360.RLEFT);
+                    result.Add(Inputs.ClassicController.RRIGHT, Inputs.Xbox360.RRIGHT);
+
+                    result.Add(Inputs.ClassicController.SELECT, Inputs.Xbox360.BACK);
+                    result.Add(Inputs.ClassicController.START, Inputs.Xbox360.START);
+                    result.Add(Inputs.ClassicController.HOME, Inputs.Xbox360.GUIDE);
+
+                    result.Add(Inputs.Wiimote.UP, Inputs.Xbox360.UP);
+                    result.Add(Inputs.Wiimote.DOWN, Inputs.Xbox360.DOWN);
+                    result.Add(Inputs.Wiimote.LEFT, Inputs.Xbox360.LEFT);
+                    result.Add(Inputs.Wiimote.RIGHT, Inputs.Xbox360.RIGHT);
+                    result.Add(Inputs.Wiimote.A, Inputs.Xbox360.A);
+                    result.Add(Inputs.Wiimote.B, Inputs.Xbox360.B);
+                    result.Add(Inputs.Wiimote.ONE, Inputs.Xbox360.LS);
+                    result.Add(Inputs.Wiimote.TWO, Inputs.Xbox360.RS);
+                    result.Add(Inputs.Wiimote.PLUS, Inputs.Xbox360.BACK);
+                    result.Add(Inputs.Wiimote.MINUS, Inputs.Xbox360.START);
+                    result.Add(Inputs.Wiimote.HOME, Inputs.Xbox360.GUIDE);
+                    break;
             }
 
             return result;
@@ -102,10 +188,10 @@ namespace WiinUSoft.Holders
 
         public override void Update()
         {
-            //if (!connected)
-            //{
-            //    return;
-            //}
+            if (!connected)
+            {
+                return;
+            }
 
             byte[] rumble = new byte[8];
             byte[] report = new byte[28];

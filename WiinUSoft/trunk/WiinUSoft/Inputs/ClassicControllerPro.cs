@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WiinUSoft.Inputs
 {
-    public static class ClassicControllerccp
+    public static class ClassicControllerPro
     {
         public const string A      = "ccpA";
         public const string B      = "ccpB";
