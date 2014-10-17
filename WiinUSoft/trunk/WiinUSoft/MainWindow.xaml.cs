@@ -40,9 +40,12 @@ namespace WiinUSoft
             foreach (string hid in hidList)
             {
                 Nintroller n = new Nintroller(hid);
-                deviceList.Add(new DeviceControl(n));
-                deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
-                groupAvailable.Children.Add(deviceList[deviceList.Count - 1]);
+                if (n.ConnectTest())
+                {
+                    deviceList.Add(new DeviceControl(n));
+                    deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
+                    groupAvailable.Children.Add(deviceList[deviceList.Count - 1]);
+                }
             }
         }
 
@@ -79,6 +82,19 @@ namespace WiinUSoft
                 case DeviceState.Connected_VJoy:
                     groupXinput.Children.Add(sender);
                     break;
+            }
+        }
+
+        private void btnDetatchAllXInput_Click(object sender, RoutedEventArgs e)
+        {
+            List<DeviceControl> detatchList = new List<DeviceControl>();
+            foreach (DeviceControl d in groupXinput.Children)
+            {
+                detatchList.Add(d);
+            }
+            foreach (DeviceControl d in detatchList)
+            {
+                d.Detatch();
             }
         }
     }

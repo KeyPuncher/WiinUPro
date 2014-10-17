@@ -39,6 +39,14 @@
                     <GradientStop Color="#FFC7C7C7"/>
                 </LinearGradientBrush>
             </Button.Background>
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="XOption1" Header="Xbox 360 Controller 1" Click="XOption_Click"/>
+                    <MenuItem x:Name="XOption2" Header="Xbox 360 Controller 2" Click="XOption_Click"/>
+                    <MenuItem x:Name="XOption3" Header="Xbox 360 Controller 3" Click="XOption_Click"/>
+                    <MenuItem x:Name="XOption4" Header="Xbox 360 Controller 4" Click="XOption_Click"/>
+                </ContextMenu>
+            </Button.ContextMenu>
         </Button>
         <Button x:Name="btnVjoy" Content="VJ" HorizontalAlignment="Left" Margin="226,36,-22,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2">
             <Button.Background>
@@ -48,7 +56,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnConfig" Content="Config" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11">
+        <Button x:Name="btnConfig" Content="Config" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11" Visibility="Hidden">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF616161" Offset="1"/>
@@ -56,7 +64,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnDetatch" Content="Detatch" HorizontalAlignment="Left" Margin="226,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="10">
+        <Button x:Name="btnDetatch" Content="Detatch" HorizontalAlignment="Left" Margin="226,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="10" Click="btnDetatch_Click" Visibility="Hidden">
             <Button.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF616161" Offset="1"/>

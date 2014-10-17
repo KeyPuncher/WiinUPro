@@ -71,5 +71,6 @@ namespace WiinUSoft.Holders
         }
 
         public abstract void Update();
+        public abstract void Close();
     }
 }

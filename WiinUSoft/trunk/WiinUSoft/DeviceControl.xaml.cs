@@ -82,6 +82,8 @@ namespace WiinUSoft
             }
         }
 
+        internal int targetXDevice = 0;
+
         public DeviceControl()
         {
             InitializeComponent();
@@ -101,6 +103,13 @@ namespace WiinUSoft
         public void SetName(string newName)
         {
             labelName.Content = new TextBox() { Text = newName };
+        }
+
+        public void Detatch()
+        {
+            device.Disconnect();
+            holder.Close();
+            ConnectionState = DeviceState.Discovered;
         }
 
         public void SetState(DeviceState newState)
@@ -130,10 +139,10 @@ namespace WiinUSoft
                     btnConfig.Visibility    = System.Windows.Visibility.Visible;
                     btnDetatch.Visibility   = System.Windows.Visibility.Visible;
 
-                    // TODO: Instantiate holder
                     var xHolder = new Holders.XInputHolder(device.Type);
-                    xHolder.ConnectXInput(1);
+                    xHolder.ConnectXInput(targetXDevice);
                     holder = xHolder;
+                    device.SetPlayerLED(targetXDevice);
                     break;
 
                 case DeviceState.Connected_VJoy:
@@ -185,16 +194,6 @@ namespace WiinUSoft
                 holder.SetValue(Inputs.ProController.HOME, e.ProController.Home);
                 holder.SetValue(Inputs.ProController.LS, e.ProController.LS);
                 holder.SetValue(Inputs.ProController.RS, e.ProController.RS);
-
-                //holder.SetValue("LRIGHT", e.ProController.LeftJoy.X > 0.1f);
-                //holder.SetValue("LLEFT", e.ProController.LeftJoy.X < -0.1f);
-                //holder.SetValue("LUP", e.ProController.LeftJoy.Y > 0.1f);
-                //holder.SetValue("LDOWN", e.ProController.LeftJoy.Y < -0.1f);
-
-                //holder.SetValue("RRIGHT", e.ProController.RightJoy.X > 0.1f);
-                //holder.SetValue("RLEFT", e.ProController.RightJoy.X < -0.1f);
-                //holder.SetValue("RUP", e.ProController.RightJoy.Y > 0.1f);
-                //holder.SetValue("RDOWN", e.ProController.RightJoy.Y < -0.1f);
 
                 holder.SetValue(Inputs.ProController.LRIGHT, e.ProController.LeftJoy.X > 0 ? e.ProController.LeftJoy.X : 0f);
                 holder.SetValue(Inputs.ProController.LLEFT , e.ProController.LeftJoy.X < 0 ? e.ProController.LeftJoy.X * -1 : 0f);
@@ -331,11 +330,35 @@ namespace WiinUSoft
 
         private void btnXinput_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Select which device number to connect to & if available
-            if (device.Connect())
+            if (btnXinput.ContextMenu != null)
             {
-                ConnectionState = DeviceState.Connected_XInput;
+                XOption1.IsEnabled = Holders.XInputHolder.availabe[0];
+                XOption2.IsEnabled = Holders.XInputHolder.availabe[1];
+                XOption3.IsEnabled = Holders.XInputHolder.availabe[2];
+                XOption4.IsEnabled = Holders.XInputHolder.availabe[3];
+
+                btnXinput.ContextMenu.PlacementTarget = btnXinput;
+                btnXinput.ContextMenu.IsOpen = true;
             }
+        }
+
+        private void XOption_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Select which device number to connect to & if available
+            if (device.ConnectTest() && device.Connect())
+            {
+                int tmp = 0;
+                if (int.TryParse(((MenuItem)sender).Name.Replace("XOption", ""), out tmp))
+                {
+                    targetXDevice = tmp;
+                    ConnectionState = DeviceState.Connected_XInput;
+                }
+            }
+        }
+
+        private void btnDetatch_Click(object sender, RoutedEventArgs e)
+        {
+            Detatch();
         }
     }
 }

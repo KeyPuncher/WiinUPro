@@ -9,6 +9,8 @@ namespace WiinUSoft.Holders
 {
     public class XInputHolder : Holder
     {
+        static internal bool[] availabe = { true, true, true, true };
+
         internal int minRumble = 20;
         internal int rumbleLeft = 0;
         internal int rumbleDecrement = 10;
@@ -107,20 +109,26 @@ namespace WiinUSoft.Holders
 
             byte[] rumble = new byte[8];
             byte[] report = new byte[28];
+            byte[] parsed = new byte[28];
 
-            //bus.Parse(input, reportB);
-
-            // TODO: populate report
             #region Populate Report
             //report[0] = 0x1C;
+            //report[1] = 0x00;
+            //report[2] = 0x00;
+            //report[3] = 0x00;
             //report[4] = (byte)ID;
-            //// 5 to 8 should remain 0
+            //report[5] = 0x00;
+            //report[6] = 0x00;
+            //report[7] = 0x00;
+            //report[8] = 0x00;
             //report[9] = 0x14;
 
             //float LX = 0f;
             //float LY = 0f;
             //float RX = 0f;
             //float RY = 0f;
+            //float LT = 0f;
+            //float RT = 0f;
 
             //foreach (KeyValuePair<string, string> map in Mappings)
             //{
@@ -129,73 +137,43 @@ namespace WiinUSoft.Holders
 
             //    switch (map.Value.ToUpper())
             //    {
-            //            // Digital (1 Bit)
-            //        case Inputs.Xbox360.UP   : index = 10; offset = 0; break;
-            //        case Inputs.Xbox360.DOWN : index = 10; offset = 1; break;
-            //        case Inputs.Xbox360.LEFT : index = 10; offset = 2; break;
-            //        case Inputs.Xbox360.RIGHT: index = 10; offset = 3; break;
-            //        case Inputs.Xbox360.START: index = 10; offset = 4; break;
-            //        case Inputs.Xbox360.BACK : index = 10; offset = 5; break;
-            //        case Inputs.Xbox360.LS   : index = 10; offset = 6; break;
-            //        case Inputs.Xbox360.RS   : index = 10; offset = 7; break;
-            //        case Inputs.Xbox360.LB   : index = 11; offset = 0; break;
-            //        case Inputs.Xbox360.RB   : index = 11; offset = 1; break;
-            //        case Inputs.Xbox360.GUIDE: index = 11; offset = 2; break;
-            //        case Inputs.Xbox360.A    : index = 11; offset = 4; break;
-            //        case Inputs.Xbox360.B    : index = 11; offset = 5; break;
-            //        case Inputs.Xbox360.X    : index = 11; offset = 6; break;
-            //        case Inputs.Xbox360.Y    : index = 11; offset = 7; break;
-            //            // Triggers (1 Byte)
-            //        case Inputs.Xbox360.LT: index = 12; offset = -1; break;
-            //        case Inputs.Xbox360.RT: index = 13; offset = -1; break;
-            //            // Analog (2 Byte)
-            //        //case Inputs.Xbox360.LX: index = 14; offset = -1; break;
-            //        //case Inputs.Xbox360.LY: index = 16; offset = -1; break;
-            //        //case Inputs.Xbox360.RX: index = 18; offset = -1; break;
-            //        //case Inputs.Xbox360.RY: index = 20; offset = -1; break;
-            //        case Inputs.Xbox360.LLEFT:  LX -= Values[map.Key]; offset = -1; break;
+            //        // Digital
+            //        case Inputs.Xbox360.UP    : index = 10; offset = 0; break;
+            //        case Inputs.Xbox360.DOWN  : index = 10; offset = 1; break;
+            //        case Inputs.Xbox360.RIGHT : index = 10; offset = 2; break;
+            //        case Inputs.Xbox360.LEFT  : index = 10; offset = 3; break;
+            //        case Inputs.Xbox360.START : index = 10; offset = 4; break;
+            //        case Inputs.Xbox360.BACK  : index = 10; offset = 5; break;
+            //        case Inputs.Xbox360.LS    : index = 10; offset = 6; break;
+            //        case Inputs.Xbox360.RS    : index = 10; offset = 7; break;
+            //        case Inputs.Xbox360.LB    : index = 11; offset = 0; break;
+            //        case Inputs.Xbox360.RB    : index = 11; offset = 1; break;
+            //        case Inputs.Xbox360.GUIDE : index = 11; offset = 2; break;
+            //        case Inputs.Xbox360.A     : index = 11; offset = 4; break;
+            //        case Inputs.Xbox360.B     : index = 11; offset = 5; break;
+            //        case Inputs.Xbox360.X     : index = 11; offset = 6; break;
+            //        case Inputs.Xbox360.Y     : index = 11; offset = 7; break;
+            //        // Analog
+            //        case Inputs.Xbox360.LT    : LT += Values[map.Key]; offset = -1; break;
+            //        case Inputs.Xbox360.RT    : RT += Values[map.Key]; offset = -1; break;
+            //        case Inputs.Xbox360.LLEFT : LX -= Values[map.Key]; offset = -1; break;
             //        case Inputs.Xbox360.LRIGHT: LX += Values[map.Key]; offset = -1; break;
-            //        case Inputs.Xbox360.LUP:    LY += Values[map.Key]; offset = -1; break;
-            //        case Inputs.Xbox360.LDOWN:  LY -= Values[map.Key]; offset = -1; break;
-            //        case Inputs.Xbox360.RLEFT:  RX -= Values[map.Key]; offset = -1; break;
+            //        case Inputs.Xbox360.LUP   : LY += Values[map.Key]; offset = -1; break;
+            //        case Inputs.Xbox360.LDOWN : LY -= Values[map.Key]; offset = -1; break;
+            //        case Inputs.Xbox360.RLEFT : RX -= Values[map.Key]; offset = -1; break;
             //        case Inputs.Xbox360.RRIGHT: RX += Values[map.Key]; offset = -1; break;
-            //        case Inputs.Xbox360.RUP:    RY += Values[map.Key]; offset = -1; break;
-            //        case Inputs.Xbox360.RDOWN:  RY -= Values[map.Key]; offset = -1; break;
+            //        case Inputs.Xbox360.RUP   : RY += Values[map.Key]; offset = -1; break;
+            //        case Inputs.Xbox360.RDOWN : RY -= Values[map.Key]; offset = -1; break;
             //    }
-                
+
             //    if (offset > -1 && index < report.Length)
             //    {
             //        report[index] |= (byte)(1 << offset);
             //    }
-            //    else if (index == 12 || index == 13)
-            //    {
-            //        report[index] = GetRawTrigger(Values[map.Key]);
-            //    }
-            //    //else if (index + 1 < report.Length)
-            //    //{
-            //    //    report[index]     = (byte)((GetRawAxis(Values[map.Key]) >> 0) & 0xFF);
-            //    //    report[index + 1] = (byte)((GetRawAxis(Values[map.Key]) >> 8) & 0xFF);
-            //    //}
-
-            //    //if (map.Value.ToUpper() == "UP"   ) report[10] |= (byte)(1 << 0);
-            //    //if (map.Value.ToUpper() == "DOWN" ) report[10] |= (byte)(1 << 1);
-            //    //if (map.Value.ToUpper() == "LEFT" ) report[10] |= (byte)(1 << 2);
-            //    //if (map.Value.ToUpper() == "RIGHT") report[10] |= (byte)(1 << 3);
-            //    //if (map.Value.ToUpper() == "START") report[10] |= (byte)(1 << 4);
-            //    //if (map.Value.ToUpper() == "BACK" ) report[10] |= (byte)(1 << 5);
-            //    //if (map.Value.ToUpper() == "LS"   ) report[10] |= (byte)(1 << 6);
-            //    //if (map.Value.ToUpper() == "RS"   ) report[10] |= (byte)(1 << 7);
-
-            //    //if (map.Value.ToUpper() == "LB"  ) report[11] |= (byte)(1 << 0);
-            //    //if (map.Value.ToUpper() == "RB"  ) report[11] |= (byte)(1 << 1);
-            //    //if (map.Value.ToUpper() == "GUIDE") report[11] |= (byte)(1 << 2);
-
-            //    //if (map.Value.ToUpper() == "A") report[11] |= (byte)(1 << 4);
-            //    //if (map.Value.ToUpper() == "B") report[11] |= (byte)(1 << 5);
-            //    //if (map.Value.ToUpper() == "X") report[11] |= (byte)(1 << 6);
-            //    //if (map.Value.ToUpper() == "Y") report[11] |= (byte)(1 << 7);
             //}
 
+            //report[12] = (byte)GetRawTrigger(LT);
+            //report[13] = (byte)GetRawTrigger(RT);
             //report[14] = (byte)((GetRawAxis(LX) >> 0) & 0xFF);
             //report[15] = (byte)((GetRawAxis(LX) >> 8) & 0xFF);
             //report[16] = (byte)((GetRawAxis(LY) >> 0) & 0xFF);
@@ -204,6 +182,13 @@ namespace WiinUSoft.Holders
             //report[19] = (byte)((GetRawAxis(RX) >> 8) & 0xFF);
             //report[20] = (byte)((GetRawAxis(RY) >> 0) & 0xFF);
             //report[21] = (byte)((GetRawAxis(RY) >> 8) & 0xFF);
+
+            //report[22] = 0x00;
+            //report[23] = 0x00;
+            //report[24] = 0x00;
+            //report[25] = 0x00;
+            //report[26] = 0x00;
+            //report[27] = 0x00;
             #endregion
 
             #region Populate Report Revised
@@ -233,35 +218,35 @@ namespace WiinUSoft.Holders
                 {
                     switch (map.Value)
                     {
-                        case Inputs.Xbox360.LLEFT : LX -= Values[map.Key]; break;
+                        case Inputs.Xbox360.LLEFT: LX -= Values[map.Key]; break;
                         case Inputs.Xbox360.LRIGHT: LX += Values[map.Key]; break;
-                        case Inputs.Xbox360.LUP   : LY += Values[map.Key]; break;
-                        case Inputs.Xbox360.LDOWN : LY -= Values[map.Key]; break;
-                        case Inputs.Xbox360.RLEFT : RX -= Values[map.Key]; break;
+                        case Inputs.Xbox360.LUP: LY += Values[map.Key]; break;
+                        case Inputs.Xbox360.LDOWN: LY -= Values[map.Key]; break;
+                        case Inputs.Xbox360.RLEFT: RX -= Values[map.Key]; break;
                         case Inputs.Xbox360.RRIGHT: RX += Values[map.Key]; break;
-                        case Inputs.Xbox360.RUP   : RY += Values[map.Key]; break;
-                        case Inputs.Xbox360.RDOWN : RY -= Values[map.Key]; break;
+                        case Inputs.Xbox360.RUP: RY += Values[map.Key]; break;
+                        case Inputs.Xbox360.RDOWN: RY -= Values[map.Key]; break;
                         case Inputs.Xbox360.LT: LT += Values[map.Key]; break;
                         case Inputs.Xbox360.RT: RT += Values[map.Key]; break;
                     }
                 }
             }
 
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.BACK]  > 0f ? 1 << 0 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.LS]    > 0f ? 1 << 1 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.RS]    > 0f ? 1 << 2 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.BACK] > 0f ? 1 << 0 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.LS] > 0f ? 1 << 1 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.RS] > 0f ? 1 << 2 : 0);
             report[10] |= (byte)(writeReport[Inputs.Xbox360.START] > 0f ? 1 << 3 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.UP]    > 0f ? 1 << 4 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.DOWN]  > 0f ? 1 << 5 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.UP] > 0f ? 1 << 4 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.DOWN] > 0f ? 1 << 5 : 0);
             report[10] |= (byte)(writeReport[Inputs.Xbox360.RIGHT] > 0f ? 1 << 6 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.LEFT]  > 0f ? 1 << 7 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.LEFT] > 0f ? 1 << 7 : 0);
 
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.LB]    > 0f ? 1 << 2 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.RB]    > 0f ? 1 << 3 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.Y]     > 0f ? 1 << 4 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.B]     > 0f ? 1 << 5 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.A]     > 0f ? 1 << 6 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.X]     > 0f ? 1 << 7 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.LB] > 0f ? 1 << 2 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.RB] > 0f ? 1 << 3 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.Y] > 0f ? 1 << 4 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.B] > 0f ? 1 << 5 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.A] > 0f ? 1 << 6 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.X] > 0f ? 1 << 7 : 0);
 
             report[12] |= (byte)(writeReport[Inputs.Xbox360.GUIDE] > 0f ? 1 << 0 : 0);
 
@@ -278,48 +263,61 @@ namespace WiinUSoft.Holders
             report[27] = GetRawTrigger(RT);
             #endregion
 
-            byte[] reportB = new byte[28];
-            bus.Parse(report, reportB);
+            bus.Parse(report, parsed);
 
-            if (bus.Report(reportB, rumble))
+            if (bus.Report(parsed, rumble))
             {
                 // This is set on a rumble state change
                 if (rumble[1] == 0x08)
                 {
-                    byte big = (byte)rumble[3];
-                    byte small = (byte)rumble[4];
-                    // TODO: Revise Rumble
-                    //System.Diagnostics.Debug.WriteLine("Big Rumble: " + big.ToString());
-                    //System.Diagnostics.Debug.WriteLine("Small Rumble: " + small.ToString());
-                    
                     // Check if it's strong enough to rumble
                     int strength = BitConverter.ToInt32(new byte[] { rumble[4], rumble[3], 0x00, 0x00 }, 0);
                     Flags[Inputs.Flags.RUMBLE] = (strength > minRumble);
-                    System.Diagnostics.Debug.WriteLine("Rumble Changed to: " + strength.ToString());
                 }
-                //else
-                //{
-                //    Flags[Inputs.Flags.RUMBLE] = false;
-                //}
             }
+        }
+
+        public override void Close()
+        {
+            Flags[Inputs.Flags.RUMBLE] = false;
+            bus.Unplug(ID);
+            
+            if (ID > 0 && ID < 5)
+            {
+                availabe[ID - 1] = true;
+            }
+
+            ID = 0;
+            connected = false;
         }
 
         public bool ConnectXInput(int id)
         {
-            bus = XBus.Default;
-            
-            if (connected)
+            if (id > 0 && id < 5)
             {
-                bus.Unplug(id);
+                availabe[id - 1] = false;
             }
+            else
+            {
+                return false;
+            }
+
+            bus = XBus.Default;
             bus.Unplug(id);
-            connected = bus.Plugin(id);
+            bus.Plugin(id);
             ID = id;
-            return connected;
+            connected = true;
+            return true;
         }
 
         public bool RemoveXInput(int id)
         {
+            if (id > 0 && id < 5)
+            {
+                availabe[id - 1] = true;
+            }
+
+
             Flags[Inputs.Flags.RUMBLE] = false;
             if (bus.Unplug(id))
             {
