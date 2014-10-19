@@ -364,6 +364,8 @@ namespace WiinUSoft
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Open mapping screen
+            var config = new ConfigWindow();
+            config.ShowDialog();
         }
     }
 }
