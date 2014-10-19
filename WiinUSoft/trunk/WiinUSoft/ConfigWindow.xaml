@@ -3,11 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ConfigWindow" Height="378" Width="696">
     <Canvas>
-        <Image Canvas.Left="329" Canvas.Top="94" Source="Images/xbox_360_controller-small.png" Height="200"/>
-        <Ellipse x:Name="selectionDevice_" Height="36" Canvas.Left="112" Stroke="#FF0D31E6" Canvas.Top="178" Width="36" StrokeThickness="5"/>
-        <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="472" Stroke="#FF0D31E6" Canvas.Top="178" Width="36" StrokeThickness="5"/>
-        <Line x:Name="guideMeet" X1="0" X2="360" Canvas.Left="127" Canvas.Top="30" Stroke="#FF0D31E6" StrokeThickness="5"/>
-        <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="129" Canvas.Top="28" Stroke="#FF0D31E6" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
-        <Line x:Name="guideDevice_Copy" X1="0" Y2="150" Canvas.Left="490" Canvas.Top="28" Stroke="#FF0D31E6" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="btnApply" Content="Apply" Canvas.Left="578" Canvas.Top="314" Width="100" Height="24"/>
+        <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="467" Canvas.Top="314" Width="100" Height="24"/>
+        <Line x:Name="guideMeet" X1="178" X2="518" Canvas.Left="0" Canvas.Top="30" Stroke="#FF0D31E6" StrokeThickness="5"/>
+        <!-- Mapped Device (360 Controller) -->
+        <Grid Canvas.Left="358" Canvas.Top="94" Height="200">
+            <Image Source="Images/xbox_360_controller-small.png"/>
+        </Grid>
+        <Line x:Name="guideDevice_Copy" X1="0" Y2="150" Canvas.Left="518" Canvas.Top="28" Stroke="#FF0D31E6" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
+        <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="500" Stroke="#FF0D31E6" Canvas.Top="178" Width="36" StrokeThickness="5"/>
+        <Label x:Name="mapLabel" Content="Guide" Canvas.Left="358" Canvas.Top="312" Width="100"/>
+        <!-- Device to Map (Pro Controller) -->
+        <Grid Canvas.Left="10" Canvas.Top="94" Height="200">
+            <Image Source="Images/ProController_map.png"/>
+            <Rectangle x:Name="pro_upClick" HorizontalAlignment="Left" Height="20" Margin="96,110,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="16" ToolTip="D-pad Up"/>
+            <Rectangle x:Name="pro_downClick" HorizontalAlignment="Left" Height="18" Margin="97,137,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="16" ToolTip="D-pad Down"/>
+            <Rectangle x:Name="pro_leftClick" HorizontalAlignment="Left" Height="18" Margin="79,124,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="17" ToolTip="D-pad Left"/>
+            <Rectangle x:Name="pro_rightClick" HorizontalAlignment="Left" Height="18" Margin="113,124,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="17" ToolTip="D-pad Right"/>
+            <Ellipse x:Name="pro_aClick" HorizontalAlignment="Left" Height="24" Margin="238,123,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="24" ToolTip="A"/>
+            <Ellipse x:Name="pro_bClick" HorizontalAlignment="Left" Height="24" Margin="214,140,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="24" ToolTip="B"/>
+            <Ellipse x:Name="pro_xClick" HorizontalAlignment="Left" Height="24" Margin="217,104,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="24" ToolTip="X"/>
+            <Ellipse x:Name="pro_yClick" HorizontalAlignment="Left" Height="24" Margin="192,122,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="24" ToolTip="Y"/>
+            <Ellipse x:Name="pro_selectClick" HorizontalAlignment="Left" Height="20" Margin="129,89,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="20" ToolTip="Select"/>
+            <Ellipse x:Name="pro_homeClick" HorizontalAlignment="Left" Height="20" Margin="158,89,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="20" ToolTip="Home"/>
+            <Ellipse x:Name="pro_startClick" HorizontalAlignment="Left" Height="20" Margin="186,89,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="20" ToolTip="Start"/>
+            <Rectangle x:Name="pro_lClick" HorizontalAlignment="Left" Height="24" Margin="33,13,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="66" ToolTip="L"/>
+            <Rectangle x:Name="pro_rClick" HorizontalAlignment="Left" Height="24" Margin="238,15,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="66" ToolTip="R"/>
+            <Rectangle x:Name="pro_zlClick" HorizontalAlignment="Left" Height="12" Margin="54,1,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="34" ToolTip="ZL"/>
+            <Rectangle x:Name="pro_zrClick" HorizontalAlignment="Left" Height="12" Margin="245,3,0,0" StrokeThickness="5" VerticalAlignment="Top" Width="34" ToolTip="ZR"/>
+        </Grid>
+        <Ellipse x:Name="selectionDevice_" Height="36" Canvas.Left="160" Stroke="#FF0D31E6" Canvas.Top="178" Width="36" StrokeThickness="5"/>
+        <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="178" Canvas.Top="28" Stroke="#FF0D31E6" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
+        <Label x:Name="deviceLabel" Content="Home" Canvas.Left="239" Canvas.Top="312" HorizontalContentAlignment="Right" Width="100"/>
     </Canvas>
 </Window>
