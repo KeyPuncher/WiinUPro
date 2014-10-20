@@ -33,7 +33,7 @@ namespace WiinUSoft.Holders
             }
         }
 
-        public void SetMapping<T>(string name, string mapping)
+        public void SetMapping(string name, string mapping)
         {
             if (Mappings.ContainsKey(name))
             {

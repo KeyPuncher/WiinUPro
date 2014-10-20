@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ConfigWindow" Height="378" Width="696">
     <Canvas>
-        <Button x:Name="btnApply" Content="Apply" Canvas.Left="578" Canvas.Top="314" Width="100" Height="24"/>
-        <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="467" Canvas.Top="314" Width="100" Height="24"/>
+        <Button x:Name="btnApply" Content="Apply" Canvas.Left="578" Canvas.Top="314" Width="100" Height="24" Click="btnApply_Click"/>
+        <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="467" Canvas.Top="314" Width="100" Height="24" Background="#FFDDDDDD" Click="btnCancel_Click"/>
         <Line x:Name="guideMeet" X1="178" X2="518" Canvas.Left="0" Canvas.Top="30" Stroke="#FF0D31E6" StrokeThickness="5"/>
         <!-- Mapped Device (360 Controller) -->
         <Grid Canvas.Left="358" Canvas.Top="94" Height="200">
@@ -21,7 +21,7 @@
             <Ellipse x:Name="x_backClick" HorizontalAlignment="Left" Height="18" Margin="116,93,0,0" VerticalAlignment="Top" Width="20" ToolTip="Back" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000"/>
             <Ellipse x:Name="x_guideClick" HorizontalAlignment="Left" Height="36" Margin="140,83,0,0" StrokeThickness="0" VerticalAlignment="Top" Width="40" ToolTip="Guide" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" Fill="#00000000"/>
             <Rectangle x:Name="x_lbClick" HorizontalAlignment="Left" Height="24" Margin="34,33,0,0" VerticalAlignment="Top" Width="61" ToolTip="LB" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000"/>
-            <Rectangle x:Name="x_rbClcik" HorizontalAlignment="Left" Height="24" Margin="227,32,0,0" VerticalAlignment="Top" Width="61" ToolTip="RB" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000"/>
+            <Rectangle x:Name="x_rbClick" HorizontalAlignment="Left" Height="24" Margin="227,32,0,0" VerticalAlignment="Top" Width="61" ToolTip="RB" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000"/>
             <Rectangle x:Name="x_ltClick" HorizontalAlignment="Left" Height="31" Margin="62,2,0,0" VerticalAlignment="Top" Width="26" ToolTip="LT" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000"/>
             <Rectangle x:Name="x_rtClick" HorizontalAlignment="Left" Height="30" Margin="234,2,0,0" VerticalAlignment="Top" Width="28" ToolTip="RT" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000"/>
             <Rectangle x:Name="x_lupClick" HorizontalAlignment="Left" Height="24" Margin="56,77,0,0" VerticalAlignment="Top" Width="18" ToolTip="LUP" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" StrokeThickness="0" Fill="#00000000"/>

@@ -364,8 +364,15 @@ namespace WiinUSoft
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Open mapping screen
-            var config = new ConfigWindow();
+            var config = new ConfigWindow(holder.Mappings, deviceType);
             config.ShowDialog();
+            if (config.result)
+            {
+                foreach (KeyValuePair<string, string> pair in config.map)
+                {
+                    holder.SetMapping(pair.Key, pair.Value);
+                }
+            }
         }
     }
 }
