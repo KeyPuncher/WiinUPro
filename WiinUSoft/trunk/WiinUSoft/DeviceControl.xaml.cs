@@ -97,6 +97,9 @@ namespace WiinUSoft
             if (Device.ConnectTest())
             {
                 ConnectionState = DeviceState.Discovered;
+                device.Connect();
+                device.Disconnect();
+                labelName.Content = device.Type.ToString();
             }
         }
 
@@ -119,10 +122,10 @@ namespace WiinUSoft
             switch (newState)
             {
                 case DeviceState.Discovered:
-                    btnIdentify.IsEnabled   = true;
-                    btnProperties.IsEnabled = true;
+                    //btnIdentify.IsEnabled   = true;
+                    //btnProperties.IsEnabled = true;
                     btnXinput.IsEnabled     = true;
-                    btnVjoy.IsEnabled       = true;
+                    //btnVjoy.IsEnabled       = true;
                     btnConfig.IsEnabled     = false;
                     btnDetatch.IsEnabled    = false;
                     btnConfig.Visibility    = System.Windows.Visibility.Hidden;
@@ -130,10 +133,10 @@ namespace WiinUSoft
                     break;
 
                 case DeviceState.Connected_XInput:
-                    btnIdentify.IsEnabled   = true;
-                    btnProperties.IsEnabled = true;
+                    //btnIdentify.IsEnabled   = true;
+                    //btnProperties.IsEnabled = true;
                     btnXinput.IsEnabled     = false;
-                    btnVjoy.IsEnabled       = false;
+                    //btnVjoy.IsEnabled       = false;
                     btnConfig.IsEnabled     = true;
                     btnDetatch.IsEnabled    = true;
                     btnConfig.Visibility    = System.Windows.Visibility.Visible;
@@ -146,10 +149,10 @@ namespace WiinUSoft
                     break;
 
                 case DeviceState.Connected_VJoy:
-                    btnIdentify.IsEnabled   = true;
-                    btnProperties.IsEnabled = true;
+                    //btnIdentify.IsEnabled   = true;
+                    //btnProperties.IsEnabled = true;
                     btnXinput.IsEnabled     = false;
-                    btnVjoy.IsEnabled       = false;
+                    //btnVjoy.IsEnabled       = false;
                     btnConfig.IsEnabled     = true;
                     btnDetatch.IsEnabled    = true;
                     btnConfig.Visibility    = System.Windows.Visibility.Visible;
@@ -364,7 +367,7 @@ namespace WiinUSoft
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Open mapping screen
-            var config = new ConfigWindow(holder.Mappings, deviceType);
+            var config = new ConfigWindow(holder.Mappings, device.Type);
             config.ShowDialog();
             if (config.result)
             {

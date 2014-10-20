@@ -32,8 +32,10 @@ namespace WiinUSoft
             InitializeComponent();
         }
 
-        public ConfigWindow(Dictionary<string, string> mappings, NintrollerLib.ControllerType type) : this()
+        public ConfigWindow(Dictionary<string, string> mappings, NintrollerLib.ControllerType type)
         {
+            InitializeComponent();
+
             // Copy the mappings over
             map = mappings.ToDictionary(entry => entry.Key, entry => entry.Value);
             deviceType = type;
@@ -177,7 +179,8 @@ namespace WiinUSoft
             Shape s = (Shape)sender;
             deviceLabel.Content = s.ToolTip;
             MoveSelector((Shape)sender, selectionDevice, guideDevice);
-            // TODO: select map
+            currentSelection = s;
+
             if (deviceShapes.ContainsKey(s) && map.ContainsKey(deviceShapes[s]))
             {
                 MoveSelector(mapShapes[map[deviceShapes[s]]], selectionMap, guideMap);
@@ -190,7 +193,7 @@ namespace WiinUSoft
             Shape s = (Shape)sender;
             mapLabel.Content = s.ToolTip;
             MoveSelector((Shape)sender, selectionMap, guideMap);
-            // TODO: update mapping
+
             if (mapValues.ContainsKey(s) && map.ContainsKey(deviceShapes[currentSelection]))
             {
                 map[deviceShapes[currentSelection]] = mapValues[s];

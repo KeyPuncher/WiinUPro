@@ -30,8 +30,8 @@ namespace WiinUSoft.Holders
                 case NintrollerLib.ControllerType.ProController:
                     result.Add(Inputs.ProController.A, Inputs.Xbox360.A);
                     result.Add(Inputs.ProController.B, Inputs.Xbox360.B);
-                    result.Add(Inputs.ProController.Y, Inputs.Xbox360.X);
-                    result.Add(Inputs.ProController.X, Inputs.Xbox360.Y);
+                    result.Add(Inputs.ProController.X, Inputs.Xbox360.X);
+                    result.Add(Inputs.ProController.Y, Inputs.Xbox360.Y);
 
                     result.Add(Inputs.ProController.UP, Inputs.Xbox360.UP);
                     result.Add(Inputs.ProController.DOWN, Inputs.Xbox360.DOWN);
@@ -156,6 +156,16 @@ namespace WiinUSoft.Holders
             Values = new System.Collections.Concurrent.ConcurrentDictionary<string, float>();
             Mappings = new Dictionary<string, string>();
             Flags = new Dictionary<string, bool>();
+            ResetReport();
+
+            if (!Flags.ContainsKey(Inputs.Flags.RUMBLE))
+            {
+                Flags.Add(Inputs.Flags.RUMBLE, false);
+            }
+        }
+
+        private void ResetReport()
+        {
             writeReport = new Dictionary<string, float>()
             {
                 {Inputs.Xbox360.A, 0},
@@ -174,11 +184,6 @@ namespace WiinUSoft.Holders
                 {Inputs.Xbox360.LS, 0},
                 {Inputs.Xbox360.RS, 0},
             };
-
-            if (!Flags.ContainsKey(Inputs.Flags.RUMBLE))
-            {
-                Flags.Add(Inputs.Flags.RUMBLE, false);
-            }
         }
 
         public XInputHolder(NintrollerLib.ControllerType t) : this()
@@ -294,45 +299,47 @@ namespace WiinUSoft.Holders
             float LT = 0f;
             float RT = 0f;
 
+            ResetReport();
+
             foreach (KeyValuePair<string, string> map in Mappings)
             {
                 if (writeReport.ContainsKey(map.Value))
                 {
-                    writeReport[map.Value] = Values[map.Key];
+                    writeReport[map.Value] += Values[map.Key];
                 }
                 else
                 {
                     switch (map.Value)
                     {
-                        case Inputs.Xbox360.LLEFT: LX -= Values[map.Key]; break;
+                        case Inputs.Xbox360.LLEFT : LX -= Values[map.Key]; break;
                         case Inputs.Xbox360.LRIGHT: LX += Values[map.Key]; break;
-                        case Inputs.Xbox360.LUP: LY += Values[map.Key]; break;
-                        case Inputs.Xbox360.LDOWN: LY -= Values[map.Key]; break;
-                        case Inputs.Xbox360.RLEFT: RX -= Values[map.Key]; break;
+                        case Inputs.Xbox360.LUP   : LY += Values[map.Key]; break;
+                        case Inputs.Xbox360.LDOWN : LY -= Values[map.Key]; break;
+                        case Inputs.Xbox360.RLEFT : RX -= Values[map.Key]; break;
                         case Inputs.Xbox360.RRIGHT: RX += Values[map.Key]; break;
-                        case Inputs.Xbox360.RUP: RY += Values[map.Key]; break;
-                        case Inputs.Xbox360.RDOWN: RY -= Values[map.Key]; break;
-                        case Inputs.Xbox360.LT: LT += Values[map.Key]; break;
-                        case Inputs.Xbox360.RT: RT += Values[map.Key]; break;
+                        case Inputs.Xbox360.RUP   : RY += Values[map.Key]; break;
+                        case Inputs.Xbox360.RDOWN : RY -= Values[map.Key]; break;
+                        case Inputs.Xbox360.LT    : LT += Values[map.Key]; break;
+                        case Inputs.Xbox360.RT    : RT += Values[map.Key]; break;
                     }
                 }
             }
 
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.BACK] > 0f ? 1 << 0 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.LS] > 0f ? 1 << 1 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.RS] > 0f ? 1 << 2 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.BACK]  > 0f ? 1 << 0 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.LS]    > 0f ? 1 << 1 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.RS]    > 0f ? 1 << 2 : 0);
             report[10] |= (byte)(writeReport[Inputs.Xbox360.START] > 0f ? 1 << 3 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.UP] > 0f ? 1 << 4 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.DOWN] > 0f ? 1 << 5 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.UP]    > 0f ? 1 << 4 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.DOWN]  > 0f ? 1 << 5 : 0);
             report[10] |= (byte)(writeReport[Inputs.Xbox360.RIGHT] > 0f ? 1 << 6 : 0);
-            report[10] |= (byte)(writeReport[Inputs.Xbox360.LEFT] > 0f ? 1 << 7 : 0);
+            report[10] |= (byte)(writeReport[Inputs.Xbox360.LEFT]  > 0f ? 1 << 7 : 0);
 
             report[11] |= (byte)(writeReport[Inputs.Xbox360.LB] > 0f ? 1 << 2 : 0);
             report[11] |= (byte)(writeReport[Inputs.Xbox360.RB] > 0f ? 1 << 3 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.Y] > 0f ? 1 << 4 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.B] > 0f ? 1 << 5 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.A] > 0f ? 1 << 6 : 0);
-            report[11] |= (byte)(writeReport[Inputs.Xbox360.X] > 0f ? 1 << 7 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.Y]  > 0f ? 1 << 4 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.B]  > 0f ? 1 << 5 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.A]  > 0f ? 1 << 6 : 0);
+            report[11] |= (byte)(writeReport[Inputs.Xbox360.X]  > 0f ? 1 << 7 : 0);
 
             report[12] |= (byte)(writeReport[Inputs.Xbox360.GUIDE] > 0f ? 1 << 0 : 0);
 
