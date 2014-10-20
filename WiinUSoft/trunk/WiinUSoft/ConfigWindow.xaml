@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WiinUSoft.ConfigWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ConfigWindow" Height="378" Width="696">
+        Title="ConfigWindow" Height="378" Width="696" Icon="Images/WiinUSoftAlpha.ico">
     <Canvas>
         <Button x:Name="btnApply" Content="Apply" Canvas.Left="578" Canvas.Top="314" Width="100" Height="24" Click="btnApply_Click"/>
         <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="467" Canvas.Top="314" Width="100" Height="24" Background="#FFDDDDDD" Click="btnCancel_Click"/>
