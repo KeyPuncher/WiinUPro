@@ -2,49 +2,26 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:WiinUSoft" x:Class="WiinUSoft.MainWindow"
-        Title="WiinUSoft" Height="436" Width="916" Loaded="Window_Loaded" Icon="Images/WiinUSoftAlpha.ico">
+        Title="WiinUSoft" Height="436" Width="916" Loaded="Window_Loaded" Icon="Images/WiinUSoftAlpha.ico" Background="{DynamicResource BrushSocialBlue}">
     <Grid>
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FFEDEDED" Offset="1"/>
-                <GradientStop Color="White"/>
-            </LinearGradientBrush>
-        </Grid.Background>
-        <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2" Margin="8,42,0,8" HorizontalAlignment="Left" Width="292">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="617*"/>
+            <ColumnDefinition Width="291*"/>
+        </Grid.ColumnDefinitions>
+        <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="8,42,0,8" HorizontalAlignment="Left" Width="292">
             <StackPanel x:Name="groupAvailable" HorizontalAlignment="Left" Width="280" Margin="4,4,0,0"/>
         </Border>
-        <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2" Margin="308,42,0,8" HorizontalAlignment="Left" Width="292">
-            <StackPanel x:Name="groupXinput" HorizontalAlignment="Left" Margin="4,4,0,0" Width="280"/>
+        <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="308,42,0,8" HorizontalAlignment="Left" Width="292">
+            <StackPanel x:Name="groupXinput" HorizontalAlignment="Left" Margin="4,4,0,0" Width="280" Background="{DynamicResource BrushAntemWhite}"/>
         </Border>
-        <Border CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2" Margin="608,42,0,8" HorizontalAlignment="Left" Width="292">
+        <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="608,42,0,8" HorizontalAlignment="Left" Width="292" Grid.ColumnSpan="2">
             <StackPanel HorizontalAlignment="Left" Margin="4,4,0,0" Width="280"/>
         </Border>
         <Label Content="Available Devices" HorizontalAlignment="Left" Margin="39,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Connected as Xbox 360 Controller (XInput)" HorizontalAlignment="Left" Margin="337,10,0,0" VerticalAlignment="Top"/>
-        <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="btnIdentify" Content="R" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11" ToolTip="Refresh" IsEnabled="False">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFC7C7C7"/>
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="btnDetatchAllXInput" Content="D" HorizontalAlignment="Left" Margin="308,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11" Click="btnDetatchAllXInput_Click" ToolTip="Detatch All">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFC7C7C7"/>
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="btnIdentify_Copy1" Content="D" HorizontalAlignment="Left" Margin="608,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11" ToolTip="Detatch All" IsEnabled="False">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFC7C7C7"/>
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+        <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="19.731,10,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <Button x:Name="btnIdentify" Content="R" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" IsEnabled="False" Background="{DynamicResource ButonFillBrush1}"/>
+        <Button x:Name="btnDetatchAllXInput" Content="D" HorizontalAlignment="Left" Margin="308,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Click="btnDetatchAllXInput_Click" ToolTip="Detatch All" Background="{DynamicResource ButonFillBrush1}"/>
+        <Button x:Name="btnIdentify_Copy1" Content="D" HorizontalAlignment="Left" Margin="608,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Detatch All" IsEnabled="False" Background="{DynamicResource ButonFillBrush1}" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

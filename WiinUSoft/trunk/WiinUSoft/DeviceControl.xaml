@@ -6,39 +6,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="300" Width="280" Height="80">
     <Grid Width="280" Height="80">
-        <Rectangle Height="80" Margin="0" Stroke="#FF122B57" Width="280" StrokeThickness="4" RadiusX="16" RadiusY="16" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Rectangle Height="80" Margin="0" Width="280" StrokeThickness="4" RadiusX="16" RadiusY="16" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Rectangle.Stroke>
+                <SolidColorBrush Color="{DynamicResource JohnTheRevelater}"/>
+            </Rectangle.Stroke>
             <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF57ADDE" Offset="0.5"/>
-                    <GradientStop Color="#FF404776" Offset="1"/>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="{DynamicResource Eyeing}" Offset="0"/>
+                    <GradientStop Color="{DynamicResource AntemBlue}" Offset="1"/>
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
         <Image HorizontalAlignment="Left" Height="80" Margin="10,0,0,0" VerticalAlignment="Top" Width="80"/>
-        <Label x:Name="labelName" Content="Device Name" HorizontalAlignment="Left" Margin="100,8,0,0" VerticalAlignment="Top" Width="160" FontSize="14" Height="26"/>
-        <Button x:Name="btnIdentify" Content="ID" HorizontalAlignment="Left" Margin="100,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11" IsEnabled="False" ToolTip="Identify">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FFC7C7C7"/>
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="btnProperties" Content="Prop" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11" IsEnabled="False" ToolTip="Properties">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                    <GradientStop Color="#FFC7C7C7"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="btnXinput" Content="X" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" Click="btnXinput_Click" ToolTip="Attatch as XInput Device">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                    <GradientStop Color="#FFC7C7C7"/>
-                </LinearGradientBrush>
-            </Button.Background>
+        <Label x:Name="labelName" Content="Device Name" HorizontalAlignment="Left" Margin="100,8,0,0" VerticalAlignment="Top" Width="160" FontSize="14" Height="26" FontStyle="Italic"/>
+        <Button x:Name="btnIdentify" Content="ID" HorizontalAlignment="Left" Margin="100,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" IsEnabled="False" ToolTip="Identify" Background="{DynamicResource ButonFillBrush1}"/>
+        <Button x:Name="btnProperties" Content="Prop" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" IsEnabled="False" ToolTip="Properties" Background="{DynamicResource ButonFillBrush1}"/>
+        <Button x:Name="btnXinput" Content="X" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" Click="btnXinput_Click" ToolTip="Attatch as XInput Device" Background="{DynamicResource ButonFillBrush1}">
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="XOption1" Header="Xbox 360 Controller 1" Click="XOption_Click"/>
@@ -48,32 +31,12 @@
                 </ContextMenu>
             </Button.ContextMenu>
         </Button>
-        <Button x:Name="btnVjoy" Content="VJ" HorizontalAlignment="Left" Margin="226,36,-22,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" IsEnabled="False" ToolTip="Attatch as DirectInput Device">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                    <GradientStop Color="#FFC7C7C7"/>
-                </LinearGradientBrush>
-            </Button.Background>
+        <Button x:Name="btnVjoy" Content="VJ" HorizontalAlignment="Left" Margin="226,36,-22,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" IsEnabled="False" ToolTip="Attatch as DirectInput Device" Background="{DynamicResource ButonFillBrush1}">
             <Button.ContextMenu>
                 <ContextMenu/>
             </Button.ContextMenu>
         </Button>
-        <Button x:Name="btnConfig" Content="Config" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="11" Visibility="Hidden" Click="btnConfig_Click" ToolTip="Configure">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                    <GradientStop Color="#FFC7C7C7"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
-        <Button x:Name="btnDetatch" Content="Detatch" HorizontalAlignment="Left" Margin="226,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="#FF3E3E3E" BorderThickness="2" FontSize="10" Click="btnDetatch_Click" Visibility="Hidden" ToolTip="Detatch">
-            <Button.Background>
-                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                    <GradientStop Color="#FF616161" Offset="1"/>
-                    <GradientStop Color="#FFC7C7C7"/>
-                </LinearGradientBrush>
-            </Button.Background>
-        </Button>
+        <Button x:Name="btnConfig" Content="Config" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Visibility="Hidden" Click="btnConfig_Click" ToolTip="Configure" Background="{DynamicResource ButonFillBrush1}"/>
+        <Button x:Name="btnDetatch" Content="Detatch" HorizontalAlignment="Left" Margin="226,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="10" Click="btnDetatch_Click" Visibility="Hidden" ToolTip="Detatch" Background="{DynamicResource ButonFillBrush1}"/>
     </Grid>
 </UserControl>
