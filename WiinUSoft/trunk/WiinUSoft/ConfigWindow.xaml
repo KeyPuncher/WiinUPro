@@ -40,7 +40,7 @@
         <Label x:Name="mapLabel" Content="Guide" Canvas.Left="358" Canvas.Top="312" Width="100"/>
         <!-- Device to Map (Pro Controller) -->
         <Grid Canvas.Left="10" Canvas.Top="94" Height="200">
-            <Image Source="Images/ProController_map_white2.png" Height="220" IsHitTestVisible="False" Margin="16,-16,-16,-4"/>
+            <Image Source="Images/ProController_map_white.png" Height="220" IsHitTestVisible="False" Margin="16,-16,-16,-4"/>
             <Rectangle x:Name="pro_upClick" HorizontalAlignment="Left" Height="21" Margin="102,77,0,0" VerticalAlignment="Top" Width="16" ToolTip="D-pad Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="pro_downClick" HorizontalAlignment="Left" Height="20" Margin="102,105,0,0" VerticalAlignment="Top" Width="16" ToolTip="D-pad Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="pro_leftClick" HorizontalAlignment="Left" Height="19" Margin="85,92,0,0" VerticalAlignment="Top" Width="17" ToolTip="D-pad Left" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
