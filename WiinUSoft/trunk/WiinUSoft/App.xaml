@@ -20,5 +20,10 @@
         <SolidColorBrush x:Key="BrushAntemSky" Color="#FFADCCEB"/>
         <SolidColorBrush x:Key="BrushAntemBlue" Color="#FF7CA3CA"/>
         <SolidColorBrush x:Key="BrushJohnTheRevelator" Color="#FF5A6E83"/>
+        <BitmapImage x:Key="ProIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="K:\Documents\Visual Studio 2013\Projects\WiinUSolution\WiinUSoft\WiinUSoft\Images\ProController_white_32.png"/>
+        <BitmapImage x:Key="CCIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="K:\Documents\Visual Studio 2013\Projects\WiinUSolution\WiinUSoft\WiinUSoft\Images\Classic_white_32.png"/>
+        <BitmapImage x:Key="CCPIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="K:\Documents\Visual Studio 2013\Projects\WiinUSolution\WiinUSoft\WiinUSoft\Images\ClassicPro_white_32.png"/>
+        <BitmapImage x:Key="WIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="K:\Documents\Visual Studio 2013\Projects\WiinUSolution\WiinUSoft\WiinUSoft\Images\wiimote_white_32.png"/>
+        <BitmapImage x:Key="WNIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="K:\Documents\Visual Studio 2013\Projects\WiinUSolution\WiinUSoft\WiinUSoft\Images\WiimoteNunchuk_white_32.png"/>
     </Application.Resources>
 </Application>

@@ -92,13 +92,22 @@ namespace WiinUSoft
         public DeviceControl(Nintroller nintroller) : this()
         {
             Device = nintroller;
+            RefreshState();
+        }
 
-            // TODO: Extract this method to a refresh state or something
+        private void RefreshState()
+        {
+            // TODO: Pull saved name using HID path
             if (Device.ConnectTest())
             {
                 ConnectionState = DeviceState.Discovered;
-                device.Connect();
-                device.Disconnect();
+
+                if (device.Type != ControllerType.ProController && device.Type != ControllerType.BalanceBoard)
+                {
+                    device.Connect();
+                    device.Disconnect();
+                }
+
                 labelName.Content = device.Type.ToString();
             }
         }
@@ -121,6 +130,10 @@ namespace WiinUSoft
 
             switch (newState)
             {
+                case DeviceState.None:
+                    // TODO: show as unavailabe
+                    break;
+
                 case DeviceState.Discovered:
                     //btnIdentify.IsEnabled   = true;
                     //btnProperties.IsEnabled = true;
