@@ -4,10 +4,6 @@
         xmlns:local="clr-namespace:WiinUSoft" x:Class="WiinUSoft.MainWindow"
         Title="WiinUSoft" Height="436" Width="916" Loaded="Window_Loaded" Icon="Images/WiinUSoftAlpha.ico" Background="{DynamicResource BrushSocialBlue}">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="617*"/>
-            <ColumnDefinition Width="291*"/>
-        </Grid.ColumnDefinitions>
         <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="8,42,0,8" HorizontalAlignment="Left" Width="292">
             <StackPanel x:Name="groupAvailable" HorizontalAlignment="Left" Width="280" Margin="4,4,0,0"/>
         </Border>
@@ -19,8 +15,8 @@
         </Border>
         <Label Content="Available Devices" HorizontalAlignment="Left" Margin="39,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Connected as Xbox 360 Controller (XInput)" HorizontalAlignment="Left" Margin="337,10,0,0" VerticalAlignment="Top"/>
-        <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="19.731,10,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <Button x:Name="btnIdentify" Content="R" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" IsEnabled="False" Background="{DynamicResource ButonFillBrush1}"/>
+        <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnIdentify" Content="R" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" Background="{DynamicResource ButonFillBrush1}" Click="btnIdentify_Click"/>
         <Button x:Name="btnDetatchAllXInput" Content="D" HorizontalAlignment="Left" Margin="308,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Click="btnDetatchAllXInput_Click" ToolTip="Detatch All" Background="{DynamicResource ButonFillBrush1}"/>
         <Button x:Name="btnIdentify_Copy1" Content="D" HorizontalAlignment="Left" Margin="608,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Detatch All" IsEnabled="False" Background="{DynamicResource ButonFillBrush1}" Grid.ColumnSpan="2"/>
     </Grid>

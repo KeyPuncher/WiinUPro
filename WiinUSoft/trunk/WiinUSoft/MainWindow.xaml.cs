@@ -34,13 +34,39 @@ namespace WiinUSoft
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // TODO: move out into a method that will be the refresh method
+            Refresh();
+        }
+
+        private void Refresh()
+        {
             hidList = Nintroller.FindControllers();
 
             foreach (string hid in hidList)
             {
                 Nintroller n = new Nintroller(hid);
-                if (n.ConnectTest())
+                DeviceControl existingDevice = null;
+
+                foreach (DeviceControl d in deviceList)
+                {
+                    if (d.Device.HIDPath == hid)
+                    {
+                        existingDevice = d;
+                        break;
+                    }
+                }
+
+                if (existingDevice != null)
+                {
+                    if (!existingDevice.Connected && !n.ConnectTest())
+                    {
+                        existingDevice.ConnectionState = DeviceState.None;
+                    }
+                    else if (!existingDevice.Connected && n.ConnectTest())
+                    {
+                        existingDevice.ConnectionState = DeviceState.Discovered;
+                    }
+                }
+                else if (n.ConnectTest())
                 {
                     deviceList.Add(new DeviceControl(n));
                     deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
@@ -96,6 +122,11 @@ namespace WiinUSoft
             {
                 d.Detatch();
             }
+        }
+
+        private void btnIdentify_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
         }
     }
 }

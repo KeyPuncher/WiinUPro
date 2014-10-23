@@ -109,6 +109,26 @@ namespace WiinUSoft
                 }
 
                 labelName.Content = device.Type.ToString();
+                switch (device.Type)
+                {
+                    case ControllerType.ProController:
+                        icon.SetValue(Image.SourceProperty, "ProIcon");
+                        break;
+                    case ControllerType.ClassicControllerPro:
+                        icon.SetValue(Image.SourceProperty, "CCPIcon");
+                        break;
+                    case ControllerType.ClassicController:
+                        icon.SetValue(Image.SourceProperty, "CCIcon");
+                        break;
+                    case ControllerType.Nunchuk:
+                    case ControllerType.NunchukB:
+                        icon.SetValue(Image.SourceProperty, "WNIcon");
+                        break;
+
+                    default:
+                        icon.SetValue(Image.SourceProperty, "WIcon");
+                        break;
+                }
             }
         }
 
@@ -135,7 +155,7 @@ namespace WiinUSoft
                     break;
 
                 case DeviceState.Discovered:
-                    //btnIdentify.IsEnabled   = true;
+                    btnIdentify.IsEnabled   = true;
                     //btnProperties.IsEnabled = true;
                     btnXinput.IsEnabled     = true;
                     //btnVjoy.IsEnabled       = true;
@@ -146,7 +166,7 @@ namespace WiinUSoft
                     break;
 
                 case DeviceState.Connected_XInput:
-                    //btnIdentify.IsEnabled   = true;
+                    btnIdentify.IsEnabled   = true;
                     //btnProperties.IsEnabled = true;
                     btnXinput.IsEnabled     = false;
                     //btnVjoy.IsEnabled       = false;
@@ -162,7 +182,7 @@ namespace WiinUSoft
                     break;
 
                 case DeviceState.Connected_VJoy:
-                    //btnIdentify.IsEnabled   = true;
+                    btnIdentify.IsEnabled   = true;
                     //btnProperties.IsEnabled = true;
                     btnXinput.IsEnabled     = false;
                     //btnVjoy.IsEnabled       = false;
@@ -360,7 +380,6 @@ namespace WiinUSoft
 
         private void XOption_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Select which device number to connect to & if available
             if (device.ConnectTest() && device.Connect())
             {
                 int tmp = 0;
@@ -379,7 +398,6 @@ namespace WiinUSoft
 
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Open mapping screen
             var config = new ConfigWindow(holder.Mappings, device.Type);
             config.ShowDialog();
             if (config.result)
@@ -389,6 +407,23 @@ namespace WiinUSoft
                     holder.SetMapping(pair.Key, pair.Value);
                 }
             }
+        }
+
+        private void btnIdentify_Click(object sender, RoutedEventArgs e)
+        {
+            // TOOD: Physically identify the device via rumble or light show
+            if (device.Connect())
+            {
+                device.SetRumble(true);
+                Delay(2000).ContinueWith(o => device.SetRumble(false));
+            }
+        }
+
+        static System.Threading.Tasks.Task Delay(int milliseconds)
+        {
+            var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
+            new System.Threading.Timer(_ => tcs.SetResult(null)).Change(milliseconds, -1);
+            return tcs.Task;
         }
     }
 }
