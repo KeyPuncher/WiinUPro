@@ -362,7 +362,14 @@ namespace NintrollerLib
             if (mStream != null && mStream.CanRead)
             {
                 byte[] bArray = new byte[Constants.REPORT_LENGTH];
-                mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncData), bArray);
+                try
+                {
+                    mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncData), bArray);
+                }
+                catch (ObjectDisposedException)
+                {
+
+                }
             }
         }
 

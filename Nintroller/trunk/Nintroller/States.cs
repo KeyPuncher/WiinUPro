@@ -1660,13 +1660,13 @@ namespace NintrollerLib
             // Normalized Triggers
             if (lTriggerRaw < lTriggerMin)
                 lTrigger = 0;
-            else if (lTriggerMax != 0)
-                lTrigger = (float)(lTriggerRaw - lTriggerMin) / (float)(lTriggerMax - lTriggerMin);
+            else
+                lTrigger = (float)(lTriggerRaw - lTriggerMin) / (float)(lTriggerMax == 0 ? ClassicControllerCalibration.Default.TriggerLMax : lTriggerMax - lTriggerMin);
 
             if (rTriggerRaw < rTriggerMin)
                 rTrigger = 0;
-            else if (rTriggerMax != 0)
-                rTrigger = (float)(rTriggerRaw - rTriggerMin) / (float)(rTriggerMax - rTriggerMin);
+            else
+                rTrigger = (float)(rTriggerRaw - rTriggerMin) / (float)(rTriggerMax == 0 ? ClassicControllerCalibration.Default.TriggerRMax : rTriggerMax - rTriggerMin);
 
             lPressure = (lTriggerRaw > lTriggerMin + lTriggerMax / 4);
             rPressure = (rTriggerRaw > rTriggerMin + rTriggerMax / 4);
