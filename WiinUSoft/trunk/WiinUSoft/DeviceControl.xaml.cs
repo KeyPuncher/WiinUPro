@@ -113,21 +113,21 @@ namespace WiinUSoft
                 switch (device.Type)
                 {
                     case ControllerType.ProController:
-                        icon.SetValue(Image.SourceProperty, "ProIcon");
+                        icon.Source = (ImageSource)Application.Current.Resources["ProIcon"];
                         break;
                     case ControllerType.ClassicControllerPro:
-                        icon.SetValue(Image.SourceProperty, "CCPIcon");
+                        icon.Source = (ImageSource)Application.Current.Resources["CCPIcon"];
                         break;
                     case ControllerType.ClassicController:
-                        icon.SetValue(Image.SourceProperty, "CCIcon");
+                        icon.Source = (ImageSource)Application.Current.Resources["CCIcon"];
                         break;
                     case ControllerType.Nunchuk:
                     case ControllerType.NunchukB:
-                        icon.SetValue(Image.SourceProperty, "WNIcon");
+                        icon.Source = (ImageSource)Application.Current.Resources["WNIcon"];
                         break;
 
                     default:
-                        icon.SetValue(Image.SourceProperty, "WIcon");
+                        icon.Source = (ImageSource)Application.Current.Resources["WIcon"];
                         break;
                 }
             }
@@ -310,7 +310,7 @@ namespace WiinUSoft
                         holder.SetValue(Inputs.ClassicController.LFULL, e.Wiimote.ClassicController.LFull);
                         holder.SetValue(Inputs.ClassicController.RFULL, e.Wiimote.ClassicController.RFull);
                         holder.SetValue(Inputs.ClassicController.LT, e.Wiimote.ClassicController.LTrigger);
-                        holder.SetValue(Inputs.ClassicController.LT, e.Wiimote.ClassicController.RTrigger);
+                        holder.SetValue(Inputs.ClassicController.RT, e.Wiimote.ClassicController.RTrigger);
 
                         holder.SetValue(Inputs.ClassicController.LRIGHT, e.Wiimote.ClassicController.LeftJoy.X > 0 ? e.Wiimote.ClassicController.LeftJoy.X : 0f);
                         holder.SetValue(Inputs.ClassicController.LLEFT, e.Wiimote.ClassicController.LeftJoy.X < 0 ? e.Wiimote.ClassicController.LeftJoy.X * -1 : 0f);
@@ -367,7 +367,6 @@ namespace WiinUSoft
 
         private void btnXinput_Click(object sender, RoutedEventArgs e)
         {
-            btnXinput.IsEnabled = !btnXinput.IsEnabled;
             if (btnXinput.ContextMenu != null)
             {
                 XOption1.IsEnabled = Holders.XInputHolder.availabe[0];

@@ -20,8 +20,12 @@
         <Label x:Name="labelUnavailable" Content="Device Unavailable" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" FontSize="16" FontStyle="Italic" Width="145" Foreground="#FF939393" Visibility="Hidden"/>
         <Image x:Name="icon" HorizontalAlignment="Left" Margin="12,16,0,0" VerticalAlignment="Top" Source="{DynamicResource ProIcon}" Width="80"/>
         <Label x:Name="labelName" Content="Device Name" HorizontalAlignment="Left" Margin="100,8,0,0" VerticalAlignment="Top" Width="160" FontSize="14" Height="26" FontStyle="Italic"/>
-        <Button x:Name="btnIdentify" Content="ID" HorizontalAlignment="Left" Margin="100,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Identify" Background="{DynamicResource ButonFillBrush1}" Click="btnIdentify_Click"/>
-        <Button x:Name="btnProperties" Content="Prop" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" IsEnabled="False" ToolTip="Properties" Background="{DynamicResource ButonFillBrush1}"/>
+        <Button x:Name="btnIdentify" HorizontalAlignment="Left" Margin="100,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Identify" Background="{DynamicResource ButonFillBrush1}" Click="btnIdentify_Click">
+            <Image Source="Images/IDicon.png"/>
+        </Button>
+        <Button x:Name="btnProperties" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" IsEnabled="False" ToolTip="Properties" Background="{DynamicResource ButonFillBrush1}">
+            <Image Source="Images/Settings-icon.png" Opacity="0.5" />
+        </Button>
         <Button x:Name="btnXinput" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" Click="btnXinput_Click" ToolTip="Attatch as XInput Device" Background="{DynamicResource ButonFillBrush1}" IsEnabledChanged="btnXinput_IsEnabledChanged">
             <Button.ContextMenu>
                 <ContextMenu>
@@ -31,7 +35,7 @@
                     <MenuItem x:Name="XOption4" Header="Xbox 360 Controller 4" Click="XOption_Click"/>
                 </ContextMenu>
             </Button.ContextMenu>
-            <Image x:Name="btnXinput_image" Source="Images/xboxlogo64.png" Margin="1"></Image>
+            <Image x:Name="btnXinput_image" Source="Images/xboxlogob64.png" Margin="1"></Image>
         </Button>
         <Button x:Name="btnVjoy" HorizontalAlignment="Left" Margin="226,36,-22,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" IsEnabled="False" ToolTip="Attatch as DirectInput Device" Background="{DynamicResource ButonFillBrush1}" IsEnabledChanged="btnVjoy_IsEnabledChanged">
             <Button.ContextMenu>
@@ -39,7 +43,11 @@
             </Button.ContextMenu>
             <Image x:Name="btnVjoy_image" Source="Images/Joystick-icon64.png" Margin="1" OpacityMask="Black" Opacity="0.5"/>
         </Button>
-        <Button x:Name="btnConfig" Content="Config" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Visibility="Hidden" Click="btnConfig_Click" ToolTip="Configure" Background="{DynamicResource ButonFillBrush1}"/>
-        <Button x:Name="btnDetatch" Content="Detatch" HorizontalAlignment="Left" Margin="226,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="10" Click="btnDetatch_Click" Visibility="Hidden" ToolTip="Detatch" Background="{DynamicResource ButonFillBrush1}"/>
+        <Button x:Name="btnConfig" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Visibility="Hidden" Click="btnConfig_Click" ToolTip="Configure" Background="{DynamicResource ButonFillBrush1}">
+            <Image Source="Images/wrench-icon.png" />
+        </Button>
+        <Button x:Name="btnDetatch" HorizontalAlignment="Left" Margin="226,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="10" Click="btnDetatch_Click" Visibility="Hidden" ToolTip="Detatch" Background="{DynamicResource ButonFillBrush1}">
+            <Image Source="Images/remove.png"/>
+        </Button>
     </Grid>
 </UserControl>

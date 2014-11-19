@@ -168,6 +168,25 @@
   <ItemGroup>
     <Resource Include="Images\Joystick-icon64.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\xboxlogob64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IDicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\remove.png" />
+    <Resource Include="Images\removeAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\wrench-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Settings-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Refresh.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
