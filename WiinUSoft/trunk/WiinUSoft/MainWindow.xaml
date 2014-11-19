@@ -5,13 +5,19 @@
         Title="WiinUSoft" Height="436" Width="916" Loaded="Window_Loaded" Icon="Images/WiinUSoftAlpha.ico" Background="{DynamicResource BrushSocialBlue}">
     <Grid>
         <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="8,42,0,8" HorizontalAlignment="Left" Width="292">
-            <StackPanel x:Name="groupAvailable" HorizontalAlignment="Left" Width="280" Margin="4,4,0,0"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="groupAvailable" HorizontalAlignment="Left" Width="280" Margin="4,4,0,0"/>
+            </ScrollViewer>
         </Border>
         <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="308,42,0,8" HorizontalAlignment="Left" Width="292">
-            <StackPanel x:Name="groupXinput" HorizontalAlignment="Left" Margin="4,4,0,0" Width="280" Background="{DynamicResource BrushAntemWhite}"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="groupXinput" HorizontalAlignment="Left" Margin="4,4,0,0" Width="280" Background="{DynamicResource BrushAntemWhite}"/>
+            </ScrollViewer>
         </Border>
         <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="608,42,0,8" HorizontalAlignment="Left" Width="292" Grid.ColumnSpan="2">
-            <StackPanel HorizontalAlignment="Left" Margin="4,4,0,0" Width="280"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel HorizontalAlignment="Left" Margin="4,4,0,0" Width="280"/>
+            </ScrollViewer>
         </Border>
         <Label Content="Available Devices" HorizontalAlignment="Left" Margin="39,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Connected as Xbox 360 Controller (XInput)" HorizontalAlignment="Left" Margin="337,10,0,0" VerticalAlignment="Top"/>
