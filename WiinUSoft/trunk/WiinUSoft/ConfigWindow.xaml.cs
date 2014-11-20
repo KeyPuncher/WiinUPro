@@ -40,10 +40,24 @@ namespace WiinUSoft
             map = mappings.ToDictionary(entry => entry.Key, entry => entry.Value);
             deviceType = type;
             GetShapes();
+
+            switch (deviceType)
+            {
+                case NintrollerLib.ControllerType.ProController:
+                    ProGrid.Visibility = System.Windows.Visibility.Visible;
+                    CCGrid.Visibility = System.Windows.Visibility.Hidden;
+                    break;
+
+                case NintrollerLib.ControllerType.ClassicController:
+                    ProGrid.Visibility = System.Windows.Visibility.Hidden;
+                    CCGrid.Visibility = System.Windows.Visibility.Visible;
+                    break;
+            }
         }
 
         private void GetShapes()
-        {   
+        {
+            #region Xbox Clickables
             mapShapes = new Dictionary<string,Shape>();
             mapShapes.Add(Inputs.Xbox360.A     , x_aClick);
             mapShapes.Add(Inputs.Xbox360.B     , x_bClick);
@@ -70,7 +84,9 @@ namespace WiinUSoft
             mapShapes.Add(Inputs.Xbox360.START , x_startClick);
             mapShapes.Add(Inputs.Xbox360.BACK  , x_backClick);
             mapShapes.Add(Inputs.Xbox360.GUIDE , x_guideClick);
+            #endregion
 
+            #region Xbox Mappings
             mapValues = new Dictionary<Shape, string>();
             mapValues.Add(x_aClick      ,Inputs.Xbox360.A);
             mapValues.Add(x_bClick      ,Inputs.Xbox360.B);
@@ -97,7 +113,9 @@ namespace WiinUSoft
             mapValues.Add(x_startClick  ,Inputs.Xbox360.START);
             mapValues.Add(x_backClick   ,Inputs.Xbox360.BACK);
             mapValues.Add(x_guideClick  ,Inputs.Xbox360.GUIDE);
+            #endregion
 
+            #region Pro Clickables
             deviceShapes = new Dictionary<Shape, string>();
             deviceShapes.Add(pro_aClick     , Inputs.ProController.A);
             deviceShapes.Add(pro_bClick     , Inputs.ProController.B);
@@ -124,11 +142,42 @@ namespace WiinUSoft
             deviceShapes.Add(pro_startClick , Inputs.ProController.START);
             deviceShapes.Add(pro_selectClick, Inputs.ProController.SELECT);
             deviceShapes.Add(pro_homeClick  , Inputs.ProController.HOME);
+            #endregion
+
+            #region Classic Clickables
+            deviceShapes.Add(cc_aClick     , Inputs.ClassicController.A);
+            deviceShapes.Add(cc_bClick     , Inputs.ClassicController.B);
+            deviceShapes.Add(cc_xClick     , Inputs.ClassicController.X);
+            deviceShapes.Add(cc_yClick     , Inputs.ClassicController.Y);
+            deviceShapes.Add(cc_lClick     , Inputs.ClassicController.LT);
+            deviceShapes.Add(cc_zlClick    , Inputs.ClassicController.ZL);
+            deviceShapes.Add(cc_rClick     , Inputs.ClassicController.RT);
+            deviceShapes.Add(cc_zrClick    , Inputs.ClassicController.ZR);
+            deviceShapes.Add(cc_upClick    , Inputs.ClassicController.UP);
+            deviceShapes.Add(cc_downClick  , Inputs.ClassicController.DOWN);
+            deviceShapes.Add(cc_leftClick  , Inputs.ClassicController.LEFT);
+            deviceShapes.Add(cc_rightClick , Inputs.ClassicController.RIGHT);
+            deviceShapes.Add(cc_lupClick   , Inputs.ClassicController.LUP);
+            deviceShapes.Add(cc_ldownClick , Inputs.ClassicController.LDOWN);
+            deviceShapes.Add(cc_lleftClick , Inputs.ClassicController.LLEFT);
+            deviceShapes.Add(cc_lrightClick, Inputs.ClassicController.LRIGHT);
+            deviceShapes.Add(cc_rupClick   , Inputs.ClassicController.RUP);
+            deviceShapes.Add(cc_rdownClick , Inputs.ClassicController.RDOWN);
+            deviceShapes.Add(cc_rleftClick , Inputs.ClassicController.RLEFT);
+            deviceShapes.Add(cc_rrightClick, Inputs.ClassicController.RRIGHT);
+            deviceShapes.Add(cc_startClick , Inputs.ClassicController.START);
+            deviceShapes.Add(cc_selectClick, Inputs.ClassicController.SELECT);
+            deviceShapes.Add(cc_homeClick  , Inputs.ClassicController.HOME);
+            #endregion
             // TODO: add other controller maps
 
             if (deviceType == NintrollerLib.ControllerType.ProController)
             {
                 currentSelection = pro_homeClick;
+            }
+            else if (deviceType == NintrollerLib.ControllerType.ClassicController)
+            {
+                currentSelection = cc_homeClick;
             }
 
             device_MouseDown(currentSelection, new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left));

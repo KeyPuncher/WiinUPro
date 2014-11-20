@@ -309,8 +309,8 @@ namespace WiinUSoft
 
                         holder.SetValue(Inputs.ClassicController.LFULL, e.Wiimote.ClassicController.LFull);
                         holder.SetValue(Inputs.ClassicController.RFULL, e.Wiimote.ClassicController.RFull);
-                        holder.SetValue(Inputs.ClassicController.LT, e.Wiimote.ClassicController.LTrigger);
-                        holder.SetValue(Inputs.ClassicController.RT, e.Wiimote.ClassicController.RTrigger);
+                        holder.SetValue(Inputs.ClassicController.LT, e.Wiimote.ClassicController.LTrigger > 0.1f ? e.Wiimote.ClassicController.LTrigger : 0f);
+                        holder.SetValue(Inputs.ClassicController.RT, e.Wiimote.ClassicController.RTrigger > 0.1f ? e.Wiimote.ClassicController.RTrigger : 0f);
 
                         holder.SetValue(Inputs.ClassicController.LRIGHT, e.Wiimote.ClassicController.LeftJoy.X > 0 ? e.Wiimote.ClassicController.LeftJoy.X : 0f);
                         holder.SetValue(Inputs.ClassicController.LLEFT, e.Wiimote.ClassicController.LeftJoy.X < 0 ? e.Wiimote.ClassicController.LeftJoy.X * -1 : 0f);
@@ -360,6 +360,13 @@ namespace WiinUSoft
 
                     // TODO: Musical Extension readins
                 }
+
+                // Rumble is currently disabled because the wiimote only reports when something changes (which can be changed)
+                //bool doRumble = holder.GetFlag(Inputs.Flags.RUMBLE);
+                //if (doRumble != e.Wiimote.Rumble)
+                //{
+                //    device.SetRumble(doRumble);
+                //}
             }
 
             holder.Update();
