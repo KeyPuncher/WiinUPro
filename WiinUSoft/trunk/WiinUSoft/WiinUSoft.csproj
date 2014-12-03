@@ -188,7 +188,17 @@
     <Resource Include="Images\Refresh.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Classic Controller.png" />
+    <Resource Include="Images\ClassicController_map.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ClassicControllerPro_map.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\WiimoteBack_map.png" />
+    <Resource Include="Images\WiimoteFront_map.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Nunchuck_map.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

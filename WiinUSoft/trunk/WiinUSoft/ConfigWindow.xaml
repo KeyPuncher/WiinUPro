@@ -6,6 +6,7 @@
         <Button x:Name="btnApply" Content="Apply" Canvas.Left="598" Canvas.Top="321" Width="100" Height="24" Click="btnApply_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}"/>
         <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="487" Canvas.Top="321" Width="100" Height="24" Click="btnCancel_Click" BorderBrush="{DynamicResource BrushAntemBlue}" Background="{DynamicResource ButonFillBrush1}"/>
         <Line x:Name="guideMeet" X1="178" X2="518" Canvas.Left="0" Canvas.Top="30" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5"/>
+        <Polygon Points="-2,-2 32,15 -2,32" Fill="Black" Canvas.Left="330" Canvas.Top="15" />
         <Polygon Points="0,0 30,15 0,30" Fill="{DynamicResource BrushAntemBlue}" Canvas.Left="330" Canvas.Top="15" />
         <!-- Mapped Device (360 Controller) -->
         <Grid x:Name="XGrid" Canvas.Left="377" Canvas.Top="94" Height="200">
@@ -68,9 +69,11 @@
             <Rectangle x:Name="pro_rdownClick" HorizontalAlignment="Left" Height="24" Margin="246,65,0,0" VerticalAlignment="Top" Width="18" ToolTip="RDown" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="pro_rsClick" HorizontalAlignment="Left" Height="16" Margin="246,48,0,0" VerticalAlignment="Top" Width="18" ToolTip="RS" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
         </Grid>
+        <!-- Device to Map (Wiimote) -->
+        <!-- TODO -->
         <!-- Device to Map (Classic Controller) -->
         <Grid x:Name="CCGrid" Canvas.Left="5" Canvas.Top="94" Visibility="Hidden">
-            <Image Source="Images/Classic Controller.png" Height="200" IsHitTestVisible="False"/>
+            <Image Source="Images/ClassicController_map.png" Height="200" IsHitTestVisible="False"/>
             <Rectangle x:Name="cc_upClick" HorizontalAlignment="Left" Height="25" Margin="70,63,0,0" VerticalAlignment="Top" Width="20" ToolTip="D-pad Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="cc_downClick" HorizontalAlignment="Left" Height="25" Margin="70,94,0,0" VerticalAlignment="Top" Width="20" ToolTip="D-pad Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="cc_leftClick" HorizontalAlignment="Left" Height="22" Margin="49,80,0,0" VerticalAlignment="Top" Width="21" ToolTip="D-pad Left" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
@@ -95,6 +98,35 @@
             <Rectangle x:Name="cc_rrightClick" HorizontalAlignment="Left" Height="18" Margin="242,141,0,0" VerticalAlignment="Top" Width="23" ToolTip="LRight" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
             <Rectangle x:Name="cc_rdownClick" HorizontalAlignment="Left" Height="24" Margin="224,158,0,0" VerticalAlignment="Top" Width="18" ToolTip="LDown" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
         </Grid>
+        <!-- Device to Map (Classic Controller Pro) -->
+        <Grid x:Name="CCPGrid" Canvas.Left="5" Canvas.Top="90" Visibility="Hidden">
+            <Image IsHitTestVisible="False" Source="Images/ClassicControllerPro_map.png" Height="200"/>
+            <Rectangle x:Name="ccp_upClick" HorizontalAlignment="Left" Height="25" Margin="61,61,0,0" VerticalAlignment="Top" Width="20" ToolTip="D-pad Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_downClick" HorizontalAlignment="Left" Height="25" Margin="61,92,0,0" VerticalAlignment="Top" Width="20" ToolTip="D-pad Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_leftClick" HorizontalAlignment="Left" Height="22" Margin="40,78,0,0" VerticalAlignment="Top" Width="21" ToolTip="D-pad Left" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_rightClick" HorizontalAlignment="Left" Height="22" Margin="81,78,0,0" VerticalAlignment="Top" Width="22" ToolTip="D-pad Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="ccp_aClick" HorizontalAlignment="Left" Height="22" Margin="262,78,0,0" VerticalAlignment="Top" Width="22" ToolTip="A" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="ccp_bClick" HorizontalAlignment="Left" Height="22" Margin="233,96,0,0" VerticalAlignment="Top" Width="22" ToolTip="B" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="ccp_xClick" HorizontalAlignment="Left" Height="22" Margin="235,59,0,0" VerticalAlignment="Top" Width="22" ToolTip="X"  MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="ccp_yClick" HorizontalAlignment="Left" Height="22" Margin="209,78,0,0" VerticalAlignment="Top" Width="22" ToolTip="Y" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="ccp_selectClick" HorizontalAlignment="Left" Height="14" Margin="131,82,0,0" VerticalAlignment="Top" Width="14" ToolTip="Select" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="ccp_homeClick" HorizontalAlignment="Left" Height="14" Margin="152,81,0,0" VerticalAlignment="Top" Width="14" ToolTip="Home" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="ccp_startClick" HorizontalAlignment="Left" Height="14" Margin="172,82,0,0" VerticalAlignment="Top" Width="14" ToolTip="Start" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_lClick" HorizontalAlignment="Left" Height="16" Margin="50,20,0,0" VerticalAlignment="Top" Width="48" ToolTip="L" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_rClick" HorizontalAlignment="Left" Height="16" Margin="217,18,0,0" VerticalAlignment="Top" Width="48" ToolTip="R" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_zlClick" HorizontalAlignment="Left" Height="14" Margin="54,3,0,0" VerticalAlignment="Top" Width="44" ToolTip="ZL" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_zrClick" HorizontalAlignment="Left" Height="14" Margin="218,3,0,0" VerticalAlignment="Top" Width="44" ToolTip="ZR" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_lupClick" HorizontalAlignment="Left" Height="24" Margin="103,101,0,0" VerticalAlignment="Top" Width="18" ToolTip="LUP" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_lleftClick" HorizontalAlignment="Left" Height="18" Margin="79,125,0,0" VerticalAlignment="Top" Width="24" ToolTip="LLeft" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_lrightClick" HorizontalAlignment="Left" Height="18" Margin="121,125,0,0" VerticalAlignment="Top" Width="23" ToolTip="LRight" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_ldownClick" HorizontalAlignment="Left" Height="24" Margin="103,142,0,0" VerticalAlignment="Top" Width="18" ToolTip="LDown" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_rupClick" HorizontalAlignment="Left" Height="24" Margin="196,101,0,0" VerticalAlignment="Top" Width="18" ToolTip="LUP" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_rleftClick" HorizontalAlignment="Left" Height="18" Margin="172,125,0,0" VerticalAlignment="Top" Width="24" ToolTip="LLeft" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_rrightClick" HorizontalAlignment="Left" Height="18" Margin="214,125,0,0" VerticalAlignment="Top" Width="23" ToolTip="LRight" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
+            <Rectangle x:Name="ccp_rdownClick" HorizontalAlignment="Left" Height="24" Margin="196,142,0,0" VerticalAlignment="Top" Width="18" ToolTip="LDown" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
+        </Grid>
+        <!-- Device to Map (Nunchuk) -->
+        <!-- TODO -->
         <Ellipse x:Name="selectionDevice" Height="36" Canvas.Left="160" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5"/>
         <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="178" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
         <Label x:Name="deviceLabel" Content="Home" Canvas.Left="259" Canvas.Top="319" HorizontalContentAlignment="Right" Width="100" BorderThickness="1,0,0,0" FontWeight="Bold"/>

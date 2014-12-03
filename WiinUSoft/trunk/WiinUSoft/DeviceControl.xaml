@@ -37,7 +37,7 @@
             </Button.ContextMenu>
             <Image x:Name="btnXinput_image" Source="Images/xboxlogob64.png" Margin="1"></Image>
         </Button>
-        <Button x:Name="btnVjoy" HorizontalAlignment="Left" Margin="226,36,-22,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" IsEnabled="False" ToolTip="Attatch as DirectInput Device" Background="{DynamicResource ButonFillBrush1}" IsEnabledChanged="btnVjoy_IsEnabledChanged">
+        <Button x:Name="btnVjoy" HorizontalAlignment="Left" Margin="226,36,-22,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" IsEnabled="False" ToolTip="Attatch as DirectInput Device" Background="{DynamicResource ButonFillBrush1}" IsEnabledChanged="btnVjoy_IsEnabledChanged" Visibility="Hidden">
             <Button.ContextMenu>
                 <ContextMenu/>
             </Button.ContextMenu>
