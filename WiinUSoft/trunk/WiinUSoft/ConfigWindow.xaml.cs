@@ -46,11 +46,44 @@ namespace WiinUSoft
                 case NintrollerLib.ControllerType.ProController:
                     ProGrid.Visibility = System.Windows.Visibility.Visible;
                     CCGrid.Visibility = System.Windows.Visibility.Hidden;
+                    CCPGrid.Visibility = System.Windows.Visibility.Hidden;
+                    NkGrid.Visibility = System.Windows.Visibility.Hidden;
+                    WmGrid.Visibility = System.Windows.Visibility.Hidden;
                     break;
 
                 case NintrollerLib.ControllerType.ClassicController:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
                     CCGrid.Visibility = System.Windows.Visibility.Visible;
+                    CCPGrid.Visibility = System.Windows.Visibility.Hidden;
+                    NkGrid.Visibility = System.Windows.Visibility.Hidden;
+                    WmGrid.Visibility = System.Windows.Visibility.Visible;
+                    // TODO: Reposition Wiimote Grid
+                    break;
+
+                case NintrollerLib.ControllerType.ClassicControllerPro:
+                    ProGrid.Visibility = System.Windows.Visibility.Hidden;
+                    CCGrid.Visibility = System.Windows.Visibility.Hidden;
+                    CCPGrid.Visibility = System.Windows.Visibility.Visible;
+                    NkGrid.Visibility = System.Windows.Visibility.Hidden;
+                    WmGrid.Visibility = System.Windows.Visibility.Visible;
+                    // TODO: Reposition Wiimote Grid
+                    break;
+
+                case NintrollerLib.ControllerType.Nunchuk:
+                case NintrollerLib.ControllerType.NunchukB:
+                    ProGrid.Visibility = System.Windows.Visibility.Hidden;
+                    CCGrid.Visibility = System.Windows.Visibility.Hidden;
+                    CCPGrid.Visibility = System.Windows.Visibility.Hidden;
+                    NkGrid.Visibility = System.Windows.Visibility.Visible;
+                    WmGrid.Visibility = System.Windows.Visibility.Visible;
+                    break;
+
+                case NintrollerLib.ControllerType.Wiimote:
+                    ProGrid.Visibility = System.Windows.Visibility.Hidden;
+                    CCGrid.Visibility = System.Windows.Visibility.Hidden;
+                    CCPGrid.Visibility = System.Windows.Visibility.Hidden;
+                    NkGrid.Visibility = System.Windows.Visibility.Hidden;
+                    WmGrid.Visibility = System.Windows.Visibility.Visible;
                     break;
             }
         }
@@ -115,60 +148,124 @@ namespace WiinUSoft
             mapValues.Add(x_guideClick  ,Inputs.Xbox360.GUIDE);
             #endregion
 
-            #region Pro Clickables
             deviceShapes = new Dictionary<Shape, string>();
-            deviceShapes.Add(pro_aClick     , Inputs.ProController.A);
-            deviceShapes.Add(pro_bClick     , Inputs.ProController.B);
-            deviceShapes.Add(pro_xClick     , Inputs.ProController.X);
-            deviceShapes.Add(pro_yClick     , Inputs.ProController.Y);
-            deviceShapes.Add(pro_lClick     , Inputs.ProController.L);
-            deviceShapes.Add(pro_zlClick    , Inputs.ProController.ZL);
-            deviceShapes.Add(pro_lsClick    , Inputs.ProController.LS);
-            deviceShapes.Add(pro_rClick     , Inputs.ProController.R);
-            deviceShapes.Add(pro_zrClick    , Inputs.ProController.ZR);
-            deviceShapes.Add(pro_rsClick    , Inputs.ProController.RS);
-            deviceShapes.Add(pro_upClick    , Inputs.ProController.UP);
-            deviceShapes.Add(pro_downClick  , Inputs.ProController.DOWN);
-            deviceShapes.Add(pro_leftClick  , Inputs.ProController.LEFT);
-            deviceShapes.Add(pro_rightClick , Inputs.ProController.RIGHT);
-            deviceShapes.Add(pro_lupClick   , Inputs.ProController.LUP);
-            deviceShapes.Add(pro_ldownClick , Inputs.ProController.LDOWN);
-            deviceShapes.Add(pro_lleftClick , Inputs.ProController.LLEFT);
-            deviceShapes.Add(pro_lrightClick, Inputs.ProController.LRIGHT);
-            deviceShapes.Add(pro_rupClick   , Inputs.ProController.RUP);
-            deviceShapes.Add(pro_rdownClick , Inputs.ProController.RDOWN);
-            deviceShapes.Add(pro_rleftClick , Inputs.ProController.RLEFT);
-            deviceShapes.Add(pro_rrightClick, Inputs.ProController.RRIGHT);
-            deviceShapes.Add(pro_startClick , Inputs.ProController.START);
-            deviceShapes.Add(pro_selectClick, Inputs.ProController.SELECT);
-            deviceShapes.Add(pro_homeClick  , Inputs.ProController.HOME);
-            #endregion
+            if (deviceType == NintrollerLib.ControllerType.ProController)
+            {
+                #region Pro Clickables
+                deviceShapes.Add(pro_aClick     , Inputs.ProController.A);
+                deviceShapes.Add(pro_bClick     , Inputs.ProController.B);
+                deviceShapes.Add(pro_xClick     , Inputs.ProController.X);
+                deviceShapes.Add(pro_yClick     , Inputs.ProController.Y);
+                deviceShapes.Add(pro_lClick     , Inputs.ProController.L);
+                deviceShapes.Add(pro_zlClick    , Inputs.ProController.ZL);
+                deviceShapes.Add(pro_lsClick    , Inputs.ProController.LS);
+                deviceShapes.Add(pro_rClick     , Inputs.ProController.R);
+                deviceShapes.Add(pro_zrClick    , Inputs.ProController.ZR);
+                deviceShapes.Add(pro_rsClick    , Inputs.ProController.RS);
+                deviceShapes.Add(pro_upClick    , Inputs.ProController.UP);
+                deviceShapes.Add(pro_downClick  , Inputs.ProController.DOWN);
+                deviceShapes.Add(pro_leftClick  , Inputs.ProController.LEFT);
+                deviceShapes.Add(pro_rightClick , Inputs.ProController.RIGHT);
+                deviceShapes.Add(pro_lupClick   , Inputs.ProController.LUP);
+                deviceShapes.Add(pro_ldownClick , Inputs.ProController.LDOWN);
+                deviceShapes.Add(pro_lleftClick , Inputs.ProController.LLEFT);
+                deviceShapes.Add(pro_lrightClick, Inputs.ProController.LRIGHT);
+                deviceShapes.Add(pro_rupClick   , Inputs.ProController.RUP);
+                deviceShapes.Add(pro_rdownClick , Inputs.ProController.RDOWN);
+                deviceShapes.Add(pro_rleftClick , Inputs.ProController.RLEFT);
+                deviceShapes.Add(pro_rrightClick, Inputs.ProController.RRIGHT);
+                deviceShapes.Add(pro_startClick , Inputs.ProController.START);
+                deviceShapes.Add(pro_selectClick, Inputs.ProController.SELECT);
+                deviceShapes.Add(pro_homeClick  , Inputs.ProController.HOME);
+                #endregion
+            }
+            else
+            {
+                #region Wiimote Clickalbes
+                // TODO: more wiimote maps
+                deviceShapes.Add(wm_aClick, Inputs.Wiimote.A);
+                deviceShapes.Add(wm_bClick, Inputs.Wiimote.B);
+                deviceShapes.Add(wm_upClick, Inputs.Wiimote.UP);
+                deviceShapes.Add(wm_downClick, Inputs.Wiimote.DOWN);
+                deviceShapes.Add(wm_leftClick, Inputs.Wiimote.LEFT);
+                deviceShapes.Add(wm_rightClick, Inputs.Wiimote.RIGHT);
+                deviceShapes.Add(wm_oneClick, Inputs.Wiimote.ONE);
+                deviceShapes.Add(wm_twoClick, Inputs.Wiimote.TWO);
+                deviceShapes.Add(wm_homeClick, Inputs.Wiimote.HOME);
+                deviceShapes.Add(wm_selectClick, Inputs.Wiimote.MINUS);
+                deviceShapes.Add(wm_startClick, Inputs.Wiimote.PLUS);
+                #endregion
 
-            #region Classic Clickables
-            deviceShapes.Add(cc_aClick     , Inputs.ClassicController.A);
-            deviceShapes.Add(cc_bClick     , Inputs.ClassicController.B);
-            deviceShapes.Add(cc_xClick     , Inputs.ClassicController.X);
-            deviceShapes.Add(cc_yClick     , Inputs.ClassicController.Y);
-            deviceShapes.Add(cc_lClick     , Inputs.ClassicController.LT);
-            deviceShapes.Add(cc_zlClick    , Inputs.ClassicController.ZL);
-            deviceShapes.Add(cc_rClick     , Inputs.ClassicController.RT);
-            deviceShapes.Add(cc_zrClick    , Inputs.ClassicController.ZR);
-            deviceShapes.Add(cc_upClick    , Inputs.ClassicController.UP);
-            deviceShapes.Add(cc_downClick  , Inputs.ClassicController.DOWN);
-            deviceShapes.Add(cc_leftClick  , Inputs.ClassicController.LEFT);
-            deviceShapes.Add(cc_rightClick , Inputs.ClassicController.RIGHT);
-            deviceShapes.Add(cc_lupClick   , Inputs.ClassicController.LUP);
-            deviceShapes.Add(cc_ldownClick , Inputs.ClassicController.LDOWN);
-            deviceShapes.Add(cc_lleftClick , Inputs.ClassicController.LLEFT);
-            deviceShapes.Add(cc_lrightClick, Inputs.ClassicController.LRIGHT);
-            deviceShapes.Add(cc_rupClick   , Inputs.ClassicController.RUP);
-            deviceShapes.Add(cc_rdownClick , Inputs.ClassicController.RDOWN);
-            deviceShapes.Add(cc_rleftClick , Inputs.ClassicController.RLEFT);
-            deviceShapes.Add(cc_rrightClick, Inputs.ClassicController.RRIGHT);
-            deviceShapes.Add(cc_startClick , Inputs.ClassicController.START);
-            deviceShapes.Add(cc_selectClick, Inputs.ClassicController.SELECT);
-            deviceShapes.Add(cc_homeClick  , Inputs.ClassicController.HOME);
-            #endregion
+                if (deviceType == NintrollerLib.ControllerType.ClassicController)
+                {
+                    #region Classic Clickables
+                    deviceShapes.Add(cc_aClick     , Inputs.ClassicController.A);
+                    deviceShapes.Add(cc_bClick     , Inputs.ClassicController.B);
+                    deviceShapes.Add(cc_xClick     , Inputs.ClassicController.X);
+                    deviceShapes.Add(cc_yClick     , Inputs.ClassicController.Y);
+                    deviceShapes.Add(cc_lClick     , Inputs.ClassicController.LT);
+                    deviceShapes.Add(cc_zlClick    , Inputs.ClassicController.ZL);
+                    deviceShapes.Add(cc_rClick     , Inputs.ClassicController.RT);
+                    deviceShapes.Add(cc_zrClick    , Inputs.ClassicController.ZR);
+                    deviceShapes.Add(cc_upClick    , Inputs.ClassicController.UP);
+                    deviceShapes.Add(cc_downClick  , Inputs.ClassicController.DOWN);
+                    deviceShapes.Add(cc_leftClick  , Inputs.ClassicController.LEFT);
+                    deviceShapes.Add(cc_rightClick , Inputs.ClassicController.RIGHT);
+                    deviceShapes.Add(cc_lupClick   , Inputs.ClassicController.LUP);
+                    deviceShapes.Add(cc_ldownClick , Inputs.ClassicController.LDOWN);
+                    deviceShapes.Add(cc_lleftClick , Inputs.ClassicController.LLEFT);
+                    deviceShapes.Add(cc_lrightClick, Inputs.ClassicController.LRIGHT);
+                    deviceShapes.Add(cc_rupClick   , Inputs.ClassicController.RUP);
+                    deviceShapes.Add(cc_rdownClick , Inputs.ClassicController.RDOWN);
+                    deviceShapes.Add(cc_rleftClick , Inputs.ClassicController.RLEFT);
+                    deviceShapes.Add(cc_rrightClick, Inputs.ClassicController.RRIGHT);
+                    deviceShapes.Add(cc_startClick , Inputs.ClassicController.START);
+                    deviceShapes.Add(cc_selectClick, Inputs.ClassicController.SELECT);
+                    deviceShapes.Add(cc_homeClick  , Inputs.ClassicController.HOME);
+                    #endregion
+                }
+                else if (deviceType == NintrollerLib.ControllerType.ClassicControllerPro)
+                {
+                    #region Classic Pro Clickables
+                    deviceShapes.Add(ccp_aClick     , Inputs.ClassicControllerPro.A);
+                    deviceShapes.Add(ccp_bClick     , Inputs.ClassicControllerPro.B);
+                    deviceShapes.Add(ccp_xClick     , Inputs.ClassicControllerPro.X);
+                    deviceShapes.Add(ccp_yClick     , Inputs.ClassicControllerPro.Y);
+                    deviceShapes.Add(ccp_lClick     , Inputs.ClassicControllerPro.L);
+                    deviceShapes.Add(ccp_zlClick    , Inputs.ClassicControllerPro.ZL);
+                    deviceShapes.Add(ccp_rClick     , Inputs.ClassicControllerPro.R);
+                    deviceShapes.Add(ccp_zrClick    , Inputs.ClassicControllerPro.ZR);
+                    deviceShapes.Add(ccp_upClick    , Inputs.ClassicControllerPro.UP);
+                    deviceShapes.Add(ccp_downClick  , Inputs.ClassicControllerPro.DOWN);
+                    deviceShapes.Add(ccp_leftClick  , Inputs.ClassicControllerPro.LEFT);
+                    deviceShapes.Add(ccp_rightClick , Inputs.ClassicControllerPro.RIGHT);
+                    deviceShapes.Add(ccp_lupClick   , Inputs.ClassicControllerPro.LUP);
+                    deviceShapes.Add(ccp_ldownClick , Inputs.ClassicControllerPro.LDOWN);
+                    deviceShapes.Add(ccp_lleftClick , Inputs.ClassicControllerPro.LLEFT);
+                    deviceShapes.Add(ccp_lrightClick, Inputs.ClassicControllerPro.LRIGHT);
+                    deviceShapes.Add(ccp_rupClick   , Inputs.ClassicControllerPro.RUP);
+                    deviceShapes.Add(ccp_rdownClick , Inputs.ClassicControllerPro.RDOWN);
+                    deviceShapes.Add(ccp_rleftClick , Inputs.ClassicControllerPro.RLEFT);
+                    deviceShapes.Add(ccp_rrightClick, Inputs.ClassicControllerPro.RRIGHT);
+                    deviceShapes.Add(ccp_startClick , Inputs.ClassicControllerPro.START);
+                    deviceShapes.Add(ccp_selectClick, Inputs.ClassicControllerPro.SELECT);
+                    deviceShapes.Add(ccp_homeClick  , Inputs.ClassicControllerPro.HOME);
+                    #endregion
+                }
+                else if (deviceType == NintrollerLib.ControllerType.Nunchuk 
+                      || deviceType == NintrollerLib.ControllerType.NunchukB)
+                {
+                    #region Nunchuk Clickables
+                    deviceShapes.Add(nk_cClick, Inputs.Nunchuk.C);
+                    deviceShapes.Add(nk_zClick, Inputs.Nunchuk.Z);
+                    deviceShapes.Add(nk_upClick, Inputs.Nunchuk.UP);
+                    deviceShapes.Add(nk_downClick, Inputs.Nunchuk.DOWN);
+                    deviceShapes.Add(nk_leftClick, Inputs.Nunchuk.LEFT);
+                    deviceShapes.Add(nk_rightClick, Inputs.Nunchuk.RIGHT);
+                    // TODO: other Nunchuk Clickables
+                    #endregion
+                }
+            }
             // TODO: add other controller maps
 
             if (deviceType == NintrollerLib.ControllerType.ProController)
@@ -178,6 +275,14 @@ namespace WiinUSoft
             else if (deviceType == NintrollerLib.ControllerType.ClassicController)
             {
                 currentSelection = cc_homeClick;
+            }
+            else if (deviceType == NintrollerLib.ControllerType.ClassicControllerPro)
+            {
+                currentSelection = ccp_homeClick;
+            }
+            else
+            {
+                currentSelection = wm_homeClick;
             }
 
             device_MouseDown(currentSelection, new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left));

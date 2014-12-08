@@ -17,11 +17,6 @@ namespace WiinUSoft.Inputs
         public const string LEFT        = "wLEFT";
         public const string RIGHT       = "wRIGHT";
 
-        public const string L           = "wL";
-        public const string R           = "wR";
-        public const string ZL          = "wZL";
-        public const string ZR          = "wZR";
-
         public const string ACCUP       = "wACCUP";
         public const string ACCDOWN     = "wACCDOWN";
         public const string ACCLEFT     = "wACCLEFT";
