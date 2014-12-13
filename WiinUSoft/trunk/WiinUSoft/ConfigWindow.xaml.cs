@@ -41,23 +41,29 @@ namespace WiinUSoft
             deviceType = type;
             GetShapes();
 
+            // other views should already be hidden except the pro controller
             switch (deviceType)
             {
                 case NintrollerLib.ControllerType.ProController:
                     ProGrid.Visibility = System.Windows.Visibility.Visible;
-                    CCGrid.Visibility = System.Windows.Visibility.Hidden;
-                    CCPGrid.Visibility = System.Windows.Visibility.Hidden;
-                    NkGrid.Visibility = System.Windows.Visibility.Hidden;
-                    WmGrid.Visibility = System.Windows.Visibility.Hidden;
+                    //CCGrid.Visibility = System.Windows.Visibility.Hidden;
+                    //CCPGrid.Visibility = System.Windows.Visibility.Hidden;
+                    //NkGrid.Visibility = System.Windows.Visibility.Hidden;
+                    //WmGrid.Visibility = System.Windows.Visibility.Hidden;
                     break;
 
                 case NintrollerLib.ControllerType.ClassicController:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
                     CCGrid.Visibility = System.Windows.Visibility.Visible;
-                    CCPGrid.Visibility = System.Windows.Visibility.Hidden;
-                    NkGrid.Visibility = System.Windows.Visibility.Hidden;
+                    //CCPGrid.Visibility = System.Windows.Visibility.Hidden;
+                    //NkGrid.Visibility = System.Windows.Visibility.Hidden;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
                     // TODO: Reposition Wiimote Grid
+                    Canvas.SetLeft(WmGrid, 70);
+                    Canvas.SetTop(WmGrid, -7);
+                    //((RotateTransform)WmGrid.RenderTransform).Angle = -90;
+                    RotateTransform rt = new RotateTransform(-90);
+                    WmGrid.RenderTransform = rt;
                     break;
 
                 case NintrollerLib.ControllerType.ClassicControllerPro:
@@ -300,6 +306,11 @@ namespace WiinUSoft
             left -= selector.Width / 2;
             left += s.Width / 2;
 
+            if (s.Name.StartsWith("wm"))
+            {
+                // TODO: Something about the rotation
+            }
+
             Canvas.SetTop(selector, top);
             Canvas.SetLeft(selector, left);
 
@@ -364,6 +375,11 @@ namespace WiinUSoft
         {
             result = false;
             Close();
+        }
+
+        private void btnDefault_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
