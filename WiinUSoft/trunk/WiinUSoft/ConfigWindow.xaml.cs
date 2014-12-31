@@ -306,9 +306,10 @@ namespace WiinUSoft
             left -= selector.Width / 2;
             left += s.Width / 2;
 
-            if (s.Name.StartsWith("wm"))
+            if (s.Name.StartsWith("wm") && deviceType != NintrollerLib.ControllerType.Wiimote)
             {
                 // TODO: Something about the rotation
+                // (x,y) => (-y, x)
             }
 
             Canvas.SetTop(selector, top);
