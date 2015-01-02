@@ -41,54 +41,45 @@ namespace WiinUSoft
             deviceType = type;
             GetShapes();
 
+            RotateTransform rt = new RotateTransform(-90);
             // other views should already be hidden except the pro controller
             switch (deviceType)
             {
                 case NintrollerLib.ControllerType.ProController:
                     ProGrid.Visibility = System.Windows.Visibility.Visible;
-                    //CCGrid.Visibility = System.Windows.Visibility.Hidden;
-                    //CCPGrid.Visibility = System.Windows.Visibility.Hidden;
-                    //NkGrid.Visibility = System.Windows.Visibility.Hidden;
-                    //WmGrid.Visibility = System.Windows.Visibility.Hidden;
                     break;
 
                 case NintrollerLib.ControllerType.ClassicController:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
                     CCGrid.Visibility = System.Windows.Visibility.Visible;
-                    //CCPGrid.Visibility = System.Windows.Visibility.Hidden;
-                    //NkGrid.Visibility = System.Windows.Visibility.Hidden;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
-                    // TODO: Reposition Wiimote Grid
+
+                    // Reposition Wiimote Grid
                     Canvas.SetLeft(WmGrid, 70);
                     Canvas.SetTop(WmGrid, -7);
-                    //((RotateTransform)WmGrid.RenderTransform).Angle = -90;
-                    RotateTransform rt = new RotateTransform(-90);
                     WmGrid.RenderTransform = rt;
                     break;
 
                 case NintrollerLib.ControllerType.ClassicControllerPro:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
-                    CCGrid.Visibility = System.Windows.Visibility.Hidden;
                     CCPGrid.Visibility = System.Windows.Visibility.Visible;
-                    NkGrid.Visibility = System.Windows.Visibility.Hidden;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
-                    // TODO: Reposition Wiimote Grid
+
+                    // Reposition Wiimote Grid
+                    Canvas.SetLeft(WmGrid, 70);
+                    Canvas.SetTop(WmGrid, -7);
+                    WmGrid.RenderTransform = rt;
                     break;
 
                 case NintrollerLib.ControllerType.Nunchuk:
                 case NintrollerLib.ControllerType.NunchukB:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
-                    CCGrid.Visibility = System.Windows.Visibility.Hidden;
-                    CCPGrid.Visibility = System.Windows.Visibility.Hidden;
                     NkGrid.Visibility = System.Windows.Visibility.Visible;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
                     break;
 
                 case NintrollerLib.ControllerType.Wiimote:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
-                    CCGrid.Visibility = System.Windows.Visibility.Hidden;
-                    CCPGrid.Visibility = System.Windows.Visibility.Hidden;
-                    NkGrid.Visibility = System.Windows.Visibility.Hidden;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
                     break;
             }
@@ -188,7 +179,7 @@ namespace WiinUSoft
             else
             {
                 #region Wiimote Clickalbes
-                // TODO: more wiimote maps
+                // TODO: more wiimote maps (Acc, IR) (not for 1st release)
                 deviceShapes.Add(wm_aClick, Inputs.Wiimote.A);
                 deviceShapes.Add(wm_bClick, Inputs.Wiimote.B);
                 deviceShapes.Add(wm_upClick, Inputs.Wiimote.UP);
@@ -268,11 +259,11 @@ namespace WiinUSoft
                     deviceShapes.Add(nk_downClick, Inputs.Nunchuk.DOWN);
                     deviceShapes.Add(nk_leftClick, Inputs.Nunchuk.LEFT);
                     deviceShapes.Add(nk_rightClick, Inputs.Nunchuk.RIGHT);
-                    // TODO: other Nunchuk Clickables
+                    // TODO: other Nunchuk Clickables (Acc) (not for 1st release)
                     #endregion
                 }
             }
-            // TODO: add other controller maps
+            // TODO: add other controller maps (Balance Board, Musicals) (not for 1st release)
 
             if (deviceType == NintrollerLib.ControllerType.ProController)
             {

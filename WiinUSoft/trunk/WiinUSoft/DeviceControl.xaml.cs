@@ -192,7 +192,7 @@ namespace WiinUSoft
                     btnConfig.Visibility = System.Windows.Visibility.Visible;
                     btnDetatch.Visibility = System.Windows.Visibility.Visible;
 
-                    // TODO: Instantiate VJoy Holder
+                    // TODO: Instantiate VJoy Holder (not for 1st release)
                     break;
             }
         }
@@ -250,11 +250,10 @@ namespace WiinUSoft
             }
             else if (DeviceType == ControllerType.BalanceBoard)
             {
-                // TODO: Balance Board Reading
+                // TODO: Balance Board Reading (not for 1st release)
             }
             else
             {
-                // TODO: Wiimote & extension Reading
                 holder.SetValue(Inputs.Wiimote.A, e.Wiimote.A);
                 holder.SetValue(Inputs.Wiimote.B, e.Wiimote.B);
                 holder.SetValue(Inputs.Wiimote.ONE, e.Wiimote.One);
@@ -269,13 +268,12 @@ namespace WiinUSoft
                 holder.SetValue(Inputs.Wiimote.PLUS, e.Wiimote.Plus);
                 holder.SetValue(Inputs.Wiimote.HOME, e.Wiimote.Home);
 
-                // Accelerometer and IR sensor
+                //TODO: Wiimote Accelerometer and IR sensor Reading (not for 1st release)
 
                 switch (DeviceType)
                 {
                     case ControllerType.Nunchuk:
                     case ControllerType.NunchukB:
-                        // TODO: Nunchuck Reading
                         holder.SetValue(Inputs.Nunchuk.C, e.Wiimote.Nunchuck.C);
                         holder.SetValue(Inputs.Nunchuk.Z, e.Wiimote.Nunchuck.Z);
 
@@ -284,7 +282,7 @@ namespace WiinUSoft
                         holder.SetValue(Inputs.Nunchuk.UP, e.Wiimote.Nunchuck.Joy.Y > 0 ? e.Wiimote.Nunchuck.Joy.Y : 0f);
                         holder.SetValue(Inputs.Nunchuk.DOWN, e.Wiimote.Nunchuck.Joy.Y < 0 ? e.Wiimote.Nunchuck.Joy.Y * -1 : 0f);
 
-                        // Accelerometer
+                        //TODO: Nunchuk Accelerometer (not for 1st release)
                         break;
 
                     case ControllerType.ClassicController:
@@ -355,10 +353,10 @@ namespace WiinUSoft
                         break;
 
                     case ControllerType.MotionPlus:
-                        // TODO: Motion Plus Reading
+                        // TODO: Motion Plus Reading (not for 1st release)
                         break;
 
-                    // TODO: Musical Extension readins
+                    // TODO: Musical Extension readings (not for 1st release)
                 }
 
                 // Rumble is currently disabled because the wiimote only reports when something changes (which can be changed)
@@ -419,11 +417,19 @@ namespace WiinUSoft
 
         private void btnIdentify_Click(object sender, RoutedEventArgs e)
         {
-            // TOOD: Physically identify the device via rumble or light show
             if (device.Connect())
             {
                 device.SetRumble(true);
                 Delay(2000).ContinueWith(o => device.SetRumble(false));
+
+                // light show
+                device.SetLEDs(1);
+                Delay(250).ContinueWith(o => device.SetLEDs(2));
+                Delay(500).ContinueWith(o => device.SetLEDs(4));
+                Delay(750).ContinueWith(o => device.SetLEDs(8));
+                Delay(1000).ContinueWith(o => device.SetLEDs(4));
+                Delay(1250).ContinueWith(o => device.SetLEDs(2));
+                Delay(1500).ContinueWith(o => device.SetLEDs(1));
             }
         }
 

@@ -24,7 +24,7 @@ namespace WiinUSoft.Holders
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
 
-            // TODO: create default mapping
+            // TODO: finish default mapping (Acc, IR, Balance Board, ect) (not for 1st release)
             switch (type)
             {
                 case NintrollerLib.ControllerType.ProController:
