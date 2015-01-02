@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ConfigWindow" Height="485.925" Width="716" Icon="Images/WiinUSoftAlpha.ico" Background="{DynamicResource BrushAntemWhite}">
-    <Canvas>
+    <Canvas x:Name="configCanvas">
         <Button x:Name="btnApply" Content="Apply" Canvas.Left="482" Canvas.Top="326" Width="128" Height="32" Click="btnApply_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}"/>
         <Button x:Name="btnDefault" Content="Default" Canvas.Left="482" Canvas.Top="369" Width="128" Height="32" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Click="btnDefault_Click"/>
         <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="482" Canvas.Top="414" Width="128" Height="32" Click="btnCancel_Click" BorderBrush="{DynamicResource BrushAntemBlue}" Background="{DynamicResource ButonFillBrush1}"/>
@@ -38,8 +38,8 @@
             <Rectangle x:Name="x_rdownClick" HorizontalAlignment="Left" Height="24" Margin="196,169,0,0" VerticalAlignment="Top" Width="18" ToolTip="RDown" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" StrokeThickness="0" Fill="#00000000"/>
             <Rectangle x:Name="x_rsClick" HorizontalAlignment="Left" Height="16" Margin="196,152,0,0" Stroke="Black" VerticalAlignment="Top" Width="18" ToolTip="RS" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" StrokeThickness="0" Fill="#00000000"/>
         </Grid>
-        <Line x:Name="guideMap" X1="0" Y2="150" Canvas.Left="518" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
-        <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="500" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5"/>
+        <Line x:Name="guideMap" X1="0" Y2="150" Canvas.Left="518" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False"/>
+        <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="500" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
         <Label x:Name="mapLabel" Content="Guide" Canvas.Left="365" Canvas.Top="-2" Width="100" FontWeight="Bold"/>
         <!-- Device to Map (Pro Controller) -->
         <Grid x:Name="ProGrid" Canvas.Left="10" Canvas.Top="94" Height="200">
@@ -142,7 +142,7 @@
             <Rectangle x:Name="ccp_rdownClick" HorizontalAlignment="Left" Height="24" Margin="196,142,0,0" VerticalAlignment="Top" Width="18" ToolTip="LDown" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
         </Grid>
         <!-- Device to Map (Nunchuk) -->
-        <Grid x:Name="NkGrid" Canvas.Left="220" Canvas.Top="30" Visibility="Hidden">
+        <Grid x:Name="NkGrid" Canvas.Left="220" Canvas.Top="48" Visibility="Hidden">
             <Image IsHitTestVisible="False" Source="Images/Nunchuck_map.png" Height="300" />
             <Rectangle x:Name="nk_upClick" HorizontalAlignment="Left" Height="25" Margin="79,24,0,0" VerticalAlignment="Top" Width="20" ToolTip="D-pad Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="nk_downClick" HorizontalAlignment="Left" Height="25" Margin="79,55,0,0" VerticalAlignment="Top" Width="20" ToolTip="D-pad Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
@@ -152,8 +152,8 @@
             <Ellipse x:Name="nk_cClick" HorizontalAlignment="Left" Height="22" Margin="17,12,0,0" VerticalAlignment="Top" Width="22" ToolTip="A" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <!-- TODO: Acceleromiter -->
         </Grid>
-        <Ellipse x:Name="selectionDevice" Height="36" Canvas.Left="160" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5"/>
-        <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="178" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5"/>
+        <Ellipse x:Name="selectionDevice" Height="36" Canvas.Left="160" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
+        <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="178" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False"/>
         <Label x:Name="deviceLabel" Content="Home" Canvas.Left="220" Canvas.Top="-2" HorizontalContentAlignment="Right" Width="100" BorderThickness="1,0,0,0" FontWeight="Bold"/>
     </Canvas>
 </Window>

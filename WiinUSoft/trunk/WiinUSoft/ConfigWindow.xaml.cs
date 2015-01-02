@@ -296,20 +296,36 @@ namespace WiinUSoft
 
         private void MoveSelector(Shape s, Ellipse selector, Line guide)
         {
-            double top = Canvas.GetTop(((UIElement)s.Parent));
-            top += s.Margin.Top;
-            top -= selector.Height / 2;
-            top += s.Height / 2;
+            double top = 0;
+            double left = 0;
 
-            double left = Canvas.GetLeft((UIElement)(s.Parent));
-            left += s.Margin.Left;
-            left -= selector.Width / 2;
-            left += s.Width / 2;
-
-            if (s.Name.StartsWith("wm") && deviceType != NintrollerLib.ControllerType.Wiimote)
+            if (s.Name.StartsWith("wm") && deviceType != NintrollerLib.ControllerType.Wiimote
+                                        && deviceType != NintrollerLib.ControllerType.Nunchuk
+                                        && deviceType != NintrollerLib.ControllerType.NunchukB)
             {
-                // TODO: Something about the rotation
-                // (x,y) => (-y, x)
+                top = 0;// Canvas.GetLeft((UIElement)s.Parent) - 50;
+                top += WmGrid.Width - s.Margin.Left;
+                top += selector.Width / 2;
+                top -= s.Width / 2;
+                top -= 10;
+
+                left = Canvas.GetTop((UIElement)s.Parent);
+                left += s.Margin.Top;
+                left += selector.Height / 2;
+                left += s.Height / 2;
+                left += 7;
+            }
+            else
+            {
+                top = Canvas.GetTop(((UIElement)s.Parent));
+                top += s.Margin.Top;
+                top -= selector.Height / 2;
+                top += s.Height / 2;
+
+                left = Canvas.GetLeft((UIElement)(s.Parent));
+                left += s.Margin.Left;
+                left -= selector.Width / 2;
+                left += s.Width / 2;
             }
 
             Canvas.SetTop(selector, top);
