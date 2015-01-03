@@ -387,7 +387,9 @@ namespace WiinUSoft
 
         private void btnDefault_Click(object sender, RoutedEventArgs e)
         {
-
+            map = Holders.XInputHolder.GetDefaultMapping(deviceType).ToDictionary(entry => entry.Key, entry => entry.Value);
+            result = true;
+            Close();
         }
     }
 }

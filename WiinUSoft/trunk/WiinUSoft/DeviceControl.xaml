@@ -23,7 +23,7 @@
         <Button x:Name="btnIdentify" HorizontalAlignment="Left" Margin="100,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Identify" Background="{DynamicResource ButonFillBrush1}" Click="btnIdentify_Click">
             <Image Source="Images/IDicon.png"/>
         </Button>
-        <Button x:Name="btnProperties" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" IsEnabled="False" ToolTip="Properties" Background="{DynamicResource ButonFillBrush1}">
+        <Button x:Name="btnProperties" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" IsEnabled="False" ToolTip="Properties" Background="{DynamicResource ButonFillBrush1}" Click="btnProperties_Click">
             <Image Source="Images/Settings-icon.png" Opacity="0.5" />
         </Button>
         <Button x:Name="btnXinput" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" Click="btnXinput_Click" ToolTip="Attatch as XInput Device" Background="{DynamicResource ButonFillBrush1}" IsEnabledChanged="btnXinput_IsEnabledChanged">

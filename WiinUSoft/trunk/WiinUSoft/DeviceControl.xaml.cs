@@ -182,18 +182,18 @@ namespace WiinUSoft
                     device.SetPlayerLED(targetXDevice);
                     break;
 
-                case DeviceState.Connected_VJoy:
-                    btnIdentify.IsEnabled = true;
-                    //btnProperties.IsEnabled = true;
-                    btnXinput.IsEnabled = false;
-                    //btnVjoy.IsEnabled       = false;
-                    btnConfig.IsEnabled = true;
-                    btnDetatch.IsEnabled = true;
-                    btnConfig.Visibility = System.Windows.Visibility.Visible;
-                    btnDetatch.Visibility = System.Windows.Visibility.Visible;
+                //case DeviceState.Connected_VJoy:
+                //    btnIdentify.IsEnabled = true;
+                //    btnProperties.IsEnabled = true;
+                //    btnXinput.IsEnabled = false;
+                //    btnVjoy.IsEnabled = false;
+                //    btnConfig.IsEnabled = true;
+                //    btnDetatch.IsEnabled = true;
+                //    btnConfig.Visibility = System.Windows.Visibility.Visible;
+                //    btnDetatch.Visibility = System.Windows.Visibility.Visible;
 
-                    // TODO: Instantiate VJoy Holder (not for 1st release)
-                    break;
+                //    // Instantiate VJoy Holder (not for 1st release)
+                //    break;
             }
         }
 
@@ -468,6 +468,11 @@ namespace WiinUSoft
             {
                 btnXinput_image.Opacity = 0.5;
             }
+        }
+
+        private void btnProperties_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Open Properties window
         }
     }
 }
