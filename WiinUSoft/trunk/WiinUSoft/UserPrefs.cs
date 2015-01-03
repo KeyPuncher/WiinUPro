@@ -23,34 +23,107 @@ namespace WiinUSoft
             }
         }
 
-        public Dictionary<string, Property> devicePrefs;
+        public List<Property> devicePrefs;
         public Profile defaultProfile;
 
-        UserPrefs()
+        public UserPrefs()
         {
-            // TODO: Load saved preferences
-            XmlSerializer x = new XmlSerializer(typeof(UserPrefs));
-            FileInfo prefs = new FileInfo(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config");
-            
-            if (prefs.Exists)
+            devicePrefs = new List<Property>();
+            defaultProfile = new Profile();
+
+            if (!LoadPrefs())
             {
-                
+                SavePrefs();
+            }
+        }
+
+        public static bool LoadPrefs()
+        {
+            bool successful = false;
+            XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
+
+            try
+            {
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config"))
+                {
+                    using (FileStream stream = File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config"))
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        _instance = X.Deserialize(reader) as UserPrefs;
+                        reader.Close();
+                        stream.Close();
+                    }
+
+                    successful = true;
+                }
+            }
+            catch { }
+
+            return successful;
+        }
+
+        public static void SavePrefs()
+        {
+            XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
+            string path = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
+
+            if (File.Exists(path))
+            {
+                FileInfo prefs = new FileInfo(path);
+                using (FileStream stream = File.Open(path, FileMode.Create, FileAccess.ReadWrite))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    X.Serialize(writer, _instance);
+                    writer.Close();
+                    stream.Close();
+                }
             }
             else
             {
-                devicePrefs = new Dictionary<string, Property>();
-                defaultProfile = new Profile();
-                var stream = prefs.Create();
-                TextWriter writer = new StreamWriter(stream);
-                x.Serialize(writer, Instance);
-                writer.Close();
-                stream.Close();
+                using (FileStream stream = File.Create(path))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    X.Serialize(writer, _instance);
+                    writer.Close();
+                    stream.Close();
+                }
             }
+        }
+
+        public Property GetDevicePref(string hid)
+        {
+            foreach (var pref in devicePrefs)
+            {
+                if (pref.hid == hid)
+                {
+                    return pref;
+                }
+            }
+
+            return null;
+        }
+
+        public void AddDevicePref(Property property)
+        {
+            foreach (var pref in devicePrefs)
+            {
+                if (pref.hid == property.hid)
+                {
+                    pref.name = property.name;
+                    pref.autoConnect = property.autoConnect;
+                    pref.profile = property.profile;
+
+                    return;
+                }
+            }
+
+            devicePrefs.Add(property);
         }
     }
 
-    class Property
+    public class Property
     {
+        public string hid = "";
         public string name = "";
         public bool autoConnect = false;
         public string profile = "";
@@ -58,7 +131,20 @@ namespace WiinUSoft
 
     public class Profile
     {
-        public Dictionary<NintrollerLib.ControllerType, KeyValuePair<string, string>> controllerMaps;
+        NintrollerLib.ControllerType profileType;
+        List<KeyValuePair<string, string>> controllerMaps;
+
+        public Profile()
+        {
+            profileType = NintrollerLib.ControllerType.Wiimote;
+            controllerMaps = new List<KeyValuePair<string, string>>();
+        }
+
+        public Profile(NintrollerLib.ControllerType type)
+        {
+            profileType = type;
+            controllerMaps = new List<KeyValuePair<string, string>>();
+        }
     }
 
 }

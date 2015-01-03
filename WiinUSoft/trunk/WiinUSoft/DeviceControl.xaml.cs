@@ -109,7 +109,6 @@ namespace WiinUSoft
                     device.Disconnect();
                 }
 
-                labelName.Content = device.Type.ToString();
                 switch (device.Type)
                 {
                     case ControllerType.ProController:
@@ -129,6 +128,28 @@ namespace WiinUSoft
                     default:
                         icon.Source = (ImageSource)Application.Current.Resources["WIcon"];
                         break;
+                }
+
+                // Load Properties
+                var properties = UserPrefs.Instance.GetDevicePref(device.HIDPath);
+
+                if (properties != null)
+                {
+                    SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
+
+                    if (properties.autoConnect && state == DeviceState.Discovered)
+                    {
+                        // TODO: Check what to auto connect to
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (Holders.XInputHolder.availabe[i])
+                            {
+                                targetXDevice = i;
+                                ConnectionState = DeviceState.Connected_XInput;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
