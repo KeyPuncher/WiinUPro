@@ -259,6 +259,11 @@ namespace WiinUSoft.Holders
 
             foreach (KeyValuePair<string, string> map in Mappings)
             {
+                if (!Values.ContainsKey(map.Key))
+                {
+                    continue;
+                }
+
                 if (writeReport.ContainsKey(map.Value))
                 {
                     writeReport[map.Value] += Values[map.Key];

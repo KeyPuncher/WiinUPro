@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace WiinUSoft
 {
@@ -390,6 +392,102 @@ namespace WiinUSoft
             map = Holders.XInputHolder.GetDefaultMapping(deviceType).ToDictionary(entry => entry.Key, entry => entry.Value);
             result = true;
             Close();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            Profile newProfile = new Profile(deviceType);
+            foreach (KeyValuePair<string, string> item in map)
+            {
+                newProfile.controllerMapKeys.Add(item.Key);
+                newProfile.controllerMapValues.Add(item.Value);
+            }
+
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = deviceType.ToString() + "_profile";
+            dialog.DefaultExt = ".wsp";
+            dialog.Filter = "WiinUSoft Profiles (.wsp) |*.wsp";
+
+            Nullable<bool> doSave = dialog.ShowDialog();
+
+            if (doSave == true)
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Profile));
+                
+                using (FileStream stream = File.Create(dialog.FileName))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    serializer.Serialize(writer, newProfile);
+                    writer.Close();
+                    stream.Close();
+                }
+            }
+        }
+
+        private void btnLoad_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.FileName = deviceType.ToString() + "_profile";
+            dialog.DefaultExt = ".wsp";
+            dialog.Filter = "WiinUSoft Profiles (.wsp) |*.wsp";
+
+            Nullable<bool> doLoad = dialog.ShowDialog();
+            Profile loadedProfile = null;
+
+            if (doLoad == true && dialog.CheckFileExists)
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Profile));
+
+                    using (FileStream stream = File.OpenRead(dialog.FileName))
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        loadedProfile = serializer.Deserialize(reader) as Profile;
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
+                catch (Exception err)
+                {
+                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                if (loadedProfile != null)
+                {
+                    if (loadedProfile.profileType != deviceType)
+                    {
+                        MessageBoxResult m = MessageBox.Show("Profile is not for this controller type. Load anyway?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                        
+                        if (m != MessageBoxResult.Yes)
+                        {
+                            doLoad = false;
+                        }
+                    }
+
+                    if (doLoad == true)
+                    {
+                        for (int i = 0; i < Math.Min(loadedProfile.controllerMapKeys.Count, loadedProfile.controllerMapValues.Count); i++)
+                        {
+                            if (map.ContainsKey(loadedProfile.controllerMapKeys[i]))
+                            {
+                                map[loadedProfile.controllerMapKeys[i]] = loadedProfile.controllerMapValues[i];
+                            }
+                            else
+                            {
+                                map.Add(loadedProfile.controllerMapKeys[i], loadedProfile.controllerMapValues[i]);
+                            }
+                        }
+
+                        result = true;
+                        Close();
+                    }
+                }
+            }
+            else if (doLoad == true && !dialog.CheckFileExists)
+            {
+                var a = MessageBox.Show("Could not find the file \"" + dialog.FileName + "\".", "File Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

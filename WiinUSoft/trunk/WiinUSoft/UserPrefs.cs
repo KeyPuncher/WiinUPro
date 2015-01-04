@@ -131,19 +131,22 @@ namespace WiinUSoft
 
     public class Profile
     {
-        NintrollerLib.ControllerType profileType;
-        List<KeyValuePair<string, string>> controllerMaps;
+        public NintrollerLib.ControllerType profileType;
+        public List<string> controllerMapKeys;
+        public List<string> controllerMapValues;
 
         public Profile()
         {
             profileType = NintrollerLib.ControllerType.Wiimote;
-            controllerMaps = new List<KeyValuePair<string, string>>();
+            controllerMapKeys = new List<string>();
+            controllerMapValues = new List<string>();
         }
 
         public Profile(NintrollerLib.ControllerType type)
         {
             profileType = type;
-            controllerMaps = new List<KeyValuePair<string, string>>();
+            controllerMapKeys = new List<string>();
+            controllerMapValues = new List<string>();
         }
     }
 
