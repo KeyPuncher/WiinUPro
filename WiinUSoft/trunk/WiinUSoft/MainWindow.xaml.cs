@@ -57,14 +57,20 @@ namespace WiinUSoft
 
                 if (existingDevice != null)
                 {
-                    if (!existingDevice.Connected && !n.ConnectTest())
+                    if (!existingDevice.Connected)
                     {
-                        existingDevice.ConnectionState = DeviceState.None;
+                        existingDevice.RefreshState();
                     }
-                    else if (!existingDevice.Connected && n.ConnectTest())
-                    {
-                        existingDevice.ConnectionState = DeviceState.Discovered;
-                    }
+                    
+                    //bool testConnect = n.ConnectTest();
+                    //if (!existingDevice.Connected && !testConnect)
+                    //{
+                    //    existingDevice.ConnectionState = DeviceState.None;
+                    //}
+                    //else if (!existingDevice.Connected && testConnect)
+                    //{
+                    //    existingDevice.ConnectionState = DeviceState.Discovered;
+                    //}
                 }
                 else if (n.ConnectTest())
                 {

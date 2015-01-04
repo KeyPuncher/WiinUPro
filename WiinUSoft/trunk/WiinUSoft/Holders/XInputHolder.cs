@@ -340,6 +340,19 @@ namespace WiinUSoft.Holders
             connected = false;
         }
 
+        public override void AddMapping(NintrollerLib.ControllerType controller)
+        {
+            var additional = GetDefaultMapping(controller);
+
+            foreach (KeyValuePair<string, string> map in additional)
+            {
+                if (!Mappings.ContainsKey(map.Key) && map.Key[0] != 'w')
+                {
+                    SetMapping(map.Key, map.Value);
+                }
+            }
+        }
+
         public bool ConnectXInput(int id)
         {
             if (id > 0 && id < 5)

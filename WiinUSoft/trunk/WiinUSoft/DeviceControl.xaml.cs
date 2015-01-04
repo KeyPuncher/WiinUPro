@@ -54,7 +54,6 @@ namespace WiinUSoft
             }
         }
 
-        private ControllerType deviceType = ControllerType.Wiimote;
         internal ControllerType DeviceType { get; private set; }
         internal Holders.Holder holder;
 
@@ -96,7 +95,7 @@ namespace WiinUSoft
             RefreshState();
         }
 
-        private void RefreshState()
+        public void RefreshState()
         {
             // TODO: Pull saved name using HID path
             if (Device.ConnectTest())
@@ -109,26 +108,7 @@ namespace WiinUSoft
                     device.Disconnect();
                 }
 
-                switch (device.Type)
-                {
-                    case ControllerType.ProController:
-                        icon.Source = (ImageSource)Application.Current.Resources["ProIcon"];
-                        break;
-                    case ControllerType.ClassicControllerPro:
-                        icon.Source = (ImageSource)Application.Current.Resources["CCPIcon"];
-                        break;
-                    case ControllerType.ClassicController:
-                        icon.Source = (ImageSource)Application.Current.Resources["CCIcon"];
-                        break;
-                    case ControllerType.Nunchuk:
-                    case ControllerType.NunchukB:
-                        icon.Source = (ImageSource)Application.Current.Resources["WNIcon"];
-                        break;
-
-                    default:
-                        icon.Source = (ImageSource)Application.Current.Resources["WIcon"];
-                        break;
-                }
+                UpdateIcon(device.Type);
 
                 // Load Properties
                 var properties = UserPrefs.Instance.GetDevicePref(device.HIDPath);
@@ -151,6 +131,34 @@ namespace WiinUSoft
                         }
                     }
                 }
+            }
+            else
+            {
+                ConnectionState = DeviceState.None;
+            }
+        }
+
+        private void UpdateIcon(ControllerType cType)
+        {
+            switch (cType)
+            {
+                case ControllerType.ProController:
+                    icon.Source = (ImageSource)Application.Current.Resources["ProIcon"];
+                    break;
+                case ControllerType.ClassicControllerPro:
+                    icon.Source = (ImageSource)Application.Current.Resources["CCPIcon"];
+                    break;
+                case ControllerType.ClassicController:
+                    icon.Source = (ImageSource)Application.Current.Resources["CCIcon"];
+                    break;
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                    icon.Source = (ImageSource)Application.Current.Resources["WNIcon"];
+                    break;
+
+                default:
+                    icon.Source = (ImageSource)Application.Current.Resources["WIcon"];
+                    break;
             }
         }
 
@@ -221,6 +229,15 @@ namespace WiinUSoft
         void device_ExtensionChange(object sender, ExtensionChangeEventArgs e)
         {
             DeviceType = e.Extension;
+
+            if (holder != null)
+            {
+                holder.AddMapping(DeviceType);
+            }
+
+            Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, 
+                new Action(() => UpdateIcon(DeviceType)
+            ));
         }
 
         void device_StateChange(object sender, StateChangeEventArgs e)

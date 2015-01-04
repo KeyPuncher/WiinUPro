@@ -72,5 +72,6 @@ namespace WiinUSoft.Holders
 
         public abstract void Update();
         public abstract void Close();
+        public abstract void AddMapping(NintrollerLib.ControllerType controller);
     }
 }
