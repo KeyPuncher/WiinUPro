@@ -133,7 +133,6 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\xbox_360_controller-small.png" />
   </ItemGroup>
@@ -198,6 +197,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Nunchuck_map.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\WiinUSoftBeta.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\WiinUSoft.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
