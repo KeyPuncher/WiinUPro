@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="DataHandler.cs" />
     <Compile Include="DataTypes.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="HIDImports.cs" />
