@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿// Tag - Beta
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Documents;
 using NintrollerLib;
