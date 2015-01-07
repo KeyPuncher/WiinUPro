@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WiinUSoft
 {
@@ -18,9 +9,53 @@ namespace WiinUSoft
     /// </summary>
     public partial class PropWindow : Window
     {
-        public PropWindow()
+        public bool doSave = false;
+        public Property props;
+
+        public PropWindow(Property org)
         {
+            props = org;
             InitializeComponent();
+        }
+
+        private void cancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void saveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            doSave = true;
+            Close();
+        }
+
+        private void autoCheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            props.autoConnect = autoCheckbox.IsChecked == true;
+        }
+
+        private void nameInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            props.name = nameInput.Text;
+        }
+
+        private void defaultInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            props.profile = defaultInput.Text;
+        }
+
+        private void defaultBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.DefaultExt = ".wsp";
+            dialog.Filter = "WiinUSoft Profiles (.wsp) |*.wsp";
+
+            Nullable<bool> doLoad = dialog.ShowDialog();
+
+            if (doLoad == true && dialog.CheckFileExists)
+            {
+                defaultInput.Text = dialog.FileName;
+            }
         }
     }
 }

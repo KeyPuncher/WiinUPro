@@ -9,7 +9,7 @@
         <Button x:Name="btnLoad" Content="Load" Canvas.Left="400" Canvas.Top="369" Width="128" Height="32" Click="btnLoad_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}"/>
         <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="550" Canvas.Top="414" Width="128" Height="32" Click="btnCancel_Click" BorderBrush="{DynamicResource BrushAntemBlue}" Background="{DynamicResource ButonFillBrush1}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}"/>
         <Line x:Name="guideMeet" X1="178" X2="518" Canvas.Left="0" Canvas.Top="30" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5"/>
-        <Polygon Points="-2,-2 32,15 -2,32" Fill="Black" Canvas.Left="330" Canvas.Top="15" />
+        <Polygon Points="-2,-2 32,15 -2,32" Fill="{DynamicResource BrushJohnTheRevelator}" Canvas.Left="330" Canvas.Top="15" />
         <Polygon Points="0,0 30,15 0,30" Fill="{DynamicResource BrushAntemBlue}" Canvas.Left="330" Canvas.Top="15" />
         <!-- Mapped Device (360 Controller) -->
         <Grid x:Name="XGrid" Canvas.Left="377" Canvas.Top="94" Height="200">

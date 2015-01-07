@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 using NintrollerLib;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace WiinUSoft
 {
@@ -56,6 +49,7 @@ namespace WiinUSoft
 
         internal ControllerType DeviceType { get; private set; }
         internal Holders.Holder holder;
+        internal Property properties;
 
         public event ConnectStateChange OnConnectStateChange;
         private DeviceState state;
@@ -97,7 +91,6 @@ namespace WiinUSoft
 
         public void RefreshState()
         {
-            // TODO: Pull saved name using HID path
             if (Device.ConnectTest())
             {
                 ConnectionState = DeviceState.Discovered;
@@ -109,32 +102,74 @@ namespace WiinUSoft
                 }
 
                 UpdateIcon(device.Type);
+                SetName(device.Type.ToString());
 
                 // Load Properties
-                var properties = UserPrefs.Instance.GetDevicePref(device.HIDPath);
-
+                properties = UserPrefs.Instance.GetDevicePref(device.HIDPath);
                 if (properties != null)
                 {
                     SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
 
                     if (properties.autoConnect && state == DeviceState.Discovered)
                     {
-                        // TODO: Check what to auto connect to
-                        for (int i = 0; i < 4; i++)
+                        if (properties.connType == Profile.HolderType.XInput)
                         {
-                            if (Holders.XInputHolder.availabe[i])
+                            for (int i = 0; i < 4; i++)
                             {
-                                targetXDevice = i;
-                                ConnectionState = DeviceState.Connected_XInput;
-                                break;
+                                if (Holders.XInputHolder.availabe[i])
+                                {
+                                    targetXDevice = i;
+                                    ConnectionState = DeviceState.Connected_XInput;
+                                    LoadProfile(properties.profile);
+                                    break;
+                                }
                             }
                         }
                     }
+                }
+                else
+                {
+                    properties = new Property(device.HIDPath);
                 }
             }
             else
             {
                 ConnectionState = DeviceState.None;
+            }
+        }
+
+        private void LoadProfile(string profilePath)
+        {
+            Profile loadedProfile = null;
+
+            if (!string.IsNullOrWhiteSpace(profilePath) && File.Exists(profilePath))
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Profile));
+
+                    using (FileStream stream = File.OpenRead(profilePath))
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        loadedProfile = serializer.Deserialize(reader) as Profile;
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
+                catch { }
+            }
+
+            if (loadedProfile == null)
+            {
+                loadedProfile = UserPrefs.Instance.defaultProfile;
+            }
+
+            if (loadedProfile != null)
+            {
+                for (int i = 0; i < Math.Min(loadedProfile.controllerMapKeys.Count, loadedProfile.controllerMapValues.Count); i++)
+                {
+                    holder.SetMapping(loadedProfile.controllerMapKeys[i], loadedProfile.controllerMapValues[i]);
+                }
             }
         }
 
@@ -181,29 +216,36 @@ namespace WiinUSoft
             switch (newState)
             {
                 case DeviceState.None:
-                    // TODO: show as unavailabe
+                    btnIdentify.IsEnabled   = false;
+                    btnProperties.IsEnabled = false;
+                    btnXinput.IsEnabled     = false;
+                    //btnVjoy.IsEnabled     = false;
+                    btnConfig.IsEnabled     = false;
+                    btnDetatch.IsEnabled    = false;
+                    btnConfig.Visibility    = System.Windows.Visibility.Hidden;
+                    btnDetatch.Visibility   = System.Windows.Visibility.Hidden;
                     break;
 
                 case DeviceState.Discovered:
-                    btnIdentify.IsEnabled = true;
-                    //btnProperties.IsEnabled = true;
-                    btnXinput.IsEnabled = true;
-                    //btnVjoy.IsEnabled       = true;
-                    btnConfig.IsEnabled = false;
-                    btnDetatch.IsEnabled = false;
-                    btnConfig.Visibility = System.Windows.Visibility.Hidden;
-                    btnDetatch.Visibility = System.Windows.Visibility.Hidden;
+                    btnIdentify.IsEnabled   = true;
+                    btnProperties.IsEnabled = true;
+                    btnXinput.IsEnabled     = true;
+                    //btnVjoy.IsEnabled     = true;
+                    btnConfig.IsEnabled     = false;
+                    btnDetatch.IsEnabled    = false;
+                    btnConfig.Visibility    = System.Windows.Visibility.Hidden;
+                    btnDetatch.Visibility   = System.Windows.Visibility.Hidden;
                     break;
 
                 case DeviceState.Connected_XInput:
-                    btnIdentify.IsEnabled = true;
-                    //btnProperties.IsEnabled = true;
-                    btnXinput.IsEnabled = false;
-                    //btnVjoy.IsEnabled       = false;
-                    btnConfig.IsEnabled = true;
-                    btnDetatch.IsEnabled = true;
-                    btnConfig.Visibility = System.Windows.Visibility.Visible;
-                    btnDetatch.Visibility = System.Windows.Visibility.Visible;
+                    btnIdentify.IsEnabled   = true;
+                    btnProperties.IsEnabled = true;
+                    btnXinput.IsEnabled     = false;
+                    //btnVjoy.IsEnabled     = false;
+                    btnConfig.IsEnabled     = true;
+                    btnDetatch.IsEnabled    = true;
+                    btnConfig.Visibility    = System.Windows.Visibility.Visible;
+                    btnDetatch.Visibility   = System.Windows.Visibility.Visible;
 
                     var xHolder = new Holders.XInputHolder(device.Type);
                     xHolder.ConnectXInput(targetXDevice);
@@ -510,7 +552,14 @@ namespace WiinUSoft
 
         private void btnProperties_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Open Properties window
+            PropWindow win = new PropWindow(properties);
+            win.ShowDialog();
+
+            if (win.doSave)
+            {
+                properties = win.props;
+                SetName(properties.name);
+            }
         }
     }
 }

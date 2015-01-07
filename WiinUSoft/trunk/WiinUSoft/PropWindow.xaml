@@ -6,12 +6,12 @@
         <Label Content="Device Name:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top" Height="26"/>
         <Label Content="Auto Connect:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26"/>
         <Label Content="Defalut Profile:" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Height="26"/>
-        <TextBox HorizontalAlignment="Left" Height="26" Margin="115,12,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180" Background="{DynamicResource BrushAntemWhite}" VerticalContentAlignment="Center"/>
-        <TextBox HorizontalAlignment="Left" Height="26" Margin="115,74,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="180" Background="{DynamicResource BrushAntemWhite}" VerticalContentAlignment="Center"/>
-        <CheckBox Content="" HorizontalAlignment="Left" Margin="115,43,0,0" VerticalAlignment="Top" Background="{DynamicResource BrushAntemWhite}" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-        <Button Content="..." Margin="300,74,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="32"/>
-        <Button Content="Okay" Margin="268,118,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="64"/>
-        <Button Content="Cancel" Margin="199,118,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="64"/>
+        <TextBox x:Name="nameInput" HorizontalAlignment="Left" Height="26" Margin="115,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" Background="{DynamicResource BrushAntemWhite}" VerticalContentAlignment="Center" TextChanged="nameInput_TextChanged"/>
+        <TextBox x:Name="defaultInput" HorizontalAlignment="Left" Height="26" Margin="115,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" Background="{DynamicResource BrushAntemWhite}" VerticalContentAlignment="Center" TextChanged="defaultInput_TextChanged"/>
+        <CheckBox x:Name="autoCheckbox" Content="" HorizontalAlignment="Left" Margin="115,43,0,0" VerticalAlignment="Top" Background="{DynamicResource BrushAntemWhite}" Height="26" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Checked="autoCheckbox_Checked"/>
+        <Button x:Name="defaultBtn" Content="..." Margin="300,74,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="32" Click="defaultBtn_Click"/>
+        <Button x:Name="saveBtn" Content="Save" Margin="268,118,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="64" Click="saveBtn_Click"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="199,118,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="64" Click="cancelBtn_Click"/>
 
     </Grid>
 </Window>

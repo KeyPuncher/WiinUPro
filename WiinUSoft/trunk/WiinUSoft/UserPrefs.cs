@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -126,12 +124,26 @@ namespace WiinUSoft
         public string hid = "";
         public string name = "";
         public bool autoConnect = false;
+        public Profile.HolderType connType;
         public string profile = "";
+
+        public Property(string ID)
+        {
+            hid = ID;
+            connType = Profile.HolderType.XInput;
+        }
     }
 
     public class Profile
     {
+        public enum HolderType
+        {
+            XInput = 0,
+            DInput = 1
+        }
+
         public NintrollerLib.ControllerType profileType;
+        public HolderType connType;
         public List<string> controllerMapKeys;
         public List<string> controllerMapValues;
 
@@ -140,6 +152,7 @@ namespace WiinUSoft
             profileType = NintrollerLib.ControllerType.Wiimote;
             controllerMapKeys = new List<string>();
             controllerMapValues = new List<string>();
+            connType = HolderType.XInput;
         }
 
         public Profile(NintrollerLib.ControllerType type)
@@ -147,6 +160,7 @@ namespace WiinUSoft
             profileType = type;
             controllerMapKeys = new List<string>();
             controllerMapValues = new List<string>();
+            connType = HolderType.XInput;
         }
     }
 
