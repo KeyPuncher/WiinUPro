@@ -110,7 +110,7 @@ namespace WiinUSoft
                 {
                     SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
 
-                    if (properties.autoConnect && state == DeviceState.Discovered)
+                    if (properties.autoConnect && state == DeviceState.Discovered && Device.Connect())
                     {
                         if (properties.connType == Property.ProfHolderType.XInput)
                         {
@@ -161,7 +161,7 @@ namespace WiinUSoft
 
             if (loadedProfile == null)
             {
-                //loadedProfile = UserPrefs.Instance.defaultProfile;
+                loadedProfile = UserPrefs.Instance.defaultProfile;
             }
 
             if (loadedProfile != null)
