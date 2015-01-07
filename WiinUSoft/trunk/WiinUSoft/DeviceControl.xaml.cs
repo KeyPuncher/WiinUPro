@@ -137,7 +137,7 @@ namespace WiinUSoft
             }
         }
 
-        private void LoadProfile(string profilePath)
+        private void LoadProfile(string profilePath, Holders.Holder h)
         {
             Profile loadedProfile = null;
 
@@ -167,7 +167,7 @@ namespace WiinUSoft
             {
                 for (int i = 0; i < Math.Min(loadedProfile.controllerMapKeys.Count, loadedProfile.controllerMapValues.Count); i++)
                 {
-                    holder.SetMapping(loadedProfile.controllerMapKeys[i], loadedProfile.controllerMapValues[i]);
+                    h.SetMapping(loadedProfile.controllerMapKeys[i], loadedProfile.controllerMapValues[i]);
                 }
             }
         }
@@ -247,10 +247,10 @@ namespace WiinUSoft
                     btnDetatch.Visibility   = System.Windows.Visibility.Visible;
 
                     var xHolder = new Holders.XInputHolder(device.Type);
+                    LoadProfile(properties.profile, xHolder);
                     xHolder.ConnectXInput(targetXDevice);
                     holder = xHolder;
                     device.SetPlayerLED(targetXDevice);
-                    LoadProfile(properties.profile);
                     break;
 
                 //case DeviceState.Connected_VJoy:
@@ -499,8 +499,15 @@ namespace WiinUSoft
         {
             if (device.Connect())
             {
-                device.SetRumble(true);
-                Delay(2000).ContinueWith(o => device.SetRumble(false));
+                if (device.Type == ControllerType.ProController)
+                {
+                    holder.Flags[Inputs.Flags.RUMBLE] = true;
+                    Delay(2000).ContinueWith(o => holder.Flags[Inputs.Flags.RUMBLE] = false);
+                }
+                {
+                    device.SetRumble(true);
+                    Delay(2000).ContinueWith(o => device.SetRumble(false));
+                }
 
                 // light show
                 device.SetLEDs(1);
