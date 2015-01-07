@@ -120,7 +120,6 @@ namespace WiinUSoft
                                 {
                                     targetXDevice = i + 1;
                                     ConnectionState = DeviceState.Connected_XInput;
-                                    LoadProfile(properties.profile);
                                     break;
                                 }
                             }
@@ -251,6 +250,7 @@ namespace WiinUSoft
                     xHolder.ConnectXInput(targetXDevice);
                     holder = xHolder;
                     device.SetPlayerLED(targetXDevice);
+                    LoadProfile(properties.profile);
                     break;
 
                 //case DeviceState.Connected_VJoy:
@@ -552,7 +552,7 @@ namespace WiinUSoft
 
         private void btnProperties_Click(object sender, RoutedEventArgs e)
         {
-            PropWindow win = new PropWindow(properties);
+            PropWindow win = new PropWindow(properties, device.Type.ToString());
             win.ShowDialog();
 
             if (win.doSave)

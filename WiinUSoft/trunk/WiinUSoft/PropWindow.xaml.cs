@@ -12,12 +12,12 @@ namespace WiinUSoft
         public bool doSave = false;
         public Property props;
 
-        public PropWindow(Property org)
+        public PropWindow(Property org, string defalutName = "")
         {
             InitializeComponent();
 
             props = org;
-            nameInput.Text = props.name;
+            nameInput.Text = string.IsNullOrWhiteSpace(props.name) ? defalutName : props.name;
             defaultInput.Text = props.profile;
             autoCheckbox.IsChecked = props.autoConnect;
         }
