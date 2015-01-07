@@ -55,7 +55,9 @@ namespace WiinUSoft
                 {
                     deviceList.Add(new DeviceControl(n));
                     deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
-                    groupAvailable.Children.Add(deviceList[deviceList.Count - 1]);
+                    deviceList[deviceList.Count - 1].RefreshState();
+                    //if (deviceList[deviceList.Count - 1].ConnectionState == DeviceState.Discovered)
+                    //    groupAvailable.Children.Add(deviceList[deviceList.Count - 1]);
                 }
             }
         }

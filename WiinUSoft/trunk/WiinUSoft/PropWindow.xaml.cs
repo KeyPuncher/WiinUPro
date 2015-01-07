@@ -14,8 +14,12 @@ namespace WiinUSoft
 
         public PropWindow(Property org)
         {
-            props = org;
             InitializeComponent();
+
+            props = org;
+            nameInput.Text = props.name;
+            defaultInput.Text = props.profile;
+            autoCheckbox.IsChecked = props.autoConnect;
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)

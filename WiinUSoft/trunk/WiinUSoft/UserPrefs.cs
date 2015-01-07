@@ -14,7 +14,17 @@ namespace WiinUSoft
             {
                 if (_instance == null)
                 {
-                    _instance = new UserPrefs();
+                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config"))
+                    {
+                        LoadPrefs();
+                    }
+                    else
+                    {
+                        _instance = new UserPrefs();
+                        _instance.devicePrefs = new List<Property>();
+                        _instance.defaultProfile = new Profile();
+                        SavePrefs();
+                    }
                 }
 
                 return _instance;
@@ -25,21 +35,13 @@ namespace WiinUSoft
         public Profile defaultProfile;
 
         public UserPrefs()
-        {
-            devicePrefs = new List<Property>();
-            defaultProfile = new Profile();
-
-            if (!LoadPrefs())
-            {
-                SavePrefs();
-            }
-        }
+        { }
 
         public static bool LoadPrefs()
         {
             bool successful = false;
             XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
-
+            
             try
             {
                 if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config"))
@@ -55,7 +57,10 @@ namespace WiinUSoft
                     successful = true;
                 }
             }
-            catch { }
+            catch (Exception e) 
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
 
             return successful;
         }
@@ -110,6 +115,7 @@ namespace WiinUSoft
                     pref.name = property.name;
                     pref.autoConnect = property.autoConnect;
                     pref.profile = property.profile;
+                    pref.connType = property.connType;
 
                     return;
                 }
@@ -121,16 +127,28 @@ namespace WiinUSoft
 
     public class Property
     {
+        public enum ProfHolderType
+        {
+            XInput = 0,
+            DInput = 1
+        }
+
         public string hid = "";
         public string name = "";
         public bool autoConnect = false;
-        public Profile.HolderType connType;
+        public ProfHolderType connType;
         public string profile = "";
+
+        public Property()
+        {
+            hid = "";
+            connType = ProfHolderType.XInput;
+        }
 
         public Property(string ID)
         {
             hid = ID;
-            connType = Profile.HolderType.XInput;
+            connType = ProfHolderType.XInput;
         }
     }
 

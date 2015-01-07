@@ -86,7 +86,7 @@ namespace WiinUSoft
             : this()
         {
             Device = nintroller;
-            RefreshState();
+            //RefreshState();
         }
 
         public void RefreshState()
@@ -112,13 +112,13 @@ namespace WiinUSoft
 
                     if (properties.autoConnect && state == DeviceState.Discovered)
                     {
-                        if (properties.connType == Profile.HolderType.XInput)
+                        if (properties.connType == Property.ProfHolderType.XInput)
                         {
                             for (int i = 0; i < 4; i++)
                             {
                                 if (Holders.XInputHolder.availabe[i])
                                 {
-                                    targetXDevice = i;
+                                    targetXDevice = i + 1;
                                     ConnectionState = DeviceState.Connected_XInput;
                                     LoadProfile(properties.profile);
                                     break;
@@ -161,7 +161,7 @@ namespace WiinUSoft
 
             if (loadedProfile == null)
             {
-                loadedProfile = UserPrefs.Instance.defaultProfile;
+                //loadedProfile = UserPrefs.Instance.defaultProfile;
             }
 
             if (loadedProfile != null)
@@ -199,7 +199,7 @@ namespace WiinUSoft
 
         public void SetName(string newName)
         {
-            labelName.Content = new TextBox() { Text = newName };
+            labelName.Content = new TextBlock() { Text = newName };
         }
 
         public void Detatch()
@@ -559,6 +559,8 @@ namespace WiinUSoft
             {
                 properties = win.props;
                 SetName(properties.name);
+                UserPrefs.Instance.AddDevicePref(properties);
+                UserPrefs.SavePrefs();
             }
         }
     }
