@@ -641,6 +641,12 @@ namespace NintrollerLib
 
                         AsyncRead();
                         byte[] ext = ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
+
+                        if (ext.Length < 6)
+                        {
+                            return false;
+                        }
+
                         long type = ((long)ext[0] << 40) | ((long)ext[1] << 32) | ((long)ext[2]) << 24 | ((long)ext[3]) << 16 | ((long)ext[4]) << 8 | ext[5];
 
                         Debug.WriteLine((ControllerType)type);
