@@ -174,6 +174,11 @@ namespace WiinUSoft
 
         private void UpdateIcon(ControllerType cType)
         {
+            if (icon.Source == (ImageSource)Application.Current.Resources["ProIcon"])
+            {
+                return;
+            }
+
             switch (cType)
             {
                 case ControllerType.ProController:
@@ -497,16 +502,24 @@ namespace WiinUSoft
 
         private void btnIdentify_Click(object sender, RoutedEventArgs e)
         {
-            if (device.Connect())
+            bool wasConnected = Connected;
+
+            if (wasConnected || device.Connect())
             {
-                if (device.Type == ControllerType.ProController)
+                if (holder != null && device.Type == ControllerType.ProController)
                 {
                     holder.Flags[Inputs.Flags.RUMBLE] = true;
                     Delay(2000).ContinueWith(o => holder.Flags[Inputs.Flags.RUMBLE] = false);
                 }
+                else
                 {
                     device.SetRumble(true);
-                    Delay(2000).ContinueWith(o => device.SetRumble(false));
+                    Delay(2000).ContinueWith(o =>
+                    {
+                        device.SetRumble(false);
+                        device.SetLEDs(targetXDevice);
+                        if (!wasConnected) device.Disconnect();
+                    });
                 }
 
                 // light show
@@ -517,6 +530,8 @@ namespace WiinUSoft
                 Delay(1000).ContinueWith(o => device.SetLEDs(4));
                 Delay(1250).ContinueWith(o => device.SetLEDs(2));
                 Delay(1500).ContinueWith(o => device.SetLEDs(1));
+                if (targetXDevice != 0)
+                    Delay(1750).ContinueWith(o => device.SetLEDs(targetXDevice));
             }
         }
 
