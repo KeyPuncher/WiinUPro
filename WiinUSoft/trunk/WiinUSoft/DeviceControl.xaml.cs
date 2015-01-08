@@ -530,7 +530,7 @@ namespace WiinUSoft
                 Delay(1250).ContinueWith(o => device.SetLEDs(2));
                 Delay(1500).ContinueWith(o => device.SetLEDs(1));
                 if (targetXDevice != 0)
-                    Delay(1750).ContinueWith(o => device.SetLEDs(targetXDevice));
+                    Delay(1750).ContinueWith(o => device.SetPlayerLED(targetXDevice));
             }
         }
 
