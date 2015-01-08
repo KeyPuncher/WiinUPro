@@ -5,7 +5,7 @@
     <Grid>
         <Label Content="Device Name:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top" Height="26"/>
         <Label Content="Auto Connect:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26"/>
-        <Label Content="Defalut Profile:" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Height="26"/>
+        <Label Content="Default Profile:" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Height="26"/>
         <TextBox x:Name="nameInput" HorizontalAlignment="Left" Height="26" Margin="115,12,0,0" VerticalAlignment="Top" Width="180" Background="{DynamicResource BrushAntemWhite}" VerticalContentAlignment="Center" TextChanged="nameInput_TextChanged"/>
         <TextBox x:Name="defaultInput" HorizontalAlignment="Left" Height="26" Margin="115,74,0,0" VerticalAlignment="Top" Width="180" Background="{DynamicResource BrushAntemWhite}" VerticalContentAlignment="Center" TextChanged="defaultInput_TextChanged"/>
         <CheckBox x:Name="autoCheckbox" Content="" HorizontalAlignment="Left" Margin="115,50,0,0" VerticalAlignment="Top" Background="{DynamicResource BrushAntemWhite}" Height="18" Padding="4,0,0,0" Click="autoCheckbox_Click"/>
