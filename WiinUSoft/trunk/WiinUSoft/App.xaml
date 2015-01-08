@@ -25,5 +25,6 @@
         <BitmapImage x:Key="CCPIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="Images/ClassicPro_white_32.png"/>
         <BitmapImage x:Key="WIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource=  "Images/wiimote_white_32.png"/>
         <BitmapImage x:Key="WNIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource= "Images/WiimoteNunchuk_white_32.png"/>
+        <BitmapImage x:Key="UIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource= "Images/unknown.png"/>
     </Application.Resources>
 </Application>

@@ -144,9 +144,6 @@
     <Resource Include="Images\xbox_360_controller-small.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ProController_map.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\WiinUSoftAlpha.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -166,9 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\WiimoteNunchuk_white_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\xboxlogo64.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Joystick-icon64.png" />
@@ -210,6 +204,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\WiinUSoft.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\unknown.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -517,7 +517,6 @@ namespace WiinUSoft
                     Delay(2000).ContinueWith(o =>
                     {
                         device.SetRumble(false);
-                        device.SetLEDs(targetXDevice);
                         if (!wasConnected) device.Disconnect();
                     });
                 }
