@@ -33,7 +33,7 @@ namespace WiinUSoft
             Close();
         }
 
-        private void autoCheckbox_Checked(object sender, RoutedEventArgs e)
+        private void autoCheckbox_Click(object sender, RoutedEventArgs e)
         {
             props.autoConnect = autoCheckbox.IsChecked == true;
         }
