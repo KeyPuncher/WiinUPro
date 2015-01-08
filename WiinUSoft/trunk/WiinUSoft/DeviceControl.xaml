@@ -19,9 +19,9 @@
         </Rectangle>
         <Label x:Name="labelUnavailable" Content="Device Unavailable" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" FontSize="16" FontStyle="Italic" Width="145" Foreground="#FF939393" Visibility="Hidden"/>
         <Image x:Name="icon" HorizontalAlignment="Left" Margin="12,16,0,0" VerticalAlignment="Top" Source="{DynamicResource UIcon}" Width="80"/>
-        <Label x:Name="labelName" Content="Device Name" HorizontalAlignment="Left" Margin="100,8,0,0" VerticalAlignment="Top" Width="160" FontSize="14" Height="26" FontStyle="Italic"/>
+        <Label x:Name="labelName" Content="Unknown Device" HorizontalAlignment="Left" Margin="100,8,0,0" VerticalAlignment="Top" Width="160" FontSize="14" Height="26" FontStyle="Italic"/>
         <Button x:Name="btnIdentify" HorizontalAlignment="Left" Margin="100,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Identify" Background="{DynamicResource ButonFillBrush1}" Click="btnIdentify_Click">
-            <Image Source="Images/IDicon.png"/>
+            <Image Source="Images/IDicon3.png"/>
         </Button>
         <Button x:Name="btnProperties" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Properties" Background="{DynamicResource ButonFillBrush1}" Click="btnProperties_Click">
             <Image Source="Images/Properties-icon.png" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="28" Height="28" />
