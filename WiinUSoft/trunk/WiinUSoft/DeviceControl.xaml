@@ -24,7 +24,7 @@
             <Image Source="Images/IDicon.png"/>
         </Button>
         <Button x:Name="btnProperties" HorizontalAlignment="Left" Margin="142,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Properties" Background="{DynamicResource ButonFillBrush1}" Click="btnProperties_Click">
-            <Image Source="Images/Settings-icon.png" Opacity="0.5" />
+            <Image Source="Images/Properties-icon.png" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="28" Height="28" />
         </Button>
         <Button x:Name="btnXinput" HorizontalAlignment="Left" Margin="184,36,0,0" VerticalAlignment="Top" Width="38" Height="38" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" Click="btnXinput_Click" ToolTip="Attatch as XInput Device" Background="{DynamicResource ButonFillBrush1}" IsEnabledChanged="btnXinput_IsEnabledChanged">
             <Button.ContextMenu>
