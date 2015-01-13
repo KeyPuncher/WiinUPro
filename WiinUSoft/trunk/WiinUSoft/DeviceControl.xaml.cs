@@ -294,6 +294,8 @@ namespace WiinUSoft
                 return;
             }
 
+            bool lowBat = false;
+
             if (DeviceType == ControllerType.ProController)
             {
                 holder.SetValue(Inputs.ProController.A, e.ProController.A);
@@ -332,6 +334,8 @@ namespace WiinUSoft
                 {
                     device.SetRumble(doRumble);
                 }
+
+                lowBat = e.ProController.BatteryLow;
             }
             else if (DeviceType == ControllerType.BalanceBoard)
             {
@@ -450,9 +454,13 @@ namespace WiinUSoft
                 //{
                 //    device.SetRumble(doRumble);
                 //}
+
+                lowBat = e.Wiimote.BatteryLow;
             }
 
             holder.Update();
+
+            // TODO: Low Battery Warning
         }
 
         private void btnXinput_Click(object sender, RoutedEventArgs e)

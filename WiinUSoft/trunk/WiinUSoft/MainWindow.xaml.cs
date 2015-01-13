@@ -113,5 +113,11 @@ namespace WiinUSoft
         {
             Refresh();
         }
+
+        private void TaskbarIcon_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Show Context Menu");
+            trayIcon.Visibility = System.Windows.Visibility.Hidden;
+        }
     }
 }
