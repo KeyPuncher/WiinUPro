@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Documents;
 using NintrollerLib;
+using System.Windows.Input;
 
 namespace WiinUSoft
 {
@@ -10,6 +11,8 @@ namespace WiinUSoft
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow Instance { get; private set; }
+
         private List<string> hidList;
         private List<DeviceControl> deviceList;
 
@@ -19,11 +22,24 @@ namespace WiinUSoft
             deviceList = new List<DeviceControl>();
 
             InitializeComponent();
+
+            Instance = this;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        public void HideWindow()
         {
-            Refresh();
+            if (WindowState == System.Windows.WindowState.Minimized)
+            {
+                trayIcon.Visibility = System.Windows.Visibility.Visible;
+                Hide();
+            }
+        }
+
+        public void ShowWindow()
+        {
+            trayIcon.Visibility = System.Windows.Visibility.Hidden;
+            Show();
+            WindowState = System.Windows.WindowState.Normal;
         }
 
         private void Refresh()
@@ -58,6 +74,11 @@ namespace WiinUSoft
                     deviceList[deviceList.Count - 1].RefreshState();
                 }
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Refresh();
         }
 
         private void DeviceControl_OnConnectStateChange(DeviceControl sender, DeviceState oldState, DeviceState newState)
@@ -114,10 +135,48 @@ namespace WiinUSoft
             Refresh();
         }
 
-        private void TaskbarIcon_MouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Window_StateChanged(object sender, System.EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Show Context Menu");
-            trayIcon.Visibility = System.Windows.Visibility.Hidden;
+            HideWindow();
         }
+
+        private void MenuItem_Show_Click(object sender, RoutedEventArgs e)
+        {
+            ShowWindow();
+        }
+
+        private void MenuItem_Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
+        private void MenuItem_Exit_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (DeviceControl dc in deviceList)
+            {
+                if (dc.ConnectionState == DeviceState.Connected_XInput
+                 || dc.ConnectionState == DeviceState.Connected_VJoy)
+                {
+                    dc.Detatch();
+                }
+            }
+
+            Close();
+        }
+    }
+
+    class ShowWindowCommand : ICommand
+    {
+        public void Execute(object parameter)
+        {
+            MainWindow.Instance.ShowWindow();
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public event System.EventHandler CanExecuteChanged;
     }
 }
