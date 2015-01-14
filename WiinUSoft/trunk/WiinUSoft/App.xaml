@@ -9,6 +9,7 @@
         <Color x:Key="AntemSky">#FFADCCEB</Color>
         <Color x:Key="AntemBlue">#FF7CA3CA</Color>
         <Color x:Key="JohnTheRevelater">#FF5A6E83</Color>
+        <Color x:Key="LowBattery">#FFDF6C25</Color>
         <LinearGradientBrush x:Key="ButonFillBrush1" EndPoint="0,1" StartPoint="0,0">
             <GradientStop Color="#FFDCEEF8" Offset="0"/>
             <GradientStop Color="#FF7CA3CA" Offset="0.5"/>

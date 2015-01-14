@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Documents;
 using NintrollerLib;
 using System.Windows.Input;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace WiinUSoft
 {
@@ -40,6 +41,11 @@ namespace WiinUSoft
             trayIcon.Visibility = System.Windows.Visibility.Hidden;
             Show();
             WindowState = System.Windows.WindowState.Normal;
+        }
+
+        public void ShowBalloon(string title, string message, BalloonIcon icon)
+        {
+            trayIcon.ShowBalloonTip(title, message, icon);
         }
 
         private void Refresh()

@@ -76,6 +76,8 @@ namespace WiinUSoft
         }
 
         internal int targetXDevice = 0;
+        internal bool lowBatteryFired = false;
+        internal string dName = "";
 
         public DeviceControl()
         {
@@ -137,72 +139,9 @@ namespace WiinUSoft
             }
         }
 
-        private void LoadProfile(string profilePath, Holders.Holder h)
-        {
-            Profile loadedProfile = null;
-
-            if (!string.IsNullOrWhiteSpace(profilePath) && File.Exists(profilePath))
-            {
-                try
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(Profile));
-
-                    using (FileStream stream = File.OpenRead(profilePath))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        loadedProfile = serializer.Deserialize(reader) as Profile;
-                        reader.Close();
-                        stream.Close();
-                    }
-                }
-                catch { }
-            }
-
-            if (loadedProfile == null)
-            {
-                loadedProfile = UserPrefs.Instance.defaultProfile;
-            }
-
-            if (loadedProfile != null)
-            {
-                for (int i = 0; i < Math.Min(loadedProfile.controllerMapKeys.Count, loadedProfile.controllerMapValues.Count); i++)
-                {
-                    h.SetMapping(loadedProfile.controllerMapKeys[i], loadedProfile.controllerMapValues[i]);
-                }
-            }
-        }
-
-        private void UpdateIcon(ControllerType cType)
-        {
-            if (icon.Source == (ImageSource)Application.Current.Resources["ProIcon"])
-            {
-                return;
-            }
-
-            switch (cType)
-            {
-                case ControllerType.ProController:
-                    icon.Source = (ImageSource)Application.Current.Resources["ProIcon"];
-                    break;
-                case ControllerType.ClassicControllerPro:
-                    icon.Source = (ImageSource)Application.Current.Resources["CCPIcon"];
-                    break;
-                case ControllerType.ClassicController:
-                    icon.Source = (ImageSource)Application.Current.Resources["CCIcon"];
-                    break;
-                case ControllerType.Nunchuk:
-                case ControllerType.NunchukB:
-                    icon.Source = (ImageSource)Application.Current.Resources["WNIcon"];
-                    break;
-
-                default:
-                    icon.Source = (ImageSource)Application.Current.Resources["WIcon"];
-                    break;
-            }
-        }
-
         public void SetName(string newName)
         {
+            dName = newName;
             labelName.Content = new TextBlock() { Text = newName };
         }
 
@@ -335,7 +274,7 @@ namespace WiinUSoft
                     device.SetRumble(doRumble);
                 }
 
-                lowBat = e.ProController.BatteryLow;
+                lowBat = e.ProController.BatteryLow && !e.ProController.Charging;
             }
             else if (DeviceType == ControllerType.BalanceBoard)
             {
@@ -459,8 +398,99 @@ namespace WiinUSoft
             }
 
             holder.Update();
+            SetBatteryStatus(lowBat);
+        }
 
-            // TODO: Low Battery Warning
+        static System.Threading.Tasks.Task Delay(int milliseconds)
+        {
+            var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
+            new System.Threading.Timer(_ => tcs.SetResult(null)).Change(milliseconds, -1);
+            return tcs.Task;
+        }
+
+        private void SetBatteryStatus(bool isLow)
+        {
+            if (isLow && !lowBatteryFired)
+            {
+                statusGradient = (GradientStop) FindResource("LowBattery");
+                lowBatteryFired = true;
+                MainWindow.Instance.ShowBalloon
+                (
+                    "Battery Low",
+                    dName + (!dName.Equals(device.Type.ToString()) ? " (" + device.Type.ToString() + ") " : " ")
+                    + "is running low on battery life.",
+                    Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Warning
+                );
+            }
+            else if (!isLow && lowBatteryFired)
+            {
+                statusGradient = (GradientStop)FindResource("AntemBlue");
+                lowBatteryFired = false;
+            }
+        }
+
+        private void LoadProfile(string profilePath, Holders.Holder h)
+        {
+            Profile loadedProfile = null;
+
+            if (!string.IsNullOrWhiteSpace(profilePath) && File.Exists(profilePath))
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Profile));
+
+                    using (FileStream stream = File.OpenRead(profilePath))
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        loadedProfile = serializer.Deserialize(reader) as Profile;
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
+                catch { }
+            }
+
+            if (loadedProfile == null)
+            {
+                loadedProfile = UserPrefs.Instance.defaultProfile;
+            }
+
+            if (loadedProfile != null)
+            {
+                for (int i = 0; i < Math.Min(loadedProfile.controllerMapKeys.Count, loadedProfile.controllerMapValues.Count); i++)
+                {
+                    h.SetMapping(loadedProfile.controllerMapKeys[i], loadedProfile.controllerMapValues[i]);
+                }
+            }
+        }
+
+        private void UpdateIcon(ControllerType cType)
+        {
+            if (icon.Source == (ImageSource)Application.Current.Resources["ProIcon"])
+            {
+                return;
+            }
+
+            switch (cType)
+            {
+                case ControllerType.ProController:
+                    icon.Source = (ImageSource)Application.Current.Resources["ProIcon"];
+                    break;
+                case ControllerType.ClassicControllerPro:
+                    icon.Source = (ImageSource)Application.Current.Resources["CCPIcon"];
+                    break;
+                case ControllerType.ClassicController:
+                    icon.Source = (ImageSource)Application.Current.Resources["CCIcon"];
+                    break;
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                    icon.Source = (ImageSource)Application.Current.Resources["WNIcon"];
+                    break;
+
+                default:
+                    icon.Source = (ImageSource)Application.Current.Resources["WIcon"];
+                    break;
+            }
         }
 
         private void btnXinput_Click(object sender, RoutedEventArgs e)
@@ -540,13 +570,6 @@ namespace WiinUSoft
                 if (targetXDevice != 0)
                     Delay(1750).ContinueWith(o => device.SetPlayerLED(targetXDevice));
             }
-        }
-
-        static System.Threading.Tasks.Task Delay(int milliseconds)
-        {
-            var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
-            new System.Threading.Timer(_ => tcs.SetResult(null)).Change(milliseconds, -1);
-            return tcs.Task;
         }
 
         private void btnVjoy_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)

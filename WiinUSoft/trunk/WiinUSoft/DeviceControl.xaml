@@ -13,7 +13,7 @@
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                     <GradientStop Color="{DynamicResource Eyeing}" Offset="0"/>
-                    <GradientStop Color="{DynamicResource AntemBlue}" Offset="1"/>
+                    <GradientStop x:Name="statusGradient" Color="{DynamicResource AntemBlue}" Offset="1"/>
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
