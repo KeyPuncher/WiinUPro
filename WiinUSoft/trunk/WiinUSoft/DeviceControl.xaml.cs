@@ -149,7 +149,13 @@ namespace WiinUSoft
         {
             device.Disconnect();
             holder.Close();
+            lowBatteryFired = false;
             ConnectionState = DeviceState.Discovered;
+            Dispatcher.BeginInvoke
+            (
+                System.Windows.Threading.DispatcherPriority.Background,
+                new Action(() => statusGradient.Color = (Color)FindResource("AntemBlue")
+            ));
         }
 
         public void SetState(DeviceState newState)
@@ -394,7 +400,7 @@ namespace WiinUSoft
                 //    device.SetRumble(doRumble);
                 //}
 
-                lowBat = e.Wiimote.BatteryLow;
+                lowBat = e.Wiimote.BatteryLow || e.Wiimote.Battery == BatteryStatus.VeryLow;
             }
 
             holder.Update();
@@ -412,15 +418,24 @@ namespace WiinUSoft
         {
             if (isLow && !lowBatteryFired)
             {
-                statusGradient = (GradientStop) FindResource("LowBattery");
-                lowBatteryFired = true;
-                MainWindow.Instance.ShowBalloon
-                (
-                    "Battery Low",
-                    dName + (!dName.Equals(device.Type.ToString()) ? " (" + device.Type.ToString() + ") " : " ")
-                    + "is running low on battery life.",
-                    Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Warning
-                );
+                Dispatcher.BeginInvoke(
+                    System.Windows.Threading.DispatcherPriority.Background,
+                    new Action(() =>
+                        {
+                            statusGradient.Color = (Color)FindResource("LowBattery");
+                            if (MainWindow.Instance.trayIcon.Visibility == System.Windows.Visibility.Visible)
+                            {
+                                lowBatteryFired = true;
+                                MainWindow.Instance.ShowBalloon
+                                (
+                                    "Battery Low",
+                                    dName + (!dName.Equals(device.Type.ToString()) ? " (" + device.Type.ToString() + ") " : " ")
+                                    + "is running low on battery life.",
+                                    Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Warning
+                                );
+                            }
+                        }
+                ));
             }
             else if (!isLow && lowBatteryFired)
             {

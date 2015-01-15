@@ -45,6 +45,8 @@ namespace WiinUSoft
 
         public void ShowBalloon(string title, string message, BalloonIcon icon)
         {
+            //if (trayIcon.Visibility == System.Windows.Visibility.Hidden)
+            //    trayIcon.Visibility = System.Windows.Visibility.Visible;
             trayIcon.ShowBalloonTip(title, message, icon);
         }
 
