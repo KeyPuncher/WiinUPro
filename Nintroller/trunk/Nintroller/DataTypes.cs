@@ -246,6 +246,16 @@ namespace NintrollerLib
             AccelerometerDeadzone = new Point3D(4, 4, 4),
             AccelerometerRange = new Point3D(48, 48, 48)
         };
+
+        /// <summary>
+        /// A modest calibration setting with larger deadzones and lower ranges.
+        /// </summary>
+        public static readonly WiimoteCalibration Modest = new WiimoteCalibration()
+        {
+            AccelerometerCenter = new Point3D(128, 128, 128),
+            AccelerometerDeadzone = new Point3D(8, 8, 8),
+            AccelerometerRange = new Point3D(44, 44, 44)
+        };
     }
 
     /// <summary>
@@ -268,8 +278,21 @@ namespace NintrollerLib
             JoystickLY = new JoyCalibration(1024, 2048, 3072),
             JoystickRX = new JoyCalibration(1024, 2048, 3072),
             JoystickRY = new JoyCalibration(1024, 2048, 3072),
-            JoystickLDeadZone = new Point2D(256, 256),
-            JoystickRDeadZone = new Point2D(256, 256)
+            JoystickLDeadZone = new Point2D(128, 128),
+            JoystickRDeadZone = new Point2D(128, 128)
+        };
+
+        /// <summary>
+        /// A modest calibration setting with smaller deadzones and lower ranges.
+        /// </summary>
+        public static readonly ProCalibration Modest = new ProCalibration()
+        {
+            JoystickLX = new JoyCalibration(1152, 2048, 2944),
+            JoystickLY = new JoyCalibration(1152, 2048, 2944),
+            JoystickRX = new JoyCalibration(1152, 2048, 2944),
+            JoystickRY = new JoyCalibration(1152, 2048, 2944),
+            JoystickLDeadZone = new Point2D(192, 192),
+            JoystickRDeadZone = new Point2D(192, 192)
         };
     }
 
@@ -296,6 +319,19 @@ namespace NintrollerLib
             AccelerometerCenter = new Point3D(128, 128, 128),
             AccelerometerDeadzone = new Point3D(4, 4, 4),
             AccelerometerRange = new Point3D(112, 112, 112)
+        };
+
+        /// <summary>
+        /// A modest calibration setting with larger deadzones and lower ranges.
+        /// </summary>
+        public static readonly NunchuckCalibration Modest = new NunchuckCalibration()
+        {
+            JoystickX = new JoyCalibration(40, 128, 216),
+            JoystickY = new JoyCalibration(40, 128, 216),
+            JoystickDeadzone = new Point2D(8, 8),
+            AccelerometerCenter = new Point3D(128, 128, 128),
+            AccelerometerDeadzone = new Point3D(8, 8, 8),
+            AccelerometerRange = new Point3D(104, 104, 104)
         };
     }
 
@@ -327,6 +363,23 @@ namespace NintrollerLib
             TriggerRMin = 0,
             TriggerRMax = 31
         };
+
+        /// <summary>
+        /// A modest calibration setting with larger deadzones and lower ranges.
+        /// </summary>
+        public static readonly ClassicControllerCalibration Modest = new ClassicControllerCalibration()
+        {
+            JoystickLX = new JoyCalibration(8, 31, 55),
+            JoystickLY = new JoyCalibration(8, 31, 55),
+            JoystickRX = new JoyCalibration(4, 15, 27),
+            JoystickRY = new JoyCalibration(4, 15, 27),
+            JoystickLDeadZone = new Point2D(8, 8), 
+            JoystickRDeadZone = new Point2D(4, 4),
+            TriggerLMin = 4,
+            TriggerLMax = 27,
+            TriggerRMin = 4,
+            TriggerRMax = 27
+        };
     }
 
     /// <summary>
@@ -351,6 +404,19 @@ namespace NintrollerLib
             JoystickRY = new JoyCalibration(0, 15, 31),
             JoystickLDeadZone = new Point2D(4, 4),
             JoystickRDeadZone = new Point2D(2, 2)
+        };
+
+        /// <summary>
+        /// A modest calibration setting with larger deadzones and lower ranges.
+        /// </summary>
+        public static readonly ClassicControllerProCalibration Modest = new ClassicControllerProCalibration()
+        {
+            JoystickLX = new JoyCalibration(8, 31, 55),
+            JoystickLY = new JoyCalibration(8, 31, 55),
+            JoystickRX = new JoyCalibration(4, 15, 27),
+            JoystickRY = new JoyCalibration(4, 15, 27),
+            JoystickLDeadZone = new Point2D(8, 8),
+            JoystickRDeadZone = new Point2D(4, 4)
         };
     }
 

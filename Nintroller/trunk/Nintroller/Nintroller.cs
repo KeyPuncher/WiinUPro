@@ -22,6 +22,8 @@ namespace NintrollerLib
     /// </summary>
     public class Nintroller : IDisposable
     {
+        public static bool UseModestConfigs = false;
+
         #region Members
         /// <summary>
         /// Fired evertime a data report is recieved.

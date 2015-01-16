@@ -415,9 +415,18 @@ namespace NintrollerLib
         /// </summary>
         public override void ResetCalibration()
         {
-            accCenter = WiimoteCalibration.Default.AccelerometerCenter;
-            accDead = WiimoteCalibration.Default.AccelerometerDeadzone;
-            accRange = WiimoteCalibration.Default.AccelerometerRange;
+            if (Nintroller.UseModestConfigs)
+            {
+                accCenter = WiimoteCalibration.Modest.AccelerometerCenter;
+                accDead = WiimoteCalibration.Modest.AccelerometerDeadzone;
+                accRange = WiimoteCalibration.Modest.AccelerometerRange;
+            }
+            else
+            {
+                accCenter = WiimoteCalibration.Default.AccelerometerCenter;
+                accDead = WiimoteCalibration.Default.AccelerometerDeadzone;
+                accRange = WiimoteCalibration.Default.AccelerometerRange;
+            }
             /*
             AccCenter.X = 128;
             AccCenter.Y = 128;
@@ -902,13 +911,26 @@ namespace NintrollerLib
         /// </summary>
         public override void ResetCalibration()
         {
-            leftJoyXCalibration = ProCalibration.Default.JoystickLX;
-            leftJoyYCalibration = ProCalibration.Default.JoystickLY;
-            leftJoyDeadZone = ProCalibration.Default.JoystickLDeadZone;
+            if (Nintroller.UseModestConfigs)
+            {
+                leftJoyXCalibration = ProCalibration.Modest.JoystickLX;
+                leftJoyYCalibration = ProCalibration.Modest.JoystickLY;
+                leftJoyDeadZone = ProCalibration.Modest.JoystickLDeadZone;
 
-            rightJoyXCalibration = ProCalibration.Default.JoystickRX;
-            rightJoyYCalibration = ProCalibration.Default.JoystickRY;
-            rightJoyDeadZone = ProCalibration.Default.JoystickRDeadZone;
+                rightJoyXCalibration = ProCalibration.Modest.JoystickRX;
+                rightJoyYCalibration = ProCalibration.Modest.JoystickRY;
+                rightJoyDeadZone = ProCalibration.Modest.JoystickRDeadZone;
+            }
+            else
+            {
+                leftJoyXCalibration = ProCalibration.Default.JoystickLX;
+                leftJoyYCalibration = ProCalibration.Default.JoystickLY;
+                leftJoyDeadZone = ProCalibration.Default.JoystickLDeadZone;
+
+                rightJoyXCalibration = ProCalibration.Default.JoystickRX;
+                rightJoyYCalibration = ProCalibration.Default.JoystickRY;
+                rightJoyDeadZone = ProCalibration.Default.JoystickRDeadZone;
+            }
             /*
             LeftJoyXCalibration.Min = 1024;
             LeftJoyXCalibration.Mid = 2048;
@@ -1285,13 +1307,26 @@ namespace NintrollerLib
         /// </summary>
         public override void ResetCalibration()
         {
-            joyXCalibration = NunchuckCalibration.Default.JoystickX;
-            joyYCalibration = NunchuckCalibration.Default.JoystickY;
-            joyDeadZone = NunchuckCalibration.Default.JoystickDeadzone;
+            if (Nintroller.UseModestConfigs)
+            {
+                joyXCalibration = NunchuckCalibration.Modest.JoystickX;
+                joyYCalibration = NunchuckCalibration.Modest.JoystickY;
+                joyDeadZone = NunchuckCalibration.Modest.JoystickDeadzone;
 
-            accCenter = NunchuckCalibration.Default.AccelerometerCenter;
-            accDead = NunchuckCalibration.Default.AccelerometerDeadzone;
-            accRange = NunchuckCalibration.Default.AccelerometerRange;
+                accCenter = NunchuckCalibration.Modest.AccelerometerCenter;
+                accDead = NunchuckCalibration.Modest.AccelerometerDeadzone;
+                accRange = NunchuckCalibration.Modest.AccelerometerRange;
+            }
+            else
+            {
+                joyXCalibration = NunchuckCalibration.Default.JoystickX;
+                joyYCalibration = NunchuckCalibration.Default.JoystickY;
+                joyDeadZone = NunchuckCalibration.Default.JoystickDeadzone;
+
+                accCenter = NunchuckCalibration.Default.AccelerometerCenter;
+                accDead = NunchuckCalibration.Default.AccelerometerDeadzone;
+                accRange = NunchuckCalibration.Default.AccelerometerRange;
+            }
             /*
             JoyXCalibration.Min = 32;
             JoyXCalibration.Mid = 128;
@@ -1563,19 +1598,38 @@ namespace NintrollerLib
         /// </summary>
         public override void ResetCalibration()
         {
-            leftJoyXCalibration = ClassicControllerCalibration.Default.JoystickLX;
-            leftJoyYCalibration = ClassicControllerCalibration.Default.JoystickLY;
-            leftJoyDeadZone = ClassicControllerCalibration.Default.JoystickLDeadZone;
+            if (Nintroller.UseModestConfigs)
+            {
+                leftJoyXCalibration = ClassicControllerCalibration.Modest.JoystickLX;
+                leftJoyYCalibration = ClassicControllerCalibration.Modest.JoystickLY;
+                leftJoyDeadZone = ClassicControllerCalibration.Modest.JoystickLDeadZone;
 
-            rightJoyXCalibration = ClassicControllerCalibration.Default.JoystickRX;
-            rightJoyYCalibration = ClassicControllerCalibration.Default.JoystickRY;
-            rightJoyDeadZone = ClassicControllerCalibration.Default.JoystickRDeadZone;
+                rightJoyXCalibration = ClassicControllerCalibration.Modest.JoystickRX;
+                rightJoyYCalibration = ClassicControllerCalibration.Modest.JoystickRY;
+                rightJoyDeadZone = ClassicControllerCalibration.Modest.JoystickRDeadZone;
 
-            lTriggerMin = ClassicControllerCalibration.Default.TriggerLMin;
-            lTriggerMax = ClassicControllerCalibration.Default.TriggerLMax;
+                lTriggerMin = ClassicControllerCalibration.Modest.TriggerLMin;
+                lTriggerMax = ClassicControllerCalibration.Modest.TriggerLMax;
 
-            lTriggerMin = ClassicControllerCalibration.Default.TriggerRMin;
-            lTriggerMax = ClassicControllerCalibration.Default.TriggerRMax;
+                lTriggerMin = ClassicControllerCalibration.Modest.TriggerRMin;
+                lTriggerMax = ClassicControllerCalibration.Modest.TriggerRMax;
+            }
+            else
+            {
+                leftJoyXCalibration = ClassicControllerCalibration.Default.JoystickLX;
+                leftJoyYCalibration = ClassicControllerCalibration.Default.JoystickLY;
+                leftJoyDeadZone = ClassicControllerCalibration.Default.JoystickLDeadZone;
+
+                rightJoyXCalibration = ClassicControllerCalibration.Default.JoystickRX;
+                rightJoyYCalibration = ClassicControllerCalibration.Default.JoystickRY;
+                rightJoyDeadZone = ClassicControllerCalibration.Default.JoystickRDeadZone;
+
+                lTriggerMin = ClassicControllerCalibration.Default.TriggerLMin;
+                lTriggerMax = ClassicControllerCalibration.Default.TriggerLMax;
+
+                lTriggerMin = ClassicControllerCalibration.Default.TriggerRMin;
+                lTriggerMax = ClassicControllerCalibration.Default.TriggerRMax;
+            }
             /*
             LeftJoyXCalibration = LeftJoyYCalibration = new JoyCalibration(0, 31, 63);
             RightJoyXCalibration = RightJoyYCalibration = new JoyCalibration(0, 15, 31);
@@ -1813,13 +1867,26 @@ namespace NintrollerLib
         /// </summary>
         public override void ResetCalibration()
         {
-            leftJoyXCalibration = ClassicControllerProCalibration.Default.JoystickLX;
-            leftJoyYCalibration = ClassicControllerProCalibration.Default.JoystickLY;
-            leftJoyDeadZone = ClassicControllerProCalibration.Default.JoystickLDeadZone;
+            if (Nintroller.UseModestConfigs)
+            {
+                leftJoyXCalibration = ClassicControllerProCalibration.Modest.JoystickLX;
+                leftJoyYCalibration = ClassicControllerProCalibration.Modest.JoystickLY;
+                leftJoyDeadZone = ClassicControllerProCalibration.Modest.JoystickLDeadZone;
 
-            rightJoyXCalibration = ClassicControllerProCalibration.Default.JoystickRX;
-            rightJoyYCalibration = ClassicControllerProCalibration.Default.JoystickRY;
-            rightJoyDeadZone = ClassicControllerProCalibration.Default.JoystickRDeadZone;
+                rightJoyXCalibration = ClassicControllerProCalibration.Modest.JoystickRX;
+                rightJoyYCalibration = ClassicControllerProCalibration.Modest.JoystickRY;
+                rightJoyDeadZone = ClassicControllerProCalibration.Modest.JoystickRDeadZone;
+            }
+            else
+            {
+                leftJoyXCalibration = ClassicControllerProCalibration.Default.JoystickLX;
+                leftJoyYCalibration = ClassicControllerProCalibration.Default.JoystickLY;
+                leftJoyDeadZone = ClassicControllerProCalibration.Default.JoystickLDeadZone;
+
+                rightJoyXCalibration = ClassicControllerProCalibration.Default.JoystickRX;
+                rightJoyYCalibration = ClassicControllerProCalibration.Default.JoystickRY;
+                rightJoyDeadZone = ClassicControllerProCalibration.Default.JoystickRDeadZone;
+            }
             /*
             LeftJoyXCalibration = LeftJoyYCalibration = new JoyCalibration(0, 31, 63);
             RightJoyXCalibration = RightJoyYCalibration = new JoyCalibration(0, 15, 31);
