@@ -9,6 +9,7 @@ namespace WiinUSoft
     /// </summary>
     public partial class PropWindow : Window
     {
+        // TODO: connect to specific device
         public bool doSave = false;
         public Property props;
 
@@ -60,6 +61,12 @@ namespace WiinUSoft
             {
                 defaultInput.Text = dialog.FileName;
             }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            props.autoConnect = autoConnectNumber.SelectedIndex > 0;
+            props.autoNum = autoConnectNumber.SelectedIndex;
         }
     }
 }

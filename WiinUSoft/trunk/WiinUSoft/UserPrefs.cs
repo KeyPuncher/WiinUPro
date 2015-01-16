@@ -136,6 +136,7 @@ namespace WiinUSoft
         public string hid = "";
         public string name = "";
         public bool autoConnect = false;
+        public int autoNum = 0;
         public ProfHolderType connType;
         public string profile = "";
 
