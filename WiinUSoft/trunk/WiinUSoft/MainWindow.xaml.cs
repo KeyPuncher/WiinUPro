@@ -19,6 +19,7 @@ namespace WiinUSoft
 
         public MainWindow()
         {
+            Nintroller.UseModestConfigs = true;
             hidList = new List<string>();
             deviceList = new List<DeviceControl>();
 

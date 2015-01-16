@@ -36,6 +36,9 @@
   <PropertyGroup>
     <ApplicationIcon>Images\WiinUSoftBeta.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>WiinUSoft.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Hardcodet.Wpf.TaskbarNotification">
       <HintPath>..\..\packages\Hardcodet.NotifyIcon.Wpf.1.0.5\lib\net40\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
@@ -43,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -56,13 +60,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    </Page>
     <Compile Include="PropWindow.xaml.cs">
       <DependentUpon>PropWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SingleInstance.cs" />
     <Compile Include="UserPrefs.cs" />
     <Page Include="ConfigWindow.xaml">
       <SubType>Designer</SubType>
