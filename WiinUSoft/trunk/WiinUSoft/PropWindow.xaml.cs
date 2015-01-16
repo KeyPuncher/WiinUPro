@@ -21,6 +21,8 @@ namespace WiinUSoft
             nameInput.Text = string.IsNullOrWhiteSpace(props.name) ? defalutName : props.name;
             defaultInput.Text = props.profile;
             autoCheckbox.IsChecked = props.autoConnect;
+            if (props.autoNum >= 0 && props.autoNum <= autoConnectNumber.Items.Count)
+                autoConnectNumber.SelectedIndex = props.autoNum;
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
@@ -65,8 +67,11 @@ namespace WiinUSoft
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            props.autoConnect = autoConnectNumber.SelectedIndex > 0;
-            props.autoNum = autoConnectNumber.SelectedIndex;
+            if (props != null)
+            {
+                props.autoConnect = autoConnectNumber.SelectedIndex > 0;
+                props.autoNum = autoConnectNumber.SelectedIndex;
+            }
         }
     }
 }

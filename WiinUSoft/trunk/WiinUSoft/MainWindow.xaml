@@ -15,8 +15,7 @@
                         DoubleClickCommand="{StaticResource ShowWindow}">
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu Background="{DynamicResource BrushAntemWhite}">
-                    <MenuItem Header="Show" Click="MenuItem_Show_Click" />
-                    <Separator/>
+                    <MenuItem Header="Show" Click="MenuItem_Show_Click" FontWeight="Bold" />
                     <MenuItem Header="Refresh" Click="MenuItem_Refresh_Click" />
                     <MenuItem Header="Exit" Click="MenuItem_Exit_Click" />
                 </ContextMenu>

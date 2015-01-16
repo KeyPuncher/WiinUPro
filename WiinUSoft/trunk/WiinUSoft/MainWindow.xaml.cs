@@ -4,6 +4,7 @@ using System.Windows.Documents;
 using NintrollerLib;
 using System.Windows.Input;
 using Hardcodet.Wpf.TaskbarNotification;
+using System.Media;
 
 namespace WiinUSoft
 {
@@ -44,11 +45,16 @@ namespace WiinUSoft
             WindowState = System.Windows.WindowState.Normal;
         }
 
-        public void ShowBalloon(string title, string message, BalloonIcon icon)
+        public void ShowBalloon(string title, string message, BalloonIcon icon, SystemSound sound = null)
         {
             //if (trayIcon.Visibility == System.Windows.Visibility.Hidden)
             //    trayIcon.Visibility = System.Windows.Visibility.Visible;
             trayIcon.ShowBalloonTip(title, message, icon);
+
+            if (sound != null)
+            {
+                sound.Play();
+            }
         }
 
         private void Refresh()

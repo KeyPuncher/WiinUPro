@@ -445,7 +445,8 @@ namespace WiinUSoft
                                     "Battery Low",
                                     dName + (!dName.Equals(device.Type.ToString()) ? " (" + device.Type.ToString() + ") " : " ")
                                     + "is running low on battery life.",
-                                    Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Warning
+                                    Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Warning,
+                                    System.Media.SystemSounds.Hand
                                 );
                             }
                         }
