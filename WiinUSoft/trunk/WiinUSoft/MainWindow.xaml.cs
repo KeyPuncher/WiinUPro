@@ -60,6 +60,7 @@ namespace WiinUSoft
         private void Refresh()
         {
             hidList = Nintroller.FindControllers();
+            List<KeyValuePair<int, DeviceControl>> connectSeq = new List<KeyValuePair<int, DeviceControl>>();
 
             foreach (string hid in hidList)
             {
@@ -80,6 +81,10 @@ namespace WiinUSoft
                     if (!existingDevice.Connected)
                     {
                         existingDevice.RefreshState();
+                        if (existingDevice.properties.autoConnect && existingDevice.ConnectionState == DeviceState.Discovered)
+                        {
+                            connectSeq.Add(new KeyValuePair<int, DeviceControl>(existingDevice.properties.autoNum, existingDevice));
+                        }
                     }
                 }
                 else if (n.ConnectTest())
@@ -87,6 +92,38 @@ namespace WiinUSoft
                     deviceList.Add(new DeviceControl(n));
                     deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
                     deviceList[deviceList.Count - 1].RefreshState();
+                    if (deviceList[deviceList.Count - 1].properties.autoConnect)
+                    {
+                        connectSeq.Add(new KeyValuePair<int, DeviceControl>(deviceList[deviceList.Count - 1].properties.autoNum, deviceList[deviceList.Count - 1]));
+                    }
+                }
+            }
+
+            // Auto connect in preferred order
+            for (int i = 1; i < connectSeq.Count; i++)
+            {
+                if (connectSeq[i].Key < connectSeq[i - 1].Key)
+                {
+                    var tmp = connectSeq[i];
+                    connectSeq[i] = connectSeq[i - 1];
+                    connectSeq[i - 1] = tmp;
+                    i--;
+                }
+            }
+
+            int target = 0;
+            while(!Holders.XInputHolder.availabe[target] && target < 4)
+            {
+                target++;
+            }
+
+            foreach(KeyValuePair<int, DeviceControl> d in connectSeq)
+            {
+                if (Holders.XInputHolder.availabe[target] && target < 4 && d.Value.Device.Connect())
+                {
+                    d.Value.targetXDevice = target + 1;
+                    d.Value.ConnectionState = DeviceState.Connected_XInput;
+                    target++;
                 }
             }
         }

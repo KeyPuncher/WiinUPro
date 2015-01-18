@@ -401,7 +401,7 @@ namespace WiinUSoft
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
             dialog.FileName = deviceType.ToString() + "_profile";
             dialog.DefaultExt = ".wsp";
-            dialog.Filter = "WiinUSoft Profiles (.wsp) |*.wsp";
+            dialog.Filter = App.PROFILE_FILTER;
 
             Nullable<bool> doSave = dialog.ShowDialog();
 
@@ -424,7 +424,7 @@ namespace WiinUSoft
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.FileName = deviceType.ToString() + "_profile";
             dialog.DefaultExt = ".wsp";
-            dialog.Filter = "WiinUSoft Profiles (.wsp) |*.wsp";
+            dialog.Filter = App.PROFILE_FILTER;
 
             Nullable<bool> doLoad = dialog.ShowDialog();
             Profile loadedProfile = null;

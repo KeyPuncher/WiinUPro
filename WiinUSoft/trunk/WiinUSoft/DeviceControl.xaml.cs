@@ -111,36 +111,6 @@ namespace WiinUSoft
                 if (properties != null)
                 {
                     SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
-
-                    if (properties.autoConnect && state == DeviceState.Discovered && Device.Connect())
-                    {
-                        int prefferred = properties.autoNum;
-                        if (properties.connType == Property.ProfHolderType.XInput)
-                        {
-                            if (Holders.XInputHolder.availabe[prefferred - 1])
-                            {
-                                targetXDevice = prefferred;
-                                ConnectionState = DeviceState.Connected_XInput;
-                            }
-                            else
-                            {
-                                for (int i = 0; i < 4; i++)
-                                {
-                                    if (Holders.XInputHolder.availabe[i])
-                                    {
-                                        targetXDevice = i + 1;
-                                        ConnectionState = DeviceState.Connected_XInput;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (ConnectionState == DeviceState.Discovered)
-                            {
-                                Device.Disconnect();
-                            }
-                        }
-                    }
                 }
                 else
                 {

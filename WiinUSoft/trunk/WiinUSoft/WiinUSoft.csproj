@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\WiinUSoftBeta.ico</ApplicationIcon>
+    <ApplicationIcon>Images\WiinUSoft.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>WiinUSoft.App</StartupObject>

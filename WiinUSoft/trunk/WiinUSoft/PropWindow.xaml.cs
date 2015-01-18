@@ -55,7 +55,7 @@ namespace WiinUSoft
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.DefaultExt = ".wsp";
-            dialog.Filter = "WiinUSoft Profiles (.wsp) |*.wsp";
+            dialog.Filter = App.PROFILE_FILTER;
 
             Nullable<bool> doLoad = dialog.ShowDialog();
 

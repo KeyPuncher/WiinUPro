@@ -14,6 +14,7 @@ namespace WiinUSoft
     /// </summary>
     public partial class App : Application, ISingleInstanceApp
     {
+        internal const string PROFILE_FILTER = "WiinUSoft Profile|*.wsp";
         private const string Unique = "wiinupro-or-wiinusoft-instance";
 
         [STAThread]

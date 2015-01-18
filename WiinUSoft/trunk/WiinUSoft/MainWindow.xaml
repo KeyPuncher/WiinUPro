@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:WiinUSoft" x:Class="WiinUSoft.MainWindow"
-        Title="WiinUSoft" Height="436" Width="624" Loaded="Window_Loaded" Icon="Images/WiinUSoftBeta.ico" Background="{DynamicResource BrushSocialBlue}" StateChanged="Window_StateChanged">
+        Title="WiinUSoft" Height="436" Width="624" Loaded="Window_Loaded" Icon="Images/WiinUSoft.ico" Background="{DynamicResource BrushSocialBlue}" StateChanged="Window_StateChanged">
     <Grid>
         <Grid.Resources>
             <local:ShowWindowCommand x:Key="ShowWindow" />
