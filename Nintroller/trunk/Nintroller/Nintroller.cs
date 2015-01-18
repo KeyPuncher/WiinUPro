@@ -731,23 +731,31 @@ namespace NintrollerLib
 
         private void ParseRead(byte[] r)
         {
-            if ((r[3] & 0x08) != 0)
-                throw new Exception("Can't read bytes (Don't Exist?)");
-
-            if ((r[3] & 0x07) != 0)
+            try
             {
-                Debug.WriteLine("Trying to Read in Write-Only mode");
-                mReadDone.Set();
-                return;
+                if ((r[3] & 0x08) != 0)
+                    throw new Exception("Can't read bytes (Don't Exist?)");
+
+                if ((r[3] & 0x07) != 0)
+                {
+                    Debug.WriteLine("Trying to Read in Write-Only mode");
+                    mReadDone.Set();
+                    return;
+                }
+
+                int size = (r[3] >> 4) + 1;
+                int offset = (r[4] << 8 | r[5]);
+
+                Array.Copy(r, 6, mReadBuff, offset - mAddress, size);
+
+                if (mAddress + mSize == offset + size)
+                    mReadDone.Set();
             }
-
-            int size    = (r[3] >> 4) + 1;
-            int offset  = (r[4] << 8 | r[5]);
-
-            Array.Copy(r, 6, mReadBuff, offset - mAddress, size);
-
-            if (mAddress + mSize == offset + size)
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error trying to read: " + ex.Message);
                 mReadDone.Set();
+            }
         }
         #endregion
 
