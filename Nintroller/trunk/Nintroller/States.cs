@@ -1052,25 +1052,110 @@ namespace NintrollerLib
             usbConnected = (r[offset + 10] & 0x08) == 0;
 
             // Normaliezed Joysticks
-            if (Math.Abs(leftJoyRaw.X - leftJoyXCalibration.Mid) < leftJoyDeadZone.X)
+            //if (Math.Abs(leftJoyRaw.X - leftJoyXCalibration.Mid) < leftJoyDeadZone.X)
+            //    leftJoy.X = 0;
+            //else if (leftJoyXCalibration.Max != 0)
+            //{
+            //    float adjustLX = leftJoyDeadZone.X * (leftJoyRaw.X > leftJoyXCalibration.Mid ? 1 : -1);
+            //    leftJoy.X = 2f * (float)(leftJoyRaw.X - leftJoyXCalibration.Mid - adjustLX)
+            //                   / (float)(leftJoyXCalibration.Max - leftJoyXCalibration.Mid - adjustLX);
+            //}
+
+            //if (Math.Abs(leftJoyRaw.Y - leftJoyYCalibration.Mid) < leftJoyDeadZone.Y)
+            //    leftJoy.Y = 0;
+            //else if (leftJoyYCalibration.Max != 0)
+            //{
+            //    float adjustLY = leftJoyDeadZone.Y * (leftJoyRaw.Y > leftJoyYCalibration.Mid ? 1 : -1);
+            //    leftJoy.Y = 2f * (float)(leftJoyRaw.Y - leftJoyYCalibration.Mid - adjustLY)
+            //                   / (float)(leftJoyYCalibration.Max - leftJoyYCalibration.Mid - adjustLY);
+            //}
+
+            //if (Math.Abs(rightJoyRaw.X - rightJoyXCalibration.Mid) < rightJoyDeadZone.X)
+            //    rightJoy.X = 0;
+            //else if (rightJoyXCalibration.Max != 0)
+            //{
+            //    float adjustRX = rightJoyDeadZone.X * (rightJoyRaw.X > rightJoyXCalibration.Mid ? 1 : -1);
+            //    rightJoy.X = (float)(rightJoyRaw.X - rightJoyXCalibration.Mid - adjustRX / 2f)
+            //                    / (float)((rightJoyXCalibration.Max - adjustRX) / 2f);
+            //}
+
+            //if (Math.Abs(rightJoyRaw.Y - rightJoyYCalibration.Mid) < rightJoyDeadZone.Y)
+            //    rightJoy.Y = 0;
+            //else if (rightJoyYCalibration.Mid != 0)
+            //{
+            //    float adjustRY = rightJoyDeadZone.Y * (rightJoyRaw.Y > rightJoyYCalibration.Mid ? 1 : -1);
+            //    rightJoy.Y = (float)(rightJoyRaw.Y - rightJoyYCalibration.Mid - adjustRY / 2f)
+            //                    / (float)((rightJoyYCalibration.Max - adjustRY) / 2f);
+            //}
+
+            // New Stuff
+            if (Math.Abs(leftJoyXCalibration.Mid - leftJoyRaw.X) < leftJoyDeadZone.X)
+            {
                 leftJoy.X = 0;
-            else if (leftJoyXCalibration.Max != 0)
-                leftJoy.X = 2f * (float)(leftJoyRaw.X - leftJoyXCalibration.Mid) / (float)(leftJoyXCalibration.Max - leftJoyXCalibration.Min);
+            }
+            else if (leftJoyRaw.X - leftJoyXCalibration.Mid > 0)
+            {
+                float LXWidthPos = leftJoyXCalibration.Max - (leftJoyXCalibration.Mid + leftJoyDeadZone.X);
+                float LXValuePos = leftJoyRaw.X - (leftJoyXCalibration.Mid + leftJoyDeadZone.X);
+                leftJoy.X = LXValuePos / LXWidthPos;
+            }
+            else
+            {
+                float LXWidthNeg = leftJoyXCalibration.Mid - leftJoyDeadZone.X - leftJoyXCalibration.Min;
+                float LXValueNeg = leftJoyRaw.X - leftJoyXCalibration.Min;
+                leftJoy.X = LXValueNeg / LXWidthNeg - 1;
+            }
 
-            if (Math.Abs(leftJoyRaw.Y - leftJoyYCalibration.Mid) < leftJoyDeadZone.Y)
+            if (Math.Abs(leftJoyYCalibration.Mid - leftJoyRaw.Y) < leftJoyDeadZone.Y)
+            {
                 leftJoy.Y = 0;
-            else if (leftJoyYCalibration.Max != 0)
-                leftJoy.Y = 2f * (float)(leftJoyRaw.Y - leftJoyYCalibration.Mid) / (float)(leftJoyYCalibration.Max - leftJoyYCalibration.Min);
+            }
+            else if (leftJoyRaw.Y - leftJoyYCalibration.Mid > 0)
+            {
+                float LYWidthPos = leftJoyYCalibration.Max - (leftJoyYCalibration.Mid + leftJoyDeadZone.Y);
+                float LYValuePos = leftJoyRaw.Y - (leftJoyYCalibration.Mid + leftJoyDeadZone.Y);
+                leftJoy.Y = LYValuePos / LYWidthPos;
+            }
+            else
+            {
+                float LYWidthNeg = leftJoyYCalibration.Mid - leftJoyDeadZone.Y - leftJoyYCalibration.Min;
+                float LYValueNeg = leftJoyRaw.Y - leftJoyYCalibration.Min;
+                leftJoy.Y = LYValueNeg / LYWidthNeg - 1;
+            }
 
-            if (Math.Abs(rightJoyRaw.X - rightJoyXCalibration.Mid) < rightJoyDeadZone.X)
+            if (Math.Abs(rightJoyXCalibration.Mid - rightJoyRaw.X ) < rightJoyDeadZone.X)
+            {
                 rightJoy.X = 0;
-            else if (rightJoyXCalibration.Max != 0)
-                rightJoy.X = 2f * (float)(rightJoyRaw.X - rightJoyXCalibration.Mid) / (float)(rightJoyXCalibration.Max - rightJoyXCalibration.Min);
+            }
+            else if (rightJoyRaw.X - rightJoyXCalibration.Mid > 0)
+            {
+                float RXWidthPos = rightJoyXCalibration.Max - (rightJoyXCalibration.Mid + rightJoyDeadZone.X);
+                float RXValuePos = rightJoyRaw.X - (rightJoyXCalibration.Mid + rightJoyDeadZone.X);
+                rightJoy.X = RXValuePos / RXWidthPos;
+            }
+            else
+            {
+                float RXWidthNeg = rightJoyXCalibration.Mid - rightJoyDeadZone.X - rightJoyXCalibration.Min;
+                float RXValueNeg = rightJoyRaw.X - rightJoyXCalibration.Min;
+                rightJoy.X = RXValueNeg / RXWidthNeg - 1;
+            }
 
-            if (Math.Abs(rightJoyRaw.Y - rightJoyYCalibration.Mid) < rightJoyDeadZone.Y)
+            if (Math.Abs(rightJoyYCalibration.Mid - rightJoyRaw.Y) < rightJoyDeadZone.Y)
+            {
                 rightJoy.Y = 0;
-            else if (rightJoyYCalibration.Mid != 0)
-                rightJoy.Y = 2f * (float)(rightJoyRaw.Y - rightJoyYCalibration.Mid) / (float)(rightJoyYCalibration.Max - rightJoyYCalibration.Min);
+            }
+            else if (rightJoyRaw.Y - rightJoyYCalibration.Mid > 0)
+            {
+                float RYWidthPos = rightJoyYCalibration.Max - (rightJoyYCalibration.Mid + rightJoyDeadZone.Y);
+                float RYValuePos = rightJoyRaw.Y - (rightJoyYCalibration.Mid + rightJoyDeadZone.Y);
+                rightJoy.Y = RYValuePos / RYWidthPos;
+            }
+            else
+            {
+                float RYWidthNeg = rightJoyYCalibration.Mid - rightJoyDeadZone.Y - rightJoyYCalibration.Min;
+                float RYValueNeg = rightJoyRaw.Y - rightJoyYCalibration.Min;
+                rightJoy.Y = RYValueNeg / RYWidthNeg - 1;
+            }
             #endregion
         }
     }

@@ -321,7 +321,7 @@ namespace NintrollerLib
                 return false;
 
             // Open Read/Write Handle
-            mHandle = HIDImports.CreateFile(mDevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+            mHandle = HIDImports.CreateFile(mDevicePath, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
 
             // create File Stream
             mStream = new FileStream(mHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
