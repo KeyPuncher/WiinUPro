@@ -105,6 +105,34 @@ namespace NintrollerLib
         {
             return;
         }
+
+        public static float NormalizeAxisValue(int rawValue, JoyCalibration calibration, int deadzoneValue)
+        {
+            float availableRange = 0f;
+            float actualValue = 0f;
+
+            // Check if it should snap to 0
+            if (Math.Abs(calibration.Mid - rawValue) < deadzoneValue)
+            {
+                return 0f;
+            }
+            else if (rawValue - calibration.Mid > 0)
+            {
+                // Positive Axis Calculation
+                availableRange = calibration.Max - (calibration.Mid + deadzoneValue);
+                actualValue = rawValue - (calibration.Mid + deadzoneValue);
+
+                return (actualValue / availableRange);
+            }
+            else
+            {
+                // Negative Axis Calculation
+                availableRange = calibration.Mid - deadzoneValue - calibration.Min;
+                actualValue = rawValue - calibration.Min;
+
+                return (actualValue / availableRange) - 1f;
+            }
+        }
     }
 
     /// <summary>
@@ -503,20 +531,25 @@ namespace NintrollerLib
                 accRaw.Y = r[4];
                 accRaw.Z = r[5];
 
-                if (Math.Abs(accRaw.X - accCenter.X) < accDead.X)
-                    acc.X = 0;
-                else
-                    acc.X = 2f * (float)(accRaw.X - accCenter.X) / (float)accRange.X;
+                //if (Math.Abs(accRaw.X - accCenter.X) < accDead.X)
+                //    acc.X = 0;
+                //else
+                //    acc.X = 2f * (float)(accRaw.X - accCenter.X) / (float)accRange.X;
 
-                if (Math.Abs(accRaw.Y - accCenter.Y) < accDead.Y)
-                    acc.Y = 0;
-                else
-                    acc.Y = 2f * (float)(accRaw.Y - accCenter.Y) / (float)accRange.Y;
+                //if (Math.Abs(accRaw.Y - accCenter.Y) < accDead.Y)
+                //    acc.Y = 0;
+                //else
+                //    acc.Y = 2f * (float)(accRaw.Y - accCenter.Y) / (float)accRange.Y;
 
-                if (Math.Abs(accRaw.Z - accCenter.Z) < accDead.Z)
-                    acc.Z = 0;
-                else
-                    acc.Z = 2f * (float)(accRaw.Z - accCenter.Z) / (float)accRange.Z;
+                //if (Math.Abs(accRaw.Z - accCenter.Z) < accDead.Z)
+                //    acc.Z = 0;
+                //else
+                //    acc.Z = 2f * (float)(accRaw.Z - accCenter.Z) / (float)accRange.Z;
+
+                // Mormalized Accelerometer
+                acc.X = NintyState.NormalizeAxisValue(accRaw.X, new JoyCalibration(accCenter.X - accRange.X, accCenter.X, accCenter.X + accRange.X), accDead.X);
+                acc.Y = NintyState.NormalizeAxisValue(accRaw.Y, new JoyCalibration(accCenter.Y - accRange.Y, accCenter.Y, accCenter.Y + accRange.Y), accDead.Y);
+                acc.Z = NintyState.NormalizeAxisValue(accRaw.Z, new JoyCalibration(accCenter.Z - accRange.Z, accCenter.Z, accCenter.Z + accRange.Z), accDead.Z);
             }
             #endregion
 
@@ -1052,110 +1085,10 @@ namespace NintrollerLib
             usbConnected = (r[offset + 10] & 0x08) == 0;
 
             // Normaliezed Joysticks
-            //if (Math.Abs(leftJoyRaw.X - leftJoyXCalibration.Mid) < leftJoyDeadZone.X)
-            //    leftJoy.X = 0;
-            //else if (leftJoyXCalibration.Max != 0)
-            //{
-            //    float adjustLX = leftJoyDeadZone.X * (leftJoyRaw.X > leftJoyXCalibration.Mid ? 1 : -1);
-            //    leftJoy.X = 2f * (float)(leftJoyRaw.X - leftJoyXCalibration.Mid - adjustLX)
-            //                   / (float)(leftJoyXCalibration.Max - leftJoyXCalibration.Mid - adjustLX);
-            //}
-
-            //if (Math.Abs(leftJoyRaw.Y - leftJoyYCalibration.Mid) < leftJoyDeadZone.Y)
-            //    leftJoy.Y = 0;
-            //else if (leftJoyYCalibration.Max != 0)
-            //{
-            //    float adjustLY = leftJoyDeadZone.Y * (leftJoyRaw.Y > leftJoyYCalibration.Mid ? 1 : -1);
-            //    leftJoy.Y = 2f * (float)(leftJoyRaw.Y - leftJoyYCalibration.Mid - adjustLY)
-            //                   / (float)(leftJoyYCalibration.Max - leftJoyYCalibration.Mid - adjustLY);
-            //}
-
-            //if (Math.Abs(rightJoyRaw.X - rightJoyXCalibration.Mid) < rightJoyDeadZone.X)
-            //    rightJoy.X = 0;
-            //else if (rightJoyXCalibration.Max != 0)
-            //{
-            //    float adjustRX = rightJoyDeadZone.X * (rightJoyRaw.X > rightJoyXCalibration.Mid ? 1 : -1);
-            //    rightJoy.X = (float)(rightJoyRaw.X - rightJoyXCalibration.Mid - adjustRX / 2f)
-            //                    / (float)((rightJoyXCalibration.Max - adjustRX) / 2f);
-            //}
-
-            //if (Math.Abs(rightJoyRaw.Y - rightJoyYCalibration.Mid) < rightJoyDeadZone.Y)
-            //    rightJoy.Y = 0;
-            //else if (rightJoyYCalibration.Mid != 0)
-            //{
-            //    float adjustRY = rightJoyDeadZone.Y * (rightJoyRaw.Y > rightJoyYCalibration.Mid ? 1 : -1);
-            //    rightJoy.Y = (float)(rightJoyRaw.Y - rightJoyYCalibration.Mid - adjustRY / 2f)
-            //                    / (float)((rightJoyYCalibration.Max - adjustRY) / 2f);
-            //}
-
-            // New Stuff
-            if (Math.Abs(leftJoyXCalibration.Mid - leftJoyRaw.X) < leftJoyDeadZone.X)
-            {
-                leftJoy.X = 0;
-            }
-            else if (leftJoyRaw.X - leftJoyXCalibration.Mid > 0)
-            {
-                float LXWidthPos = leftJoyXCalibration.Max - (leftJoyXCalibration.Mid + leftJoyDeadZone.X);
-                float LXValuePos = leftJoyRaw.X - (leftJoyXCalibration.Mid + leftJoyDeadZone.X);
-                leftJoy.X = LXValuePos / LXWidthPos;
-            }
-            else
-            {
-                float LXWidthNeg = leftJoyXCalibration.Mid - leftJoyDeadZone.X - leftJoyXCalibration.Min;
-                float LXValueNeg = leftJoyRaw.X - leftJoyXCalibration.Min;
-                leftJoy.X = LXValueNeg / LXWidthNeg - 1;
-            }
-
-            if (Math.Abs(leftJoyYCalibration.Mid - leftJoyRaw.Y) < leftJoyDeadZone.Y)
-            {
-                leftJoy.Y = 0;
-            }
-            else if (leftJoyRaw.Y - leftJoyYCalibration.Mid > 0)
-            {
-                float LYWidthPos = leftJoyYCalibration.Max - (leftJoyYCalibration.Mid + leftJoyDeadZone.Y);
-                float LYValuePos = leftJoyRaw.Y - (leftJoyYCalibration.Mid + leftJoyDeadZone.Y);
-                leftJoy.Y = LYValuePos / LYWidthPos;
-            }
-            else
-            {
-                float LYWidthNeg = leftJoyYCalibration.Mid - leftJoyDeadZone.Y - leftJoyYCalibration.Min;
-                float LYValueNeg = leftJoyRaw.Y - leftJoyYCalibration.Min;
-                leftJoy.Y = LYValueNeg / LYWidthNeg - 1;
-            }
-
-            if (Math.Abs(rightJoyXCalibration.Mid - rightJoyRaw.X ) < rightJoyDeadZone.X)
-            {
-                rightJoy.X = 0;
-            }
-            else if (rightJoyRaw.X - rightJoyXCalibration.Mid > 0)
-            {
-                float RXWidthPos = rightJoyXCalibration.Max - (rightJoyXCalibration.Mid + rightJoyDeadZone.X);
-                float RXValuePos = rightJoyRaw.X - (rightJoyXCalibration.Mid + rightJoyDeadZone.X);
-                rightJoy.X = RXValuePos / RXWidthPos;
-            }
-            else
-            {
-                float RXWidthNeg = rightJoyXCalibration.Mid - rightJoyDeadZone.X - rightJoyXCalibration.Min;
-                float RXValueNeg = rightJoyRaw.X - rightJoyXCalibration.Min;
-                rightJoy.X = RXValueNeg / RXWidthNeg - 1;
-            }
-
-            if (Math.Abs(rightJoyYCalibration.Mid - rightJoyRaw.Y) < rightJoyDeadZone.Y)
-            {
-                rightJoy.Y = 0;
-            }
-            else if (rightJoyRaw.Y - rightJoyYCalibration.Mid > 0)
-            {
-                float RYWidthPos = rightJoyYCalibration.Max - (rightJoyYCalibration.Mid + rightJoyDeadZone.Y);
-                float RYValuePos = rightJoyRaw.Y - (rightJoyYCalibration.Mid + rightJoyDeadZone.Y);
-                rightJoy.Y = RYValuePos / RYWidthPos;
-            }
-            else
-            {
-                float RYWidthNeg = rightJoyYCalibration.Mid - rightJoyDeadZone.Y - rightJoyYCalibration.Min;
-                float RYValueNeg = rightJoyRaw.Y - rightJoyYCalibration.Min;
-                rightJoy.Y = RYValueNeg / RYWidthNeg - 1;
-            }
+            leftJoy.X = NormalizeAxisValue(leftJoyRaw.X, leftJoyXCalibration, leftJoyDeadZone.X);
+            leftJoy.Y = NormalizeAxisValue(leftJoyRaw.Y, leftJoyYCalibration, leftJoyDeadZone.Y);
+            rightJoy.X = NormalizeAxisValue(rightJoyRaw.X, rightJoyXCalibration, rightJoyDeadZone.X);
+            rightJoy.Y = NormalizeAxisValue(rightJoyRaw.Y, rightJoyYCalibration, rightJoyDeadZone.Y);
             #endregion
         }
     }
@@ -1468,30 +1401,13 @@ namespace NintrollerLib
             accRaw.Z = r[offset + 4];
 
             // Normaliezed Joysticks
-            if (Math.Abs(joyRaw.X - joyXCalibration.Mid) < joyDeadZone.X)
-                joy.X = 0;
-            else if (joyXCalibration.Max != 0)
-                joy.X = 2f * (float)(joyRaw.X - joyXCalibration.Mid) / (float)(joyXCalibration.Max - joyXCalibration.Min);
-
-            if (Math.Abs(joyRaw.Y - joyYCalibration.Mid) < joyDeadZone.Y)
-                joy.Y = 0;
-            else if (joyYCalibration.Max != 0)
-                joy.Y = 2f * (float)(joyRaw.Y - joyYCalibration.Mid) / (float)(joyYCalibration.Max - joyYCalibration.Min);
-
-            if (Math.Abs(accRaw.X - accCenter.X) < accDead.X)
-                acc.X = 0;
-            else
-                acc.X = 2f * (float)(accRaw.X - accCenter.X) / (float)accRange.X;
-
-            if (Math.Abs(accRaw.Y - accCenter.Y) < accDead.Y)
-                acc.Y = 0;
-            else
-                acc.Y = 2f * (float)(accRaw.Y - accCenter.Y) / (float)accRange.Y;
-
-            if (Math.Abs(accRaw.Z - accCenter.Z) < accDead.Z)
-                acc.Z = 0;
-            else
-                acc.Z = 2f * (float)(accRaw.Z - accCenter.Z) / (float)accRange.Z;
+            joy.X = NintyState.NormalizeAxisValue(joyRaw.X, joyXCalibration, joyDeadZone.X);
+            joy.Y = NintyState.NormalizeAxisValue(joyRaw.Y, joyYCalibration, joyDeadZone.Y);
+            
+            // Mormalized Accelerometer
+            acc.X = NintyState.NormalizeAxisValue(accRaw.X, new JoyCalibration(accCenter.X - accRange.X, accCenter.X, accCenter.X + accRange.X), accDead.X);
+            acc.Y = NintyState.NormalizeAxisValue(accRaw.Y, new JoyCalibration(accCenter.Y - accRange.Y, accCenter.Y, accCenter.Y + accRange.Y), accDead.Y);
+            acc.Z = NintyState.NormalizeAxisValue(accRaw.Z, new JoyCalibration(accCenter.Z - accRange.Z, accCenter.Z, accCenter.Z + accRange.Z), accDead.Z);
         }
     }
 
@@ -1776,25 +1692,10 @@ namespace NintrollerLib
             rTriggerRaw = (byte)(r[offset + 3] & 0x1f);
 
             // Normaliezed Joysticks
-            if (Math.Abs(leftJoyRaw.X - leftJoyXCalibration.Mid) < leftJoyDeadZone.X)
-                leftJoy.X = 0;
-            else if (leftJoyXCalibration.Max != 0)
-                leftJoy.X = 2f * (float)(leftJoyRaw.X - leftJoyXCalibration.Mid) / (float)(leftJoyXCalibration.Max - leftJoyXCalibration.Min);
-
-            if (Math.Abs(leftJoyRaw.Y - leftJoyYCalibration.Mid) < leftJoyDeadZone.Y)
-                leftJoy.Y = 0;
-            else if (leftJoyYCalibration.Max != 0)
-                leftJoy.Y = 2f * (float)(leftJoyRaw.Y - leftJoyYCalibration.Mid) / (float)(leftJoyYCalibration.Max - leftJoyYCalibration.Min);
-
-            if (Math.Abs(rightJoyRaw.X - rightJoyXCalibration.Mid) < rightJoyDeadZone.X)
-                rightJoy.X = 0;
-            else if (rightJoyXCalibration.Max != 0)
-                rightJoy.X = 2f * (float)(rightJoyRaw.X - rightJoyXCalibration.Mid) / (float)(rightJoyXCalibration.Max - rightJoyXCalibration.Min);
-
-            if (Math.Abs(rightJoyRaw.Y - rightJoyYCalibration.Mid) < rightJoyDeadZone.Y)
-                rightJoy.Y = 0;
-            else if (rightJoyYCalibration.Mid != 0)
-                rightJoy.Y = 2f * (float)(rightJoyRaw.Y - rightJoyYCalibration.Mid) / (float)(rightJoyYCalibration.Max - rightJoyYCalibration.Min);
+            leftJoy.X = NintyState.NormalizeAxisValue(leftJoyRaw.X, leftJoyXCalibration, leftJoyDeadZone.X);
+            leftJoy.Y = NintyState.NormalizeAxisValue(leftJoyRaw.Y, leftJoyYCalibration, leftJoyDeadZone.Y);
+            rightJoy.X = NintyState.NormalizeAxisValue(rightJoyRaw.X, rightJoyXCalibration, rightJoyDeadZone.X);
+            rightJoy.Y = NintyState.NormalizeAxisValue(rightJoyRaw.Y, rightJoyYCalibration, rightJoyDeadZone.Y);
 
             // Normalized Triggers
             if (lTriggerRaw < lTriggerMin)
@@ -2022,25 +1923,10 @@ namespace NintrollerLib
             rightJoyRaw.Y = (byte)(r[offset + 2] & 0x1f);
 
             // Normaliezed Joysticks
-            if (Math.Abs(leftJoyRaw.X - leftJoyXCalibration.Mid) < leftJoyDeadZone.X)
-                leftJoy.X = 0;
-            else if (leftJoyXCalibration.Max != 0)
-                leftJoy.X = 2f * (float)(leftJoyRaw.X - leftJoyXCalibration.Mid) / (float)(leftJoyXCalibration.Max - leftJoyXCalibration.Min);
-
-            if (Math.Abs(leftJoyRaw.Y - leftJoyYCalibration.Mid) < leftJoyDeadZone.Y)
-                leftJoy.Y = 0;
-            else if (leftJoyYCalibration.Max != 0)
-                leftJoy.Y = 2f * (float)(leftJoyRaw.Y - leftJoyYCalibration.Mid) / (float)(leftJoyYCalibration.Max - leftJoyYCalibration.Min);
-
-            if (Math.Abs(rightJoyRaw.X - rightJoyXCalibration.Mid) < rightJoyDeadZone.X)
-                rightJoy.X = 0;
-            else if (rightJoyXCalibration.Max != 0)
-                rightJoy.X = 2f * (float)(rightJoyRaw.X - rightJoyXCalibration.Mid) / (float)(rightJoyXCalibration.Max - rightJoyXCalibration.Min);
-
-            if (Math.Abs(rightJoyRaw.Y - rightJoyYCalibration.Mid) < rightJoyDeadZone.Y)
-                rightJoy.Y = 0;
-            else if (rightJoyYCalibration.Mid != 0)
-                rightJoy.Y = 2f * (float)(rightJoyRaw.Y - rightJoyYCalibration.Mid) / (float)(rightJoyYCalibration.Max - rightJoyYCalibration.Min);
+            leftJoy.X = NintyState.NormalizeAxisValue(leftJoyRaw.X, leftJoyXCalibration, leftJoyDeadZone.X);
+            leftJoy.Y = NintyState.NormalizeAxisValue(leftJoyRaw.Y, leftJoyYCalibration, leftJoyDeadZone.Y);
+            rightJoy.X = NintyState.NormalizeAxisValue(rightJoyRaw.X, rightJoyXCalibration, rightJoyDeadZone.X);
+            rightJoy.Y = NintyState.NormalizeAxisValue(rightJoyRaw.Y, rightJoyYCalibration, rightJoyDeadZone.Y);
         }
     }
 
