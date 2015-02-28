@@ -17,10 +17,11 @@ namespace WiinUSoft
         {
             InitializeComponent();
 
-            props = org;
+            props = new Property(org);
             nameInput.Text = string.IsNullOrWhiteSpace(props.name) ? defalutName : props.name;
             defaultInput.Text = props.profile;
             autoCheckbox.IsChecked = props.autoConnect;
+            rumbleEnabled.IsChecked = props.useRumble;
             if (props.autoNum >= 0 && props.autoNum <= autoConnectNumber.Items.Count)
                 autoConnectNumber.SelectedIndex = props.autoNum;
         }
@@ -39,6 +40,11 @@ namespace WiinUSoft
         private void autoCheckbox_Click(object sender, RoutedEventArgs e)
         {
             props.autoConnect = autoCheckbox.IsChecked == true;
+        }
+
+        private void rumbleEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            props.useRumble = rumbleEnabled.IsChecked == true;
         }
 
         private void nameInput_TextChanged(object sender, TextChangedEventArgs e)

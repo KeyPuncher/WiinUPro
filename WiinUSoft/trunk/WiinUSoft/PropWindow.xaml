@@ -2,17 +2,18 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="WiinUSoft.PropWindow"
-        Title="PropWindow" Height="186" Width="356" Background="{DynamicResource BrushSocialBlue}" Icon="Images/WiinUSoft.ico">
+        Title="PropWindow" Height="207" Width="356" Background="{DynamicResource BrushSocialBlue}" Icon="Images/WiinUSoft.ico">
     <Grid>
         <Label Content="Device Name:" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top" Height="26"/>
         <Label Content="Auto Connect:" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Height="26"/>
         <Label Content="Default Profile:" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Height="26"/>
+        <Label Content="Rumble Enabled:" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Height="26"/>
         <TextBox x:Name="nameInput" HorizontalAlignment="Left" Height="26" Margin="115,12,0,0" VerticalAlignment="Top" Width="180" Background="{DynamicResource BrushAntemWhite}" VerticalContentAlignment="Center" TextChanged="nameInput_TextChanged"/>
         <TextBox x:Name="defaultInput" HorizontalAlignment="Left" Height="26" Margin="115,74,0,0" VerticalAlignment="Top" Width="180" Background="{DynamicResource BrushAntemWhite}" VerticalContentAlignment="Center" TextChanged="defaultInput_TextChanged"/>
         <CheckBox x:Name="autoCheckbox" Content="" HorizontalAlignment="Left" Margin="115,50,0,0" VerticalAlignment="Top" Background="{DynamicResource BrushAntemWhite}" Height="18" Padding="4,0,0,0" Click="autoCheckbox_Click" Visibility="Hidden"/>
         <Button x:Name="defaultBtn" Content="..." Margin="300,74,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="32" Click="defaultBtn_Click"/>
-        <Button x:Name="saveBtn" Content="Save" Margin="268,118,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="64" Click="saveBtn_Click"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Margin="199,118,0,0" VerticalAlignment="Top" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" Height="26" HorizontalAlignment="Left" Width="64" Click="cancelBtn_Click"/>
+        <Button x:Name="saveBtn" Content="Save" Margin="268,0,0,12" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" HorizontalAlignment="Left" Width="64" Click="saveBtn_Click" Height="26" VerticalAlignment="Bottom"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="199,0,0,12" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}" HorizontalAlignment="Left" Width="64" Click="cancelBtn_Click" Height="26" VerticalAlignment="Bottom"/>
         <ComboBox x:Name="autoConnectNumber" HorizontalAlignment="Left" Margin="115,45,0,0" VerticalAlignment="Top" Width="180" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged">
             <System:String>None</System:String>
             <System:String>Controller 1</System:String>
@@ -20,6 +21,7 @@
             <System:String>Controller 3</System:String>
             <System:String>Controller 4</System:String>
         </ComboBox>
+        <CheckBox x:Name="rumbleEnabled" HorizontalAlignment="Left" Margin="115,110,0,0" VerticalAlignment="Top" IsChecked="True" Click="rumbleEnabled_Click"/>
 
     </Grid>
 </Window>

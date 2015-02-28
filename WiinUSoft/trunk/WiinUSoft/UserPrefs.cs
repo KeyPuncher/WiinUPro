@@ -136,6 +136,7 @@ namespace WiinUSoft
         public string hid = "";
         public string name = "";
         public bool autoConnect = false;
+        public bool useRumble = true;
         public int autoNum = 0;
         public ProfHolderType connType;
         public string profile = "";
@@ -150,6 +151,17 @@ namespace WiinUSoft
         {
             hid = ID;
             connType = ProfHolderType.XInput;
+        }
+
+        public Property(Property copy)
+        {
+            hid = copy.hid;
+            name = copy.name;
+            autoConnect = copy.autoConnect;
+            useRumble = copy.useRumble;
+            autoNum = copy.autoNum;
+            connType = copy.connType;
+            profile = copy.profile;
         }
     }
 

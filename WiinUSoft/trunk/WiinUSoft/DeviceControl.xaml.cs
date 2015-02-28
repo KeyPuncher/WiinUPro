@@ -258,7 +258,7 @@ namespace WiinUSoft
                 holder.SetValue(Inputs.ProController.RUP, e.ProController.RightJoy.Y > 0 ? e.ProController.RightJoy.Y : 0f);
                 holder.SetValue(Inputs.ProController.RDOWN, e.ProController.RightJoy.Y < 0 ? e.ProController.RightJoy.Y * -1 : 0f);
 
-                bool doRumble = holder.GetFlag(Inputs.Flags.RUMBLE);
+                bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
                 if (doRumble != e.ProController.Rumble)
                 {
                     device.SetRumble(doRumble);
@@ -378,7 +378,7 @@ namespace WiinUSoft
                 }
 
                 // Rumble is currently disabled because the wiimote only reports when something changes (which can be changed)
-                //bool doRumble = holder.GetFlag(Inputs.Flags.RUMBLE);
+                //bool doRumble = properties.doRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
                 //if (doRumble != e.Wiimote.Rumble)
                 //{
                 //    device.SetRumble(doRumble);
@@ -609,7 +609,7 @@ namespace WiinUSoft
 
             if (win.doSave)
             {
-                properties = win.props;
+                properties = new Property(win.props);
                 SetName(properties.name);
                 UserPrefs.Instance.AddDevicePref(properties);
                 UserPrefs.SavePrefs();
