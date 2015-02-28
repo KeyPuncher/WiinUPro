@@ -79,9 +79,24 @@ namespace WiinUSoft
         internal bool lowBatteryFired = false;
         internal string dName = "";
 
+        internal System.Threading.Timer updateTimer;
+
         public DeviceControl()
         {
             InitializeComponent();
+        }
+
+        private void HolderUpdate(object state)
+        {
+            holder.Update();
+
+            bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
+            if (doRumble != device.State.GetRumble())
+            {
+                device.SetRumble(doRumble);
+            }
+
+            SetBatteryStatus(device.State.BatteryLow);
         }
 
         public DeviceControl(Nintroller nintroller)
@@ -145,6 +160,10 @@ namespace WiinUSoft
         public void SetState(DeviceState newState)
         {
             state = newState;
+            if (updateTimer != null)
+            {
+                updateTimer.Dispose();
+            }
 
             switch (newState)
             {
@@ -185,6 +204,7 @@ namespace WiinUSoft
                     xHolder.ConnectXInput(targetXDevice);
                     holder = xHolder;
                     device.SetPlayerLED(targetXDevice);
+                    updateTimer = new System.Threading.Timer(HolderUpdate, device, 1000, 100);
                     break;
 
                 //case DeviceState.Connected_VJoy:
@@ -218,6 +238,9 @@ namespace WiinUSoft
 
         void device_StateChange(object sender, StateChangeEventArgs e)
         {
+            // Makes the timer wait
+            if (updateTimer != null) updateTimer.Change(1000, 100);
+
             if (holder == null)
             {
                 return;
@@ -378,17 +401,20 @@ namespace WiinUSoft
                 }
 
                 // Rumble is currently disabled because the wiimote only reports when something changes (which can be changed)
-                //bool doRumble = properties.doRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
-                //if (doRumble != e.Wiimote.Rumble)
-                //{
-                //    device.SetRumble(doRumble);
-                //}
+                bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
+                if (doRumble != e.Wiimote.Rumble)
+                {
+                    device.SetRumble(doRumble);
+                }
 
                 lowBat = e.Wiimote.BatteryLow || e.Wiimote.Battery == BatteryStatus.VeryLow;
             }
 
             holder.Update();
             SetBatteryStatus(lowBat);
+
+            // Resumes the timer in case this method is not called withing 100ms
+            if (updateTimer != null) updateTimer.Change(100, 100);
         }
 
         static System.Threading.Tasks.Task Delay(int milliseconds)
@@ -493,6 +519,7 @@ namespace WiinUSoft
             }
         }
 
+        #region UI Events
         private void btnXinput_Click(object sender, RoutedEventArgs e)
         {
             if (btnXinput.ContextMenu != null)
@@ -615,5 +642,40 @@ namespace WiinUSoft
                 UserPrefs.SavePrefs();
             }
         }
+        #endregion
     }
+
+    //public class Rumbler
+    //{
+    //    private Nintroller nintroller;
+    //    private int intensity = 0;
+    //    private bool active = false;
+    //    private System.Threading.Tasks.Task task;
+
+    //    public Rumbler(Nintroller n)
+    //    {
+    //        task = new System.Threading.Tasks.Task((Action)RumbleSequence);
+    //        nintroller = n;
+    //    }
+
+    //    public void SetIntensity(int amount)
+    //    {
+    //        // TODO: If not running, start
+
+    //        intensity = amount;
+    //    }
+
+    //    public void Stop()
+    //    {
+    //        intensity = 0;
+    //    }
+
+    //    private void RumbleSequence()
+    //    {
+    //        while(intensity > 0)
+    //        {
+
+    //        }
+    //    }
+    //}
 }
