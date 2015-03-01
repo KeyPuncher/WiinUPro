@@ -80,23 +80,11 @@ namespace WiinUSoft
         internal string dName = "";
 
         internal System.Threading.Timer updateTimer;
+        internal const int UPDATE_SPEED = 25;
 
         public DeviceControl()
         {
             InitializeComponent();
-        }
-
-        private void HolderUpdate(object state)
-        {
-            holder.Update();
-
-            bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
-            if (doRumble != device.State.GetRumble())
-            {
-                device.SetRumble(doRumble);
-            }
-
-            SetBatteryStatus(device.State.BatteryLow);
         }
 
         public DeviceControl(Nintroller nintroller)
@@ -163,6 +151,7 @@ namespace WiinUSoft
             if (updateTimer != null)
             {
                 updateTimer.Dispose();
+                updateTimer = null;
             }
 
             switch (newState)
@@ -204,7 +193,7 @@ namespace WiinUSoft
                     xHolder.ConnectXInput(targetXDevice);
                     holder = xHolder;
                     device.SetPlayerLED(targetXDevice);
-                    updateTimer = new System.Threading.Timer(HolderUpdate, device, 1000, 100);
+                    updateTimer = new System.Threading.Timer(HolderUpdate, device, 1000, UPDATE_SPEED);
                     break;
 
                 //case DeviceState.Connected_VJoy:
@@ -239,7 +228,7 @@ namespace WiinUSoft
         void device_StateChange(object sender, StateChangeEventArgs e)
         {
             // Makes the timer wait
-            if (updateTimer != null) updateTimer.Change(1000, 100);
+            if (updateTimer != null) updateTimer.Change(1000, UPDATE_SPEED);
 
             if (holder == null)
             {
@@ -281,10 +270,17 @@ namespace WiinUSoft
                 holder.SetValue(Inputs.ProController.RUP, e.ProController.RightJoy.Y > 0 ? e.ProController.RightJoy.Y : 0f);
                 holder.SetValue(Inputs.ProController.RDOWN, e.ProController.RightJoy.Y < 0 ? e.ProController.RightJoy.Y * -1 : 0f);
 
-                bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
-                if (doRumble != e.ProController.Rumble)
+                //bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
+                //if (doRumble != e.ProController.Rumble)
+                //{
+                //    device.SetRumble(doRumble);
+                //}
+
+                float intensity = 0;
+                if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
                 {
-                    device.SetRumble(doRumble);
+                    rumbleIntensity = (int)intensity;
+                    RumbleStep();
                 }
 
                 lowBat = e.ProController.BatteryLow && !e.ProController.Charging;
@@ -401,20 +397,86 @@ namespace WiinUSoft
                 }
 
                 // Rumble is currently disabled because the wiimote only reports when something changes (which can be changed)
-                bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
-                if (doRumble != e.Wiimote.Rumble)
-                {
-                    device.SetRumble(doRumble);
-                }
+                //bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
+                //if (doRumble != e.Wiimote.Rumble)
+                //{
+                //    device.SetRumble(doRumble);
+                //}
 
-                lowBat = e.Wiimote.BatteryLow || e.Wiimote.Battery == BatteryStatus.VeryLow;
+                //lowBat = e.Wiimote.BatteryLow || e.Wiimote.Battery == BatteryStatus.VeryLow;
+
+                float intensity = 0;
+                if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
+                {
+                    rumbleIntensity = (int)intensity;
+                    RumbleStep();
+                }
             }
 
             holder.Update();
             SetBatteryStatus(lowBat);
 
             // Resumes the timer in case this method is not called withing 100ms
-            if (updateTimer != null) updateTimer.Change(100, 100);
+            if (updateTimer != null) updateTimer.Change(100, UPDATE_SPEED);
+        }
+
+        private void HolderUpdate(object state)
+        {
+            holder.Update();
+
+            float intensity = 0;
+            if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
+            {
+                rumbleIntensity = (int)intensity;
+                RumbleStep();
+            }
+
+            //bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
+            //if (doRumble != device.State.GetRumble())
+            //{
+            //    device.SetRumble(doRumble);
+            //}
+            //rumbler.SetIntensity(doRumble ? (int)holder.Values[Inputs.Flags.RUMBLE] : 0);
+
+            SetBatteryStatus(device.State.BatteryLow);
+        }
+
+        int rumbleIntensity = 0;
+        int rumbleStepCount = 0;
+        int rumbleStepPeriod = 10;
+        float rumbleSlowMult = 0.5f;
+        void RumbleStep()
+        {
+            bool currentRumbleState = device.State.GetRumble();
+
+            float dutyCycle = 0;
+
+            if (rumbleIntensity < 256)
+            {
+                dutyCycle = rumbleSlowMult * (float)rumbleIntensity / 256f;
+            }
+            else
+            {
+                dutyCycle = (float)rumbleIntensity / 65535f;
+            }
+
+            int stopStep = (int)Math.Round(dutyCycle * rumbleStepPeriod);
+
+            if (rumbleStepCount < stopStep)
+            {
+                if (!currentRumbleState) device.SetRumble(true);
+            }
+            else
+            {
+                if (currentRumbleState) device.SetRumble(false);
+            }
+
+            rumbleStepCount += 1;
+
+            if (rumbleStepCount >= rumbleStepPeriod)
+            {
+                rumbleStepCount = 0;
+            }
         }
 
         static System.Threading.Tasks.Task Delay(int milliseconds)
@@ -644,38 +706,4 @@ namespace WiinUSoft
         }
         #endregion
     }
-
-    //public class Rumbler
-    //{
-    //    private Nintroller nintroller;
-    //    private int intensity = 0;
-    //    private bool active = false;
-    //    private System.Threading.Tasks.Task task;
-
-    //    public Rumbler(Nintroller n)
-    //    {
-    //        task = new System.Threading.Tasks.Task((Action)RumbleSequence);
-    //        nintroller = n;
-    //    }
-
-    //    public void SetIntensity(int amount)
-    //    {
-    //        // TODO: If not running, start
-
-    //        intensity = amount;
-    //    }
-
-    //    public void Stop()
-    //    {
-    //        intensity = 0;
-    //    }
-
-    //    private void RumbleSequence()
-    //    {
-    //        while(intensity > 0)
-    //        {
-
-    //        }
-    //    }
-    //}
 }
