@@ -71,12 +71,21 @@ namespace WiinUSoft
             }
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void AutoConnect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (props != null)
             {
                 props.autoConnect = autoConnectNumber.SelectedIndex > 0;
                 props.autoNum = autoConnectNumber.SelectedIndex;
+            }
+        }
+
+        private void Rumble_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (props != null)
+            {
+                props.useRumble = rumbleSelection.SelectedIndex > 0;
+                props.rumbleIntensity = rumbleSelection.SelectedIndex;
             }
         }
     }

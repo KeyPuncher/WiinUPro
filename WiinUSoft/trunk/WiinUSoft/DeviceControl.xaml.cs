@@ -82,6 +82,11 @@ namespace WiinUSoft
         internal System.Threading.Timer updateTimer;
         internal const int UPDATE_SPEED = 25;
 
+        private int rumbleAmount = 0;
+        private int rumbleStepCount = 0;
+        private int rumbleStepPeriod = 10;
+        private float rumbleSlowMult = 0.5f;
+
         public DeviceControl()
         {
             InitializeComponent();
@@ -279,7 +284,7 @@ namespace WiinUSoft
                 float intensity = 0;
                 if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
                 {
-                    rumbleIntensity = (int)intensity;
+                    rumbleAmount = (int)intensity;
                     RumbleStep();
                 }
 
@@ -408,7 +413,7 @@ namespace WiinUSoft
                 float intensity = 0;
                 if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
                 {
-                    rumbleIntensity = (int)intensity;
+                    rumbleAmount = (int)intensity;
                     RumbleStep();
                 }
             }
@@ -422,12 +427,14 @@ namespace WiinUSoft
 
         private void HolderUpdate(object state)
         {
+            if (holder == null) return;
+
             holder.Update();
 
             float intensity = 0;
             if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
             {
-                rumbleIntensity = (int)intensity;
+                rumbleAmount = (int)intensity;
                 RumbleStep();
             }
 
@@ -441,26 +448,28 @@ namespace WiinUSoft
             SetBatteryStatus(device.State.BatteryLow);
         }
 
-        int rumbleIntensity = 0;
-        int rumbleStepCount = 0;
-        int rumbleStepPeriod = 10;
-        float rumbleSlowMult = 0.5f;
         void RumbleStep()
         {
             bool currentRumbleState = device.State.GetRumble();
 
-            float dutyCycle = 0;
-
-            if (rumbleIntensity < 256)
+            if (!properties.useRumble && currentRumbleState)
             {
-                dutyCycle = rumbleSlowMult * (float)rumbleIntensity / 256f;
+                device.SetRumble(false);
+            }
+
+            float dutyCycle = 0;
+            float modifier = properties.rumbleIntensity * 0.5f;
+
+            if (rumbleAmount < 256)
+            {
+                dutyCycle = rumbleSlowMult * (float)rumbleAmount / 256f;
             }
             else
             {
-                dutyCycle = (float)rumbleIntensity / 65535f;
+                dutyCycle = (float)rumbleAmount / 65535f;
             }
 
-            int stopStep = (int)Math.Round(dutyCycle * rumbleStepPeriod);
+            int stopStep = (int)Math.Round(modifier * dutyCycle * rumbleStepPeriod);
 
             if (rumbleStepCount < stopStep)
             {

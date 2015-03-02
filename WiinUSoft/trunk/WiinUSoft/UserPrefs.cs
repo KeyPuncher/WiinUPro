@@ -138,6 +138,7 @@ namespace WiinUSoft
         public bool autoConnect = false;
         public bool useRumble = true;
         public int autoNum = 0;
+        public int rumbleIntensity = 2;
         public ProfHolderType connType;
         public string profile = "";
 
@@ -159,6 +160,7 @@ namespace WiinUSoft
             name = copy.name;
             autoConnect = copy.autoConnect;
             useRumble = copy.useRumble;
+            rumbleIntensity = copy.rumbleIntensity;
             autoNum = copy.autoNum;
             connType = copy.connType;
             profile = copy.profile;
