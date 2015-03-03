@@ -116,6 +116,9 @@ namespace WiinUSoft
                     pref.autoConnect = property.autoConnect;
                     pref.profile = property.profile;
                     pref.connType = property.connType;
+                    pref.autoNum = property.autoNum;
+                    pref.rumbleIntensity = property.rumbleIntensity;
+                    pref.useRumble = property.useRumble;
 
                     return;
                 }
@@ -159,9 +162,9 @@ namespace WiinUSoft
             hid = copy.hid;
             name = copy.name;
             autoConnect = copy.autoConnect;
+            autoNum = copy.autoNum;
             useRumble = copy.useRumble;
             rumbleIntensity = copy.rumbleIntensity;
-            autoNum = copy.autoNum;
             connType = copy.connType;
             profile = copy.profile;
         }

@@ -23,7 +23,13 @@ namespace WiinUSoft
             autoCheckbox.IsChecked = props.autoConnect;
             rumbleEnabled.IsChecked = props.useRumble;
             if (props.autoNum >= 0 && props.autoNum <= autoConnectNumber.Items.Count)
+            {
                 autoConnectNumber.SelectedIndex = props.autoNum;
+            }
+            if (props.rumbleIntensity >= 0 && props.rumbleIntensity <= rumbleSelection.Items.Count)
+            {
+                rumbleSelection.SelectedIndex = props.rumbleIntensity;
+            }
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)

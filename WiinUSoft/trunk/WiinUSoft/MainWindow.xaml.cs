@@ -119,6 +119,10 @@ namespace WiinUSoft
 
             foreach(KeyValuePair<int, DeviceControl> d in connectSeq)
             {
+                var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
+                new System.Threading.Timer(_ => tcs.SetResult(null)).Change(1000, -1);
+                tcs.Task.Wait();
+
                 if (Holders.XInputHolder.availabe[target] && target < 4 && d.Value.Device.Connect())
                 {
                     d.Value.targetXDevice = target + 1;
