@@ -70,26 +70,33 @@ namespace WiinUSoft
             XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
             string path = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
 
-            if (File.Exists(path))
+            try
             {
-                FileInfo prefs = new FileInfo(path);
-                using (FileStream stream = File.Open(path, FileMode.Create, FileAccess.ReadWrite))
-                using (StreamWriter writer = new StreamWriter(stream))
+                if (File.Exists(path))
                 {
-                    X.Serialize(writer, _instance);
-                    writer.Close();
-                    stream.Close();
+                    FileInfo prefs = new FileInfo(path);
+                    using (FileStream stream = File.Open(path, FileMode.Create, FileAccess.ReadWrite))
+                    using (StreamWriter writer = new StreamWriter(stream))
+                    {
+                        X.Serialize(writer, _instance);
+                        writer.Close();
+                        stream.Close();
+                    }
+                }
+                else
+                {
+                    using (FileStream stream = File.Create(path))
+                    using (StreamWriter writer = new StreamWriter(stream))
+                    {
+                        X.Serialize(writer, _instance);
+                        writer.Close();
+                        stream.Close();
+                    }
                 }
             }
-            else
+            catch (Exception e)
             {
-                using (FileStream stream = File.Create(path))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    X.Serialize(writer, _instance);
-                    writer.Close();
-                    stream.Close();
-                }
+                System.Diagnostics.Debug.WriteLine(e.Message);
             }
         }
 
