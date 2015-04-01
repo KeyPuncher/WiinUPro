@@ -217,6 +217,13 @@ namespace NintrollerLib
 
         PartiallyInserted   = 0xffffffffffff
     };
+
+    public enum ReadReportType
+    {
+        Unknown,
+        Extension_A,
+        Extension_B
+    };
     #endregion
 
     #region Calibration Structs

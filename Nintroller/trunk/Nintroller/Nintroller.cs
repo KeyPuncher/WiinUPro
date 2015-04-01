@@ -60,12 +60,14 @@ namespace NintrollerLib
         private byte[]          mReadBuff;  // Read Buffer
         private int             mAddress;   // Address to read
         private short           mSize;      // read request size
+        private ReadReportType  _readType;  // help with parsing ReadMem reports
+        private object          _readingObj;// for locking/blocking
 
         // Currently unused
-        private bool            mAltWrite;  // Alternative Report Writing
-        private short           mPID;       // Product ID for this device
-        private bool            mDoNotRead; // Flag to avoid trying to read from the device
-        private bool            mParsing;   // prevent double parse
+        //private bool            mAltWrite;  // Alternative Report Writing
+        //private short           mPID;       // Product ID for this device
+        //private bool            mDoNotRead; // Flag to avoid trying to read memory from the device
+        //private bool            mParsing;   // prevent double parse
 
         // The HID device path
         private string mDevicePath = string.Empty;
@@ -80,9 +82,9 @@ namespace NintrollerLib
         private ProCalibration                  mCalibrationPro;
 
         // Read Only Variables
-        private readonly AutoResetEvent mReadDone = new AutoResetEvent(false);
-        private readonly AutoResetEvent mWriteDone = new AutoResetEvent(false);
-        private readonly AutoResetEvent mStatusDone = new AutoResetEvent(false);
+        //private readonly AutoResetEvent mReadDone = new AutoResetEvent(false);
+        //private readonly AutoResetEvent mWriteDone = new AutoResetEvent(false);
+        //private readonly AutoResetEvent mStatusDone = new AutoResetEvent(false);
         private readonly Guid mID = Guid.NewGuid();
 
         // delegates
@@ -272,7 +274,8 @@ namespace NintrollerLib
         /// <returns>Controller able to connect.</returns>
         public bool ConnectTest()
         {
-            bool retunValue = true;
+            bool retunValue = false;
+            int bytesRead = 0;
 
             if (string.IsNullOrEmpty(mDevicePath))
                 return false;
@@ -285,16 +288,21 @@ namespace NintrollerLib
                 if (mStream != null && mStream.CanRead)
                 {
                     byte[] bArray = new byte[Constants.REPORT_LENGTH];
-                    mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncOnce), bArray);
+                    //mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncOnce), bArray);
+                    // don't need to start reading async
+                    // but may want to set a timeout
+                    bytesRead = mStream.Read(bArray, 0, bArray.Length);
                 }
 
-
+                // Do we need to do this write, and if so should it be before the read?
                 byte[] buff = new byte[Constants.REPORT_LENGTH];
 
                 buff[0] = (byte)OutputReport.StatusRequest;
                 buff[1] = 0x00;
 
                 mStream.Write(buff, 0, Constants.REPORT_LENGTH);
+
+                retunValue = true;
             }
             catch (Exception err)
             {
@@ -302,9 +310,6 @@ namespace NintrollerLib
                 retunValue = false;
                 //HIDImports.HidD_SetOutputReport(this.mHandle.DangerousGetHandle(), buff, (uint)buff.Length);
             }
-
-            if (retunValue && !mStatusDone.WaitOne(500, false))
-                retunValue = false;
 
             Disconnect();
 
@@ -326,13 +331,13 @@ namespace NintrollerLib
             // create File Stream
             mStream = new FileStream(mHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
 
-            // begin read?
+            // begin reading
             AsyncRead();
 
             // get calibration? Trying to calibrate a Pro Controller or a newer device will disconnect it!
             //GetCalibration();
 
-            // get status?
+            // get status
             GetStatus();
 
             connected = true;
@@ -363,14 +368,17 @@ namespace NintrollerLib
         {
             if (mStream != null && mStream.CanRead)
             {
-                byte[] bArray = new byte[Constants.REPORT_LENGTH];
-                try
+                lock (_readingObj)
                 {
-                    mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncData), bArray);
-                }
-                catch (ObjectDisposedException)
-                {
-
+                    byte[] bArray = new byte[Constants.REPORT_LENGTH];
+                    try
+                    {
+                        mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncData), bArray);
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        
+                    }
                 }
             }
         }
@@ -399,21 +407,21 @@ namespace NintrollerLib
         }
 
         // For doing the Connection Test
-        private void AsyncOnce(IAsyncResult data)
-        {
-            try
-            {
-                mStream.EndRead(data);
-                mStatusDone.Set();
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.WriteLine("Async Read Was Cancelled");
-            }
-        }
+        //private void AsyncOnce(IAsyncResult data)
+        //{
+        //    try
+        //    {
+        //        mStream.EndRead(data);
+        //        mStatusDone.Set();
+        //    }
+        //    catch (OperationCanceledException)
+        //    {
+        //        Debug.WriteLine("Async Read Was Cancelled");
+        //    }
+        //}
 
         // Read Data From Device
-        private byte[] ReadData(int address, short size)
+        private void ReadData(int address, short size)
         {
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
 
@@ -431,19 +439,21 @@ namespace NintrollerLib
 
             WriteReport(buffer);
 
-            if (!mReadDone.WaitOne(1000, false))
-            {
-                Debug.WriteLine("Failed to Wait during Read");
-                //throw new Exception("Error Reading Data");
-            }
+            // why wait here, why not just parse it when it comes through
+            //if (!mReadDone.WaitOne(1000, false))
+            //{
+            //    Debug.WriteLine("Failed to Wait during Read");
+            //    //throw new Exception("Error Reading Data");
+            //}
 
-            return mReadBuff;
+            //return mReadBuff;
         }
 
         // get calibration from the controller
         private void GetCalibration()
         {
-            byte[] buff = ReadData(0x0016, 7);
+            //byte[] buff = ReadData(0x0016, 7);
+            ReadData(0x0016, 7);
         }
 
         private void GetStatus()
@@ -455,8 +465,9 @@ namespace NintrollerLib
 
             WriteReport(buff);
 
-            if (!mStatusDone.WaitOne(3000, false))
-                Debug.WriteLine("Timeout for status report");
+            // why wait for the status to come back to return from this method?
+            //if (!mStatusDone.WaitOne(3000, false))
+            //    Debug.WriteLine("Timeout for status report");
         }
 
         /// <summary>
@@ -513,11 +524,12 @@ namespace NintrollerLib
             else if (mStream != null)
                 mStream.Write(report, 0, Constants.REPORT_LENGTH);*/
 
-            if (report[0] == (byte)OutputReport.WriteMemory)
-            {
-                if (!mWriteDone.WaitOne(1000, false))
-                    Debug.WriteLine("Failed to Wait during Writing");
-            }
+            // why wait when we aren't returning from this function
+            //if (report[0] == (byte)OutputReport.WriteMemory)
+            //{
+            //    if (!mWriteDone.WaitOne(1000, false))
+            //        Debug.WriteLine("Failed to Wait during Writing");
+            //}
         }
 
         private void WriteByte(int address, byte data)
@@ -622,76 +634,16 @@ namespace NintrollerLib
                     /// Parse Buttons? (maybe not)
 
                     // Get Extension
-                    AsyncRead();
-                    byte[] extensionType = ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
-                    Debug.WriteLine("Extenstion Bytes: " + extensionType[0].ToString("x2"));
+                    //AsyncRead();
+                    //byte[] extensionType = ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                    //Debug.WriteLine("Extenstion Bytes: " + extensionType[0].ToString("x2"));
+                    _readType = ReadReportType.Extension_A;
+                    ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
 
-                    bool extensionConnected = (report[3] & 0x02) != 0;
-                    Debug.WriteLine("Extension Connected: " + extensionConnected.ToString());
+                    //bool extensionConnected = (report[3] & 0x02) != 0;
+                    //Debug.WriteLine("Extension Connected: " + extensionConnected.ToString());
 
-                    /// TODO: Account for Wiimote Plus controllers
-                    if (extensionConnected)
-                    {
-                        // Initialize the extension
-                        if(extensionType[0] != 0x04)
-                        {
-                            AsyncRead();
-                            WriteByte(Constants.REGISTER_EXTENSION_INIT_1, 0x55);
-                            WriteByte(Constants.REGISTER_EXTENSION_INIT_2, 0x00);
-                        }
-                    
-
-                        AsyncRead();
-                        byte[] ext = ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
-
-                        if (ext.Length < 6)
-                        {
-                            return false;
-                        }
-
-                        long type = ((long)ext[0] << 40) | ((long)ext[1] << 32) | ((long)ext[2]) << 24 | ((long)ext[3]) << 16 | ((long)ext[4]) << 8 | ext[5];
-
-                        Debug.WriteLine((ControllerType)type);
-
-                        if (currentType != (ControllerType)type)
-                        {
-                            currentType = (ControllerType)type;
-
-                            switch ((ControllerType)type)
-                            {
-                                case ControllerType.ProController:
-                                    mDeviceState = new ProControllerState();
-                                    break;
-                                case ControllerType.BalanceBoard:
-                                    mDeviceState = new BalanceBoardState();
-                                    break;
-                                case ControllerType.Nunchuk:
-                                case ControllerType.NunchukB:
-                                case ControllerType.ClassicController:
-                                case ControllerType.ClassicControllerPro:
-                                case ControllerType.MotionPlus:
-                                    ((WiimoteState)mDeviceState).SetExtension(currentType);
-                                   break;
-                                ///TODO: Musicals
-                                case ControllerType.PartiallyInserted:
-                                    GetStatus();
-                                    break;
-                            }
-
-                            if (ExtensionChange != null)
-                                ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
-                        }
-                    }
-                    else if (currentType != ControllerType.Wiimote)
-                    {
-                        // Remove the extension
-                        ((WiimoteState)mDeviceState).extension = new ExtensionState();
-                        currentType = ControllerType.Wiimote;
-                        ((WiimoteState)mDeviceState).SetExtension(currentType);
-
-                        if (ExtensionChange != null)
-                            ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
-                   }
+                    // MOVED to InputReport.ReadMem
 
                     // Battery Level
                     mDeviceState.batteryRaw = report[6];
@@ -707,18 +659,102 @@ namespace NintrollerLib
                     // Get & Set the report type
                     SetReport(mDeviceState.GetReportType());
 
-                    mStatusDone.Set();
+                    //mStatusDone.Set();
                     break;
 
                 case InputReport.ReadMem:
                     Debug.WriteLine("Read Memory");
                     // Parse Buttons
-                    ParseRead(report);
+                    byte[] data = ParseRead(report);
+
+                    switch (_readType)
+                    {
+                        case ReadReportType.Extension_A:
+                            bool hasExtension = (report[3] & 0x02) != 0;
+
+                            /// TODO: Account for Wiimote Plus controllers
+                            if (hasExtension)
+                            {
+                                // Initialize the extension
+                                if (report[0] != 0x04)
+                                {
+                                    //AsyncRead();
+                                    WriteByte(Constants.REGISTER_EXTENSION_INIT_1, 0x55);
+                                    WriteByte(Constants.REGISTER_EXTENSION_INIT_2, 0x00);
+                                }
+
+
+                                //AsyncRead();
+                                //byte[] ext = ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
+                                _readType = ReadReportType.Extension_B;
+                                ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
+
+                                // MOVED to ReadReportType.Extension_B
+                            }
+                            else if (currentType != ControllerType.Wiimote)
+                            {
+                                // Remove the extension
+                                ((WiimoteState)mDeviceState).extension = new ExtensionState();
+                                currentType = ControllerType.Wiimote;
+                                ((WiimoteState)mDeviceState).SetExtension(currentType);
+
+                                if (ExtensionChange != null)
+                                    ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
+                            }
+                            break;
+
+                        case ReadReportType.Extension_B:
+                            if (report.Length < 6)
+                            {
+                                return false;
+                            }
+
+                            long type = ((long)report[0] << 40) | ((long)report[1] << 32) | ((long)report[2]) << 24 | ((long)report[3]) << 16 | ((long)report[4]) << 8 | report[5];
+
+                            Debug.WriteLine((ControllerType)type);
+
+                            if (currentType != (ControllerType)type)
+                            {
+                                currentType = (ControllerType)type;
+
+                                switch ((ControllerType)type)
+                                {
+                                    case ControllerType.ProController:
+                                        mDeviceState = new ProControllerState();
+                                        break;
+                                    case ControllerType.BalanceBoard:
+                                        mDeviceState = new BalanceBoardState();
+                                        break;
+                                    case ControllerType.Nunchuk:
+                                    case ControllerType.NunchukB:
+                                    case ControllerType.ClassicController:
+                                    case ControllerType.ClassicControllerPro:
+                                    case ControllerType.MotionPlus:
+                                        ((WiimoteState)mDeviceState).SetExtension(currentType);
+                                        break;
+                                    ///TODO: Musicals
+                                    case ControllerType.PartiallyInserted:
+                                        // try again
+                                        GetStatus();
+                                        break;
+                                }
+
+                                // TODO: if not a pro or newer (check PID?) get the calibration
+
+                                if (ExtensionChange != null)
+                                    ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
+                            }
+                            break;
+
+                        default:
+                            Debug.WriteLine("Don't know what ReadMem this is for");
+                            break;
+                    }
                     break;
 
                 case InputReport.Acknowledge:
                     Debug.WriteLine("Acknowledge Report");
-                    mWriteDone.Set();
+                    //mWriteDone.Set();
                     break;
                 #endregion
                 default:
@@ -729,7 +765,7 @@ namespace NintrollerLib
             return true;
         }
 
-        private void ParseRead(byte[] r)
+        private byte[] ParseRead(byte[] r)
         {
             try
             {
@@ -739,8 +775,8 @@ namespace NintrollerLib
                 if ((r[3] & 0x07) != 0)
                 {
                     Debug.WriteLine("Trying to Read in Write-Only mode");
-                    mReadDone.Set();
-                    return;
+                    //mReadDone.Set();
+                    return null;
                 }
 
                 int size = (r[3] >> 4) + 1;
@@ -748,14 +784,18 @@ namespace NintrollerLib
 
                 Array.Copy(r, 6, mReadBuff, offset - mAddress, size);
 
-                if (mAddress + mSize == offset + size)
-                    mReadDone.Set();
+                // need another way to read an incomplete message?
+                //if (mAddress + mSize == offset + size)
+                    //mReadDone.Set();
+                if (mAddress + mSize != offset + size) Debug.WriteLine("Reading isn't done");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("Error trying to read: " + ex.Message);
-                mReadDone.Set();
+                //mReadDone.Set();
             }
+
+            return mReadBuff;
         }
         #endregion
 
