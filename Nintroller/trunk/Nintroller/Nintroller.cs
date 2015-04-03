@@ -61,7 +61,8 @@ namespace NintrollerLib
         private int             mAddress;   // Address to read
         private short           mSize;      // read request size
         private ReadReportType  _readType;  // help with parsing ReadMem reports
-        private object          _readingObj;// for locking/blocking
+        
+        private readonly object _readingObj = new object();// for locking/blocking
 
         // Currently unused
         //private bool            mAltWrite;  // Alternative Report Writing
@@ -274,6 +275,7 @@ namespace NintrollerLib
         /// <returns>Controller able to connect.</returns>
         public bool ConnectTest()
         {
+            return true;
             bool retunValue = false;
             int bytesRead = 0;
 
@@ -458,12 +460,15 @@ namespace NintrollerLib
 
         private void GetStatus()
         {
-            byte[] buff = new byte[Constants.REPORT_LENGTH];
+            lock (_readingObj)
+            {
+                byte[] buff = new byte[Constants.REPORT_LENGTH];
 
-            buff[0] = (byte)OutputReport.StatusRequest;
-            buff[1] = (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00);
+                buff[0] = (byte)OutputReport.StatusRequest;
+                buff[1] = (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00);
 
-            WriteReport(buff);
+                WriteReport(buff);
+            }
 
             // why wait for the status to come back to return from this method?
             //if (!mStatusDone.WaitOne(3000, false))
@@ -495,7 +500,10 @@ namespace NintrollerLib
             buff[1] = (byte)(0x00 | (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00)); // 0x40 for continous
             buff[2] = (byte)reportType;
 
-            WriteReport(buff);
+            lock (_readingObj)
+            {
+                WriteReport(buff);
+            }
         }
         #endregion
 
@@ -637,8 +645,11 @@ namespace NintrollerLib
                     //AsyncRead();
                     //byte[] extensionType = ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
                     //Debug.WriteLine("Extenstion Bytes: " + extensionType[0].ToString("x2"));
-                    _readType = ReadReportType.Extension_A;
-                    ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                    lock (_readingObj)
+                    {
+                        _readType = ReadReportType.Extension_A;
+                        ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                    }
 
                     //bool extensionConnected = (report[3] & 0x02) != 0;
                     //Debug.WriteLine("Extension Connected: " + extensionConnected.ToString());
@@ -649,7 +660,7 @@ namespace NintrollerLib
                     mDeviceState.batteryRaw = report[6];
                     mDeviceState.lowBattery = (report[3] & 0x01) != 0;
                     mDeviceState.UpdateBattery();
-
+                    
                     // Get LEDs
                     mDeviceState.led1 = (report[3] & 0x10) != 0;
                     mDeviceState.led2 = (report[3] & 0x20) != 0;
@@ -657,7 +668,7 @@ namespace NintrollerLib
                     mDeviceState.led4 = (report[3] & 0x80) != 0;
 
                     // Get & Set the report type
-                    SetReport(mDeviceState.GetReportType());
+                    //SetReport(mDeviceState.GetReportType());
 
                     //mStatusDone.Set();
                     break;
@@ -671,23 +682,26 @@ namespace NintrollerLib
                     {
                         case ReadReportType.Extension_A:
                             bool hasExtension = (report[3] & 0x02) != 0;
+                            hasExtension = true;
 
                             /// TODO: Account for Wiimote Plus controllers
                             if (hasExtension)
                             {
-                                // Initialize the extension
-                                if (report[0] != 0x04)
+                                lock (_readingObj)
                                 {
+                                    // Initialize the extension
+                                    if (report[0] != 0x04)
+                                    {
+                                        //AsyncRead();
+                                        WriteByte(Constants.REGISTER_EXTENSION_INIT_1, 0x55);
+                                        WriteByte(Constants.REGISTER_EXTENSION_INIT_2, 0x00);
+                                    }
+
                                     //AsyncRead();
-                                    WriteByte(Constants.REGISTER_EXTENSION_INIT_1, 0x55);
-                                    WriteByte(Constants.REGISTER_EXTENSION_INIT_2, 0x00);
+                                    //byte[] ext = ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
+                                    _readType = ReadReportType.Extension_B;
+                                    ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
                                 }
-
-
-                                //AsyncRead();
-                                //byte[] ext = ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
-                                _readType = ReadReportType.Extension_B;
-                                ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
 
                                 // MOVED to ReadReportType.Extension_B
                             }
@@ -700,6 +714,8 @@ namespace NintrollerLib
 
                                 if (ExtensionChange != null)
                                     ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
+
+                                SetReport(mDeviceState.GetReportType());
                             }
                             break;
 
@@ -709,8 +725,10 @@ namespace NintrollerLib
                                 return false;
                             }
 
-                            long type = ((long)report[0] << 40) | ((long)report[1] << 32) | ((long)report[2]) << 24 | ((long)report[3]) << 16 | ((long)report[4]) << 8 | report[5];
-
+                            byte[] r = new byte[6];
+                            Array.Copy(report, 6, r, 0, 6);
+                            long type = ((long)r[0] << 40) | ((long)r[1] << 32) | ((long)r[2]) << 24 | ((long)r[3]) << 16 | ((long)r[4]) << 8 | r[5];
+                            
                             Debug.WriteLine((ControllerType)type);
 
                             if (currentType != (ControllerType)type)
@@ -743,6 +761,8 @@ namespace NintrollerLib
 
                                 if (ExtensionChange != null)
                                     ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
+
+                                SetReport(mDeviceState.GetReportType());
                             }
                             break;
 
