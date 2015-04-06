@@ -293,6 +293,7 @@ namespace NintrollerLib
                     //mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncOnce), bArray);
                     // don't need to start reading async
                     // but may want to set a timeout
+                    // TODO: use an async callback and automatically, but only give it a few hundred ms before calling EndRead
                     bytesRead = mStream.Read(bArray, 0, bArray.Length);
                 }
 
