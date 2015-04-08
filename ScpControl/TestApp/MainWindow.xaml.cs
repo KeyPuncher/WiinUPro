@@ -56,6 +56,7 @@ namespace TestApp
                 _nintroller.Disconnect();
                 _nintroller = null;
                 _stackDigitalInputs.Children.Clear();
+                _stackAnalogInputs.Children.Clear();
                 _btnConnect.Content = "Connect";
             }
             else if (_comboBoxDeviceList.SelectedItem != null)
@@ -87,6 +88,7 @@ namespace TestApp
 
                 if (_nintroller.Type == ControllerType.Wiimote)
                 {
+                    // Add Digital Inputs
                     _stackDigitalInputs.Children.Add(new CheckBox() { Content = "A" });
                     _stackDigitalInputs.Children.Add(new CheckBox() { Content = "B" });
                     _stackDigitalInputs.Children.Add(new CheckBox() { Content = "1" });
@@ -98,6 +100,16 @@ namespace TestApp
                     _stackDigitalInputs.Children.Add(new CheckBox() { Content = "Plus" });
                     _stackDigitalInputs.Children.Add(new CheckBox() { Content = "Minus" });
                     _stackDigitalInputs.Children.Add(new CheckBox() { Content = "Home" });
+                    _stackDigitalInputs.Children.Add(new CheckBox() { Content = "IR1 in view" });
+                    _stackDigitalInputs.Children.Add(new CheckBox() { Content = "IR2 in view" });
+                    _stackDigitalInputs.Children.Add(new CheckBox() { Content = "IR3 in view" });
+                    _stackDigitalInputs.Children.Add(new CheckBox() { Content = "IR4 in view" });
+
+                    // Add Analog Inputs
+                    _stackAnalogInputs.Children.Add(new Label());
+                    _stackAnalogInputs.Children.Add(new Label());
+                    _stackAnalogInputs.Children.Add(new Label());
+                    _stackAnalogInputs.Children.Add(new Label());
 
                     _nintroller.StateChange += StateChange;
                 }
@@ -108,6 +120,8 @@ namespace TestApp
         {
             Dispatcher.Invoke(() =>
             {
+                // Update Digital Inputs
+                if (_stackDigitalInputs.Children.Count < 15) return;
                 ((CheckBox)_stackDigitalInputs.Children[0]).IsChecked = e.Wiimote.A;
                 ((CheckBox)_stackDigitalInputs.Children[1]).IsChecked = e.Wiimote.B;
                 ((CheckBox)_stackDigitalInputs.Children[2]).IsChecked = e.Wiimote.One;
@@ -119,6 +133,17 @@ namespace TestApp
                 ((CheckBox)_stackDigitalInputs.Children[8]).IsChecked = e.Wiimote.Plus;
                 ((CheckBox)_stackDigitalInputs.Children[9]).IsChecked = e.Wiimote.Minus;
                 ((CheckBox)_stackDigitalInputs.Children[10]).IsChecked = e.Wiimote.Home;
+                ((CheckBox)_stackDigitalInputs.Children[11]).IsChecked = e.Wiimote.IR1.InView;
+                ((CheckBox)_stackDigitalInputs.Children[12]).IsChecked = e.Wiimote.IR2.InView;
+                ((CheckBox)_stackDigitalInputs.Children[13]).IsChecked = e.Wiimote.IR3.InView;
+                ((CheckBox)_stackDigitalInputs.Children[14]).IsChecked = e.Wiimote.IR4.InView;
+
+                // Update Analog Inputs
+                if (_stackAnalogInputs.Children.Count < 4) return;
+                ((Label)_stackAnalogInputs.Children[0]).Content = "Acc: " + e.Wiimote.Acc.ToString();
+                ((Label)_stackAnalogInputs.Children[1]).Content = "Acc X: " + e.Wiimote.AccRaw.X.ToString();
+                ((Label)_stackAnalogInputs.Children[2]).Content = "Acc Y: " + e.Wiimote.AccRaw.Y.ToString();
+                ((Label)_stackAnalogInputs.Children[3]).Content = "Acc Z: " + e.Wiimote.AccRaw.Z.ToString();
             });
         }
     }

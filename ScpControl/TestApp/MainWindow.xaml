@@ -9,6 +9,9 @@
         <GroupBox Header="Digital Inputs" HorizontalAlignment="Left" Margin="5,35,0,8" Width="135">
             <StackPanel x:Name="_stackDigitalInputs" HorizontalAlignment="Left" Margin="1,3,0,0" Width="120" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         </GroupBox>
+        <GroupBox Header="Analog Inputs" HorizontalAlignment="Left" Margin="151,35,0,8" Width="135">
+            <StackPanel x:Name="_stackAnalogInputs" HorizontalAlignment="Left" Margin="1,3,0,0" Width="120" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        </GroupBox>
 
     </Grid>
 </Window>
