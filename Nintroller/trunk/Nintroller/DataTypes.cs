@@ -194,6 +194,8 @@ namespace NintrollerLib
 
     public enum ControllerType : long
     {
+        // not yet determined
+        Unknown             = -1,
         // Wiimote, no extension
         Wiimote             = 0x000000000000,
         // Wii U Pro Controller

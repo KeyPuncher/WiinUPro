@@ -374,6 +374,8 @@ namespace NintrollerLib
             /// TODO: Take IR Enabled into account
             switch (currentExtension)
             {
+                case ControllerType.Wiimote:
+                    return InputReport.BtnsAcc;
                 case ControllerType.Nunchuk:
                     return InputReport.BtnsAccIRExt;
                 case ControllerType.ClassicController:

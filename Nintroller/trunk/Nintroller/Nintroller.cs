@@ -51,7 +51,7 @@ namespace NintrollerLib
         public Guid ID { get { return mID; } }
         public ControllerType Type { get { return currentType; } }
 
-        private ControllerType currentType = ControllerType.Wiimote;
+        private ControllerType currentType = ControllerType.Unknown;
         private bool connected;
         
         // Read/Writing Variables
@@ -921,6 +921,19 @@ namespace NintrollerLib
         {
             /// TODO: determine if we need to pass through Nunchuck or Classic Controller
             WriteByte(Constants.REGISTER_MOTIONPLUS_INIT, 0x04);
+        }
+
+        public void InitIRCamera()
+        {
+            lock (_readingObj)
+            {
+                byte[] buff = new byte[Constants.REPORT_LENGTH];
+
+                buff[0] = (byte)OutputReport.StatusRequest;
+                buff[1] = (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00);
+
+                WriteReport(buff);
+            }
         }
         #endregion
 
