@@ -268,6 +268,11 @@ namespace NintrollerLib
             return ControllerList;
         }
 
+        private string ByteString(byte[] report)
+        {
+            return BitConverter.ToString(report);
+        }
+
         #region Connectivity
         /// <summary>
         /// Test to see if the controller is able to be connected to.
@@ -682,8 +687,7 @@ namespace NintrollerLib
                     switch (_readType)
                     {
                         case ReadReportType.Extension_A:
-                            bool hasExtension = (report[3] & 0x02) != 0;
-                            hasExtension = true;
+                            bool hasExtension = (report[3] & 0x0F) == 0;
 
                             /// TODO: Account for Wiimote Plus controllers
                             if (hasExtension)
@@ -756,6 +760,9 @@ namespace NintrollerLib
                                         // try again
                                         GetStatus();
                                         break;
+                                    default:
+                                        Debug.WriteLine("Unidentifed Extension");
+                                        break;
                                 }
 
                                 // TODO: if not a pro or newer (check PID?) get the calibration
@@ -764,6 +771,12 @@ namespace NintrollerLib
                                     ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
 
                                 SetReport(mDeviceState.GetReportType());
+                            }
+                            else if (currentType == ControllerType.PartiallyInserted)
+                            {
+                                // keep trying until it is fully inserted
+                                Thread.Sleep(20);
+                                GetStatus();
                             }
                             break;
 
@@ -791,11 +804,12 @@ namespace NintrollerLib
             try
             {
                 if ((r[3] & 0x08) != 0)
-                    throw new Exception("Can't read bytes (Don't Exist?)");
+                    throw new Exception("Can't read bytes, memory address doesn't exist.");
 
                 if ((r[3] & 0x07) != 0)
                 {
-                    Debug.WriteLine("Trying to Read in Write-Only mode");
+                    Debug.WriteLine("Trying to Read in Write-Only mode, or no expansion connected");
+                    Debug.WriteLine(ByteString(r));
                     //mReadDone.Set();
                     return null;
                 }
