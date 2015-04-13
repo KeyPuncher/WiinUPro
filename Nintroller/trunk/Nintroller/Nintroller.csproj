@@ -44,6 +44,8 @@
     <Compile Include="DataTypes.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="HIDImports.cs" />
+    <Compile Include="New\INintrollerState.cs" />
+    <Compile Include="New\Nintroller.cs" />
     <Compile Include="Nintroller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States.cs" />

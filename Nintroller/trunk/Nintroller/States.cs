@@ -574,6 +574,7 @@ namespace NintrollerLib
 
             if (offset != 0)
             {
+                System.Diagnostics.Debug.WriteLine(BitConverter.ToString(r));
                 ir1.RawX = r[offset]     | ((r[offset + 2] >> 4) & 0x03) << 8;
                 ir1.RawY = r[offset + 1] | ((r[offset + 2] >> 6) & 0x03) << 8;
 

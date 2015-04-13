@@ -345,6 +345,8 @@ namespace NintrollerLib
             // get calibration? Trying to calibrate a Pro Controller or a newer device will disconnect it!
             //GetCalibration();
 
+            //SetReport(InputReport.BtnsOnly);
+
             // get status
             GetStatus();
 
@@ -503,7 +505,7 @@ namespace NintrollerLib
             byte[] buff = new byte[Constants.REPORT_LENGTH];
 
             buff[0] = (byte)OutputReport.DataReportMode;
-            buff[1] = (byte)(0x00 | (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00)); // 0x40 for continous
+            buff[1] = (byte)(0x04 | (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00)); // 0x40 for continous
             buff[2] = (byte)reportType;
 
             lock (_readingObj)
@@ -517,6 +519,7 @@ namespace NintrollerLib
         private void WriteReport(byte[] report)
         {
             Debug.WriteLine("Writing a Report for: " + Enum.Parse(typeof(OutputReport), report[0].ToString()));
+            Debug.WriteLine(ByteString(report));
 
             if (mStream != null)
             {
@@ -647,6 +650,13 @@ namespace NintrollerLib
                     Debug.WriteLine("Status Report");
                     /// Parse Buttons? (maybe not)
 
+                    if (_readType == ReadReportType.EnableIR)
+                    {
+                        Debug.WriteLine("Requesting Status trying to Enable IR");
+                        InitIR();
+                        break;
+                    }
+
                     // Get Extension
                     //AsyncRead();
                     //byte[] extensionType = ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
@@ -674,7 +684,7 @@ namespace NintrollerLib
                     mDeviceState.led4 = (report[3] & 0x80) != 0;
 
                     // Get & Set the report type
-                    //SetReport(mDeviceState.GetReportType());
+                    SetReport(mDeviceState.GetReportType());
 
                     //mStatusDone.Set();
                     break;
@@ -683,6 +693,21 @@ namespace NintrollerLib
                     Debug.WriteLine("Read Memory");
                     // Parse Buttons
                     byte[] data = ParseRead(report);
+
+                    if (data == null && currentType == ControllerType.Unknown)
+                    {
+                        // Remove the extension
+                        ((WiimoteState)mDeviceState).extension = new ExtensionState();
+                        currentType = ControllerType.Wiimote;
+                        ((WiimoteState)mDeviceState).SetExtension(currentType);
+
+                        if (ExtensionChange != null)
+                            ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
+
+                        //EnableIR(IRSetting.Wide);
+                        SetReport(mDeviceState.GetReportType());
+                        break;
+                    }
 
                     switch (_readType)
                     {
@@ -720,6 +745,7 @@ namespace NintrollerLib
                                 if (ExtensionChange != null)
                                     ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
 
+                                //EnableIR(IRSetting.Wide);
                                 SetReport(mDeviceState.GetReportType());
                             }
                             break;
@@ -788,7 +814,45 @@ namespace NintrollerLib
 
                 case InputReport.Acknowledge:
                     Debug.WriteLine("Acknowledge Report");
+                    Debug.WriteLine(ByteString(report));
                     //mWriteDone.Set();
+
+
+                    // Test
+                    switch (_ackType)
+                    {
+                        case New.AcknowledgementType.IR_Step1:
+                            _ackType = New.AcknowledgementType.IR_Step2;
+                            WriteBytes(Constants.REGISTER_IR_SENSITIVITY_1, 9, new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x90, 0x00, 0x41 });
+                            break;
+
+                        case New.AcknowledgementType.IR_Step2:
+                            _ackType = New.AcknowledgementType.IR_Step3;
+                            WriteBytes(Constants.REGISTER_IR_SENSITIVITY_2, 2, new byte[] { 0x40, 0x00 });
+                            break;
+
+                        case New.AcknowledgementType.IR_Step3:
+                            _ackType = New.AcknowledgementType.IR_Step4;
+                            WriteBytes(Constants.REGISTER_IR_MODE, 1, new byte[] { 0x01 });
+                            break;
+
+                        case New.AcknowledgementType.IR_Step4:
+                            _ackType = New.AcknowledgementType.IR_Step5;
+                            WriteBytes(Constants.REGISTER_IR, 1, new byte[] { 0x08 });
+                            break;
+
+                        case New.AcknowledgementType.IR_Step5:
+                            Debug.WriteLine("IR Camera Enabled");
+
+                            SetReport(InputReport.BtnsAccIRExt);
+                            _ackType = New.AcknowledgementType.NA;
+                            break;
+
+                        default:
+                            Debug.WriteLine("Unhandled acknowledgement");
+                            _ackType = New.AcknowledgementType.NA;
+                            break;
+                    }
                     break;
                 #endregion
                 default:
@@ -927,13 +991,99 @@ namespace NintrollerLib
         {
             lock (_readingObj)
             {
+                Debug.WriteLine("Enable IR");
                 byte[] buff = new byte[Constants.REPORT_LENGTH];
 
-                buff[0] = (byte)OutputReport.StatusRequest;
-                buff[1] = (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00);
-
+                // Enable IR Camera on output report 0x13
+                buff[0] = (byte)OutputReport.IREnable;
+                buff[1] = (byte)(0x04);
                 WriteReport(buff);
+
+                // Enable IR Camera 2 on output report 0x1a
+                buff[0] = (byte)OutputReport.IREnable2;
+                WriteReport(buff);
+
+                // Write to register 0xb000030
+                WriteByte(Constants.REGISTER_IR, 0x08);
+                
+                // Default here is sensitivity level 2
+                // Write Sensitivity Block 1 to register 0xb00000
+                WriteBytes(Constants.REGISTER_IR_SENSITIVITY_1, 9, new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x96, 0x00, 0xb4 });
+
+                // Write Sensitivity Block 2 to register 0xb0001a
+                WriteBytes(Constants.REGISTER_IR_SENSITIVITY_2, 2, new byte[] { 0xb3, 0x04 });
+
+                //case IRSensitivity.WiiLevel1:
+                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x64, 0x00, 0xfe});
+                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0xfd, 0x05});
+                //    break;
+                //case IRSensitivity.WiiLevel2:
+                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x96, 0x00, 0xb4});
+                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0xb3, 0x04});
+                //    break;
+                //case IRSensitivity.WiiLevel3:
+                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xaa, 0x00, 0x64});
+                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0x63, 0x03});
+                //    break;
+                //case IRSensitivity.WiiLevel4:
+                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xc8, 0x00, 0x36});
+                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0x35, 0x03});
+                //    break;
+                //case IRSensitivity.WiiLevel5:
+                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x07, 0x00, 0x00, 0x71, 0x01, 0x00, 0x72, 0x00, 0x20});
+                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0x1, 0x03});
+                //    break;
+                //case IRSensitivity.Maximum:
+                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x90, 0x00, 0x41});
+                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0x40, 0x00});
+                //    break;
+
+                // Write mode number to register 0xb00033
+                WriteByte(Constants.REGISTER_IR_MODE, (byte)IRSetting.Wide);
+
+                // Write to register 0xb000030
+                WriteByte(Constants.REGISTER_IR, 0x08);
+                Debug.WriteLine("IR Enabled");
+                SetReport(InputReport.BtnsAccIR);
             }
+        }
+
+        private void EnableIR(IRSetting type)
+        {
+            Debug.WriteLine("Enable IR");
+            byte[] buff = new byte[Constants.REPORT_LENGTH];
+
+            buff[0] = (byte)OutputReport.IREnable;
+            buff[1] = (byte)(0x04);
+            WriteReport(buff);
+
+            buff[0] = (byte)OutputReport.IREnable2;
+            buff[1] = (byte)(0x04);
+            WriteReport(buff);
+
+            // TODO: we need to wait for the acknowledgement report after writing to each register
+            WriteByte(Constants.REGISTER_IR, 0x08);
+
+            WriteBytes(Constants.REGISTER_IR_SENSITIVITY_1, 9, new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x90, 0x00, 0x41 });
+            WriteBytes(Constants.REGISTER_IR_SENSITIVITY_2, 2, new byte[] { 0x40, 0x00 });
+
+            WriteByte(Constants.REGISTER_IR_MODE, (byte)type); // wiimote lib seems to be writing 0x01 (Basic)
+
+            WriteByte(Constants.REGISTER_IR, 0x08);
+            Debug.WriteLine("IR Enabled");
+        }
+
+        private void DisableIR()
+        {
+            byte[] buff = new byte[Constants.REPORT_LENGTH];
+
+            buff[0] = (byte)OutputReport.IREnable;
+            buff[1] = (byte)(0x00);
+            WriteReport(buff);
+
+            buff[0] = (byte)OutputReport.IREnable2;
+            buff[1] = (byte)(0x00);
+            WriteReport(buff);
         }
         #endregion
 
@@ -1014,5 +1164,58 @@ namespace NintrollerLib
         }
         */
         #endregion
+
+        private New.AcknowledgementType _ackType = New.AcknowledgementType.NA;
+        public void EnableIR()
+        {
+            _readType = ReadReportType.EnableIR;
+
+            //byte[] test = new byte[Constants.REPORT_LENGTH];
+            //test[0] = (byte)OutputReport.ReadMemory;
+            //test[4] = 16;
+            //test[6] = 17;
+            // WriteReport(test);
+            //17-00-00-00-16-00-07-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            buffer = new byte[Constants.REPORT_LENGTH];
+            buffer[0] = (byte)OutputReport.StatusRequest;
+            WriteReport(buffer);
+            //15-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+        }
+        private void InitIR()
+        {
+            //ControllerType[] compatableTypes = new ControllerType[]
+            //{
+            //    ControllerType.Wiimote,
+            //    ControllerType.Nunchuk,
+            //    ControllerType.NunchukB,
+            //    ControllerType.MotionPlus,
+            //    ControllerType.ClassicController,
+            //    ControllerType.ClassicControllerPro
+            //};
+
+            //if ( Array!compatableTypes.Contains(_currentType))
+            //{
+            //    Log("Can't Enabled IR Camera for type " + _currentType.ToString());
+            //}
+            //else
+            //{
+                Debug.WriteLine("Enabling IR Camera");
+
+                byte[] buffer = new byte[Constants.REPORT_LENGTH];
+                buffer[0] = (byte)OutputReport.IREnable;
+                buffer[1] = (byte)(0x04);
+                WriteReport(buffer);
+
+                buffer[0] = (byte)OutputReport.IREnable2;
+                buffer[1] = (byte)(0x04);
+                WriteReport(buffer);
+
+                _ackType = New.AcknowledgementType.IR_Step1;
+                WriteBytes(Constants.REGISTER_IR, 1, new byte[] { 0x08 });
+                // continue other steps in Acknowledgement Reporting
+            //}
+        }
     }
 }

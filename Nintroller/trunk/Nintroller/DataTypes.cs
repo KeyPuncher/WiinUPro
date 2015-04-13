@@ -224,7 +224,8 @@ namespace NintrollerLib
     {
         Unknown,
         Extension_A,
-        Extension_B
+        Extension_B,
+        EnableIR
     };
     #endregion
 
