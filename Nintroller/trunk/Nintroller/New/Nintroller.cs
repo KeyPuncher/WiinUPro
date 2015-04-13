@@ -15,22 +15,29 @@ namespace NintrollerLib.New
         /// <summary>
         /// Fired evertime a data report is recieved.
         /// </summary>
-        public event EventHandler<StateChangeEventArgs> StateUpdate = delegate { };
+        //public event EventHandler<StateChangeEventArgs> StateUpdate = delegate { };
         /// <summary>
         /// Fired when the controller's extension changes.
         /// </summary>
-        public event EventHandler<ExtensionChangeEventArgs> ExtensionChange = delegate { };
+        //public event EventHandler<ExtensionChangeEventArgs> ExtensionChange = delegate { };
+
+        public event EventHandler<NintrollerStateEventArgs> StateUpdate = delegate { };
+        public event EventHandler<ControllerType> ExtensionChange = delegate { };
+        public event EventHandler<BatteryStatus> LowBattery = delegate { };
         
         private string           _path = string.Empty;
         private bool             _connected;
-        private NintyState       _state;
+        private INintrollerState _state;
         private ControllerType   _currentType = ControllerType.Unknown;
         private byte             _rumbleBit = 0x00;
+        private byte             _battery = 0x00;
+        private bool             _batteryLow;
+        private bool             _led1, _led2, _led3, _led4;
 
         // Read/Writing Variables
-        private SafeFileHandle   _fileHandle;       // Handle for Reading and Writing
-        private FileStream       _stream;           // Read and Write Stream
-        private bool             _reading = false;  // notes if actevly reading
+        private SafeFileHandle   _fileHandle;                // Handle for Reading and Writing
+        private FileStream       _stream;                    // Read and Write Stream
+        private bool             _reading = false;           // notes if actevly reading
         private readonly object  _readingObj = new object(); // for locking/blocking
         
         // help with parsing Reports
@@ -38,13 +45,6 @@ namespace NintrollerLib.New
         private StatusType          _statusType = StatusType.Unknown;
         private ReadReportType      _readType = ReadReportType.Unknown;
 
-        // Calibration Variables - Probably won't need these
-        private WiimoteCalibration mCalibrationWiimote;
-        private MotionPlusCalibration mCalibrationMotionPlus;
-        private NunchuckCalibration mCalibrationNunchuck;
-        private ClassicControllerCalibration mCalibrationClassic;
-        private ClassicControllerProCalibration mCalibrationClassicPro;
-        private ProCalibration mCalibrationPro;
         #endregion
 
         #region Properties
@@ -70,6 +70,46 @@ namespace NintrollerLib.New
 
             // TODO: New: Enable/Disable Rumble
         }
+
+        public bool Led1
+        {
+            get
+            {
+                return _led1;
+            }
+
+            // TODO: New: Set LED
+        }
+
+        public bool Led2
+        {
+            get
+            {
+                return _led2;
+            }
+
+            // TODO: New: Set LED
+        }
+
+        public bool Led3
+        {
+            get
+            {
+                return _led3;
+            }
+
+            // TODO: New: Set LED
+        }
+
+        public bool Led4
+        {
+            get
+            {
+                return _led4;
+            }
+
+            // TODO: New: Set LED
+        }
         #endregion
 
         #region LifeCycle
@@ -81,7 +121,7 @@ namespace NintrollerLib.New
         /// <param name="devicePath">The HID Path</param>
         public Nintroller(string devicePath)
         {
-            _state = new NintyState();
+            _state = null;
             _path = devicePath;
         }
 
@@ -187,7 +227,7 @@ namespace NintrollerLib.New
                 // Must be called for each BeginRead()
                 _stream.EndRead(data);
 
-                // TODO: New: Parse the read result
+                ParseReport(result);
 
                 // start another read if we are still to be reading
                 if (_reading)
@@ -357,16 +397,19 @@ namespace NintrollerLib.New
                         case StatusType.Unknown:
                         default:
                             // Battery Level
-                            byte rawBattery = report[6];
+                            _battery = report[6];
                             bool lowBattery = (report[3] & 0x01) != 0;
-                            // TODO: New: Update Battery
+                            
+                            if (lowBattery && !_batteryLow)
+                            {
+                                LowBattery(this, BatteryStatus.VeryLow);
+                            }
 
                             // LED
-                            bool led1 = (report[3] & 0x10) != 0;
-                            bool led2 = (report[3] & 0x20) != 0;
-                            bool led3 = (report[3] & 0x40) != 0;
-                            bool led4 = (report[3] & 0x80) != 0;
-                            // TODO: New: Update LEDs
+                            _led1 = (report[3] & 0x10) != 0;
+                            _led2 = (report[3] & 0x20) != 0;
+                            _led3 = (report[3] & 0x40) != 0;
+                            _led4 = (report[3] & 0x80) != 0;
 
                             // Extension/Type
                             lock (_readingObj)
@@ -408,10 +451,13 @@ namespace NintrollerLib.New
                             {
                                 // TODO: New: Remove extension
                                 _currentType = ControllerType.Wiimote;
+                                _state = new Wiimote();
 
                                 // and Fire Event
+                                ExtensionChange(this, _currentType);
 
                                 // and set report
+                                SetReportType(InputReport.BtnsAccIR);
                             }
                             break;
 
@@ -442,19 +488,28 @@ namespace NintrollerLib.New
                                 switch(_currentType)
                                 {
                                     case ControllerType.ProController:
-                                        //
+                                        _state = new ProController();
                                         break;
 
                                     case ControllerType.BalanceBoard:
-                                        //
+                                        _state = new BalanceBoard();
                                         break;
 
                                     case ControllerType.Nunchuk:
                                     case ControllerType.NunchukB:
+                                        _state = new Nunchuk();
+                                        break;
+
                                     case ControllerType.ClassicController:
+                                        _state = new ClassicController();
+                                        break;
+
                                     case ControllerType.ClassicControllerPro:
+                                        _state = new ClassicControllerPro();
+                                        break;
+
                                     case ControllerType.MotionPlus:
-                                        //
+                                        _state = new WiimotePlus();
                                         break;
 
                                     case ControllerType.PartiallyInserted:
@@ -465,7 +520,7 @@ namespace NintrollerLib.New
                                     case ControllerType.Drums:
                                     case ControllerType.Guitar:
                                     case ControllerType.TaikoDrum:
-                                        //
+                                        // TODO: New: Musicals
                                         break;
 
                                     default:
@@ -476,6 +531,7 @@ namespace NintrollerLib.New
                                 // TODO: Get calibration if PID != 330
 
                                 // TODO: New: Fire ExtensionChange event
+                                ExtensionChange(this, _currentType);
                                 // set report
                             }
                             break;
@@ -600,6 +656,23 @@ namespace NintrollerLib.New
 
     #region New Event Args
 
+    public class NintrollerStateEventArgs : EventArgs
+    {
+        public Nintroller sender;
+        public ControllerType controllerType;
+        public INintrollerState state;
+        public BatteryStatus batteryLevel;
+        
+        // TODO: New: Create Constructor
+        public NintrollerStateEventArgs(Nintroller device, ControllerType type, INintrollerState state, BatteryStatus battery)
+        {
+            this.sender = device;
+            this.controllerType = type;
+            this.state = state;
+            this.batteryLevel = battery;
+        }
+    }
+
     #endregion
 
     #region New Enums
@@ -619,6 +692,236 @@ namespace NintrollerLib.New
         Requested,
         IR_Enable,
         DiscoverExtension
+    }
+    #endregion
+
+    #region New Structs
+
+    public interface INintrollerParsable
+    {
+        public void Parse(byte[] input);
+    }
+
+    public interface INintrollerNormalizable
+    {
+        public void Normalize();
+    }
+
+    public struct CoreButtons : INintrollerParsable
+    {
+        public bool A, B;
+        public bool One, Two;
+        public bool Up, Down, Left, Right;
+        public bool Plus, Minus, Home;
+
+        public void Parse(byte[] input)
+        {
+            InputReport type = (InputReport)input[0];
+
+            if (type != InputReport.ExtOnly)
+            {
+                A     = (input[2] & 0x08) != 0;
+                B     = (input[2] & 0x04) != 0;
+                One   = (input[2] & 0x02) != 0;
+                Two   = (input[2] & 0x01) != 0;
+                Home  = (input[2] & 0x80) != 0;
+                Minus = (input[2] & 0x10) != 0;
+                Plus  = (input[1] & 0x10) != 0;
+                Up    = (input[1] & 0x08) != 0;
+                Down  = (input[1] & 0x04) != 0;
+                Right = (input[1] & 0x02) != 0;
+                Left  = (input[1] & 0x01) != 0;
+            }
+        }
+    }
+
+    public struct Accelerometer : INintrollerParsable, INintrollerNormalizable
+    {
+        float rawX, rawY, rawZ;
+        float X, Y, Z;
+
+        public void Parse(byte[] input)
+        {
+            InputReport type = (InputReport)input[0];
+
+            InputReport[] accepted = new InputReport[]
+            {
+                InputReport.BtnsAcc,
+                InputReport.BtnsAccExt,
+                InputReport.BtnsAccIR,
+                InputReport.BtnsAccIRExt
+            };
+
+            if (accepted.Contains(type))
+            {
+                rawX = input[3];
+                rawY = input[4];
+                rawZ = input[5];
+            }
+        }
+
+        public void Normalize()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public struct IRPoint
+    {
+        public int rawX, rawY, size;
+        public float x, y;
+        public bool visible;
+    }
+
+    public struct IR : INintrollerParsable
+    {
+        IRPoint point1, point2, point3, point4;
+
+        public void Parse(byte[] input)
+        {
+            InputReport type = (InputReport)input[0];
+            int offset = 0;
+
+            if (type == InputReport.BtnsAccIR || type == InputReport.BtnsAccIRExt)
+            {
+                offset = 6;
+            }
+            else if (type == InputReport.BtnsIRExt)
+            {
+                offset = 3;
+            }
+            else
+            {
+                return;
+            }
+
+            point1.rawX = input[offset]     | ((input[offset + 2] >> 4) & 0x03) << 8;
+            point1.rawY = input[offset + 1] | ((input[offset + 2] >> 6) & 0x03) << 8;
+
+            if (type == InputReport.BtnsAccIR)
+            {
+                // Extended Mode
+                point2.rawX = input[offset + 3]  | ((input[offset + 5]  >> 4) & 0x03) << 8;
+                point2.rawY = input[offset + 4]  | ((input[offset + 5]  >> 6) & 0x03) << 8;
+                point3.rawX = input[offset + 6]  | ((input[offset + 8]  >> 4) & 0x03) << 8;
+                point3.rawY = input[offset + 7]  | ((input[offset + 8]  >> 6) & 0x03) << 8;
+                point4.rawX = input[offset + 9]  | ((input[offset + 11] >> 4) & 0x03) << 8;
+                point4.rawY = input[offset + 10] | ((input[offset + 11] >> 6) & 0x03) << 8;
+                
+                point1.size = input[offset + 2]  & 0x0f;
+                point2.size = input[offset + 5]  & 0x0f;
+                point3.size = input[offset + 8]  & 0x0f;
+                point4.size = input[offset + 11] & 0x0f;
+                
+                point1.visible = !(input[offset]     == 0xff && input[offset + 1]  == 0xff && input[offset + 2]  == 0xff);
+                point2.visible = !(input[offset + 3] == 0xff && input[offset + 4]  == 0xff && input[offset + 5]  == 0xff);
+                point3.visible = !(input[offset + 6] == 0xff && input[offset + 7]  == 0xff && input[offset + 8]  == 0xff);
+                point4.visible = !(input[offset + 9] == 0xff && input[offset + 10] == 0xff && input[offset + 11] == 0xff);
+            }
+            else
+            {
+                // Basic Mode
+                point2.rawX = input[offset + 3] | ((input[offset + 2] >> 0) & 0x03) << 8;
+                point2.rawY = input[offset + 4] | ((input[offset + 2] >> 2) & 0x03) << 8;
+                point3.rawX = input[offset + 5] | ((input[offset + 7] >> 4) & 0x03) << 8;
+                point3.rawY = input[offset + 6] | ((input[offset + 7] >> 6) & 0x03) << 8;
+                point4.rawX = input[offset + 8] | ((input[offset + 7] >> 0) & 0x03) << 8;
+                point4.rawY = input[offset + 9] | ((input[offset + 7] >> 2) & 0x03) << 8;
+                
+                point1.size = 0x00;
+                point2.size = 0x00;
+                point3.size = 0x00;
+                point4.size = 0x00;
+                
+                point1.visible = !(input[offset]     == 0xff && input[offset + 1] == 0xff);
+                point2.visible = !(input[offset + 3] == 0xff && input[offset + 4] == 0xff);
+                point3.visible = !(input[offset + 5] == 0xff && input[offset + 6] == 0xff);
+                point4.visible = !(input[offset + 8] == 0xff && input[offset + 9] == 0xff);
+            }
+        }
+    }
+
+    public struct Trigger : INintrollerParsable
+    {
+        public short rawValue;
+        public float value;
+    }
+
+    public struct Joystick : INintrollerParsable
+    {
+        public short rawValue;
+        public float value;
+    }
+
+    #endregion
+
+    #region Full Structs
+
+    struct Wiimote : INintrollerState
+    {
+        CoreButtons buttons;
+        Accelerometer accelerometer;
+        IR irSensor;
+        //INintrollerState extension;
+
+        public Wiimote(byte[] rawData)
+        {
+            buttons = new CoreButtons();
+            accelerometer = new Accelerometer();
+            irSensor = new IR();
+            //extension = null;
+
+            buttons.Parse(rawData);
+        }
+    }
+
+    struct Nunchuk : INintrollerState
+    {
+        Wiimote wiimote;
+        Accelerometer accelerometer;
+        Joystick joystick;
+        bool C, Z;
+    }
+
+    struct ClassicController : INintrollerState
+    {
+        Wiimote wiimote;
+        Joystick LJoy, RJoy;
+        Trigger L, R;
+        bool A, B, X, Y;
+        bool Up, Down, Left, Right;
+        bool ZL, ZR, Plus, Minus, Home;
+    }
+
+    struct ClassicControllerPro : INintrollerState
+    {
+        Wiimote wiimote;
+        Joystick LJoy, RJoy;
+        bool A, B, X, Y;
+        bool Up, Down, Left, Right;
+        bool L, R, ZL, ZR;
+        bool Plus, Minus, Home;
+    }
+
+    public struct ProController : INintrollerState
+    {
+        Joystick LJoy, RJoy;
+        bool A, B, X, Y;
+        bool Up, Down, Left, Right;
+        bool L, R, ZL, ZR;
+        bool Plus, Minus, Home;
+        bool LStick, RStick;
+    }
+
+    public struct BalanceBoard : INintrollerState
+    {
+
+    }
+
+    public struct WiimotePlus : INintrollerState
+    {
+        Wiimote wiimote;
+        //gyro
     }
     #endregion
 }
