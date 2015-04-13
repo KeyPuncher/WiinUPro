@@ -106,10 +106,17 @@ namespace TestApp
                     _stackDigitalInputs.Children.Add(new CheckBox() { Content = "IR4 in view" });
 
                     // Add Analog Inputs
-                    _stackAnalogInputs.Children.Add(new Label());
-                    _stackAnalogInputs.Children.Add(new Label());
-                    _stackAnalogInputs.Children.Add(new Label());
-                    _stackAnalogInputs.Children.Add(new Label());
+                    for (int i = 0; i < 8; i++)
+                    {
+                        _stackAnalogInputs.Children.Add(new Label());
+                        _stackAnalogInputs.Children.Add(new Label());
+                        _stackAnalogInputs.Children.Add(new Label());
+                        _stackAnalogInputs.Children.Add(new Label());
+                        _stackAnalogInputs.Children.Add(new Label());
+                        _stackAnalogInputs.Children.Add(new Label());
+                        _stackAnalogInputs.Children.Add(new Label());
+                        _stackAnalogInputs.Children.Add(new Label());
+                    }
 
                     _nintroller.StateChange += StateChange;
                 }
@@ -144,7 +151,17 @@ namespace TestApp
                 ((Label)_stackAnalogInputs.Children[1]).Content = "Acc X: " + e.Wiimote.AccRaw.X.ToString();
                 ((Label)_stackAnalogInputs.Children[2]).Content = "Acc Y: " + e.Wiimote.AccRaw.Y.ToString();
                 ((Label)_stackAnalogInputs.Children[3]).Content = "Acc Z: " + e.Wiimote.AccRaw.Z.ToString();
+                ((Label)_stackAnalogInputs.Children[4]).Content = string.Format("IR 1: x:{0} y:{1} size:{2}", e.Wiimote.IR1.RawX, e.Wiimote.IR1.RawY, e.Wiimote.IR1.Size);
+                ((Label)_stackAnalogInputs.Children[5]).Content = string.Format("IR 2: x:{0} y:{1} size:{2}", e.Wiimote.IR2.RawX, e.Wiimote.IR2.RawY, e.Wiimote.IR2.Size);
+                ((Label)_stackAnalogInputs.Children[6]).Content = string.Format("IR 3: x:{0} y:{1} size:{2}", e.Wiimote.IR3.RawX, e.Wiimote.IR3.RawY, e.Wiimote.IR3.Size);
+                ((Label)_stackAnalogInputs.Children[7]).Content = string.Format("IR 4: x:{0} y:{1} size:{2}", e.Wiimote.IR4.RawX, e.Wiimote.IR4.RawY, e.Wiimote.IR4.Size);
             });
+        }
+
+        private void _btnEnableIR_Click(object sender, RoutedEventArgs e)
+        {
+            //_nintroller.InitIRCamera();
+            _nintroller.EnableIR();
         }
     }
 }
