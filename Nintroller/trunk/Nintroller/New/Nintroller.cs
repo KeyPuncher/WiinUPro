@@ -25,16 +25,18 @@ namespace NintrollerLib.New
         private bool             _connected;
         private NintyState       _state;
         private ControllerType   _currentType = ControllerType.Unknown;
+        private byte             _rumbleBit = 0x00;
 
         // Read/Writing Variables
         private SafeFileHandle   _fileHandle;       // Handle for Reading and Writing
         private FileStream       _stream;           // Read and Write Stream
-        private ReadReportType   _readType;         // help with parsing ReadMem reports
-        private object           _readingObj;       // for locking/blocking
         private bool             _reading = false;  // notes if actevly reading
+        private readonly object  _readingObj = new object(); // for locking/blocking
         
-        // help with parsing Acknowledgement Reports
-        private AcknowledgementType _ackType = AcknowledgementType.NA; 
+        // help with parsing Reports
+        private AcknowledgementType _ackType = AcknowledgementType.NA;
+        private StatusType          _statusType = StatusType.Unknown;
+        private ReadReportType      _readType = ReadReportType.Unknown;
 
         // Calibration Variables - Probably won't need these
         private WiimoteCalibration mCalibrationWiimote;
@@ -58,6 +60,16 @@ namespace NintrollerLib.New
         /// The type of controller this has been identified as
         /// </summary>
         public ControllerType Type { get { return _currentType; } }
+
+        public bool RumbleEnabled
+        {
+            get
+            {
+                return _rumbleBit == 0x01;
+            }
+
+            // TODO: New: Enable/Disable Rumble
+        }
         #endregion
 
         #region LifeCycle
@@ -196,10 +208,10 @@ namespace NintrollerLib.New
 
             buffer[0] = (byte)OutputReport.ReadMemory;
 
-            buffer[1] = (byte)((address & 0xff000000) >> 24); // TODO: New: OR with rumble bit (0x01 or 0x00)
-            buffer[2] = (byte)((address & 0x00ff0000) >> 16);
-            buffer[3] = (byte)((address & 0x0000ff00) >>  8);
-            buffer[4] = (byte) (address & 0x000000ff);
+            buffer[1] = (byte)(((address & 0xff000000) >> 24) | _rumbleBit);
+            buffer[2] =  (byte)((address & 0x00ff0000) >> 16);
+            buffer[3] =  (byte)((address & 0x0000ff00) >>  8);
+            buffer[4] =  (byte) (address & 0x000000ff);
 
             buffer[5] = (byte)((size & 0xff00) >> 8);
             buffer[6] = (byte) (size & 0xff);
@@ -207,6 +219,7 @@ namespace NintrollerLib.New
             SendData(buffer);
 
             // TODO: New: Determine if no reading should occur until the report comes back
+            // I'm thinking no. This function is typically only called when we go in status reporting mode
         }
 
         private void GetCalibration()
@@ -220,17 +233,17 @@ namespace NintrollerLib.New
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.StatusRequest;
-            buffer[1] = 0x00; // TODO: New: Use Rumble bit
+            buffer[1] = _rumbleBit;
 
             SendData(buffer);
         }
 
-        private void ApplyReportingType(InputReport reportType)
+        private void ApplyReportingType(InputReport reportType, bool continuous = true)
         {
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.DataReportMode;
-            buffer[1] = (byte)(0x00); // TOOD: New: 0x40 for continues, OR with Rumble Bit
+            buffer[1] = (byte)((continuous ? 0x40 : 0x00) | _rumbleBit);
             buffer[2] = (byte)reportType;
 
             SendData(buffer);
@@ -272,6 +285,7 @@ namespace NintrollerLib.New
 
                     // TOOD: New: Determine if and when to use HidD_SetOutputReport
                     // TODO: New: Determine if nothing else should occur until this report is acknowledged
+                    // No, we can send data without an acknowledgement
                 }
                 catch (Exception ex)
                 {
@@ -285,10 +299,10 @@ namespace NintrollerLib.New
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.WriteMemory;
-            buffer[1] = (byte)((address & 0xff000000) >> 24); // TODO: New: OR with Rumble bit
-            buffer[2] = (byte)((address & 0x00ff0000) >> 16);
-            buffer[3] = (byte)((address & 0x0000ff00) >>  8);
-            buffer[4] = (byte) (address & 0x000000ff);
+            buffer[1] = (byte)(((address & 0xff000000) >> 24) | _rumbleBit);
+            buffer[2] = (byte) ((address & 0x00ff0000) >> 16);
+            buffer[3] = (byte) ((address & 0x0000ff00) >>  8);
+            buffer[4] = (byte)  (address & 0x000000ff);
             buffer[5] = (byte)data.Length;
 
             Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, 16));
@@ -307,7 +321,7 @@ namespace NintrollerLib.New
                 (two   ? 0x20 : 0x00) |
                 (three ? 0x40 : 0x00) |
                 (four  ? 0x80 : 0x00) |
-                (0x00) // TODO: New: OR with rumble bit
+                (_rumbleBit)
             );
 
             SendData(buffer);
@@ -330,23 +344,37 @@ namespace NintrollerLib.New
 
                     // core buttons can be parsed if desired
 
-                    // Battery Level
-                    byte rawBattery = report[6];
-                    bool lowBattery = (report[3] & 0x01) != 0;
-                    // TODO: New: Update Battery
-
-                    // LED
-                    bool led1 = (report[3] & 0x10) != 0;
-                    bool led2 = (report[3] & 0x20) != 0;
-                    bool led3 = (report[3] & 0x40) != 0;
-                    bool led4 = (report[3] & 0x80) != 0;
-                    // TODO: New: Update LEDs
-
-                    // Extension/Type
-                    lock (_readingObj)
+                    switch (_statusType)
                     {
-                        _readType = ReadReportType.Extension_A;
-                        ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                        case StatusType.Requested:
+                            //
+                            break;
+
+                        case StatusType.IR_Enable:
+                            EnableIR();
+                            break;
+
+                        case StatusType.Unknown:
+                        default:
+                            // Battery Level
+                            byte rawBattery = report[6];
+                            bool lowBattery = (report[3] & 0x01) != 0;
+                            // TODO: New: Update Battery
+
+                            // LED
+                            bool led1 = (report[3] & 0x10) != 0;
+                            bool led2 = (report[3] & 0x20) != 0;
+                            bool led3 = (report[3] & 0x40) != 0;
+                            bool led4 = (report[3] & 0x80) != 0;
+                            // TODO: New: Update LEDs
+
+                            // Extension/Type
+                            lock (_readingObj)
+                            {
+                                _readType = ReadReportType.Extension_A;
+                                ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                            }
+                            break;
                     }
                     #endregion
                     break;
@@ -489,6 +517,7 @@ namespace NintrollerLib.New
                         case AcknowledgementType.IR_Step5:
                             Log("IR Camera Enabled");
                             _ackType = AcknowledgementType.NA;
+                            SetReportType(InputReport.BtnsAccIRExt);
                             break;
 
                         default:
@@ -522,8 +551,10 @@ namespace NintrollerLib.New
 
         #endregion
 
-        public void EnableIR()
+        public void EnableIR(IRSetting mode = IRSetting.Basic)
         {
+            // TODO: New: Incorperate IRSetting
+
             ControllerType[] compatableTypes = new ControllerType[]
             {
                 ControllerType.Wiimote,
@@ -541,20 +572,29 @@ namespace NintrollerLib.New
             else
             {
                 Log("Enabling IR Camera");
-
+                
+                _statusType = StatusType.IR_Enable;
                 byte[] buffer = new byte[Constants.REPORT_LENGTH];
-                buffer[0] = (byte)OutputReport.IREnable;
-                buffer[1] = (byte)(0x04);
-                SendData(buffer);
+                buffer[0] = (byte)OutputReport.StatusRequest;
 
-                buffer[0] = (byte)OutputReport.IREnable2;
-                buffer[1] = (byte)(0x04);
                 SendData(buffer);
-
-                _ackType = AcknowledgementType.IR_Step1;
-                WriteToMemory(Constants.REGISTER_IR, new byte[] { 0x08 });
-                // continue other steps in Acknowledgement Reporting
             }
+        }
+
+        private void EnableIR()
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            buffer[0] = (byte)OutputReport.IREnable;
+            buffer[1] = (byte)(0x04);
+            SendData(buffer);
+
+            buffer[0] = (byte)OutputReport.IREnable2;
+            buffer[1] = (byte)(0x04);
+            SendData(buffer);
+
+            _ackType = AcknowledgementType.IR_Step1;
+            WriteToMemory(Constants.REGISTER_IR, new byte[] { 0x08 });
+            // continue other steps in Acknowledgement Reporting
         }
     }
 
@@ -571,6 +611,14 @@ namespace NintrollerLib.New
         IR_Step3,
         IR_Step4,
         IR_Step5
+    }
+
+    internal enum StatusType
+    {
+        Unknown,
+        Requested,
+        IR_Enable,
+        DiscoverExtension
     }
     #endregion
 }
