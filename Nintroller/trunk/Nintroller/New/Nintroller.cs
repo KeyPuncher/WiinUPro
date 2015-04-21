@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace NintrollerLib.New
@@ -12,23 +13,19 @@ namespace NintrollerLib.New
     {
         #region Members
         // Events
-        /// <summary>
-        /// Fired evertime a data report is recieved.
-        /// </summary>
-        //public event EventHandler<StateChangeEventArgs> StateUpdate = delegate { };
-        /// <summary>
-        /// Fired when the controller's extension changes.
-        /// </summary>
-        //public event EventHandler<ExtensionChangeEventArgs> ExtensionChange = delegate { };
-
         public event EventHandler<NintrollerStateEventArgs> StateUpdate = delegate { };
-        public event EventHandler<ControllerType> ExtensionChange = delegate { };
-        public event EventHandler<BatteryStatus> LowBattery = delegate { };
+        public event EventHandler<NintrollerExtensionEventArgs> ExtensionChange = delegate { };
+        public event EventHandler<LowBatteryEventArgs> LowBattery = delegate { };
+        //public event EventHandler<ControllerType> ExtensionChange;
+        //public event EventHandler<BatteryStatus> LowBattery;
         
+        // General
         private string           _path = string.Empty;
         private bool             _connected;
-        private INintrollerState _state;
+        private INintrollerState _state = new Wiimote();
         private ControllerType   _currentType = ControllerType.Unknown;
+        private IRCamMode        _irMode = IRCamMode.Off;
+        private IRCamSensitivity _irSensitivity = IRCamSensitivity.Level3;
         private byte             _rumbleBit = 0x00;
         private byte             _battery = 0x00;
         private bool             _batteryLow;
@@ -61,14 +58,91 @@ namespace NintrollerLib.New
         /// </summary>
         public ControllerType Type { get { return _currentType; } }
 
+        public IRCamMode IRMode
+        {
+            get { return _irMode; }
+            set
+            {
+                if (_irMode != value)
+                {
+                    switch (_currentType)
+                    {
+                        case ControllerType.Wiimote:
+                            // this can be set to any mode
+                            _irMode = value;
+                            
+                            if (value == IRCamMode.Off)
+                            {
+                                DisableIR();
+                            }
+                            else
+                            {
+                                EnableIR();
+                            }
+                            break;
+
+                        case ControllerType.ClassicController:
+                        case ControllerType.ClassicControllerPro:
+                        case ControllerType.Nunchuk:
+                        case ControllerType.NunchukB:
+                            // on certian modes can be set
+                            if (value == IRCamMode.Off)
+                            {
+                                _irMode = value;
+                                DisableIR();
+                            }
+                            else if (value != IRCamMode.Full)
+                            {
+                                _irMode = value;
+                                EnableIR();
+                            }
+                            break;
+
+                        default:
+                            // do nothing
+                            break;
+                    }
+                }
+            }
+        }
+
+        public IRCamSensitivity IRSensitivity
+        {
+            get { return _irSensitivity; }
+            set
+            {
+                if (_irSensitivity != value && _irMode != IRCamMode.Off)
+                {
+                    switch (_currentType)
+                    {
+                        case ControllerType.Wiimote:
+                        case ControllerType.ClassicController:
+                        case ControllerType.ClassicControllerPro:
+                        case ControllerType.Nunchuk:
+                        case ControllerType.NunchukB:
+                            _irSensitivity = value;
+                            EnableIR();
+                            break;
+
+                        default:
+                            // do nothing
+                            break;
+                    }
+                }
+            }
+        }
+
         public bool RumbleEnabled
         {
             get
             {
                 return _rumbleBit == 0x01;
             }
-
-            // TODO: New: Enable/Disable Rumble
+            set
+            {
+                _rumbleBit = (byte)(value ? 0x01 : 0x00);
+                ApplyLEDs();
+            }
         }
 
         public bool Led1
@@ -77,8 +151,14 @@ namespace NintrollerLib.New
             {
                 return _led1;
             }
-
-            // TODO: New: Set LED
+            set
+            {
+                if (_led1 != value)
+                {
+                    _led1 = value;
+                    ApplyLEDs();
+                }
+            }
         }
 
         public bool Led2
@@ -87,8 +167,14 @@ namespace NintrollerLib.New
             {
                 return _led2;
             }
-
-            // TODO: New: Set LED
+            set
+            {
+                if (_led2 != value)
+                {
+                    _led2 = value;
+                    ApplyLEDs();
+                }
+            }
         }
 
         public bool Led3
@@ -97,8 +183,14 @@ namespace NintrollerLib.New
             {
                 return _led3;
             }
-
-            // TODO: New: Set LED
+            set
+            {
+                if (_led3 != value)
+                {
+                    _led3 = value;
+                    ApplyLEDs();
+                }
+            }
         }
 
         public bool Led4
@@ -107,8 +199,67 @@ namespace NintrollerLib.New
             {
                 return _led4;
             }
+            set
+            {
+                if (_led4 != value)
+                {
+                    _led4 = value;
+                    ApplyLEDs();
+                }
+            }
+        }
 
-            // TODO: New: Set LED
+        public BatteryStatus BatteryLevel
+        {
+            get
+            {
+                if (_batteryLow)
+                {
+                    return BatteryStatus.VeryLow;
+                }
+                else
+                {
+                    // Wiimote's parsing
+                    //batteryLevel = 100.0f * (float)batteryRaw / 192.0f;
+                    //lowBattery = batteryLevel < 0.1f;
+                    //
+                    //if (batteryLevel > 80f)
+                    //    Battery = BatteryStatus.VeryHigh;
+                    //else if (batteryLevel > 60f)
+                    //    Battery = BatteryStatus.High;
+                    //else if (batteryLevel > 40f)
+                    //    Battery = BatteryStatus.Medium;
+                    //else if (batteryLevel > 20f)
+                    //    Battery = BatteryStatus.Low;
+                    //else
+                    //    Battery = BatteryStatus.VeryLow;
+
+                    // Pro Controller's parsing
+                    //batteryLevel = 2f * ((float)batteryRaw - 205f);
+                    //lowBattery = batteryLevel < 50f;
+
+                    //if (batteryLevel > 90f)
+                    //    Battery = BatteryStatus.VeryHigh;
+                    //else if (batteryLevel > 80f)
+                    //    Battery = BatteryStatus.High;
+                    //else if (batteryLevel > 70f)
+                    //    Battery = BatteryStatus.Medium;
+                    //else if (batteryLevel > 60f)
+                    //    Battery = BatteryStatus.Low;
+                    //else
+                    //    Battery = BatteryStatus.VeryLow;
+
+                    // TODO: New: Check if battery parsing is right
+                    if (_battery == 0xFF)
+                        return BatteryStatus.VeryHigh;
+                    else if (_battery > 0xE0)
+                        return BatteryStatus.High;
+                    else if (_battery > 0xA0)
+                        return BatteryStatus.Medium;
+                    else
+                        return BatteryStatus.Low;
+                }
+            }
         }
         #endregion
 
@@ -131,7 +282,7 @@ namespace NintrollerLib.New
             GC.SuppressFinalize(this);
         }
 
-        internal void Log(string message)
+        internal static void Log(string message)
         {
 #if DEBUG
             Debug.WriteLine(message);
@@ -191,6 +342,7 @@ namespace NintrollerLib.New
             // kickoff the reading process if it hasn't started already
             if (!_reading && _stream != null)
             {
+                _reading = true;
                 ReadAsync();
             }
         }
@@ -248,18 +400,32 @@ namespace NintrollerLib.New
 
             buffer[0] = (byte)OutputReport.ReadMemory;
 
-            buffer[1] = (byte)(((address & 0xff000000) >> 24) | _rumbleBit);
-            buffer[2] =  (byte)((address & 0x00ff0000) >> 16);
-            buffer[3] =  (byte)((address & 0x0000ff00) >>  8);
-            buffer[4] =  (byte) (address & 0x000000ff);
+            buffer[1] = (byte)(((address & 0xFF000000) >> 24) | _rumbleBit);
+            buffer[2] = (byte) ((address & 0x00FF0000) >> 16);
+            buffer[3] = (byte) ((address & 0x0000FF00) >>  8);
+            buffer[4] = (byte)  (address & 0x000000FF);
 
-            buffer[5] = (byte)((size & 0xff00) >> 8);
-            buffer[6] = (byte) (size & 0xff);
+            buffer[5] = (byte)((size & 0xFF00) >> 8);
+            buffer[6] = (byte) (size & 0xFF);
 
             SendData(buffer);
+        }
 
-            // TODO: New: Determine if no reading should occur until the report comes back
-            // I'm thinking no. This function is typically only called when we go in status reporting mode
+        private void ReadMemory(int address, byte[] data)
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+
+            buffer[0] = (byte)OutputReport.ReadMemory;
+
+            buffer[1] = (byte)(((address & 0xFF000000) >> 24) | _rumbleBit);
+            buffer[2] = (byte)((address & 0x00FF0000) >> 16);
+            buffer[3] = (byte)((address & 0x0000FF00) >> 8);
+            buffer[4] = (byte)(address & 0x000000FF);
+            buffer[5] = (byte)data.Length;
+
+            Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, 16));
+
+            SendData(buffer);
         }
 
         private void GetCalibration()
@@ -268,7 +434,7 @@ namespace NintrollerLib.New
             ReadMemory(0x0016, 7);
         }
 
-        private void GetStatus()
+        public void GetStatus()
         {
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
 
@@ -278,12 +444,12 @@ namespace NintrollerLib.New
             SendData(buffer);
         }
 
-        private void ApplyReportingType(InputReport reportType, bool continuous = true)
+        private void ApplyReportingType(InputReport reportType, bool continuous = false)
         {
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.DataReportMode;
-            buffer[1] = (byte)((continuous ? 0x40 : 0x00) | _rumbleBit);
+            buffer[1] = (byte)((continuous ? 0x04 : 0x00) | _rumbleBit);
             buffer[2] = (byte)reportType;
 
             SendData(buffer);
@@ -315,6 +481,7 @@ namespace NintrollerLib.New
             }
 
             Log("Sending " + Enum.Parse(typeof(OutputReport), report[0].ToString()) + " report");
+            Log(BitConverter.ToString(report));
 
             if (_stream != null && _stream.CanWrite)
             {
@@ -324,8 +491,6 @@ namespace NintrollerLib.New
                     _stream.Write(report, 0, Constants.REPORT_LENGTH);
 
                     // TOOD: New: Determine if and when to use HidD_SetOutputReport
-                    // TODO: New: Determine if nothing else should occur until this report is acknowledged
-                    // No, we can send data without an acknowledgement
                 }
                 catch (Exception ex)
                 {
@@ -339,28 +504,30 @@ namespace NintrollerLib.New
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.WriteMemory;
-            buffer[1] = (byte)(((address & 0xff000000) >> 24) | _rumbleBit);
-            buffer[2] = (byte) ((address & 0x00ff0000) >> 16);
-            buffer[3] = (byte) ((address & 0x0000ff00) >>  8);
-            buffer[4] = (byte)  (address & 0x000000ff);
+            buffer[1] = (byte)(((address & 0xFF000000) >> 24) | _rumbleBit);
+            buffer[2] = (byte) ((address & 0x00FF0000) >> 16);
+            buffer[3] = (byte) ((address & 0x0000FF00) >>  8);
+            buffer[4] = (byte)  (address & 0x000000FF);
             buffer[5] = (byte)data.Length;
 
             Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, 16));
 
+            Debug.WriteLine(BitConverter.ToString(buffer));
+
             SendData(buffer);
         }
 
-        private void ApplyLEDs(bool one, bool two, bool three, bool four)
+        private void ApplyLEDs()
         {
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.LEDs;
             buffer[1] = (byte)
             (
-                (one   ? 0x10 : 0x00) |
-                (two   ? 0x20 : 0x00) |
-                (three ? 0x40 : 0x00) |
-                (four  ? 0x80 : 0x00) |
+                (_led1 ? 0x10 : 0x00) |
+                (_led2 ? 0x20 : 0x00) |
+                (_led3 ? 0x40 : 0x00) |
+                (_led4 ? 0x80 : 0x00) |
                 (_rumbleBit)
             );
 
@@ -374,6 +541,7 @@ namespace NintrollerLib.New
         private void ParseReport(byte[] report)
         {
             InputReport input = (InputReport)report[0];
+            bool error = (report[4] & 0x0F) == 0x03;
 
             switch(input)
             {
@@ -402,7 +570,8 @@ namespace NintrollerLib.New
                             
                             if (lowBattery && !_batteryLow)
                             {
-                                LowBattery(this, BatteryStatus.VeryLow);
+                                //LowBattery(this, BatteryStatus.VeryLow);
+                                LowBattery(this, new LowBatteryEventArgs(BatteryStatus.VeryLow));
                             }
 
                             // LED
@@ -412,10 +581,29 @@ namespace NintrollerLib.New
                             _led4 = (report[3] & 0x80) != 0;
 
                             // Extension/Type
-                            lock (_readingObj)
+                            bool ext = (report[3] & 0x02) != 0;
+                            if (ext)
                             {
-                                _readType = ReadReportType.Extension_A;
-                                ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                                //lock (_readingObj)
+                                //{
+                                //    _readType = ReadReportType.Extension_A;
+                                //    ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                                // 16-04-A4-00-F0-01-55-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+                                // 16-04-A4-00-FB-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+                                //}
+                            }
+                            else if (_currentType != ControllerType.Wiimote)
+                            {
+                                _currentType = ControllerType.Wiimote;
+                                _state = new Wiimote();
+                                _state.Update(report);
+
+                                // and Fire Event
+                                //ExtensionChange(this, _currentType);
+                                ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
+
+                                // and set report
+                                SetReportType(InputReport.BtnsAccIR);
                             }
                             break;
                     }
@@ -449,12 +637,13 @@ namespace NintrollerLib.New
                             }
                             else if (_currentType != ControllerType.Wiimote)
                             {
-                                // TODO: New: Remove extension
                                 _currentType = ControllerType.Wiimote;
                                 _state = new Wiimote();
+                                _state.Update(report);
 
                                 // and Fire Event
-                                ExtensionChange(this, _currentType);
+                                //ExtensionChange(this, _currentType);
+                                ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
 
                                 // and set report
                                 SetReportType(InputReport.BtnsAccIR);
@@ -530,8 +719,9 @@ namespace NintrollerLib.New
 
                                 // TODO: Get calibration if PID != 330
 
-                                // TODO: New: Fire ExtensionChange event
-                                ExtensionChange(this, _currentType);
+                                // Fire ExtensionChange event
+                                //ExtensionChange(this, _currentType);
+                                ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
                                 // set report
                             }
                             break;
@@ -546,23 +736,98 @@ namespace NintrollerLib.New
                 case InputReport.Acknowledge:
                     #region Parse Acknowledgement
                     Log("Output Acknowledged");
-                    // TODO: New: continue doing whatever
 
                     switch (_ackType)
                     {
                         case AcknowledgementType.IR_Step1:
+                            byte[] sensitivityBlock1 = null;
+                            
+                            switch (_irSensitivity)
+                            {
+                                case IRCamSensitivity.Custom:
+                                    sensitivityBlock1 = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0xC0 };
+                                    break;
+
+                                case IRCamSensitivity.CustomHigh:
+                                    sensitivityBlock1 = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0x41 };
+                                    break;
+
+                                case IRCamSensitivity.CustomMax:
+                                    sensitivityBlock1 = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x0C };
+                                    break;
+
+                                case IRCamSensitivity.Level1:
+                                    sensitivityBlock1 = new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x64, 0x00, 0xFE };
+                                    break;
+                                    
+                                case IRCamSensitivity.Level2:
+                                    sensitivityBlock1 = new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x96, 0x00, 0xB4 };
+                                    break;
+
+                                case IRCamSensitivity.Level4:
+                                    sensitivityBlock1 = new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xc8, 0x00, 0x36 };
+                                    break;
+
+                                case IRCamSensitivity.Level5:
+                                    sensitivityBlock1 = new byte[] { 0x07, 0x00, 0x00, 0x71, 0x01, 0x00, 0x72, 0x00, 0x20 };
+                                    break;
+
+                                case IRCamSensitivity.Level3:
+                                default:
+                                    sensitivityBlock1 = new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xaa, 0x00, 0x64 };
+                                    break;
+                            }
+
                             _ackType = AcknowledgementType.IR_Step2;
-                            WriteToMemory(Constants.REGISTER_IR_SENSITIVITY_1, new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x90, 0x00, 0x41 });
+                            WriteToMemory(Constants.REGISTER_IR_SENSITIVITY_1, sensitivityBlock1);
                             break;
 
                         case AcknowledgementType.IR_Step2:
+                            byte[] sensitivityBlock2 = null;
+                            
+                            switch (_irSensitivity)
+                            {
+                                case IRCamSensitivity.Custom:
+                                    sensitivityBlock2 = new byte[] { 0x40, 0x00 };
+                                    break;
+
+                                case IRCamSensitivity.CustomHigh:
+                                    sensitivityBlock2 = new byte[] { 0x40, 0x00 };
+                                    break;
+
+                                case IRCamSensitivity.CustomMax:
+                                    sensitivityBlock2 = new byte[] { 0x00, 0x00 };
+                                    break;
+
+                                case IRCamSensitivity.Level1:
+                                    sensitivityBlock2 = new byte[] { 0xFD, 0x05 };
+                                    break;
+                                    
+                                case IRCamSensitivity.Level2:
+                                    sensitivityBlock2 = new byte[] { 0xB3, 0x04 };
+                                    break;
+
+                                case IRCamSensitivity.Level4:
+                                    sensitivityBlock2 = new byte[] { 0x35, 0x03 };
+                                    break;
+
+                                case IRCamSensitivity.Level5:
+                                    sensitivityBlock2 = new byte[] { 0x1F, 0x03 };
+                                    break;
+
+                                case IRCamSensitivity.Level3:
+                                default:
+                                    sensitivityBlock2 = new byte[] { 0x63, 0x03 };
+                                    break;
+                            }
+
                             _ackType = AcknowledgementType.IR_Step3;
-                            WriteToMemory(Constants.REGISTER_IR_SENSITIVITY_2, new byte[] { 0x40, 0x00 });
+                            WriteToMemory(Constants.REGISTER_IR_SENSITIVITY_2, sensitivityBlock2);
                             break;
 
                         case AcknowledgementType.IR_Step3:
                             _ackType = AcknowledgementType.IR_Step4;
-                            WriteToMemory(Constants.REGISTER_IR_MODE, new byte[] { 0x01 });
+                            WriteToMemory(Constants.REGISTER_IR_MODE, new byte[] { (byte)_irMode });
                             break;
 
                         case AcknowledgementType.IR_Step4:
@@ -573,12 +838,32 @@ namespace NintrollerLib.New
                         case AcknowledgementType.IR_Step5:
                             Log("IR Camera Enabled");
                             _ackType = AcknowledgementType.NA;
-                            SetReportType(InputReport.BtnsAccIRExt);
+
+                            switch (_irMode)
+                            {
+                                case IRCamMode.Off:
+                                    SetReportType(InputReport.BtnsAccExt);
+                                    break;
+
+                                case IRCamMode.Basic:
+                                    SetReportType(InputReport.BtnsAccIRExt);
+                                    break;
+
+                                case IRCamMode.Wide:
+                                    SetReportType(InputReport.BtnsAccIR);
+                                    break;
+
+                                case IRCamMode.Full:
+                                    // not a supported report type right now
+                                    SetReportType(InputReport.BtnsIRExt);
+                                    break;
+                            }
                             break;
 
                         default:
                             Log("Unhandled acknowledgement");
                             _ackType = AcknowledgementType.NA;
+                            Log(BitConverter.ToString(report));
                             break;
                     }
                     #endregion
@@ -595,7 +880,12 @@ namespace NintrollerLib.New
                 case InputReport.BtnsIRExt:
                 case InputReport.BtnsAccIRExt:
                 case InputReport.ExtOnly:
-                    // TODO: New: Parse controller's input
+                    if (_state != null)
+                    {
+                        _state.Update(report);
+                        var arg = new NintrollerStateEventArgs(_currentType, _state, BatteryLevel);
+                        StateUpdate(this, arg);
+                    }
                     break;
                 #endregion
 
@@ -607,33 +897,122 @@ namespace NintrollerLib.New
 
         #endregion
 
-        public void EnableIR(IRSetting mode = IRSetting.Basic)
+        #region General
+
+        public static List<string> GetControllerPaths()
         {
-            // TODO: New: Incorperate IRSetting
+            List<string> result = new List<string>();
+            Guid hidGuid;
+            int index = 0;
+            SafeFileHandle mHandle;
 
-            ControllerType[] compatableTypes = new ControllerType[]
-            {
-                ControllerType.Wiimote,
-                ControllerType.Nunchuk,
-                ControllerType.NunchukB,
-                ControllerType.MotionPlus,
-                ControllerType.ClassicController,
-                ControllerType.ClassicControllerPro
-            };
+            // Get GUID of the HID class
+            HIDImports.HidD_GetHidGuid(out hidGuid);
 
-            if (!compatableTypes.Contains(_currentType))
+            // handle for HID devices
+            IntPtr hDevInfo = HIDImports.SetupDiGetClassDevs(ref hidGuid, null, IntPtr.Zero, HIDImports.DIGCF_DEVICEINTERFACE);
+            HIDImports.SP_DEVICE_INTERFACE_DATA diData = new HIDImports.SP_DEVICE_INTERFACE_DATA();
+            diData.cbSize = Marshal.SizeOf(diData);
+
+            // Step through all devices
+            while (HIDImports.SetupDiEnumDeviceInterfaces(hDevInfo, IntPtr.Zero, ref hidGuid, index, ref diData))
             {
-                Log("Can't Enabled IR Camera for type " + _currentType.ToString());
+                UInt32 size;
+                // get device buffer size
+                HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, IntPtr.Zero, 0, out size, IntPtr.Zero);
+
+                // create detail struct
+                HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA diDetail = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
+                diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
+
+                // populate detail struct
+                if (HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, ref diDetail, size, out size, IntPtr.Zero))
+                {
+                    // open read/write handle for the device
+                    mHandle = HIDImports.CreateFile(diDetail.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+
+                    // create attributes structure
+                    HIDImports.HIDD_ATTRIBUTES attrib = new HIDImports.HIDD_ATTRIBUTES();
+                    attrib.Size = Marshal.SizeOf(attrib);
+
+                    // populate attributes
+                    if (HIDImports.HidD_GetAttributes(mHandle.DangerousGetHandle(), ref attrib))
+                    {
+                        // check if it matches what we are looking for
+                        if (attrib.VendorID == Constants.VID && (attrib.ProductID == Constants.PID1 || attrib.ProductID == Constants.PID2))
+                        {
+                            result.Add(diDetail.DevicePath);
+                        }
+                    }
+
+                    mHandle.Close();
+                }
+                else
+                {
+                    Log("Failed to get info on a device.");
+                }
+
+                index += 1;
+            }
+
+            // clean up
+            HIDImports.SetupDiDestroyDeviceInfoList(hDevInfo);
+            Log("Total Controllers Found: " + result.Count.ToString());
+            return result;
+        }
+
+        internal static float Normalize(int raw, int min, int center, int max, int dead)
+        {
+            float availableRange = 0f;
+            float actualValue = 0f;
+
+            if (Math.Abs(center - raw) < dead)
+            {
+                return 0f;
+            }
+            else if (raw - center > 0)
+            {
+                availableRange = max - (center + dead);
+                actualValue = raw - (center + dead);
+
+                return (actualValue / availableRange);
             }
             else
             {
-                Log("Enabling IR Camera");
-                
-                _statusType = StatusType.IR_Enable;
-                byte[] buffer = new byte[Constants.REPORT_LENGTH];
-                buffer[0] = (byte)OutputReport.StatusRequest;
+                availableRange = center - dead - min;
+                actualValue = raw - center;
 
-                SendData(buffer);
+                if (availableRange == 0)
+                {
+                    return 0f;
+                }
+
+                return (actualValue / availableRange) - 1f;
+            }
+        }
+
+        internal static float Normalize(float raw, float min, float center, float max, float dead)
+        {
+            float availableRange = 0f;
+            float actualValue = 0f;
+
+            if (Math.Abs(center - raw) < dead)
+            {
+                return 0f;
+            }
+            else if (raw - center > 0)
+            {
+                availableRange = max - (center + dead);
+                actualValue = raw - (center + dead);
+
+                return (actualValue / availableRange);
+            }
+            else
+            {
+                availableRange = center - dead - min;
+                actualValue = raw - center;
+
+                return (actualValue / availableRange) - 1f;
             }
         }
 
@@ -652,276 +1031,172 @@ namespace NintrollerLib.New
             WriteToMemory(Constants.REGISTER_IR, new byte[] { 0x08 });
             // continue other steps in Acknowledgement Reporting
         }
+
+        private void DisableIR()
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            buffer[0] = (byte)OutputReport.IREnable;
+            buffer[1] = (byte)(0x00);
+            SendData(buffer);
+
+            buffer[0] = (byte)OutputReport.IREnable2;
+            buffer[1] = (byte)(0x00);
+            SendData(buffer);
+
+            // TODO: New: Check if we need to monitor the acknowledgment report
+        }
+
+        private void StartMotionPlus()
+        {
+            // TODO: New: Motion Plus
+            // determine if we need to pass through Nunchuck or Classic Controller
+            //WriteByte(Constants.REGISTER_MOTIONPLUS_INIT, 0x04);
+            //WriteToMemory(Constants.REGISTER_MOTIONPLUS_INIT, new byte[] { 0x04 });
+        }
+
+        /// <summary>
+        /// Sets the LEDs to a reversed binary display.
+        /// </summary>
+        /// <param name="bin">Decimal binary value to use (0 - 15).</param>
+        public void SetBinaryLEDs(int bin)
+        {
+            _led1 = (bin & 0x01) > 0;
+            _led2 = (bin & 0x02) > 0;
+            _led3 = (bin & 0x04) > 0;
+            _led4 = (bin & 0x08) > 0;
+
+            ApplyLEDs();
+        }
+
+        /// <summary>
+        /// Sets the LEDs to correspond with the player number.
+        /// (e.g. 1 = 1st LED &amp; 4 = 4th LED)
+        /// </summary>
+        /// <param name="num">Player LED to set (0 - 15)</param>
+        public void SetPlayerLED(int num)
+        {
+            // 1st LED
+            if (num == 1 || num == 5 || num == 8 || num == 10 || num == 11 || num > 12)
+                _led1 = true;
+            else
+                _led1 = false;
+
+            // 2nd LED
+            if (num == 2 || num == 5 || num == 6 || num == 9 || num == 11 || num == 12 || num > 13)
+                _led2 = true;
+            else
+                _led2 = false;
+
+            // 3rd LED
+            if (num == 3 || num == 6 || num == 7 || num == 8 || num == 11 || num == 12 || num == 13 || num == 15)
+                _led3 = true;
+            else
+                _led3 = false;
+
+            // 4th LED
+            if (num == 4 || num == 7 || num == 9 || num == 10 || num > 11)
+                _led4 = true;
+            else
+                _led4 = false;
+
+            ApplyLEDs();
+        }
+
+        #endregion
+
+        #region Calibration
+
+        public void SetCalibration(Wiimote wiimoteCalibration)
+        {
+            if (_currentType == ControllerType.Wiimote)
+            {
+                ((Wiimote)_state).accelerometer.Calibrate(wiimoteCalibration.accelerometer);
+            }
+            else if (_currentType == ControllerType.Nunchuk || _currentType == ControllerType.NunchukB)
+            {
+                ((Nunchuk)_state).wiimote.accelerometer.Calibrate(wiimoteCalibration.accelerometer);
+            }
+            else if (_currentType == ControllerType.ClassicController)
+            {
+                ((ClassicController)_state).wiimote.accelerometer.Calibrate(wiimoteCalibration.accelerometer);
+            }
+            else if (_currentType == ControllerType.ClassicControllerPro)
+            {
+                ((ClassicControllerPro)_state).wiimote.accelerometer.Calibrate(wiimoteCalibration.accelerometer);
+            }
+        }
+
+        public void SetCalibration(Nunchuk nunchukCalibration)
+        {
+            if (_currentType == ControllerType.Nunchuk || _currentType == ControllerType.NunchukB)
+            {
+                ((Nunchuk)_state).joystick.Calibrate(nunchukCalibration.joystick);
+                ((Nunchuk)_state).accelerometer.Calibrate(nunchukCalibration.accelerometer);
+            }
+        }
+
+        public void SetCalibration(ClassicController classicCalibration)
+        {
+            if (_currentType == ControllerType.ClassicController)
+            {
+                ((ClassicController)_state).LJoy.Calibrate(classicCalibration.LJoy);
+                ((ClassicController)_state).RJoy.Calibrate(classicCalibration.RJoy);
+                ((ClassicController)_state).L.Calibrate(classicCalibration.L);
+                ((ClassicController)_state).R.Calibrate(classicCalibration.R);
+            }
+        }
+
+        public void SetCalibration(ClassicControllerPro classicProCalibration)
+        {
+            ((ClassicControllerPro)_state).LJoy.Calibrate(classicProCalibration.LJoy);
+            ((ClassicControllerPro)_state).RJoy.Calibrate(classicProCalibration.RJoy);
+        }
+
+        public void SetCalibration(ProController proCalibration)
+        {
+            ((ProController)_state).LJoy.Calibrate(proCalibration.LJoy);
+            ((ProController)_state).RJoy.Calibrate(proCalibration.RJoy);
+        }
+
+        #endregion
     }
 
     #region New Event Args
 
     public class NintrollerStateEventArgs : EventArgs
     {
-        public Nintroller sender;
         public ControllerType controllerType;
         public INintrollerState state;
         public BatteryStatus batteryLevel;
         
-        // TODO: New: Create Constructor
-        public NintrollerStateEventArgs(Nintroller device, ControllerType type, INintrollerState state, BatteryStatus battery)
+        public NintrollerStateEventArgs(ControllerType type, INintrollerState state, BatteryStatus battery)
         {
-            this.sender = device;
             this.controllerType = type;
-            this.state = state;
-            this.batteryLevel = battery;
+            this.state          = state;
+            this.batteryLevel   = battery;
+        }
+    }
+
+    public class NintrollerExtensionEventArgs : EventArgs
+    {
+        public ControllerType controllerType;
+
+        public NintrollerExtensionEventArgs(ControllerType type)
+        {
+            controllerType = type;
+        }
+    }
+
+    public class LowBatteryEventArgs : EventArgs
+    {
+        public BatteryStatus batteryLevel;
+
+        public LowBatteryEventArgs(BatteryStatus level)
+        {
+            batteryLevel = level;
         }
     }
 
     #endregion
 
-    #region New Enums
-    internal enum AcknowledgementType
-    {
-        NA,
-        IR_Step1,
-        IR_Step2,
-        IR_Step3,
-        IR_Step4,
-        IR_Step5
-    }
-
-    internal enum StatusType
-    {
-        Unknown,
-        Requested,
-        IR_Enable,
-        DiscoverExtension
-    }
-    #endregion
-
-    #region New Structs
-
-    public interface INintrollerParsable
-    {
-        public void Parse(byte[] input);
-    }
-
-    public interface INintrollerNormalizable
-    {
-        public void Normalize();
-    }
-
-    public struct CoreButtons : INintrollerParsable
-    {
-        public bool A, B;
-        public bool One, Two;
-        public bool Up, Down, Left, Right;
-        public bool Plus, Minus, Home;
-
-        public void Parse(byte[] input)
-        {
-            InputReport type = (InputReport)input[0];
-
-            if (type != InputReport.ExtOnly)
-            {
-                A     = (input[2] & 0x08) != 0;
-                B     = (input[2] & 0x04) != 0;
-                One   = (input[2] & 0x02) != 0;
-                Two   = (input[2] & 0x01) != 0;
-                Home  = (input[2] & 0x80) != 0;
-                Minus = (input[2] & 0x10) != 0;
-                Plus  = (input[1] & 0x10) != 0;
-                Up    = (input[1] & 0x08) != 0;
-                Down  = (input[1] & 0x04) != 0;
-                Right = (input[1] & 0x02) != 0;
-                Left  = (input[1] & 0x01) != 0;
-            }
-        }
-    }
-
-    public struct Accelerometer : INintrollerParsable, INintrollerNormalizable
-    {
-        float rawX, rawY, rawZ;
-        float X, Y, Z;
-
-        public void Parse(byte[] input)
-        {
-            InputReport type = (InputReport)input[0];
-
-            InputReport[] accepted = new InputReport[]
-            {
-                InputReport.BtnsAcc,
-                InputReport.BtnsAccExt,
-                InputReport.BtnsAccIR,
-                InputReport.BtnsAccIRExt
-            };
-
-            if (accepted.Contains(type))
-            {
-                rawX = input[3];
-                rawY = input[4];
-                rawZ = input[5];
-            }
-        }
-
-        public void Normalize()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public struct IRPoint
-    {
-        public int rawX, rawY, size;
-        public float x, y;
-        public bool visible;
-    }
-
-    public struct IR : INintrollerParsable
-    {
-        IRPoint point1, point2, point3, point4;
-
-        public void Parse(byte[] input)
-        {
-            InputReport type = (InputReport)input[0];
-            int offset = 0;
-
-            if (type == InputReport.BtnsAccIR || type == InputReport.BtnsAccIRExt)
-            {
-                offset = 6;
-            }
-            else if (type == InputReport.BtnsIRExt)
-            {
-                offset = 3;
-            }
-            else
-            {
-                return;
-            }
-
-            point1.rawX = input[offset]     | ((input[offset + 2] >> 4) & 0x03) << 8;
-            point1.rawY = input[offset + 1] | ((input[offset + 2] >> 6) & 0x03) << 8;
-
-            if (type == InputReport.BtnsAccIR)
-            {
-                // Extended Mode
-                point2.rawX = input[offset + 3]  | ((input[offset + 5]  >> 4) & 0x03) << 8;
-                point2.rawY = input[offset + 4]  | ((input[offset + 5]  >> 6) & 0x03) << 8;
-                point3.rawX = input[offset + 6]  | ((input[offset + 8]  >> 4) & 0x03) << 8;
-                point3.rawY = input[offset + 7]  | ((input[offset + 8]  >> 6) & 0x03) << 8;
-                point4.rawX = input[offset + 9]  | ((input[offset + 11] >> 4) & 0x03) << 8;
-                point4.rawY = input[offset + 10] | ((input[offset + 11] >> 6) & 0x03) << 8;
-                
-                point1.size = input[offset + 2]  & 0x0f;
-                point2.size = input[offset + 5]  & 0x0f;
-                point3.size = input[offset + 8]  & 0x0f;
-                point4.size = input[offset + 11] & 0x0f;
-                
-                point1.visible = !(input[offset]     == 0xff && input[offset + 1]  == 0xff && input[offset + 2]  == 0xff);
-                point2.visible = !(input[offset + 3] == 0xff && input[offset + 4]  == 0xff && input[offset + 5]  == 0xff);
-                point3.visible = !(input[offset + 6] == 0xff && input[offset + 7]  == 0xff && input[offset + 8]  == 0xff);
-                point4.visible = !(input[offset + 9] == 0xff && input[offset + 10] == 0xff && input[offset + 11] == 0xff);
-            }
-            else
-            {
-                // Basic Mode
-                point2.rawX = input[offset + 3] | ((input[offset + 2] >> 0) & 0x03) << 8;
-                point2.rawY = input[offset + 4] | ((input[offset + 2] >> 2) & 0x03) << 8;
-                point3.rawX = input[offset + 5] | ((input[offset + 7] >> 4) & 0x03) << 8;
-                point3.rawY = input[offset + 6] | ((input[offset + 7] >> 6) & 0x03) << 8;
-                point4.rawX = input[offset + 8] | ((input[offset + 7] >> 0) & 0x03) << 8;
-                point4.rawY = input[offset + 9] | ((input[offset + 7] >> 2) & 0x03) << 8;
-                
-                point1.size = 0x00;
-                point2.size = 0x00;
-                point3.size = 0x00;
-                point4.size = 0x00;
-                
-                point1.visible = !(input[offset]     == 0xff && input[offset + 1] == 0xff);
-                point2.visible = !(input[offset + 3] == 0xff && input[offset + 4] == 0xff);
-                point3.visible = !(input[offset + 5] == 0xff && input[offset + 6] == 0xff);
-                point4.visible = !(input[offset + 8] == 0xff && input[offset + 9] == 0xff);
-            }
-        }
-    }
-
-    public struct Trigger : INintrollerParsable
-    {
-        public short rawValue;
-        public float value;
-    }
-
-    public struct Joystick : INintrollerParsable
-    {
-        public short rawValue;
-        public float value;
-    }
-
-    #endregion
-
-    #region Full Structs
-
-    struct Wiimote : INintrollerState
-    {
-        CoreButtons buttons;
-        Accelerometer accelerometer;
-        IR irSensor;
-        //INintrollerState extension;
-
-        public Wiimote(byte[] rawData)
-        {
-            buttons = new CoreButtons();
-            accelerometer = new Accelerometer();
-            irSensor = new IR();
-            //extension = null;
-
-            buttons.Parse(rawData);
-        }
-    }
-
-    struct Nunchuk : INintrollerState
-    {
-        Wiimote wiimote;
-        Accelerometer accelerometer;
-        Joystick joystick;
-        bool C, Z;
-    }
-
-    struct ClassicController : INintrollerState
-    {
-        Wiimote wiimote;
-        Joystick LJoy, RJoy;
-        Trigger L, R;
-        bool A, B, X, Y;
-        bool Up, Down, Left, Right;
-        bool ZL, ZR, Plus, Minus, Home;
-    }
-
-    struct ClassicControllerPro : INintrollerState
-    {
-        Wiimote wiimote;
-        Joystick LJoy, RJoy;
-        bool A, B, X, Y;
-        bool Up, Down, Left, Right;
-        bool L, R, ZL, ZR;
-        bool Plus, Minus, Home;
-    }
-
-    public struct ProController : INintrollerState
-    {
-        Joystick LJoy, RJoy;
-        bool A, B, X, Y;
-        bool Up, Down, Left, Right;
-        bool L, R, ZL, ZR;
-        bool Plus, Minus, Home;
-        bool LStick, RStick;
-    }
-
-    public struct BalanceBoard : INintrollerState
-    {
-
-    }
-
-    public struct WiimotePlus : INintrollerState
-    {
-        Wiimote wiimote;
-        //gyro
-    }
-    #endregion
 }
