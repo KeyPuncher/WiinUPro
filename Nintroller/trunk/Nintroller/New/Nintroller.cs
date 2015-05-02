@@ -673,7 +673,6 @@ namespace NintrollerLib.New
 
                                 Log("Controller type: " + _currentType.ToString());
 
-                                // TODO: New: Handle the controller type
                                 switch(_currentType)
                                 {
                                     case ControllerType.ProController:

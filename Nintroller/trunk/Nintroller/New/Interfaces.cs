@@ -20,4 +20,9 @@ namespace NintrollerLib.New
     {
         void Normalize();
     }
+
+    public interface INintrollerBounds
+    {
+        bool InBounds(int x, int y = 0, int z = 0);
+    }
 }

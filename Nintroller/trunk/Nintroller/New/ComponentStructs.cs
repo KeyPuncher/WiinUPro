@@ -89,16 +89,21 @@ namespace NintrollerLib.New
             Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadY);
             Z = Nintroller.Normalize(rawZ, minZ, centerZ, maxZ, deadZ);
         }
+
+        public override string ToString()
+        {
+            return string.Format("X:{0} Y:{1} Z{2}", X, Y, Z);
+        }
     }
 
     public struct IRPoint
     {
         public int rawX, rawY, size;
-        public float x, y;
+        //public float x, y;
         public bool visible;
     }
 
-    public struct IR : INintrollerParsable
+    public struct IR : INintrollerParsable, INintrollerNormalizable
     {
         public IRPoint point1, point2, point3, point4;
         public float rotation, distance;
@@ -162,7 +167,20 @@ namespace NintrollerLib.New
             }
         }
 
-        // TODO: New: Calculate into a point
+        public void Normalize()
+        {
+            X = (point2.rawX - point1.rawX) / 2f;
+            Y = (point2.rawY - point1.rawX) / 2f;
+
+            float denominator = (point2.rawX - point1.rawX);
+            rotation = denominator == 0 ? 0f : (180 / 3.14159f) * (float)Math.Sin((point2.rawY - point1.rawX) / denominator);
+            distance = (float)Math.Sqrt(Math.Pow(point2.rawX - point1.rawX, 2) + Math.Pow(point2.rawY - point1.rawY, 2));
+        }
+
+        public override string ToString()
+        {
+            return string.Format("X:{0} Y:{1}", X, Y);
+        }
     }
 
     public struct Trigger : INintrollerParsable, INintrollerNormalizable
@@ -241,6 +259,11 @@ namespace NintrollerLib.New
             X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadX);
             Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadY);
         }
+
+        public override string ToString()
+        {
+            return string.Format("X:{0} Y:{1}", X, Y);
+        }
     }
 
     // Balance Board
@@ -253,4 +276,55 @@ namespace NintrollerLib.New
     //raw.BottomLeft   = (short)((short)r[offset + 6] << 8 | r[offset + 7]);
 
     // Calculate other members (like weight distribution)
+
+    public struct CircularBoundry : INintrollerBounds
+    {
+        public int center_x;
+        public int center_y;
+        public int radius;
+
+        public CircularBoundry(int center_x, int center_y, int radius)
+        {
+            this.center_x = center_x;
+            this.center_y = center_y;
+            this.radius = radius;
+        }
+
+        public bool InBounds(int x, int y = 0, int z = 0)
+        {
+            var dist = Math.Sqrt(Math.Pow(center_x - x, 2) + Math.Pow(center_y - y, 2));
+
+            if (dist <= radius) 
+                return true;
+            else 
+                return false;
+        }
+    }
+
+    public struct SquareBoundry : INintrollerBounds
+    {
+        public int center_x;
+        public int center_y;
+        public int size;
+
+        public SquareBoundry(int x, int y, int s)
+        {
+            center_x = x;
+            center_y = y;
+            size = s;
+        }
+
+        public bool InBounds(int x, int y = 0, int z = 0)
+        {
+            if (x > (center_x - size/2) && x < (center_x + size/2))
+            {
+                if (y > (center_y - size/2) && y < (center_y + size/2))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 }
