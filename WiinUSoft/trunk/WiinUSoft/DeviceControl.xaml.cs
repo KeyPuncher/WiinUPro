@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using NintrollerLib;
+using NintrollerLib.New;
 using System.Xml.Serialization;
 using System.IO;
 
@@ -32,10 +32,12 @@ namespace WiinUSoft
                 if (device != null)
                 {
                     device.ExtensionChange += device_ExtensionChange;
-                    device.StateChange += device_StateChange;
+                    device.StateUpdate += device_StateChange;
+                    device.LowBattery += device_LowBattery;
                 }
             }
         }
+
         internal bool Connected
         {
             get
@@ -105,6 +107,7 @@ namespace WiinUSoft
             {
                 ConnectionState = DeviceState.Discovered;
 
+                // I forgot the purpose for this...
                 if (device.Type != ControllerType.ProController && device.Type != ControllerType.BalanceBoard)
                 {
                     device.Connect();
@@ -216,9 +219,9 @@ namespace WiinUSoft
             }
         }
 
-        void device_ExtensionChange(object sender, ExtensionChangeEventArgs e)
+        void device_ExtensionChange(object sender, NintrollerExtensionEventArgs e)
         {
-            DeviceType = e.Extension;
+            DeviceType = e.controllerType;
 
             if (holder != null)
             {
@@ -230,7 +233,12 @@ namespace WiinUSoft
             ));
         }
 
-        void device_StateChange(object sender, StateChangeEventArgs e)
+        void device_LowBattery(object sender, LowBatteryEventArgs e)
+        {
+            SetBatteryStatus(e.batteryLevel == BatteryStatus.Low || e.batteryLevel == BatteryStatus.VeryLow);
+        }
+
+        void device_StateChange(object sender, NintrollerStateEventArgs e)
         {
             // Makes the timer wait
             if (updateTimer != null) updateTimer.Change(1000, UPDATE_SPEED);
@@ -240,189 +248,182 @@ namespace WiinUSoft
                 return;
             }
 
-            bool lowBat = false;
-
-            if (DeviceType == ControllerType.ProController)
+            switch (e.controllerType)
             {
-                holder.SetValue(Inputs.ProController.A, e.ProController.A);
-                holder.SetValue(Inputs.ProController.B, e.ProController.B);
-                holder.SetValue(Inputs.ProController.X, e.ProController.X);
-                holder.SetValue(Inputs.ProController.Y, e.ProController.Y);
-
-                holder.SetValue(Inputs.ProController.UP, e.ProController.Up);
-                holder.SetValue(Inputs.ProController.DOWN, e.ProController.Down);
-                holder.SetValue(Inputs.ProController.LEFT, e.ProController.Left);
-                holder.SetValue(Inputs.ProController.RIGHT, e.ProController.Right);
-
-                holder.SetValue(Inputs.ProController.L, e.ProController.L);
-                holder.SetValue(Inputs.ProController.R, e.ProController.R);
-                holder.SetValue(Inputs.ProController.ZL, e.ProController.ZL);
-                holder.SetValue(Inputs.ProController.ZR, e.ProController.ZR);
-
-                holder.SetValue(Inputs.ProController.START, e.ProController.Start);
-                holder.SetValue(Inputs.ProController.SELECT, e.ProController.Select);
-                holder.SetValue(Inputs.ProController.HOME, e.ProController.Home);
-                holder.SetValue(Inputs.ProController.LS, e.ProController.LS);
-                holder.SetValue(Inputs.ProController.RS, e.ProController.RS);
-
-                holder.SetValue(Inputs.ProController.LRIGHT, e.ProController.LeftJoy.X > 0 ? e.ProController.LeftJoy.X : 0f);
-                holder.SetValue(Inputs.ProController.LLEFT, e.ProController.LeftJoy.X < 0 ? e.ProController.LeftJoy.X * -1 : 0f);
-                holder.SetValue(Inputs.ProController.LUP, e.ProController.LeftJoy.Y > 0 ? e.ProController.LeftJoy.Y : 0f);
-                holder.SetValue(Inputs.ProController.LDOWN, e.ProController.LeftJoy.Y < 0 ? e.ProController.LeftJoy.Y * -1 : 0f);
-
-                holder.SetValue(Inputs.ProController.RRIGHT, e.ProController.RightJoy.X > 0 ? e.ProController.RightJoy.X : 0f);
-                holder.SetValue(Inputs.ProController.RLEFT, e.ProController.RightJoy.X < 0 ? e.ProController.RightJoy.X * -1 : 0f);
-                holder.SetValue(Inputs.ProController.RUP, e.ProController.RightJoy.Y > 0 ? e.ProController.RightJoy.Y : 0f);
-                holder.SetValue(Inputs.ProController.RDOWN, e.ProController.RightJoy.Y < 0 ? e.ProController.RightJoy.Y * -1 : 0f);
-
-                //bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
-                //if (doRumble != e.ProController.Rumble)
-                //{
-                //    device.SetRumble(doRumble);
-                //}
-
-                float intensity = 0;
-                if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
-                {
-                    rumbleAmount = (int)intensity;
-                    RumbleStep();
-                }
-
-                lowBat = e.ProController.BatteryLow && !e.ProController.Charging;
-            }
-            else if (DeviceType == ControllerType.BalanceBoard)
-            {
+                // TODO: Motion Plus Reading (not for 1st release)
                 // TODO: Balance Board Reading (not for 1st release)
+                // TODO: Musical Extension readings (not for 1st release)
+                case ControllerType.ProController:
+                    #region Pro Controller
+                    ProController pro = (ProController)e.state;
+
+                    holder.SetValue(Inputs.ProController.A, pro.A);
+                    holder.SetValue(Inputs.ProController.B, pro.B);
+                    holder.SetValue(Inputs.ProController.X, pro.X);
+                    holder.SetValue(Inputs.ProController.Y, pro.Y);
+
+                    holder.SetValue(Inputs.ProController.UP, pro.Up);
+                    holder.SetValue(Inputs.ProController.DOWN, pro.Down);
+                    holder.SetValue(Inputs.ProController.LEFT, pro.Left);
+                    holder.SetValue(Inputs.ProController.RIGHT, pro.Right);
+
+                    holder.SetValue(Inputs.ProController.L, pro.L);
+                    holder.SetValue(Inputs.ProController.R, pro.R);
+                    holder.SetValue(Inputs.ProController.ZL, pro.ZL);
+                    holder.SetValue(Inputs.ProController.ZR, pro.ZR);
+
+                    holder.SetValue(Inputs.ProController.START, pro.Plus);
+                    holder.SetValue(Inputs.ProController.SELECT, pro.Minus);
+                    holder.SetValue(Inputs.ProController.HOME, pro.Home);
+                    holder.SetValue(Inputs.ProController.LS, pro.LStick);
+                    holder.SetValue(Inputs.ProController.RS, pro.RStick);
+
+                    holder.SetValue(Inputs.ProController.LRIGHT, pro.LJoy.X > 0 ? pro.LJoy.X : 0f);
+                    holder.SetValue(Inputs.ProController.LLEFT,  pro.LJoy.X < 0 ? pro.LJoy.X * -1 : 0f);
+                    holder.SetValue(Inputs.ProController.LUP,    pro.LJoy.Y > 0 ? pro.LJoy.Y : 0f);
+                    holder.SetValue(Inputs.ProController.LDOWN,  pro.LJoy.Y < 0 ? pro.LJoy.Y * -1 : 0f);
+
+                    holder.SetValue(Inputs.ProController.RRIGHT, pro.RJoy.X > 0 ? pro.RJoy.X : 0f);
+                    holder.SetValue(Inputs.ProController.RLEFT,  pro.RJoy.X < 0 ? pro.RJoy.X * -1 : 0f);
+                    holder.SetValue(Inputs.ProController.RUP,    pro.RJoy.Y > 0 ? pro.RJoy.Y : 0f);
+                    holder.SetValue(Inputs.ProController.RDOWN,  pro.RJoy.Y < 0 ? pro.RJoy.Y * -1 : 0f);
+                    #endregion
+                    break;
+
+                case ControllerType.Wiimote:
+                    Wiimote wm = (Wiimote)e.state;
+                    SetWiimoteInputs(wm);
+                    break;
+
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                    #region Nunchuk
+                    Nunchuk nun = (Nunchuk)e.state;
+
+                    SetWiimoteInputs(nun.wiimote);
+
+                    holder.SetValue(Inputs.Nunchuk.C, nun.C);
+                    holder.SetValue(Inputs.Nunchuk.Z, nun.Z);
+
+                    holder.SetValue(Inputs.Nunchuk.RIGHT, nun.joystick.X > 0 ? nun.joystick.X : 0f);
+                    holder.SetValue(Inputs.Nunchuk.LEFT,  nun.joystick.X < 0 ? nun.joystick.X * -1 : 0f);
+                    holder.SetValue(Inputs.Nunchuk.UP,    nun.joystick.Y > 0 ? nun.joystick.Y : 0f);
+                    holder.SetValue(Inputs.Nunchuk.DOWN,  nun.joystick.Y < 0 ? nun.joystick.Y * -1 : 0f);
+
+                    //TODO: Nunchuk Accelerometer (not for 1st release)
+                    #endregion
+                    break;
+
+                case ControllerType.ClassicController:
+                    #region Classic Controller
+                    ClassicController cc = (ClassicController)e.state;
+
+                    SetWiimoteInputs(cc.wiimote);
+
+                    holder.SetValue(Inputs.ClassicController.A, cc.A);
+                    holder.SetValue(Inputs.ClassicController.B, cc.B);
+                    holder.SetValue(Inputs.ClassicController.X, cc.X);
+                    holder.SetValue(Inputs.ClassicController.Y, cc.Y);
+
+                    holder.SetValue(Inputs.ClassicController.UP, cc.Up);
+                    holder.SetValue(Inputs.ClassicController.DOWN, cc.Down);
+                    holder.SetValue(Inputs.ClassicController.LEFT, cc.Left);
+                    holder.SetValue(Inputs.ClassicController.RIGHT, cc.Right);
+
+                    holder.SetValue(Inputs.ClassicController.L, cc.L.value > 0);
+                    holder.SetValue(Inputs.ClassicController.R, cc.R.value > 0);
+                    holder.SetValue(Inputs.ClassicController.ZL, cc.ZL);
+                    holder.SetValue(Inputs.ClassicController.ZR, cc.ZR);
+
+                    holder.SetValue(Inputs.ClassicController.START, cc.Start);
+                    holder.SetValue(Inputs.ClassicController.SELECT, cc.Select);
+                    holder.SetValue(Inputs.ClassicController.HOME, cc.Home);
+
+                    holder.SetValue(Inputs.ClassicController.LFULL, cc.LFull);
+                    holder.SetValue(Inputs.ClassicController.RFULL, cc.RFull);
+                    holder.SetValue(Inputs.ClassicController.LT, cc.L.value > 0.1f ? cc.L.value : 0f);
+                    holder.SetValue(Inputs.ClassicController.RT, cc.R.value > 0.1f ? cc.R.value : 0f);
+
+                    holder.SetValue(Inputs.ClassicController.LRIGHT, cc.LJoy.X > 0 ? cc.LJoy.X : 0f);
+                    holder.SetValue(Inputs.ClassicController.LLEFT, cc.LJoy.X < 0 ? cc.LJoy.X * -1 : 0f);
+                    holder.SetValue(Inputs.ClassicController.LUP, cc.LJoy.Y > 0 ? cc.LJoy.Y : 0f);
+                    holder.SetValue(Inputs.ClassicController.LDOWN, cc.LJoy.Y < 0 ? cc.LJoy.Y * -1 : 0f);
+
+                    holder.SetValue(Inputs.ClassicController.RRIGHT, cc.RJoy.X > 0 ? cc.RJoy.X : 0f);
+                    holder.SetValue(Inputs.ClassicController.RLEFT, cc.RJoy.X < 0 ? cc.RJoy.X * -1 : 0f);
+                    holder.SetValue(Inputs.ClassicController.RUP, cc.RJoy.Y > 0 ? cc.RJoy.Y : 0f);
+                    holder.SetValue(Inputs.ClassicController.RDOWN, cc.RJoy.Y < 0 ? cc.RJoy.Y * -1 : 0f);
+                    #endregion
+                    break;
+
+                case ControllerType.ClassicControllerPro:
+                    #region Classic Controller Pro
+                    ClassicControllerPro ccp = (ClassicControllerPro)e.state;
+
+                    SetWiimoteInputs(ccp.wiimote);
+
+                    holder.SetValue(Inputs.ClassicControllerPro.A, ccp.A);
+                    holder.SetValue(Inputs.ClassicControllerPro.B, ccp.B);
+                    holder.SetValue(Inputs.ClassicControllerPro.X, ccp.X);
+                    holder.SetValue(Inputs.ClassicControllerPro.Y, ccp.Y);
+
+                    holder.SetValue(Inputs.ClassicControllerPro.UP, ccp.Up);
+                    holder.SetValue(Inputs.ClassicControllerPro.DOWN, ccp.Down);
+                    holder.SetValue(Inputs.ClassicControllerPro.LEFT, ccp.Left);
+                    holder.SetValue(Inputs.ClassicControllerPro.RIGHT, ccp.Right);
+
+                    holder.SetValue(Inputs.ClassicControllerPro.L, ccp.L);
+                    holder.SetValue(Inputs.ClassicControllerPro.R, ccp.R);
+                    holder.SetValue(Inputs.ClassicControllerPro.ZL, ccp.ZL);
+                    holder.SetValue(Inputs.ClassicControllerPro.ZR, ccp.ZR);
+
+                    holder.SetValue(Inputs.ClassicControllerPro.START, ccp.Start);
+                    holder.SetValue(Inputs.ClassicControllerPro.SELECT, ccp.Select);
+                    holder.SetValue(Inputs.ClassicControllerPro.HOME, ccp.Home);
+
+                    holder.SetValue(Inputs.ClassicControllerPro.LRIGHT, ccp.LJoy.X > 0 ? ccp.LJoy.X : 0f);
+                    holder.SetValue(Inputs.ClassicControllerPro.LLEFT, ccp.LJoy.X < 0 ? ccp.LJoy.X * -1 : 0f);
+                    holder.SetValue(Inputs.ClassicControllerPro.LUP, ccp.LJoy.Y > 0 ? ccp.LJoy.Y : 0f);
+                    holder.SetValue(Inputs.ClassicControllerPro.LDOWN, ccp.LJoy.Y < 0 ? ccp.LJoy.Y * -1 : 0f);
+
+                    holder.SetValue(Inputs.ClassicControllerPro.RRIGHT, ccp.RJoy.X > 0 ? ccp.RJoy.X : 0f);
+                    holder.SetValue(Inputs.ClassicControllerPro.RLEFT, ccp.RJoy.X < 0 ? ccp.RJoy.X * -1 : 0f);
+                    holder.SetValue(Inputs.ClassicControllerPro.RUP, ccp.RJoy.Y > 0 ? ccp.RJoy.Y : 0f);
+                    holder.SetValue(Inputs.ClassicControllerPro.RDOWN, ccp.RJoy.Y < 0 ? ccp.RJoy.Y * -1 : 0f);
+                    #endregion
+                    break;
             }
-            else
+
+            float intensity = 0;
+            if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
             {
-                holder.SetValue(Inputs.Wiimote.A, e.Wiimote.A);
-                holder.SetValue(Inputs.Wiimote.B, e.Wiimote.B);
-                holder.SetValue(Inputs.Wiimote.ONE, e.Wiimote.One);
-                holder.SetValue(Inputs.Wiimote.TWO, e.Wiimote.Two);
-
-                holder.SetValue(Inputs.Wiimote.UP, e.Wiimote.Up);
-                holder.SetValue(Inputs.Wiimote.DOWN, e.Wiimote.Down);
-                holder.SetValue(Inputs.Wiimote.LEFT, e.Wiimote.Left);
-                holder.SetValue(Inputs.Wiimote.RIGHT, e.Wiimote.Right);
-
-                holder.SetValue(Inputs.Wiimote.MINUS, e.Wiimote.Minus);
-                holder.SetValue(Inputs.Wiimote.PLUS, e.Wiimote.Plus);
-                holder.SetValue(Inputs.Wiimote.HOME, e.Wiimote.Home);
-
-                //TODO: Wiimote Accelerometer and IR sensor Reading (not for 1st release)
-
-                switch (DeviceType)
-                {
-                    case ControllerType.Nunchuk:
-                    case ControllerType.NunchukB:
-                        holder.SetValue(Inputs.Nunchuk.C, e.Wiimote.Nunchuck.C);
-                        holder.SetValue(Inputs.Nunchuk.Z, e.Wiimote.Nunchuck.Z);
-
-                        holder.SetValue(Inputs.Nunchuk.RIGHT, e.Wiimote.Nunchuck.Joy.X > 0 ? e.Wiimote.Nunchuck.Joy.X : 0f);
-                        holder.SetValue(Inputs.Nunchuk.LEFT, e.Wiimote.Nunchuck.Joy.X < 0 ? e.Wiimote.Nunchuck.Joy.X * -1 : 0f);
-                        holder.SetValue(Inputs.Nunchuk.UP, e.Wiimote.Nunchuck.Joy.Y > 0 ? e.Wiimote.Nunchuck.Joy.Y : 0f);
-                        holder.SetValue(Inputs.Nunchuk.DOWN, e.Wiimote.Nunchuck.Joy.Y < 0 ? e.Wiimote.Nunchuck.Joy.Y * -1 : 0f);
-
-                        //TODO: Nunchuk Accelerometer (not for 1st release)
-                        break;
-
-                    case ControllerType.ClassicController:
-                        holder.SetValue(Inputs.ClassicController.A, e.Wiimote.ClassicController.A);
-                        holder.SetValue(Inputs.ClassicController.B, e.Wiimote.ClassicController.B);
-                        holder.SetValue(Inputs.ClassicController.X, e.Wiimote.ClassicController.X);
-                        holder.SetValue(Inputs.ClassicController.Y, e.Wiimote.ClassicController.Y);
-
-                        holder.SetValue(Inputs.ClassicController.UP, e.Wiimote.ClassicController.Up);
-                        holder.SetValue(Inputs.ClassicController.DOWN, e.Wiimote.ClassicController.Down);
-                        holder.SetValue(Inputs.ClassicController.LEFT, e.Wiimote.ClassicController.Left);
-                        holder.SetValue(Inputs.ClassicController.RIGHT, e.Wiimote.ClassicController.Right);
-
-                        holder.SetValue(Inputs.ClassicController.L, e.Wiimote.ClassicController.L);
-                        holder.SetValue(Inputs.ClassicController.R, e.Wiimote.ClassicController.R);
-                        holder.SetValue(Inputs.ClassicController.ZL, e.Wiimote.ClassicController.ZL);
-                        holder.SetValue(Inputs.ClassicController.ZR, e.Wiimote.ClassicController.ZR);
-
-                        holder.SetValue(Inputs.ClassicController.START, e.Wiimote.ClassicController.Start);
-                        holder.SetValue(Inputs.ClassicController.SELECT, e.Wiimote.ClassicController.Select);
-                        holder.SetValue(Inputs.ClassicController.HOME, e.Wiimote.ClassicController.Home);
-
-                        holder.SetValue(Inputs.ClassicController.LFULL, e.Wiimote.ClassicController.LFull);
-                        holder.SetValue(Inputs.ClassicController.RFULL, e.Wiimote.ClassicController.RFull);
-                        holder.SetValue(Inputs.ClassicController.LT, e.Wiimote.ClassicController.LTrigger > 0.1f ? e.Wiimote.ClassicController.LTrigger : 0f);
-                        holder.SetValue(Inputs.ClassicController.RT, e.Wiimote.ClassicController.RTrigger > 0.1f ? e.Wiimote.ClassicController.RTrigger : 0f);
-
-                        holder.SetValue(Inputs.ClassicController.LRIGHT, e.Wiimote.ClassicController.LeftJoy.X > 0 ? e.Wiimote.ClassicController.LeftJoy.X : 0f);
-                        holder.SetValue(Inputs.ClassicController.LLEFT, e.Wiimote.ClassicController.LeftJoy.X < 0 ? e.Wiimote.ClassicController.LeftJoy.X * -1 : 0f);
-                        holder.SetValue(Inputs.ClassicController.LUP, e.Wiimote.ClassicController.LeftJoy.Y > 0 ? e.Wiimote.ClassicController.LeftJoy.Y : 0f);
-                        holder.SetValue(Inputs.ClassicController.LDOWN, e.Wiimote.ClassicController.LeftJoy.Y < 0 ? e.Wiimote.ClassicController.LeftJoy.Y * -1 : 0f);
-
-                        holder.SetValue(Inputs.ClassicController.RRIGHT, e.Wiimote.ClassicController.RightJoy.X > 0 ? e.Wiimote.ClassicController.RightJoy.X : 0f);
-                        holder.SetValue(Inputs.ClassicController.RLEFT, e.Wiimote.ClassicController.RightJoy.X < 0 ? e.Wiimote.ClassicController.RightJoy.X * -1 : 0f);
-                        holder.SetValue(Inputs.ClassicController.RUP, e.Wiimote.ClassicController.RightJoy.Y > 0 ? e.Wiimote.ClassicController.RightJoy.Y : 0f);
-                        holder.SetValue(Inputs.ClassicController.RDOWN, e.Wiimote.ClassicController.RightJoy.Y < 0 ? e.Wiimote.ClassicController.RightJoy.Y * -1 : 0f);
-                        break;
-
-                    case ControllerType.ClassicControllerPro:
-                        holder.SetValue(Inputs.ClassicControllerPro.A, e.Wiimote.ClassicControllerPro.A);
-                        holder.SetValue(Inputs.ClassicControllerPro.B, e.Wiimote.ClassicControllerPro.B);
-                        holder.SetValue(Inputs.ClassicControllerPro.X, e.Wiimote.ClassicControllerPro.X);
-                        holder.SetValue(Inputs.ClassicControllerPro.Y, e.Wiimote.ClassicControllerPro.Y);
-
-                        holder.SetValue(Inputs.ClassicControllerPro.UP, e.Wiimote.ClassicControllerPro.Up);
-                        holder.SetValue(Inputs.ClassicControllerPro.DOWN, e.Wiimote.ClassicControllerPro.Down);
-                        holder.SetValue(Inputs.ClassicControllerPro.LEFT, e.Wiimote.ClassicControllerPro.Left);
-                        holder.SetValue(Inputs.ClassicControllerPro.RIGHT, e.Wiimote.ClassicControllerPro.Right);
-
-                        holder.SetValue(Inputs.ClassicControllerPro.L, e.Wiimote.ClassicControllerPro.L);
-                        holder.SetValue(Inputs.ClassicControllerPro.R, e.Wiimote.ClassicControllerPro.R);
-                        holder.SetValue(Inputs.ClassicControllerPro.ZL, e.Wiimote.ClassicControllerPro.ZL);
-                        holder.SetValue(Inputs.ClassicControllerPro.ZR, e.Wiimote.ClassicControllerPro.ZR);
-
-                        holder.SetValue(Inputs.ClassicControllerPro.START, e.Wiimote.ClassicControllerPro.Start);
-                        holder.SetValue(Inputs.ClassicControllerPro.SELECT, e.Wiimote.ClassicControllerPro.Select);
-                        holder.SetValue(Inputs.ClassicControllerPro.HOME, e.Wiimote.ClassicControllerPro.Home);
-
-                        holder.SetValue(Inputs.ClassicControllerPro.LRIGHT, e.Wiimote.ClassicControllerPro.LeftJoy.X > 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.X : 0f);
-                        holder.SetValue(Inputs.ClassicControllerPro.LLEFT, e.Wiimote.ClassicControllerPro.LeftJoy.X < 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.X * -1 : 0f);
-                        holder.SetValue(Inputs.ClassicControllerPro.LUP, e.Wiimote.ClassicControllerPro.LeftJoy.Y > 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.Y : 0f);
-                        holder.SetValue(Inputs.ClassicControllerPro.LDOWN, e.Wiimote.ClassicControllerPro.LeftJoy.Y < 0 ? e.Wiimote.ClassicControllerPro.LeftJoy.Y * -1 : 0f);
-
-                        holder.SetValue(Inputs.ClassicControllerPro.RRIGHT, e.Wiimote.ClassicControllerPro.RightJoy.X > 0 ? e.Wiimote.ClassicControllerPro.RightJoy.X : 0f);
-                        holder.SetValue(Inputs.ClassicControllerPro.RLEFT, e.Wiimote.ClassicControllerPro.RightJoy.X < 0 ? e.Wiimote.ClassicControllerPro.RightJoy.X * -1 : 0f);
-                        holder.SetValue(Inputs.ClassicControllerPro.RUP, e.Wiimote.ClassicControllerPro.RightJoy.Y > 0 ? e.Wiimote.ClassicControllerPro.RightJoy.Y : 0f);
-                        holder.SetValue(Inputs.ClassicControllerPro.RDOWN, e.Wiimote.ClassicControllerPro.RightJoy.Y < 0 ? e.Wiimote.ClassicControllerPro.RightJoy.Y * -1 : 0f);
-                        break;
-
-                    case ControllerType.MotionPlus:
-                        // TODO: Motion Plus Reading (not for 1st release)
-                        break;
-
-                    // TODO: Musical Extension readings (not for 1st release)
-                }
-
-                // Rumble is currently disabled because the wiimote only reports when something changes (which can be changed)
-                //bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
-                //if (doRumble != e.Wiimote.Rumble)
-                //{
-                //    device.SetRumble(doRumble);
-                //}
-
-                //lowBat = e.Wiimote.BatteryLow || e.Wiimote.Battery == BatteryStatus.VeryLow;
-
-                float intensity = 0;
-                if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
-                {
-                    rumbleAmount = (int)intensity;
-                    RumbleStep();
-                }
+                rumbleAmount = (int)intensity;
+                RumbleStep();
             }
-
+            
             holder.Update();
-            SetBatteryStatus(lowBat);
 
             // Resumes the timer in case this method is not called withing 100ms
             if (updateTimer != null) updateTimer.Change(100, UPDATE_SPEED);
+        }
+
+        private void SetWiimoteInputs(Wiimote wm)
+        {
+            holder.SetValue(Inputs.Wiimote.A, wm.buttons.A);
+            holder.SetValue(Inputs.Wiimote.B, wm.buttons.B);
+            holder.SetValue(Inputs.Wiimote.ONE, wm.buttons.One);
+            holder.SetValue(Inputs.Wiimote.TWO, wm.buttons.Two);
+
+            holder.SetValue(Inputs.Wiimote.UP, wm.buttons.Up);
+            holder.SetValue(Inputs.Wiimote.DOWN, wm.buttons.Down);
+            holder.SetValue(Inputs.Wiimote.LEFT, wm.buttons.Left);
+            holder.SetValue(Inputs.Wiimote.RIGHT, wm.buttons.Right);
+
+            holder.SetValue(Inputs.Wiimote.MINUS, wm.buttons.Minus);
+            holder.SetValue(Inputs.Wiimote.PLUS, wm.buttons.Plus);
+            holder.SetValue(Inputs.Wiimote.HOME, wm.buttons.Home);
+
+            //TODO: Wiimote Accelerometer and IR sensor Reading (not for 1st release)
         }
 
         private void HolderUpdate(object state)
@@ -438,23 +439,17 @@ namespace WiinUSoft
                 RumbleStep();
             }
 
-            //bool doRumble = properties.useRumble && holder.GetFlag(Inputs.Flags.RUMBLE);
-            //if (doRumble != device.State.GetRumble())
-            //{
-            //    device.SetRumble(doRumble);
-            //}
-            //rumbler.SetIntensity(doRumble ? (int)holder.Values[Inputs.Flags.RUMBLE] : 0);
-
-            SetBatteryStatus(device.State.BatteryLow);
+            SetBatteryStatus(device.BatteryLevel == BatteryStatus.Low);
         }
 
         void RumbleStep()
         {
-            bool currentRumbleState = device.State.GetRumble();
+            bool currentRumbleState = device.RumbleEnabled;
 
             if (!properties.useRumble && currentRumbleState)
             {
-                device.SetRumble(false);
+                device.RumbleEnabled = false;
+                return;
             }
 
             float dutyCycle = 0;
@@ -473,11 +468,11 @@ namespace WiinUSoft
 
             if (rumbleStepCount < stopStep)
             {
-                if (!currentRumbleState) device.SetRumble(true);
+                if (!currentRumbleState) device.RumbleEnabled = true;
             }
             else
             {
-                if (currentRumbleState) device.SetRumble(false);
+                if (currentRumbleState) device.RumbleEnabled = false;
             }
 
             rumbleStepCount += 1;
@@ -609,6 +604,9 @@ namespace WiinUSoft
         {
             if (device.ConnectTest() && device.Connect())
             {
+                device.BeginReading();
+                device.GetStatus();
+
                 int tmp = 0;
                 if (int.TryParse(((MenuItem)sender).Name.Replace("XOption", ""), out tmp))
                 {
@@ -649,22 +647,22 @@ namespace WiinUSoft
                 }
                 else
                 {
-                    device.SetRumble(true);
+                    device.RumbleEnabled = true;
                     Delay(2000).ContinueWith(o =>
                     {
-                        device.SetRumble(false);
+                        device.RumbleEnabled = false;
                         if (!wasConnected) device.Disconnect();
                     });
                 }
 
                 // light show
-                device.SetLEDs(1);
-                Delay(250).ContinueWith(o => device.SetLEDs(2));
-                Delay(500).ContinueWith(o => device.SetLEDs(4));
-                Delay(750).ContinueWith(o => device.SetLEDs(8));
-                Delay(1000).ContinueWith(o => device.SetLEDs(4));
-                Delay(1250).ContinueWith(o => device.SetLEDs(2));
-                Delay(1500).ContinueWith(o => device.SetLEDs(1));
+                device.SetPlayerLED(1);
+                Delay(250).ContinueWith(o => device.SetPlayerLED(2));
+                Delay(500).ContinueWith(o => device.SetPlayerLED(3));
+                Delay(750).ContinueWith(o => device.SetPlayerLED(4));
+                Delay(1000).ContinueWith(o => device.SetPlayerLED(3));
+                Delay(1250).ContinueWith(o => device.SetPlayerLED(2));
+                Delay(1500).ContinueWith(o => device.SetPlayerLED(1));
                 if (targetXDevice != 0)
                     Delay(1750).ContinueWith(o => device.SetPlayerLED(targetXDevice));
             }

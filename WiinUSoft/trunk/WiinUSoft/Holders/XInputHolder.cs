@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using NintrollerLib.New;
 using ScpControl;
 
 namespace WiinUSoft.Holders
@@ -20,14 +21,14 @@ namespace WiinUSoft.Holders
         private int ID;
         private Dictionary<string, float> writeReport;
 
-        public static Dictionary<string, string> GetDefaultMapping(NintrollerLib.ControllerType type)
+        public static Dictionary<string, string> GetDefaultMapping(ControllerType type)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
 
             // TODO: finish default mapping (Acc, IR, Balance Board, ect) (not for 1st release)
             switch (type)
             {
-                case NintrollerLib.ControllerType.ProController:
+                case ControllerType.ProController:
                     result.Add(Inputs.ProController.A,      Inputs.Xbox360.A);
                     result.Add(Inputs.ProController.B,      Inputs.Xbox360.B);
                     result.Add(Inputs.ProController.X,      Inputs.Xbox360.X);
@@ -60,7 +61,7 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.ProController.HOME,   Inputs.Xbox360.GUIDE);
                     break;
 
-                case NintrollerLib.ControllerType.ClassicControllerPro:
+                case ControllerType.ClassicControllerPro:
                     result.Add(Inputs.ClassicControllerPro.A,      Inputs.Xbox360.A);
                     result.Add(Inputs.ClassicControllerPro.B,      Inputs.Xbox360.B);
                     result.Add(Inputs.ClassicControllerPro.X,      Inputs.Xbox360.X);
@@ -103,7 +104,7 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Wiimote.HOME,  Inputs.Xbox360.GUIDE);
                     break;
 
-                case NintrollerLib.ControllerType.ClassicController:
+                case ControllerType.ClassicController:
                     result.Add(Inputs.ClassicController.B,      Inputs.Xbox360.B);
                     result.Add(Inputs.ClassicController.A,      Inputs.Xbox360.A);
                     result.Add(Inputs.ClassicController.Y,      Inputs.Xbox360.X);
@@ -146,8 +147,8 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Wiimote.HOME,  Inputs.Xbox360.GUIDE);
                     break;
 
-                case NintrollerLib.ControllerType.Nunchuk:
-                case NintrollerLib.ControllerType.NunchukB:
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
                     result.Add(Inputs.Nunchuk.UP,    Inputs.Xbox360.LUP);
                     result.Add(Inputs.Nunchuk.DOWN,  Inputs.Xbox360.LDOWN);
                     result.Add(Inputs.Nunchuk.LEFT,  Inputs.Xbox360.LLEFT);
@@ -168,7 +169,7 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Wiimote.HOME,  Inputs.Xbox360.GUIDE);
                     break;
 
-                case NintrollerLib.ControllerType.Wiimote:
+                case ControllerType.Wiimote:
                     result.Add(Inputs.Wiimote.UP,    Inputs.Xbox360.LEFT);
                     result.Add(Inputs.Wiimote.DOWN,  Inputs.Xbox360.RIGHT);
                     result.Add(Inputs.Wiimote.LEFT,  Inputs.Xbox360.DOWN);
@@ -227,7 +228,7 @@ namespace WiinUSoft.Holders
             };
         }
 
-        public XInputHolder(NintrollerLib.ControllerType t) : this()
+        public XInputHolder(ControllerType t) : this()
         {
             Mappings = GetDefaultMapping(t);
         }
@@ -351,7 +352,7 @@ namespace WiinUSoft.Holders
             connected = false;
         }
 
-        public override void AddMapping(NintrollerLib.ControllerType controller)
+        public override void AddMapping(ControllerType controller)
         {
             var additional = GetDefaultMapping(controller);
 

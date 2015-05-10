@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Documents;
-using NintrollerLib;
+using NintrollerLib.New;
 using System.Windows.Input;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.Media;
@@ -20,7 +20,7 @@ namespace WiinUSoft
 
         public MainWindow()
         {
-            Nintroller.UseModestConfigs = true;
+            //Nintroller.UseModestConfigs = true;
             hidList = new List<string>();
             deviceList = new List<DeviceControl>();
 
@@ -59,7 +59,8 @@ namespace WiinUSoft
 
         private void Refresh()
         {
-            hidList = Nintroller.FindControllers();
+            //hidList = Nintroller.FindControllers();
+            hidList = Nintroller.GetControllerPaths();
             List<KeyValuePair<int, DeviceControl>> connectSeq = new List<KeyValuePair<int, DeviceControl>>();
 
             foreach (string hid in hidList)

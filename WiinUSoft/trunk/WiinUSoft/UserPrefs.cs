@@ -185,20 +185,20 @@ namespace WiinUSoft
             DInput = 1
         }
 
-        public NintrollerLib.ControllerType profileType;
+        public NintrollerLib.New.ControllerType profileType;
         public HolderType connType;
         public List<string> controllerMapKeys;
         public List<string> controllerMapValues;
 
         public Profile()
         {
-            profileType = NintrollerLib.ControllerType.Wiimote;
+            profileType = NintrollerLib.New.ControllerType.Wiimote;
             controllerMapKeys = new List<string>();
             controllerMapValues = new List<string>();
             connType = HolderType.XInput;
         }
 
-        public Profile(NintrollerLib.ControllerType type)
+        public Profile(NintrollerLib.New.ControllerType type)
         {
             profileType = type;
             controllerMapKeys = new List<string>();

@@ -9,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
+using NintrollerLib.New;
+
 namespace WiinUSoft
 {
     /// <summary>
@@ -21,7 +23,7 @@ namespace WiinUSoft
         private Dictionary<string, Shape> mapShapes;
         private Dictionary<Shape, string> mapValues;
         private Dictionary<Shape, string> deviceShapes;
-        private NintrollerLib.ControllerType deviceType = NintrollerLib.ControllerType.Wiimote;
+        private ControllerType deviceType = ControllerType.Wiimote;
         private Shape currentSelection;
 
         private ConfigWindow()
@@ -29,7 +31,8 @@ namespace WiinUSoft
             InitializeComponent();
         }
 
-        public ConfigWindow(Dictionary<string, string> mappings, NintrollerLib.ControllerType type)
+        public ConfigWindow(Dictionary<string, string> mappings, ControllerType type)
+        //public ConfigWindow(Dictionary<string, string> mappings, ControllerType type)
         {
             InitializeComponent();
 
@@ -42,11 +45,11 @@ namespace WiinUSoft
             // other views should already be hidden except the pro controller
             switch (deviceType)
             {
-                case NintrollerLib.ControllerType.ProController:
+                case ControllerType.ProController:
                     ProGrid.Visibility = System.Windows.Visibility.Visible;
                     break;
 
-                case NintrollerLib.ControllerType.ClassicController:
+                case ControllerType.ClassicController:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
                     CCGrid.Visibility = System.Windows.Visibility.Visible;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
@@ -57,7 +60,7 @@ namespace WiinUSoft
                     WmGrid.RenderTransform = rt;
                     break;
 
-                case NintrollerLib.ControllerType.ClassicControllerPro:
+                case ControllerType.ClassicControllerPro:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
                     CCPGrid.Visibility = System.Windows.Visibility.Visible;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
@@ -68,14 +71,14 @@ namespace WiinUSoft
                     WmGrid.RenderTransform = rt;
                     break;
 
-                case NintrollerLib.ControllerType.Nunchuk:
-                case NintrollerLib.ControllerType.NunchukB:
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
                     NkGrid.Visibility = System.Windows.Visibility.Visible;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
                     break;
 
-                case NintrollerLib.ControllerType.Wiimote:
+                case ControllerType.Wiimote:
                     ProGrid.Visibility = System.Windows.Visibility.Hidden;
                     WmGrid.Visibility = System.Windows.Visibility.Visible;
                     break;
@@ -143,7 +146,7 @@ namespace WiinUSoft
             #endregion
 
             deviceShapes = new Dictionary<Shape, string>();
-            if (deviceType == NintrollerLib.ControllerType.ProController)
+            if (deviceType == ControllerType.ProController)
             {
                 #region Pro Clickables
                 deviceShapes.Add(pro_aClick     , Inputs.ProController.A);
@@ -190,7 +193,7 @@ namespace WiinUSoft
                 deviceShapes.Add(wm_startClick, Inputs.Wiimote.PLUS);
                 #endregion
 
-                if (deviceType == NintrollerLib.ControllerType.ClassicController)
+                if (deviceType == ControllerType.ClassicController)
                 {
                     #region Classic Clickables
                     deviceShapes.Add(cc_aClick     , Inputs.ClassicController.A);
@@ -218,7 +221,7 @@ namespace WiinUSoft
                     deviceShapes.Add(cc_homeClick  , Inputs.ClassicController.HOME);
                     #endregion
                 }
-                else if (deviceType == NintrollerLib.ControllerType.ClassicControllerPro)
+                else if (deviceType == ControllerType.ClassicControllerPro)
                 {
                     #region Classic Pro Clickables
                     deviceShapes.Add(ccp_aClick     , Inputs.ClassicControllerPro.A);
@@ -246,8 +249,8 @@ namespace WiinUSoft
                     deviceShapes.Add(ccp_homeClick  , Inputs.ClassicControllerPro.HOME);
                     #endregion
                 }
-                else if (deviceType == NintrollerLib.ControllerType.Nunchuk 
-                      || deviceType == NintrollerLib.ControllerType.NunchukB)
+                else if (deviceType == ControllerType.Nunchuk 
+                      || deviceType == ControllerType.NunchukB)
                 {
                     #region Nunchuk Clickables
                     deviceShapes.Add(nk_cClick, Inputs.Nunchuk.C);
@@ -262,15 +265,15 @@ namespace WiinUSoft
             }
             // TODO: add other controller maps (Balance Board, Musicals) (not for 1st release)
 
-            if (deviceType == NintrollerLib.ControllerType.ProController)
+            if (deviceType == ControllerType.ProController)
             {
                 currentSelection = pro_homeClick;
             }
-            else if (deviceType == NintrollerLib.ControllerType.ClassicController)
+            else if (deviceType == ControllerType.ClassicController)
             {
                 currentSelection = cc_homeClick;
             }
-            else if (deviceType == NintrollerLib.ControllerType.ClassicControllerPro)
+            else if (deviceType == ControllerType.ClassicControllerPro)
             {
                 currentSelection = ccp_homeClick;
             }
@@ -287,9 +290,9 @@ namespace WiinUSoft
             double top = 0;
             double left = 0;
 
-            if (s.Name.StartsWith("wm") && deviceType != NintrollerLib.ControllerType.Wiimote
-                                        && deviceType != NintrollerLib.ControllerType.Nunchuk
-                                        && deviceType != NintrollerLib.ControllerType.NunchukB)
+            if (s.Name.StartsWith("wm") && deviceType != ControllerType.Wiimote
+                                        && deviceType != ControllerType.Nunchuk
+                                        && deviceType != ControllerType.NunchukB)
             {
                 top = 0;// Canvas.GetLeft((UIElement)s.Parent) - 50;
                 top += WmGrid.Width - s.Margin.Left;
