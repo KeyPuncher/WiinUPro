@@ -117,6 +117,18 @@ namespace NintrollerLib.New
         public bool ZL, ZR, LFull, RFull;
         public bool Plus, Minus, Home;
 
+        public bool Start
+        {
+            get { return Plus; }
+            set { Plus = value; }
+        }
+
+        public bool Select
+        {
+            get { return Minus; }
+            set { Minus = value; }
+        }
+
         public void Update(byte[] data)
         {
             int offset = 0;
@@ -195,6 +207,18 @@ namespace NintrollerLib.New
         public bool L, R, ZL, ZR;
         public bool Plus, Minus, Home;
 
+        public bool Start
+        {
+            get { return Plus; }
+            set { Plus = value; }
+        }
+
+        public bool Select
+        {
+            get { return Minus; }
+            set { Minus = value; }
+        }
+
         public void Update(byte[] data)
         {
             int offset = 0;
@@ -267,6 +291,18 @@ namespace NintrollerLib.New
         public bool Plus, Minus, Home;
         public bool LStick, RStick;
         public bool charging, usbConnected;
+
+        public bool Start
+        {
+            get { return Plus; }
+            set { Plus = value; }
+        }
+
+        public bool Select
+        {
+            get { return Minus; }
+            set { Minus = value; }
+        }
 
         public void Update(byte[] data)
         {

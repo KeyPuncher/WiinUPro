@@ -9,44 +9,44 @@ using System.Text;
 
 namespace NintrollerLib.New
 {
+    /// <summary>
+    /// Used to represent a Nintendo controller
+    /// </summary>
     public class Nintroller : IDisposable
     {
         #region Members
         // Events
-        public event EventHandler<NintrollerStateEventArgs> StateUpdate = delegate { };
+        public event EventHandler<NintrollerStateEventArgs>     StateUpdate     = delegate { };
         public event EventHandler<NintrollerExtensionEventArgs> ExtensionChange = delegate { };
-        public event EventHandler<LowBatteryEventArgs> LowBattery = delegate { };
-        //public event EventHandler<ControllerType> ExtensionChange;
-        //public event EventHandler<BatteryStatus> LowBattery;
+        public event EventHandler<LowBatteryEventArgs>          LowBattery      = delegate { };
         
         // General
-        private string           _path = string.Empty;
-        private bool             _connected;
-        private INintrollerState _state = new Wiimote();
-        private ControllerType   _currentType = ControllerType.Unknown;
-        private IRCamMode        _irMode = IRCamMode.Off;
-        private IRCamSensitivity _irSensitivity = IRCamSensitivity.Level3;
-        private byte             _rumbleBit = 0x00;
-        private byte             _battery = 0x00;
-        private bool             _batteryLow;
+        private string           _path                          = string.Empty;
+        private bool             _connected                     = false;
+        private INintrollerState _state                         = new Wiimote();
+        private ControllerType   _currentType                   = ControllerType.Unknown;
+        private IRCamMode        _irMode                        = IRCamMode.Off;
+        private IRCamSensitivity _irSensitivity                 = IRCamSensitivity.Level3;
+        private byte             _rumbleBit                     = 0x00;
+        private byte             _battery                       = 0x00;
+        private bool             _batteryLow                    = false;
         private bool             _led1, _led2, _led3, _led4;
 
         // Read/Writing Variables
         private SafeFileHandle   _fileHandle;                // Handle for Reading and Writing
         private FileStream       _stream;                    // Read and Write Stream
-        private bool             _reading = false;           // notes if actevly reading
+        private bool             _reading    = false;        // true if actively reading
         private readonly object  _readingObj = new object(); // for locking/blocking
         
         // help with parsing Reports
-        private AcknowledgementType _ackType = AcknowledgementType.NA;
+        private AcknowledgementType _ackType    = AcknowledgementType.NA;
         private StatusType          _statusType = StatusType.Unknown;
-        private ReadReportType      _readType = ReadReportType.Unknown;
-
+        private ReadReportType      _readType   = ReadReportType.Unknown;
         #endregion
 
         #region Properties
         /// <summary>
-        /// If the controller is open to communication.
+        /// True if the controller is open to communication.
         /// </summary>
         public bool Connected { get { return _connected; } }
         /// <summary>
@@ -57,7 +57,10 @@ namespace NintrollerLib.New
         /// The type of controller this has been identified as
         /// </summary>
         public ControllerType Type { get { return _currentType; } }
-
+        /// <summary>
+        /// Gets or Sets the current IR Camera Mode.
+        /// (will turn the camera on or off)
+        /// </summary>
         public IRCamMode IRMode
         {
             get { return _irMode; }
@@ -85,13 +88,13 @@ namespace NintrollerLib.New
                         case ControllerType.ClassicControllerPro:
                         case ControllerType.Nunchuk:
                         case ControllerType.NunchukB:
-                            // on certian modes can be set
+                            // only certian modes can be set
                             if (value == IRCamMode.Off)
                             {
                                 _irMode = value;
                                 DisableIR();
                             }
-                            else if (value != IRCamMode.Full)
+                            else if (value != IRCamMode.Full) // we won't use Full
                             {
                                 _irMode = value;
                                 EnableIR();
@@ -99,13 +102,16 @@ namespace NintrollerLib.New
                             break;
 
                         default:
-                            // do nothing
+                            // do nothing, IR usage is invalid
                             break;
                     }
                 }
             }
         }
-
+        /// <summary>
+        /// Gets or Sets the IR Sensitivity Mode.
+        /// (Only set if the IR Camera is On)
+        /// </summary>
         public IRCamSensitivity IRSensitivity
         {
             get { return _irSensitivity; }
@@ -131,7 +137,9 @@ namespace NintrollerLib.New
                 }
             }
         }
-
+        /// <summary>
+        /// Gets or Sets the controller's force feedback
+        /// </summary>
         public bool RumbleEnabled
         {
             get
@@ -144,7 +152,9 @@ namespace NintrollerLib.New
                 ApplyLEDs();
             }
         }
-
+        /// <summary>
+        /// Gets or Sets the LED in position 1
+        /// </summary>
         public bool Led1
         {
             get
@@ -160,7 +170,9 @@ namespace NintrollerLib.New
                 }
             }
         }
-
+        /// <summary>
+        /// Gets or Sets the LED in position 2
+        /// </summary>
         public bool Led2
         {
             get
@@ -176,7 +188,9 @@ namespace NintrollerLib.New
                 }
             }
         }
-
+        /// <summary>
+        /// Gets or Sets the LED in position 3
+        /// </summary>
         public bool Led3
         {
             get
@@ -192,7 +206,9 @@ namespace NintrollerLib.New
                 }
             }
         }
-
+        /// <summary>
+        /// Gets or Sets the LED in position 4
+        /// </summary>
         public bool Led4
         {
             get
@@ -208,7 +224,9 @@ namespace NintrollerLib.New
                 }
             }
         }
-
+        /// <summary>
+        /// The controller's current approximate battery level.
+        /// </summary>
         public BatteryStatus BatteryLevel
         {
             get
@@ -219,52 +237,43 @@ namespace NintrollerLib.New
                 }
                 else
                 {
-                    // Wiimote's parsing
-                    //batteryLevel = 100.0f * (float)batteryRaw / 192.0f;
-                    //lowBattery = batteryLevel < 0.1f;
-                    //
-                    //if (batteryLevel > 80f)
-                    //    Battery = BatteryStatus.VeryHigh;
-                    //else if (batteryLevel > 60f)
-                    //    Battery = BatteryStatus.High;
-                    //else if (batteryLevel > 40f)
-                    //    Battery = BatteryStatus.Medium;
-                    //else if (batteryLevel > 20f)
-                    //    Battery = BatteryStatus.Low;
-                    //else
-                    //    Battery = BatteryStatus.VeryLow;
+                    // Calculate the approximate battery level based on the controller type
+                    if (_currentType == ControllerType.ProController)
+                    {
+                        var level = 2f * ((float)_battery - 205f);
 
-                    // Pro Controller's parsing
-                    //batteryLevel = 2f * ((float)batteryRaw - 205f);
-                    //lowBattery = batteryLevel < 50f;
-
-                    //if (batteryLevel > 90f)
-                    //    Battery = BatteryStatus.VeryHigh;
-                    //else if (batteryLevel > 80f)
-                    //    Battery = BatteryStatus.High;
-                    //else if (batteryLevel > 70f)
-                    //    Battery = BatteryStatus.Medium;
-                    //else if (batteryLevel > 60f)
-                    //    Battery = BatteryStatus.Low;
-                    //else
-                    //    Battery = BatteryStatus.VeryLow;
-
-                    // TODO: New: Check if battery parsing is right
-                    if (_battery == 0xFF)
-                        return BatteryStatus.VeryHigh;
-                    else if (_battery > 0xE0)
-                        return BatteryStatus.High;
-                    else if (_battery > 0xA0)
-                        return BatteryStatus.Medium;
+                        if (level > 90f)
+                            return BatteryStatus.VeryHigh;
+                        else if (level > 80f)
+                            return BatteryStatus.High;
+                        else if (level > 70f)
+                            return BatteryStatus.Medium;
+                        else if (level > 60f)
+                            return BatteryStatus.Low;
+                        else
+                            return BatteryStatus.VeryLow;
+                    }
                     else
-                        return BatteryStatus.Low;
+                    {
+                        var level = 100f * (float)_battery / 192f;
+
+                        if (level > 80f)
+                            return BatteryStatus.VeryHigh;
+                        else if (level > 60f)
+                            return BatteryStatus.High;
+                        else if (level > 40f)
+                            return BatteryStatus.Medium;
+                        else if (level > 20f)
+                            return BatteryStatus.Low;
+                        else
+                            return BatteryStatus.VeryLow;
+                    }
                 }
             }
         }
         #endregion
 
-        #region LifeCycle
-
+        #region General
         /// <summary>
         /// Creates a controller with it's known location.
         /// (Ideally connection ready)
@@ -275,7 +284,7 @@ namespace NintrollerLib.New
             _state = null;
             _path = devicePath;
         }
-
+        
         public void Dispose()
         {
             Disconnect();
@@ -284,19 +293,25 @@ namespace NintrollerLib.New
 
         internal static void Log(string message)
         {
-#if DEBUG
+            #if DEBUG
             Debug.WriteLine(message);
-#endif
+            #endif
         }
-
         #endregion
 
         #region Connectivity
-
+        /// <summary>
+        /// Opens a connection stream to the device.
+        /// (Reading is not yet started)
+        /// </summary>
+        /// <returns>Success</returns>
         public bool Connect()
         {
             if (string.IsNullOrWhiteSpace(_path))
+            {
+                Log("The HID Path is empty! Can't Connection.");
                 return false;
+            }
 
             try
             {
@@ -307,7 +322,6 @@ namespace NintrollerLib.New
                 _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
 
                 _connected = true;
-
                 Log("Connected to device (" + _path + ")");
                 return true;
             }
@@ -318,6 +332,54 @@ namespace NintrollerLib.New
             }
         }
 
+        public bool ConnectTest()
+        {
+            // TODO: use a timer + FileStream.Read to manually timeout the read
+
+            // Can't check the device if we can't open a stream
+            if (!Connect()) return false;
+
+            bool success = false;
+
+            try
+            {
+                System.Timers.Timer timeouter = new System.Timers.Timer(2000);
+                timeouter.AutoReset = false;
+                timeouter.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) =>
+                    {
+                        _stream.Close();
+                    };
+
+                timeouter.Start();
+                GetStatus();
+                byte[] result = new byte[Constants.REPORT_LENGTH];
+
+                // reset timer
+                timeouter.Stop();
+                timeouter.Start();
+
+                _stream.Read(result, 0, result.Length);
+                timeouter.Stop();
+                ParseReport(result);
+
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                success = false;
+            }
+            finally
+            {
+                Disconnect();
+            }
+
+            return success;
+        }
+
+        /// <summary>
+        /// Closes the connection stream to the device.
+        /// </summary>
         public void Disconnect()
         {
             _reading = false;
@@ -332,11 +394,12 @@ namespace NintrollerLib.New
 
             Log("Disconnected device (" + _path + ")");
         }
-
         #endregion
 
         #region Data Requesting
-
+        /// <summary>
+        /// Starts asynchronously recieving data from the device.
+        /// </summary>
         public void BeginReading()
         {
             // kickoff the reading process if it hasn't started already
@@ -344,6 +407,35 @@ namespace NintrollerLib.New
             {
                 _reading = true;
                 ReadAsync();
+            }
+        }
+        /// <summary>
+        /// Sends a status request to the device.
+        /// </summary>
+        public void GetStatus()
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+
+            buffer[0] = (byte)OutputReport.StatusRequest;
+            buffer[1] = _rumbleBit;
+
+            SendData(buffer);
+        }
+        /// <summary>
+        /// Changes the device's reporting type.
+        /// </summary>
+        /// <param name="reportType">The report type to set to.</param>
+        public void SetReportType(InputReport reportType)
+        {
+            if (reportType == InputReport.Acknowledge ||
+                reportType == InputReport.ReadMem ||
+                reportType == InputReport.Status)
+            {
+                Log("Can't Set the report type to: " + reportType.ToString());
+            }
+            else
+            {
+                ApplyReportingType(reportType);
             }
         }
 
@@ -428,22 +520,15 @@ namespace NintrollerLib.New
             SendData(buffer);
         }
 
+        // Read calibration from the controller
         private void GetCalibration()
         {
+            // TODO: New: Test (possibly move)
             // don't attempt on Pro Controllers
             ReadMemory(0x0016, 7);
         }
 
-        public void GetStatus()
-        {
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
-
-            buffer[0] = (byte)OutputReport.StatusRequest;
-            buffer[1] = _rumbleBit;
-
-            SendData(buffer);
-        }
-
+        // Sets the reporting mode type
         private void ApplyReportingType(InputReport reportType, bool continuous = false)
         {
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
@@ -454,24 +539,10 @@ namespace NintrollerLib.New
 
             SendData(buffer);
         }
-
-        public void SetReportType(InputReport reportType)
-        {
-            if (reportType == InputReport.Acknowledge ||
-                reportType == InputReport.ReadMem     ||
-                reportType == InputReport.Status)
-            {
-                Log("Can't Set the report type to: " + reportType.ToString());
-            }
-            else
-            {
-                ApplyReportingType(reportType);
-            }
-        }
         #endregion
 
         #region Data Sending
-
+        // sends bytes to the device
         private void SendData(byte[] report)
         {
             if (!_connected)
@@ -480,6 +551,7 @@ namespace NintrollerLib.New
                 return;
             }
 
+            // TODO: New: Remove when done testing
             Log("Sending " + Enum.Parse(typeof(OutputReport), report[0].ToString()) + " report");
             Log(BitConverter.ToString(report));
 
@@ -499,6 +571,7 @@ namespace NintrollerLib.New
             }
         }
 
+        // writes bytes to the device's memory
         private void WriteToMemory(int address, byte[] data)
         {
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
@@ -512,11 +585,13 @@ namespace NintrollerLib.New
 
             Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, 16));
 
+            // TODO: New: Remove when done testing
             Debug.WriteLine(BitConverter.ToString(buffer));
 
             SendData(buffer);
         }
 
+        // set's the device's LEDs and Rumble states
         private void ApplyLEDs()
         {
             byte[] buffer = new byte[Constants.REPORT_LENGTH];
@@ -533,7 +608,6 @@ namespace NintrollerLib.New
 
             SendData(buffer);
         }
-
         #endregion
 
         #region Data Parsing

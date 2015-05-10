@@ -280,7 +280,6 @@ namespace NintrollerLib
         /// <returns>Controller able to connect.</returns>
         public bool ConnectTest()
         {
-            return true;
             bool retunValue = false;
             int bytesRead = 0;
 

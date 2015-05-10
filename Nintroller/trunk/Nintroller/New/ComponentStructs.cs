@@ -12,6 +12,18 @@ namespace NintrollerLib.New
         public bool Up, Down, Left, Right;
         public bool Plus, Minus, Home;
 
+        public bool Start
+        {
+            get { return Plus; }
+            set { Plus = value; }
+        }
+
+        public bool Select
+        {
+            get { return Minus; }
+            set { Minus = value; }
+        }
+
         public void Parse(byte[] input, int offset = 0)
         {
             InputReport type = (InputReport)input[0];
