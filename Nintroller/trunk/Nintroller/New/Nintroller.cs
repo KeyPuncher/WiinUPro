@@ -45,6 +45,7 @@ namespace NintrollerLib.New
         #endregion
 
         #region Properties
+
         /// <summary>
         /// True if the controller is open to communication.
         /// </summary>
@@ -57,6 +58,7 @@ namespace NintrollerLib.New
         /// The type of controller this has been identified as
         /// </summary>
         public ControllerType Type { get { return _currentType; } }
+
         /// <summary>
         /// Gets or Sets the current IR Camera Mode.
         /// (will turn the camera on or off)
@@ -137,6 +139,7 @@ namespace NintrollerLib.New
                 }
             }
         }
+
         /// <summary>
         /// Gets or Sets the controller's force feedback
         /// </summary>
@@ -152,6 +155,7 @@ namespace NintrollerLib.New
                 ApplyLEDs();
             }
         }
+
         /// <summary>
         /// Gets or Sets the LED in position 1
         /// </summary>
@@ -271,9 +275,11 @@ namespace NintrollerLib.New
                 }
             }
         }
+
         #endregion
 
-        #region General
+        #region Necessities
+
         /// <summary>
         /// Creates a controller with it's known location.
         /// (Ideally connection ready)
@@ -297,9 +303,11 @@ namespace NintrollerLib.New
             Debug.WriteLine(message);
             #endif
         }
+
         #endregion
 
         #region Connectivity
+
         /// <summary>
         /// Opens a connection stream to the device.
         /// (Reading is not yet started)
@@ -623,7 +631,7 @@ namespace NintrollerLib.New
                 case InputReport.Status:
                     #region Parse Status
                     Log("Status Report");
-
+                    Log(BitConverter.ToString(report));
                     // core buttons can be parsed if desired
 
                     switch (_statusType)
@@ -660,8 +668,8 @@ namespace NintrollerLib.New
                             {
                                 //lock (_readingObj)
                                 //{
-                                //    _readType = ReadReportType.Extension_A;
-                                //    ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                                    _readType = ReadReportType.Extension_A;
+                                    ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
                                 // 16-04-A4-00-F0-01-55-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
                                 // 16-04-A4-00-FB-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
                                 //}
@@ -810,9 +818,67 @@ namespace NintrollerLib.New
                     #region Parse Acknowledgement
                     Log("Output Acknowledged");
 
+                    if (report[4] == 0x03)
+                    {
+                        Log("Possible Error with Operation");
+                        return;
+                    }
+
                     switch (_ackType)
                     {
+                        case AcknowledgementType.NA:
+                            #region Default Acknowledgement
+                            Log("Acknowledgement Report");
+                            Log(BitConverter.ToString(report));
+                            // Core buttons can be parsed here
+                            // 20 BB BB LF 00 00 VV
+                            // 20 = Acknowledgement Report
+                            // BB BB = Core Buttons
+                            // LF = LED Status & Flags
+                            //     0x01 = Battery very low
+                            //     0x02 = Extension connected
+                            //     0x04 = Speaker enabled
+                            //     0x08 = IR camera enabled
+                            //     0x10 = LED 1
+                            //     0x20 = LED 2
+                            //     0x40 = LED 3
+                            //     0x80 = LED 4
+                            // VV = current battery level
+
+                            // Gather Flags
+                            _batteryLow    = (report[3] & 0x01) == 1;
+                            bool extension = (report[3] & 0x02) == 1;
+                            bool speaker   = (report[3] & 0x04) == 1;
+                            bool irOn      = (report[3] & 0x08) == 1;
+                            
+                            // Gather LEDs
+                            _led1 = (report[3] & 0x10) == 1;
+                            _led2 = (report[3] & 0x20) == 1;
+                            _led3 = (report[3] & 0x40) == 1;
+                            _led4 = (report[3] & 0x80) == 1;
+
+                            if (extension)
+                            {
+                                _readType = ReadReportType.Extension_A;
+                                ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                            }
+                            else if (_currentType != ControllerType.Wiimote)
+                            {
+                                _currentType = ControllerType.Wiimote;
+                                _state = new Wiimote();
+                                _state.Update(report);
+
+                                // Fire event
+                                ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
+
+                                // and set report
+                                SetReportType(InputReport.BtnsAccIR);
+                            }
+                            #endregion
+                            break;
+
                         case AcknowledgementType.IR_Step1:
+                            #region IR Step 1
                             byte[] sensitivityBlock1 = null;
                             
                             switch (_irSensitivity)
@@ -853,9 +919,11 @@ namespace NintrollerLib.New
 
                             _ackType = AcknowledgementType.IR_Step2;
                             WriteToMemory(Constants.REGISTER_IR_SENSITIVITY_1, sensitivityBlock1);
+                            #endregion
                             break;
 
                         case AcknowledgementType.IR_Step2:
+                            #region IR Step 2
                             byte[] sensitivityBlock2 = null;
                             
                             switch (_irSensitivity)
@@ -896,6 +964,7 @@ namespace NintrollerLib.New
 
                             _ackType = AcknowledgementType.IR_Step3;
                             WriteToMemory(Constants.REGISTER_IR_SENSITIVITY_2, sensitivityBlock2);
+                            #endregion
                             break;
 
                         case AcknowledgementType.IR_Step3:
@@ -909,6 +978,7 @@ namespace NintrollerLib.New
                             break;
 
                         case AcknowledgementType.IR_Step5:
+                            #region Final IR Step
                             Log("IR Camera Enabled");
                             _ackType = AcknowledgementType.NA;
 
@@ -931,6 +1001,7 @@ namespace NintrollerLib.New
                                     SetReportType(InputReport.BtnsIRExt);
                                     break;
                             }
+                            #endregion
                             break;
 
                         default:
@@ -971,7 +1042,10 @@ namespace NintrollerLib.New
         #endregion
 
         #region General
-
+        /// <summary>
+        /// Builds a list of HID paths for Nintendo Controllers.
+        /// </summary>
+        /// <returns>A list of HID paths</returns>
         public static List<string> GetControllerPaths()
         {
             List<string> result = new List<string>();
@@ -1179,6 +1253,10 @@ namespace NintrollerLib.New
 
         #region Calibration
 
+        /// <summary>
+        /// Sets the controller calibration for the Wiimote
+        /// </summary>
+        /// <param name="wiimoteCalibration">The Wiimote Struct with the calibration values to use</param>
         public void SetCalibration(Wiimote wiimoteCalibration)
         {
             if (_currentType == ControllerType.Wiimote)
@@ -1198,7 +1276,10 @@ namespace NintrollerLib.New
                 ((ClassicControllerPro)_state).wiimote.accelerometer.Calibrate(wiimoteCalibration.accelerometer);
             }
         }
-
+        /// <summary>
+        /// Sets the controller calibration for the Nunchuk
+        /// </summary>
+        /// <param name="nunchukCalibration">The Nunchuk Struct with the calibration values to use</param>
         public void SetCalibration(Nunchuk nunchukCalibration)
         {
             if (_currentType == ControllerType.Nunchuk || _currentType == ControllerType.NunchukB)
@@ -1207,7 +1288,10 @@ namespace NintrollerLib.New
                 ((Nunchuk)_state).accelerometer.Calibrate(nunchukCalibration.accelerometer);
             }
         }
-
+        /// <summary>
+        /// Sets the controller calibration for the Classic Controller
+        /// </summary>
+        /// <param name="classicCalibration">The ClassicController Struct with the calibration values to use</param>
         public void SetCalibration(ClassicController classicCalibration)
         {
             if (_currentType == ControllerType.ClassicController)
@@ -1218,13 +1302,19 @@ namespace NintrollerLib.New
                 ((ClassicController)_state).R.Calibrate(classicCalibration.R);
             }
         }
-
+        /// <summary>
+        /// Sets the controller calibration for the Classic Controller Pro
+        /// </summary>
+        /// <param name="classicProCalibration">The ClassicControllerPro Struct with the calibration values to use</param>
         public void SetCalibration(ClassicControllerPro classicProCalibration)
         {
             ((ClassicControllerPro)_state).LJoy.Calibrate(classicProCalibration.LJoy);
             ((ClassicControllerPro)_state).RJoy.Calibrate(classicProCalibration.RJoy);
         }
-
+        /// <summary>
+        /// Sets the controller calibration for the Pro Controller
+        /// </summary>
+        /// <param name="proCalibration">The ProController Struct with the calibration values to use</param>
         public void SetCalibration(ProController proCalibration)
         {
             ((ProController)_state).LJoy.Calibrate(proCalibration.LJoy);
