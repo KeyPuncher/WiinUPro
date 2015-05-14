@@ -145,6 +145,10 @@ namespace WiinUSoft
             mapValues.Add(x_guideClick  ,Inputs.Xbox360.GUIDE);
             #endregion
 
+            // Mouse Mode
+            mapShapes.Add("MouseMode", mouseClick);
+            mapValues.Add(mouseClick, "MouseMode");
+
             deviceShapes = new Dictionary<Shape, string>();
             if (deviceType == ControllerType.ProController)
             {
@@ -180,17 +184,17 @@ namespace WiinUSoft
             {
                 #region Wiimote Clickalbes
                 // TODO: more wiimote maps (Acc, IR) (not for 1st release)
-                deviceShapes.Add(wm_aClick, Inputs.Wiimote.A);
-                deviceShapes.Add(wm_bClick, Inputs.Wiimote.B);
-                deviceShapes.Add(wm_upClick, Inputs.Wiimote.UP);
-                deviceShapes.Add(wm_downClick, Inputs.Wiimote.DOWN);
-                deviceShapes.Add(wm_leftClick, Inputs.Wiimote.LEFT);
-                deviceShapes.Add(wm_rightClick, Inputs.Wiimote.RIGHT);
-                deviceShapes.Add(wm_oneClick, Inputs.Wiimote.ONE);
-                deviceShapes.Add(wm_twoClick, Inputs.Wiimote.TWO);
-                deviceShapes.Add(wm_homeClick, Inputs.Wiimote.HOME);
+                deviceShapes.Add(wm_aClick,      Inputs.Wiimote.A);
+                deviceShapes.Add(wm_bClick,      Inputs.Wiimote.B);
+                deviceShapes.Add(wm_upClick,     Inputs.Wiimote.UP);
+                deviceShapes.Add(wm_downClick,   Inputs.Wiimote.DOWN);
+                deviceShapes.Add(wm_leftClick,   Inputs.Wiimote.LEFT);
+                deviceShapes.Add(wm_rightClick,  Inputs.Wiimote.RIGHT);
+                deviceShapes.Add(wm_oneClick,    Inputs.Wiimote.ONE);
+                deviceShapes.Add(wm_twoClick,    Inputs.Wiimote.TWO);
+                deviceShapes.Add(wm_homeClick,   Inputs.Wiimote.HOME);
                 deviceShapes.Add(wm_selectClick, Inputs.Wiimote.MINUS);
-                deviceShapes.Add(wm_startClick, Inputs.Wiimote.PLUS);
+                deviceShapes.Add(wm_startClick,  Inputs.Wiimote.PLUS);
                 #endregion
 
                 if (deviceType == ControllerType.ClassicController)

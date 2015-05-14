@@ -240,6 +240,12 @@ namespace WiinUSoft.Holders
                 return;
             }
 
+            if (InMouseMode)
+            {
+                UpdateMouseMode();
+                return;
+            }
+
             byte[] rumble = new byte[8];
             byte[] report = new byte[28];
             byte[] parsed = new byte[28];
@@ -288,6 +294,8 @@ namespace WiinUSoft.Holders
                         case Inputs.Xbox360.RDOWN : RY -= Values[map.Key]; break;
                         case Inputs.Xbox360.LT    : LT += Values[map.Key]; break;
                         case Inputs.Xbox360.RT    : RT += Values[map.Key]; break;
+
+                        case "MouseMode": InMouseMode = (Values[map.Key] > 0f && !InMouseMode); break;
                     }
                 }
             }

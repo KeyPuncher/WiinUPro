@@ -21,7 +21,34 @@ namespace WiinUSoft
 
     public partial class DeviceControl : UserControl
     {
+        #region Members
+        
+        // private members
         private Nintroller device;
+        private DeviceState state;
+        private int   rumbleAmount      = 0;
+        private int   rumbleStepCount   = 0;
+        private int   rumbleStepPeriod  = 10;
+        private float rumbleSlowMult    = 0.5f;
+        
+        // internally public members
+        internal Holders.Holder holder;
+        internal Property       properties;
+        internal int            targetXDevice = 0;
+        internal bool           lowBatteryFired = false;
+        internal string         dName = "";
+        internal System.Threading.Timer updateTimer;
+
+        // constance
+        internal const int UPDATE_SPEED = 25;
+
+        // events
+        public event ConnectStateChange OnConnectStateChange;
+
+        #endregion
+
+        #region Properties
+
         internal Nintroller Device
         {
             get { return device; }
@@ -38,6 +65,8 @@ namespace WiinUSoft
             }
         }
 
+        internal ControllerType DeviceType { get; private set; }
+
         internal bool Connected
         {
             get
@@ -49,12 +78,6 @@ namespace WiinUSoft
             }
         }
 
-        internal ControllerType DeviceType { get; private set; }
-        internal Holders.Holder holder;
-        internal Property properties;
-
-        public event ConnectStateChange OnConnectStateChange;
-        private DeviceState state;
         internal DeviceState ConnectionState
         {
             get
@@ -77,17 +100,7 @@ namespace WiinUSoft
             }
         }
 
-        internal int targetXDevice = 0;
-        internal bool lowBatteryFired = false;
-        internal string dName = "";
-
-        internal System.Threading.Timer updateTimer;
-        internal const int UPDATE_SPEED = 25;
-
-        private int rumbleAmount = 0;
-        private int rumbleStepCount = 0;
-        private int rumbleStepPeriod = 10;
-        private float rumbleSlowMult = 0.5f;
+        #endregion
 
         public DeviceControl()
         {
