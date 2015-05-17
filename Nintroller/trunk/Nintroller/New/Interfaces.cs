@@ -9,6 +9,8 @@ namespace NintrollerLib.New
     {
         void Update(byte[] data);
         float GetValue(string input);
+        void SetCalibration(Calibrations.CalibrationPreset preset);
+        void SetCalibration(INintrollerState from);
     }
 
     public interface INintrollerParsable

@@ -678,6 +678,7 @@ namespace NintrollerLib.New
                             {
                                 _currentType = ControllerType.Wiimote;
                                 _state = new Wiimote();
+                                _state.SetCalibration(Calibrations.CalibrationPreset.Default);
                                 _state.Update(report);
 
                                 // and Fire Event
@@ -822,6 +823,8 @@ namespace NintrollerLib.New
                                 }
 
                                 // TODO: Get calibration if PID != 330
+
+                                _state.SetCalibration(Calibrations.CalibrationPreset.Default);
 
                                 // Fire ExtensionChange event
                                 //ExtensionChange(this, _currentType);

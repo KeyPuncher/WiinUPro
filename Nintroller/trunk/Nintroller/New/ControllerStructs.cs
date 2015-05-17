@@ -39,6 +39,24 @@ namespace NintrollerLib.New
         {
             throw new NotImplementedException();
         }
+
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
+        {
+            switch (preset)
+            {
+                case Calibrations.CalibrationPreset.Default:
+                    accelerometer.Calibrate(Calibrations.Defaults.WiimoteDefault.accelerometer);
+                    break;
+
+                case Calibrations.CalibrationPreset.Modest:
+                    break;
+            }
+        }
+
+        public void SetCalibration(INintrollerState from)
+        {
+            System.Diagnostics.Debug.WriteLine(from.GetType());
+        }
     }
 
     public struct Nunchuk : INintrollerState
@@ -105,7 +123,28 @@ namespace NintrollerLib.New
         {
             throw new NotImplementedException();
         }
-    }
+
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
+        {
+            wiimote.SetCalibration(preset);
+
+            switch (preset)
+            {
+                case Calibrations.CalibrationPreset.Default:
+                    joystick.Calibrate(Calibrations.Defaults.NunchukDefault.joystick);
+                    accelerometer.Calibrate(Calibrations.Defaults.NunchukDefault.accelerometer);
+                    break;
+
+                case Calibrations.CalibrationPreset.Modest:
+                    break;
+            }
+        }
+
+        public void SetCalibration(INintrollerState from)
+        {
+            System.Diagnostics.Debug.WriteLine(from.GetType());
+        }
+}
 
     public struct ClassicController : INintrollerState
     {
@@ -196,6 +235,29 @@ namespace NintrollerLib.New
         {
             throw new NotImplementedException();
         }
+
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
+        {
+            wiimote.SetCalibration(preset);
+
+            switch (preset)
+            {
+                case Calibrations.CalibrationPreset.Default:
+                    LJoy.Calibrate(Calibrations.Defaults.ClassicControllerDefault.LJoy);
+                    RJoy.Calibrate(Calibrations.Defaults.ClassicControllerDefault.RJoy);
+                    L.Calibrate(Calibrations.Defaults.ClassicControllerDefault.L);
+                    R.Calibrate(Calibrations.Defaults.ClassicControllerDefault.R);
+                    break;
+
+                case Calibrations.CalibrationPreset.Modest:
+                    break;
+            }
+        }
+
+        public void SetCalibration(INintrollerState from)
+        {
+            System.Diagnostics.Debug.WriteLine(from.GetType());
+        }
     }
 
     public struct ClassicControllerPro : INintrollerState
@@ -279,6 +341,27 @@ namespace NintrollerLib.New
         public float GetValue(string input)
         {
             throw new NotImplementedException();
+        }
+
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
+        {
+            wiimote.SetCalibration(preset);
+
+            switch (preset)
+            {
+                case Calibrations.CalibrationPreset.Default:
+                    LJoy.Calibrate(Calibrations.Defaults.ClassicControllerProDefault.LJoy);
+                    RJoy.Calibrate(Calibrations.Defaults.ClassicControllerProDefault.RJoy);
+                    break;
+
+                case Calibrations.CalibrationPreset.Modest:
+                    break;
+            }
+        }
+
+        public void SetCalibration(INintrollerState from)
+        {
+            System.Diagnostics.Debug.WriteLine(from.GetType());
         }
     }
 
@@ -370,6 +453,25 @@ namespace NintrollerLib.New
         {
             throw new NotImplementedException();
         }
+
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
+        {
+            switch (preset)
+            {
+                case Calibrations.CalibrationPreset.Default:
+                    LJoy.Calibrate(Calibrations.Defaults.ProControllerDefault.LJoy);
+                    RJoy.Calibrate(Calibrations.Defaults.ProControllerDefault.RJoy);
+                    break;
+
+                case Calibrations.CalibrationPreset.Modest:
+                    break;
+            }
+        }
+
+        public void SetCalibration(INintrollerState from)
+        {
+            System.Diagnostics.Debug.WriteLine(from.GetType());
+        }
     }
 
     public struct BalanceBoard : INintrollerState
@@ -383,6 +485,23 @@ namespace NintrollerLib.New
         public float GetValue(string input)
         {
             throw new NotImplementedException();
+        }
+
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
+        {
+            switch (preset)
+            {
+                case Calibrations.CalibrationPreset.Default:
+                    break;
+
+                case Calibrations.CalibrationPreset.Modest:
+                    break;
+            }
+        }
+
+        public void SetCalibration(INintrollerState from)
+        {
+            System.Diagnostics.Debug.WriteLine(from.GetType());
         }
     }
 
@@ -399,6 +518,25 @@ namespace NintrollerLib.New
         public float GetValue(string input)
         {
             throw new NotImplementedException();
+        }
+
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
+        {
+            wiimote.SetCalibration(preset);
+
+            switch (preset)
+            {
+                case Calibrations.CalibrationPreset.Default:
+                    break;
+
+                case Calibrations.CalibrationPreset.Modest:
+                    break;
+            }
+        }
+
+        public void SetCalibration(INintrollerState from)
+        {
+            System.Diagnostics.Debug.WriteLine(from.GetType());
         }
     }
 }
