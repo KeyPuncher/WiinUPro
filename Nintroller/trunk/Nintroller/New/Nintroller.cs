@@ -695,41 +695,27 @@ namespace NintrollerLib.New
                 case InputReport.ReadMem:
                     #region Parse ReadMem
                     Log("Read Memory Report | " + _readType.ToString());
+                    Log(BitConverter.ToString(report));
+
+                    bool noError = (report[3] & 0xF) == 0;
+                    if (!noError)
+                        Log("Possible ReadMem Error: " + (report[3] & 0x0F).ToString());
 
                     switch(_readType)
                     {
                         case ReadReportType.Extension_A:
-                            bool hasExtension = (report[3] & 0x02) != 0;
-
-                            // TODO: Account for Wiimote+ controllers
-                            if (hasExtension)
+                            // Initialize
+                            lock (_readingObj)
                             {
-                                // Initialize
-                                lock (_readingObj)
+                                if (report[0] != 0x04)
                                 {
-                                    if (report[0] != 0x04)
-                                    {
-                                        WriteToMemory(Constants.REGISTER_EXTENSION_INIT_1, new byte[] { 0x55 });
-                                        WriteToMemory(Constants.REGISTER_EXTENSION_INIT_2, new byte[] { 0x00 });
-                                    }
+                                    WriteToMemory(Constants.REGISTER_EXTENSION_INIT_1, new byte[] { 0x55 });
+                                    WriteToMemory(Constants.REGISTER_EXTENSION_INIT_2, new byte[] { 0x00 });
                                 }
-
-                                _readType = ReadReportType.Extension_B;
-                                ReadMemory(Constants.REGISTER_EXTENSION_TYPE, 6);
                             }
-                            else if (_currentType != ControllerType.Wiimote)
-                            {
-                                _currentType = ControllerType.Wiimote;
-                                _state = new Wiimote();
-                                _state.Update(report);
 
-                                // and Fire Event
-                                //ExtensionChange(this, _currentType);
-                                ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
-
-                                // and set report
-                                SetReportType(InputReport.BtnsAccIR);
-                            }
+                            _readType = ReadReportType.Extension_B;
+                            ReadMemory(Constants.REGISTER_EXTENSION_TYPE, 6);
                             break;
 
                         case ReadReportType.Extension_B:
@@ -754,32 +740,69 @@ namespace NintrollerLib.New
                                 _currentType = (ControllerType)type;
 
                                 Log("Controller type: " + _currentType.ToString());
+                                // TODO: New: Check parsing after applying a report type (Pro is working, CC is not)
+                                InputReport applyReport = InputReport.BtnsOnly;
+                                bool continuiousReporting = true;
 
                                 switch(_currentType)
                                 {
                                     case ControllerType.ProController:
                                         _state = new ProController();
+                                        applyReport = InputReport.ExtOnly;
                                         break;
 
                                     case ControllerType.BalanceBoard:
                                         _state = new BalanceBoard();
+                                        applyReport = InputReport.ExtOnly;
                                         break;
 
                                     case ControllerType.Nunchuk:
                                     case ControllerType.NunchukB:
                                         _state = new Nunchuk();
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsAccExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
                                         break;
 
                                     case ControllerType.ClassicController:
                                         _state = new ClassicController();
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
                                         break;
 
                                     case ControllerType.ClassicControllerPro:
                                         _state = new ClassicControllerPro();
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsAccExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
                                         break;
 
                                     case ControllerType.MotionPlus:
                                         _state = new WiimotePlus();
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsAccExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
                                         break;
 
                                     case ControllerType.PartiallyInserted:
@@ -803,7 +826,9 @@ namespace NintrollerLib.New
                                 // Fire ExtensionChange event
                                 //ExtensionChange(this, _currentType);
                                 ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
-                                // set report
+                                
+                                // set Report
+                                ApplyReportingType(applyReport, continuiousReporting);
                             }
                             break;
 
@@ -857,23 +882,23 @@ namespace NintrollerLib.New
                             _led3 = (report[3] & 0x40) == 1;
                             _led4 = (report[3] & 0x80) == 1;
 
-                            if (extension)
-                            {
-                                _readType = ReadReportType.Extension_A;
-                                ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
-                            }
-                            else if (_currentType != ControllerType.Wiimote)
-                            {
-                                _currentType = ControllerType.Wiimote;
-                                _state = new Wiimote();
-                                _state.Update(report);
-
-                                // Fire event
-                                ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
-
-                                // and set report
-                                SetReportType(InputReport.BtnsAccIR);
-                            }
+                            //if (extension)
+                            //{
+                            //    _readType = ReadReportType.Extension_A;
+                            //    ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                            //}
+                            //else if (_currentType != ControllerType.Wiimote)
+                            //{
+                            //    _currentType = ControllerType.Wiimote;
+                            //    _state = new Wiimote();
+                            //    _state.Update(report);
+                            //
+                            //    // Fire event
+                            //    ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
+                            //
+                            //    // and set report
+                            //    SetReportType(InputReport.BtnsAccIR);
+                            //}
                             #endregion
                             break;
 
