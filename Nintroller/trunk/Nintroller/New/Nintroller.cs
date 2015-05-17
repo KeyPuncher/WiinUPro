@@ -1147,6 +1147,11 @@ namespace NintrollerLib.New
                 availableRange = max - (center + dead);
                 actualValue = raw - (center + dead);
 
+                if (availableRange == 0)
+                {
+                    return 0f;
+                }
+
                 return (actualValue / availableRange);
             }
             else

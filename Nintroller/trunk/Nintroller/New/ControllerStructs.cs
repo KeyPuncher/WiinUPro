@@ -360,6 +360,10 @@ namespace NintrollerLib.New
             // Other
             charging     = (data[offset + 10] & 0x04) == 0;
             usbConnected = (data[offset + 10] & 0x08) == 0;
+
+            // Normalize
+            LJoy.Normalize();
+            RJoy.Normalize();
         }
 
         public float GetValue(string input)
