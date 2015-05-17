@@ -121,11 +121,11 @@ namespace WiinUSoft
                 ConnectionState = DeviceState.Discovered;
 
                 // I forgot the purpose for this...
-                if (device.Type != ControllerType.ProController && device.Type != ControllerType.BalanceBoard)
-                {
-                    device.Connect();
-                    device.Disconnect();
-                }
+                //if (device.Type != ControllerType.ProController && device.Type != ControllerType.BalanceBoard)
+                //{
+                //    device.Connect();
+                //    device.Disconnect();
+                //}
 
                 UpdateIcon(device.Type);
                 SetName(device.Type.ToString());

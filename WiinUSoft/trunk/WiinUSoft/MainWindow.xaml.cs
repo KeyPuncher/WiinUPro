@@ -128,6 +128,8 @@ namespace WiinUSoft
                 {
                     d.Value.targetXDevice = target + 1;
                     d.Value.ConnectionState = DeviceState.Connected_XInput;
+                    d.Value.Device.BeginReading();
+                    d.Value.Device.GetStatus();
                     target++;
                 }
             }
