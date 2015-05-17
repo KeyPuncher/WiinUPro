@@ -343,6 +343,9 @@ namespace NintrollerLib.New
         public bool ConnectTest()
         {
             // TODO: use a timer + FileStream.Read to manually timeout the read
+            // Open Stream
+            // Request Status Report
+            // Check Extension if connected
 
             // Can't check the device if we can't open a stream
             if (!Connect()) return false;
@@ -369,6 +372,17 @@ namespace NintrollerLib.New
                 _stream.Read(result, 0, result.Length);
                 timeouter.Stop();
                 ParseReport(result);
+
+                timeouter.Start();
+                if (_currentType == ControllerType.Unknown)
+                {
+                    while (_currentType == ControllerType.Unknown)
+                    {
+                        _stream.Read(result, 0, result.Length);
+                        ParseReport(result);
+                    }
+                }
+                timeouter.Stop();
 
                 success = true;
             }
