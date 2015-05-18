@@ -240,6 +240,8 @@ namespace WiinUSoft.Holders
                 return;
             }
 
+            if (_modeChangeCount > 0) _modeChangeCount--;
+
             if (InMouseMode)
             {
                 UpdateMouseMode();
@@ -295,7 +297,13 @@ namespace WiinUSoft.Holders
                         case Inputs.Xbox360.LT    : LT += Values[map.Key]; break;
                         case Inputs.Xbox360.RT    : RT += Values[map.Key]; break;
 
-                        case "MouseMode": InMouseMode = (Values[map.Key] > 0f && !InMouseMode); break;
+                        case "MouseMode": 
+                            if (!InMouseMode && _modeChangeCount == 0)
+                            { 
+                                _modeChangeCount = 100;
+                                InMouseMode = Values[map.Key] > 0f;
+                            }
+                            break;
                     }
                 }
             }

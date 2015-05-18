@@ -13,6 +13,8 @@ namespace WiinUSoft.Holders
         public Dictionary<string, bool> Flags { get; protected set; }
         public bool InMouseMode { get; protected set; }
 
+        protected int _modeChangeCount = 0;
+
         public void SetValue(string name, bool value)
         {
             SetValue(name, value ? 1.0f : 0.0f);
@@ -78,6 +80,7 @@ namespace WiinUSoft.Holders
         // used for basic mouse and keyboard actions (fixed mappings)
         protected void UpdateMouseMode()
         {
+            Console.WriteLine("Mouse Mode");
             bool leftMouseBtn = false;
             bool rightMouseBtn = false;
             bool escKey = false;
@@ -131,7 +134,13 @@ namespace WiinUSoft.Holders
 
                     case Inputs.ProController.START : break;
                     case Inputs.ProController.SELECT: break;
-                    case Inputs.ProController.HOME  : InMouseMode   = false; break; // might need some sort of delay
+                    case Inputs.ProController.HOME  : 
+                        if (_modeChangeCount == 0)
+                        {
+                            _modeChangeCount = 100;
+                            InMouseMode = !(input.Value > 0);
+                        }
+                        break; // might need some sort of delay
                     #endregion
 
                     #region Wiimote Inputs
@@ -147,7 +156,7 @@ namespace WiinUSoft.Holders
 
                     case Inputs.Wiimote.PLUS  : ctrlKey       |= input.Value > 0f; break;
                     case Inputs.Wiimote.MINUS : shiftKey      |= input.Value > 0f; break;
-                    case Inputs.Wiimote.HOME  : InMouseMode = false; break;
+                    case Inputs.Wiimote.HOME: InMouseMode = !(input.Value > 0); break;
                     #endregion
 
                     #region Nunchuk Inputs
@@ -188,7 +197,7 @@ namespace WiinUSoft.Holders
 
                     case Inputs.ClassicController.START : break;
                     case Inputs.ClassicController.SELECT: break;
-                    case Inputs.ClassicController.HOME  : InMouseMode = false; break; // might need some sort of delay
+                    case Inputs.ClassicController.HOME: InMouseMode = !(input.Value > 0); break; // might need some sort of delay
                     #endregion
 
                     #region Classic Controller Pro Inputs
@@ -219,7 +228,7 @@ namespace WiinUSoft.Holders
 
                     case Inputs.ClassicControllerPro.START : break;
                     case Inputs.ClassicControllerPro.SELECT: break;
-                    case Inputs.ClassicControllerPro.HOME  : InMouseMode = false; break; // might need some sort of delay
+                    case Inputs.ClassicControllerPro.HOME: InMouseMode = !(input.Value > 0); break; // might need some sort of delay
                     #endregion
                 }
             }
