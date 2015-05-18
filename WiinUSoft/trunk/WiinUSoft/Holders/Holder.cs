@@ -95,26 +95,26 @@ namespace WiinUSoft.Holders
                     case Inputs.ProController.X     : break;
                     case Inputs.ProController.Y     : break;
 
-                    case Inputs.ProController.L     : altKey        |= input.Value > 0f; break;
-                    case Inputs.ProController.R     : tabKey        |= input.Value > 0f; break;
-                    case Inputs.ProController.ZL    : ctrlKey       |= input.Value > 0f; break;
-                    case Inputs.ProController.ZR    : shiftKey      |= input.Value > 0f; break;
+                    case Inputs.ProController.L     : simInput.altKey        |= input.Value > 0f; break;
+                    case Inputs.ProController.R     : simInput.tabKey        |= input.Value > 0f; break;
+                    case Inputs.ProController.ZL    : simInput.ctrlKey       |= input.Value > 0f; break;
+                    case Inputs.ProController.ZR    : simInput.shiftKey      |= input.Value > 0f; break;
 
-                    case Inputs.ProController.UP    : upKey         |= input.Value > 0f; break;
-                    case Inputs.ProController.DOWN  : downKey       |= input.Value > 0f; break;
-                    case Inputs.ProController.LEFT  : leftKey       |= input.Value > 0f; break;
-                    case Inputs.ProController.RIGHT : rightKey      |= input.Value > 0f; break;
+                    case Inputs.ProController.UP    : simInput.upKey         |= input.Value > 0f; break;
+                    case Inputs.ProController.DOWN  : simInput.downKey       |= input.Value > 0f; break;
+                    case Inputs.ProController.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
+                    case Inputs.ProController.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ProController.LUP   : moveMouseY    += input.Value; break;
-                    case Inputs.ProController.LDOWN : moveMouseY    -= input.Value; break;
-                    case Inputs.ProController.LLEFT : moveMouseX    -= input.Value; break;
-                    case Inputs.ProController.LRIGHT: moveMouseX    += input.Value; break;
+                    case Inputs.ProController.LUP   : simInput.moveMouseY    += input.Value; break;
+                    case Inputs.ProController.LDOWN : simInput.moveMouseY    -= input.Value; break;
+                    case Inputs.ProController.LLEFT : simInput.moveMouseX    -= input.Value; break;
+                    case Inputs.ProController.LRIGHT: simInput.moveMouseX    += input.Value; break;
                     case Inputs.ProController.LS    : break;
 
-                    case Inputs.ProController.RUP   : upKey         |= input.Value > 0f; break;
-                    case Inputs.ProController.RDOWN : downKey       |= input.Value > 0f; break;
-                    case Inputs.ProController.RLEFT : leftKey       |= input.Value > 0f; break;
-                    case Inputs.ProController.RRIGHT: rightKey      |= input.Value > 0f; break;
+                    case Inputs.ProController.RUP   : simInput.upKey         |= input.Value > 0f; break;
+                    case Inputs.ProController.RDOWN : simInput.downKey       |= input.Value > 0f; break;
+                    case Inputs.ProController.RLEFT : simInput.leftKey       |= input.Value > 0f; break;
+                    case Inputs.ProController.RRIGHT: simInput.rightKey      |= input.Value > 0f; break;
                     case Inputs.ProController.RS    : break;
 
                     case Inputs.ProController.START : break;
@@ -129,56 +129,56 @@ namespace WiinUSoft.Holders
                     #endregion
 
                     #region Wiimote Inputs
-                    case Inputs.Wiimote.A     : leftMouseBtn  |= input.Value > 0f; break;
-                    case Inputs.Wiimote.B     : rightMouseBtn |= input.Value > 0f; break;
-                    case Inputs.Wiimote.ONE   : altKey        |= input.Value > 0f; break;
-                    case Inputs.Wiimote.TWO   : tabKey        |= input.Value > 0f; break;
+                    case Inputs.Wiimote.A     : simInput.leftMouseBtn  |= input.Value > 0f; break;
+                    case Inputs.Wiimote.B     : simInput.rightMouseBtn |= input.Value > 0f; break;
+                    case Inputs.Wiimote.ONE   : simInput.altKey        |= input.Value > 0f; break;
+                    case Inputs.Wiimote.TWO   : simInput.tabKey        |= input.Value > 0f; break;
 
-                    case Inputs.Wiimote.UP    : upKey         |= input.Value > 0f; break;
-                    case Inputs.Wiimote.DOWN  : downKey       |= input.Value > 0f; break;
-                    case Inputs.Wiimote.LEFT  : leftKey       |= input.Value > 0f; break;
-                    case Inputs.Wiimote.RIGHT : rightKey      |= input.Value > 0f; break;
+                    case Inputs.Wiimote.UP    : simInput.upKey         |= input.Value > 0f; break;
+                    case Inputs.Wiimote.DOWN  : simInput.downKey       |= input.Value > 0f; break;
+                    case Inputs.Wiimote.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
+                    case Inputs.Wiimote.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.Wiimote.PLUS  : ctrlKey       |= input.Value > 0f; break;
-                    case Inputs.Wiimote.MINUS : shiftKey      |= input.Value > 0f; break;
+                    case Inputs.Wiimote.PLUS  : simInput.ctrlKey       |= input.Value > 0f; break;
+                    case Inputs.Wiimote.MINUS : simInput.shiftKey      |= input.Value > 0f; break;
                     case Inputs.Wiimote.HOME: InMouseMode = !(input.Value > 0); break;
                     #endregion
 
                     #region Nunchuk Inputs
-                    case Inputs.Nunchuk.C     : ctrlKey       |= input.Value > 0f; break;
-                    case Inputs.Nunchuk.Z     : shiftKey      |= input.Value > 0f; break;
+                    case Inputs.Nunchuk.C     : simInput.ctrlKey       |= input.Value > 0f; break;
+                    case Inputs.Nunchuk.Z     : simInput.shiftKey      |= input.Value > 0f; break;
 
-                    case Inputs.Nunchuk.UP    : moveMouseY    += input.Value; break;
-                    case Inputs.Nunchuk.DOWN  : moveMouseY    -= input.Value; break;
-                    case Inputs.Nunchuk.LEFT  : moveMouseX    -= input.Value; break;
-                    case Inputs.Nunchuk.RIGHT : moveMouseX    += input.Value; break;
+                    case Inputs.Nunchuk.UP    : simInput.moveMouseY    += input.Value; break;
+                    case Inputs.Nunchuk.DOWN  : simInput.moveMouseY    -= input.Value; break;
+                    case Inputs.Nunchuk.LEFT  : simInput.moveMouseX    -= input.Value; break;
+                    case Inputs.Nunchuk.RIGHT : simInput.moveMouseX    += input.Value; break;
                     #endregion
 
                     #region Classic Controller Inputs
-                    case Inputs.ClassicController.A     : leftMouseBtn  |= input.Value > 0f; break;
-                    case Inputs.ClassicController.B     : rightMouseBtn |= input.Value > 0f; break;
+                    case Inputs.ClassicController.A     : simInput.leftMouseBtn  |= input.Value > 0f; break;
+                    case Inputs.ClassicController.B     : simInput.rightMouseBtn |= input.Value > 0f; break;
                     case Inputs.ClassicController.X     : break;
                     case Inputs.ClassicController.Y     : break;
 
-                    case Inputs.ClassicController.L     : altKey        |= input.Value > 0f; break;
-                    case Inputs.ClassicController.R     : tabKey        |= input.Value > 0f; break;
-                    case Inputs.ClassicController.ZL    : ctrlKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicController.ZR    : shiftKey      |= input.Value > 0f; break;
+                    case Inputs.ClassicController.L     : simInput.altKey        |= input.Value > 0f; break;
+                    case Inputs.ClassicController.R     : simInput.tabKey        |= input.Value > 0f; break;
+                    case Inputs.ClassicController.ZL    : simInput.ctrlKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicController.ZR    : simInput.shiftKey      |= input.Value > 0f; break;
 
-                    case Inputs.ClassicController.UP    : upKey         |= input.Value > 0f; break;
-                    case Inputs.ClassicController.DOWN  : downKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicController.LEFT  : leftKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicController.RIGHT : rightKey      |= input.Value > 0f; break;
+                    case Inputs.ClassicController.UP    : simInput.upKey         |= input.Value > 0f; break;
+                    case Inputs.ClassicController.DOWN  : simInput.downKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicController.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicController.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ClassicController.LUP   : moveMouseY    += input.Value; break;
-                    case Inputs.ClassicController.LDOWN : moveMouseY    -= input.Value; break;
-                    case Inputs.ClassicController.LLEFT : moveMouseX    -= input.Value; break;
-                    case Inputs.ClassicController.LRIGHT: moveMouseX    += input.Value; break;
+                    case Inputs.ClassicController.LUP   : simInput.moveMouseY    += input.Value; break;
+                    case Inputs.ClassicController.LDOWN : simInput.moveMouseY    -= input.Value; break;
+                    case Inputs.ClassicController.LLEFT : simInput.moveMouseX    -= input.Value; break;
+                    case Inputs.ClassicController.LRIGHT: simInput.moveMouseX    += input.Value; break;
 
-                    case Inputs.ClassicController.RUP   : upKey         |= input.Value > 0f; break;
-                    case Inputs.ClassicController.RDOWN : downKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicController.RLEFT : leftKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicController.RRIGHT: rightKey      |= input.Value > 0f; break;
+                    case Inputs.ClassicController.RUP   : simInput.upKey         |= input.Value > 0f; break;
+                    case Inputs.ClassicController.RDOWN : simInput.downKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicController.RLEFT : simInput.leftKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicController.RRIGHT: simInput.rightKey      |= input.Value > 0f; break;
 
                     case Inputs.ClassicController.START : break;
                     case Inputs.ClassicController.SELECT: break;
@@ -186,30 +186,30 @@ namespace WiinUSoft.Holders
                     #endregion
 
                     #region Classic Controller Pro Inputs
-                    case Inputs.ClassicControllerPro.A     : leftMouseBtn  |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.B     : rightMouseBtn |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.A     : simInput.leftMouseBtn  |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.B     : simInput.rightMouseBtn |= input.Value > 0f; break;
                     case Inputs.ClassicControllerPro.X     : break;
                     case Inputs.ClassicControllerPro.Y     : break;
 
-                    case Inputs.ClassicControllerPro.L     : altKey        |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.R     : tabKey        |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.ZL    : ctrlKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.ZR    : shiftKey      |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.L     : simInput.altKey        |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.R     : simInput.tabKey        |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.ZL    : simInput.ctrlKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.ZR    : simInput.shiftKey      |= input.Value > 0f; break;
 
-                    case Inputs.ClassicControllerPro.UP    : upKey         |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.DOWN  : downKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.LEFT  : leftKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.RIGHT : rightKey      |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.UP    : simInput.upKey         |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.DOWN  : simInput.downKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ClassicControllerPro.LUP   : moveMouseY    += input.Value; break;
-                    case Inputs.ClassicControllerPro.LDOWN : moveMouseY    -= input.Value; break;
-                    case Inputs.ClassicControllerPro.LLEFT : moveMouseX    -= input.Value; break;
-                    case Inputs.ClassicControllerPro.LRIGHT: moveMouseX    += input.Value; break;
+                    case Inputs.ClassicControllerPro.LUP   : simInput.moveMouseY    += input.Value; break;
+                    case Inputs.ClassicControllerPro.LDOWN : simInput.moveMouseY    -= input.Value; break;
+                    case Inputs.ClassicControllerPro.LLEFT : simInput.moveMouseX    -= input.Value; break;
+                    case Inputs.ClassicControllerPro.LRIGHT: simInput.moveMouseX    += input.Value; break;
 
-                    case Inputs.ClassicControllerPro.RUP   : upKey         |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.RDOWN : downKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.RLEFT : leftKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.RRIGHT: rightKey      |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.RUP   : simInput.upKey         |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.RDOWN : simInput.downKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.RLEFT : simInput.leftKey       |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.RRIGHT: simInput.rightKey      |= input.Value > 0f; break;
 
                     case Inputs.ClassicControllerPro.START : break;
                     case Inputs.ClassicControllerPro.SELECT: break;
@@ -219,32 +219,47 @@ namespace WiinUSoft.Holders
             }
 
             // TODO: Apply the movements
-            _inputSim.Mouse.MoveMouseBy((int)moveMouseX, (int)moveMouseY * -1);
-            _inputSim.Mouse.LeftButtonDown();
+            // Mouse
+            _inputSim.Mouse.MoveMouseBy((int)simInput.moveMouseX, (int)simInput.moveMouseY * -1);
+
+            if (simInput.leftMouseBtn && !_lastInput.leftMouseBtn)
+                _inputSim.Mouse.LeftButtonDown();
+            else if (!simInput.leftMouseBtn && _lastInput.leftMouseBtn)
+                _inputSim.Mouse.LeftButtonUp();
+
+            if (simInput.rightMouseBtn && !_lastInput.rightMouseBtn)
+                _inputSim.Mouse.RightButtonDown();
+            else if (!simInput.rightMouseBtn && _lastInput.rightMouseBtn)
+                _inputSim.Mouse.RightButtonUp();
+
+            // Keyboard
+
+
+            _lastInput = simInput;
         }
 
         protected SimulatedInput _lastInput = new SimulatedInput();
 
         protected struct SimulatedInput
         {
-            bool leftMouseBtn  = false;
-            bool rightMouseBtn = false;
-            bool escKey        = false;
-            bool altKey        = false;
-            bool tabKey        = false;
-            bool ctrlKey       = false;
-            bool shiftKey      = false;
-            bool enterKey      = false;
+            public bool leftMouseBtn ;
+            public bool rightMouseBtn;
+            public bool escKey       ;
+            public bool altKey       ;
+            public bool tabKey       ;
+            public bool ctrlKey      ;
+            public bool shiftKey     ;
+            public bool enterKey     ;
 
-            bool upKey         = false;
-            bool downKey       = false;
-            bool leftKey       = false;
-            bool rightKey      = false;
+            public bool upKey        ;
+            public bool downKey      ;
+            public bool leftKey      ;
+            public bool rightKey     ;
 
-            float moveMouseX   = 0f;
-            float moveMouseY   = 0f;
-            float mouseAbsX    = 0f;
-            float mouseAbsY    = 0f;
+            public float moveMouseX  ;
+            public float moveMouseY  ;
+            public float mouseAbsX   ;
+            public float mouseAbsY   ;
         }
     }
 }
