@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WindowsInput;
 
 namespace WiinUSoft.Holders
 {
@@ -14,6 +15,7 @@ namespace WiinUSoft.Holders
         public bool InMouseMode { get; protected set; }
 
         protected int _modeChangeCount = 0;
+        protected InputSimulator _inputSim;
 
         public void SetValue(string name, bool value)
         {
@@ -81,32 +83,15 @@ namespace WiinUSoft.Holders
         protected void UpdateMouseMode()
         {
             Console.WriteLine("Mouse Mode");
-            bool leftMouseBtn = false;
-            bool rightMouseBtn = false;
-            bool escKey = false;
-            bool altKey = false;
-            bool tabKey = false;
-            bool ctrlKey = false;
-            bool shiftKey = false;
-            bool enterKey = false;
-
-            bool upKey = false;
-            bool downKey = false;
-            bool leftKey = false;
-            bool rightKey = false;
-
-            float moveMouseX = 0f;
-            float moveMouseY = 0f;
-            float mouseAbsX = 0f;
-            float mouseAbsY = 0f;
+            SimulatedInput simInput = new SimulatedInput();
 
             foreach (KeyValuePair<string, float> input in Values)
             {
                 switch (input.Key)
                 {
                     #region Pro Controller Inputs
-                    case Inputs.ProController.A     : leftMouseBtn  |= input.Value > 0f; break;
-                    case Inputs.ProController.B     : rightMouseBtn |= input.Value > 0f; break;
+                    case Inputs.ProController.A     : simInput.leftMouseBtn  |= input.Value > 0f; break;
+                    case Inputs.ProController.B     : simInput.rightMouseBtn |= input.Value > 0f; break;
                     case Inputs.ProController.X     : break;
                     case Inputs.ProController.Y     : break;
 
@@ -234,6 +219,32 @@ namespace WiinUSoft.Holders
             }
 
             // TODO: Apply the movements
+            _inputSim.Mouse.MoveMouseBy((int)moveMouseX, (int)moveMouseY * -1);
+            _inputSim.Mouse.LeftButtonDown();
+        }
+
+        protected SimulatedInput _lastInput = new SimulatedInput();
+
+        protected struct SimulatedInput
+        {
+            bool leftMouseBtn  = false;
+            bool rightMouseBtn = false;
+            bool escKey        = false;
+            bool altKey        = false;
+            bool tabKey        = false;
+            bool ctrlKey       = false;
+            bool shiftKey      = false;
+            bool enterKey      = false;
+
+            bool upKey         = false;
+            bool downKey       = false;
+            bool leftKey       = false;
+            bool rightKey      = false;
+
+            float moveMouseX   = 0f;
+            float moveMouseY   = 0f;
+            float mouseAbsX    = 0f;
+            float mouseAbsY    = 0f;
         }
     }
 }

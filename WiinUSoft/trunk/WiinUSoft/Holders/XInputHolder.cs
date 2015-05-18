@@ -189,6 +189,7 @@ namespace WiinUSoft.Holders
 
         public XInputHolder()
         {
+            _inputSim = new WindowsInput.InputSimulator();
             //Values = new Dictionary<string, float>();
             Values = new System.Collections.Concurrent.ConcurrentDictionary<string, float>();
             Mappings = new Dictionary<string, string>();
