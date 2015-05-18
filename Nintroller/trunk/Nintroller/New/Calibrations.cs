@@ -15,6 +15,7 @@ namespace NintrollerLib.New
 
         #region Properties
         public static readonly Defalut Defaults = new Defalut();
+        // TODO: New: Add Modest Calibrations
         #endregion
 
         #region Inner Classes (Calibration Types)

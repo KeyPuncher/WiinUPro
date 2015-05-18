@@ -354,7 +354,7 @@ namespace NintrollerLib.New
 
             try
             {
-                System.Timers.Timer timeouter = new System.Timers.Timer(2000);
+                System.Timers.Timer timeouter = new System.Timers.Timer(500);
                 timeouter.AutoReset = false;
                 timeouter.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) =>
                     {
