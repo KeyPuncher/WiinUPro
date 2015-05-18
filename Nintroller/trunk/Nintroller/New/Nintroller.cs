@@ -1152,37 +1152,63 @@ namespace NintrollerLib.New
 
         internal static float Normalize(int raw, int min, int center, int max, int dead)
         {
-            float availableRange = 0f;
-            float actualValue = 0f;
+            //float availableRange = 0f;
+            //float actualValue = 0f;
 
-            if (Math.Abs(center - raw) < dead)
+            //if (Math.Abs(center - raw) < dead)
+            //{
+            //    return 0f;
+            //}
+            //else if (raw - center > 0)
+            //{
+            //    availableRange = max - (center + dead);
+            //    actualValue = raw - (center + dead);
+
+            //    if (availableRange == 0)
+            //    {
+            //        return 0f;
+            //    }
+
+            //    return (actualValue / availableRange);
+            //}
+            //else
+            //{
+            //    availableRange = center - dead - min;
+            //    actualValue = raw - center;
+
+            //    if (availableRange == 0)
+            //    {
+            //        return 0f;
+            //    }
+
+            //    return (actualValue / availableRange) - 1f;
+            //}
+
+            float actual = 0;
+            float range = 0;
+
+            if (Math.Abs(center - raw) <= dead)
             {
                 return 0f;
             }
-            else if (raw - center > 0)
-            {
-                availableRange = max - (center + dead);
-                actualValue = raw - (center + dead);
-
-                if (availableRange == 0)
-                {
-                    return 0f;
-                }
-
-                return (actualValue / availableRange);
-            }
             else
             {
-                availableRange = center - dead - min;
-                actualValue = raw - center;
-
-                if (availableRange == 0)
+                if (raw > center)
                 {
-                    return 0f;
+                    actual = raw - (center + dead);
+                    range = max - (center + dead);
                 }
-
-                return (actualValue / availableRange) - 1f;
+                else if (raw < center)
+                {
+                    actual = raw - (center - dead);
+                    range = (center - dead) - min;
+                }
             }
+
+            if (range == 0)
+                return 0f;
+
+            return actual / range;
         }
 
         internal static float Normalize(float raw, float min, float center, float max, float dead)

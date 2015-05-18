@@ -29,7 +29,7 @@ namespace NintrollerLib.New
                     maxX    = 3072,
                     deadX   = 128,
 
-                    centerY = 0,
+                    centerY = 2048,
                     minY    = 1024,
                     maxY    = 3072,
                     deadY   = 128
@@ -41,7 +41,7 @@ namespace NintrollerLib.New
                     maxX    = 3072,
                     deadX   = 128,
 
-                    centerY = 0,
+                    centerY = 2048,
                     minY    = 1024,
                     maxY    = 3072,
                     deadY   = 128
