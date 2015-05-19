@@ -82,7 +82,6 @@ namespace WiinUSoft.Holders
         // used for basic mouse and keyboard actions (fixed mappings)
         protected void UpdateMouseMode()
         {
-            Console.WriteLine("Mouse Mode");
             SimulatedInput simInput = new SimulatedInput();
 
             foreach (KeyValuePair<string, float> input in Values)
@@ -105,11 +104,11 @@ namespace WiinUSoft.Holders
                     case Inputs.ProController.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
                     case Inputs.ProController.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ProController.LUP   : simInput.moveMouseY    += input.Value; break;
-                    case Inputs.ProController.LDOWN : simInput.moveMouseY    -= input.Value; break;
-                    case Inputs.ProController.LLEFT : simInput.moveMouseX    -= input.Value; break;
-                    case Inputs.ProController.LRIGHT: simInput.moveMouseX    += input.Value; break;
-                    case Inputs.ProController.LS    : break;
+                    case Inputs.ProController.LUP   : simInput.moveMouseY    += 5 * input.Value; break;
+                    case Inputs.ProController.LDOWN : simInput.moveMouseY    -= 5 * input.Value; break;
+                    case Inputs.ProController.LLEFT : simInput.moveMouseX    -= 5 * input.Value; break;
+                    case Inputs.ProController.LRIGHT: simInput.moveMouseX    += 5 * input.Value; break;
+                    case Inputs.ProController.LS    : simInput.escKey        |= input.Value > 0f; break;
 
                     case Inputs.ProController.RUP   : simInput.upKey         |= input.Value > 0f; break;
                     case Inputs.ProController.RDOWN : simInput.downKey       |= input.Value > 0f; break;
@@ -117,7 +116,7 @@ namespace WiinUSoft.Holders
                     case Inputs.ProController.RRIGHT: simInput.rightKey      |= input.Value > 0f; break;
                     case Inputs.ProController.RS    : break;
 
-                    case Inputs.ProController.START : break;
+                    case Inputs.ProController.START : simInput.enterKey      |= input.Value > 0f; break;
                     case Inputs.ProController.SELECT:
                     case Inputs.ProController.HOME  : 
                         if (_modeChangeCount == 0)
@@ -148,10 +147,10 @@ namespace WiinUSoft.Holders
                     case Inputs.Nunchuk.C     : simInput.ctrlKey       |= input.Value > 0f; break;
                     case Inputs.Nunchuk.Z     : simInput.shiftKey      |= input.Value > 0f; break;
 
-                    case Inputs.Nunchuk.UP    : simInput.moveMouseY    += input.Value; break;
-                    case Inputs.Nunchuk.DOWN  : simInput.moveMouseY    -= input.Value; break;
-                    case Inputs.Nunchuk.LEFT  : simInput.moveMouseX    -= input.Value; break;
-                    case Inputs.Nunchuk.RIGHT : simInput.moveMouseX    += input.Value; break;
+                    case Inputs.Nunchuk.UP    : simInput.moveMouseY    += 5 * input.Value; break;
+                    case Inputs.Nunchuk.DOWN  : simInput.moveMouseY    -= 5 * input.Value; break;
+                    case Inputs.Nunchuk.LEFT  : simInput.moveMouseX    -= 5 * input.Value; break;
+                    case Inputs.Nunchuk.RIGHT : simInput.moveMouseX    += 5 * input.Value; break;
                     #endregion
 
                     #region Classic Controller Inputs
@@ -170,10 +169,10 @@ namespace WiinUSoft.Holders
                     case Inputs.ClassicController.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
                     case Inputs.ClassicController.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ClassicController.LUP   : simInput.moveMouseY    += input.Value; break;
-                    case Inputs.ClassicController.LDOWN : simInput.moveMouseY    -= input.Value; break;
-                    case Inputs.ClassicController.LLEFT : simInput.moveMouseX    -= input.Value; break;
-                    case Inputs.ClassicController.LRIGHT: simInput.moveMouseX    += input.Value; break;
+                    case Inputs.ClassicController.LUP   : simInput.moveMouseY    += 5 * input.Value; break;
+                    case Inputs.ClassicController.LDOWN : simInput.moveMouseY    -= 5 * input.Value; break;
+                    case Inputs.ClassicController.LLEFT : simInput.moveMouseX    -= 5 * input.Value; break;
+                    case Inputs.ClassicController.LRIGHT: simInput.moveMouseX    += 5 * input.Value; break;
 
                     case Inputs.ClassicController.RUP   : simInput.upKey         |= input.Value > 0f; break;
                     case Inputs.ClassicController.RDOWN : simInput.downKey       |= input.Value > 0f; break;
@@ -201,10 +200,10 @@ namespace WiinUSoft.Holders
                     case Inputs.ClassicControllerPro.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
                     case Inputs.ClassicControllerPro.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ClassicControllerPro.LUP   : simInput.moveMouseY    += input.Value; break;
-                    case Inputs.ClassicControllerPro.LDOWN : simInput.moveMouseY    -= input.Value; break;
-                    case Inputs.ClassicControllerPro.LLEFT : simInput.moveMouseX    -= input.Value; break;
-                    case Inputs.ClassicControllerPro.LRIGHT: simInput.moveMouseX    += input.Value; break;
+                    case Inputs.ClassicControllerPro.LUP   : simInput.moveMouseY    += 5 * input.Value; break;
+                    case Inputs.ClassicControllerPro.LDOWN : simInput.moveMouseY    -= 5 * input.Value; break;
+                    case Inputs.ClassicControllerPro.LLEFT : simInput.moveMouseX    -= 5 * input.Value; break;
+                    case Inputs.ClassicControllerPro.LRIGHT: simInput.moveMouseX    += 5 * input.Value; break;
 
                     case Inputs.ClassicControllerPro.RUP   : simInput.upKey         |= input.Value > 0f; break;
                     case Inputs.ClassicControllerPro.RDOWN : simInput.downKey       |= input.Value > 0f; break;
