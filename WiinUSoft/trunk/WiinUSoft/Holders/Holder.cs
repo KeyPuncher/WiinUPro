@@ -91,7 +91,7 @@ namespace WiinUSoft.Holders
                     #region Pro Controller Inputs
                     case Inputs.ProController.A     : simInput.leftMouseBtn  |= input.Value > 0f; break;
                     case Inputs.ProController.B     : simInput.rightMouseBtn |= input.Value > 0f; break;
-                    case Inputs.ProController.X     : break;
+                    case Inputs.ProController.X     : simInput.delKey        |= input.Value > 0f; break;
                     case Inputs.ProController.Y     : break;
 
                     case Inputs.ProController.L     : simInput.altKey        |= input.Value > 0f; break;
@@ -250,6 +250,9 @@ namespace WiinUSoft.Holders
             if (simInput.enterKey && !_lastInput.enterKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.RETURN);
             else if (!simInput.enterKey && _lastInput.enterKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.RETURN);
 
+            if (simInput.delKey && !_lastInput.delKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.DELETE);
+            else if (!simInput.delKey && _lastInput.delKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.DELETE);
+
             if (simInput.upKey && !_lastInput.upKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.UP);
             else if (!simInput.upKey && _lastInput.upKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.UP);
 
@@ -277,6 +280,7 @@ namespace WiinUSoft.Holders
             public bool ctrlKey;
             public bool shiftKey;
             public bool enterKey;
+            public bool delKey;
 
             public bool upKey;
             public bool downKey;
