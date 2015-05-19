@@ -118,7 +118,7 @@ namespace WiinUSoft.Holders
                     case Inputs.ProController.RS    : break;
 
                     case Inputs.ProController.START : break;
-                    case Inputs.ProController.SELECT: break;
+                    case Inputs.ProController.SELECT:
                     case Inputs.ProController.HOME  : 
                         if (_modeChangeCount == 0)
                         {
@@ -233,7 +233,35 @@ namespace WiinUSoft.Holders
                 _inputSim.Mouse.RightButtonUp();
 
             // Keyboard
+            if (simInput.escKey && !_lastInput.escKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.ESCAPE);
+            else if (!simInput.escKey && _lastInput.escKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.ESCAPE);
 
+            if (simInput.altKey && !_lastInput.altKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.MENU);
+            else if (!simInput.altKey && _lastInput.altKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.MENU);
+
+            if (simInput.tabKey && !_lastInput.tabKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.TAB);
+            else if (!simInput.tabKey && _lastInput.tabKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.TAB);
+
+            if (simInput.ctrlKey && !_lastInput.ctrlKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.CONTROL);
+            else if (!simInput.ctrlKey && _lastInput.ctrlKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.CONTROL);
+
+            if (simInput.shiftKey && !_lastInput.shiftKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.SHIFT);
+            else if (!simInput.shiftKey && _lastInput.shiftKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.SHIFT);
+
+            if (simInput.enterKey && !_lastInput.enterKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.RETURN);
+            else if (!simInput.enterKey && _lastInput.enterKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.RETURN);
+
+            if (simInput.upKey && !_lastInput.upKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.UP);
+            else if (!simInput.upKey && _lastInput.upKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.UP);
+
+            if (simInput.downKey && !_lastInput.downKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.DOWN);
+            else if (!simInput.downKey && _lastInput.downKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.DOWN);
+
+            if (simInput.leftKey && !_lastInput.leftKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.LEFT);
+            else if (!simInput.leftKey && _lastInput.leftKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.LEFT);
+
+            if (simInput.rightKey && !_lastInput.rightKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.RIGHT);
+            else if (!simInput.rightKey && _lastInput.rightKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.RIGHT);
 
             _lastInput = simInput;
         }
@@ -242,24 +270,24 @@ namespace WiinUSoft.Holders
 
         protected struct SimulatedInput
         {
-            public bool leftMouseBtn ;
+            public bool leftMouseBtn;
             public bool rightMouseBtn;
-            public bool escKey       ;
-            public bool altKey       ;
-            public bool tabKey       ;
-            public bool ctrlKey      ;
-            public bool shiftKey     ;
-            public bool enterKey     ;
+            public bool escKey;
+            public bool altKey;
+            public bool tabKey;
+            public bool ctrlKey;
+            public bool shiftKey;
+            public bool enterKey;
 
-            public bool upKey        ;
-            public bool downKey      ;
-            public bool leftKey      ;
-            public bool rightKey     ;
+            public bool upKey;
+            public bool downKey;
+            public bool leftKey;
+            public bool rightKey;
 
-            public float moveMouseX  ;
-            public float moveMouseY  ;
-            public float mouseAbsX   ;
-            public float mouseAbsY   ;
+            public float moveMouseX;
+            public float moveMouseY;
+            public float mouseAbsX;
+            public float mouseAbsY;
         }
     }
 }
