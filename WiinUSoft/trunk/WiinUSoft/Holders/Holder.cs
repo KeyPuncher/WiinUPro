@@ -14,7 +14,7 @@ namespace WiinUSoft.Holders
         public Dictionary<string, bool> Flags { get; protected set; }
         public bool InMouseMode { get; protected set; }
 
-        protected int _modeChangeCount = 0;
+        protected DateTime _mmLastTime = new DateTime(0);
         protected InputSimulator _inputSim;
 
         public void SetValue(string name, bool value)
@@ -79,6 +79,15 @@ namespace WiinUSoft.Holders
         public abstract void Close();
         public abstract void AddMapping(NintrollerLib.New.ControllerType controller);
 
+        protected void MouseModeCheck(bool pressed)
+        {
+            if (pressed && DateTime.Now.Subtract(_mmLastTime).TotalSeconds > 3)
+            {
+                _mmLastTime = DateTime.Now;
+                InMouseMode = false;
+            }
+        }
+
         // used for basic mouse and keyboard actions (fixed mappings)
         protected void UpdateMouseMode()
         {
@@ -104,10 +113,10 @@ namespace WiinUSoft.Holders
                     case Inputs.ProController.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
                     case Inputs.ProController.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ProController.LUP   : simInput.moveMouseY    += 5 * input.Value; break;
-                    case Inputs.ProController.LDOWN : simInput.moveMouseY    -= 5 * input.Value; break;
-                    case Inputs.ProController.LLEFT : simInput.moveMouseX    -= 5 * input.Value; break;
-                    case Inputs.ProController.LRIGHT: simInput.moveMouseX    += 5 * input.Value; break;
+                    case Inputs.ProController.LUP   : simInput.moveMouseY    += 6 * input.Value; break;
+                    case Inputs.ProController.LDOWN : simInput.moveMouseY    -= 6 * input.Value; break;
+                    case Inputs.ProController.LLEFT : simInput.moveMouseX    -= 6 * input.Value; break;
+                    case Inputs.ProController.LRIGHT: simInput.moveMouseX    += 6 * input.Value; break;
                     case Inputs.ProController.LS    : simInput.escKey        |= input.Value > 0f; break;
 
                     case Inputs.ProController.RUP   : simInput.upKey         |= input.Value > 0f; break;
@@ -118,13 +127,7 @@ namespace WiinUSoft.Holders
 
                     case Inputs.ProController.START : simInput.enterKey      |= input.Value > 0f; break;
                     case Inputs.ProController.SELECT:
-                    case Inputs.ProController.HOME  : 
-                        if (_modeChangeCount == 0)
-                        {
-                            _modeChangeCount = 100;
-                            InMouseMode = !(input.Value > 0);
-                        }
-                        break; // might need some sort of delay
+                    case Inputs.ProController.HOME: MouseModeCheck(input.Value > 0f); break; 
                     #endregion
 
                     #region Wiimote Inputs
@@ -140,17 +143,17 @@ namespace WiinUSoft.Holders
 
                     case Inputs.Wiimote.PLUS  : simInput.ctrlKey       |= input.Value > 0f; break;
                     case Inputs.Wiimote.MINUS : simInput.shiftKey      |= input.Value > 0f; break;
-                    case Inputs.Wiimote.HOME: InMouseMode = !(input.Value > 0); break;
+                    case Inputs.Wiimote.HOME  : MouseModeCheck(input.Value > 0f); break;
                     #endregion
 
                     #region Nunchuk Inputs
                     case Inputs.Nunchuk.C     : simInput.ctrlKey       |= input.Value > 0f; break;
                     case Inputs.Nunchuk.Z     : simInput.shiftKey      |= input.Value > 0f; break;
 
-                    case Inputs.Nunchuk.UP    : simInput.moveMouseY    += 5 * input.Value; break;
-                    case Inputs.Nunchuk.DOWN  : simInput.moveMouseY    -= 5 * input.Value; break;
-                    case Inputs.Nunchuk.LEFT  : simInput.moveMouseX    -= 5 * input.Value; break;
-                    case Inputs.Nunchuk.RIGHT : simInput.moveMouseX    += 5 * input.Value; break;
+                    case Inputs.Nunchuk.UP    : simInput.moveMouseY    += 6 * input.Value; break;
+                    case Inputs.Nunchuk.DOWN  : simInput.moveMouseY    -= 6 * input.Value; break;
+                    case Inputs.Nunchuk.LEFT  : simInput.moveMouseX    -= 6 * input.Value; break;
+                    case Inputs.Nunchuk.RIGHT : simInput.moveMouseX    += 6 * input.Value; break;
                     #endregion
 
                     #region Classic Controller Inputs
@@ -169,10 +172,10 @@ namespace WiinUSoft.Holders
                     case Inputs.ClassicController.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
                     case Inputs.ClassicController.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ClassicController.LUP   : simInput.moveMouseY    += 5 * input.Value; break;
-                    case Inputs.ClassicController.LDOWN : simInput.moveMouseY    -= 5 * input.Value; break;
-                    case Inputs.ClassicController.LLEFT : simInput.moveMouseX    -= 5 * input.Value; break;
-                    case Inputs.ClassicController.LRIGHT: simInput.moveMouseX    += 5 * input.Value; break;
+                    case Inputs.ClassicController.LUP   : simInput.moveMouseY    += 6 * input.Value; break;
+                    case Inputs.ClassicController.LDOWN : simInput.moveMouseY    -= 6 * input.Value; break;
+                    case Inputs.ClassicController.LLEFT : simInput.moveMouseX    -= 6 * input.Value; break;
+                    case Inputs.ClassicController.LRIGHT: simInput.moveMouseX    += 6 * input.Value; break;
 
                     case Inputs.ClassicController.RUP   : simInput.upKey         |= input.Value > 0f; break;
                     case Inputs.ClassicController.RDOWN : simInput.downKey       |= input.Value > 0f; break;
@@ -181,7 +184,7 @@ namespace WiinUSoft.Holders
 
                     case Inputs.ClassicController.START : break;
                     case Inputs.ClassicController.SELECT: break;
-                    case Inputs.ClassicController.HOME: InMouseMode = !(input.Value > 0); break; // might need some sort of delay
+                    case Inputs.ClassicController.HOME: MouseModeCheck(input.Value > 0f); break; // might need some sort of delay
                     #endregion
 
                     #region Classic Controller Pro Inputs
@@ -200,10 +203,10 @@ namespace WiinUSoft.Holders
                     case Inputs.ClassicControllerPro.LEFT  : simInput.leftKey       |= input.Value > 0f; break;
                     case Inputs.ClassicControllerPro.RIGHT : simInput.rightKey      |= input.Value > 0f; break;
 
-                    case Inputs.ClassicControllerPro.LUP   : simInput.moveMouseY    += 5 * input.Value; break;
-                    case Inputs.ClassicControllerPro.LDOWN : simInput.moveMouseY    -= 5 * input.Value; break;
-                    case Inputs.ClassicControllerPro.LLEFT : simInput.moveMouseX    -= 5 * input.Value; break;
-                    case Inputs.ClassicControllerPro.LRIGHT: simInput.moveMouseX    += 5 * input.Value; break;
+                    case Inputs.ClassicControllerPro.LUP   : simInput.moveMouseY    += 6 * input.Value; break;
+                    case Inputs.ClassicControllerPro.LDOWN : simInput.moveMouseY    -= 6 * input.Value; break;
+                    case Inputs.ClassicControllerPro.LLEFT : simInput.moveMouseX    -= 6 * input.Value; break;
+                    case Inputs.ClassicControllerPro.LRIGHT: simInput.moveMouseX    += 6 * input.Value; break;
 
                     case Inputs.ClassicControllerPro.RUP   : simInput.upKey         |= input.Value > 0f; break;
                     case Inputs.ClassicControllerPro.RDOWN : simInput.downKey       |= input.Value > 0f; break;
@@ -212,12 +215,12 @@ namespace WiinUSoft.Holders
 
                     case Inputs.ClassicControllerPro.START : break;
                     case Inputs.ClassicControllerPro.SELECT: break;
-                    case Inputs.ClassicControllerPro.HOME: InMouseMode = !(input.Value > 0); break; // might need some sort of delay
+                    case Inputs.ClassicControllerPro.HOME: MouseModeCheck(input.Value > 0f); break; // might need some sort of delay
                     #endregion
                 }
             }
 
-            // TODO: Apply the movements
+            #region Apply input
             // Mouse
             _inputSim.Mouse.MoveMouseBy((int)simInput.moveMouseX, (int)simInput.moveMouseY * -1);
 
@@ -264,6 +267,7 @@ namespace WiinUSoft.Holders
 
             if (simInput.rightKey && !_lastInput.rightKey) _inputSim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.RIGHT);
             else if (!simInput.rightKey && _lastInput.rightKey) _inputSim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.RIGHT);
+            #endregion
 
             _lastInput = simInput;
         }
