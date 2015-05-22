@@ -22,6 +22,8 @@ namespace WiinUSoft
         {
             if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
             {
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
                 var application = new App();
                 application.InitializeComponent();
                 application.Run();
@@ -29,6 +31,16 @@ namespace WiinUSoft
                 // Allow single instance code to perform cleanup operations
                 SingleInstance<App>.Cleanup();
             }
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+
+            // TODO: set the exception properties and close other windows
+            System.Diagnostics.Debug.WriteLine("Caught an Exception: " + e.Message);
+            var box = new ErrorWindow();
+            box.ShowDialog();
         }
 
         public bool SignalExternalCommandLineArgs(IList<string> args)

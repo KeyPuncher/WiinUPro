@@ -62,7 +62,7 @@ namespace WiinUSoft
             //hidList = Nintroller.FindControllers();
             hidList = Nintroller.GetControllerPaths();
             List<KeyValuePair<int, DeviceControl>> connectSeq = new List<KeyValuePair<int, DeviceControl>>();
-
+            
             foreach (string hid in hidList)
             {
                 Nintroller n = new Nintroller(hid);
@@ -97,6 +97,11 @@ namespace WiinUSoft
                     {
                         connectSeq.Add(new KeyValuePair<int, DeviceControl>(deviceList[deviceList.Count - 1].properties.autoNum, deviceList[deviceList.Count - 1]));
                     }
+                }
+                else
+                {
+                    // device isn't connected, but prevent other applications form trying to use it
+                    n.Hold();
                 }
             }
 
