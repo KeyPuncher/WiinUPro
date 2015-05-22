@@ -309,6 +309,35 @@ namespace NintrollerLib.New
         #region Connectivity
 
         /// <summary>
+        /// Holds onto to controller to prevent other applications for reading it.
+        /// </summary>
+        /// <returns>Successful</returns>
+        public bool Hold()
+        {
+            if (!_connected)
+            {
+                try
+                {
+                    // Open Read 'n Write file handle
+                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+
+                    // create a stream from the file
+                    _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
+                    
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Opens a connection stream to the device.
         /// (Reading is not yet started)
         /// </summary>
