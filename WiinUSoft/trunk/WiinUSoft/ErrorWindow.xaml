@@ -1,13 +1,15 @@
 ﻿<Window x:Class="WiinUSoft.ErrorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ErrorWindow" Height="300" Width="300">
+        Title="Application Error" Height="439" Width="436">
     <Grid>
         <Label Content="Uh-oh, something went wrong..." HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="_errorMessage" Content="Message" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="_errorStack" HorizontalAlignment="Left" Height="155" Margin="10,71,0,0" TextWrapping="Wrap" Text="More Info" VerticalAlignment="Top" Width="274"/>
-        <Button x:Name="_sendBtn" Content="Send" HorizontalAlignment="Left" Margin="209,241,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="_dontSendBtn" Content="Don't Send" HorizontalAlignment="Left" Margin="120,241,0,0" VerticalAlignment="Top" Width="75"/>
+        <Label x:Name="_errorMessage" Content="Message" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="272" IsEnabled="False" Foreground="Black" FontWeight="Bold"/>
+        <TextBox x:Name="_errorStack" Margin="10,71,8,125" TextWrapping="Wrap" Text="More Info" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" IsReadOnly="True" FontStyle="Italic"/>
+        <Button x:Name="_sendBtn" Content="Send" Margin="0,0,8,6" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="_sendBtn_Click"/>
+        <Button x:Name="_dontSendBtn" Content="Don't Send" Margin="0,0,97,6" HorizontalAlignment="Right" Width="75" Height="21" VerticalAlignment="Bottom" Click="_dontSendBtn_Click"/>
+        <TextBox x:Name="_userInfo" Margin="10,0,8,32" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Height="56" VerticalAlignment="Bottom" Text="optional"/>
+        <Label Content="Comments, Email, ect." HorizontalAlignment="Left" Margin="10,0,0,93" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>

@@ -38,8 +38,9 @@ namespace WiinUSoft
             Exception e = (Exception)args.ExceptionObject;
 
             // TODO: set the exception properties and close other windows
+            SingleInstance<App>.Cleanup();
             System.Diagnostics.Debug.WriteLine("Caught an Exception: " + e.Message);
-            var box = new ErrorWindow();
+            var box = new ErrorWindow(e);
             box.ShowDialog();
         }
 
