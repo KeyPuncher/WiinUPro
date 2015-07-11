@@ -101,7 +101,7 @@ namespace WiinUSoft.Holders
                     case Inputs.ProController.A     : simInput.leftMouseBtn  |= input.Value > 0f; break;
                     case Inputs.ProController.B     : simInput.rightMouseBtn |= input.Value > 0f; break;
                     case Inputs.ProController.X     : simInput.delKey        |= input.Value > 0f; break;
-                    case Inputs.ProController.Y     : break;
+                    case Inputs.ProController.Y     : simInput.escKey        |= input.Value > 0f; break;
 
                     case Inputs.ProController.L     : simInput.altKey        |= input.Value > 0f; break;
                     case Inputs.ProController.R     : simInput.tabKey        |= input.Value > 0f; break;
@@ -117,13 +117,13 @@ namespace WiinUSoft.Holders
                     case Inputs.ProController.LDOWN : simInput.moveMouseY    -= 6 * input.Value; break;
                     case Inputs.ProController.LLEFT : simInput.moveMouseX    -= 6 * input.Value; break;
                     case Inputs.ProController.LRIGHT: simInput.moveMouseX    += 6 * input.Value; break;
-                    case Inputs.ProController.LS    : simInput.escKey        |= input.Value > 0f; break;
+                    case Inputs.ProController.LS    : simInput.leftMouseBtn  |= input.Value > 0f; break;
 
                     case Inputs.ProController.RUP   : simInput.upKey         |= input.Value > 0f; break;
                     case Inputs.ProController.RDOWN : simInput.downKey       |= input.Value > 0f; break;
                     case Inputs.ProController.RLEFT : simInput.leftKey       |= input.Value > 0f; break;
                     case Inputs.ProController.RRIGHT: simInput.rightKey      |= input.Value > 0f; break;
-                    case Inputs.ProController.RS    : break;
+                    case Inputs.ProController.RS    : simInput.rightMouseBtn |= input.Value > 0f; break;
 
                     case Inputs.ProController.START : simInput.enterKey      |= input.Value > 0f; break;
                     case Inputs.ProController.SELECT:
