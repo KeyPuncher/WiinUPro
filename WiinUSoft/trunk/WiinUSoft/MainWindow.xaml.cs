@@ -65,7 +65,6 @@ namespace WiinUSoft
             
             foreach (string hid in hidList)
             {
-                Nintroller n = new Nintroller(hid);
                 DeviceControl existingDevice = null;
 
                 foreach (DeviceControl d in deviceList)
@@ -88,20 +87,25 @@ namespace WiinUSoft
                         }
                     }
                 }
-                else if (n.ConnectTest())
-                {
-                    deviceList.Add(new DeviceControl(n));
-                    deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
-                    deviceList[deviceList.Count - 1].RefreshState();
-                    if (deviceList[deviceList.Count - 1].properties.autoConnect)
-                    {
-                        connectSeq.Add(new KeyValuePair<int, DeviceControl>(deviceList[deviceList.Count - 1].properties.autoNum, deviceList[deviceList.Count - 1]));
-                    }
-                }
                 else
                 {
-                    // device isn't connected, but prevent other applications form trying to use it
-                    n.Hold();
+                    Nintroller n = new Nintroller(hid);
+
+                    if (n.ConnectTest())
+                    {
+                        deviceList.Add(new DeviceControl(n));
+                        deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
+                        deviceList[deviceList.Count - 1].RefreshState();
+                        if (deviceList[deviceList.Count - 1].properties.autoConnect)
+                        {
+                            connectSeq.Add(new KeyValuePair<int, DeviceControl>(deviceList[deviceList.Count - 1].properties.autoNum, deviceList[deviceList.Count - 1]));
+                        }
+                    }
+                    else
+                    {
+                        // device isn't connected, but prevent other applications form trying to use it
+                        n.Hold();
+                    }
                 }
             }
 
@@ -113,7 +117,7 @@ namespace WiinUSoft
                     var tmp = connectSeq[i];
                     connectSeq[i] = connectSeq[i - 1];
                     connectSeq[i - 1] = tmp;
-                    i--;
+                    i = 0;
                 }
             }
 
