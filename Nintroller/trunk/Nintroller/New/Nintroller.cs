@@ -766,6 +766,7 @@ namespace NintrollerLib.New
                             if (report.Length < 6)
                             {
                                 _readType = ReadReportType.Unknown;
+                                Log("Report length not long enough for Extension_B");
                                 return;
                             }
 
@@ -851,8 +852,10 @@ namespace NintrollerLib.New
 
                                     case ControllerType.PartiallyInserted:
                                         // try again
+                                        // TODO: New: Make sure this works
                                         GetStatus();
-                                        break;
+                                        return;
+                                        //break;
 
                                     case ControllerType.Drums:
                                     case ControllerType.Guitar:
