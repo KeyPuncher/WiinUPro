@@ -69,6 +69,7 @@ namespace WiinUSoft
         {
             XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
             string path = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
+            // TODO: Might have to adjust the save path
 
             try
             {
@@ -119,13 +120,14 @@ namespace WiinUSoft
             {
                 if (pref.hid == property.hid)
                 {
-                    pref.name = property.name;
-                    pref.autoConnect = property.autoConnect;
-                    pref.profile = property.profile;
-                    pref.connType = property.connType;
-                    pref.autoNum = property.autoNum;
+                    pref.name            = property.name;
+                    pref.autoConnect     = property.autoConnect;
+                    pref.profile         = property.profile;
+                    pref.connType        = property.connType;
+                    pref.autoNum         = property.autoNum;
                     pref.rumbleIntensity = property.rumbleIntensity;
-                    pref.useRumble = property.useRumble;
+                    pref.useRumble       = property.useRumble;
+                    pref.calPref         = property.calPref;
 
                     return;
                 }
@@ -143,6 +145,16 @@ namespace WiinUSoft
             DInput = 1
         }
 
+        public enum CalibrationPreference
+        {
+            Raw     = -2,
+            Minimal = -1,
+            Defalut = 0,
+            More    = 1,
+            Extra   = 2,
+            Custom  = 3
+        }
+
         public string hid = "";
         public string name = "";
         public bool autoConnect = false;
@@ -151,17 +163,21 @@ namespace WiinUSoft
         public int rumbleIntensity = 2;
         public ProfHolderType connType;
         public string profile = "";
+        public CalibrationPreference calPref;
+        public string calString = ""; // not the best solution for saving the custom config but makes it easy
 
         public Property()
         {
             hid = "";
             connType = ProfHolderType.XInput;
+            calPref = CalibrationPreference.Defalut;
         }
 
         public Property(string ID)
         {
             hid = ID;
             connType = ProfHolderType.XInput;
+            calPref = CalibrationPreference.Defalut;
         }
 
         public Property(Property copy)
@@ -174,6 +190,7 @@ namespace WiinUSoft
             rumbleIntensity = copy.rumbleIntensity;
             connType = copy.connType;
             profile = copy.profile;
+            calPref = copy.calPref;
         }
     }
 

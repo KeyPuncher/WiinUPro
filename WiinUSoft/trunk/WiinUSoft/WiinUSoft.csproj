@@ -67,14 +67,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="CalibrateWindow.xaml.cs">
+      <DependentUpon>CalibrateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NumPicker.xaml.cs">
+      <DependentUpon>NumPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="PropWindow.xaml.cs">
       <DependentUpon>PropWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SingleInstance.cs" />
     <Compile Include="UserPrefs.cs" />
+    <Page Include="CalibrateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,6 +128,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NumPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PropWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -227,6 +241,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\IDicon3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\arrow_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

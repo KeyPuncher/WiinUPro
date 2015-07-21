@@ -11,6 +11,7 @@ namespace WiinUSoft
     {
         // TODO: connect to specific device
         public bool doSave = false;
+        public bool customCalibrate = false;
         public Property props;
 
         public PropWindow(Property org, string defalutName = "")
@@ -21,7 +22,6 @@ namespace WiinUSoft
             nameInput.Text = string.IsNullOrWhiteSpace(props.name) ? defalutName : props.name;
             defaultInput.Text = props.profile;
             autoCheckbox.IsChecked = props.autoConnect;
-            rumbleEnabled.IsChecked = props.useRumble;
             if (props.autoNum >= 0 && props.autoNum <= autoConnectNumber.Items.Count)
             {
                 autoConnectNumber.SelectedIndex = props.autoNum;
@@ -46,11 +46,6 @@ namespace WiinUSoft
         private void autoCheckbox_Click(object sender, RoutedEventArgs e)
         {
             props.autoConnect = autoCheckbox.IsChecked == true;
-        }
-
-        private void rumbleEnabled_Click(object sender, RoutedEventArgs e)
-        {
-            props.useRumble = rumbleEnabled.IsChecked == true;
         }
 
         private void nameInput_TextChanged(object sender, TextChangedEventArgs e)
@@ -92,6 +87,44 @@ namespace WiinUSoft
             {
                 props.useRumble = rumbleSelection.SelectedIndex > 0;
                 props.rumbleIntensity = rumbleSelection.SelectedIndex;
+            }
+        }
+
+        private void Calibration_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // TODO: Save Calibration Setting
+
+            if (props != null)
+            {
+                switch (calibrationSelection.SelectedIndex)
+                {
+                    case 0:
+                        props.calPref = Property.CalibrationPreference.Defalut;
+                        break;
+
+                    case 1:
+                        props.calPref = Property.CalibrationPreference.Minimal;
+                        break;
+
+                    case 2:
+                        props.calPref = Property.CalibrationPreference.More;
+                        break;
+
+                    case 3:
+                        props.calPref = Property.CalibrationPreference.Extra;
+                        break;
+
+                    case 4:
+                        props.calPref = Property.CalibrationPreference.Custom;
+                        customCalibrate = true;
+                        Close();
+                        // TODO: Open calibration window
+
+                        // save the calibration into a string like so:
+                        // [type]:[min],[center],[max],[dead];[type2:] ect
+                        // wm:-72,128,180,[...];nun:-32,0,32,[...];cc:0,0,0,0,0,0;ccp:0,0,0,0,0,0;
+                        break;
+                }
             }
         }
     }

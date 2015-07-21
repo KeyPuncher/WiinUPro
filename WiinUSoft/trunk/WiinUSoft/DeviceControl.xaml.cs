@@ -716,6 +716,13 @@ namespace WiinUSoft
             PropWindow win = new PropWindow(properties, device.Type.ToString());
             win.ShowDialog();
 
+            if (win.customCalibrate)
+            {
+                // TODO: Show Calibration Window, then reshow props after calibrating
+                CalibrateWindow cb = new CalibrateWindow(device);
+                cb.ShowDialog();
+            }
+
             if (win.doSave)
             {
                 properties = new Property(win.props);
