@@ -453,5 +453,40 @@ namespace TestApp
             //_nintroller.EnableIR();
             _nintroller.IRMode = IRCamMode.Wide;
         }
+
+        private void typeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_nintroller == null) return;
+
+            switch (typeBox.SelectedIndex)
+            {
+                case 0:
+                    _nintroller.ForceControllerType(ControllerType.Unknown);
+                    break;
+
+                case 1:
+                    _nintroller.ForceControllerType(ControllerType.ProController);
+                    break;
+
+                case 2:
+                    _nintroller.ForceControllerType(ControllerType.Wiimote);
+                    break;
+
+                case 3:
+                    _nintroller.ForceControllerType(ControllerType.Nunchuk);
+                    break;
+
+                case 4:
+                    _nintroller.ForceControllerType(ControllerType.ClassicController);
+                    break;
+
+                case 5:
+                    _nintroller.ForceControllerType(ControllerType.ClassicControllerPro);
+                    break;
+
+                default:
+                    break;
+            }
+        }
     }
 }
