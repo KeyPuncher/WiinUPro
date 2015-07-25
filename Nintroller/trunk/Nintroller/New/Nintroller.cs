@@ -21,16 +21,18 @@ namespace NintrollerLib.New
         public event EventHandler<LowBatteryEventArgs>          LowBattery      = delegate { };
         
         // General
-        private string           _path                          = string.Empty;
-        private bool             _connected                     = false;
-        private INintrollerState _state                         = new Wiimote();
-        private ControllerType   _currentType                   = ControllerType.Unknown;
-        private IRCamMode        _irMode                        = IRCamMode.Off;
-        private IRCamSensitivity _irSensitivity                 = IRCamSensitivity.Level3;
-        private byte             _rumbleBit                     = 0x00;
-        private byte             _battery                       = 0x00;
-        private bool             _batteryLow                    = false;
-        private bool             _led1, _led2, _led3, _led4;
+        private string             _path                        = string.Empty;
+        private bool               _connected                   = false;
+        private INintrollerState   _state                       = new Wiimote();
+        private CalibrationStorage _calibrations                = new CalibrationStorage();
+        private ControllerType     _currentType                 = ControllerType.Unknown;
+        private ControllerType     _forceType                   = ControllerType.Unknown;
+        private IRCamMode          _irMode                      = IRCamMode.Off;
+        private IRCamSensitivity   _irSensitivity               = IRCamSensitivity.Level3;
+        private byte               _rumbleBit                   = 0x00;
+        private byte               _battery                     = 0x00;
+        private bool               _batteryLow                  = false;
+        private bool               _led1, _led2, _led3, _led4;
 
         // Read/Writing Variables
         private SafeFileHandle   _fileHandle;                // Handle for Reading and Writing
@@ -780,19 +782,34 @@ namespace NintrollerLib.New
                                 ((long)r[3] << 16) | 
                                 ((long)r[4] <<  8) | r[5];
 
+                            bool typeChange = false;
+                            ControllerType newType = ControllerType.PartiallyInserted;
+
                             if (_currentType != (ControllerType)type)
                             {
-                                _currentType = (ControllerType)type;
+                                typeChange = true;
+                                newType = (ControllerType)type;
+                            }
+                            else if (_forceType != ControllerType.Unknown &&
+                                     _forceType != ControllerType.PartiallyInserted &&
+                                     _currentType != _forceType)
+                            {
+                                typeChange = true;
+                                newType = _forceType;
+                            }
 
+                            if (typeChange)
+                            {
                                 Log("Controller type: " + _currentType.ToString());
                                 // TODO: New: Check parsing after applying a report type (Pro is working, CC is not)
                                 InputReport applyReport = InputReport.BtnsOnly;
                                 bool continuiousReporting = true;
 
-                                switch(_currentType)
+                                switch(newType)
                                 {
                                     case ControllerType.ProController:
                                         _state = new ProController();
+                                        _state.SetCalibration(_calibrations.ProCalibration);
                                         applyReport = InputReport.ExtOnly;
                                         break;
 
@@ -804,6 +821,7 @@ namespace NintrollerLib.New
                                     case ControllerType.Nunchuk:
                                     case ControllerType.NunchukB:
                                         _state = new Nunchuk();
+                                        _state.SetCalibration(_calibrations.NunchukCalibration);
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsAccExt;
@@ -816,6 +834,7 @@ namespace NintrollerLib.New
 
                                     case ControllerType.ClassicController:
                                         _state = new ClassicController();
+                                        _state.SetCalibration(_calibrations.ClassicCalibration);
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsExt;
@@ -828,6 +847,7 @@ namespace NintrollerLib.New
 
                                     case ControllerType.ClassicControllerPro:
                                         _state = new ClassicControllerPro();
+                                        _state.SetCalibration(_calibrations.ClassicProCalibration);
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsAccExt;
@@ -840,6 +860,7 @@ namespace NintrollerLib.New
 
                                     case ControllerType.MotionPlus:
                                         _state = new WiimotePlus();
+                                        // TODO: Calibration: apply stored motion plus calibration
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsAccExt;
@@ -868,9 +889,11 @@ namespace NintrollerLib.New
                                         break;
                                 }
 
+                                _currentType = newType;
+
                                 // TODO: Get calibration if PID != 330
 
-                                _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                //_state.SetCalibration(Calibrations.CalibrationPreset.Default);
 
                                 // Fire ExtensionChange event
                                 //ExtensionChange(this, _currentType);
@@ -1354,6 +1377,20 @@ namespace NintrollerLib.New
             ApplyLEDs();
         }
 
+        /// <summary>
+        /// Forces the controller to be read as the provided type.
+        /// </summary>
+        /// <param name="type">Type to be parsed as. Setting it to Unknown or Partially Inserted clears it.</param>
+        public void ForceControllerType(ControllerType type)
+        {
+            _forceType = type;
+
+            if (_connected)
+            {
+                GetStatus();
+            }
+        }
+
         #endregion
 
         #region Calibration
@@ -1364,6 +1401,8 @@ namespace NintrollerLib.New
         /// <param name="wiimoteCalibration">The Wiimote Struct with the calibration values to use</param>
         public void SetCalibration(Wiimote wiimoteCalibration)
         {
+            _calibrations.WiimoteCalibration = wiimoteCalibration;
+
             if (_currentType == ControllerType.Wiimote)
             {
                 ((Wiimote)_state).accelerometer.Calibrate(wiimoteCalibration.accelerometer);
@@ -1387,6 +1426,8 @@ namespace NintrollerLib.New
         /// <param name="nunchukCalibration">The Nunchuk Struct with the calibration values to use</param>
         public void SetCalibration(Nunchuk nunchukCalibration)
         {
+            _calibrations.NunchukCalibration = nunchukCalibration;
+
             if (_currentType == ControllerType.Nunchuk || _currentType == ControllerType.NunchukB)
             {
                 ((Nunchuk)_state).joystick.Calibrate(nunchukCalibration.joystick);
@@ -1399,6 +1440,8 @@ namespace NintrollerLib.New
         /// <param name="classicCalibration">The ClassicController Struct with the calibration values to use</param>
         public void SetCalibration(ClassicController classicCalibration)
         {
+            _calibrations.ClassicCalibration = classicCalibration;
+
             if (_currentType == ControllerType.ClassicController)
             {
                 ((ClassicController)_state).LJoy.Calibrate(classicCalibration.LJoy);
@@ -1413,8 +1456,13 @@ namespace NintrollerLib.New
         /// <param name="classicProCalibration">The ClassicControllerPro Struct with the calibration values to use</param>
         public void SetCalibration(ClassicControllerPro classicProCalibration)
         {
-            ((ClassicControllerPro)_state).LJoy.Calibrate(classicProCalibration.LJoy);
-            ((ClassicControllerPro)_state).RJoy.Calibrate(classicProCalibration.RJoy);
+            _calibrations.ClassicProCalibration = classicProCalibration;
+
+            if (_currentType == ControllerType.ClassicControllerPro)
+            {
+                ((ClassicControllerPro)_state).LJoy.Calibrate(classicProCalibration.LJoy);
+                ((ClassicControllerPro)_state).RJoy.Calibrate(classicProCalibration.RJoy);
+            }
         }
         /// <summary>
         /// Sets the controller calibration for the Pro Controller
@@ -1422,8 +1470,13 @@ namespace NintrollerLib.New
         /// <param name="proCalibration">The ProController Struct with the calibration values to use</param>
         public void SetCalibration(ProController proCalibration)
         {
-            ((ProController)_state).LJoy.Calibrate(proCalibration.LJoy);
-            ((ProController)_state).RJoy.Calibrate(proCalibration.RJoy);
+            _calibrations.ProCalibration = proCalibration;
+
+            if (_currentType == ControllerType.ProController)
+            {
+                ((ProController)_state).LJoy.Calibrate(proCalibration.LJoy);
+                ((ProController)_state).RJoy.Calibrate(proCalibration.RJoy);
+            }
         }
 
         #endregion

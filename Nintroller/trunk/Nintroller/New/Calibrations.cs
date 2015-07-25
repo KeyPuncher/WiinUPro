@@ -328,6 +328,7 @@ namespace NintrollerLib.New
             };
         }
 
+        // TODO: Calibration - Optimize Defaults
         public class Default
         {
             public ProController ProControllerDefault = new ProController()
@@ -781,5 +782,23 @@ namespace NintrollerLib.New
             };
         }
         #endregion
+    }
+
+    public class CalibrationStorage
+    {
+        public ProController ProCalibration;
+        public Wiimote WiimoteCalibration;
+        public Nunchuk NunchukCalibration;
+        public ClassicController ClassicCalibration;
+        public ClassicControllerPro ClassicProCalibration;
+
+        public CalibrationStorage()
+        {
+            ProCalibration        = Calibrations.Defaults.ProControllerDefault;
+            WiimoteCalibration    = Calibrations.Defaults.WiimoteDefault;
+            NunchukCalibration    = Calibrations.Defaults.NunchukDefault;
+            ClassicCalibration    = Calibrations.Defaults.ClassicControllerDefault;
+            ClassicProCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+        }
     }
 }
