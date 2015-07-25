@@ -529,6 +529,7 @@ namespace WiinUSoft
                     group1_min.Max    = group2_min.Max    = group3_min.Max    = 300;
                     group1_max.Max    = group2_max.Max    = group3_max.Max    = 300;
                     group1_dead.Max   = group2_dead.Max   = group3_dead.Max   = 150;
+                    group1_dead.Value = group2_dead.Value = group3_dead.Value = 16;
                     group1.Header = "X-Axis";
                     group1_center.IsEnabled = false;
                     group1_min.IsEnabled    = false;
@@ -595,6 +596,7 @@ namespace WiinUSoft
                     group1_min.Max    = group2_min.Max    = 300;
                     group1_max.Max    = group2_max.Max    = 300;
                     group1_dead.Max   = group2_dead.Max   = 150;
+                    group1_dead.Value = group2_dead.Value = 8;
                     group1.Header = "X-Axis";
                     group1_center.IsEnabled = false;
                     group1_min.IsEnabled = false;

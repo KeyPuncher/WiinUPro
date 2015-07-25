@@ -629,6 +629,39 @@ namespace WiinUSoft
             }
         }
 
+        private void typeOption_Click(object sender, RoutedEventArgs e)
+        {
+            switch(icon.ContextMenu.Items.IndexOf(sender))
+            {
+                case 0:
+                    device.ForceControllerType(ControllerType.Unknown);
+                    break;
+
+                case 1:
+                    device.ForceControllerType(ControllerType.ProController);
+                    break;
+
+                case 2:
+                    device.ForceControllerType(ControllerType.Wiimote);
+                    break;
+
+                case 3:
+                    device.ForceControllerType(ControllerType.Nunchuk);
+                    break;
+
+                case 4:
+                    device.ForceControllerType(ControllerType.ClassicController);
+                    break;
+
+                case 5:
+                    device.ForceControllerType(ControllerType.ClassicControllerPro);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         private void btnDetatch_Click(object sender, RoutedEventArgs e)
         {
             Detatch();
