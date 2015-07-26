@@ -304,8 +304,8 @@ namespace NintrollerLib
         /// <summary>
         /// The state of a connected Nunchuck.
         /// </summary>
-        public NunchuckState Nunchuck { get { return nunchuck; } }
-        internal NunchuckState nunchuck = NunchuckState.Empty;
+        public NunchukState Nunchuck { get { return nunchuck; } }
+        internal NunchukState nunchuck = NunchukState.Empty;
         /// <summary>
         /// The state of a connected Classic Controller.
         /// </summary>
@@ -412,7 +412,7 @@ namespace NintrollerLib
             {
                 case ControllerType.Nunchuk:
                 case ControllerType.NunchukB:
-                    extension = new NunchuckState();
+                    extension = new NunchukState();
                     extensionConnected = true;
                     currentExtension = ControllerType.Nunchuk;
                     break;
@@ -644,13 +644,13 @@ namespace NintrollerLib
                         break;
                 }
 
-                nunchuck = NunchuckState.Empty;
+                nunchuck = NunchukState.Empty;
                 classicController = ClassicControllerState.Empty;
                 classicControllerPro = ClassicControllerProState.Empty;
                 motionPlus = MotionPlusState.Empty;
 
-                if (extension.GetType() == typeof(NunchuckState))
-                    nunchuck = (NunchuckState)extension;
+                if (extension.GetType() == typeof(NunchukState))
+                    nunchuck = (NunchukState)extension;
                 else if (extension.GetType() == typeof(ClassicControllerState))
                     classicController = (ClassicControllerState)extension;
                 else if (extension.GetType() == typeof(ClassicControllerProState))
@@ -1237,13 +1237,13 @@ namespace NintrollerLib
     /// Contains variables that describe a Nunchuck
     /// </summary>
     [Serializable]
-    public class NunchuckState : ExtensionState
+    public class NunchukState : ExtensionState
     {
         /// <summary>
         /// An empty Nunchuck state
         /// (nothing active)
         /// </summary>
-        public static readonly NunchuckState Empty = new NunchuckState();
+        public static readonly NunchukState Empty = new NunchukState();
 
         #region Inputs
         // Buttons
@@ -1318,7 +1318,7 @@ namespace NintrollerLib
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public NunchuckState ()
+        public NunchukState ()
         {
             ResetCalibration();
         }
@@ -1330,23 +1330,23 @@ namespace NintrollerLib
         {
             if (Nintroller.UseModestConfigs)
             {
-                joyXCalibration = NunchuckCalibration.Modest.JoystickX;
-                joyYCalibration = NunchuckCalibration.Modest.JoystickY;
-                joyDeadZone = NunchuckCalibration.Modest.JoystickDeadzone;
+                joyXCalibration = NunchukCalibration.Modest.JoystickX;
+                joyYCalibration = NunchukCalibration.Modest.JoystickY;
+                joyDeadZone = NunchukCalibration.Modest.JoystickDeadzone;
 
-                accCenter = NunchuckCalibration.Modest.AccelerometerCenter;
-                accDead = NunchuckCalibration.Modest.AccelerometerDeadzone;
-                accRange = NunchuckCalibration.Modest.AccelerometerRange;
+                accCenter = NunchukCalibration.Modest.AccelerometerCenter;
+                accDead = NunchukCalibration.Modest.AccelerometerDeadzone;
+                accRange = NunchukCalibration.Modest.AccelerometerRange;
             }
             else
             {
-                joyXCalibration = NunchuckCalibration.Default.JoystickX;
-                joyYCalibration = NunchuckCalibration.Default.JoystickY;
-                joyDeadZone = NunchuckCalibration.Default.JoystickDeadzone;
+                joyXCalibration = NunchukCalibration.Default.JoystickX;
+                joyYCalibration = NunchukCalibration.Default.JoystickY;
+                joyDeadZone = NunchukCalibration.Default.JoystickDeadzone;
 
-                accCenter = NunchuckCalibration.Default.AccelerometerCenter;
-                accDead = NunchuckCalibration.Default.AccelerometerDeadzone;
-                accRange = NunchuckCalibration.Default.AccelerometerRange;
+                accCenter = NunchukCalibration.Default.AccelerometerCenter;
+                accDead = NunchukCalibration.Default.AccelerometerDeadzone;
+                accRange = NunchukCalibration.Default.AccelerometerRange;
             }
             /*
             JoyXCalibration.Min = 32;
@@ -1378,7 +1378,7 @@ namespace NintrollerLib
         /// Sets the calibration settings.
         /// </summary>
         /// <param name="calibration">Calibration settings</param>
-        public void SetCalibration(NunchuckCalibration calibration)
+        public void SetCalibration(NunchukCalibration calibration)
         {
             joyXCalibration = calibration.JoystickX;
             joyYCalibration = calibration.JoystickY;

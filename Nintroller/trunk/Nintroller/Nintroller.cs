@@ -77,7 +77,7 @@ namespace NintrollerLib
         // Calibration Variables - Probably won't need these
         private WiimoteCalibration              mCalibrationWiimote;
         private MotionPlusCalibration           mCalibrationMotionPlus;
-        private NunchuckCalibration             mCalibrationNunchuck;
+        private NunchukCalibration             mCalibrationNunchuck;
         private ClassicControllerCalibration    mCalibrationClassic;
         private ClassicControllerProCalibration mCalibrationClassicPro;
         private ProCalibration                  mCalibrationPro;
@@ -1113,13 +1113,13 @@ namespace NintrollerLib
         /// Set's the controller's calibration
         /// </summary>
         /// <param name="calibration">Nunchuck's Calibration</param>
-        public void UpdateCalibration(NunchuckCalibration calibration)
+        public void UpdateCalibration(NunchukCalibration calibration)
         {
             mCalibrationNunchuck = calibration;
             if (mDeviceState.GetType() == typeof(WiimoteState))
             {
-                if (((WiimoteState)mDeviceState).extension.GetType() == typeof(NunchuckState))
-                    ((NunchuckState)((WiimoteState)mDeviceState).extension).SetCalibration(calibration);
+                if (((WiimoteState)mDeviceState).extension.GetType() == typeof(NunchukState))
+                    ((NunchukState)((WiimoteState)mDeviceState).extension).SetCalibration(calibration);
             }
         }
 

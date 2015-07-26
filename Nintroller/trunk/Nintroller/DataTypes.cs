@@ -310,18 +310,18 @@ namespace NintrollerLib
     /// Calibration settings for a Nunchuck
     /// </summary>
     [Serializable]
-    public struct NunchuckCalibration
+    public struct NunchukCalibration
     {
         public JoyCalibration JoystickX, JoystickY;
         public Point2D JoystickDeadzone;
         public Point3D AccelerometerCenter, AccelerometerDeadzone, AccelerometerRange;
 
-        public static readonly NunchuckCalibration Empty = new NunchuckCalibration();
+        public static readonly NunchukCalibration Empty = new NunchukCalibration();
 
         /// <summary>
         /// The Nunchuck's default calibration
         /// </summary>
-        public static readonly NunchuckCalibration Default = new NunchuckCalibration()
+        public static readonly NunchukCalibration Default = new NunchukCalibration()
         {
             JoystickX = new JoyCalibration(32, 128, 224),
             JoystickY = new JoyCalibration(32, 128, 224),
@@ -334,7 +334,7 @@ namespace NintrollerLib
         /// <summary>
         /// A modest calibration setting with larger deadzones and lower ranges.
         /// </summary>
-        public static readonly NunchuckCalibration Modest = new NunchuckCalibration()
+        public static readonly NunchukCalibration Modest = new NunchukCalibration()
         {
             JoystickX = new JoyCalibration(40, 128, 216),
             JoystickY = new JoyCalibration(40, 128, 216),
