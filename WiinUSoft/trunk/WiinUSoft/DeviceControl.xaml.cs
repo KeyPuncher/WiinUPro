@@ -116,7 +116,7 @@ namespace WiinUSoft
 
         public void RefreshState()
         {
-            if (Device.ConnectTest())
+            if (Device.Connected || Device.ConnectTest())
             {
                 ConnectionState = DeviceState.Discovered;
 
@@ -660,6 +660,8 @@ namespace WiinUSoft
                 default:
                     break;
             }
+
+            RefreshState();
         }
 
         private void btnDetatch_Click(object sender, RoutedEventArgs e)
