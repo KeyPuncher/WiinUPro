@@ -11,7 +11,7 @@ namespace NintrollerLib.New
         float GetValue(string input);
         void SetCalibration(Calibrations.CalibrationPreset preset);
         void SetCalibration(INintrollerState from);
-        void SetCalibration(string);
+        void SetCalibration(string calibrationString);
         string GetCalibrationString();
     }
 
