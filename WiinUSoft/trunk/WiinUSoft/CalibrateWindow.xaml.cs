@@ -56,10 +56,18 @@ namespace WiinUSoft
             Pro_joy_deadzone
         }
 
+        public bool doSave = false;
+        public CalibrationStorage Calibration
+        {
+            get { return _calibrations; }
+        }
+
         private Nintroller _device;
         private bool _changingType = false;
+        private ControllerType _calibrationToSave = ControllerType.Unknown;
         private List<ControllerType> _calibratedTypes = new List<ControllerType>();
         private CalibrationStep _step = CalibrationStep.ChangeController;
+        private CalibrationStorage _calibrations = new CalibrationStorage();
 
         private CalibrateWindow()
         {
@@ -68,6 +76,7 @@ namespace WiinUSoft
 
         public CalibrateWindow(Nintroller device) :this()
         {
+            _calibrations.SetCalibrations(device.Calibrations.ToString());
             SelectStep(device.Type);
            
             _device = device;
@@ -90,6 +99,8 @@ namespace WiinUSoft
             }
             else
             {
+                StoreCalibration(_calibrationToSave);
+
                 switch (deviceType)
                 {
                     case ControllerType.Wiimote:
@@ -806,11 +817,131 @@ namespace WiinUSoft
             groupR_min.Value = groupR_max.Value = 4;
         }
 
+        public void StoreCalibration(ControllerType type)
+        {
+            switch (type)
+            {
+                case ControllerType.Wiimote:
+                    _calibrations.WiimoteCalibration.accelerometer.centerX = group1_center.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.minX    = group1_min.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.maxX    = group1_max.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.deadX   = group1_dead.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.centerY = group2_center.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.minY    = group2_min.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.maxY    = group2_max.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.deadY   = group2_dead.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.centerZ = group3_center.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.minZ    = group3_min.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.maxZ    = group3_max.Value;
+                    _calibrations.WiimoteCalibration.accelerometer.deadZ   = group3_dead.Value;
+                    _calibratedTypes.Add(ControllerType.Wiimote);
+                    break;
+
+                case ControllerType.Nunchuk:
+                    _calibrations.NunchukCalibration.accelerometer.centerX = group1_center.Value;
+                    _calibrations.NunchukCalibration.accelerometer.minX    = group1_min.Value;
+                    _calibrations.NunchukCalibration.accelerometer.maxX    = group1_max.Value;
+                    _calibrations.NunchukCalibration.accelerometer.deadX   = group1_dead.Value;
+                    _calibrations.NunchukCalibration.accelerometer.centerY = group2_center.Value;
+                    _calibrations.NunchukCalibration.accelerometer.minY    = group2_min.Value;
+                    _calibrations.NunchukCalibration.accelerometer.maxY    = group2_max.Value;
+                    _calibrations.NunchukCalibration.accelerometer.deadY   = group2_dead.Value;
+                    _calibrations.NunchukCalibration.accelerometer.centerZ = group3_center.Value;
+                    _calibrations.NunchukCalibration.accelerometer.minZ    = group3_min.Value;
+                    _calibrations.NunchukCalibration.accelerometer.maxZ    = group3_max.Value;
+                    _calibrations.NunchukCalibration.accelerometer.deadZ   = group3_dead.Value;
+                    break;
+
+                case ControllerType.NunchukB:
+                    _calibrations.NunchukCalibration.joystick.centerX = group1_center.Value;
+                    _calibrations.NunchukCalibration.joystick.minX    = group1_min.Value;
+                    _calibrations.NunchukCalibration.joystick.maxX    = group1_max.Value;
+                    _calibrations.NunchukCalibration.joystick.deadX   = group1_dead.Value;
+                    _calibrations.NunchukCalibration.joystick.centerY = group2_center.Value;
+                    _calibrations.NunchukCalibration.joystick.minY    = group2_min.Value;
+                    _calibrations.NunchukCalibration.joystick.maxY    = group2_max.Value;
+                    _calibrations.NunchukCalibration.joystick.deadY   = group2_dead.Value;
+                    _calibratedTypes.Add(ControllerType.Nunchuk);
+                    _calibratedTypes.Add(ControllerType.NunchukB);
+                    break;
+
+                case ControllerType.ClassicController:
+                    _calibrations.ClassicCalibration.LJoy.centerX = group1_center.Value;
+                    _calibrations.ClassicCalibration.LJoy.minX    = group1_min.Value;
+                    _calibrations.ClassicCalibration.LJoy.maxX    = group1_max.Value;
+                    _calibrations.ClassicCalibration.LJoy.deadX   = group1_dead.Value;
+                    _calibrations.ClassicCalibration.LJoy.centerY = group2_center.Value;
+                    _calibrations.ClassicCalibration.LJoy.minY    = group2_min.Value;
+                    _calibrations.ClassicCalibration.LJoy.maxY    = group2_max.Value;
+                    _calibrations.ClassicCalibration.LJoy.deadY   = group2_dead.Value;
+                    _calibrations.ClassicCalibration.RJoy.centerX = group3_center.Value;
+                    _calibrations.ClassicCalibration.RJoy.minX    = group3_min.Value;
+                    _calibrations.ClassicCalibration.RJoy.maxX    = group3_max.Value;
+                    _calibrations.ClassicCalibration.RJoy.deadX   = group3_dead.Value;
+                    _calibrations.ClassicCalibration.RJoy.centerY = group4_center.Value;
+                    _calibrations.ClassicCalibration.RJoy.minY    = group4_min.Value;
+                    _calibrations.ClassicCalibration.RJoy.maxY    = group4_max.Value;
+                    _calibrations.ClassicCalibration.RJoy.deadY   = group4_dead.Value;
+                    _calibrations.ClassicCalibration.L.min        = groupL_min.Value;
+                    _calibrations.ClassicCalibration.L.max        = groupL_max.Value;
+                    _calibrations.ClassicCalibration.R.min        = groupR_min.Value;
+                    _calibrations.ClassicCalibration.R.max        = groupR_max.Value;
+                    _calibratedTypes.Add(ControllerType.ClassicController);
+                    break;
+
+                case ControllerType.ClassicControllerPro:
+                    _calibrations.ClassicProCalibration.LJoy.centerX = group1_center.Value;
+                    _calibrations.ClassicProCalibration.LJoy.minX    = group1_min.Value;
+                    _calibrations.ClassicProCalibration.LJoy.maxX    = group1_max.Value;
+                    _calibrations.ClassicProCalibration.LJoy.deadX   = group1_dead.Value;
+                    _calibrations.ClassicProCalibration.LJoy.centerY = group2_center.Value;
+                    _calibrations.ClassicProCalibration.LJoy.minY    = group2_min.Value;
+                    _calibrations.ClassicProCalibration.LJoy.maxY    = group2_max.Value;
+                    _calibrations.ClassicProCalibration.LJoy.deadY   = group2_dead.Value;
+                    _calibrations.ClassicProCalibration.RJoy.centerX = group3_center.Value;
+                    _calibrations.ClassicProCalibration.RJoy.minX    = group3_min.Value;
+                    _calibrations.ClassicProCalibration.RJoy.maxX    = group3_max.Value;
+                    _calibrations.ClassicProCalibration.RJoy.deadX   = group3_dead.Value;
+                    _calibrations.ClassicProCalibration.RJoy.centerY = group4_center.Value;
+                    _calibrations.ClassicProCalibration.RJoy.minY    = group4_min.Value;
+                    _calibrations.ClassicProCalibration.RJoy.maxY    = group4_max.Value;
+                    _calibrations.ClassicProCalibration.RJoy.deadY   = group4_dead.Value;
+                    _calibratedTypes.Add(ControllerType.ClassicControllerPro);
+                    break;
+
+                case ControllerType.ProController:
+                    _calibrations.ProCalibration.LJoy.centerX = group1_center.Value;
+                    _calibrations.ProCalibration.LJoy.minX    = group1_min.Value;
+                    _calibrations.ProCalibration.LJoy.maxX    = group1_max.Value;
+                    _calibrations.ProCalibration.LJoy.deadX   = group1_dead.Value;
+                    _calibrations.ProCalibration.LJoy.centerY = group2_center.Value;
+                    _calibrations.ProCalibration.LJoy.minY    = group2_min.Value;
+                    _calibrations.ProCalibration.LJoy.maxY    = group2_max.Value;
+                    _calibrations.ProCalibration.LJoy.deadY   = group2_dead.Value;
+                    _calibrations.ProCalibration.RJoy.centerX = group3_center.Value;
+                    _calibrations.ProCalibration.RJoy.minX    = group3_min.Value;
+                    _calibrations.ProCalibration.RJoy.maxX    = group3_max.Value;
+                    _calibrations.ProCalibration.RJoy.deadX   = group3_dead.Value;
+                    _calibrations.ProCalibration.RJoy.centerY = group4_center.Value;
+                    _calibrations.ProCalibration.RJoy.minY    = group4_min.Value;
+                    _calibrations.ProCalibration.RJoy.maxY    = group4_max.Value;
+                    _calibrations.ProCalibration.RJoy.deadY   = group4_dead.Value;
+                    _calibratedTypes.Add(ControllerType.ProController);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         private void nextBtn_Click(object sender, RoutedEventArgs e)
         {
             if (_step == CalibrationStep.Done || _step == CalibrationStep.ChangeController)
             {
                 // Done with calibrating
+                StoreCalibration(_calibrationToSave);
+                doSave = true;
+                Close();
             }
             else
             {
@@ -822,7 +953,8 @@ namespace WiinUSoft
                     case CalibrationStep.Wiimote_acc_y_center: _step = CalibrationStep.Wiimote_acc_y_range;  break;
                     case CalibrationStep.Wiimote_acc_y_range:  _step = CalibrationStep.Wiimote_acc_z_center; break;
                     case CalibrationStep.Wiimote_acc_z_center: _step = CalibrationStep.Wiimote_acc_z_range;  break;
-                    case CalibrationStep.Wiimote_acc_z_range:  
+                    case CalibrationStep.Wiimote_acc_z_range:
+                        _calibrationToSave = ControllerType.Wiimote;
                         _step = CalibrationStep.ChangeController;
                         group3_min.IsEnabled  = true;
                         group3_max.IsEnabled  = true;
@@ -834,16 +966,21 @@ namespace WiinUSoft
                     case CalibrationStep.Nunchuk_acc_y_center: _step = CalibrationStep.Nunchuk_acc_y_range; break;
                     case CalibrationStep.Nunchuk_acc_y_range: _step = CalibrationStep.Nunchuk_acc_z_center; break;
                     case CalibrationStep.Nunchuk_acc_z_center: _step = CalibrationStep.Nunchuk_acc_z_range; break;
-                    case CalibrationStep.Nunchuk_acc_z_range: 
+                    case CalibrationStep.Nunchuk_acc_z_range:
+                        _calibrationToSave = ControllerType.Nunchuk;
                         _step = CalibrationStep.Nunchuk_acc_done;
                         group1_dead.IsEnabled = true;
                         group2_dead.IsEnabled = true;
                         group3_dead.IsEnabled = true;
                         break;
-                    case CalibrationStep.Nunchuk_acc_done: _step = CalibrationStep.Nunchuk_joy_center; break;
+                    case CalibrationStep.Nunchuk_acc_done:
+                        StoreCalibration(ControllerType.Nunchuk);
+                        _step = CalibrationStep.Nunchuk_joy_center; 
+                        break;
                     case CalibrationStep.Nunchuk_joy_center: _step = CalibrationStep.Nunchuk_joy_range; break;
                     case CalibrationStep.Nunchuk_joy_range: _step = CalibrationStep.Nunchuk_joy_deadzone; break;
                     case CalibrationStep.Nunchuk_joy_deadzone:
+                        _calibrationToSave = ControllerType.NunchukB;
                         _step = CalibrationStep.ChangeController;
                         group1_dead.IsEnabled = true;
                         group2_dead.IsEnabled = true;
@@ -851,7 +988,8 @@ namespace WiinUSoft
 
                     case CalibrationStep.Classic_joy_center:   _step = CalibrationStep.Classic_joy_range;    break;
                     case CalibrationStep.Classic_joy_range:    _step = CalibrationStep.Classic_joy_deadzone; break;
-                    case CalibrationStep.Classic_joy_deadzone: 
+                    case CalibrationStep.Classic_joy_deadzone:
+                        _calibrationToSave = ControllerType.ClassicController;
                         _step = CalibrationStep.ChangeController;
                         group1_dead.IsEnabled = true;
                         group2_dead.IsEnabled = true;
@@ -861,7 +999,8 @@ namespace WiinUSoft
 
                     case CalibrationStep.ClassicPro_joy_center:   _step = CalibrationStep.ClassicPro_joy_range;    break;
                     case CalibrationStep.ClassicPro_joy_range:    _step = CalibrationStep.ClassicPro_joy_deadzone; break;
-                    case CalibrationStep.ClassicPro_joy_deadzone: 
+                    case CalibrationStep.ClassicPro_joy_deadzone:
+                        _calibrationToSave = ControllerType.ClassicControllerPro;
                         _step = CalibrationStep.ChangeController;
                         group1_dead.IsEnabled = true;
                         group2_dead.IsEnabled = true;
@@ -872,6 +1011,7 @@ namespace WiinUSoft
                     case CalibrationStep.Pro_joy_center:   _step = CalibrationStep.Pro_joy_range;    break;
                     case CalibrationStep.Pro_joy_range:    _step = CalibrationStep.Pro_joy_deadzone; break;
                     case CalibrationStep.Pro_joy_deadzone:
+                        _calibrationToSave = ControllerType.ProController;
                         _step = CalibrationStep.Done;
                         group1_dead.IsEnabled = true;
                         group2_dead.IsEnabled = true;

@@ -191,6 +191,7 @@ namespace WiinUSoft
             connType = copy.connType;
             profile = copy.profile;
             calPref = copy.calPref;
+            calString = copy.calString;
         }
     }
 
