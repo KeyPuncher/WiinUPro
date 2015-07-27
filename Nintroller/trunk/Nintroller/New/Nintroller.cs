@@ -735,7 +735,7 @@ namespace NintrollerLib.New
                             {
                                 _currentType = ControllerType.Wiimote;
                                 _state = new Wiimote();
-                                _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                _state.SetCalibration(_calibrations.WiimoteCalibration);
                                 _state.Update(report);
 
                                 // and Fire Event
