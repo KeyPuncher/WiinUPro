@@ -355,7 +355,15 @@ namespace NintrollerLib.New
             try
             {
                 // Open Read 'n Write file handle
-                _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+                if (Environment.OSVersion.Version.Major > 6)
+                {
+                    // Windows 10 can't have FileShare.None
+                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+                }
+                else
+                {
+                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+                }
 
                 // create a stream from the file
                 _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
