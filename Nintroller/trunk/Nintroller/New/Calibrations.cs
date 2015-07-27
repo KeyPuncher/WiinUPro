@@ -800,5 +800,98 @@ namespace NintrollerLib.New
             ClassicCalibration    = Calibrations.Defaults.ClassicControllerDefault;
             ClassicProCalibration = Calibrations.Defaults.ClassicControllerProDefault;
         }
+
+        public CalibrationStorage(string storageString)
+        {
+            SetCalibrations(storageString);
+        }
+
+        public void SetCalibrations(string storageString)
+        {
+            string[] chunks = storageString.Split(new char[] { '-' });
+
+            foreach (string calStr in chunks)
+            {
+                if (calStr.StartsWith("wm"))
+                {
+                    WiimoteCalibration.SetCalibration(calStr);
+                }
+                else if (calStr.StartsWith("nun"))
+                {
+                    NunchukCalibration.SetCalibration(calStr);
+                }
+                else if (calStr.StartsWith("cls"))
+                {
+                    ClassicCalibration.SetCalibration(calStr);
+                }
+                else if (calStr.StartsWith("ccp"))
+                {
+                    ClassicProCalibration.SetCalibration(calStr);
+                }
+                else if (calStr.StartsWith("pro"))
+                {
+                    ProCalibration.SetCalibration(calStr);
+                }
+            }
+        }
+
+        public void SetCalibrations(Calibrations.CalibrationPreset preset)
+        {
+            switch (preset)
+            {
+                case Calibrations.CalibrationPreset.Default:
+                    ProCalibration        = Calibrations.Defaults.ProControllerDefault;
+                    WiimoteCalibration    = Calibrations.Defaults.WiimoteDefault;
+                    NunchukCalibration    = Calibrations.Defaults.NunchukDefault;
+                    ClassicCalibration    = Calibrations.Defaults.ClassicControllerDefault;
+                    ClassicProCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+                    break;
+
+                case Calibrations.CalibrationPreset.Modest:
+                    ProCalibration        = Calibrations.Moderate.ProControllerModest;
+                    WiimoteCalibration    = Calibrations.Moderate.WiimoteModest;
+                    NunchukCalibration    = Calibrations.Moderate.NunchukModest;
+                    ClassicCalibration    = Calibrations.Moderate.ClassicControllerModest;
+                    ClassicProCalibration = Calibrations.Moderate.ClassicControllerProModest;
+                    break;
+
+                case Calibrations.CalibrationPreset.Extra:
+                    ProCalibration        = Calibrations.Extras.ProControllerExtra;
+                    WiimoteCalibration    = Calibrations.Extras.WiimoteExtra;
+                    NunchukCalibration    = Calibrations.Extras.NunchukExtra;
+                    ClassicCalibration    = Calibrations.Extras.ClassicControllerExtra;
+                    ClassicProCalibration = Calibrations.Extras.ClassicControllerProExtra;
+                    break;
+
+                case Calibrations.CalibrationPreset.Minimum:
+                    ProCalibration        = Calibrations.Minimum.ProControllerMinimal;
+                    WiimoteCalibration    = Calibrations.Minimum.WiimoteMinimal;
+                    NunchukCalibration    = Calibrations.Minimum.NunchukMinimal;
+                    ClassicCalibration    = Calibrations.Minimum.ClassicControllerMinimal;
+                    ClassicProCalibration = Calibrations.Minimum.ClassicControllerProMinimal;
+                    break;
+
+                case Calibrations.CalibrationPreset.None:
+                    ProCalibration        = Calibrations.None.ProControllerRaw;
+                    WiimoteCalibration    = Calibrations.None.WiimoteRaw;
+                    NunchukCalibration    = Calibrations.None.NunchukRaw;
+                    ClassicCalibration    = Calibrations.None.ClassicControllerRaw;
+                    ClassicProCalibration = Calibrations.None.ClassicControllerProRaw;
+                    break;
+            }
+        }
+
+        public override string ToString()
+        {
+            string text = "";
+
+            text += WiimoteCalibration.GetCalibrationString();
+            text += NunchukCalibration.GetCalibrationString();
+            text += ClassicCalibration.GetCalibrationString();
+            text += ClassicProCalibration.GetCalibrationString();
+            text += ProCalibration.GetCalibrationString();
+
+            return text;
+        }
     }
 }

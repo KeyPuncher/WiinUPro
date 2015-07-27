@@ -60,6 +60,10 @@ namespace NintrollerLib.New
         /// The type of controller this has been identified as
         /// </summary>
         public ControllerType Type { get { return _currentType; } }
+        /// <summary>
+        /// The calibration settings applied to the respective controller types.
+        /// </summary>
+        public CalibrationStorage Calibrations { get { return _calibrations; } }
 
         /// <summary>
         /// Gets or Sets the current IR Camera Mode.
@@ -1403,6 +1407,15 @@ namespace NintrollerLib.New
 
         #region Calibration
 
+        /// <summary>
+        /// Sets the device's calibrations based on a preset.
+        /// </summary>
+        /// <param name="preset">Preset to be used.</param>
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
+        {
+            _state.SetCalibration(preset);
+            _calibrations.SetCalibrations(preset);
+        }
         /// <summary>
         /// Sets the controller calibration for the Wiimote
         /// </summary>
