@@ -189,7 +189,9 @@ namespace WiinUSoft.Holders
 
         public XInputHolder()
         {
+#if MouseMode
             _inputSim = new WindowsInput.InputSimulator();
+#endif
             //Values = new Dictionary<string, float>();
             Values = new System.Collections.Concurrent.ConcurrentDictionary<string, float>();
             Mappings = new Dictionary<string, string>();
@@ -241,11 +243,13 @@ namespace WiinUSoft.Holders
                 return;
             }
 
+#if MouseMode
             if (InMouseMode)
             {
                 UpdateMouseMode();
                 return;
             }
+#endif
 
             byte[] rumble = new byte[8];
             byte[] report = new byte[28];
@@ -296,13 +300,15 @@ namespace WiinUSoft.Holders
                         case Inputs.Xbox360.LT    : LT += Values[map.Key]; break;
                         case Inputs.Xbox360.RT    : RT += Values[map.Key]; break;
 
+#if MouseMode
                         case "MouseMode": 
-                            if (Values[map.Key] > 0f && _mmLastTime.Subtract(DateTime.Now).TotalSeconds > 3)
+                            if (Values[map.Key] > 0f && DateTime.Now.Subtract(_mmLastTime).TotalSeconds > 3)
                             {
                                 _mmLastTime = DateTime.Now;
                                 InMouseMode = true;
                             }
                             break;
+#endif
                     }
                 }
             }

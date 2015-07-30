@@ -145,9 +145,11 @@ namespace WiinUSoft
             mapValues.Add(x_guideClick  ,Inputs.Xbox360.GUIDE);
             #endregion
 
+#if MouseMode
             // Mouse Mode
             mapShapes.Add("MouseMode", mouseClick);
             mapValues.Add(mouseClick, "MouseMode");
+#endif
 
             deviceShapes = new Dictionary<Shape, string>();
             if (deviceType == ControllerType.ProController)

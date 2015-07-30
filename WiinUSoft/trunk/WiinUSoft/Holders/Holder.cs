@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+#if MouseMode
 using WindowsInput;
+#endif
 
 namespace WiinUSoft.Holders
 {
@@ -12,10 +14,12 @@ namespace WiinUSoft.Holders
         //public Dictionary<string, float> Values { get; protected set; }
         public Dictionary<string, string> Mappings { get; protected set; }
         public Dictionary<string, bool> Flags { get; protected set; }
+        
+#if MouseMode
         public bool InMouseMode { get; protected set; }
-
         protected DateTime _mmLastTime = new DateTime(0);
         protected InputSimulator _inputSim;
+#endif
 
         public void SetValue(string name, bool value)
         {
@@ -79,12 +83,25 @@ namespace WiinUSoft.Holders
         public abstract void Close();
         public abstract void AddMapping(NintrollerLib.New.ControllerType controller);
 
+#if MouseMode
         protected void MouseModeCheck(bool pressed)
         {
             if (pressed && DateTime.Now.Subtract(_mmLastTime).TotalSeconds > 3)
             {
                 _mmLastTime = DateTime.Now;
                 InMouseMode = false;
+            }
+        }
+        
+
+        private DateTime lastTime = DateTime.Now;
+        protected void ShowDesktop()
+        {
+            if (DateTime.Now.Subtract(lastTime).TotalSeconds > 2)
+            {
+                Type typeShell = Type.GetTypeFromProgID("Shell.Application");
+                object objShell = Activator.CreateInstance(typeShell);
+                typeShell.InvokeMember("MinimizeAll", System.Reflection.BindingFlags.InvokeMethod, null, objShell, null); // Call function MinimizeAll
             }
         }
 
@@ -119,14 +136,14 @@ namespace WiinUSoft.Holders
                     case Inputs.ProController.LRIGHT: simInput.moveMouseX    += 6 * input.Value; break;
                     case Inputs.ProController.LS    : simInput.leftMouseBtn  |= input.Value > 0f; break;
 
-                    case Inputs.ProController.RUP   : simInput.upKey         |= input.Value > 0f; break;
-                    case Inputs.ProController.RDOWN : simInput.downKey       |= input.Value > 0f; break;
-                    case Inputs.ProController.RLEFT : simInput.leftKey       |= input.Value > 0f; break;
-                    case Inputs.ProController.RRIGHT: simInput.rightKey      |= input.Value > 0f; break;
+                    case Inputs.ProController.RUP   : simInput.upKey         |= input.Value > 0.1f; break;
+                    case Inputs.ProController.RDOWN : simInput.downKey       |= input.Value > 0.1f; break;
+                    case Inputs.ProController.RLEFT : simInput.leftKey       |= input.Value > 0.1f; break;
+                    case Inputs.ProController.RRIGHT: simInput.rightKey      |= input.Value > 0.1f; break;
                     case Inputs.ProController.RS    : simInput.rightMouseBtn |= input.Value > 0f; break;
 
                     case Inputs.ProController.START : simInput.enterKey      |= input.Value > 0f; break;
-                    case Inputs.ProController.SELECT:
+                    case Inputs.ProController.SELECT: simInput.desktop |= input.Value > 0f; break;
                     case Inputs.ProController.HOME: MouseModeCheck(input.Value > 0f); break; 
                     #endregion
 
@@ -177,10 +194,10 @@ namespace WiinUSoft.Holders
                     case Inputs.ClassicController.LLEFT : simInput.moveMouseX    -= 6 * input.Value; break;
                     case Inputs.ClassicController.LRIGHT: simInput.moveMouseX    += 6 * input.Value; break;
 
-                    case Inputs.ClassicController.RUP   : simInput.upKey         |= input.Value > 0f; break;
-                    case Inputs.ClassicController.RDOWN : simInput.downKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicController.RLEFT : simInput.leftKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicController.RRIGHT: simInput.rightKey      |= input.Value > 0f; break;
+                    case Inputs.ClassicController.RUP   : simInput.upKey         |= input.Value > 0.1f; break;
+                    case Inputs.ClassicController.RDOWN : simInput.downKey       |= input.Value > 0.1f; break;
+                    case Inputs.ClassicController.RLEFT : simInput.leftKey       |= input.Value > 0.1f; break;
+                    case Inputs.ClassicController.RRIGHT: simInput.rightKey      |= input.Value > 0.1f; break;
 
                     case Inputs.ClassicController.START : break;
                     case Inputs.ClassicController.SELECT: break;
@@ -208,10 +225,10 @@ namespace WiinUSoft.Holders
                     case Inputs.ClassicControllerPro.LLEFT : simInput.moveMouseX    -= 6 * input.Value; break;
                     case Inputs.ClassicControllerPro.LRIGHT: simInput.moveMouseX    += 6 * input.Value; break;
 
-                    case Inputs.ClassicControllerPro.RUP   : simInput.upKey         |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.RDOWN : simInput.downKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.RLEFT : simInput.leftKey       |= input.Value > 0f; break;
-                    case Inputs.ClassicControllerPro.RRIGHT: simInput.rightKey      |= input.Value > 0f; break;
+                    case Inputs.ClassicControllerPro.RUP   : simInput.upKey         |= input.Value > 0.1f; break;
+                    case Inputs.ClassicControllerPro.RDOWN : simInput.downKey       |= input.Value > 0.1f; break;
+                    case Inputs.ClassicControllerPro.RLEFT : simInput.leftKey       |= input.Value > 0.1f; break;
+                    case Inputs.ClassicControllerPro.RRIGHT: simInput.rightKey      |= input.Value > 0.1f; break;
 
                     case Inputs.ClassicControllerPro.START : break;
                     case Inputs.ClassicControllerPro.SELECT: break;
@@ -221,6 +238,9 @@ namespace WiinUSoft.Holders
             }
 
             #region Apply input
+            if (simInput.desktop)
+                ShowDesktop();
+
             // Mouse
             _inputSim.Mouse.MoveMouseBy((int)simInput.moveMouseX, (int)simInput.moveMouseY * -1);
 
@@ -295,6 +315,9 @@ namespace WiinUSoft.Holders
             public float moveMouseY;
             public float mouseAbsX;
             public float mouseAbsY;
+
+            public bool desktop;
         }
+#endif
     }
 }

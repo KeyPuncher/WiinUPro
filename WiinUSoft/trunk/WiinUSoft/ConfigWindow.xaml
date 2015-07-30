@@ -39,8 +39,10 @@
             <Rectangle x:Name="x_rrightClick" HorizontalAlignment="Left" Height="18" Margin="215,152,0,0" VerticalAlignment="Top" Width="23" ToolTip="RRight" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" StrokeThickness="0" Fill="#00000000"/>
             <Rectangle x:Name="x_rdownClick" HorizontalAlignment="Left" Height="24" Margin="196,169,0,0" VerticalAlignment="Top" Width="18" ToolTip="RDown" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" StrokeThickness="0" Fill="#00000000"/>
             <Rectangle x:Name="x_rsClick" HorizontalAlignment="Left" Height="16" Margin="196,152,0,0" Stroke="Black" VerticalAlignment="Top" Width="18" ToolTip="RS" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" StrokeThickness="0" Fill="#00000000"/>
-        <TextBlock Canvas.Left="565" TextWrapping="Wrap" Text="Toggle Mouse Mode" Canvas.Top="66"/>
-        <Rectangle x:Name="mouseClick" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="118" ToolTip="MM" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000" Canvas.Left="562" Canvas.Top="64"/>
+            <!-- Mouse Mode
+            <TextBlock TextWrapping="Wrap" Text="Toggle Mouse Mode" Width="100" Height="16" Margin="200,-64,20,200" Visibility="Collapsed"/>
+            <Rectangle x:Name="mouseClick" HorizontalAlignment="Left" Height="20" Margin="190,-42,0,200" VerticalAlignment="Top" Width="118" ToolTip="MM" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000" Visibility="Collapsed"/>
+            -->
         </Grid>
         <Line x:Name="guideMap" X1="0" Y2="150" Canvas.Left="518" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False"/>
         <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="500" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
