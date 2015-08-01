@@ -251,6 +251,10 @@ namespace NintrollerLib.New
                 accelerometer.Calibrate(((Nunchuk)from).accelerometer);
                 joystick.Calibrate(((Nunchuk)from).joystick);
             }
+            else if (from.GetType() == typeof(Wiimote))
+            {
+                wiimote.SetCalibration(from);
+            }
         }
 
         public void SetCalibration(string calibrationString)
@@ -480,6 +484,10 @@ namespace NintrollerLib.New
                 RJoy.Calibrate(((ClassicController)from).RJoy);
                 L.Calibrate(((ClassicController)from).L);
                 R.Calibrate(((ClassicController)from).R);
+            }
+            else if (from.GetType() == typeof(Wiimote))
+            {
+                wiimote.SetCalibration(from);
             }
         }
 
@@ -729,6 +737,10 @@ namespace NintrollerLib.New
                 LJoy.Calibrate(((ClassicControllerPro)from).LJoy);
                 RJoy.Calibrate(((ClassicControllerPro)from).RJoy);
             }
+            else if (from.GetType() == typeof(Wiimote))
+            {
+                wiimote.SetCalibration(from);
+            }
         }
 
         public void SetCalibration(string calibrationString)
@@ -791,7 +803,7 @@ namespace NintrollerLib.New
         public string GetCalibrationString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("-cla");
+            sb.Append("-ccp");
                 sb.Append(":joyL");
                     sb.Append("|"); sb.Append(LJoy.centerX);
                     sb.Append("|"); sb.Append(LJoy.minX);
@@ -959,13 +971,13 @@ namespace NintrollerLib.New
                             switch (jL)
                             {
                                 case 1: LJoy.centerX = value; break;
-                                case 2: LJoy.minX = value; break;
-                                case 3: LJoy.maxX = value; break;
-                                case 4: LJoy.deadX = value; break;
+                                case 2: LJoy.minX    = value; break;
+                                case 3: LJoy.maxX    = value; break;
+                                case 4: LJoy.deadX   = value; break;
                                 case 5: LJoy.centerY = value; break;
-                                case 6: LJoy.minY = value; break;
-                                case 7: LJoy.maxY = value; break;
-                                case 8: LJoy.deadY = value; break;
+                                case 6: LJoy.minY    = value; break;
+                                case 7: LJoy.maxY    = value; break;
+                                case 8: LJoy.deadY   = value; break;
                                 default: break;
                             }
                         }
@@ -983,13 +995,13 @@ namespace NintrollerLib.New
                             switch (jR)
                             {
                                 case 1: RJoy.centerX = value; break;
-                                case 2: RJoy.minX = value; break;
-                                case 3: RJoy.maxX = value; break;
-                                case 4: RJoy.deadX = value; break;
+                                case 2: RJoy.minX    = value; break;
+                                case 3: RJoy.maxX    = value; break;
+                                case 4: RJoy.deadX   = value; break;
                                 case 5: RJoy.centerY = value; break;
-                                case 6: RJoy.minY = value; break;
-                                case 7: RJoy.maxY = value; break;
-                                case 8: RJoy.deadY = value; break;
+                                case 6: RJoy.minY    = value; break;
+                                case 7: RJoy.maxY    = value; break;
+                                case 8: RJoy.deadY   = value; break;
                                 default: break;
                             }
                         }
@@ -1001,7 +1013,7 @@ namespace NintrollerLib.New
         public string GetCalibrationString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("-cla");
+            sb.Append("-pro");
             sb.Append(":joyL");
             sb.Append("|"); sb.Append(LJoy.centerX);
             sb.Append("|"); sb.Append(LJoy.minX);

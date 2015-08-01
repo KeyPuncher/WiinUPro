@@ -1417,6 +1417,16 @@ namespace NintrollerLib.New
             _calibrations.SetCalibrations(preset);
         }
         /// <summary>
+        /// Sets the device's calibrations based on a string.
+        /// </summary>
+        /// <param name="calibrationStorageString">Calibration storage string to use.</param>
+        public void SetCalibration(string calibrationStorageString)
+        {
+            _calibrations.SetCalibrations(calibrationStorageString);
+            
+            // TODO: apply 
+        }
+        /// <summary>
         /// Sets the controller calibration for the Wiimote
         /// </summary>
         /// <param name="wiimoteCalibration">The Wiimote Struct with the calibration values to use</param>
@@ -1424,21 +1434,13 @@ namespace NintrollerLib.New
         {
             _calibrations.WiimoteCalibration = wiimoteCalibration;
 
-            if (_currentType == ControllerType.Wiimote)
+            if (_currentType == ControllerType.Wiimote || 
+                _currentType == ControllerType.Nunchuk || 
+                _currentType == ControllerType.NunchukB ||
+                _currentType == ControllerType.ClassicController || 
+                _currentType == ControllerType.ClassicControllerPro)
             {
-                ((Wiimote)_state).accelerometer.Calibrate(wiimoteCalibration.accelerometer);
-            }
-            else if (_currentType == ControllerType.Nunchuk || _currentType == ControllerType.NunchukB)
-            {
-                ((Nunchuk)_state).wiimote.accelerometer.Calibrate(wiimoteCalibration.accelerometer);
-            }
-            else if (_currentType == ControllerType.ClassicController)
-            {
-                ((ClassicController)_state).wiimote.accelerometer.Calibrate(wiimoteCalibration.accelerometer);
-            }
-            else if (_currentType == ControllerType.ClassicControllerPro)
-            {
-                ((ClassicControllerPro)_state).wiimote.accelerometer.Calibrate(wiimoteCalibration.accelerometer);
+                _state.SetCalibration(wiimoteCalibration);
             }
         }
         /// <summary>
@@ -1451,8 +1453,7 @@ namespace NintrollerLib.New
 
             if (_currentType == ControllerType.Nunchuk || _currentType == ControllerType.NunchukB)
             {
-                ((Nunchuk)_state).joystick.Calibrate(nunchukCalibration.joystick);
-                ((Nunchuk)_state).accelerometer.Calibrate(nunchukCalibration.accelerometer);
+                _state.SetCalibration(nunchukCalibration);
             }
         }
         /// <summary>
@@ -1465,10 +1466,7 @@ namespace NintrollerLib.New
 
             if (_currentType == ControllerType.ClassicController)
             {
-                ((ClassicController)_state).LJoy.Calibrate(classicCalibration.LJoy);
-                ((ClassicController)_state).RJoy.Calibrate(classicCalibration.RJoy);
-                ((ClassicController)_state).L.Calibrate(classicCalibration.L);
-                ((ClassicController)_state).R.Calibrate(classicCalibration.R);
+                _state.SetCalibration(classicCalibration);
             }
         }
         /// <summary>
@@ -1481,8 +1479,7 @@ namespace NintrollerLib.New
 
             if (_currentType == ControllerType.ClassicControllerPro)
             {
-                ((ClassicControllerPro)_state).LJoy.Calibrate(classicProCalibration.LJoy);
-                ((ClassicControllerPro)_state).RJoy.Calibrate(classicProCalibration.RJoy);
+                _state.SetCalibration(classicProCalibration);
             }
         }
         /// <summary>
@@ -1495,8 +1492,7 @@ namespace NintrollerLib.New
 
             if (_currentType == ControllerType.ProController)
             {
-                ((ProController)_state).LJoy.Calibrate(proCalibration.LJoy);
-                ((ProController)_state).RJoy.Calibrate(proCalibration.RJoy);
+                _state.SetCalibration(proCalibration);
             }
         }
 

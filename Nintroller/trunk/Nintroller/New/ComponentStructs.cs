@@ -202,7 +202,7 @@ namespace NintrollerLib.New
         public bool full;
 
         // calibration values
-        public float min, max;
+        public int min, max;
 
         public void Parse(byte[] input, int offset = 0)
         {
