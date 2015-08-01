@@ -118,7 +118,8 @@ namespace WiinUSoft
         {
             if (Device.Connected || Device.ConnectTest())
             {
-                ConnectionState = DeviceState.Discovered;
+                if (state != DeviceState.Connected_XInput)
+                    ConnectionState = DeviceState.Discovered;
 
                 // I forgot the purpose for this...
                 //if (device.Type != ControllerType.ProController && device.Type != ControllerType.BalanceBoard)
@@ -135,39 +136,7 @@ namespace WiinUSoft
                 if (properties != null)
                 {
                     SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
-                    
-                    // Load calibration settings
-                    switch (properties.calPref)
-                    {
-                        case Property.CalibrationPreference.Defalut:
-                            device.SetCalibration(Calibrations.CalibrationPreset.Default);
-                            break;
-
-                        case Property.CalibrationPreference.More:
-                            device.SetCalibration(Calibrations.CalibrationPreset.Modest);
-                            break;
-
-                        case Property.CalibrationPreference.Extra:
-                            device.SetCalibration(Calibrations.CalibrationPreset.Extra);
-                            break;
-
-                        case Property.CalibrationPreference.Minimal:
-                            device.SetCalibration(Calibrations.CalibrationPreset.Minimum);
-                            break;
-
-                        case Property.CalibrationPreference.Raw:
-                            device.SetCalibration(Calibrations.CalibrationPreset.None);
-                            break;
-
-                        case Property.CalibrationPreference.Custom:
-                            CalibrationStorage calStor = new CalibrationStorage(properties.calString);
-                            device.SetCalibration(calStor.ProCalibration);
-                            device.SetCalibration(calStor.NunchukCalibration);
-                            device.SetCalibration(calStor.ClassicCalibration);
-                            device.SetCalibration(calStor.ClassicProCalibration);
-                            device.SetCalibration(calStor.WiimoteCalibration);
-                            break;
-                    }
+                    ApplyCalibration(properties.calPref, properties.calString);
                 }
                 else
                 {
@@ -631,6 +600,42 @@ namespace WiinUSoft
             }
         }
 
+        private void ApplyCalibration(Property.CalibrationPreference calPref, string calString)
+        {
+            // Load calibration settings
+            switch (calPref)
+            {
+                case Property.CalibrationPreference.Defalut:
+                    device.SetCalibration(Calibrations.CalibrationPreset.Default);
+                    break;
+
+                case Property.CalibrationPreference.More:
+                    device.SetCalibration(Calibrations.CalibrationPreset.Modest);
+                    break;
+
+                case Property.CalibrationPreference.Extra:
+                    device.SetCalibration(Calibrations.CalibrationPreset.Extra);
+                    break;
+
+                case Property.CalibrationPreference.Minimal:
+                    device.SetCalibration(Calibrations.CalibrationPreset.Minimum);
+                    break;
+
+                case Property.CalibrationPreference.Raw:
+                    device.SetCalibration(Calibrations.CalibrationPreset.None);
+                    break;
+
+                case Property.CalibrationPreference.Custom:
+                    CalibrationStorage calStor = new CalibrationStorage(calString);
+                    device.SetCalibration(calStor.ProCalibration);
+                    device.SetCalibration(calStor.NunchukCalibration);
+                    device.SetCalibration(calStor.ClassicCalibration);
+                    device.SetCalibration(calStor.ClassicProCalibration);
+                    device.SetCalibration(calStor.WiimoteCalibration);
+                    break;
+            }
+        }
+
         #region UI Events
         private void btnXinput_Click(object sender, RoutedEventArgs e)
         {
@@ -786,7 +791,6 @@ namespace WiinUSoft
 
             if (win.customCalibrate)
             {
-                // TODO: Show Calibration Window, then reshow props after calibrating
                 CalibrateWindow cb = new CalibrateWindow(device);
                 cb.ShowDialog();
 
@@ -795,10 +799,15 @@ namespace WiinUSoft
                     win.props.calString = cb.Calibration.ToString();
                     win.ShowDialog();
                 }
+                else
+                {
+                    win.Close();
+                }
             }
 
             if (win.doSave)
             {
+                ApplyCalibration(win.props.calPref, win.props.calString);
                 properties = new Property(win.props);
                 SetName(properties.name);
                 UserPrefs.Instance.AddDevicePref(properties);

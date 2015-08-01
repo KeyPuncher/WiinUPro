@@ -9,7 +9,6 @@ namespace WiinUSoft
     /// </summary>
     public partial class PropWindow : Window
     {
-        // TODO: connect to specific device
         public bool doSave = false;
         public bool customCalibrate = false;
         public Property props;
@@ -30,15 +29,35 @@ namespace WiinUSoft
             {
                 rumbleSelection.SelectedIndex = props.rumbleIntensity;
             }
+            switch (props.calPref)
+            {
+                case Property.CalibrationPreference.Defalut:
+                    calibrationSelection.SelectedIndex = 0;
+                    break;
+                case Property.CalibrationPreference.Minimal:
+                    calibrationSelection.SelectedIndex = 1;
+                    break;
+                case Property.CalibrationPreference.More:
+                    calibrationSelection.SelectedIndex = 2;
+                    break;
+                case Property.CalibrationPreference.Extra:
+                    calibrationSelection.SelectedIndex = 3;
+                    break;
+                case Property.CalibrationPreference.Custom:
+                    calibrationSelection.SelectedIndex = 4;
+                    break;
+            }
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
+            customCalibrate = false;
             Close();
         }
 
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
+            customCalibrate = false;
             doSave = true;
             Close();
         }
@@ -92,37 +111,34 @@ namespace WiinUSoft
 
         private void Calibration_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // TODO: Save Calibration Setting
-
             if (props != null)
             {
                 switch (calibrationSelection.SelectedIndex)
                 {
                     case 0:
                         props.calPref = Property.CalibrationPreference.Defalut;
+                        customCalibrate = false;
                         break;
 
                     case 1:
                         props.calPref = Property.CalibrationPreference.Minimal;
+                        customCalibrate = false;
                         break;
 
                     case 2:
                         props.calPref = Property.CalibrationPreference.More;
+                        customCalibrate = false;
                         break;
 
                     case 3:
                         props.calPref = Property.CalibrationPreference.Extra;
+                        customCalibrate = false;
                         break;
 
                     case 4:
                         props.calPref = Property.CalibrationPreference.Custom;
                         customCalibrate = true;
-                        Close();
-                        // TODO: Open calibration window
-
-                        // save the calibration into a string like so:
-                        // [type]:[min],[center],[max],[dead];[type2:] ect
-                        // wm:-72,128,180,[...];nun:-32,0,32,[...];cc:0,0,0,0,0,0;ccp:0,0,0,0,0,0;
+                        Hide();
                         break;
                 }
             }
