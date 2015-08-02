@@ -146,6 +146,12 @@ namespace WiinUSoft
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            if (UserPrefs.Instance.startMinimized)
+            {
+                menu_StartMinimized.IsChecked = true;
+                WindowState = System.Windows.WindowState.Minimized;
+            }
+
             Refresh();
         }
 
@@ -230,6 +236,26 @@ namespace WiinUSoft
             }
 
             Close();
+        }
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnSettings.ContextMenu != null)
+            {
+                btnSettings.ContextMenu.IsOpen = true;
+            }
+        }
+
+        private void menu_AutoStart_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Add program to startup
+        }
+
+        private void menu_StartMinimized_Click(object sender, RoutedEventArgs e)
+        {
+            menu_StartMinimized.IsChecked = !menu_StartMinimized.IsChecked;
+            UserPrefs.Instance.startMinimized = menu_StartMinimized.IsChecked;
+            UserPrefs.SavePrefs();
         }
     }
 

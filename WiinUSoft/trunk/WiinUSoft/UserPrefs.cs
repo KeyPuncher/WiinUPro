@@ -33,6 +33,8 @@ namespace WiinUSoft
 
         public List<Property> devicePrefs;
         public Profile defaultProfile;
+        public bool autoStartup;
+        public bool startMinimized;
 
         public UserPrefs()
         { }

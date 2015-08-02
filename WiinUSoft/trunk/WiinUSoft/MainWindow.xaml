@@ -45,8 +45,15 @@
         <Button x:Name="btnDetatchAllXInput" HorizontalAlignment="Left" Margin="308,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Click="btnDetatchAllXInput_Click" ToolTip="Detatch All" Background="{DynamicResource ButonFillBrush1}">
             <Image Source="Images/removeAll.png"/>
         </Button>
-        <Button x:Name="btnIdentify_Copy1" HorizontalAlignment="Left" Margin="608,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Detatch All" IsEnabled="False" Background="{DynamicResource ButonFillBrush1}" Grid.ColumnSpan="2" Visibility="Hidden">
-            <Image Source="Images/removeAll.png" Opacity="0.5"/>
+        <Button x:Name="btnSettings" HorizontalAlignment="Left" Margin="576,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Settings" Background="{DynamicResource ButonFillBrush1}" Click="btnSettings_Click">
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="menu_AutoStart" Header="Auto Startup" Click="menu_AutoStart_Click"/>
+                    <MenuItem x:Name="menu_StartMinimized" Header="Start Minimized" Click="menu_StartMinimized_Click"/>
+                    <MenuItem Header="version 2.0" IsEnabled="False"/>
+                </ContextMenu>
+            </Button.ContextMenu>
+            <Image Source="Images/Settings-icon.png"/>
         </Button>
     </Grid>
 </Window>
