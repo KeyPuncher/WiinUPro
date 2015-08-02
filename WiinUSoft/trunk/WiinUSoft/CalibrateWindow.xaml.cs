@@ -597,6 +597,8 @@ namespace WiinUSoft
 
                 case CalibrationStep.Nunchuk_acc_done:
                     inst.Text = "Accelerometer calibration is complete, click next to calibrate the joystick.";
+                    group3_min.IsEnabled = true;
+                    group3_max.IsEnabled = true;
                     group3_dead.IsEnabled = true;
                     break;
 
@@ -1072,6 +1074,12 @@ namespace WiinUSoft
                 case CalibrationStep.Pro_joy_range:           _step = CalibrationStep.Pro_joy_deadzone;        break;
                 case CalibrationStep.Pro_joy_deadzone:        _step = CalibrationStep.Done;                    break;
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _device.StateUpdate -= _device_StateUpdate;
+            _device.ExtensionChange -= _device_ExtensionChange;
         }
     }
 }

@@ -114,6 +114,7 @@ namespace WiinUSoft
             mapShapes.Add(Inputs.Xbox360.START , x_startClick);
             mapShapes.Add(Inputs.Xbox360.BACK  , x_backClick);
             mapShapes.Add(Inputs.Xbox360.GUIDE , x_guideClick);
+            mapShapes.Add("", x_noneClick);
             #endregion
 
             #region Xbox Mappings
@@ -143,6 +144,7 @@ namespace WiinUSoft
             mapValues.Add(x_startClick  ,Inputs.Xbox360.START);
             mapValues.Add(x_backClick   ,Inputs.Xbox360.BACK);
             mapValues.Add(x_guideClick  ,Inputs.Xbox360.GUIDE);
+            mapValues.Add(x_noneClick, "");
             #endregion
 
 #if MouseMode
@@ -197,6 +199,13 @@ namespace WiinUSoft
                 deviceShapes.Add(wm_homeClick,   Inputs.Wiimote.HOME);
                 deviceShapes.Add(wm_selectClick, Inputs.Wiimote.MINUS);
                 deviceShapes.Add(wm_startClick,  Inputs.Wiimote.PLUS);
+                deviceShapes.Add(wm_accXClick, Inputs.Wiimote.ACC_SHAKE_X);
+                deviceShapes.Add(wm_accYClick, Inputs.Wiimote.ACC_SHAKE_Y);
+                deviceShapes.Add(wm_accZClick, Inputs.Wiimote.ACC_SHAKE_Z);
+                deviceShapes.Add(wm_aRollClick, Inputs.Wiimote.TILT_RIGHT);
+                deviceShapes.Add(wm_aRollNegClick, Inputs.Wiimote.TILT_LEFT);
+                deviceShapes.Add(wm_aPitchClick, Inputs.Wiimote.TILT_UP);
+                deviceShapes.Add(wm_aPitchNegClick, Inputs.Wiimote.TILT_DOWN);
                 #endregion
 
                 if (deviceType == ControllerType.ClassicController)

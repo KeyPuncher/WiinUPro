@@ -102,6 +102,13 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Wiimote.PLUS,  Inputs.Xbox360.BACK);
                     result.Add(Inputs.Wiimote.MINUS, Inputs.Xbox360.START);
                     result.Add(Inputs.Wiimote.HOME,  Inputs.Xbox360.GUIDE);
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_X, "");
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_Y, "");
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_Z, "");
+                    result.Add(Inputs.Wiimote.TILT_RIGHT, "");
+                    result.Add(Inputs.Wiimote.TILT_LEFT, "");
+                    result.Add(Inputs.Wiimote.TILT_UP, "");
+                    result.Add(Inputs.Wiimote.TILT_DOWN, "");
                     break;
 
                 case ControllerType.ClassicController:
@@ -145,6 +152,13 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Wiimote.PLUS,  Inputs.Xbox360.BACK);
                     result.Add(Inputs.Wiimote.MINUS, Inputs.Xbox360.START);
                     result.Add(Inputs.Wiimote.HOME,  Inputs.Xbox360.GUIDE);
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_X, "");
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_Y, "");
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_Z, "");
+                    result.Add(Inputs.Wiimote.TILT_RIGHT, "");
+                    result.Add(Inputs.Wiimote.TILT_LEFT, "");
+                    result.Add(Inputs.Wiimote.TILT_UP, "");
+                    result.Add(Inputs.Wiimote.TILT_DOWN, "");
                     break;
 
                 case ControllerType.Nunchuk:
@@ -155,6 +169,13 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Nunchuk.RIGHT, Inputs.Xbox360.RRIGHT);
                     result.Add(Inputs.Nunchuk.Z,     Inputs.Xbox360.RT);
                     result.Add(Inputs.Nunchuk.C,     Inputs.Xbox360.LT);
+                    result.Add(Inputs.Nunchuk.TILT_RIGHT, "");
+                    result.Add(Inputs.Nunchuk.TILT_LEFT, "");
+                    result.Add(Inputs.Nunchuk.TILT_UP, "");
+                    result.Add(Inputs.Nunchuk.TILT_DOWN, "");
+                    result.Add(Inputs.Nunchuk.ACC_SHAKE_X, "");
+                    result.Add(Inputs.Nunchuk.ACC_SHAKE_Y, "");
+                    result.Add(Inputs.Nunchuk.ACC_SHAKE_Z, "");
 
                     result.Add(Inputs.Wiimote.UP,    Inputs.Xbox360.UP);
                     result.Add(Inputs.Wiimote.DOWN,  Inputs.Xbox360.DOWN);
@@ -167,13 +188,20 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Wiimote.PLUS,  Inputs.Xbox360.BACK);
                     result.Add(Inputs.Wiimote.MINUS, Inputs.Xbox360.START);
                     result.Add(Inputs.Wiimote.HOME,  Inputs.Xbox360.GUIDE);
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_X, "");
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_Y, "");
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_Z, "");
+                    result.Add(Inputs.Wiimote.TILT_RIGHT, "");
+                    result.Add(Inputs.Wiimote.TILT_LEFT, "");
+                    result.Add(Inputs.Wiimote.TILT_UP, "");
+                    result.Add(Inputs.Wiimote.TILT_DOWN, "");
                     break;
 
                 case ControllerType.Wiimote:
                     result.Add(Inputs.Wiimote.UP,    Inputs.Xbox360.LEFT);
                     result.Add(Inputs.Wiimote.DOWN,  Inputs.Xbox360.RIGHT);
                     result.Add(Inputs.Wiimote.LEFT,  Inputs.Xbox360.DOWN);
-                    result.Add(Inputs.Wiimote.RIGHT, Inputs.Xbox360.LEFT);
+                    result.Add(Inputs.Wiimote.RIGHT, Inputs.Xbox360.UP);
                     result.Add(Inputs.Wiimote.A,     Inputs.Xbox360.X);
                     result.Add(Inputs.Wiimote.B,     Inputs.Xbox360.Y);
                     result.Add(Inputs.Wiimote.ONE,   Inputs.Xbox360.A);
@@ -181,6 +209,13 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Wiimote.PLUS,  Inputs.Xbox360.BACK);
                     result.Add(Inputs.Wiimote.MINUS, Inputs.Xbox360.START);
                     result.Add(Inputs.Wiimote.HOME,  Inputs.Xbox360.GUIDE);
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_X, "");
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_Y, "");
+                    result.Add(Inputs.Wiimote.ACC_SHAKE_Z, "");
+                    result.Add(Inputs.Wiimote.TILT_RIGHT, "");
+                    result.Add(Inputs.Wiimote.TILT_LEFT, "");
+                    result.Add(Inputs.Wiimote.TILT_UP, "");
+                    result.Add(Inputs.Wiimote.TILT_DOWN, "");
                     break;
             }
 
