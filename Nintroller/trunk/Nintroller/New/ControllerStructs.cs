@@ -65,6 +65,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(INintrollerState from)
         {
+            if (from.CalibrationEmpty)
+            {
+                // don't apply empty calibrations
+                return;
+            }
+
             if (from.GetType() == typeof(Wiimote))
             {
                 accelerometer.Calibrate(((Wiimote)from).accelerometer);
@@ -85,6 +91,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(string calibrationString)
         {
+            if (calibrationString.Count(c => c == '0') > 5)
+            {
+                // don't set empty calibrations
+                return;
+            }
+
             string[] components = calibrationString.Split(new char[] {':'});
 
             foreach (string component in components)
@@ -148,6 +160,21 @@ namespace NintrollerLib.New
             // there is no IR settings yet
 
             return sb.ToString();
+        }
+
+        public bool CalibrationEmpty
+        {
+            get 
+            { 
+                if (accelerometer.maxX == 0 && accelerometer.maxY == 0 && accelerometer.maxZ == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 
@@ -246,6 +273,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(INintrollerState from)
         {
+            if (from.CalibrationEmpty)
+            {
+                // don't apply empty calibrations
+                return;
+            }
+
             if (from.GetType() == typeof(Nunchuk))
             {
                 accelerometer.Calibrate(((Nunchuk)from).accelerometer);
@@ -259,6 +292,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(string calibrationString)
         {
+            if (calibrationString.Count(c => c == '0') > 5)
+            {
+                // don't set empty calibrations
+                return;
+            }
+
             string[] components = calibrationString.Split(new char[] { ':' });
 
             foreach (string component in components)
@@ -349,6 +388,25 @@ namespace NintrollerLib.New
                     sb.Append("|"); sb.Append(accelerometer.deadZ);
 
             return sb.ToString();
+        }
+
+        public bool CalibrationEmpty
+        {
+            get
+            {
+                if (accelerometer.maxX == 0 && accelerometer.maxY == 0 && accelerometer.maxZ == 0)
+                {
+                    return true;
+                }
+                else if (joystick.maxX == 0 && joystick.maxY == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 
@@ -478,6 +536,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(INintrollerState from)
         {
+            if (from.CalibrationEmpty)
+            {
+                // don't apply empty calibrations
+                return;
+            }
+
             if (from.GetType() == typeof(ClassicController))
             {
                 LJoy.Calibrate(((ClassicController)from).LJoy);
@@ -493,6 +557,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(string calibrationString)
         {
+            if (calibrationString.Count(c => c == '0') > 5)
+            {
+                // don't set empty calibrations
+                return;
+            }
+
             string[] components = calibrationString.Split(new char[] { ':' });
 
             foreach (string component in components)
@@ -615,6 +685,21 @@ namespace NintrollerLib.New
 
             return sb.ToString();
         }
+
+        public bool CalibrationEmpty
+        {
+            get
+            {
+                if (LJoy.maxX == 0 && LJoy.maxY == 0 && RJoy.maxX == 0 && RJoy.maxY == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 
     public struct ClassicControllerPro : INintrollerState
@@ -732,6 +817,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(INintrollerState from)
         {
+            if (from.CalibrationEmpty)
+            {
+                // don't apply empty calibrations
+                return;
+            }
+
             if (from.GetType() == typeof(ClassicControllerPro))
             {
                 LJoy.Calibrate(((ClassicControllerPro)from).LJoy);
@@ -745,6 +836,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(string calibrationString)
         {
+            if (calibrationString.Count(c => c == '0') > 5)
+            {
+                // don't set empty calibrations
+                return;
+            }
+
             string[] components = calibrationString.Split(new char[] { ':' });
 
             foreach (string component in components)
@@ -824,6 +921,21 @@ namespace NintrollerLib.New
                     sb.Append("|"); sb.Append(RJoy.deadY);
 
             return sb.ToString();
+        }
+
+        public bool CalibrationEmpty
+        {
+            get
+            {
+                if (LJoy.maxX == 0 && LJoy.maxY == 0 && RJoy.maxX == 0 && RJoy.maxY == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 
@@ -946,6 +1058,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(INintrollerState from)
         {
+            if (from.CalibrationEmpty)
+            {
+                // don't apply empty calibrations
+                return;
+            }
+
             if (from.GetType() == typeof(ProController))
             {
                 LJoy.Calibrate(((ProController)from).LJoy);
@@ -955,6 +1073,12 @@ namespace NintrollerLib.New
 
         public void SetCalibration(string calibrationString)
         {
+            if (calibrationString.Count(c => c == '0') > 5)
+            {
+                // don't set empty calibrations
+                return;
+            }
+
             string[] components = calibrationString.Split(new char[] { ':' });
 
             foreach (string component in components)
@@ -1034,6 +1158,21 @@ namespace NintrollerLib.New
             sb.Append("|"); sb.Append(RJoy.deadY);
 
             return sb.ToString();
+        }
+
+        public bool CalibrationEmpty
+        {
+            get
+            {
+                if (LJoy.maxX == 0 && LJoy.maxY == 0 && RJoy.maxX == 0 && RJoy.maxY == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 

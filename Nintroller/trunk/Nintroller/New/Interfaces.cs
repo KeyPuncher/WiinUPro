@@ -13,6 +13,7 @@ namespace NintrollerLib.New
         void SetCalibration(INintrollerState from);
         void SetCalibration(string calibrationString);
         string GetCalibrationString();
+        bool CalibrationEmpty { get; }
     }
 
     public interface INintrollerParsable
