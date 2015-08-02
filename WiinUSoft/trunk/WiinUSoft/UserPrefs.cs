@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.AccessControl;
@@ -60,6 +61,50 @@ namespace WiinUSoft
         }
 
         public static string DataPath { get; protected set; }
+        public static bool AutoStart
+        {
+            get { return Instance.autoStartup; }
+            set
+            {
+                try
+                {
+                    RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+
+                    if (value)
+                    {
+                        if (key.GetValue("WiinUSoft") == null)
+                        {
+                            key.SetValue("WiinUSoft", (new Uri(System.Reflection.Assembly.GetEntryAssembly().CodeBase)).LocalPath);
+                        }
+                    }
+                    else
+                    {
+                        key.DeleteValue("WiinUSoft", false);
+                    }
+                }
+                catch
+                {
+                    string dir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+
+                    if (value)
+                    {
+                        if (!File.Exists(Path.Combine(dir, "WiinUSoft.lnk")))
+                        {
+                            MainWindow.Instance.CreateShortcut(dir);
+                        }
+                    }
+                    else
+                    {
+                        if (File.Exists(Path.Combine(dir, "WiinUSoft.lnk")))
+                        {
+                            File.Delete(Path.Combine(dir, "WiinUSoft.lnk"));
+                        }
+                    }
+                }
+
+                Instance.autoStartup = value;
+            }
+        }
 
         public List<Property> devicePrefs;
         public Profile defaultProfile;
