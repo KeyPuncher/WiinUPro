@@ -185,6 +185,12 @@ namespace NintrollerLib.New
         public Joystick joystick;
         public bool C, Z;
 
+        public Nunchuk(Wiimote wm)
+        {
+            this = new Nunchuk();
+            wiimote = wm;
+        }
+
         public Nunchuk(byte[] rawData)
         {
             wiimote = new Wiimote(rawData);
@@ -419,6 +425,12 @@ namespace NintrollerLib.New
         public bool Up, Down, Left, Right;
         public bool ZL, ZR, LFull, RFull;
         public bool Plus, Minus, Home;
+
+        public ClassicController(Wiimote wm)
+        {
+            this = new ClassicController();
+            wiimote = wm;
+        }
 
         public bool Start
         {
@@ -710,6 +722,12 @@ namespace NintrollerLib.New
         public bool Up, Down, Left, Right;
         public bool L, R, ZL, ZR;
         public bool Plus, Minus, Home;
+
+        public ClassicControllerPro(Wiimote wm)
+        {
+            this = new ClassicControllerPro();
+            wiimote = wm;
+        }
 
         public bool Start
         {

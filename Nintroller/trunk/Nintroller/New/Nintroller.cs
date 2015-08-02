@@ -846,7 +846,8 @@ namespace NintrollerLib.New
 
                                     case ControllerType.Nunchuk:
                                     case ControllerType.NunchukB:
-                                        _state = new Nunchuk();
+                                        _state = new Nunchuk(_calibrations.WiimoteCalibration);
+
                                         if (_calibrations.NunchukCalibration.CalibrationEmpty)
                                         {
                                             _state.SetCalibration(New.Calibrations.CalibrationPreset.Default);
@@ -855,6 +856,7 @@ namespace NintrollerLib.New
                                         {
                                             _state.SetCalibration(_calibrations.NunchukCalibration);
                                         }
+
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsAccExt;
@@ -866,7 +868,8 @@ namespace NintrollerLib.New
                                         break;
 
                                     case ControllerType.ClassicController:
-                                        _state = new ClassicController();
+                                        _state = new ClassicController(_calibrations.WiimoteCalibration);
+
                                         if (_calibrations.ClassicCalibration.CalibrationEmpty)
                                         {
                                             _state.SetCalibration(New.Calibrations.CalibrationPreset.Default);
@@ -875,6 +878,7 @@ namespace NintrollerLib.New
                                         {
                                             _state.SetCalibration(_calibrations.ClassicCalibration);
                                         }
+
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsExt;
@@ -886,7 +890,8 @@ namespace NintrollerLib.New
                                         break;
 
                                     case ControllerType.ClassicControllerPro:
-                                        _state = new ClassicControllerPro();
+                                        _state = new ClassicControllerPro(_calibrations.WiimoteCalibration);
+
                                         if (_calibrations.ClassicProCalibration.CalibrationEmpty)
                                         {
                                             _state.SetCalibration(New.Calibrations.CalibrationPreset.Default);
@@ -895,6 +900,7 @@ namespace NintrollerLib.New
                                         {
                                             _state.SetCalibration(_calibrations.ClassicProCalibration);
                                         }
+
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsAccExt;
