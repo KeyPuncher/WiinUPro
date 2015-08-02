@@ -17,12 +17,12 @@ namespace WiinUSoft
                 {
                     if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config"))
                     {
-                        DataPath = AppDomain.CurrentDomain.BaseDirectory;
+                        DataPath = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
                         LoadPrefs();
                     }
-                    else if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\prefs.config"))
+                    else if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\WiinUSoft_prefs.config"))
                     {
-                        DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                        DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\WiinUSoft_prefs.config";
                         LoadPrefs();
                     }
                     else
@@ -41,11 +41,11 @@ namespace WiinUSoft
 
                         if (access)
                         {
-                            DataPath = AppDomain.CurrentDomain.BaseDirectory;
+                            DataPath = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
                         }
                         else
                         {
-                            DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                            DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\WiinUSoft_prefs.config";
                         }
 
                         _instance = new UserPrefs();
@@ -73,13 +73,12 @@ namespace WiinUSoft
         {
             bool successful = false;
             XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
-            string path = DataPath + @"\prefs.config";
             
             try
             {
-                if (File.Exists(path))
+                if (File.Exists(DataPath))
                 {
-                    using (FileStream stream = File.OpenRead(path))
+                    using (FileStream stream = File.OpenRead(DataPath))
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         _instance = X.Deserialize(reader) as UserPrefs;
@@ -101,14 +100,13 @@ namespace WiinUSoft
         public static void SavePrefs()
         {
             XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
-            string path = DataPath + @"\prefs.config";
 
             try
             {
-                if (File.Exists(path))
+                if (File.Exists(DataPath))
                 {
-                    FileInfo prefs = new FileInfo(path);
-                    using (FileStream stream = File.Open(path, FileMode.Create, FileAccess.ReadWrite))
+                    FileInfo prefs = new FileInfo(DataPath);
+                    using (FileStream stream = File.Open(DataPath, FileMode.Create, FileAccess.ReadWrite))
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
                         X.Serialize(writer, _instance);
@@ -118,7 +116,7 @@ namespace WiinUSoft
                 }
                 else
                 {
-                    using (FileStream stream = File.Create(path))
+                    using (FileStream stream = File.Create(DataPath))
                     using (StreamWriter writer = new StreamWriter(stream))
                     {
                         X.Serialize(writer, _instance);
