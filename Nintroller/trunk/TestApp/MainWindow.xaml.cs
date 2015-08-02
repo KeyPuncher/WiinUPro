@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using NintrollerLib.New;
+using NintrollerLib;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
