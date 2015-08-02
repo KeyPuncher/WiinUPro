@@ -263,6 +263,8 @@ namespace WiinUSoft
                 return;
             }
 
+            holder.ClearAllValues();
+
             switch (e.controllerType)
             {
                 // TODO: Motion Plus Reading (not for 1st release)

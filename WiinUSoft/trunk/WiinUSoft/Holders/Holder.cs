@@ -67,6 +67,11 @@ namespace WiinUSoft.Holders
             Mappings.Clear();
         }
 
+        public void ClearAllValues()
+        {
+            Values.Clear();
+        }
+
         public bool GetFlag(string name)
         {
             if (Flags.ContainsKey(name))
