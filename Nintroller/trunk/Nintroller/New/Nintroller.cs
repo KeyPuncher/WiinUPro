@@ -735,7 +735,14 @@ namespace NintrollerLib.New
                             {
                                 _currentType = ControllerType.Wiimote;
                                 _state = new Wiimote();
-                                _state.SetCalibration(_calibrations.WiimoteCalibration);
+                                if (_calibrations.WiimoteCalibration.CalibrationEmpty)
+                                {
+                                    _state.SetCalibration(New.Calibrations.CalibrationPreset.Default);
+                                }
+                                else
+                                {
+                                    _state.SetCalibration(_calibrations.WiimoteCalibration);
+                                }
                                 _state.Update(report);
 
                                 // and Fire Event
@@ -821,7 +828,14 @@ namespace NintrollerLib.New
                                 {
                                     case ControllerType.ProController:
                                         _state = new ProController();
-                                        _state.SetCalibration(_calibrations.ProCalibration);
+                                        if (_calibrations.ProCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(New.Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.ProCalibration);
+                                        }
                                         applyReport = InputReport.ExtOnly;
                                         break;
 
@@ -833,7 +847,14 @@ namespace NintrollerLib.New
                                     case ControllerType.Nunchuk:
                                     case ControllerType.NunchukB:
                                         _state = new Nunchuk();
-                                        _state.SetCalibration(_calibrations.NunchukCalibration);
+                                        if (_calibrations.NunchukCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(New.Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.NunchukCalibration);
+                                        }
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsAccExt;
@@ -846,7 +867,14 @@ namespace NintrollerLib.New
 
                                     case ControllerType.ClassicController:
                                         _state = new ClassicController();
-                                        _state.SetCalibration(_calibrations.ClassicCalibration);
+                                        if (_calibrations.ClassicCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(New.Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.ClassicCalibration);
+                                        }
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsExt;
@@ -859,7 +887,14 @@ namespace NintrollerLib.New
 
                                     case ControllerType.ClassicControllerPro:
                                         _state = new ClassicControllerPro();
-                                        _state.SetCalibration(_calibrations.ClassicProCalibration);
+                                        if (_calibrations.ClassicProCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(New.Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.ClassicProCalibration);
+                                        }
                                         if (_irMode == IRCamMode.Off)
                                         {
                                             applyReport = InputReport.BtnsAccExt;
