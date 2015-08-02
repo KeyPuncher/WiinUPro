@@ -151,6 +151,9 @@ namespace WiinUSoft
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
+            menu_version.Header = string.Format("version {0}.{1}.{2}", version.Major, version.Minor, version.Revision);
+
             if (UserPrefs.Instance.startMinimized)
             {
                 menu_StartMinimized.IsChecked = true;
