@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.AccessControl;
 using System.Xml.Serialization;
 
 namespace WiinUSoft
@@ -16,10 +17,37 @@ namespace WiinUSoft
                 {
                     if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config"))
                     {
+                        DataPath = AppDomain.CurrentDomain.BaseDirectory;
+                        LoadPrefs();
+                    }
+                    else if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\prefs.config"))
+                    {
+                        DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                         LoadPrefs();
                     }
                     else
                     {
+                        DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+                        var dirSecurity = dir.GetAccessControl();
+                        var dirAuth = dirSecurity.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
+                        bool access = false;
+                        foreach (FileSystemAccessRule rule in dirAuth)
+                        {
+                            if ((FileSystemRights.Read & rule.FileSystemRights) == FileSystemRights.Read)
+                            {
+                                access = rule.AccessControlType == AccessControlType.Allow;
+                            }
+                        }
+
+                        if (access)
+                        {
+                            DataPath = AppDomain.CurrentDomain.BaseDirectory;
+                        }
+                        else
+                        {
+                            DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                        }
+
                         _instance = new UserPrefs();
                         _instance.devicePrefs = new List<Property>();
                         _instance.defaultProfile = new Profile();
@@ -30,6 +58,8 @@ namespace WiinUSoft
                 return _instance;
             }
         }
+
+        public static string DataPath { get; protected set; }
 
         public List<Property> devicePrefs;
         public Profile defaultProfile;
@@ -43,12 +73,13 @@ namespace WiinUSoft
         {
             bool successful = false;
             XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
+            string path = DataPath + @"\prefs.config";
             
             try
             {
-                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config"))
+                if (File.Exists(path))
                 {
-                    using (FileStream stream = File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config"))
+                    using (FileStream stream = File.OpenRead(path))
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         _instance = X.Deserialize(reader) as UserPrefs;
@@ -70,8 +101,7 @@ namespace WiinUSoft
         public static void SavePrefs()
         {
             XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
-            string path = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
-            // TODO: Might have to adjust the save path
+            string path = DataPath + @"\prefs.config";
 
             try
             {
