@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using NintrollerLib.New;
+using NintrollerLib;
 using ScpControl;
 
 namespace WiinUSoft.Holders

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using NintrollerLib.New;
+using NintrollerLib;
 using System.Xml.Serialization;
 using System.IO;
 

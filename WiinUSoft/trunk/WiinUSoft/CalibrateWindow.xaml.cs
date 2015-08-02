@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-using NintrollerLib.New;
+using NintrollerLib;
 
 namespace WiinUSoft
 {
@@ -76,7 +76,7 @@ namespace WiinUSoft
 
         public CalibrateWindow(Nintroller device) :this()
         {
-            _calibrations.SetCalibrations(device.Calibrations.ToString());
+            _calibrations.SetCalibrations(device.StoredCalibrations.ToString());
             SelectStep(device.Type);
            
             _device = device;

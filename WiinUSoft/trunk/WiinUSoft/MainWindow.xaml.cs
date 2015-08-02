@@ -1,5 +1,5 @@
 ﻿using Hardcodet.Wpf.TaskbarNotification;
-using NintrollerLib.New;
+using NintrollerLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
