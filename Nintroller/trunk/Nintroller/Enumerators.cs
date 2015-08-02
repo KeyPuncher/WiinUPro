@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NintrollerLib.New
+namespace NintrollerLib
 {
     public enum ControllerType : long
     {

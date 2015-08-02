@@ -1,102 +1,290 @@
-﻿using System;
-using Microsoft.Win32.SafeHandles;
-using System.IO;
-using System.Threading;
-using System.Runtime.Serialization;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
+﻿using Microsoft.Win32.SafeHandles;
+using System;
 using System.Collections.Generic;
-
-/// TODO: 
-/// - Initializing Motion Plus Attatchemnt
-/// - NOTE: WiimotePlus may Handle motion plus a little differently
-/// - Enable/Disable IR Sensor
-/// - Continous Reports
-/// - Allow reading calibration for balance board
-
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace NintrollerLib
 {
     /// <summary>
-    /// For creating connections and communicating with controllers.
+    /// Used to represent a Nintendo controller
     /// </summary>
     public class Nintroller : IDisposable
     {
-        public static bool UseModestConfigs = false;
-
         #region Members
+        // Events
+        public event EventHandler<NintrollerStateEventArgs>     StateUpdate     = delegate { };
+        public event EventHandler<NintrollerExtensionEventArgs> ExtensionChange = delegate { };
+        public event EventHandler<LowBatteryEventArgs>          LowBattery      = delegate { };
+        
+        // General
+        private string             _path                        = string.Empty;
+        private bool               _connected                   = false;
+        private INintrollerState   _state                       = new Wiimote();
+        private CalibrationStorage _calibrations                = new CalibrationStorage();
+        private ControllerType     _currentType                 = ControllerType.Unknown;
+        private ControllerType     _forceType                   = ControllerType.Unknown;
+        private IRCamMode          _irMode                      = IRCamMode.Off;
+        private IRCamSensitivity   _irSensitivity               = IRCamSensitivity.Level3;
+        private byte               _rumbleBit                   = 0x00;
+        private byte               _battery                     = 0x00;
+        private bool               _batteryLow                  = false;
+        private bool               _led1, _led2, _led3, _led4;
+
+        // Read/Writing Variables
+        private SafeFileHandle   _fileHandle;                // Handle for Reading and Writing
+        private FileStream       _stream;                    // Read and Write Stream
+        private bool             _reading    = false;        // true if actively reading
+        private readonly object  _readingObj = new object(); // for locking/blocking
+        
+        // help with parsing Reports
+        private AcknowledgementType _ackType    = AcknowledgementType.NA;
+        private StatusType          _statusType = StatusType.Unknown;
+        private ReadReportType      _readType   = ReadReportType.Unknown;
+        #endregion
+
+        #region Properties
+
         /// <summary>
-        /// Fired evertime a data report is recieved.
+        /// True if the controller is open to communication.
         /// </summary>
-        public event EventHandler<StateChangeEventArgs> StateChange;
-        /// <summary>
-        /// Fired when the controller's extension changes.
-        /// </summary>
-        public event EventHandler<ExtensionChangeEventArgs> ExtensionChange;
-        /// <summary>
-        /// If the controller is open to communication.
-        /// </summary>
-        public bool Connected { get { return connected; } }
-        /// <summary>
-        /// The controller's current state.
-        /// </summary>
-        public NintyState State { get { return mDeviceState; } }
+        public bool Connected { get { return _connected; } }
         /// <summary>
         /// The HID path of the controller.
         /// </summary>
-        public string HIDPath { get { return mDevicePath; } }
+        public string HIDPath { get { return _path; } }
         /// <summary>
-        /// The ID of instance of the controller.
+        /// The type of controller this has been identified as
         /// </summary>
-        public Guid ID { get { return mID; } }
-        public ControllerType Type { get { return currentType; } }
+        public ControllerType Type { get { return _currentType; } }
+        /// <summary>
+        /// The calibration settings applied to the respective controller types.
+        /// </summary>
+        public CalibrationStorage StoredCalibrations { get { return _calibrations; } }
 
-        private ControllerType currentType = ControllerType.Unknown;
-        private bool connected;
-        
-        // Read/Writing Variables
-        private SafeFileHandle  mHandle;    // Handle for Reading and Writing
-        private FileStream      mStream;    // Read and Write Stream
-        private byte[]          mReadBuff;  // Read Buffer
-        private int             mAddress;   // Address to read
-        private short           mSize;      // read request size
-        private ReadReportType  _readType;  // help with parsing ReadMem reports
-        
-        private readonly object _readingObj = new object();// for locking/blocking
+        /// <summary>
+        /// Gets or Sets the current IR Camera Mode.
+        /// (will turn the camera on or off)
+        /// </summary>
+        public IRCamMode IRMode
+        {
+            get { return _irMode; }
+            set
+            {
+                if (_irMode != value)
+                {
+                    switch (_currentType)
+                    {
+                        case ControllerType.Wiimote:
+                            // this can be set to any mode
+                            _irMode = value;
+                            
+                            if (value == IRCamMode.Off)
+                            {
+                                DisableIR();
+                            }
+                            else
+                            {
+                                EnableIR();
+                            }
+                            break;
 
-        // Currently unused
-        //private bool            mAltWrite;  // Alternative Report Writing
-        //private short           mPID;       // Product ID for this device
-        //private bool            mDoNotRead; // Flag to avoid trying to read memory from the device
-        //private bool            mParsing;   // prevent double parse
+                        case ControllerType.ClassicController:
+                        case ControllerType.ClassicControllerPro:
+                        case ControllerType.Nunchuk:
+                        case ControllerType.NunchukB:
+                            // only certian modes can be set
+                            if (value == IRCamMode.Off)
+                            {
+                                _irMode = value;
+                                DisableIR();
+                            }
+                            else if (value != IRCamMode.Full) // we won't use Full
+                            {
+                                _irMode = value;
+                                EnableIR();
+                            }
+                            break;
 
-        // The HID device path
-        private string mDevicePath = string.Empty;
-        private NintyState mDeviceState;
+                        default:
+                            // do nothing, IR usage is invalid
+                            break;
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Gets or Sets the IR Sensitivity Mode.
+        /// (Only set if the IR Camera is On)
+        /// </summary>
+        public IRCamSensitivity IRSensitivity
+        {
+            get { return _irSensitivity; }
+            set
+            {
+                if (_irSensitivity != value && _irMode != IRCamMode.Off)
+                {
+                    switch (_currentType)
+                    {
+                        case ControllerType.Wiimote:
+                        case ControllerType.ClassicController:
+                        case ControllerType.ClassicControllerPro:
+                        case ControllerType.Nunchuk:
+                        case ControllerType.NunchukB:
+                            _irSensitivity = value;
+                            EnableIR();
+                            break;
 
-        // Calibration Variables - Probably won't need these
-        private WiimoteCalibration              mCalibrationWiimote;
-        private MotionPlusCalibration           mCalibrationMotionPlus;
-        private NunchukCalibration             mCalibrationNunchuck;
-        private ClassicControllerCalibration    mCalibrationClassic;
-        private ClassicControllerProCalibration mCalibrationClassicPro;
-        private ProCalibration                  mCalibrationPro;
+                        default:
+                            // do nothing
+                            break;
+                    }
+                }
+            }
+        }
 
-        // Read Only Variables
-        //private readonly AutoResetEvent mReadDone = new AutoResetEvent(false);
-        //private readonly AutoResetEvent mWriteDone = new AutoResetEvent(false);
-        //private readonly AutoResetEvent mStatusDone = new AutoResetEvent(false);
-        private readonly Guid mID = Guid.NewGuid();
+        /// <summary>
+        /// Gets or Sets the controller's force feedback
+        /// </summary>
+        public bool RumbleEnabled
+        {
+            get
+            {
+                return _rumbleBit == 0x01;
+            }
+            set
+            {
+                _rumbleBit = (byte)(value ? 0x01 : 0x00);
+                ApplyLEDs();
+            }
+        }
 
-        // delegates
+        /// <summary>
+        /// Gets or Sets the LED in position 1
+        /// </summary>
+        public bool Led1
+        {
+            get
+            {
+                return _led1;
+            }
+            set
+            {
+                if (_led1 != value)
+                {
+                    _led1 = value;
+                    ApplyLEDs();
+                }
+            }
+        }
+        /// <summary>
+        /// Gets or Sets the LED in position 2
+        /// </summary>
+        public bool Led2
+        {
+            get
+            {
+                return _led2;
+            }
+            set
+            {
+                if (_led2 != value)
+                {
+                    _led2 = value;
+                    ApplyLEDs();
+                }
+            }
+        }
+        /// <summary>
+        /// Gets or Sets the LED in position 3
+        /// </summary>
+        public bool Led3
+        {
+            get
+            {
+                return _led3;
+            }
+            set
+            {
+                if (_led3 != value)
+                {
+                    _led3 = value;
+                    ApplyLEDs();
+                }
+            }
+        }
+        /// <summary>
+        /// Gets or Sets the LED in position 4
+        /// </summary>
+        public bool Led4
+        {
+            get
+            {
+                return _led4;
+            }
+            set
+            {
+                if (_led4 != value)
+                {
+                    _led4 = value;
+                    ApplyLEDs();
+                }
+            }
+        }
+        /// <summary>
+        /// The controller's current approximate battery level.
+        /// </summary>
+        public BatteryStatus BatteryLevel
+        {
+            get
+            {
+                if (_batteryLow)
+                {
+                    return BatteryStatus.VeryLow;
+                }
+                else
+                {
+                    // Calculate the approximate battery level based on the controller type
+                    if (_currentType == ControllerType.ProController)
+                    {
+                        var level = 2f * ((float)_battery - 205f);
+
+                        if (level > 90f)
+                            return BatteryStatus.VeryHigh;
+                        else if (level > 80f)
+                            return BatteryStatus.High;
+                        else if (level > 70f)
+                            return BatteryStatus.Medium;
+                        else if (level > 60f)
+                            return BatteryStatus.Low;
+                        else
+                            return BatteryStatus.VeryLow;
+                    }
+                    else
+                    {
+                        var level = 100f * (float)_battery / 192f;
+
+                        if (level > 80f)
+                            return BatteryStatus.VeryHigh;
+                        else if (level > 60f)
+                            return BatteryStatus.High;
+                        else if (level > 40f)
+                            return BatteryStatus.Medium;
+                        else if (level > 20f)
+                            return BatteryStatus.Low;
+                        else
+                            return BatteryStatus.VeryLow;
+                    }
+                }
+            }
+        }
+
         #endregion
 
-        #region Constructors
-        /// <summary>
-        /// Default Constructor
-        /// (Not ready to be connected to)
-        /// </summary>
-        public Nintroller() { mDeviceState = new NintyState(); }
+        #region Necessities
 
         /// <summary>
         /// Creates a controller with it's known location.
@@ -105,493 +293,878 @@ namespace NintrollerLib
         /// <param name="devicePath">The HID Path</param>
         public Nintroller(string devicePath)
         {
-            mDeviceState = new WiimoteState();
-            mDevicePath = devicePath;
+            _state = null;
+            _path = devicePath;
         }
-        #endregion
-
-        #region IDispose Methods
+        
         public void Dispose()
         {
-            Dispose(true);
+            Disconnect();
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        internal static void Log(string message)
         {
-            if (disposing)
-                Disconnect();
+            #if DEBUG
+            Debug.WriteLine(message);
+            #endif
         }
+
         #endregion
-
-        /// <summary>
-        /// Retreives the location of all recognized controllers.
-        /// </summary>
-        /// <returns>List of the HID Paths to recognized controllers.</returns>
-        public static List<string> FindControllers()
-        {
-            List<string> ControllerList = new List<string>();
-            int index = 0;
-            Guid guid;
-            SafeFileHandle mHandle;
-
-            // Get the GUID of HID class
-            HIDImports.HidD_GetHidGuid(out guid);
-
-            // Handle to all HID devices
-            IntPtr hDevInfo = HIDImports.SetupDiGetClassDevs(ref guid, null, IntPtr.Zero, HIDImports.DIGCF_DEVICEINTERFACE);
-
-            HIDImports.SP_DEVICE_INTERFACE_DATA diData = new HIDImports.SP_DEVICE_INTERFACE_DATA();
-            diData.cbSize = Marshal.SizeOf(diData);
-            
-            // Look Through All Devices
-            while (HIDImports.SetupDiEnumDeviceInterfaces(hDevInfo, IntPtr.Zero, ref guid, index, ref diData))
-            {
-                UInt32 size;
-
-                // get buffer size for the device
-                HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, IntPtr.Zero, 0, out size, IntPtr.Zero);
-
-                // create detail struct
-                HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA diDetail = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
-
-                diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
-
-                // get the detail struct
-                if (HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, ref diDetail, size, out size, IntPtr.Zero))
-                {
-        //            Debug.WriteLine(string.Format("{0}: {1} - {2}", index, diDetail.DevicePath, Marshal.GetLastWin32Error()));
-
-                    // open read/write handle for device
-                    mHandle = HIDImports.CreateFile(diDetail.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
-
-                    // create attributes structure
-                    HIDImports.HIDD_ATTRIBUTES attrib = new HIDImports.HIDD_ATTRIBUTES();
-                    attrib.Size = Marshal.SizeOf(attrib);
-
-                    // get attributes
-                    if (HIDImports.HidD_GetAttributes(mHandle.DangerousGetHandle(), ref attrib))
-                    {
-                        if (attrib.VendorID == Constants.VID && (attrib.ProductID == Constants.PID1 || attrib.ProductID == Constants.PID2))
-                        {
-                            ControllerList.Add(diDetail.DevicePath);
-                        }
-                    }
-
-                    mHandle.Close();
-                }
-                else
-                {
-                    Debug.WriteLine("Failed to get info on this device.\n");
-                }
-
-                index++;
-            }
-
-            // clean list
-            HIDImports.SetupDiDestroyDeviceInfoList(hDevInfo);
-
-            Debug.WriteLine("Total Devices: " + ControllerList.Count.ToString());
-
-            return ControllerList;
-        }
-
-        /// <summary>
-        /// Retreives the location of all the unrecognized devices.
-        /// </summary>
-        /// <returns></returns>
-        public static List<string> FindOtherDevices()
-        {
-            List<string> ControllerList = new List<string>();
-            int index = 0;
-            Guid guid;
-            SafeFileHandle mHandle;
-
-            // Get the GUID of HID class
-            HIDImports.HidD_GetHidGuid(out guid);
-
-            // Handle to all HID devices
-            IntPtr hDevInfo = HIDImports.SetupDiGetClassDevs(ref guid, null, IntPtr.Zero, HIDImports.DIGCF_DEVICEINTERFACE);
-
-            HIDImports.SP_DEVICE_INTERFACE_DATA diData = new HIDImports.SP_DEVICE_INTERFACE_DATA();
-            diData.cbSize = Marshal.SizeOf(diData);
-
-            // Look Through All Devices
-            while (HIDImports.SetupDiEnumDeviceInterfaces(hDevInfo, IntPtr.Zero, ref guid, index, ref diData))
-            {
-                UInt32 size;
-
-                // get buffer size for the device
-                HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, IntPtr.Zero, 0, out size, IntPtr.Zero);
-
-                // create detail struct
-                HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA diDetail = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
-
-                diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
-
-                // get the detail struct
-                if (HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, ref diDetail, size, out size, IntPtr.Zero))
-                {
-                    //            Debug.WriteLine(string.Format("{0}: {1} - {2}", index, diDetail.DevicePath, Marshal.GetLastWin32Error()));
-
-                    // open read/write handle for device
-                    mHandle = HIDImports.CreateFile(diDetail.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
-
-                    // create attributes structure
-                    HIDImports.HIDD_ATTRIBUTES attrib = new HIDImports.HIDD_ATTRIBUTES();
-                    attrib.Size = Marshal.SizeOf(attrib);
-
-                    // get attributes
-                    if (HIDImports.HidD_GetAttributes(mHandle.DangerousGetHandle(), ref attrib))
-                    {
-                        if (attrib.VendorID != Constants.VID && attrib.ProductID != Constants.PID1 && attrib.ProductID != Constants.PID2)
-                        {
-                            ControllerList.Add(diDetail.DevicePath);
-                        }
-                    }
-
-                    mHandle.Close();
-                }
-                else
-                {
-                    Debug.WriteLine("Failed to get info on this device.\n");
-                }
-
-                index++;
-            }
-
-            // clean list
-            HIDImports.SetupDiDestroyDeviceInfoList(hDevInfo);
-
-            Debug.WriteLine("Total Unrecognized Devices: " + ControllerList.Count.ToString());
-
-            return ControllerList;
-        }
-
-        private string ByteString(byte[] report)
-        {
-            return BitConverter.ToString(report);
-        }
 
         #region Connectivity
-        /// <summary>
-        /// Test to see if the controller is able to be connected to.
-        /// </summary>
-        /// <returns>Controller able to connect.</returns>
-        public bool ConnectTest()
-        {
-            bool retunValue = false;
-            int bytesRead = 0;
-
-            if (string.IsNullOrEmpty(mDevicePath))
-                return false;
-
-            mHandle = HIDImports.CreateFile(mDevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
-            mStream = new FileStream(mHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
-
-            try
-            {
-                if (mStream != null && mStream.CanRead)
-                {
-                    byte[] bArray = new byte[Constants.REPORT_LENGTH];
-                    //mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncOnce), bArray);
-                    // don't need to start reading async
-                    // but may want to set a timeout
-                    // TODO: use an async callback and automatically, but only give it a few hundred ms before calling EndRead
-                    bytesRead = mStream.Read(bArray, 0, bArray.Length);
-                }
-
-                // Do we need to do this write, and if so should it be before the read?
-                byte[] buff = new byte[Constants.REPORT_LENGTH];
-
-                buff[0] = (byte)OutputReport.StatusRequest;
-                buff[1] = 0x00;
-
-                mStream.Write(buff, 0, Constants.REPORT_LENGTH);
-
-                retunValue = true;
-            }
-            catch (Exception err)
-            {
-                Debug.WriteLine(err.Message);
-                retunValue = false;
-                //HIDImports.HidD_SetOutputReport(this.mHandle.DangerousGetHandle(), buff, (uint)buff.Length);
-            }
-
-            Disconnect();
-
-            return retunValue;
-        }
 
         /// <summary>
-        /// Opens a controller connection for communication.
+        /// Holds onto to controller to prevent other applications for reading it.
         /// </summary>
-        /// <returns>Successful connection.</returns>
-        public bool Connect()
+        /// <returns>Successful</returns>
+        public bool Hold()
         {
-            if (string.IsNullOrEmpty(mDevicePath))
-                return false;
-
-            // Open Read/Write Handle
-            mHandle = HIDImports.CreateFile(mDevicePath, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
-
-            // create File Stream
-            mStream = new FileStream(mHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
-
-            // begin reading
-            AsyncRead();
-
-            // get calibration? Trying to calibrate a Pro Controller or a newer device will disconnect it!
-            //GetCalibration();
-
-            //SetReport(InputReport.BtnsOnly);
-
-            // get status
-            GetStatus();
-
-            connected = true;
-            return true;
-        }
-
-        /// <summary>
-        /// Disconnects from the controller.
-        /// </summary>
-        public void Disconnect()
-        {
-            if (mStream != null)
-                mStream.Close();
-
-            if (mHandle != null)
-                mHandle.Close();
-
-            connected = false;
-
-            Debug.WriteLine("Disconnected");
-        }
-        #endregion
-
-        #region Data Reading
-
-        // Initiate Asynchronous Reading
-        private void AsyncRead()
-        {
-            if (mStream != null && mStream.CanRead)
-            {
-                lock (_readingObj)
-                {
-                    byte[] bArray = new byte[Constants.REPORT_LENGTH];
-                    try
-                    {
-                        mStream.BeginRead(bArray, 0, Constants.REPORT_LENGTH, new AsyncCallback(AsyncData), bArray);
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                        
-                    }
-                }
-            }
-        }
-
-        // Data has been read from the device
-        private void AsyncData(IAsyncResult data)
-        {
-            byte[] result = (byte[])data.AsyncState;
-
-            try
-            {
-                mStream.EndRead(data);
-
-                if (ParseReport(result))
-                {
-                    if (StateChange != null)
-                        StateChange(this, new StateChangeEventArgs(mDeviceState));
-                }
-
-                AsyncRead();
-            }
-            catch (OperationCanceledException)
-            {
-                Debug.WriteLine("Async Read Was Cancelled");
-            }
-        }
-
-        // For doing the Connection Test
-        //private void AsyncOnce(IAsyncResult data)
-        //{
-        //    try
-        //    {
-        //        mStream.EndRead(data);
-        //        mStatusDone.Set();
-        //    }
-        //    catch (OperationCanceledException)
-        //    {
-        //        Debug.WriteLine("Async Read Was Cancelled");
-        //    }
-        //}
-
-        // Read Data From Device
-        private void ReadData(int address, short size)
-        {
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
-
-            mReadBuff = new byte[size];
-            mAddress = address & 0xffff;
-            mSize = size;
-
-            buffer[0] = (byte)OutputReport.ReadMemory;
-            buffer[1] = (byte)(((address & 0xff000000) >> 24) | (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00));
-            buffer[2] = (byte)((address & 0x00ff0000) >> 16);
-            buffer[3] = (byte)((address & 0x0000ff00) >> 8);
-            buffer[4] = (byte)(address & 0x000000ff);
-            buffer[5] = (byte)((size & 0xff00) >> 8);
-            buffer[6] = (byte)(size & 0xff);
-
-            WriteReport(buffer);
-
-            // why wait here, why not just parse it when it comes through
-            //if (!mReadDone.WaitOne(1000, false))
-            //{
-            //    Debug.WriteLine("Failed to Wait during Read");
-            //    //throw new Exception("Error Reading Data");
-            //}
-
-            //return mReadBuff;
-        }
-
-        // get calibration from the controller
-        private void GetCalibration()
-        {
-            //byte[] buff = ReadData(0x0016, 7);
-            ReadData(0x0016, 7);
-        }
-
-        private void GetStatus()
-        {
-            lock (_readingObj)
-            {
-                byte[] buff = new byte[Constants.REPORT_LENGTH];
-
-                buff[0] = (byte)OutputReport.StatusRequest;
-                buff[1] = (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00);
-
-                WriteReport(buff);
-            }
-
-            // why wait for the status to come back to return from this method?
-            //if (!mStatusDone.WaitOne(3000, false))
-            //    Debug.WriteLine("Timeout for status report");
-        }
-
-        /// <summary>
-        /// Refresh information such as the battery level and extensions.
-        /// </summary>
-        public void RefreshStatus()
-        {
-            GetStatus();
-        }
-
-        /// <summary>
-        /// Sets the device's report type.
-        /// </summary>
-        /// <param name="reportType">Report to switch to.</param>
-        public void ChangeReport(InputReport reportType)
-        {
-            SetReport(reportType);
-        }
-
-        private void SetReport(InputReport reportType)
-        {
-            byte[] buff = new byte[Constants.REPORT_LENGTH];
-
-            buff[0] = (byte)OutputReport.DataReportMode;
-            buff[1] = (byte)(0x04 | (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00)); // 0x40 for continous
-            buff[2] = (byte)reportType;
-
-            lock (_readingObj)
-            {
-                WriteReport(buff);
-            }
-        }
-        #endregion
-
-        #region Data Writing
-        private void WriteReport(byte[] report)
-        {
-            Debug.WriteLine("Writing a Report for: " + Enum.Parse(typeof(OutputReport), report[0].ToString()));
-            Debug.WriteLine(ByteString(report));
-
-            if (mStream != null)
+            if (!_connected)
             {
                 try
                 {
-                    mStream.Write(report, 0, Constants.REPORT_LENGTH);
+                    // Open Read 'n Write file handle
+                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+
+                    // create a stream from the file
+                    _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
+                    
+                    return true;
                 }
-                catch (Exception err)
+                catch
                 {
-                    Debug.WriteLine(err.Message);
-                    HIDImports.HidD_SetOutputReport(this.mHandle.DangerousGetHandle(), report, (uint)report.Length);
+                    return false;
                 }
             }
             else
-                HIDImports.HidD_SetOutputReport(this.mHandle.DangerousGetHandle(), report, (uint)report.Length);
-
-            /*if (mAltWrite)
-                HIDImports.HidD_SetOutputReport(this.mHandle.DangerousGetHandle(), report, (uint)report.Length);
-            else if (mStream != null)
-                mStream.Write(report, 0, Constants.REPORT_LENGTH);*/
-
-            // why wait when we aren't returning from this function
-            //if (report[0] == (byte)OutputReport.WriteMemory)
-            //{
-            //    if (!mWriteDone.WaitOne(1000, false))
-            //        Debug.WriteLine("Failed to Wait during Writing");
-            //}
+            {
+                return false;
+            }
         }
 
-        private void WriteByte(int address, byte data)
+        /// <summary>
+        /// Opens a connection stream to the device.
+        /// (Reading is not yet started)
+        /// </summary>
+        /// <returns>Success</returns>
+        public bool Connect()
         {
-            WriteBytes(address, 1, new byte[] { data });
+            if (string.IsNullOrWhiteSpace(_path))
+            {
+                Log("The HID Path is empty! Can't Connection.");
+                return false;
+            }
+
+            try
+            {
+                // Open Read 'n Write file handle
+                if (Environment.OSVersion.Version.Major > 6)
+                {
+                    // Windows 10 can't have FileShare.None
+                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+                }
+                else
+                {
+                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+                }
+
+                // create a stream from the file
+                _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
+
+                _connected = true;
+                Log("Connected to device (" + _path + ")");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log("Error Connecting to device (" + _path + "): " + ex.Message);
+                return false;
+            }
         }
 
-        private void WriteBytes(int address, byte size, byte[] data)
+        public bool ConnectTest()
         {
-            byte[] bytes = new byte[Constants.REPORT_LENGTH];
+            // TODO: use a timer + FileStream.Read to manually timeout the read
+            // Open Stream
+            // Request Status Report
+            // Check Extension if connected
 
-            bytes[0] = (byte)OutputReport.WriteMemory;
-            bytes[1] = (byte)(((address & 0xff000000) >> 24) | (byte)(mDeviceState.GetRumble() ? 0x01 : 0x00));
-            bytes[2] = (byte)((address & 0x00ff0000) >> 16);
-            bytes[3] = (byte)((address & 0x0000ff00) >> 8);
-            bytes[4] = (byte)(address & 0x000000ff);
-            bytes[5] = size;
-            Array.Copy(data, 0, bytes, 6, size);
+            // Can't check the device if we can't open a stream
+            if (!Connect()) return false;
 
-            WriteReport(bytes);
+            bool success = false;
+
+            try
+            {
+                System.Timers.Timer timeouter = new System.Timers.Timer(500);
+                timeouter.AutoReset = false;
+                timeouter.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) =>
+                    {
+                        _stream.Close();
+                    };
+
+                timeouter.Start();
+                GetStatus();
+                byte[] result = new byte[Constants.REPORT_LENGTH];
+
+                // reset timer
+                timeouter.Stop();
+                timeouter.Start();
+
+                _stream.Read(result, 0, result.Length);
+                timeouter.Stop();
+                ParseReport(result);
+
+                timeouter.Start();
+                if (_currentType == ControllerType.Unknown)
+                {
+                    while (_currentType == ControllerType.Unknown)
+                    {
+                        _stream.Read(result, 0, result.Length);
+                        ParseReport(result);
+                    }
+                }
+                timeouter.Stop();
+
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                success = false;
+            }
+            finally
+            {
+                Disconnect();
+            }
+
+            return success;
         }
 
-        private void WriteLEDs()
+        /// <summary>
+        /// Closes the connection stream to the device.
+        /// </summary>
+        public void Disconnect()
         {
-            byte[] ledReport = new byte[Constants.REPORT_LENGTH];
+            _reading = false;
 
-            ledReport[0] = (byte)OutputReport.LEDs;
-            ledReport[1] = (byte)(
-                            (mDeviceState.led1 ? 0x10 : 0x00) |
-                            (mDeviceState.led2 ? 0x20 : 0x00) |
-                            (mDeviceState.led3 ? 0x40 : 0x00) |
-                            (mDeviceState.led4 ? 0x80 : 0x00) |
-                            (mDeviceState.GetRumble() ? 0x01 : 0x00));
+            if (_stream != null)
+                _stream.Close();
 
-            WriteReport(ledReport);
+            if (_fileHandle != null)
+                _fileHandle.Close();
+
+            _connected = false;
+
+            Log("Disconnected device (" + _path + ")");
+        }
+        #endregion
+
+        #region Data Requesting
+        /// <summary>
+        /// Starts asynchronously recieving data from the device.
+        /// </summary>
+        public void BeginReading()
+        {
+            // kickoff the reading process if it hasn't started already
+            if (!_reading && _stream != null)
+            {
+                _reading = true;
+                ReadAsync();
+            }
+        }
+        /// <summary>
+        /// Sends a status request to the device.
+        /// </summary>
+        public void GetStatus()
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+
+            buffer[0] = (byte)OutputReport.StatusRequest;
+            buffer[1] = _rumbleBit;
+
+            SendData(buffer);
+        }
+        /// <summary>
+        /// Changes the device's reporting type.
+        /// </summary>
+        /// <param name="reportType">The report type to set to.</param>
+        public void SetReportType(InputReport reportType)
+        {
+            if (reportType == InputReport.Acknowledge ||
+                reportType == InputReport.ReadMem ||
+                reportType == InputReport.Status)
+            {
+                Log("Can't Set the report type to: " + reportType.ToString());
+            }
+            else
+            {
+                ApplyReportingType(reportType);
+            }
+        }
+
+        // Performs an asynchronous read
+        private void ReadAsync()
+        {
+            if (_stream != null && _stream.CanRead)
+            {
+                lock (_readingObj)
+                {
+                    byte[] readResult = new byte[Constants.REPORT_LENGTH];
+                    
+                    try
+                    {
+                        _stream.BeginRead(readResult, 0, readResult.Length, new AsyncCallback(RecieveDataAsync), readResult);
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        Log("Can't read, the stream was disposed");
+                    }
+                }
+            }
+        }
+
+        // Recieve Data from reading the stream
+        private void RecieveDataAsync (IAsyncResult data)
+        {
+            try
+            {
+                // Convert the result
+                byte[] result = data.AsyncState as byte[];
+
+                // Must be called for each BeginRead()
+                _stream.EndRead(data);
+
+                ParseReport(result);
+
+                // start another read if we are still to be reading
+                if (_reading)
+                {
+                    ReadAsync();
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                Log("Async Read Was Cancelled");
+            }
+        }
+
+        // Request data from the device's memory
+        private void ReadMemory(int address, short size)
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+
+            buffer[0] = (byte)OutputReport.ReadMemory;
+
+            buffer[1] = (byte)(((address & 0xFF000000) >> 24) | _rumbleBit);
+            buffer[2] = (byte) ((address & 0x00FF0000) >> 16);
+            buffer[3] = (byte) ((address & 0x0000FF00) >>  8);
+            buffer[4] = (byte)  (address & 0x000000FF);
+
+            buffer[5] = (byte)((size & 0xFF00) >> 8);
+            buffer[6] = (byte) (size & 0xFF);
+
+            SendData(buffer);
+        }
+
+        private void ReadMemory(int address, byte[] data)
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+
+            buffer[0] = (byte)OutputReport.ReadMemory;
+
+            buffer[1] = (byte)(((address & 0xFF000000) >> 24) | _rumbleBit);
+            buffer[2] = (byte)((address & 0x00FF0000) >> 16);
+            buffer[3] = (byte)((address & 0x0000FF00) >> 8);
+            buffer[4] = (byte)(address & 0x000000FF);
+            buffer[5] = (byte)data.Length;
+
+            Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, 16));
+
+            SendData(buffer);
+        }
+
+        // Read calibration from the controller
+        private void GetCalibration()
+        {
+            // TODO: New: Test (possibly move)
+            // don't attempt on Pro Controllers
+            ReadMemory(0x0016, 7);
+        }
+
+        // Sets the reporting mode type
+        private void ApplyReportingType(InputReport reportType, bool continuous = false)
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+
+            buffer[0] = (byte)OutputReport.DataReportMode;
+            buffer[1] = (byte)((continuous ? 0x04 : 0x00) | _rumbleBit);
+            buffer[2] = (byte)reportType;
+
+            SendData(buffer);
+        }
+        #endregion
+
+        #region Data Sending
+        // sends bytes to the device
+        private void SendData(byte[] report)
+        {
+            if (!_connected)
+            {
+                Log("Can't Send data, we are not connected!");
+                return;
+            }
+
+            // TODO: New: Remove when done testing
+            Log("Sending " + Enum.Parse(typeof(OutputReport), report[0].ToString()) + " report");
+            Log(BitConverter.ToString(report));
+
+            if (_stream != null && _stream.CanWrite)
+            {
+                try
+                {
+                    // send via the file stream
+                    _stream.Write(report, 0, Constants.REPORT_LENGTH);
+
+                    // TOOD: New: Determine if and when to use HidD_SetOutputReport
+                }
+                catch (Exception ex)
+                {
+                    Log("Error while writing to the stream: " + ex.Message);
+                }
+            }
+        }
+
+        // writes bytes to the device's memory
+        private void WriteToMemory(int address, byte[] data)
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+
+            buffer[0] = (byte)OutputReport.WriteMemory;
+            buffer[1] = (byte)(((address & 0xFF000000) >> 24) | _rumbleBit);
+            buffer[2] = (byte) ((address & 0x00FF0000) >> 16);
+            buffer[3] = (byte) ((address & 0x0000FF00) >>  8);
+            buffer[4] = (byte)  (address & 0x000000FF);
+            buffer[5] = (byte)data.Length;
+
+            Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, 16));
+
+            // TODO: New: Remove when done testing
+            Debug.WriteLine(BitConverter.ToString(buffer));
+
+            SendData(buffer);
+        }
+
+        // set's the device's LEDs and Rumble states
+        private void ApplyLEDs()
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+
+            buffer[0] = (byte)OutputReport.LEDs;
+            buffer[1] = (byte)
+            (
+                (_led1 ? 0x10 : 0x00) |
+                (_led2 ? 0x20 : 0x00) |
+                (_led3 ? 0x40 : 0x00) |
+                (_led4 ? 0x80 : 0x00) |
+                (_rumbleBit)
+            );
+
+            SendData(buffer);
         }
         #endregion
 
         #region Data Parsing
-        private bool ParseReport(byte[] report)
+
+        private void ParseReport(byte[] report)
         {
             InputReport input = (InputReport)report[0];
-//            Debug.WriteLine(BitConverter.ToString(report));
-            switch (input)
+            bool error = (report[4] & 0x0F) == 0x03;
+
+            switch(input)
             {
-                // Any of the following reports can be parsed by the controller
+                #region Status Reports
+                case InputReport.Status:
+                    #region Parse Status
+                    Log("Status Report");
+                    Log(BitConverter.ToString(report));
+                    // core buttons can be parsed if desired
+
+                    switch (_statusType)
+                    {
+                        case StatusType.Requested:
+                            //
+                            break;
+
+                        case StatusType.IR_Enable:
+                            EnableIR();
+                            break;
+
+                        case StatusType.Unknown:
+                        default:
+                            // Battery Level
+                            _battery = report[6];
+                            bool lowBattery = (report[3] & 0x01) != 0;
+                            
+                            if (lowBattery && !_batteryLow)
+                            {
+                                //LowBattery(this, BatteryStatus.VeryLow);
+                                LowBattery(this, new LowBatteryEventArgs(BatteryStatus.VeryLow));
+                            }
+
+                            // LED
+                            _led1 = (report[3] & 0x10) != 0;
+                            _led2 = (report[3] & 0x20) != 0;
+                            _led3 = (report[3] & 0x40) != 0;
+                            _led4 = (report[3] & 0x80) != 0;
+
+                            // Extension/Type
+                            bool ext = (report[3] & 0x02) != 0;
+                            if (ext)
+                            {
+                                //lock (_readingObj)
+                                //{
+                                    _readType = ReadReportType.Extension_A;
+                                    ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                                // 16-04-A4-00-F0-01-55-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+                                // 16-04-A4-00-FB-01-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+                                //}
+                            }
+                            else if (_currentType != ControllerType.Wiimote)
+                            {
+                                _currentType = ControllerType.Wiimote;
+                                _state = new Wiimote();
+                                if (_calibrations.WiimoteCalibration.CalibrationEmpty)
+                                {
+                                    _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                }
+                                else
+                                {
+                                    _state.SetCalibration(_calibrations.WiimoteCalibration);
+                                }
+                                _state.Update(report);
+
+                                // and Fire Event
+                                //ExtensionChange(this, _currentType);
+                                ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
+
+                                // and set report
+                                SetReportType(InputReport.BtnsAccIR);
+                            }
+                            break;
+                    }
+                    #endregion
+                    break;
+
+                case InputReport.ReadMem:
+                    #region Parse ReadMem
+                    Log("Read Memory Report | " + _readType.ToString());
+                    Log(BitConverter.ToString(report));
+
+                    bool noError = (report[3] & 0xF) == 0;
+                    if (!noError)
+                        Log("Possible ReadMem Error: " + (report[3] & 0x0F).ToString());
+
+                    switch(_readType)
+                    {
+                        case ReadReportType.Extension_A:
+                            // Initialize
+                            lock (_readingObj)
+                            {
+                                if (report[0] != 0x04)
+                                {
+                                    WriteToMemory(Constants.REGISTER_EXTENSION_INIT_1, new byte[] { 0x55 });
+                                    WriteToMemory(Constants.REGISTER_EXTENSION_INIT_2, new byte[] { 0x00 });
+                                }
+                            }
+
+                            _readType = ReadReportType.Extension_B;
+                            ReadMemory(Constants.REGISTER_EXTENSION_TYPE, 6);
+                            break;
+
+                        case ReadReportType.Extension_B:
+                            if (report.Length < 6)
+                            {
+                                _readType = ReadReportType.Unknown;
+                                Log("Report length not long enough for Extension_B");
+                                return;
+                            }
+
+                            byte[] r = new byte[6];
+                            Array.Copy(report, 6, r, 0, 6);
+
+                            long type = 
+                                ((long)r[0] << 40) | 
+                                ((long)r[1] << 32) | 
+                                ((long)r[2] << 24) | 
+                                ((long)r[3] << 16) | 
+                                ((long)r[4] <<  8) | r[5];
+
+                            bool typeChange = false;
+                            ControllerType newType = ControllerType.PartiallyInserted;
+
+                            if (_currentType != (ControllerType)type)
+                            {
+                                typeChange = true;
+                                newType = (ControllerType)type;
+                            }
+                            else if (_forceType != ControllerType.Unknown &&
+                                     _forceType != ControllerType.PartiallyInserted &&
+                                     _currentType != _forceType)
+                            {
+                                typeChange = true;
+                                newType = _forceType;
+                            }
+
+                            if (typeChange)
+                            {
+                                Log("Controller type: " + _currentType.ToString());
+                                // TODO: New: Check parsing after applying a report type (Pro is working, CC is not)
+                                InputReport applyReport = InputReport.BtnsOnly;
+                                bool continuiousReporting = true;
+
+                                switch(newType)
+                                {
+                                    case ControllerType.ProController:
+                                        _state = new ProController();
+                                        if (_calibrations.ProCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.ProCalibration);
+                                        }
+                                        applyReport = InputReport.ExtOnly;
+                                        break;
+
+                                    case ControllerType.BalanceBoard:
+                                        _state = new BalanceBoard();
+                                        applyReport = InputReport.ExtOnly;
+                                        break;
+
+                                    case ControllerType.Nunchuk:
+                                    case ControllerType.NunchukB:
+                                        _state = new Nunchuk(_calibrations.WiimoteCalibration);
+
+                                        if (_calibrations.NunchukCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.NunchukCalibration);
+                                        }
+
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsAccExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
+                                        break;
+
+                                    case ControllerType.ClassicController:
+                                        _state = new ClassicController(_calibrations.WiimoteCalibration);
+
+                                        if (_calibrations.ClassicCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.ClassicCalibration);
+                                        }
+
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
+                                        break;
+
+                                    case ControllerType.ClassicControllerPro:
+                                        _state = new ClassicControllerPro(_calibrations.WiimoteCalibration);
+
+                                        if (_calibrations.ClassicProCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.ClassicProCalibration);
+                                        }
+
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsAccExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
+                                        break;
+
+                                    case ControllerType.MotionPlus:
+                                        _state = new WiimotePlus();
+                                        // TODO: Calibration: apply stored motion plus calibration
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsAccExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
+                                        break;
+
+                                    case ControllerType.PartiallyInserted:
+                                        // try again
+                                        // TODO: New: Make sure this works
+                                        GetStatus();
+                                        return;
+                                        //break;
+
+                                    case ControllerType.Drums:
+                                    case ControllerType.Guitar:
+                                    case ControllerType.TaikoDrum:
+                                        // TODO: New: Musicals
+                                        break;
+
+                                    default:
+                                        Log("Unhandled controller type");
+                                        break;
+                                }
+
+                                _currentType = newType;
+
+                                // TODO: Get calibration if PID != 330
+
+                                //_state.SetCalibration(Calibrations.CalibrationPreset.Default);
+
+                                // Fire ExtensionChange event
+                                //ExtensionChange(this, _currentType);
+                                ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
+                                
+                                // set Report
+                                ApplyReportingType(applyReport, continuiousReporting);
+                            }
+                            break;
+
+                        default:
+                            Log("Unrecognized Read Memory report");
+                            break;
+                    }
+                    #endregion
+                    break;
+
+                case InputReport.Acknowledge:
+                    #region Parse Acknowledgement
+                    Log("Output Acknowledged");
+
+                    if (report[4] == 0x03)
+                    {
+                        Log("Possible Error with Operation");
+                        return;
+                    }
+
+                    switch (_ackType)
+                    {
+                        case AcknowledgementType.NA:
+                            #region Default Acknowledgement
+                            Log("Acknowledgement Report");
+                            Log(BitConverter.ToString(report));
+                            // Core buttons can be parsed here
+                            // 20 BB BB LF 00 00 VV
+                            // 20 = Acknowledgement Report
+                            // BB BB = Core Buttons
+                            // LF = LED Status & Flags
+                            //     0x01 = Battery very low
+                            //     0x02 = Extension connected
+                            //     0x04 = Speaker enabled
+                            //     0x08 = IR camera enabled
+                            //     0x10 = LED 1
+                            //     0x20 = LED 2
+                            //     0x40 = LED 3
+                            //     0x80 = LED 4
+                            // VV = current battery level
+
+                            // Gather Flags
+                            _batteryLow    = (report[3] & 0x01) == 1;
+                            bool extension = (report[3] & 0x02) == 1;
+                            bool speaker   = (report[3] & 0x04) == 1;
+                            bool irOn      = (report[3] & 0x08) == 1;
+                            
+                            // Gather LEDs
+                            _led1 = (report[3] & 0x10) == 1;
+                            _led2 = (report[3] & 0x20) == 1;
+                            _led3 = (report[3] & 0x40) == 1;
+                            _led4 = (report[3] & 0x80) == 1;
+
+                            //if (extension)
+                            //{
+                            //    _readType = ReadReportType.Extension_A;
+                            //    ReadMemory(Constants.REGISTER_EXTENSION_TYPE_2, 1);
+                            //}
+                            //else if (_currentType != ControllerType.Wiimote)
+                            //{
+                            //    _currentType = ControllerType.Wiimote;
+                            //    _state = new Wiimote();
+                            //    _state.Update(report);
+                            //
+                            //    // Fire event
+                            //    ExtensionChange(this, new NintrollerExtensionEventArgs(_currentType));
+                            //
+                            //    // and set report
+                            //    SetReportType(InputReport.BtnsAccIR);
+                            //}
+                            #endregion
+                            break;
+
+                        case AcknowledgementType.IR_Step1:
+                            #region IR Step 1
+                            byte[] sensitivityBlock1 = null;
+                            
+                            switch (_irSensitivity)
+                            {
+                                case IRCamSensitivity.Custom:
+                                    sensitivityBlock1 = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0xC0 };
+                                    break;
+
+                                case IRCamSensitivity.CustomHigh:
+                                    sensitivityBlock1 = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0x41 };
+                                    break;
+
+                                case IRCamSensitivity.CustomMax:
+                                    sensitivityBlock1 = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x0C };
+                                    break;
+
+                                case IRCamSensitivity.Level1:
+                                    sensitivityBlock1 = new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x64, 0x00, 0xFE };
+                                    break;
+                                    
+                                case IRCamSensitivity.Level2:
+                                    sensitivityBlock1 = new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x96, 0x00, 0xB4 };
+                                    break;
+
+                                case IRCamSensitivity.Level4:
+                                    sensitivityBlock1 = new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xc8, 0x00, 0x36 };
+                                    break;
+
+                                case IRCamSensitivity.Level5:
+                                    sensitivityBlock1 = new byte[] { 0x07, 0x00, 0x00, 0x71, 0x01, 0x00, 0x72, 0x00, 0x20 };
+                                    break;
+
+                                case IRCamSensitivity.Level3:
+                                default:
+                                    sensitivityBlock1 = new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xaa, 0x00, 0x64 };
+                                    break;
+                            }
+
+                            _ackType = AcknowledgementType.IR_Step2;
+                            WriteToMemory(Constants.REGISTER_IR_SENSITIVITY_1, sensitivityBlock1);
+                            #endregion
+                            break;
+
+                        case AcknowledgementType.IR_Step2:
+                            #region IR Step 2
+                            byte[] sensitivityBlock2 = null;
+                            
+                            switch (_irSensitivity)
+                            {
+                                case IRCamSensitivity.Custom:
+                                    sensitivityBlock2 = new byte[] { 0x40, 0x00 };
+                                    break;
+
+                                case IRCamSensitivity.CustomHigh:
+                                    sensitivityBlock2 = new byte[] { 0x40, 0x00 };
+                                    break;
+
+                                case IRCamSensitivity.CustomMax:
+                                    sensitivityBlock2 = new byte[] { 0x00, 0x00 };
+                                    break;
+
+                                case IRCamSensitivity.Level1:
+                                    sensitivityBlock2 = new byte[] { 0xFD, 0x05 };
+                                    break;
+                                    
+                                case IRCamSensitivity.Level2:
+                                    sensitivityBlock2 = new byte[] { 0xB3, 0x04 };
+                                    break;
+
+                                case IRCamSensitivity.Level4:
+                                    sensitivityBlock2 = new byte[] { 0x35, 0x03 };
+                                    break;
+
+                                case IRCamSensitivity.Level5:
+                                    sensitivityBlock2 = new byte[] { 0x1F, 0x03 };
+                                    break;
+
+                                case IRCamSensitivity.Level3:
+                                default:
+                                    sensitivityBlock2 = new byte[] { 0x63, 0x03 };
+                                    break;
+                            }
+
+                            _ackType = AcknowledgementType.IR_Step3;
+                            WriteToMemory(Constants.REGISTER_IR_SENSITIVITY_2, sensitivityBlock2);
+                            #endregion
+                            break;
+
+                        case AcknowledgementType.IR_Step3:
+                            _ackType = AcknowledgementType.IR_Step4;
+                            WriteToMemory(Constants.REGISTER_IR_MODE, new byte[] { (byte)_irMode });
+                            break;
+
+                        case AcknowledgementType.IR_Step4:
+                            _ackType = AcknowledgementType.IR_Step5;
+                            WriteToMemory(Constants.REGISTER_IR, new byte[] { 0x08 });
+                            break;
+
+                        case AcknowledgementType.IR_Step5:
+                            #region Final IR Step
+                            Log("IR Camera Enabled");
+                            _ackType = AcknowledgementType.NA;
+
+                            switch (_irMode)
+                            {
+                                case IRCamMode.Off:
+                                    SetReportType(InputReport.BtnsAccExt);
+                                    break;
+
+                                case IRCamMode.Basic:
+                                    SetReportType(InputReport.BtnsAccIRExt);
+                                    break;
+
+                                case IRCamMode.Wide:
+                                    SetReportType(InputReport.BtnsAccIR);
+                                    break;
+
+                                case IRCamMode.Full:
+                                    // not a supported report type right now
+                                    SetReportType(InputReport.BtnsIRExt);
+                                    break;
+                            }
+                            #endregion
+                            break;
+
+                        default:
+                            Log("Unhandled acknowledgement");
+                            _ackType = AcknowledgementType.NA;
+                            Log(BitConverter.ToString(report));
+                            break;
+                    }
+                    #endregion
+                    break;
+                #endregion
+
+                #region Data Reports
                 case InputReport.BtnsOnly:
                 case InputReport.BtnsAcc:
                 case InputReport.BtnsExt:
@@ -601,337 +1174,228 @@ namespace NintrollerLib
                 case InputReport.BtnsIRExt:
                 case InputReport.BtnsAccIRExt:
                 case InputReport.ExtOnly:
-                    mDeviceState.ParseReport(report);
-                    break;
-                #region Data Reports OLD
-                /*case InputReport.BtnsOnly:
-                    Debug.WriteLine("Core Buttons");
-                    mDeviceState.ParseReport(report);
-                    break;
-
-                case InputReport.BtnsAcc:
-                    Debug.WriteLine("Core Buttons and Accelerometer");
-                    break;
-
-                case InputReport.BtnsExt:
-                    Debug.WriteLine("Core Buttons with 8 Extension bytes");
-                    break;
-
-                case InputReport.BtnsAccIR:
-                    Debug.WriteLine("Core Buttons and Accelerometer with 12 IR bytes");
-                    break;
-
-                case InputReport.BtnsExtB:
-                    Debug.WriteLine("Core buttons with 19 Extension Bytes");
-                    break;
-
-                case InputReport.BtnsAccExt:
-                    Debug.WriteLine("Core Buttons and Acceleromter with 16 Extension Bytes");
-                    break;
-
-                case InputReport.BtnsIRExt:
-                    Debug.WriteLine("Core Buttons with 10 IR bytes and 9 Extension Bytes");
-                    break;
-
-                case InputReport.BtnsAccIRExt:
-                    Debug.WriteLine("Core Buttons and Accelerometer with 10 IR bytes and 6 Extension Bytes");
-                    break;
-
-                case InputReport.ExtOnly:
-  //                  Debug.WriteLine("21 Extension Bytes");
-                    mDeviceState.ParseReport(report);
-                    break;*/
-                #endregion
-
-                // After we Identify the controller, we can change the input report type.
-                #region Status Reports
-                case InputReport.Status:
-                    Debug.WriteLine("Status Report");
-                    /// Parse Buttons? (maybe not)
-
-                    if (_readType == ReadReportType.EnableIR)
+                    if (_state != null)
                     {
-                        Debug.WriteLine("Requesting Status trying to Enable IR");
-                        InitIR();
-                        break;
-                    }
-
-                    // Get Extension
-                    //AsyncRead();
-                    //byte[] extensionType = ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
-                    //Debug.WriteLine("Extenstion Bytes: " + extensionType[0].ToString("x2"));
-                    lock (_readingObj)
-                    {
-                        _readType = ReadReportType.Extension_A;
-                        ReadData(Constants.REGISTER_EXTENSION_TYPE_2, 1);
-                    }
-
-                    //bool extensionConnected = (report[3] & 0x02) != 0;
-                    //Debug.WriteLine("Extension Connected: " + extensionConnected.ToString());
-
-                    // MOVED to InputReport.ReadMem
-
-                    // Battery Level
-                    mDeviceState.batteryRaw = report[6];
-                    mDeviceState.lowBattery = (report[3] & 0x01) != 0;
-                    mDeviceState.UpdateBattery();
-                    
-                    // Get LEDs
-                    mDeviceState.led1 = (report[3] & 0x10) != 0;
-                    mDeviceState.led2 = (report[3] & 0x20) != 0;
-                    mDeviceState.led3 = (report[3] & 0x40) != 0;
-                    mDeviceState.led4 = (report[3] & 0x80) != 0;
-
-                    // Get & Set the report type
-                    SetReport(mDeviceState.GetReportType());
-
-                    //mStatusDone.Set();
-                    break;
-
-                case InputReport.ReadMem:
-                    Debug.WriteLine("Read Memory");
-                    // Parse Buttons
-                    byte[] data = ParseRead(report);
-
-                    if (data == null && currentType == ControllerType.Unknown)
-                    {
-                        // Remove the extension
-                        ((WiimoteState)mDeviceState).extension = new ExtensionState();
-                        currentType = ControllerType.Wiimote;
-                        ((WiimoteState)mDeviceState).SetExtension(currentType);
-
-                        if (ExtensionChange != null)
-                            ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
-
-                        //EnableIR(IRSetting.Wide);
-                        SetReport(mDeviceState.GetReportType());
-                        break;
-                    }
-
-                    switch (_readType)
-                    {
-                        case ReadReportType.Extension_A:
-                            bool hasExtension = (report[3] & 0x0F) == 0;
-
-                            /// TODO: Account for Wiimote Plus controllers
-                            if (hasExtension)
-                            {
-                                lock (_readingObj)
-                                {
-                                    // Initialize the extension
-                                    if (report[0] != 0x04)
-                                    {
-                                        //AsyncRead();
-                                        WriteByte(Constants.REGISTER_EXTENSION_INIT_1, 0x55);
-                                        WriteByte(Constants.REGISTER_EXTENSION_INIT_2, 0x00);
-                                    }
-
-                                    //AsyncRead();
-                                    //byte[] ext = ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
-                                    _readType = ReadReportType.Extension_B;
-                                    ReadData(Constants.REGISTER_EXTENSION_TYPE, 6);
-                                }
-
-                                // MOVED to ReadReportType.Extension_B
-                            }
-                            else if (currentType != ControllerType.Wiimote)
-                            {
-                                // Remove the extension
-                                ((WiimoteState)mDeviceState).extension = new ExtensionState();
-                                currentType = ControllerType.Wiimote;
-                                ((WiimoteState)mDeviceState).SetExtension(currentType);
-
-                                if (ExtensionChange != null)
-                                    ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
-
-                                //EnableIR(IRSetting.Wide);
-                                SetReport(mDeviceState.GetReportType());
-                            }
-                            break;
-
-                        case ReadReportType.Extension_B:
-                            if (report.Length < 6)
-                            {
-                                return false;
-                            }
-
-                            byte[] r = new byte[6];
-                            Array.Copy(report, 6, r, 0, 6);
-                            long type = ((long)r[0] << 40) | ((long)r[1] << 32) | ((long)r[2]) << 24 | ((long)r[3]) << 16 | ((long)r[4]) << 8 | r[5];
-                            
-                            Debug.WriteLine((ControllerType)type);
-
-                            if (currentType != (ControllerType)type)
-                            {
-                                currentType = (ControllerType)type;
-
-                                switch ((ControllerType)type)
-                                {
-                                    case ControllerType.ProController:
-                                        mDeviceState = new ProControllerState();
-                                        break;
-                                    case ControllerType.BalanceBoard:
-                                        mDeviceState = new BalanceBoardState();
-                                        break;
-                                    case ControllerType.Nunchuk:
-                                    case ControllerType.NunchukB:
-                                    case ControllerType.ClassicController:
-                                    case ControllerType.ClassicControllerPro:
-                                    case ControllerType.MotionPlus:
-                                        ((WiimoteState)mDeviceState).SetExtension(currentType);
-                                        break;
-                                    ///TODO: Musicals
-                                    case ControllerType.PartiallyInserted:
-                                        // try again
-                                        GetStatus();
-                                        break;
-                                    default:
-                                        Debug.WriteLine("Unidentifed Extension");
-                                        break;
-                                }
-
-                                // TODO: if not a pro or newer (check PID?) get the calibration
-
-                                if (ExtensionChange != null)
-                                    ExtensionChange(this, new ExtensionChangeEventArgs(mID, currentType));
-
-                                SetReport(mDeviceState.GetReportType());
-                            }
-                            else if (currentType == ControllerType.PartiallyInserted)
-                            {
-                                // keep trying until it is fully inserted
-                                Thread.Sleep(20);
-                                GetStatus();
-                            }
-                            break;
-
-                        default:
-                            Debug.WriteLine("Don't know what ReadMem this is for");
-                            break;
-                    }
-                    break;
-
-                case InputReport.Acknowledge:
-                    Debug.WriteLine("Acknowledge Report");
-                    Debug.WriteLine(ByteString(report));
-                    //mWriteDone.Set();
-
-
-                    // Test
-                    switch (_ackType)
-                    {
-                        case New.AcknowledgementType.IR_Step1:
-                            _ackType = New.AcknowledgementType.IR_Step2;
-                            WriteBytes(Constants.REGISTER_IR_SENSITIVITY_1, 9, new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x90, 0x00, 0x41 });
-                            break;
-
-                        case New.AcknowledgementType.IR_Step2:
-                            _ackType = New.AcknowledgementType.IR_Step3;
-                            WriteBytes(Constants.REGISTER_IR_SENSITIVITY_2, 2, new byte[] { 0x40, 0x00 });
-                            break;
-
-                        case New.AcknowledgementType.IR_Step3:
-                            _ackType = New.AcknowledgementType.IR_Step4;
-                            WriteBytes(Constants.REGISTER_IR_MODE, 1, new byte[] { 0x01 });
-                            break;
-
-                        case New.AcknowledgementType.IR_Step4:
-                            _ackType = New.AcknowledgementType.IR_Step5;
-                            WriteBytes(Constants.REGISTER_IR, 1, new byte[] { 0x08 });
-                            break;
-
-                        case New.AcknowledgementType.IR_Step5:
-                            Debug.WriteLine("IR Camera Enabled");
-
-                            SetReport(InputReport.BtnsAccIRExt);
-                            _ackType = New.AcknowledgementType.NA;
-                            break;
-
-                        default:
-                            Debug.WriteLine("Unhandled acknowledgement");
-                            _ackType = New.AcknowledgementType.NA;
-                            break;
+                        _state.Update(report);
+                        var arg = new NintrollerStateEventArgs(_currentType, _state, BatteryLevel);
+                        StateUpdate(this, arg);
                     }
                     break;
                 #endregion
+
                 default:
-                    Debug.WriteLine("Couldn't Parse Report type: " + input.ToString("x"));
-                    return false;
+                    Log("Unexpected Report type: " + input.ToString("x"));
+                    break;
             }
-
-            return true;
         }
 
-        private byte[] ParseRead(byte[] r)
-        {
-            try
-            {
-                if ((r[3] & 0x08) != 0)
-                    throw new Exception("Can't read bytes, memory address doesn't exist.");
-
-                if ((r[3] & 0x07) != 0)
-                {
-                    Debug.WriteLine("Trying to Read in Write-Only mode, or no expansion connected");
-                    Debug.WriteLine(ByteString(r));
-                    //mReadDone.Set();
-                    return null;
-                }
-
-                int size = (r[3] >> 4) + 1;
-                int offset = (r[4] << 8 | r[5]);
-
-                Array.Copy(r, 6, mReadBuff, offset - mAddress, size);
-
-                // need another way to read an incomplete message?
-                //if (mAddress + mSize == offset + size)
-                    //mReadDone.Set();
-                if (mAddress + mSize != offset + size) Debug.WriteLine("Reading isn't done");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Error trying to read: " + ex.Message);
-                //mReadDone.Set();
-            }
-
-            return mReadBuff;
-        }
         #endregion
 
-        #region Settings
+        #region General
         /// <summary>
-        /// Sets each LED individually.
+        /// Builds a list of HID paths for Nintendo Controllers.
         /// </summary>
-        /// <param name="LED1">Leftmost LED</param>
-        /// <param name="LED2">Center left LED</param>
-        /// <param name="LED3">Center right LED</param>
-        /// <param name="LED4">Rightmost LED</param>
-        public void SetLEDs(bool LED1, bool LED2, bool LED3, bool LED4)
+        /// <returns>A list of HID paths</returns>
+        public static List<string> GetControllerPaths()
         {
-            mDeviceState.led1 = LED1;
-            mDeviceState.led2 = LED2;
-            mDeviceState.led3 = LED3;
-            mDeviceState.led4 = LED4;
+            List<string> result = new List<string>();
+            Guid hidGuid;
+            int index = 0;
+            SafeFileHandle mHandle;
 
-            if (mDeviceState.hasLEDs)
-                WriteLEDs();
+            // Get GUID of the HID class
+            HIDImports.HidD_GetHidGuid(out hidGuid);
+
+            // handle for HID devices
+            IntPtr hDevInfo = HIDImports.SetupDiGetClassDevs(ref hidGuid, null, IntPtr.Zero, HIDImports.DIGCF_DEVICEINTERFACE);
+            HIDImports.SP_DEVICE_INTERFACE_DATA diData = new HIDImports.SP_DEVICE_INTERFACE_DATA();
+            diData.cbSize = Marshal.SizeOf(diData);
+
+            // Step through all devices
+            while (HIDImports.SetupDiEnumDeviceInterfaces(hDevInfo, IntPtr.Zero, ref hidGuid, index, ref diData))
+            {
+                UInt32 size;
+                // get device buffer size
+                HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, IntPtr.Zero, 0, out size, IntPtr.Zero);
+
+                // create detail struct
+                HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA diDetail = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
+                diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
+
+                // populate detail struct
+                if (HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, ref diDetail, size, out size, IntPtr.Zero))
+                {
+                    // open read/write handle for the device
+                    mHandle = HIDImports.CreateFile(diDetail.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+
+                    // create attributes structure
+                    HIDImports.HIDD_ATTRIBUTES attrib = new HIDImports.HIDD_ATTRIBUTES();
+                    attrib.Size = Marshal.SizeOf(attrib);
+
+                    // populate attributes
+                    if (HIDImports.HidD_GetAttributes(mHandle.DangerousGetHandle(), ref attrib))
+                    {
+                        // check if it matches what we are looking for
+                        if (attrib.VendorID == Constants.VID && (attrib.ProductID == Constants.PID1 || attrib.ProductID == Constants.PID2))
+                        {
+                            result.Add(diDetail.DevicePath);
+                        }
+                    }
+
+                    mHandle.Close();
+                }
+                else
+                {
+                    Log("Failed to get info on a device.");
+                }
+
+                index += 1;
+            }
+
+            // clean up
+            HIDImports.SetupDiDestroyDeviceInfoList(hDevInfo);
+            Log("Total Controllers Found: " + result.Count.ToString());
+            return result;
         }
-        
+
+        internal static float Normalize(int raw, int min, int center, int max, int dead)
+        {
+            //float availableRange = 0f;
+            //float actualValue = 0f;
+
+            //if (Math.Abs(center - raw) < dead)
+            //{
+            //    return 0f;
+            //}
+            //else if (raw - center > 0)
+            //{
+            //    availableRange = max - (center + dead);
+            //    actualValue = raw - (center + dead);
+
+            //    if (availableRange == 0)
+            //    {
+            //        return 0f;
+            //    }
+
+            //    return (actualValue / availableRange);
+            //}
+            //else
+            //{
+            //    availableRange = center - dead - min;
+            //    actualValue = raw - center;
+
+            //    if (availableRange == 0)
+            //    {
+            //        return 0f;
+            //    }
+
+            //    return (actualValue / availableRange) - 1f;
+            //}
+
+            float actual = 0;
+            float range = 0;
+
+            if (Math.Abs(center - raw) <= dead)
+            {
+                return 0f;
+            }
+            else
+            {
+                if (raw > center)
+                {
+                    actual = raw - (center + dead);
+                    range = max - (center + dead);
+                }
+                else if (raw < center)
+                {
+                    actual = raw - (center - dead);
+                    range = (center - dead) - min;
+                }
+            }
+
+            if (range == 0)
+                return 0f;
+
+            return actual / range;
+        }
+
+        internal static float Normalize(float raw, float min, float center, float max, float dead)
+        {
+            float availableRange = 0f;
+            float actualValue = 0f;
+
+            if (Math.Abs(center - raw) < dead)
+            {
+                return 0f;
+            }
+            else if (raw - center > 0)
+            {
+                availableRange = max - (center + dead);
+                actualValue = raw - (center + dead);
+
+                return (actualValue / availableRange);
+            }
+            else
+            {
+                availableRange = center - dead - min;
+                actualValue = raw - center;
+
+                return (actualValue / availableRange) - 1f;
+            }
+        }
+
+        private void EnableIR()
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            buffer[0] = (byte)OutputReport.IREnable;
+            buffer[1] = (byte)(0x04);
+            SendData(buffer);
+
+            buffer[0] = (byte)OutputReport.IREnable2;
+            buffer[1] = (byte)(0x04);
+            SendData(buffer);
+
+            _ackType = AcknowledgementType.IR_Step1;
+            WriteToMemory(Constants.REGISTER_IR, new byte[] { 0x08 });
+            // continue other steps in Acknowledgement Reporting
+        }
+
+        private void DisableIR()
+        {
+            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            buffer[0] = (byte)OutputReport.IREnable;
+            buffer[1] = (byte)(0x00);
+            SendData(buffer);
+
+            buffer[0] = (byte)OutputReport.IREnable2;
+            buffer[1] = (byte)(0x00);
+            SendData(buffer);
+
+            // TODO: New: Check if we need to monitor the acknowledgment report
+        }
+
+        private void StartMotionPlus()
+        {
+            // TODO: New: Motion Plus
+            // determine if we need to pass through Nunchuck or Classic Controller
+            //WriteByte(Constants.REGISTER_MOTIONPLUS_INIT, 0x04);
+            //WriteToMemory(Constants.REGISTER_MOTIONPLUS_INIT, new byte[] { 0x04 });
+        }
+
         /// <summary>
         /// Sets the LEDs to a reversed binary display.
         /// </summary>
         /// <param name="bin">Decimal binary value to use (0 - 15).</param>
-        public void SetLEDs(int bin)
+        public void SetBinaryLEDs(int bin)
         {
-            mDeviceState.led1 = (bin & 0x01) > 0;
-            mDeviceState.led2 = (bin & 0x02) > 0;
-            mDeviceState.led3 = (bin & 0x04) > 0;
-            mDeviceState.led4 = (bin & 0x08) > 0;
+            _led1 = (bin & 0x01) > 0;
+            _led2 = (bin & 0x02) > 0;
+            _led3 = (bin & 0x04) > 0;
+            _led4 = (bin & 0x08) > 0;
 
-            if (mDeviceState.hasLEDs)
-                WriteLEDs();
+            ApplyLEDs();
         }
 
-        // set leds to a player number (1 = 1st, 2 = 2nd, 3 = 3rd, 4 = 4th 5 = 1st & 2nd, ect.)
         /// <summary>
         /// Sets the LEDs to correspond with the player number.
         /// (e.g. 1 = 1st LED &amp; 4 = 4th LED)
@@ -941,280 +1405,177 @@ namespace NintrollerLib
         {
             // 1st LED
             if (num == 1 || num == 5 || num == 8 || num == 10 || num == 11 || num > 12)
-                mDeviceState.led1 = true;
+                _led1 = true;
             else
-                mDeviceState.led1 = false;
+                _led1 = false;
 
             // 2nd LED
             if (num == 2 || num == 5 || num == 6 || num == 9 || num == 11 || num == 12 || num > 13)
-                mDeviceState.led2 = true;
+                _led2 = true;
             else
-                mDeviceState.led2 = false;
+                _led2 = false;
 
             // 3rd LED
             if (num == 3 || num == 6 || num == 7 || num == 8 || num == 11 || num == 12 || num == 13 || num == 15)
-                mDeviceState.led3 = true;
+                _led3 = true;
             else
-                mDeviceState.led3 = false;
+                _led3 = false;
 
             // 4th LED
             if (num == 4 || num == 7 || num == 9 || num == 10 || num > 11)
-                mDeviceState.led4 = true;
+                _led4 = true;
             else
-                mDeviceState.led4 = false;
+                _led4 = false;
 
-            if (mDeviceState.hasLEDs)
-                WriteLEDs();
+            ApplyLEDs();
         }
 
         /// <summary>
-        /// Enable or Disable the rumble.
+        /// Forces the controller to be read as the provided type.
         /// </summary>
-        /// <param name="set">Rumble State</param>
-        public void SetRumble(bool set)
+        /// <param name="type">Type to be parsed as. Setting it to Unknown or Partially Inserted clears it.</param>
+        public void ForceControllerType(ControllerType type)
         {
-            mDeviceState.SetRumble(set);
-            WriteLEDs();
-        }
+            _forceType = type;
 
-        /// <summary>
-        /// Initiate the Motion Plus Extension
-        /// </summary>
-        public void StartMotionPlus()
-        {
-            /// TODO: determine if we need to pass through Nunchuck or Classic Controller
-            WriteByte(Constants.REGISTER_MOTIONPLUS_INIT, 0x04);
-        }
-
-        public void InitIRCamera()
-        {
-            lock (_readingObj)
+            if (_connected)
             {
-                Debug.WriteLine("Enable IR");
-                byte[] buff = new byte[Constants.REPORT_LENGTH];
-
-                // Enable IR Camera on output report 0x13
-                buff[0] = (byte)OutputReport.IREnable;
-                buff[1] = (byte)(0x04);
-                WriteReport(buff);
-
-                // Enable IR Camera 2 on output report 0x1a
-                buff[0] = (byte)OutputReport.IREnable2;
-                WriteReport(buff);
-
-                // Write to register 0xb000030
-                WriteByte(Constants.REGISTER_IR, 0x08);
-                
-                // Default here is sensitivity level 2
-                // Write Sensitivity Block 1 to register 0xb00000
-                WriteBytes(Constants.REGISTER_IR_SENSITIVITY_1, 9, new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x96, 0x00, 0xb4 });
-
-                // Write Sensitivity Block 2 to register 0xb0001a
-                WriteBytes(Constants.REGISTER_IR_SENSITIVITY_2, 2, new byte[] { 0xb3, 0x04 });
-
-                //case IRSensitivity.WiiLevel1:
-                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x64, 0x00, 0xfe});
-                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0xfd, 0x05});
-                //    break;
-                //case IRSensitivity.WiiLevel2:
-                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x96, 0x00, 0xb4});
-                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0xb3, 0x04});
-                //    break;
-                //case IRSensitivity.WiiLevel3:
-                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xaa, 0x00, 0x64});
-                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0x63, 0x03});
-                //    break;
-                //case IRSensitivity.WiiLevel4:
-                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xc8, 0x00, 0x36});
-                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0x35, 0x03});
-                //    break;
-                //case IRSensitivity.WiiLevel5:
-                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x07, 0x00, 0x00, 0x71, 0x01, 0x00, 0x72, 0x00, 0x20});
-                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0x1, 0x03});
-                //    break;
-                //case IRSensitivity.Maximum:
-                //    WriteData(REGISTER_IR_SENSITIVITY_1, 9, new byte[] {0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x90, 0x00, 0x41});
-                //    WriteData(REGISTER_IR_SENSITIVITY_2, 2, new byte[] {0x40, 0x00});
-                //    break;
-
-                // Write mode number to register 0xb00033
-                WriteByte(Constants.REGISTER_IR_MODE, (byte)IRSetting.Wide);
-
-                // Write to register 0xb000030
-                WriteByte(Constants.REGISTER_IR, 0x08);
-                Debug.WriteLine("IR Enabled");
-                SetReport(InputReport.BtnsAccIR);
+                GetStatus();
             }
         }
 
-        private void EnableIR(IRSetting type)
-        {
-            Debug.WriteLine("Enable IR");
-            byte[] buff = new byte[Constants.REPORT_LENGTH];
-
-            buff[0] = (byte)OutputReport.IREnable;
-            buff[1] = (byte)(0x04);
-            WriteReport(buff);
-
-            buff[0] = (byte)OutputReport.IREnable2;
-            buff[1] = (byte)(0x04);
-            WriteReport(buff);
-
-            // TODO: we need to wait for the acknowledgement report after writing to each register
-            WriteByte(Constants.REGISTER_IR, 0x08);
-
-            WriteBytes(Constants.REGISTER_IR_SENSITIVITY_1, 9, new byte[] { 0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x90, 0x00, 0x41 });
-            WriteBytes(Constants.REGISTER_IR_SENSITIVITY_2, 2, new byte[] { 0x40, 0x00 });
-
-            WriteByte(Constants.REGISTER_IR_MODE, (byte)type); // wiimote lib seems to be writing 0x01 (Basic)
-
-            WriteByte(Constants.REGISTER_IR, 0x08);
-            Debug.WriteLine("IR Enabled");
-        }
-
-        private void DisableIR()
-        {
-            byte[] buff = new byte[Constants.REPORT_LENGTH];
-
-            buff[0] = (byte)OutputReport.IREnable;
-            buff[1] = (byte)(0x00);
-            WriteReport(buff);
-
-            buff[0] = (byte)OutputReport.IREnable2;
-            buff[1] = (byte)(0x00);
-            WriteReport(buff);
-        }
         #endregion
 
-        #region Setting Calibration
-        /// <summary>
-        /// Set's the controller's calibration
-        /// </summary>
-        /// <param name="calibration">Pro Controller's Calibration</param>
-        public void UpdateCalibration(ProCalibration calibration)
-        {
-            mCalibrationPro = calibration;
-            if (mDeviceState.GetType() == typeof(ProControllerState))
-                ((ProControllerState)mDeviceState).SetCalibration(calibration);
-        }
+        #region Calibration
 
         /// <summary>
-        /// Set's the controller's calibration
+        /// Sets the device's calibrations based on a preset.
         /// </summary>
-        /// <param name="calibration">Wiimote's Calibration</param>
-        public void UpdateCalibration(WiimoteCalibration calibration)
+        /// <param name="preset">Preset to be used.</param>
+        public void SetCalibration(Calibrations.CalibrationPreset preset)
         {
-            mCalibrationWiimote = calibration;
-            if (mDeviceState.GetType() == typeof(WiimoteState))
-                ((WiimoteState)mDeviceState).SetCalibration(calibration);
+            _state.SetCalibration(preset);
+            _calibrations.SetCalibrations(preset);
         }
-
         /// <summary>
-        /// Set's the controller's calibration
+        /// Sets the device's calibrations based on a string.
         /// </summary>
-        /// <param name="calibration">Nunchuck's Calibration</param>
-        public void UpdateCalibration(NunchukCalibration calibration)
+        /// <param name="calibrationStorageString">Calibration storage string to use.</param>
+        public void SetCalibration(string calibrationStorageString)
         {
-            mCalibrationNunchuck = calibration;
-            if (mDeviceState.GetType() == typeof(WiimoteState))
+            _calibrations.SetCalibrations(calibrationStorageString);
+            
+            // TODO: apply 
+        }
+        /// <summary>
+        /// Sets the controller calibration for the Wiimote
+        /// </summary>
+        /// <param name="wiimoteCalibration">The Wiimote Struct with the calibration values to use</param>
+        public void SetCalibration(Wiimote wiimoteCalibration)
+        {
+            _calibrations.WiimoteCalibration = wiimoteCalibration;
+
+            if (_currentType == ControllerType.Wiimote || 
+                _currentType == ControllerType.Nunchuk || 
+                _currentType == ControllerType.NunchukB ||
+                _currentType == ControllerType.ClassicController || 
+                _currentType == ControllerType.ClassicControllerPro)
             {
-                if (((WiimoteState)mDeviceState).extension.GetType() == typeof(NunchukState))
-                    ((NunchukState)((WiimoteState)mDeviceState).extension).SetCalibration(calibration);
+                _state.SetCalibration(wiimoteCalibration);
+            }
+        }
+        /// <summary>
+        /// Sets the controller calibration for the Nunchuk
+        /// </summary>
+        /// <param name="nunchukCalibration">The Nunchuk Struct with the calibration values to use</param>
+        public void SetCalibration(Nunchuk nunchukCalibration)
+        {
+            _calibrations.NunchukCalibration = nunchukCalibration;
+
+            if (_currentType == ControllerType.Nunchuk || _currentType == ControllerType.NunchukB)
+            {
+                _state.SetCalibration(nunchukCalibration);
+            }
+        }
+        /// <summary>
+        /// Sets the controller calibration for the Classic Controller
+        /// </summary>
+        /// <param name="classicCalibration">The ClassicController Struct with the calibration values to use</param>
+        public void SetCalibration(ClassicController classicCalibration)
+        {
+            _calibrations.ClassicCalibration = classicCalibration;
+
+            if (_currentType == ControllerType.ClassicController)
+            {
+                _state.SetCalibration(classicCalibration);
+            }
+        }
+        /// <summary>
+        /// Sets the controller calibration for the Classic Controller Pro
+        /// </summary>
+        /// <param name="classicProCalibration">The ClassicControllerPro Struct with the calibration values to use</param>
+        public void SetCalibration(ClassicControllerPro classicProCalibration)
+        {
+            _calibrations.ClassicProCalibration = classicProCalibration;
+
+            if (_currentType == ControllerType.ClassicControllerPro)
+            {
+                _state.SetCalibration(classicProCalibration);
+            }
+        }
+        /// <summary>
+        /// Sets the controller calibration for the Pro Controller
+        /// </summary>
+        /// <param name="proCalibration">The ProController Struct with the calibration values to use</param>
+        public void SetCalibration(ProController proCalibration)
+        {
+            _calibrations.ProCalibration = proCalibration;
+
+            if (_currentType == ControllerType.ProController)
+            {
+                _state.SetCalibration(proCalibration);
             }
         }
 
-        /// <summary>
-        /// Set's the controller's calibration
-        /// </summary>
-        /// <param name="calibration">Classic Controller's Calibration</param>
-        public void UpdateCalibration(ClassicControllerCalibration calibration)
-        {
-            mCalibrationClassic = calibration;
-            if (mDeviceState.GetType() == typeof(WiimoteState))
-            {
-                if (((WiimoteState)mDeviceState).extension.GetType() == typeof(ClassicControllerState))
-                    ((ClassicControllerState)((WiimoteState)mDeviceState).extension).SetCalibration(calibration);
-            }
-        }
-
-        /// <summary>
-        /// Set's the controller's calibration
-        /// </summary>
-        /// <param name="calibration">Classic Controller Pro's Calibration</param>
-        public void UpdateCalibration(ClassicControllerProCalibration calibration)
-        {
-            mCalibrationClassicPro = calibration;
-            if (mDeviceState.GetType() == typeof(WiimoteState))
-            {
-                if (((WiimoteState)mDeviceState).extension.GetType() == typeof(ClassicControllerProState))
-                    ((ClassicControllerProState)((WiimoteState)mDeviceState).extension).SetCalibration(calibration);
-            }
-        }
-
-        /* TODO: Motion Plus Calibration
-        public void UpdateCalibration(MotionPlusCalibration calibration)
-        {
-            mCalibrationMotionPlus = calibration;
-            if (mDeviceState.GetType() == typeof(WiimoteState))
-            {
-                if (((WiimoteState)mDeviceState).Extension.GetType() == typeof(MotionPlusState))
-                    ((MotionPlusState)((WiimoteState)mDeviceState).Extension).SetCalibration(calibration);
-            }
-        }
-        */
         #endregion
+    }
 
-        private New.AcknowledgementType _ackType = New.AcknowledgementType.NA;
-        public void EnableIR()
+    #region New Event Args
+
+    public class NintrollerStateEventArgs : EventArgs
+    {
+        public ControllerType controllerType;
+        public INintrollerState state;
+        public BatteryStatus batteryLevel;
+        
+        public NintrollerStateEventArgs(ControllerType type, INintrollerState state, BatteryStatus battery)
         {
-            _readType = ReadReportType.EnableIR;
-
-            //byte[] test = new byte[Constants.REPORT_LENGTH];
-            //test[0] = (byte)OutputReport.ReadMemory;
-            //test[4] = 16;
-            //test[6] = 17;
-            // WriteReport(test);
-            //17-00-00-00-16-00-07-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
-
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
-            buffer = new byte[Constants.REPORT_LENGTH];
-            buffer[0] = (byte)OutputReport.StatusRequest;
-            WriteReport(buffer);
-            //15-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
-        }
-        private void InitIR()
-        {
-            //ControllerType[] compatableTypes = new ControllerType[]
-            //{
-            //    ControllerType.Wiimote,
-            //    ControllerType.Nunchuk,
-            //    ControllerType.NunchukB,
-            //    ControllerType.MotionPlus,
-            //    ControllerType.ClassicController,
-            //    ControllerType.ClassicControllerPro
-            //};
-
-            //if ( Array!compatableTypes.Contains(_currentType))
-            //{
-            //    Log("Can't Enabled IR Camera for type " + _currentType.ToString());
-            //}
-            //else
-            //{
-                Debug.WriteLine("Enabling IR Camera");
-
-                byte[] buffer = new byte[Constants.REPORT_LENGTH];
-                buffer[0] = (byte)OutputReport.IREnable;
-                buffer[1] = (byte)(0x04);
-                WriteReport(buffer);
-
-                buffer[0] = (byte)OutputReport.IREnable2;
-                buffer[1] = (byte)(0x04);
-                WriteReport(buffer);
-
-                _ackType = New.AcknowledgementType.IR_Step1;
-                WriteBytes(Constants.REGISTER_IR, 1, new byte[] { 0x08 });
-                // continue other steps in Acknowledgement Reporting
-            //}
+            this.controllerType = type;
+            this.state          = state;
+            this.batteryLevel   = battery;
         }
     }
+
+    public class NintrollerExtensionEventArgs : EventArgs
+    {
+        public ControllerType controllerType;
+
+        public NintrollerExtensionEventArgs(ControllerType type)
+        {
+            controllerType = type;
+        }
+    }
+
+    public class LowBatteryEventArgs : EventArgs
+    {
+        public BatteryStatus batteryLevel;
+
+        public LowBatteryEventArgs(BatteryStatus level)
+        {
+            batteryLevel = level;
+        }
+    }
+
+    #endregion
+
 }
