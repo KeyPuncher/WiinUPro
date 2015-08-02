@@ -37,7 +37,9 @@ namespace WiinUSoft.Inputs
         public const string ACC_RIGHT    = "wACCRIGHT";
         public const string ACC_FORWARD  = "wACCFORWARD";
         public const string ACC_BACKWARD = "wACCBACKWARD";
-        public const string ACC_SHAKE    = "wACCSHAKE";
+        public const string ACC_SHAKE_X  = "wACCSHAKEX";
+        public const string ACC_SHAKE_Y  = "wACCSHAKEY";
+        public const string ACC_SHAKE_Z  = "wACCSHAKEZ";
 
         // Pointer from IR camera
         public const string IR_X         = "wIRX";

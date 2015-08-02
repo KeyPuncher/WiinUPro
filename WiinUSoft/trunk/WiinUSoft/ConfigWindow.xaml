@@ -48,7 +48,7 @@
         <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="500" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
         <Label x:Name="mapLabel" Content="Guide" Canvas.Left="365" Canvas.Top="-2" Width="100" FontWeight="Bold"/>
         <!-- Device to Map (Pro Controller) -->
-        <Grid x:Name="ProGrid" Canvas.Left="10" Canvas.Top="94" Height="200" Visibility="Visible">
+        <Grid x:Name="ProGrid" Canvas.Left="10" Canvas.Top="94" Height="200" Visibility="Hidden">
             <Image Source="Images/ProController_map_white.png" Height="220" IsHitTestVisible="False" Margin="16,-16,-16,-4"/>
             <Rectangle x:Name="pro_upClick" HorizontalAlignment="Left" Height="21" Margin="102,77,0,0" VerticalAlignment="Top" Width="16" ToolTip="D-pad Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="pro_downClick" HorizontalAlignment="Left" Height="20" Margin="102,105,0,0" VerticalAlignment="Top" Width="16" ToolTip="D-pad Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
@@ -77,9 +77,10 @@
             <Rectangle x:Name="pro_rsClick" HorizontalAlignment="Left" Height="16" Margin="246,48,0,0" VerticalAlignment="Top" Width="18" ToolTip="RS" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
         </Grid>
         <!-- Device to Map (Wiimote) -->
-        <Grid x:Name="WmGrid" Canvas.Left="10" Canvas.Top="50" Width="232" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
+        <Grid x:Name="WmGrid" Canvas.Left="10" Canvas.Top="50" Width="232" RenderTransformOrigin="0.5,0.5">
             <Image IsHitTestVisible="False" Source="Images/WiimoteFront_map.png" Height="300" Margin="10,0,124,0"/>
             <Image IsHitTestVisible="False" Height="300" Source="Images/WiimoteBack_map.png" Margin="106,0,27,0" />
+            <!--<Image IsHitTestVisible="False" Source="Images/axisMaps.png" Margin="71,113,-8,43"/>-->
             <Rectangle x:Name="wm_upClick" HorizontalAlignment="Left" Height="16" Margin="53,35,0,0" VerticalAlignment="Top" Width="12" ToolTip="D-pad Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="wm_downClick" HorizontalAlignment="Left" Height="16" Margin="53,56,0,0" VerticalAlignment="Top" Width="12" ToolTip="D-pad Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="wm_leftClick" HorizontalAlignment="Left" Height="12" Margin="37,46,0,0" VerticalAlignment="Top" Width="16" ToolTip="D-pad Left" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
@@ -149,15 +150,23 @@
             <Rectangle x:Name="ccp_rdownClick" HorizontalAlignment="Left" Height="24" Margin="196,142,0,0" VerticalAlignment="Top" Width="18" ToolTip="RDown" Stroke="Black" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" StrokeThickness="0"/>
         </Grid>
         <!-- Device to Map (Nunchuk) -->
-        <Grid x:Name="NkGrid" Canvas.Left="220" Canvas.Top="48" Visibility="Hidden">
-            <Image IsHitTestVisible="False" Source="Images/Nunchuck_map.png" Height="300" />
+        <Grid x:Name="NkGrid" Canvas.Left="220" Canvas.Top="48" Visibility="Visible">
+            <Image IsHitTestVisible="False" Source="Images/Nunchuck_map.png" Margin="0,0,0,0" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Image IsHitTestVisible="False" Source="Images/axisMaps.png" Margin="0,100,0,0" Width="150" Height="150" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Rectangle x:Name="nk_upClick" HorizontalAlignment="Left" Height="25" Margin="79,24,0,0" VerticalAlignment="Top" Width="20" ToolTip="D-pad Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="nk_downClick" HorizontalAlignment="Left" Height="25" Margin="79,55,0,0" VerticalAlignment="Top" Width="20" ToolTip="D-pad Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="nk_leftClick" HorizontalAlignment="Left" Height="22" Margin="58,41,0,0" VerticalAlignment="Top" Width="21" ToolTip="D-pad Left" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="nk_rightClick" HorizontalAlignment="Left" Height="22" Margin="99,41,-6.6,0" VerticalAlignment="Top" Width="22" ToolTip="D-pad Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="nk_zClick" HorizontalAlignment="Left" Height="34" Margin="2,34,0,0" VerticalAlignment="Top" Width="23" ToolTip="Z" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Ellipse x:Name="nk_cClick" HorizontalAlignment="Left" Height="22" Margin="17,12,0,0" VerticalAlignment="Top" Width="22" ToolTip="C" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
-            <!-- TODO: Accelerometer -->
+            <!-- Accelerometer -->
+            <Ellipse x:Name="nk_aUpClick" HorizontalAlignment="Left" Height="24" Margin="58,108,0,0" VerticalAlignment="Top" Width="24" ToolTip="Shake Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="nk_aRightClick" HorizontalAlignment="Left" Height="24" Margin="12,187,0,0" VerticalAlignment="Top" Width="24" ToolTip="Shake Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Ellipse x:Name="nk_aForwardClick" HorizontalAlignment="Left" Height="24" Margin="105,187,0,0" VerticalAlignment="Top" Width="24" ToolTip="Shake Forward" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="nk_aPitchClick" HorizontalAlignment="Left" Height="21" Margin="77,135,0,0" VerticalAlignment="Top" Width="17" ToolTip="Tilt Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="nk_aPitchNegClick" HorizontalAlignment="Left" Height="18" Margin="77,160,0,0" VerticalAlignment="Top" Width="17" ToolTip="Tilt Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="nk_aRollClick" HorizontalAlignment="Left" Height="18" Margin="21,168,0,0" VerticalAlignment="Top" Width="17" ToolTip="Tilt Left" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="nk_aRollNegClick" HorizontalAlignment="Left" Height="18" Margin="41,179,0,0" VerticalAlignment="Top" Width="17" ToolTip="Tilt Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
         </Grid>
         <Ellipse x:Name="selectionDevice" Height="36" Canvas.Left="160" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
         <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="178" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False"/>

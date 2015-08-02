@@ -266,6 +266,13 @@ namespace WiinUSoft
                     deviceShapes.Add(nk_leftClick, Inputs.Nunchuk.LEFT);
                     deviceShapes.Add(nk_rightClick, Inputs.Nunchuk.RIGHT);
                     // TODO: other Nunchuk Clickables (Acc) (not for 1st release)
+                    deviceShapes.Add(nk_aRightClick, Inputs.Nunchuk.ACC_SHAKE_X);
+                    deviceShapes.Add(nk_aUpClick, Inputs.Nunchuk.ACC_SHAKE_Y);
+                    deviceShapes.Add(nk_aForwardClick, Inputs.Nunchuk.ACC_SHAKE_Z);
+                    deviceShapes.Add(nk_aRollClick, Inputs.Nunchuk.TILT_LEFT);
+                    deviceShapes.Add(nk_aRollNegClick, Inputs.Nunchuk.TILT_RIGHT);
+                    deviceShapes.Add(nk_aPitchClick, Inputs.Nunchuk.TILT_UP);
+                    deviceShapes.Add(nk_aPitchNegClick, Inputs.Nunchuk.TILT_DOWN);
                     #endregion
                 }
             }
