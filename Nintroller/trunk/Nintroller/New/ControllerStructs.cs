@@ -1228,6 +1228,12 @@ namespace NintrollerLib.New
         {
             return "";
         }
+
+
+        public bool CalibrationEmpty
+        {
+            get { return false; }
+        }
     }
 
     public struct WiimotePlus : INintrollerState
@@ -1284,5 +1290,11 @@ namespace NintrollerLib.New
         {
             return "";
         }
+
+        public bool CalibrationEmpty
+        {
+            get { return false; }
+        }
+
     }
 }
