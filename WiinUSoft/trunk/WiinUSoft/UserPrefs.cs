@@ -28,31 +28,16 @@ namespace WiinUSoft
                     }
                     else
                     {
-                        DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-                        var dirSecurity = dir.GetAccessControl();
-                        var dirAuth = dirSecurity.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
-                        bool access = false;
-                        foreach (FileSystemAccessRule rule in dirAuth)
-                        {
-                            if ((FileSystemRights.Read & rule.FileSystemRights) == FileSystemRights.Read)
-                            {
-                                access = rule.AccessControlType == AccessControlType.Allow;
-                            }
-                        }
-
-                        if (access)
-                        {
-                            DataPath = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
-                        }
-                        else
-                        {
-                            DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\WiinUSoft_prefs.config";
-                        }
-
                         _instance = new UserPrefs();
                         _instance.devicePrefs = new List<Property>();
                         _instance.defaultProfile = new Profile();
-                        SavePrefs();
+                        DataPath = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
+                        
+                        if (!SavePrefs())
+                        {
+                            DataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\WiinUSoft_prefs.config";
+                            SavePrefs();
+                        }
                     }
                 }
 
@@ -142,8 +127,9 @@ namespace WiinUSoft
             return successful;
         }
 
-        public static void SavePrefs()
+        public static bool SavePrefs()
         {
+            bool successful = false;
             XmlSerializer X = new XmlSerializer(typeof(UserPrefs));
 
             try
@@ -169,11 +155,15 @@ namespace WiinUSoft
                         stream.Close();
                     }
                 }
+
+                successful = true;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
+
+            return successful;
         }
 
         public Property GetDevicePref(string hid)
