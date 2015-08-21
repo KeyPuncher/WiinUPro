@@ -14,6 +14,8 @@ namespace WiinUSoft.Holders
         //public Dictionary<string, float> Values { get; protected set; }
         public Dictionary<string, string> Mappings { get; protected set; }
         public Dictionary<string, bool> Flags { get; protected set; }
+        public float RumbleAmount { get; protected set; }
+        
         
 #if MouseMode
         public bool InMouseMode { get; protected set; }

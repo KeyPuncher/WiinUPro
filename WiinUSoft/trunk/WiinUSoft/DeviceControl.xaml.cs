@@ -26,7 +26,7 @@ namespace WiinUSoft
         // private members
         private Nintroller device;
         private DeviceState state;
-        private int   rumbleAmount      = 0;
+        private float rumbleAmount      = 0;
         private int   rumbleStepCount   = 0;
         private int   rumbleStepPeriod  = 10;
         private float rumbleSlowMult    = 0.5f;
@@ -36,6 +36,7 @@ namespace WiinUSoft
         internal Property       properties;
         internal int            targetXDevice = 0;
         internal bool           lowBatteryFired = false;
+        internal bool           identifying = false;
         internal string         dName = "";
         internal System.Threading.Timer updateTimer;
 
@@ -263,6 +264,13 @@ namespace WiinUSoft
                 return;
             }
 
+//            float intensity = 0;
+//            if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
+//            {
+//                rumbleAmount = (int)intensity;
+                RumbleStep();
+//            }
+
             holder.ClearAllValues();
 
             switch (e.controllerType)
@@ -418,13 +426,6 @@ namespace WiinUSoft
                     #endregion
                     break;
             }
-
-            float intensity = 0;
-            if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
-            {
-                rumbleAmount = (int)intensity;
-                RumbleStep();
-            }
             
             holder.Update();
 
@@ -465,25 +466,29 @@ namespace WiinUSoft
 
             holder.Update();
 
-            float intensity = 0;
-            if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
-            {
-                rumbleAmount = (int)intensity;
+//            float intensity = 0;
+//            if (holder.Values.TryGetValue(Inputs.Flags.RUMBLE, out intensity))
+//            {
+//                rumbleAmount = (int)intensity;
                 RumbleStep();
-            }
+//            }
 
             SetBatteryStatus(device.BatteryLevel == BatteryStatus.Low);
         }
 
         void RumbleStep()
         {
+            if (identifying) return;
+
             bool currentRumbleState = device.RumbleEnabled;
 
-            if (!properties.useRumble && currentRumbleState)
+            if (!properties.useRumble)
             {
-                device.RumbleEnabled = false;
+                if (currentRumbleState) device.RumbleEnabled = false;
                 return;
             }
+
+            rumbleAmount = holder.RumbleAmount;
 
             float dutyCycle = 0;
             float modifier = properties.rumbleIntensity * 0.5f;
@@ -671,7 +676,7 @@ namespace WiinUSoft
 
         private void XOption_Click(object sender, RoutedEventArgs e)
         {
-            if (device.ConnectTest() && device.Connect())
+            if (device.Connect())
             {
                 device.BeginReading();
                 device.GetStatus();
@@ -744,20 +749,22 @@ namespace WiinUSoft
 
             if (wasConnected || device.Connect())
             {
-                if (holder != null && device.Type == ControllerType.ProController)
-                {
-                    holder.Flags[Inputs.Flags.RUMBLE] = true;
-                    Delay(2000).ContinueWith(o => holder.Flags[Inputs.Flags.RUMBLE] = false);
-                }
-                else
-                {
+                //if (holder != null && device.Type == ControllerType.ProController)
+                //{
+                //    holder.Flags[Inputs.Flags.RUMBLE] = true;
+                //    Delay(2000).ContinueWith(o => holder.Flags[Inputs.Flags.RUMBLE] = false);
+                //}
+                //else
+                //{
+                    identifying = true;
                     device.RumbleEnabled = true;
                     Delay(2000).ContinueWith(o =>
                     {
+                        identifying = false;
                         device.RumbleEnabled = false;
                         if (!wasConnected) device.Disconnect();
                     });
-                }
+                //}
 
                 // light show
                 device.SetPlayerLED(1);

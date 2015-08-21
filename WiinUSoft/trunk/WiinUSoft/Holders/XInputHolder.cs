@@ -233,15 +233,15 @@ namespace WiinUSoft.Holders
             Flags = new Dictionary<string, bool>();
             ResetReport();
 
-            if (!Flags.ContainsKey(Inputs.Flags.RUMBLE))
-            {
-                Flags.Add(Inputs.Flags.RUMBLE, false);
-            }
-
-            if (!Values.ContainsKey(Inputs.Flags.RUMBLE))
-            {
-                Values.TryAdd(Inputs.Flags.RUMBLE, 0f);
-            }
+            //if (!Flags.ContainsKey(Inputs.Flags.RUMBLE))
+            //{
+            //    Flags.Add(Inputs.Flags.RUMBLE, false);
+            //}
+            //
+            //if (!Values.ContainsKey(Inputs.Flags.RUMBLE))
+            //{
+            //    Values.TryAdd(Inputs.Flags.RUMBLE, 0f);
+            //}
         }
 
         private void ResetReport()
@@ -388,8 +388,10 @@ namespace WiinUSoft.Holders
                 {
                     // Check if it's strong enough to rumble
                     int strength = BitConverter.ToInt32(new byte[] { rumble[4], rumble[3], 0x00, 0x00 }, 0);
+                    System.Diagnostics.Debug.WriteLine(strength);
                     Flags[Inputs.Flags.RUMBLE] = (strength > minRumble);
-                    Values[Inputs.Flags.RUMBLE] = strength > minRumble ? strength : 0;
+                    //Values[Inputs.Flags.RUMBLE] = strength > minRumble ? strength : 0;
+                    RumbleAmount = strength > minRumble ? strength : 0;
                 }
             }
         }
