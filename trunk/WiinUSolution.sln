@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiinUSoft", "WiinUSoft\Wiin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nintroller", "Nintroller\Nintroller.csproj", "{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiinUPro", "WiinUPro\WiinUPro.csproj", "{6551DFE7-AEEC-4BF9-BEED-58FF87388FD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACC86CB0-CE56-4B4E-8024-DCB49B9FC5FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6551DFE7-AEEC-4BF9-BEED-58FF87388FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6551DFE7-AEEC-4BF9-BEED-58FF87388FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6551DFE7-AEEC-4BF9-BEED-58FF87388FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6551DFE7-AEEC-4BF9-BEED-58FF87388FD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
