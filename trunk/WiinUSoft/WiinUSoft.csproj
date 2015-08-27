@@ -114,9 +114,7 @@
     </Compile>
     <Compile Include="DragCanvas.cs" />
     <Compile Include="Holders\Holder.cs" />
-    <Compile Include="Holders\XInputHolder.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Holders\XInputHolder.cs" />
     <Compile Include="Inputs\ClassicController.cs" />
     <Compile Include="Inputs\ClassicControllerPro.cs" />
     <Compile Include="Inputs\Flags.cs" />
