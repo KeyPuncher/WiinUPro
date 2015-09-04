@@ -322,7 +322,10 @@ namespace WiinUSoft
     {
         public void Execute(object parameter)
         {
-            MainWindow.Instance.ShowWindow();
+            if (MainWindow.Instance != null)
+            {
+                MainWindow.Instance.ShowWindow();
+            }
         }
 
         public bool CanExecute(object parameter)
