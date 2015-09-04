@@ -137,7 +137,7 @@ namespace WiinUSoft
                 if (properties != null)
                 {
                     SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
-                    ApplyCalibration(properties.calPref, properties.calString);
+                    ApplyCalibration(properties.calPref, properties.calString ?? "");
                 }
                 else
                 {

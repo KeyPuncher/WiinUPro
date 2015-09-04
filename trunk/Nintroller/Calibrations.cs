@@ -808,6 +808,8 @@ namespace NintrollerLib
 
         public void SetCalibrations(string storageString)
         {
+            if (storageString == null) return;
+
             string[] chunks = storageString.Split(new char[] { '-' });
 
             foreach (string calStr in chunks)
