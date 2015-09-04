@@ -389,7 +389,7 @@ namespace WiinUSoft
             mapLabel.Content = s.ToolTip;
             MoveSelector((Shape)sender, selectionMap, guideMap);
 
-            if (mapValues.ContainsKey(s) && map.ContainsKey(deviceShapes[currentSelection]))
+            if (deviceShapes.ContainsKey(currentSelection) && mapValues.ContainsKey(s) && map.ContainsKey(deviceShapes[currentSelection]))
             {
                 map[deviceShapes[currentSelection]] = mapValues[s];
             }
