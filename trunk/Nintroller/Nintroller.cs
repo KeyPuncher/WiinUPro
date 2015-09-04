@@ -330,7 +330,7 @@ namespace NintrollerLib
                     // create a stream from the file
                     _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
                     
-                    return true;
+                    return _stream != null;
                 }
                 catch
                 {
@@ -371,6 +371,7 @@ namespace NintrollerLib
 
                 // create a stream from the file
                 _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
+                //_stream = new FileStream(_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, Constants.REPORT_LENGTH, true);
 
                 _connected = true;
                 Log("Connected to device (" + _path + ")");
