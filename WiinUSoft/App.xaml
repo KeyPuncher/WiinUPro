@@ -1,7 +1,7 @@
 ﻿<Application x:Class="WiinUSoft.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
         <Color x:Key="AntemWhite">#FFF3F6FB</Color>
         <Color x:Key="SocialBlue">#FFE7F3FF</Color>

@@ -49,23 +49,25 @@ namespace WiinUSoft
             message.Subject = "WiinUSoft Error";
             message.From = new System.Net.Mail.MailAddress("justin@wiinupro.com");
             message.Body = _exception.InnerException != null
-                ? string.Format("Date: {2}\n\nUser Comments: {5}\n\nMessage: {0}\n\nStack: {1}\n\nInner Message: {3}\n\nInnerStack:\n {4}",
+                ? string.Format("Date: {2}\n\nOS: {3}\n\nUser Comments: {6}\n\nMessage: {0}\n\nStack: {1}\n\nInner Message: {4}\n\nInnerStack:\n {5}",
                     _exception.Message,                     // 0
                     _exception.StackTrace,                  // 1
                     System.DateTime.Now,                    // 2
-                    _exception.InnerException.Message,      // 3
-                    _exception.InnerException.StackTrace,   // 4
-                    _userInfo.Text)                         // 5
-                : string.Format("Date: {2}\n\nUser Comments: {3}\n\nMessage: {0}\n\nStack:\n {1}",
+                    Environment.OSVersion.ToString(),       // 3
+                    _exception.InnerException.Message,      // 4
+                    _exception.InnerException.StackTrace,   // 5
+                    _userInfo.Text)                         // 6
+                : string.Format("Date: {2}\n\nOS: {3}\n\nUser Comments: {4}\n\nMessage: {0}\n\nStack:\n {1}",
                     _exception.Message,                     // 0
                     _exception.StackTrace,                  // 1
                     System.DateTime.Now,                    // 2
-                    _userInfo.Text);                        // 3
+                    Environment.OSVersion.ToString(),       // 3
+                    _userInfo.Text);                        // 4
 
             System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
             smtp.Host = "smtp.gmail.com";
             smtp.Port = 587;
-            smtp.Credentials = new System.Net.NetworkCredential("wiinuproError@gmail.com", "wiinupro100");
+            smtp.Credentials = new System.Net.NetworkCredential("wiinuproError@gmail.com", "wiinupro101");
             smtp.EnableSsl = true;
             smtp.Timeout = 30;
 
