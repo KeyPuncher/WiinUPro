@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:WiinUSoft" x:Class="WiinUSoft.MainWindow"
-        Title="WiinUSoft" Height="436" Width="624" Loaded="Window_Loaded" Icon="Images/WiinUSoft.ico" Background="{DynamicResource BrushSocialBlue}" StateChanged="Window_StateChanged">
+        Title="WiinUSoft" Height="436" Width="624" Loaded="Window_Loaded" Icon="../Images/WiinUSoft.ico" Background="{DynamicResource BrushSocialBlue}" StateChanged="Window_StateChanged">
     <Grid>
         <Grid.Resources>
             <local:ShowWindowCommand x:Key="ShowWindow" />
         </Grid.Resources>
         <tb:TaskbarIcon x:Name="trayIcon" 
-                        IconSource="/Images/WiinUSoft.ico" 
+                        IconSource="../Images/WiinUSoft.ico" 
                         ToolTipText="WiinUSoft" 
                         Visibility="Hidden"
                         DoubleClickCommand="{StaticResource ShowWindow}">
@@ -40,10 +40,10 @@
         <Label Content="Connected as Xbox 360 Controller (XInput)" HorizontalAlignment="Left" Margin="337,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
         <Button x:Name="btnIdentify" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" Background="{DynamicResource ButonFillBrush1}" Click="btnIdentify_Click">
-            <Image Source="Images/Refresh.png" />
+            <Image Source="../Images/Refresh.png" />
         </Button>
         <Button x:Name="btnDetatchAllXInput" HorizontalAlignment="Left" Margin="308,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Click="btnDetatchAllXInput_Click" ToolTip="Detatch All" Background="{DynamicResource ButonFillBrush1}">
-            <Image Source="Images/removeAll.png"/>
+            <Image Source="../Images/removeAll.png"/>
         </Button>
         <Button x:Name="btnSettings" HorizontalAlignment="Left" Margin="576,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Settings" Background="{DynamicResource ButonFillBrush1}" Click="btnSettings_Click">
             <Button.ContextMenu>
@@ -53,7 +53,7 @@
                     <MenuItem x:Name="menu_version" Header="version 2.0" IsEnabled="False"/>
                 </ContextMenu>
             </Button.ContextMenu>
-            <Image Source="Images/Settings-icon.png"/>
+            <Image Source="../Images/Settings-icon.png"/>
         </Button>
     </Grid>
 </Window>

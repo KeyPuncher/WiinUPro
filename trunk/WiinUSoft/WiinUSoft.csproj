@@ -44,8 +44,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hardcodet.Wpf.TaskbarNotification">
-      <HintPath>..\..\packages\Hardcodet.NotifyIcon.Wpf.1.0.5\lib\net40\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification, Version=1.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.5\lib\net40\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -68,37 +69,37 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="CalibrateWindow.xaml.cs">
+    <Compile Include="Windows\CalibrateWindow.xaml.cs">
       <DependentUpon>CalibrateWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ErrorWindow.xaml.cs">
+    <Compile Include="Windows\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NumPicker.xaml.cs">
+    <Compile Include="Components\NumPicker.xaml.cs">
       <DependentUpon>NumPicker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PropWindow.xaml.cs">
+    <Compile Include="Windows\PropWindow.xaml.cs">
       <DependentUpon>PropWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SingleInstance.cs" />
     <Compile Include="UserPrefs.cs" />
-    <Page Include="CalibrateWindow.xaml">
+    <Page Include="Windows\CalibrateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfigWindow.xaml">
+    <Page Include="Windows\ConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DeviceControl.xaml">
+    <Page Include="Components\DeviceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ErrorWindow.xaml">
+    <Page Include="Windows\ErrorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -106,13 +107,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConfigWindow.xaml.cs">
+    <Compile Include="Windows\ConfigWindow.xaml.cs">
       <DependentUpon>ConfigWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DeviceControl.xaml.cs">
+    <Compile Include="Components\DeviceControl.xaml.cs">
       <DependentUpon>DeviceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DragCanvas.cs" />
+    <Compile Include="Components\DragCanvas.cs" />
     <Compile Include="Holders\Holder.cs" />
     <Compile Include="Holders\XInputHolder.cs" />
     <Compile Include="Inputs\ClassicController.cs" />
@@ -123,15 +124,15 @@
     <Compile Include="Inputs\ProController.cs" />
     <Compile Include="Inputs\Wiimote.cs" />
     <Compile Include="Inputs\Xbox360.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NumPicker.xaml">
+    <Page Include="Components\NumPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PropWindow.xaml">
+    <Page Include="Windows\PropWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -168,10 +169,9 @@
       <Name>Nintroller</Name>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
-    <ProjectReference Include="..\..\ScpControl\ScpControl.csproj">
+    <ProjectReference Include="..\Scp\ScpControl\ScpControl.csproj">
       <Project>{ddecf06e-be48-4610-8bf8-4ae5140d9f0c}</Project>
       <Name>ScpControl</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +251,7 @@
   <ItemGroup>
     <Resource Include="Images\Settings-icon.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
