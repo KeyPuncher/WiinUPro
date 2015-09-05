@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WiinUSoft.ConfigWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ConfigWindow" Height="485.925" Width="716" Icon="../Images/WiinUSoft.ico" Background="{DynamicResource BrushAntemWhite}">
+        Title="ConfigWindow" Height="485.925" Width="716" Icon="../Images/WiinUSoft_Icon32.png" Background="{DynamicResource BrushAntemWhite}">
     <Canvas x:Name="configCanvas">
         <Button x:Name="btnApply" Content="Apply" Canvas.Left="550" Canvas.Top="324" Width="128" Height="32" Click="btnApply_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}"/>
         <Button x:Name="btnDefault" Content="Default" Canvas.Left="550" Canvas.Top="369" Width="128" Height="32" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Click="btnDefault_Click" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}"/>
