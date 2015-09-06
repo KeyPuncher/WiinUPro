@@ -1,0 +1,56 @@
+﻿Installing assembly 'C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe'.
+Affected parameters are:
+   assemblypath = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe
+   logfile = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog
+Installing service Ds3Service...
+Service Ds3Service has been successfully installed.
+Creating EventLog source Ds3Service in log Application...
+See the contents of the log file for the C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe assembly's progress.
+The file is located at C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog.
+Committing assembly 'C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe
+   logfile = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog
+Uninstalling assembly 'C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe'.
+Affected parameters are:
+   assemblypath = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe
+   logfile = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog
+Removing EventLog source Ds3Service.
+Service Ds3Service is being removed from the system...
+Service Ds3Service was successfully removed from the system.
+Installing assembly 'C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe'.
+Affected parameters are:
+   assemblypath = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe
+   logfile = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog
+Installing service Ds3Service...
+Service Ds3Service has been successfully installed.
+Creating EventLog source Ds3Service in log Application...
+See the contents of the log file for the C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe assembly's progress.
+The file is located at C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog.
+Committing assembly 'C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe
+   logfile = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog
+Uninstalling assembly 'C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe'.
+Affected parameters are:
+   assemblypath = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe
+   logfile = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog
+Removing EventLog source Ds3Service.
+Service Ds3Service is being removed from the system...
+Service Ds3Service was successfully removed from the system.
+Installing assembly 'C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe'.
+Affected parameters are:
+   assemblypath = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe
+   logfile = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog
+Installing service Ds3Service...
+Service Ds3Service has been successfully installed.
+Creating EventLog source Ds3Service in log Application...
+See the contents of the log file for the C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe assembly's progress.
+The file is located at C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog.
+Committing assembly 'C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.exe
+   logfile = C:\Users\Justin\Desktop\ScpServer\bin\ScpService.InstallLog
