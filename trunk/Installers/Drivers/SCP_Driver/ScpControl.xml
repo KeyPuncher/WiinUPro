@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- ScpControl Configuration Data. 8/26/2014 10:13:55 PM -->
+
+<ScpControl>
+  <Idle>600000</Idle>
+  <LX>False</LX>
+  <LY>False</LY>
+  <RX>False</RX>
+  <RY>False</RY>
+  <LED>False</LED>
+  <Rumble>False</Rumble>
+  <Triggers>False</Triggers>
+  <LightBar>False</LightBar>
+  <Latency>128</Latency>
+  <DeadL>0</DeadL>
+  <DeadR>0</DeadR>
+  <Native>False</Native>
+</ScpControl>
