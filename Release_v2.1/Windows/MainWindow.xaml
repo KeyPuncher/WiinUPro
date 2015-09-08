@@ -1,0 +1,59 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        xmlns:local="clr-namespace:WiinUSoft" x:Class="WiinUSoft.MainWindow"
+        Title="WiinUSoft" Height="436" Width="624" Loaded="Window_Loaded" Icon="../Images/WiinUSoft_Icon32.png" Background="{DynamicResource BrushSocialBlue}" StateChanged="Window_StateChanged">
+    <Grid>
+        <Grid.Resources>
+            <local:ShowWindowCommand x:Key="ShowWindow" />
+        </Grid.Resources>
+        <tb:TaskbarIcon x:Name="trayIcon" 
+                        IconSource="../Images/WiinUSoft.ico" 
+                        ToolTipText="WiinUSoft" 
+                        Visibility="Hidden"
+                        DoubleClickCommand="{StaticResource ShowWindow}">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu Background="{DynamicResource BrushAntemWhite}">
+                    <MenuItem Header="Show" Click="MenuItem_Show_Click" FontWeight="Bold" />
+                    <MenuItem Header="Refresh" Click="MenuItem_Refresh_Click" />
+                    <MenuItem Header="Exit" Click="MenuItem_Exit_Click" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+        <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="8,42,0,8" HorizontalAlignment="Left" Width="292">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="groupAvailable" HorizontalAlignment="Left" Width="280" Margin="4,4,0,0"/>
+            </ScrollViewer>
+        </Border>
+        <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="308,42,0,8" HorizontalAlignment="Left" Width="292">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="groupXinput" HorizontalAlignment="Left" Margin="4,4,0,0" Width="280" Background="{DynamicResource BrushAntemWhite}"/>
+            </ScrollViewer>
+        </Border>
+        <Border CornerRadius="6" BorderBrush="{DynamicResource BrushJohnTheRevelator}" Background="{DynamicResource BrushAntemWhite}" BorderThickness="2" Margin="608,42,0,8" HorizontalAlignment="Left" Width="292" Grid.ColumnSpan="2" Visibility="Hidden">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel HorizontalAlignment="Left" Margin="4,4,0,0" Width="280"/>
+            </ScrollViewer>
+        </Border>
+        <Label Content="Available Devices" HorizontalAlignment="Left" Margin="39,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Connected as Xbox 360 Controller (XInput)" HorizontalAlignment="Left" Margin="337,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <Button x:Name="btnIdentify" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" Background="{DynamicResource ButonFillBrush1}" Click="btnIdentify_Click">
+            <Image Source="../Images/Refresh.png" />
+        </Button>
+        <Button x:Name="btnDetatchAllXInput" HorizontalAlignment="Left" Margin="308,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Click="btnDetatchAllXInput_Click" ToolTip="Detatch All" Background="{DynamicResource ButonFillBrush1}">
+            <Image Source="../Images/removeAll.png"/>
+        </Button>
+        <Button x:Name="btnSettings" HorizontalAlignment="Left" Margin="576,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Settings" Background="{DynamicResource ButonFillBrush1}" Click="btnSettings_Click">
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="menu_AutoStart" Header="Auto Startup" Click="menu_AutoStart_Click"/>
+                    <MenuItem x:Name="menu_StartMinimized" Header="Start Minimized" Click="menu_StartMinimized_Click"/>
+                    <MenuItem x:Name="menu_version" Header="version 2.0" IsEnabled="False"/>
+                </ContextMenu>
+            </Button.ContextMenu>
+            <Image Source="../Images/Settings-icon.png"/>
+        </Button>
+    </Grid>
+</Window>
