@@ -36,7 +36,7 @@ namespace NintrollerLib
 
         // Read/Writing Variables
         private SafeFileHandle   _fileHandle;                // Handle for Reading and Writing
-        private FileStream       _stream;                    // Read and Write Stream
+        private /*File*/Stream   _stream;                    // Read and Write Stream
         private bool             _reading    = false;        // true if actively reading
         private readonly object  _readingObj = new object(); // for locking/blocking
         
@@ -56,6 +56,10 @@ namespace NintrollerLib
         /// The HID path of the controller.
         /// </summary>
         public string HIDPath { get { return _path; } }
+        /// <summary>
+        /// The data stream to the controller.
+        /// </summary>
+        public Stream DataStream { get { return _stream; } }
         /// <summary>
         /// The type of controller this has been identified as
         /// </summary>
@@ -291,7 +295,7 @@ namespace NintrollerLib
         /// (Ideally connection ready)
         /// </summary>
         /// <param name="devicePath">The HID Path</param>
-        public Nintroller(string devicePath)
+        public Nintroller(string devicePath = "")
         {
             _state = null;
             _path = devicePath;
@@ -372,6 +376,8 @@ namespace NintrollerLib
                 // create a stream from the file
                 _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
                 //_stream = new FileStream(_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, Constants.REPORT_LENGTH, true);
+                
+                // TODO: try checking CanRead and CanWrite properties of the stream
 
                 _connected = true;
                 Log("Connected to device (" + _path + ")");
@@ -384,6 +390,28 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Connects to the controller using a given System.IO.Stream.
+        /// </summary>
+        /// <param name="dataStream">The data stream to the controller</param>
+        /// <returns>If the stream can be read from and written to.</returns>
+        public bool Connect(Stream dataStream)
+        {
+            if (_connected)
+            {
+                Log("This device is already connected!");
+                return false;
+            }
+
+            _stream = dataStream;
+            _connected = _stream.CanRead && _stream.CanWrite;
+            return _connected;
+        }
+
+        /// <summary>
+        /// Attempts to open a file stream using the HID Path and read from the device.
+        /// </summary>
+        /// <returns></returns>
         public bool ConnectTest()
         {
             // TODO: use a timer + FileStream.Read to manually timeout the read
