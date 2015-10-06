@@ -101,7 +101,54 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\ClassicPro_black_24.png" />
+    <Resource Include="Images\Icons\ClassicPro_white_24.png" />
+    <Resource Include="Images\Icons\Classic_black_24.png" />
+    <Resource Include="Images\Icons\Classic_white_24.png" />
+    <Resource Include="Images\Icons\ProController_black_24.png" />
+    <Resource Include="Images\Icons\ProController_white_24.png" />
+    <Resource Include="Images\Icons\Wiimote+Nunchuck_black_24.png" />
+    <Resource Include="Images\Icons\Wiimote+Nunchuck_white_24.png" />
+    <Resource Include="Images\Icons\wiimote_black_24.png" />
+    <Resource Include="Images\Icons\wiimote_white_24.png" />
+  </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Controllers\Pro\dpadWhiteCenter.png" />
+    <Resource Include="Images\Controllers\Pro\proBlackBase.png" />
+    <Resource Include="Images\Controllers\Pro\problackLED1.png" />
+    <Resource Include="Images\Controllers\Pro\problackLED2.png" />
+    <Resource Include="Images\Controllers\Pro\problackLED3.png" />
+    <Resource Include="Images\Controllers\Pro\problackLED4.png" />
+    <Resource Include="Images\Controllers\Pro\problackthumbstick.png" />
+    <Resource Include="Images\Controllers\Pro\problackthumbstickR.png" />
+    <Resource Include="Images\Controllers\Pro\proControllerBlack.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitea.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiteb.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitedown.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitedownCropped.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitehome.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitel.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitel2.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiteleft.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiteleftCropped.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiteminus.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiteplus.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiter.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiter2.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiteright.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiterightCropped.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitethumbstic.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiteup.png" />
+    <Resource Include="Images\Controllers\Pro\proWhiteupCropped.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitex.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitey.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitezl.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitezl2.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitezr.png" />
+    <Resource Include="Images\Controllers\Pro\proWhitezr2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

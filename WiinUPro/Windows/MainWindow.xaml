@@ -5,8 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="417.857" Width="505.714">
     <Grid>
-        
+        <TabControl x:Name="tabControl" Margin="10" >
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/WiinUPro;component/Images/Icons/ProController_black_24.png" HorizontalAlignment="Left" Height="12" Margin="0,0,4,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Controller 1" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Canvas Background="#FFE5E5E5">
+                    <Grid Margin="10,10,0,0">
+                        <!-- Base Image -->
+                        <Image Source="/WiinUPro;component/Images/Controllers/Pro/proBlackBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" />
+                        <!-- LED Images -->
+                        <Image x:Name="led1" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED1.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="153,180,0,0" />
+                        <Image x:Name="led2" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED2.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="167,180,0,0" />
+                        <Image x:Name="led3" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED3.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="182,180,0,0" />
+                        <Image x:Name="led4" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED4.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="198,180,0,0" />
+                    </Grid>
+                </Canvas>
+            </TabItem>
+            <TabItem Header="+" Width="26" IsEnabled="False">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>
