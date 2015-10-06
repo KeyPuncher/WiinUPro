@@ -715,10 +715,11 @@ namespace NintrollerLib
                             }
 
                             // LED
-                            _led1 = (report[3] & 0x10) != 0;
-                            _led2 = (report[3] & 0x20) != 0;
-                            _led3 = (report[3] & 0x40) != 0;
-                            _led4 = (report[3] & 0x80) != 0;
+                            // TODO: LED Check - we probably don't want this one
+                            //_led1 = (report[3] & 0x10) != 0;
+                            //_led2 = (report[3] & 0x20) != 0;
+                            //_led3 = (report[3] & 0x40) != 0;
+                            //_led4 = (report[3] & 0x80) != 0;
 
                             // Extension/Type
                             bool ext = (report[3] & 0x02) != 0;
@@ -1003,10 +1004,11 @@ namespace NintrollerLib
                             bool irOn      = (report[3] & 0x08) == 1;
                             
                             // Gather LEDs
-                            _led1 = (report[3] & 0x10) == 1;
-                            _led2 = (report[3] & 0x20) == 1;
-                            _led3 = (report[3] & 0x40) == 1;
-                            _led4 = (report[3] & 0x80) == 1;
+                            // TODO: LED Check - we may want this one
+                            //_led1 = (report[3] & 0x10) == 1;
+                            //_led2 = (report[3] & 0x20) == 1;
+                            //_led3 = (report[3] & 0x40) == 1;
+                            //_led4 = (report[3] & 0x80) == 1;
 
                             //if (extension)
                             //{
