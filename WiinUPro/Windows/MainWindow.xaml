@@ -20,10 +20,35 @@
                         <!-- Base Image -->
                         <Image Source="/WiinUPro;component/Images/Controllers/Pro/proBlackBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" />
                         <!-- LED Images -->
-                        <Image x:Name="led1" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED1.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="153,180,0,0" />
-                        <Image x:Name="led2" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED2.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="167,180,0,0" />
-                        <Image x:Name="led3" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED3.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="182,180,0,0" />
-                        <Image x:Name="led4" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED4.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="198,180,0,0" />
+                        <Image x:Name="led1" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED1.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="153,180,0,0" Opacity="0" />
+                        <Image x:Name="led2" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED2.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="167,180,0,0" Opacity="0" />
+                        <Image x:Name="led3" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED3.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="182,180,0,0" Opacity="0" />
+                        <Image x:Name="led4" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED4.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="197,180,0,0" Opacity="0" />
+                        <!-- Analog Stick Images -->
+                        <Image x:Name="leftStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="54,63,0,0" Opacity="100" />
+                        <Image x:Name="righStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstickR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,63,0,0" Opacity="100" />
+                        <Image x:Name="leftStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="54,63,0,0" Opacity="0" />
+                        <Image x:Name="righStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,63,0,0" Opacity="0" />
+                        <!-- Dpad Images-->
+                        <Image x:Name="dpadUp" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteupCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,115,0,0" Opacity="0" />
+                        <Image x:Name="dpadDown" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitedownCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,150,0,0" Opacity="0" />
+                        <Image x:Name="dpadLeft" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteleftCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="87,133,0,0" Opacity="0" />
+                        <Image x:Name="dpadRight" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiterightCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="122,133,0,0" Opacity="0" />
+                        <Image x:Name="dpadCenter" Source="/WiinUPro;component/Images/Controllers/Pro/dpadWhiteCenter.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,133,0,0" Opacity="0" Width="18" />
+                        <!-- Face Button Images -->
+                        <Image x:Name="aBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitea.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="262,130,0,0" Opacity="0" />
+                        <Image x:Name="bBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteb.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="236,154,0,0" Opacity="0" />
+                        <Image x:Name="xBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitex.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="236,107,0,0" Opacity="0" />
+                        <Image x:Name="yBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitey.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="209,130,0,0" Opacity="0" />
+                        <!-- Shoulder Button Images -->
+                        <Image x:Name="lBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitel.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,10,0,0" Opacity="0" />
+                        <Image x:Name="rBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiter.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="253,8,0,0" Opacity="0" />
+                        <Image x:Name="zlBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitezl.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="67,-7,0,0" Opacity="0" />
+                        <Image x:Name="zrBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitezr.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="267,-4,0,0" Opacity="0" />
+                        <!-- Middle Button Images -->
+                        <Image x:Name="homeBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitehome.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="171,90,0,0" Opacity="0" />
+                        <Image x:Name="minusBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteminus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="141,89,0,0" Opacity="0" />
+                        <Image x:Name="plusBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteplus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="202,90,0,0" Opacity="0" />
                     </Grid>
                 </Canvas>
             </TabItem>
