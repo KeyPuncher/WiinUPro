@@ -23,6 +23,13 @@ namespace WiinUPro
         public MainWindow()
         {
             InitializeComponent();
+
+            // Test
+            TabItem t = new TabItem();
+            t.Header = "New";
+            NintyControl n = new NintyControl("yo");
+            t.Content = n;
+            tabControl.Items.Add(t);
         }
     }
 }
