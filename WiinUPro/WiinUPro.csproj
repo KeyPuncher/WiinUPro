@@ -55,6 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\ProControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -69,6 +73,9 @@
     <Compile Include="Directors\MouseDirector.cs" />
     <Compile Include="Directors\VJoyDirector.cs" />
     <Compile Include="Directors\ScpDirector.cs" />
+    <Compile Include="Controls\ProControl.xaml.cs">
+      <DependentUpon>ProControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
