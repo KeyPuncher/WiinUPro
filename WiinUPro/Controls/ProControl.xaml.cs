@@ -57,5 +57,13 @@ namespace WiinUPro
                 rightStickBtn.Margin = new Thickness(980 + 50 * pro.RJoy.X, 230 + 50 * pro.RJoy.Y, 0, 0);
             }
         }
+
+        public void ChangeLEDs(bool one, bool two, bool three, bool four)
+        {
+            led1.Opacity = one ? 1 : 0;
+            led2.Opacity = two ? 1 : 0;
+            led3.Opacity = three ? 1 : 0;
+            led4.Opacity = four ? 1 : 0;
+        }
     }
 }
