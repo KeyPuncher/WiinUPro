@@ -18,8 +18,8 @@
                 <!-- Analog Stick Images -->
                 <Image x:Name="leftStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,232,0,0" Opacity="1" Width="148" Height="148" />
                 <Image x:Name="leftStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,230,0,0" Width="151" Height="152" Opacity="0" />
-                <Image x:Name="righStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstickR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,232,0,0" Opacity="1" Width="148" Height="148" />
-                <Image x:Name="righStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,230,0,0" Width="151" Height="152" Opacity="0" />
+                <Image x:Name="rightStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstickR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,232,0,0" Opacity="1" Width="148" Height="148" />
+                <Image x:Name="rightStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,230,0,0" Width="151" Height="152" Opacity="0" />
                 <!-- Dpad Images-->
                 <Image x:Name="dpadUp" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteupCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="382,421,0,0" Opacity="0" Width="64" Height="66" />
                 <Image x:Name="dpadDown" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitedownCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="382,550,0,0" Opacity="0" Width="64" Height="66" />

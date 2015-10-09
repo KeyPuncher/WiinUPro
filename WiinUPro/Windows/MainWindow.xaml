@@ -15,7 +15,7 @@
                         <TextBlock Text="Controller 1" />
                     </StackPanel>
                 </TabItem.Header>
-                <local:ProControl HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                
             </TabItem>
             <TabItem Header="+" Width="26" IsEnabled="False">
                 <Grid Background="#FFE5E5E5"/>
