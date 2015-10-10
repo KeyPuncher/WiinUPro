@@ -21,6 +21,8 @@ namespace WiinUPro
     /// </summary>
     public partial class ProControl : UserControl, INintyControl
     {
+        public event EventHandler<bool[]> OnChangeLEDs;
+
         public ProControl()
         {
             InitializeComponent();
@@ -33,7 +35,7 @@ namespace WiinUPro
                 var pro = (ProController)state;
 
                 aBtn.Opacity = pro.A ? 1 : 0;
-                aBtn.Opacity = pro.B ? 1 : 0;
+                bBtn.Opacity = pro.B ? 1 : 0;
                 xBtn.Opacity = pro.X ? 1 : 0;
                 yBtn.Opacity = pro.Y ? 1 : 0;
                 lBtn.Opacity = pro.L ? 1 : 0;
@@ -51,10 +53,10 @@ namespace WiinUPro
                 leftStickBtn.Opacity = pro.LStick ? 1 : 0;
                 rightStickBtn.Opacity = pro.RStick ? 1 : 0;
 
-                leftStick.Margin = new Thickness(196 + 50 * pro.LJoy.X, 232 + 50 * pro.LJoy.Y, 0, 0);
-                leftStickBtn.Margin = new Thickness(196 + 50 * pro.LJoy.X, 230 + 50 * pro.LJoy.Y, 0, 0);
-                rightStick.Margin = new Thickness(980 + 50 * pro.RJoy.X, 232 + 50 * pro.RJoy.Y, 0, 0);
-                rightStickBtn.Margin = new Thickness(980 + 50 * pro.RJoy.X, 230 + 50 * pro.RJoy.Y, 0, 0);
+                leftStick.Margin = new Thickness(196 + 50 * pro.LJoy.X, 232 - 50 * pro.LJoy.Y, 0, 0);
+                leftStickBtn.Margin = new Thickness(196 + 50 * pro.LJoy.X, 230 - 50 * pro.LJoy.Y, 0, 0);
+                rightStick.Margin = new Thickness(980 + 50 * pro.RJoy.X, 232 - 50 * pro.RJoy.Y, 0, 0);
+                rightStickBtn.Margin = new Thickness(980 + 50 * pro.RJoy.X, 230 - 50 * pro.RJoy.Y, 0, 0);
             }
         }
 
@@ -64,6 +66,26 @@ namespace WiinUPro
             led2.Opacity = two ? 1 : 0;
             led3.Opacity = three ? 1 : 0;
             led4.Opacity = four ? 1 : 0;
+        }
+
+        private void led_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var light = sender as Image;
+            if (light != null)
+            {
+                light.Opacity = light.Opacity > 0.1 ? 0 : 1;
+            }
+
+            if (OnChangeLEDs != null)
+            {
+                bool[] leds = new bool[4];
+                leds[0] = led1.Opacity > 0.1;
+                leds[1] = led2.Opacity > 0.1;
+                leds[2] = led3.Opacity > 0.1;
+                leds[3] = led4.Opacity > 0.1;
+
+                OnChangeLEDs(this, leds);
+            }
         }
     }
 }

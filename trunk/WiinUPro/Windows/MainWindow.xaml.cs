@@ -24,12 +24,17 @@ namespace WiinUPro
         {
             InitializeComponent();
 
-            // Test
-            TabItem t = new TabItem();
-            t.Header = "New";
-            NintyControl n = new NintyControl("yo");
-            t.Content = n;
-            tabControl.Items.Add(t);
+
+            #region Test
+            foreach (var path in NintrollerLib.Nintroller.GetControllerPaths())
+            {
+                TabItem t = new TabItem();
+                t.Header = "New";
+                NintyControl n = new NintyControl(path);
+                t.Content = n;
+                tabControl.Items.Add(t);
+            }
+            #endregion
         }
     }
 }
