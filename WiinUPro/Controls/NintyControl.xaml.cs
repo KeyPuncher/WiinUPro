@@ -40,12 +40,12 @@ namespace WiinUPro
         #region Nintroller Events
         private void _nintroller_LowBattery(object sender, LowBatteryEventArgs e)
         {
-            //throw new NotImplementedException();
+            // Indicate that this controller's battery is low
         }
 
         private void _nintroller_ExtensionChange(object sender, NintrollerExtensionEventArgs e)
         {
-            //throw new NotImplementedException();
+            // Handle the extension change
         }
 
         private void _nintroller_StateUpdate(object sender, NintrollerStateEventArgs e)
@@ -64,6 +64,8 @@ namespace WiinUPro
         #region GUI Events
         private void btnConnect_Click(object sender, RoutedEventArgs e)
         {
+            bool success = false;
+
             if (_nintroller.Connect())
             {
                 btnConnect.IsEnabled = false;
@@ -71,18 +73,36 @@ namespace WiinUPro
                 _nintroller.GetStatus();
                 _nintroller.SetPlayerLED(1);
 
-                _controller = new ProControl();
-                _controller.OnChangeLEDs += SetLeds;
-                _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
-                _view.Child = _controller as ProControl;
-                ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
-                ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+                // We need a function we can await for the type to come back
+                //switch (_nintroller.Type)
+                //{
+                //    case ControllerType.ProController:
+                        _controller = new ProControl();
+                //        break;
+                //}
 
+                if (_controller != null)
+                {
+                    _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
+                    _controller.OnChangeLEDs += SetLeds;
+                    _controller.OnInputSelected += InputSelected;
+
+                    _view.Child = _controller as UserControl;
+                    ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
+                    ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+
+                    success = true;
+                }
+            }
+
+            if (success)
+            {
                 btnDisconnect.IsEnabled = true;
             }
             else
             {
                 MessageBox.Show("Could not connect to device!");
+                btnConnect.IsEnabled = true;
             }
         }
 
@@ -109,12 +129,17 @@ namespace WiinUPro
                 _nintroller.Led4 = values[3];
             }
         }
+        private void InputSelected(object sender, string e)
+        {
+            System.Diagnostics.Debug.WriteLine(e);
+        }
         #endregion
     }
 
     public interface INintyControl
     {
         event EventHandler<bool[]> OnChangeLEDs;
+        event EventHandler<string> OnInputSelected;
 
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);

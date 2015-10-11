@@ -22,6 +22,7 @@ namespace WiinUPro
     public partial class ProControl : UserControl, INintyControl
     {
         public event EventHandler<bool[]> OnChangeLEDs;
+        public event EventHandler<string> OnInputSelected;
 
         public ProControl()
         {
@@ -86,6 +87,27 @@ namespace WiinUPro
 
                 OnChangeLEDs(this, leds);
             }
+        }
+
+        private void Btn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                var element = sender as FrameworkElement;
+                var tag = element == null ? "" : element.Tag as string;
+
+                // Open input assignment window
+                if (OnInputSelected != null && tag != null)
+                {
+                    OnInputSelected(sender, tag);
+                }
+            }
+        }
+
+        private void Btn_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("open context menu");
+            // Open Context menu
         }
     }
 }
