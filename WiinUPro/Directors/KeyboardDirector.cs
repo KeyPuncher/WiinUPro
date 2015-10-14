@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsInput;
+using WindowsInput.Native;
 
 namespace WiinUPro
 {
@@ -15,29 +17,48 @@ namespace WiinUPro
             Access = new KeyboardDirector();
         }
 
+        private IKeyboardSimulator _keyboard;
+
         public KeyboardDirector()
         {
-            // TODO Director: initialize keyboard hook
+            _keyboard = new KeyboardSimulator(InputSim.Simulator);
         }
 
-        public void KeyDown(int code)
+        public void KeyDown(VirtualKeyCode code)
         {
-            // TODO Director: key down
+            _keyboard.KeyDown(code);
         }
 
-        public void KeyUp(int code)
+        public void KeyUp(VirtualKeyCode code)
         {
-            // TODO Director: key up
+            _keyboard.KeyUp(code);
         }
 
-        public void KeyPress(int code)
+        public void KeyPress(VirtualKeyCode code)
         {
-            // TODO Director: key press
+            _keyboard.KeyPress(code);
         }
 
         public void DetectKey()
         {
             // TODO Director: start key detection
+        }
+    }
+
+    static class InputSim
+    {
+        static IInputSimulator _simulator;
+        public static IInputSimulator Simulator
+        {
+            get
+            {
+                return _simulator;
+            }
+        }
+
+        static InputSim()
+        {
+            _simulator = new InputSimulator();
         }
     }
 }

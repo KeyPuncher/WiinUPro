@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsInput;
 
 namespace WiinUPro
 {
@@ -15,41 +16,109 @@ namespace WiinUPro
             Access = new MouseDirector();
         }
 
+        private IMouseSimulator _mouse;
+
         public MouseDirector()
         {
-            // TODO Director: Initilize mouse hook
+            _mouse = new MouseSimulator(InputSim.Simulator);
         }
 
-        public void MouseButtonDown(int code)
+        public void MouseButtonDown(byte code)
         {
-            // TODO Director: mouse btn down
+            switch (code)
+            {
+                case 0:
+                    _mouse.LeftButtonDown();
+                    break;
+
+                case 1:
+                    _mouse.RightButtonDown();
+                    break;
+
+                default:
+                    _mouse.XButtonDown(code);
+                    break;
+            }
         }
 
-        public void MouseButtonUp(int code)
+        public void MouseButtonUp(byte code)
         {
-            // TODO Director: mouse btn up
+            switch (code)
+            {
+                case 0:
+                    _mouse.LeftButtonUp();
+                    break;
+
+                case 1:
+                    _mouse.RightButtonUp();
+                    break;
+
+                default:
+                    _mouse.XButtonUp(code);
+                    break;
+            }
         }
 
         public void MouseButtonPress(int code)
         {
-            // TODO Director: mouse btn press
+            switch (code)
+            {
+                case 0:
+                    _mouse.LeftButtonClick();
+                    break;
+
+                case 1:
+                    _mouse.RightButtonClick();
+                    break;
+
+                default:
+                    _mouse.XButtonClick(code);
+                    break;
+            }
         }
 
-        public void MouseMoveX(float amount)
+        public void MouseButtonDoubleClick(int code)
         {
-            // TODO Director: mouse movement along X plane
+            switch (code)
+            {
+                case 0:
+                    _mouse.LeftButtonDoubleClick();
+                    break;
+
+                case 1:
+                    _mouse.RightButtonDoubleClick();
+                    break;
+
+                default:
+                    _mouse.XButtonDoubleClick(code);
+                    break;
+            }
         }
 
-        public void MouseMoveY(float amount)
+        public void MouseMoveX(int amount)
         {
-            // TODO Director: mouse movement along Y plane
+            _mouse.MoveMouseBy(amount, 0);
+        }
+
+        public void MouseMoveY(int amount)
+        {
+            _mouse.MoveMouseBy(0, amount);
         }
 
         public void MouseMoveTo(float x, float y)
         {
-            // TODO Director: absolute mouse movement
-            //System.Windows.SystemParameters.PrimaryScreenHeight;
-            //System.Windows.SystemParameters.PrimaryScreenWidth;
+            var w = System.Windows.SystemParameters.PrimaryScreenWidth * x;
+            var h = System.Windows.SystemParameters.PrimaryScreenHeight * y;
+
+            _mouse.MoveMouseTo(w, h);
         }
+    }
+
+    public enum VirtualMouseButton : byte
+    {
+        Left    = 0,
+        Right   = 1,
+        Middle  = 2,
+        Button4 = 3
     }
 }
