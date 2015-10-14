@@ -86,6 +86,7 @@ namespace WiinUPro
                     _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
                     _controller.OnChangeLEDs += SetLeds;
                     _controller.OnInputSelected += InputSelected;
+                    _controller.OnInputRightClick += InputOpenMenu;
 
                     _view.Child = _controller as UserControl;
                     ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
@@ -94,6 +95,18 @@ namespace WiinUPro
                     success = true;
                 }
             }
+#if DEBUG
+            else
+            {
+                _controller = new ProControl();
+                _controller.OnInputSelected += InputSelected;
+                _controller.OnInputRightClick += InputOpenMenu;
+                _view.Child = _controller as UserControl;
+                ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
+                ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+                success = true;
+            }
+#endif
 
             if (success)
             {
@@ -129,9 +142,15 @@ namespace WiinUPro
                 _nintroller.Led4 = values[3];
             }
         }
+
         private void InputSelected(object sender, string e)
         {
             System.Diagnostics.Debug.WriteLine(e);
+        }
+
+        private void InputOpenMenu(object sender, string e)
+        {
+            subMenu.IsOpen = true;
         }
         #endregion
     }
@@ -140,6 +159,7 @@ namespace WiinUPro
     {
         event EventHandler<bool[]> OnChangeLEDs;
         event EventHandler<string> OnInputSelected;
+        event EventHandler<string> OnInputRightClick;
 
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);

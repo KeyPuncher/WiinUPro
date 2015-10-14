@@ -23,6 +23,7 @@ namespace WiinUPro
     {
         public event EventHandler<bool[]> OnChangeLEDs;
         public event EventHandler<string> OnInputSelected;
+        public event EventHandler<string> OnInputRightClick;
 
         public ProControl()
         {
@@ -106,8 +107,14 @@ namespace WiinUPro
 
         private void Btn_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("open context menu");
+            var element = sender as FrameworkElement;
+            var tag = element == null ? "" : element.Tag as string;
+
             // Open Context menu
+            if (OnInputRightClick != null && tag != null)
+            {
+                OnInputRightClick(sender, tag);
+            }
         }
     }
 }

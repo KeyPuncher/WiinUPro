@@ -6,9 +6,17 @@
              xmlns:local="clr-namespace:WiinUPro"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid ContextMenuService.IsEnabled="False">
         <Button x:Name="btnConnect" Content="Connect" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="75" Click="btnConnect_Click"/>
         <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="100,5,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click" IsEnabled="False"/>
         <Viewbox x:Name="_view" Margin="0,32,0,0" />
+        <Grid.ContextMenu>
+            <ContextMenu x:Name="subMenu">
+                <MenuItem Header="Assign"/>
+                <MenuItem Header="Copy"/>
+                <MenuItem Header="Paste"/>
+                <MenuItem Header="Clear"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
     </Grid>
 </UserControl>
