@@ -10,28 +10,40 @@ namespace WiinUPro
 {
     class KeyboardDirector
     {
+        #region Access
         public static KeyboardDirector Access { get; protected set; }
 
         static KeyboardDirector()
         {
             Access = new KeyboardDirector();
         }
+        #endregion
 
         private IKeyboardSimulator _keyboard;
+        private List<VirtualKeyCode> _pressedKeys;
 
         public KeyboardDirector()
         {
             _keyboard = new KeyboardSimulator(InputSim.Simulator);
+            _pressedKeys = new List<VirtualKeyCode>();
         }
 
         public void KeyDown(VirtualKeyCode code)
         {
-            _keyboard.KeyDown(code);
+            if (!_pressedKeys.Contains(code))
+            {
+                _keyboard.KeyDown(code);
+                _pressedKeys.Add(code);
+            }
         }
 
         public void KeyUp(VirtualKeyCode code)
         {
-            _keyboard.KeyUp(code);
+            if (_pressedKeys.Contains(code))
+            {
+                _keyboard.KeyUp(code);
+                _pressedKeys.Remove(code);
+            }
         }
 
         public void KeyPress(VirtualKeyCode code)
@@ -42,6 +54,16 @@ namespace WiinUPro
         public void DetectKey()
         {
             // TODO Director: start key detection
+        }
+
+        public void Release()
+        {
+            foreach (var key in _pressedKeys)
+            {
+                _keyboard.KeyUp(key);
+            }
+
+            _pressedKeys.Clear();
         }
     }
 

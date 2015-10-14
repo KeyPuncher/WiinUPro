@@ -9,22 +9,28 @@ namespace WiinUPro
 {
     class MouseDirector
     {
+        #region Access
         public static MouseDirector Access { get; protected set; }
 
         static MouseDirector()
         {
             Access = new MouseDirector();
         }
+        #endregion  
 
         private IMouseSimulator _mouse;
+        private List<byte> _pressedButtons;
 
         public MouseDirector()
         {
             _mouse = new MouseSimulator(InputSim.Simulator);
+            _pressedButtons = new List<byte>();
         }
 
         public void MouseButtonDown(byte code)
         {
+            if (!_pressedButtons.Contains(code))
+            {
             switch (code)
             {
                 case 0:
@@ -39,10 +45,15 @@ namespace WiinUPro
                     _mouse.XButtonDown(code);
                     break;
             }
+
+                _pressedButtons.Add(code);
+            }
         }
 
         public void MouseButtonUp(byte code)
         {
+            if (_pressedButtons.Contains(code))
+            {
             switch (code)
             {
                 case 0:
@@ -56,6 +67,9 @@ namespace WiinUPro
                 default:
                     _mouse.XButtonUp(code);
                     break;
+            }
+
+                _pressedButtons.Remove(code);
             }
         }
 
@@ -122,8 +136,28 @@ namespace WiinUPro
         {
             _mouse.HorizontalScroll(amount);
         }
+
+        public void Release()
+        {
+            foreach (var btn in _pressedButtons)
+            {
+                if (btn == 0)
+                {
+                    _mouse.LeftButtonUp();
+                }
+                else if (btn == 1)
+                {
+                    _mouse.RightButtonUp();
+                }
+                else
+                {
+                    _mouse.XButtonUp(btn);
+                }
+            }
+        }
     }
 
+    // TODO: Test if XButton ids start from 0, 1, or overlap with left and right
     public enum VirtualMouseButton : byte
     {
         Left    = 0,
