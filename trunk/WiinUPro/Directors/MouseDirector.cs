@@ -112,6 +112,16 @@ namespace WiinUPro
 
             _mouse.MoveMouseTo(w, h);
         }
+
+        public void MouseScrollVertical(int amount)
+        {
+            _mouse.VerticalScroll(amount);
+        }
+
+        public void MouseScrollHorizontal(int amount)
+        {
+            _mouse.HorizontalScroll(amount);
+        }
     }
 
     public enum VirtualMouseButton : byte
