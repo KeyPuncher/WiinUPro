@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -175,6 +176,18 @@ namespace NintrollerLib
                     return false;
                 }
             }
+        }
+
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
+        {
+            yield return new KeyValuePair<string, float>("wmPlus", buttons.Plus ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>("wmSelect", buttons.Minus ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>("wmHome", buttons.Home ? 1.0f : 0.0f);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 
@@ -413,6 +426,19 @@ namespace NintrollerLib
                     return false;
                 }
             }
+        }
+
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
+        {
+            foreach (var input in wiimote)
+            {
+                yield return input;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 
@@ -712,6 +738,19 @@ namespace NintrollerLib
                 }
             }
         }
+
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
+        {
+            foreach (var input in wiimote)
+            {
+                yield return input;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     public struct ClassicControllerPro : INintrollerState
@@ -955,6 +994,19 @@ namespace NintrollerLib
                 }
             }
         }
+
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
+        {
+            foreach (var input in wiimote)
+            {
+                yield return input;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     public struct ProController : INintrollerState
@@ -1192,6 +1244,51 @@ namespace NintrollerLib
                 }
             }
         }
+
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
+        {
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.A, A ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.B, B ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.X, X ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.Y, Y ? 1.0f : 0.0f);
+
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.L,  L  ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.R,  R  ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.ZL, ZL ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.ZR, ZR ? 1.0f : 0.0f);
+
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.UP,    Up    ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.DOWN,  Down  ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LEFT,  Left  ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RIGHT, Right ? 1.0f : 0.0f);
+
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.START,  Start  ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.SELECT, Select ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.HOME,   Home   ? 1.0f : 0.0f);
+
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LS, LStick ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RS, RStick ? 1.0f : 0.0f);
+
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LX, LJoy.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LY, LJoy.Y);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RX, RJoy.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RY, RJoy.X);
+
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LUP,    LJoy.Y > 0f ? LJoy.Y : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LDOWN,  LJoy.Y > 0f ? 0.0f : LJoy.Y);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LLEFT,  LJoy.X > 0f ? 0.0f : LJoy.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LRIGHT, LJoy.X > 0f ? LJoy.X : 0.0f);
+
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RUP,    RJoy.Y > 0f ? RJoy.Y : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RDOWN,  RJoy.Y > 0f ? 0.0f : RJoy.Y);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RLEFT,  RJoy.X > 0f ? 0.0f : RJoy.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RRIGHT, RJoy.X > 0f ? RJoy.X : 0.0f);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     public struct BalanceBoard : INintrollerState
@@ -1251,6 +1348,16 @@ namespace NintrollerLib
         public bool CalibrationEmpty
         {
             get { return false; }
+        }
+
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
+        {
+            yield return new KeyValuePair<string, float>("bb", 0);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 
@@ -1314,5 +1421,17 @@ namespace NintrollerLib
             get { return false; }
         }
 
+        public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
+        {
+            foreach (var input in wiimote)
+            {
+                yield return input;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

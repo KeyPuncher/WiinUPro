@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NintrollerLib
 {
-    public interface INintrollerState
+    public interface INintrollerState : IEnumerable<KeyValuePair<string, float>>
     {
         void Update(byte[] data);
         float GetValue(string input);

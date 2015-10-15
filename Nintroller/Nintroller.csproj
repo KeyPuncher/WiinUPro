@@ -45,6 +45,7 @@
     <Compile Include="ComponentStructs.cs" />
     <Compile Include="ControllerStructs.cs" />
     <Compile Include="Enumerators.cs" />
+    <Compile Include="INPUT_NAMES.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Nintroller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
