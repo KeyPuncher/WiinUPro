@@ -21,8 +21,11 @@ namespace WiinUPro
     /// </summary>
     public partial class NintyControl : UserControl
     {
-        internal Nintroller _nintroller;
-        internal INintyControl _controller;
+        internal Nintroller _nintroller;            // Physical Controller Device
+        internal INintyControl _controller;         // Visual Controller Representation
+        internal IAssignment _assignmentClipboard;  // Assignment to be pasted
+        internal string _selectedInput;             // Controller's input to be effected by change
+        internal Dictionary<string, IAssignment> _testAssignments;
 
         public NintyControl()
         {
@@ -31,6 +34,14 @@ namespace WiinUPro
 
         public NintyControl(string devicePath) : this()
         {
+            _testAssignments = new Dictionary<string, IAssignment>();
+            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.A, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_A));
+            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.B, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_B));
+            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.X, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_X));
+            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.Y, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_Y));
+            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LX, new TestMouseAssignment(true));
+            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LY, new TestMouseAssignment(false));
+
             _nintroller = new Nintroller(devicePath);
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
@@ -85,6 +96,19 @@ namespace WiinUPro
 
         private void _nintroller_StateUpdate(object sender, NintrollerStateEventArgs e)
         {
+            // Use the input to apply assignments.
+            // This should only be done if not modifying the assignments
+            //_controller.ApplyInput(e.state);
+            foreach (var input in e.state)
+            {
+                //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
+                if (_testAssignments.ContainsKey(input.Key))
+                {
+                    _testAssignments[input.Key].Apply(input.Value);
+                }
+            }
+
+            // Visaul should only be updated if tab is in view
             Dispatcher.Invoke(new Action(() =>
             {
                 if (_controller != null)
@@ -200,6 +224,7 @@ namespace WiinUPro
 
         private void InputOpenMenu(object sender, string e)
         {
+            _selectedInput = e;
             subMenu.IsOpen = true;
         }
         #endregion
@@ -211,6 +236,7 @@ namespace WiinUPro
         event EventHandler<string> OnInputSelected;
         event EventHandler<string> OnInputRightClick;
 
+        void ApplyInput(INintrollerState state);
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);
     }

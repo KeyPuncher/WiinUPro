@@ -30,6 +30,16 @@ namespace WiinUPro
             InitializeComponent();
         }
 
+        public void ApplyInput(INintrollerState state)
+        {
+            ProController? pro = state as ProController?;
+
+            if (pro != null && pro.HasValue)
+            {
+                //pro.Value.GetValue
+            }
+        }
+
         public void UpdateVisual(INintrollerState state)
         {
             if (state.GetType() == typeof(ProController))
