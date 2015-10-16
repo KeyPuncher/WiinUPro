@@ -121,8 +121,8 @@ namespace WiinUPro
 
         public void MouseMoveTo(float x, float y)
         {
-            var w = System.Windows.SystemParameters.PrimaryScreenWidth * x;
-            var h = System.Windows.SystemParameters.PrimaryScreenHeight * y;
+            var w = /*System.Windows.SystemParameters.PrimaryScreenWidth*/ 65535 * x;
+            var h = /*System.Windows.SystemParameters.PrimaryScreenHeight*/ 65535 * y;
 
             _mouse.MoveMouseTo(w, h);
         }
