@@ -17,7 +17,7 @@ namespace WiinUPro
         /// <summary>
         /// Set to use Turbo feature
         /// </summary>
-        public bool TurboEnabled { get; set; } = false;
+        public bool TurboEnabled { get; set; }
 
         /// <summary>
         /// Turbo rate in milliseconds (0ms to 1000ms)
@@ -31,14 +31,19 @@ namespace WiinUPro
         /// <summary>
         /// What the applied value must be greater than to apply
         /// </summary>
-        public float Threshold { get; set; } = 0.1f;
+        public float Threshold 
+        { 
+            get { return _threashold; } 
+            set { _threashold = value; }
+        }
 
         /// <summary>
         /// Set to apply key simulation when input is not being applied
         /// </summary>
-        public bool InverseInput { get; set; } = false;
+        public bool InverseInput { get; set; }
 
         private int _turboRate = 200;
+        private float _threashold = 0.1f;
         private bool _lastState = false;
         private int _lastApplied = 0;
 
