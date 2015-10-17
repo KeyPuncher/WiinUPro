@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,54 @@ namespace WiinUPro
     public interface IAssignment
     {
         void Apply(float value);
+        bool SameAs(IAssignment assignment);
+        // Don't forget to override Equals(object)
+    }
+
+    public class AssignmentCollection : IEnumerable<IAssignment>
+    {
+        public List<IAssignment> Assignments { get; protected set; }
+
+        public AssignmentCollection()
+        {
+            Assignments = new List<IAssignment>();
+        }
+
+        public AssignmentCollection(List<IAssignment> assignments)
+        {
+            Assignments = assignments;
+        }
+
+        public bool Add(IAssignment assignment)
+        {
+            if (Assignments.Contains(assignment))
+            {
+                return false;
+            }
+            else
+            {
+                Assignments.Add(assignment);
+                return true;
+            }
+        }
+
+        public void ApplyAll(float value)
+        {
+            foreach (var assignment in Assignments)
+            {
+                assignment.Apply(value);
+            }
+        }
+
+        public IEnumerator<IAssignment> GetEnumerator()
+        {
+            return Assignments.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     public class TestAssignment : IAssignment
@@ -26,6 +75,11 @@ namespace WiinUPro
             {
                 KeyboardDirector.Access.KeyPress(_key);
             }
+        }
+
+        public bool SameAs(IAssignment assignment)
+        {
+            return false;
         }
     }
 
@@ -64,6 +118,11 @@ namespace WiinUPro
                 x2 = x;
                 y2 = y;
             }
+        }
+
+        public bool SameAs(IAssignment assignment)
+        {
+            return false;
         }
     }
 }

@@ -70,6 +70,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\InputsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,8 +82,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IAssignment.cs" />
-    <Compile Include="IControllerMap.cs" />
+    <Compile Include="Assignments\IAssignment.cs" />
+    <Compile Include="Assignments\KeyboardAssignment.cs" />
     <Compile Include="Directors\KeyboardDirector.cs" />
     <Compile Include="Directors\MouseDirector.cs" />
     <Compile Include="Directors\VJoyDirector.cs" />
@@ -89,6 +93,9 @@
     </Compile>
     <Compile Include="Controls\NintyControl.xaml.cs">
       <DependentUpon>NintyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\InputsWindow.xaml.cs">
+      <DependentUpon>InputsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -25,6 +25,8 @@ namespace WiinUPro
         internal INintyControl _controller;         // Visual Controller Representation
         internal IAssignment _assignmentClipboard;  // Assignment to be pasted
         internal string _selectedInput;             // Controller's input to be effected by change
+        internal int _shiftSate = 0;                // Current shift state being applied
+
         internal Dictionary<string, IAssignment> _testAssignments;
 
         public NintyControl()
