@@ -32,7 +32,10 @@ namespace WiinUPro
         {
             if (!_pressedKeys.Contains(code))
             {
-                _keyboard.KeyDown(code);
+                //InputManager.Keyboard.KeyDown(System.Windows.Forms.Keys);
+                // TODO: Figure out what keys are what
+                InputManager.Keyboard.KeyDown((uint)code);
+                //_keyboard.KeyDown(code);
                 _pressedKeys.Add(code);
             }
         }
@@ -41,7 +44,8 @@ namespace WiinUPro
         {
             if (_pressedKeys.Contains(code))
             {
-                _keyboard.KeyUp(code);
+                InputManager.Keyboard.KeyUp((uint)code);
+                //_keyboard.KeyUp(code);
                 _pressedKeys.Remove(code);
             }
         }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiinUSoft", "WiinUSoft\WiinUSoft.csproj", "{4ED3CDAC-B467-497B-A80D-AAB4A395A7EE}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiinUPro", "WiinUPro\WiinUPro.csproj", "{6551DFE7-AEEC-4BF9-BEED-58FF87388FD0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScpControl", "Scp\ScpControl\ScpControl.csproj", "{DDECF06E-BE48-4610-8BF8-4AE5140D9F0C}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "InputManager", "InputManager\InputManager.vbproj", "{E522A5A7-BFB0-43D7-9898-ECEF05A48C8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DDECF06E-BE48-4610-8BF8-4AE5140D9F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDECF06E-BE48-4610-8BF8-4AE5140D9F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDECF06E-BE48-4610-8BF8-4AE5140D9F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E522A5A7-BFB0-43D7-9898-ECEF05A48C8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E522A5A7-BFB0-43D7-9898-ECEF05A48C8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E522A5A7-BFB0-43D7-9898-ECEF05A48C8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E522A5A7-BFB0-43D7-9898-ECEF05A48C8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
