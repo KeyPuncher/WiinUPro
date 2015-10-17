@@ -27,7 +27,7 @@ namespace WiinUPro
         internal string _selectedInput;             // Controller's input to be effected by change
         internal int _shiftSate = 0;                // Current shift state being applied
 
-        internal Dictionary<string, IAssignment> _testAssignments;
+        internal Dictionary<string, AssignmentCollection> _testAssignments;
 
         public NintyControl()
         {
@@ -36,13 +36,13 @@ namespace WiinUPro
 
         public NintyControl(string devicePath) : this()
         {
-            _testAssignments = new Dictionary<string, IAssignment>();
-            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.A, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_A));
-            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.B, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_B));
-            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.X, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_X));
-            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.Y, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_Y));
-            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LX, new TestMouseAssignment(true));
-            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LY, new TestMouseAssignment(false));
+            _testAssignments = new Dictionary<string, AssignmentCollection>();
+            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.A, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_A));
+            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.B, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_B));
+            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.X, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_X));
+            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.Y, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_Y));
+            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LX, new TestMouseAssignment(true));
+            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LY, new TestMouseAssignment(false));
 
             _nintroller = new Nintroller(devicePath);
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
@@ -106,7 +106,7 @@ namespace WiinUPro
                 //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
                 if (_testAssignments.ContainsKey(input.Key))
                 {
-                    _testAssignments[input.Key].Apply(input.Value);
+                    _testAssignments[input.Key].ApplyAll(input.Value);
                 }
             }
 
@@ -222,6 +222,19 @@ namespace WiinUPro
         private void InputSelected(object sender, string e)
         {
             System.Diagnostics.Debug.WriteLine(e);
+            InputsWindow win = new InputsWindow();
+            win.ShowDialog();
+
+            var key = (sender as FrameworkElement).Tag.ToString();
+
+            if (_testAssignments.ContainsKey(key))
+            {
+                _testAssignments[key] = win.Result;
+            }
+            else
+            {
+                _testAssignments.Add(key, win.Result);
+            }
         }
 
         private void InputOpenMenu(object sender, string e)
