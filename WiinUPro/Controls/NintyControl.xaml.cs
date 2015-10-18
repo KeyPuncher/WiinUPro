@@ -41,8 +41,8 @@ namespace WiinUPro
             //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.B, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_B));
             //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.X, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_X));
             //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.Y, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_Y));
-            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LX, new TestMouseAssignment(true));
-            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LY, new TestMouseAssignment(false));
+            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment>() { new TestMouseAssignment(true) }));
+            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment>() { new TestMouseAssignment(false) }));
 
             _nintroller = new Nintroller(devicePath);
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
