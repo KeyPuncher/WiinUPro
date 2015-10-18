@@ -3,25 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using InputManager;
+using WindowsInput;
+using WindowsInput.Native;
 
 namespace WiinUPro
 {
-    class KeyboardDirector
+    class KeyboardDirector_WI
     {
         #region Access
-        public static KeyboardDirector Access { get; protected set; }
+        public static KeyboardDirector_WI Access { get; protected set; }
 
-        static KeyboardDirector()
+        static KeyboardDirector_WI()
         {
-            Access = new KeyboardDirector();
+            Access = new KeyboardDirector_WI();
+        }
+
+        public static VirtualKeyCode TranslateVirtualKeyCode(InputManager.VirtualKeyCode code)
+        {
+            return (VirtualKeyCode)code;
         }
         #endregion
 
+        private IKeyboardSimulator _keyboard;
         private List<VirtualKeyCode> _pressedKeys;
 
-        public KeyboardDirector()
+        public KeyboardDirector_WI()
         {
+            _keyboard = new KeyboardSimulator(InputSim.Simulator);
             _pressedKeys = new List<VirtualKeyCode>();
         }
 
@@ -29,7 +37,7 @@ namespace WiinUPro
         {
             if (!_pressedKeys.Contains(code))
             {
-                Keyboard.KeyDown((uint)code);
+                _keyboard.KeyDown(code);
                 _pressedKeys.Add(code);
             }
         }
@@ -38,14 +46,14 @@ namespace WiinUPro
         {
             if (_pressedKeys.Contains(code))
             {
-                Keyboard.KeyUp((uint)code);
+                _keyboard.KeyUp(code);
                 _pressedKeys.Remove(code);
             }
         }
 
         public void KeyPress(VirtualKeyCode code)
         {
-            Keyboard.KeyPress(code);
+            _keyboard.KeyPress(code);
         }
 
         public void DetectKey()
@@ -57,10 +65,27 @@ namespace WiinUPro
         {
             foreach (var key in _pressedKeys)
             {
-                Keyboard.KeyUp((uint)key);
+                _keyboard.KeyUp(key);
             }
 
             _pressedKeys.Clear();
+        }
+    }
+
+    static class InputSim
+    {
+        static IInputSimulator _simulator;
+        public static IInputSimulator Simulator
+        {
+            get
+            {
+                return _simulator;
+            }
+        }
+
+        static InputSim()
+        {
+            _simulator = new InputSimulator();
         }
     }
 }
