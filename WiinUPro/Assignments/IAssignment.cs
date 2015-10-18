@@ -60,29 +60,6 @@ namespace WiinUPro
         }
     }
 
-    public class TestAssignment : IAssignment
-    {
-        private WindowsInput.Native.VirtualKeyCode _key;
-
-        public TestAssignment(WindowsInput.Native.VirtualKeyCode key)
-        {
-            _key = key;
-        }
-
-        public void Apply(float value)
-        {
-            if (value > 0.1f)
-            {
-                KeyboardDirector.Access.KeyPress(_key);
-            }
-        }
-
-        public bool SameAs(IAssignment assignment)
-        {
-            return false;
-        }
-    }
-
     public class TestMouseAssignment : IAssignment
     {
         private bool xAxis;
