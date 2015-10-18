@@ -78,20 +78,20 @@ namespace WiinUPro
 
             if (xAxis)
             {
-                //MouseDirector.Access.MouseMoveX((int)Math.Round(10 * value));
+                MouseDirector.Access.MouseMoveX((int)Math.Round(10 * value));
                 //MouseDirector.Access.MouseMoveTo(value, 0);
                 x = value;
             }
             else
             {
-                //MouseDirector.Access.MouseMoveY((int)Math.Round(10 * value));
+                MouseDirector.Access.MouseMoveY((int)Math.Round(-10 * value));
                 // MouseDirector.Access.MouseMoveTo(0, value);
                 y = value;
             }
 
             if (x != x2 || y != y2)
             {
-                MouseDirector.Access.MouseMoveTo(x, y);
+                //MouseDirector.Access.MouseMoveTo(x, y);
                 x2 = x;
                 y2 = y;
             }
