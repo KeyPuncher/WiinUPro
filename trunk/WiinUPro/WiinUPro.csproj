@@ -85,6 +85,7 @@
     </Compile>
     <Compile Include="Assignments\IAssignment.cs" />
     <Compile Include="Assignments\KeyboardAssignment.cs" />
+    <Compile Include="Assignments\MouseButtonAssignment.cs" />
     <Compile Include="Assignments\ShiftAssignment.cs" />
     <Compile Include="Directors\KeyboardDirector.cs" />
     <Compile Include="Directors\KeyboardDirector_WI.cs" />
