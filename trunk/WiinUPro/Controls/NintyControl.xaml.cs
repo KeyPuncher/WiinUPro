@@ -233,7 +233,7 @@ namespace WiinUPro
             }
         }
 
-        private void CLearMenu_Click(object sender, RoutedEventArgs e)
+        private void ClearMenu_Click(object sender, RoutedEventArgs e)
         {
             if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(_selectedInput))
             {
