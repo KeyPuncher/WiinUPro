@@ -25,8 +25,7 @@ namespace WiinUPro
         internal INintyControl _controller;         // Visual Controller Representation
         internal AssignmentCollection _clipboard;   // Assignments to be pasted
         internal string _selectedInput;             // Controller's input to be effected by change
-        internal ShiftState _currentState;
-        internal int _shiftSate = 0;                // Current shift state being applied
+        internal ShiftState _currentState;          // Current shift state being applied
 
         internal Dictionary<string, AssignmentCollection>[] _testAssignments;
 
