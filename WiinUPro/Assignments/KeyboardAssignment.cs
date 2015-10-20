@@ -131,5 +131,16 @@ namespace WiinUPro
                 return KeyCode == other.KeyCode;
             }
         }
+
+        public override int GetHashCode()
+        {
+            int hash = (int)KeyCode + 1;
+            return hash;
+        }
+
+        public override string ToString()
+        {
+            return KeyCode.ToString();
+        }
     }
 }

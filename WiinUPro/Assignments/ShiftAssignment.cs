@@ -96,18 +96,77 @@ namespace WiinUPro
                 return false;
             }
 
-            bool isSame = true;
-            isSame &= Toggles == obj.Toggles;
+            bool result = true;
+            result &= Toggles == obj.Toggles;
             if (Toggles)
             {
-                isSame &= ToggleStates == obj.ToggleStates;
+                result &= ToggleStates == obj.ToggleStates;
             }
             else
             {
-                isSame &= TargetState == obj.TargetState;
+                result &= TargetState == obj.TargetState;
             }
 
-            return isSame;
+            return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as ShiftAssignment;
+
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (Toggles != other.Toggles)
+            {
+                return false;
+            }
+
+            if (Toggles)
+            {
+                return TargetState == other.TargetState;
+            }
+            else
+            {
+                return ToggleStates == other.ToggleStates;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = (int)TargetState + 1;
+
+            if (Toggles && ToggleStates != null)
+            {
+                hash = (hash * 17) + ToggleStates.Count;
+                foreach (var state in ToggleStates)
+                {
+                    hash = (hash * 17) + (int)state;
+                }
+            }
+
+            return hash;
+        }
+
+        public override string ToString()
+        {
+            string result = "";
+
+            if (Toggles)
+            {
+                foreach (var state in ToggleStates)
+                {
+                    result += state.ToString();
+                }
+            }
+            else
+            {
+                result = TargetState.ToString();
+            }
+
+            return result;
         }
     }
 
