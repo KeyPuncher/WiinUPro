@@ -27,7 +27,7 @@ namespace WiinUPro
         internal string _selectedInput;             // Controller's input to be effected by change
         internal int _shiftSate = 0;                // Current shift state being applied
 
-        internal Dictionary<string, AssignmentCollection> _testAssignments;
+        internal Dictionary<string, AssignmentCollection>[] _testAssignments;
 
         public NintyControl()
         {
@@ -36,13 +36,15 @@ namespace WiinUPro
 
         public NintyControl(string devicePath) : this()
         {
-            _testAssignments = new Dictionary<string, AssignmentCollection>();
-            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.A, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_A));
-            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.B, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_B));
-            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.X, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_X));
-            //_testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.Y, new TestAssignment(WindowsInput.Native.VirtualKeyCode.VK_Y));
-            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment>() { new TestMouseAssignment(true) }));
-            _testAssignments.Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment>() { new TestMouseAssignment(false) }));
+            _testAssignments = new Dictionary<string, AssignmentCollection>[ShiftDirector.SHIFT_STATE_COUNT]
+            {
+                new Dictionary<string, AssignmentCollection>(),
+                new Dictionary<string, AssignmentCollection>(),
+                new Dictionary<string, AssignmentCollection>(),
+                new Dictionary<string, AssignmentCollection>()
+            };
+            _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment>() { new TestMouseAssignment(true) }));
+            _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment>() { new TestMouseAssignment(false) }));
 
             _nintroller = new Nintroller(devicePath);
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
@@ -104,9 +106,9 @@ namespace WiinUPro
             foreach (var input in e.state)
             {
                 //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
-                if (_testAssignments.ContainsKey(input.Key))
+                if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(input.Key))
                 {
-                    _testAssignments[input.Key].ApplyAll(input.Value);
+                    _testAssignments[ShiftDirector.CurrentShiftState][input.Key].ApplyAll(input.Value);
                 }
             }
 
@@ -227,13 +229,13 @@ namespace WiinUPro
 
             var key = (sender as FrameworkElement).Tag.ToString();
 
-            if (_testAssignments.ContainsKey(key))
+            if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(key))
             {
-                _testAssignments[key] = win.Result;
+                _testAssignments[ShiftDirector.CurrentShiftState][key] = win.Result;
             }
             else
             {
-                _testAssignments.Add(key, win.Result);
+                _testAssignments[ShiftDirector.CurrentShiftState].Add(key, win.Result);
             }
         }
 

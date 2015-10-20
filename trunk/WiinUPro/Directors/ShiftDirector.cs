@@ -8,6 +8,8 @@ namespace WiinUPro
 {
     static class ShiftDirector
     {
+        public const int SHIFT_STATE_COUNT = 4;
+
         static ShiftDirector()
         {
             _currentState = ShiftState.None;
