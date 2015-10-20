@@ -25,18 +25,36 @@ namespace WiinUPro
         internal INintyControl _controller;         // Visual Controller Representation
         internal AssignmentCollection _assignmentClipboard;  // Assignments to be pasted
         internal string _selectedInput;             // Controller's input to be effected by change
+        internal ShiftState _currentState;
         internal int _shiftSate = 0;                // Current shift state being applied
 
         internal Dictionary<string, AssignmentCollection>[] _testAssignments;
 
+        public int ShiftIndex
+        {
+            get
+            {
+                return (int)_currentState;
+            }
+        }
+
+        public ShiftState CurrentShiftState
+        {
+            get
+            {
+                return _currentState;
+            }
+        }
+
         public NintyControl()
         {
+            _currentState = ShiftState.None;
             InitializeComponent();
         }
 
         public NintyControl(string devicePath) : this()
         {
-            _testAssignments = new Dictionary<string, AssignmentCollection>[ShiftDirector.SHIFT_STATE_COUNT]
+            _testAssignments = new Dictionary<string, AssignmentCollection>[ShiftAssignment.SHIFT_STATE_COUNT]
             {
                 new Dictionary<string, AssignmentCollection>(),
                 new Dictionary<string, AssignmentCollection>(),
@@ -50,6 +68,16 @@ namespace WiinUPro
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
             _nintroller.LowBattery += _nintroller_LowBattery;
+        }
+
+        public void ChangeState(ShiftState newState)
+        {
+            if (_currentState != newState)
+            {
+                KeyboardDirector.Access.Release();
+                MouseDirector.Access.Release();
+                _currentState = newState;
+            }
         }
 
         #region Nintroller Events
@@ -106,9 +134,9 @@ namespace WiinUPro
             foreach (var input in e.state)
             {
                 //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
-                if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(input.Key))
+                if (_testAssignments[ShiftIndex].ContainsKey(input.Key))
                 {
-                    _testAssignments[ShiftDirector.CurrentShiftState][input.Key].ApplyAll(input.Value);
+                    _testAssignments[ShiftIndex][input.Key].ApplyAll(input.Value);
                 }
             }
 
@@ -215,29 +243,29 @@ namespace WiinUPro
 
         private void CopyMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(_selectedInput))
+            if (_testAssignments[ShiftIndex].ContainsKey(_selectedInput))
             {
-                _assignmentClipboard = _testAssignments[ShiftDirector.CurrentShiftState][_selectedInput];
+                _assignmentClipboard = _testAssignments[ShiftIndex][_selectedInput];
             }
         }
 
         private void PasteMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(_selectedInput))
+            if (_testAssignments[ShiftIndex].ContainsKey(_selectedInput))
             {
-                _testAssignments[ShiftDirector.CurrentShiftState][_selectedInput] = _assignmentClipboard;
+                _testAssignments[ShiftIndex][_selectedInput] = _assignmentClipboard;
             }
             else
             {
-                _testAssignments[ShiftDirector.CurrentShiftState].Add(_selectedInput, _assignmentClipboard);
+                _testAssignments[ShiftIndex].Add(_selectedInput, _assignmentClipboard);
             }
         }
 
         private void ClearMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(_selectedInput))
+            if (_testAssignments[ShiftIndex].ContainsKey(_selectedInput))
             {
-                _testAssignments[ShiftDirector.CurrentShiftState].Remove(_selectedInput);
+                _testAssignments[ShiftIndex].Remove(_selectedInput);
             }
         }
         #endregion
@@ -261,13 +289,13 @@ namespace WiinUPro
             InputsWindow win = new InputsWindow();
             win.ShowDialog();
 
-            if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(key))
+            if (_testAssignments[ShiftIndex].ContainsKey(key))
             {
-                _testAssignments[ShiftDirector.CurrentShiftState][key] = win.Result;
+                _testAssignments[ShiftIndex][key] = win.Result;
             }
             else
             {
-                _testAssignments[ShiftDirector.CurrentShiftState].Add(key, win.Result);
+                _testAssignments[ShiftIndex].Add(key, win.Result);
             }
         }
 

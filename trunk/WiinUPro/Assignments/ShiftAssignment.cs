@@ -8,6 +8,8 @@ namespace WiinUPro
 {
     public class ShiftAssignment : IAssignment
     {
+        public const int SHIFT_STATE_COUNT = 4;
+
         /// <summary>
         /// The state to enter when used.
         /// </summary>
@@ -32,9 +34,15 @@ namespace WiinUPro
             set { _threashold = value; }
         }
 
+        private NintyControl _control;
         private ShiftState _previousState;
         private float _threashold = 0.1f;
         private bool _isEnabled = false;
+
+        public ShiftAssignment(NintyControl control)
+        {
+            _control = control;
+        }
 
         public void Apply(float value)
         {
@@ -48,33 +56,33 @@ namespace WiinUPro
                 {
                     if (isDown)
                     {
-                        if (ToggleStates.Contains((ShiftState)ShiftDirector.CurrentShiftState))
+                        if (ToggleStates.Contains(_control.CurrentShiftState))
                         {
-                            int index = ToggleStates.IndexOf((ShiftState)ShiftDirector.CurrentShiftState);
+                            int index = ToggleStates.IndexOf(_control.CurrentShiftState);
                             
                             if (ToggleStates.Count > index)
                             {
-                                ShiftDirector.ChangeState(ToggleStates[index]);
+                                _control.ChangeState(ToggleStates[index]);
                             }
                             else
                             {
-                                ShiftDirector.ChangeState(ToggleStates[0]);
+                                _control.ChangeState(ToggleStates[0]);
                             }
                         }
                         else
                         {
-                            ShiftDirector.ChangeState(ToggleStates[0]);
+                            _control.ChangeState(ToggleStates[0]);
                         }
                     }
                 }
                 else if (isDown)
                 {
-                    _previousState = (ShiftState)ShiftDirector.CurrentShiftState;
-                    ShiftDirector.ChangeState(TargetState);
+                    _previousState = _control.CurrentShiftState;
+                    _control.ChangeState(TargetState);
                 }
                 else
                 {
-                    ShiftDirector.ChangeState(_previousState);
+                    _control.ChangeState(_previousState);
                 }
             }
         }
@@ -101,5 +109,13 @@ namespace WiinUPro
 
             return isSame;
         }
+    }
+
+    public enum ShiftState
+    {
+        None    = 0,
+        Red     = 1,
+        Blue    = 2,
+        Green   = 3
     }
 }
