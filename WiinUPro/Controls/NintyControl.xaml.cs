@@ -303,6 +303,10 @@ namespace WiinUPro
             _selectedInput = e;
             subMenu.IsOpen = true;
         }
+        private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _currentState = (ShiftState)dropShift.SelectedIndex;
+        }
         #endregion
     }
 
