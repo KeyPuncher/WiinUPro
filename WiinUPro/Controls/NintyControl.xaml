@@ -12,10 +12,10 @@
         <Viewbox x:Name="_view" Margin="0,32,0,0" />
         <Grid.ContextMenu>
             <ContextMenu x:Name="subMenu">
-                <MenuItem Header="Assign"/>
-                <MenuItem Header="Copy"/>
-                <MenuItem Header="Paste"/>
-                <MenuItem Header="Clear"/>
+                <MenuItem Header="Assign" Click="AssignMenu_Click"/>
+                <MenuItem Header="Copy" Click="CopyMenu_Click"/>
+                <MenuItem Header="Paste" Click="PasteMenu_Click"/>
+                <MenuItem Header="Clear" Click="CLearMenu_Click"/>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>
