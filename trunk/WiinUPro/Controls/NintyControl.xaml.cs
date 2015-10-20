@@ -23,7 +23,7 @@ namespace WiinUPro
     {
         internal Nintroller _nintroller;            // Physical Controller Device
         internal INintyControl _controller;         // Visual Controller Representation
-        internal AssignmentCollection _assignmentClipboard;  // Assignments to be pasted
+        internal AssignmentCollection _clipboard;   // Assignments to be pasted
         internal string _selectedInput;             // Controller's input to be effected by change
         internal ShiftState _currentState;
         internal int _shiftSate = 0;                // Current shift state being applied
@@ -245,7 +245,7 @@ namespace WiinUPro
         {
             if (_testAssignments[ShiftIndex].ContainsKey(_selectedInput))
             {
-                _assignmentClipboard = _testAssignments[ShiftIndex][_selectedInput];
+                _clipboard = _testAssignments[ShiftIndex][_selectedInput];
             }
         }
 
@@ -253,11 +253,11 @@ namespace WiinUPro
         {
             if (_testAssignments[ShiftIndex].ContainsKey(_selectedInput))
             {
-                _testAssignments[ShiftIndex][_selectedInput] = _assignmentClipboard;
+                _testAssignments[ShiftIndex][_selectedInput] = _clipboard;
             }
             else
             {
-                _testAssignments[ShiftIndex].Add(_selectedInput, _assignmentClipboard);
+                _testAssignments[ShiftIndex].Add(_selectedInput, _clipboard);
             }
         }
 
