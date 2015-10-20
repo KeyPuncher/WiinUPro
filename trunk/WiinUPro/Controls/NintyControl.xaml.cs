@@ -23,7 +23,7 @@ namespace WiinUPro
     {
         internal Nintroller _nintroller;            // Physical Controller Device
         internal INintyControl _controller;         // Visual Controller Representation
-        internal IAssignment _assignmentClipboard;  // Assignment to be pasted
+        internal AssignmentCollection _assignmentClipboard;  // Assignments to be pasted
         internal string _selectedInput;             // Controller's input to be effected by change
         internal int _shiftSate = 0;                // Current shift state being applied
 
@@ -207,6 +207,39 @@ namespace WiinUPro
 
             btnConnect.IsEnabled = true;
         }
+
+        private void AssignMenu_Click(object sender, RoutedEventArgs e)
+        {
+            InputSelected(sender, _selectedInput);
+        }
+
+        private void CopyMenu_Click(object sender, RoutedEventArgs e)
+        {
+            if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(_selectedInput))
+            {
+                _assignmentClipboard = _testAssignments[ShiftDirector.CurrentShiftState][_selectedInput];
+            }
+        }
+
+        private void PasteMenu_Click(object sender, RoutedEventArgs e)
+        {
+            if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(_selectedInput))
+            {
+                _testAssignments[ShiftDirector.CurrentShiftState][_selectedInput] = _assignmentClipboard;
+            }
+            else
+            {
+                _testAssignments[ShiftDirector.CurrentShiftState].Add(_selectedInput, _assignmentClipboard);
+            }
+        }
+
+        private void CLearMenu_Click(object sender, RoutedEventArgs e)
+        {
+            if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(_selectedInput))
+            {
+                _testAssignments[ShiftDirector.CurrentShiftState].Remove(_selectedInput);
+            }
+        }
         #endregion
 
         #region Control Events
@@ -221,13 +254,12 @@ namespace WiinUPro
             }
         }
 
-        private void InputSelected(object sender, string e)
+        private void InputSelected(object sender, string key)
         {
-            System.Diagnostics.Debug.WriteLine(e);
+            System.Diagnostics.Debug.WriteLine(key);
+
             InputsWindow win = new InputsWindow();
             win.ShowDialog();
-
-            var key = (sender as FrameworkElement).Tag.ToString();
 
             if (_testAssignments[ShiftDirector.CurrentShiftState].ContainsKey(key))
             {
