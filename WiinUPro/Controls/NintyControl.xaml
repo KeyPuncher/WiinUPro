@@ -15,7 +15,7 @@
                 <MenuItem Header="Assign" Click="AssignMenu_Click"/>
                 <MenuItem Header="Copy" Click="CopyMenu_Click"/>
                 <MenuItem Header="Paste" Click="PasteMenu_Click"/>
-                <MenuItem Header="Clear" Click="CLearMenu_Click"/>
+                <MenuItem Header="Clear" Click="ClearMenu_Click"/>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>
