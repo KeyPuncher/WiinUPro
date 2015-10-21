@@ -437,6 +437,24 @@ Public Class Mouse
         SendInput(1, input, cbSize)
     End Sub
     ''' <summary>
+    ''' Moves the mouse to a certain location on the screen.
+    ''' Using a value from 0.0 to 1.0.
+    ''' </summary>
+    ''' <param name="X">The x location to move the mouse between 0.0 and 1.0.</param>
+    ''' <param name="Y">The y location to move the mouse between 0.0 and 1.0</param>
+    ''' <remarks></remarks>
+    Public Shared Sub Move(ByVal X As Double, ByVal Y As Double)
+        Dim input As New INPUT()
+        input.dwType = INPUT_MOUSE
+        input.mkhi.mi = New MOUSEINPUT()
+        input.mkhi.mi.dwExtraInfo = IntPtr.Zero
+        input.mkhi.mi.dwFlags = MOUSEEVENTF_ABSOLUTE + MOUSEEVENTF_MOVE
+        input.mkhi.mi.dx = X * 65535
+        input.mkhi.mi.dy = Y * 65535
+        Dim cbSize As Integer = Marshal.SizeOf(GetType(INPUT))
+        SendInput(1, input, cbSize)
+    End Sub
+    ''' <summary>
     ''' Moves the mouse to a location relative to the current one.
     ''' </summary>
     ''' <param name="X">The amount of pixels to move the mouse on the x axis.</param>
