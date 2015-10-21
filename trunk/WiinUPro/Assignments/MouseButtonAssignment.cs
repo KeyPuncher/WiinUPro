@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using InputManager;
 
-namespace WiinUPro.Assignments
+namespace WiinUPro
 {
     public class MouseButtonAssignment : IAssignment
     {
