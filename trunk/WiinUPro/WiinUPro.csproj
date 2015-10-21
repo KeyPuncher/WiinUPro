@@ -90,6 +90,7 @@
     <Compile Include="Directors\KeyboardDirector.cs" />
     <Compile Include="Directors\KeyboardDirector_WI.cs" />
     <Compile Include="Directors\MouseDirector.cs" />
+    <Compile Include="Directors\MouseDirector_WI.cs" />
     <Compile Include="Directors\VJoyDirector.cs" />
     <Compile Include="Directors\ScpDirector.cs" />
     <Compile Include="Controls\ProControl.xaml.cs">

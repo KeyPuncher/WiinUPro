@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WindowsInput;
+using InputManager;
 
 namespace WiinUPro
 {
@@ -18,151 +18,68 @@ namespace WiinUPro
         }
         #endregion  
 
-        private IMouseSimulator _mouse;
-        private List<byte> _pressedButtons;
+        private List<Mouse.MouseKeys> _pressedButtons;
 
         public MouseDirector()
         {
-            _mouse = new MouseSimulator(InputSim.Simulator);
-            _pressedButtons = new List<byte>();
+            _pressedButtons = new List<Mouse.MouseKeys>();
         }
 
-        public void MouseButtonDown(byte code)
+        public void MouseButtonDown(Mouse.MouseKeys code)
         {
             if (!_pressedButtons.Contains(code))
             {
-            switch (code)
-            {
-                case 0:
-                    _mouse.LeftButtonDown();
-                    break;
-
-                case 1:
-                    _mouse.RightButtonDown();
-                    break;
-
-                default:
-                    _mouse.XButtonDown(code);
-                    break;
-            }
-
+                Mouse.ButtonDown(code);
                 _pressedButtons.Add(code);
             }
         }
 
-        public void MouseButtonUp(byte code)
+        public void MouseButtonUp(Mouse.MouseKeys code)
         {
             if (_pressedButtons.Contains(code))
             {
-            switch (code)
-            {
-                case 0:
-                    _mouse.LeftButtonUp();
-                    break;
-
-                case 1:
-                    _mouse.RightButtonUp();
-                    break;
-
-                default:
-                    _mouse.XButtonUp(code);
-                    break;
-            }
-
+                Mouse.ButtonUp(code);
                 _pressedButtons.Remove(code);
             }
         }
 
-        public void MouseButtonPress(int code)
+        public void MouseButtonPress(Mouse.MouseKeys code)
         {
-            switch (code)
-            {
-                case 0:
-                    _mouse.LeftButtonClick();
-                    break;
-
-                case 1:
-                    _mouse.RightButtonClick();
-                    break;
-
-                default:
-                    _mouse.XButtonClick(code);
-                    break;
-            }
-        }
-
-        public void MouseButtonDoubleClick(int code)
-        {
-            switch (code)
-            {
-                case 0:
-                    _mouse.LeftButtonDoubleClick();
-                    break;
-
-                case 1:
-                    _mouse.RightButtonDoubleClick();
-                    break;
-
-                default:
-                    _mouse.XButtonDoubleClick(code);
-                    break;
-            }
+            Mouse.PressButton(code);
         }
 
         public void MouseMoveX(int amount)
         {
-            _mouse.MoveMouseBy(amount, 0);
+            Mouse.MoveRelative(amount, 0);
         }
 
         public void MouseMoveY(int amount)
         {
-            _mouse.MoveMouseBy(0, amount);
+            Mouse.MoveRelative(0, amount);
         }
 
         public void MouseMoveTo(float x, float y)
         {
-            var w = /*System.Windows.SystemParameters.PrimaryScreenWidth*/ 65535 * x;
-            var h = /*System.Windows.SystemParameters.PrimaryScreenHeight*/ 65535 * y;
-
-            _mouse.MoveMouseTo(w, h);
+            Mouse.Move((int)Math.Floor(x * 100), (int)Math.Floor(y * 100));
         }
 
+        // Will need to change and test how the scrolling works
         public void MouseScrollVertical(int amount)
         {
-            _mouse.VerticalScroll(amount);
+            Mouse.Scroll(Mouse.ScrollDirection.Up);
         }
 
         public void MouseScrollHorizontal(int amount)
         {
-            _mouse.HorizontalScroll(amount);
+            Mouse.Scroll(Mouse.ScrollDirection.Down);
         }
 
         public void Release()
         {
             foreach (var btn in _pressedButtons)
             {
-                if (btn == 0)
-                {
-                    _mouse.LeftButtonUp();
-                }
-                else if (btn == 1)
-                {
-                    _mouse.RightButtonUp();
-                }
-                else
-                {
-                    _mouse.XButtonUp(btn);
-                }
+                Mouse.ButtonUp(btn);
             }
         }
-    }
-
-    // TODO: Test if XButton ids start from 0, 1, or overlap with left and right
-    public enum VirtualMouseButton : byte
-    {
-        Left    = 0,
-        Right   = 1,
-        Middle  = 2,
-        Button4 = 3
     }
 }
