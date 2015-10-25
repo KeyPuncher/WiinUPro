@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace WiinUSoft
 {
@@ -18,6 +10,9 @@ namespace WiinUSoft
     /// </summary>
     public partial class ErrorWindow : Window
     {
+        private const string KEY    = "key-67c739dec007c874f0f6c4362cda08b4";
+        private const string DOMAIN = "sandboxb83b809e3b6d4692bea3f0664adce540.mailgun.org";
+
         private Exception _exception;
 
         public ErrorWindow()
@@ -37,50 +32,53 @@ namespace WiinUSoft
         private void _dontSendBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
+            Application.Current.Shutdown();
         }
 
         private void _sendBtn_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            string messageBody = "Test Body";
 
-            // Option 1, send an email
-            System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
-            message.To.Add("justin@wiinupro.com");
-            message.Subject = "WiinUSoft Error";
-            message.From = new System.Net.Mail.MailAddress("justin@wiinupro.com");
-            message.Body = _exception.InnerException != null
-                ? string.Format("Date: {2}\n\nOS: {3}\n\nUser Comments: {6}\n\nMessage: {0}\n\nStack: {1}\n\nInner Message: {4}\n\nInnerStack:\n {5}",
+            messageBody = string.Format("Date: {2}\n\nOS: {3}\n\nUser Comments: {4}\n\nMessage: {0}\n\nStack:\n {1}",
                     _exception.Message,                     // 0
                     _exception.StackTrace,                  // 1
-                    System.DateTime.Now,                    // 2
-                    Environment.OSVersion.ToString(),       // 3
-                    _exception.InnerException.Message,      // 4
-                    _exception.InnerException.StackTrace,   // 5
-                    _userInfo.Text)                         // 6
-                : string.Format("Date: {2}\n\nOS: {3}\n\nUser Comments: {4}\n\nMessage: {0}\n\nStack:\n {1}",
-                    _exception.Message,                     // 0
-                    _exception.StackTrace,                  // 1
-                    System.DateTime.Now,                    // 2
+                    DateTime.Now,                           // 2
                     Environment.OSVersion.ToString(),       // 3
                     _userInfo.Text);                        // 4
 
-            System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
-            smtp.Host = "smtp.gmail.com";
-            smtp.Port = 587;
-            smtp.Credentials = new System.Net.NetworkCredential("wiinuproError@gmail.com", "wiinupro101");
-            smtp.EnableSsl = true;
-            smtp.Timeout = 30;
+            if (_exception.InnerException != null)
+            {
+                messageBody += string.Format("n\nInner Message: {0}\n\nInnerStack:\n {1}",
+                    _exception.InnerException.Message,      // 0
+                    _exception.InnerException.StackTrace);  // 1
+            }
+            
+            // Send Email using MailGun
+            RestClient client = new RestClient();
+            client.BaseUrl = new Uri("https://api.mailgun.net/v3");
+            client.Authenticator = new HttpBasicAuthenticator("api", KEY);
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", DOMAIN, ParameterType.UrlSegment);
+            request.Resource = "{domain}/messages";
+            request.AddParameter("from", "WiinUSoft <wiinuproerror@gmail.com>");
+            request.AddParameter("to", "justin@wiinupro.com");
+            request.AddParameter("subject", "WiinUSoft Error");
+            request.AddParameter
+            (
+                "text", messageBody
+            );
+            request.Method = Method.POST;
 
             try
             {
-                smtp.Send(message);
+                var result = client.Execute(request);
             }
             catch
             {
                 // it's okay if we fail, we just won't notify the user
             }
-            
-            // Option 2, post to server
+
+            Application.Current.Shutdown();
         }
     }
 }
