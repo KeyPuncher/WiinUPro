@@ -26,6 +26,7 @@ namespace WiinUPro
 
         private List<VirtualKeyCode> _selectedKeys;
         private List<MouseInput> _selectedMouseDirections;
+        private List<InputManager.Mouse.MouseKeys> _selectedMouseButtons;
 
         public InputsWindow()
         {
@@ -36,6 +37,7 @@ namespace WiinUPro
 
             _selectedKeys = new List<VirtualKeyCode>();
             _selectedMouseDirections = new List<MouseInput>();
+            _selectedMouseButtons = new List<InputManager.Mouse.MouseKeys>();
         }
 
         public InputsWindow(AssignmentCollection collection) : this()
@@ -43,51 +45,43 @@ namespace WiinUPro
             // fill the window with current assignments
         }
 
-        private void ToggleKey(object sender, RoutedEventArgs e)
+        private void AddToList<TEnum>(object obj, List<TEnum> list) where TEnum : struct
         {
-            var btn = sender as Button;
-            
+            var btn = obj as Button;
+
             if (btn != null)
             {
-                VirtualKeyCode code;
-                if (Enum.TryParse<VirtualKeyCode>(btn.Tag.ToString(), out code))
+                TEnum inputType;
+                if (Enum.TryParse(btn.Tag.ToString(), out inputType))
                 {
-                    if (btn.Background == keySelectedBrush && _selectedKeys.Contains(code))
+                    if (btn.Background == keySelectedBrush && list.Contains(inputType))
                     {
                         // Deselect and remove from list
                         btn.Background = keyDeselectedBrush;
-                        _selectedKeys.Remove(code);
+                        list.Remove(inputType);
                     }
                     else
                     {
                         btn.Background = keySelectedBrush;
-                        _selectedKeys.Add(code);
+                        list.Add(inputType);
                     }
                 }
             }
         }
 
+        private void ToggleKey(object sender, RoutedEventArgs e)
+        {
+            AddToList<VirtualKeyCode>(sender, _selectedKeys);
+        }
+
         private void ToggleMouseDirection(object sender, RoutedEventArgs e)
         {
-            var btn = sender as Button;
+            AddToList<MouseInput>(sender, _selectedMouseDirections);
+        }
 
-            if (btn != null)
-            {
-                MouseInput input;
-                if (Enum.TryParse(btn.Tag.ToString(), out input))
-                {
-                    if (btn.Background == keySelectedBrush && _selectedMouseDirections.Contains(input))
-                    {
-                        btn.Background = keyDeselectedBrush;
-                        _selectedMouseDirections.Remove(input);
-                    }
-                    else
-                    {
-                        btn.Background = keySelectedBrush;
-                        _selectedMouseDirections.Add(input);
-                    }
-                }
-            }
+        private void ToggleMouseButton(object sender, RoutedEventArgs e)
+        {
+            AddToList(sender, _selectedMouseButtons);
         }
 
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
