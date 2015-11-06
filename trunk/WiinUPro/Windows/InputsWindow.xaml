@@ -45,6 +45,10 @@
                     <Button Content="Dn" HorizontalAlignment="Left" Margin="111,143,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveDown"/>
                     <Button Content="Lt" HorizontalAlignment="Left" Margin="64,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveLeft"/>
                     <Button Content="Rt" HorizontalAlignment="Left" Margin="163,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveRight"/>
+
+                    <Button Content="L" HorizontalAlignment="Left" Margin="259,40,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left"/>
+                    <Button Content="M" HorizontalAlignment="Left" Margin="306,40,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle"/>
+                    <Button Content="R" HorizontalAlignment="Left" Margin="353,40,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Right"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Xbox 360">
