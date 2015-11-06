@@ -25,6 +25,7 @@ namespace WiinUPro
         public SolidColorBrush keyDeselectedBrush;
 
         private List<VirtualKeyCode> _selectedKeys;
+        private List<MouseInput> _selectedMouseDirections;
 
         public InputsWindow()
         {
@@ -34,6 +35,7 @@ namespace WiinUPro
             keyDeselectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD));
 
             _selectedKeys = new List<VirtualKeyCode>();
+            _selectedMouseDirections = new List<MouseInput>();
         }
 
         public InputsWindow(AssignmentCollection collection) : this()
@@ -65,11 +67,39 @@ namespace WiinUPro
             }
         }
 
+        private void ToggleMouseDirection(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+
+            if (btn != null)
+            {
+                MouseInput input;
+                if (Enum.TryParse(btn.Tag.ToString(), out input))
+                {
+                    if (btn.Background == keySelectedBrush && _selectedMouseDirections.Contains(input))
+                    {
+                        btn.Background = keyDeselectedBrush;
+                        _selectedMouseDirections.Remove(input);
+                    }
+                    else
+                    {
+                        btn.Background = keySelectedBrush;
+                        _selectedMouseDirections.Add(input);
+                    }
+                }
+            }
+        }
+
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
         {
             foreach (var key in _selectedKeys)
             {
                 Result.Add(new KeyboardAssignment(key));
+            }
+
+            foreach (var mDir in _selectedMouseDirections)
+            {
+                Result.Add(new MouseAssignment(mDir, 1.0f));
             }
 
             Close();

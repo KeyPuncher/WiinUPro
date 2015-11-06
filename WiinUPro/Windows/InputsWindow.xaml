@@ -40,7 +40,12 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Mouse">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Button Content="Up" HorizontalAlignment="Left" Margin="111,48,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveUp"/>
+                    <Button Content="Dn" HorizontalAlignment="Left" Margin="111,143,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveDown"/>
+                    <Button Content="Lt" HorizontalAlignment="Left" Margin="64,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveLeft"/>
+                    <Button Content="Rt" HorizontalAlignment="Left" Margin="163,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveRight"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Xbox 360">
                 <Grid Background="#FFE5E5E5"/>
