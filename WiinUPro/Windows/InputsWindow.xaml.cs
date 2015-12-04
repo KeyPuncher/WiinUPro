@@ -96,6 +96,11 @@ namespace WiinUPro
                 Result.Add(new MouseAssignment(mDir, 1.0f));
             }
 
+            foreach (var mBtn in _selectedMouseButtons)
+            {
+                Result.Add(new MouseButtonAssignment(mBtn));
+            }
+
             Close();
         }
 
