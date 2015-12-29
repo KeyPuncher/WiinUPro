@@ -88,6 +88,7 @@
     <Compile Include="Assignments\MouseAssignment.cs" />
     <Compile Include="Assignments\MouseButtonAssignment.cs" />
     <Compile Include="Assignments\ShiftAssignment.cs" />
+    <Compile Include="Assignments\XInputButtonAssignment.cs" />
     <Compile Include="Directors\KeyboardDirector.cs" />
     <Compile Include="Directors\KeyboardDirector_WI.cs" />
     <Compile Include="Directors\MouseDirector.cs" />

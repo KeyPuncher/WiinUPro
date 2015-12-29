@@ -52,7 +52,23 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Xbox 360">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Button Content="A" HorizontalAlignment="Left" Margin="444,154,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="A"/>
+                    <Button Content="B" HorizontalAlignment="Left" Margin="493,108,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="B"/>
+                    <Button Content="X" HorizontalAlignment="Left" Margin="401,108,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="X"/>
+                    <Button Content="Y" HorizontalAlignment="Left" Margin="444,62,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Y"/>
+                    <Button Content="Up" HorizontalAlignment="Left" Margin="149,139,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Up"/>
+                    <Button Content="Dn" HorizontalAlignment="Left" Margin="149,222,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Down"/>
+                    <Button Content="Lt" HorizontalAlignment="Left" Margin="102,184,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Left"/>
+                    <Button Content="Rt" HorizontalAlignment="Left" Margin="196,184,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Right"/>
+                    <Button Content="LB" HorizontalAlignment="Left" Margin="149,22,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="LB"/>
+                    <Button Content="RB" HorizontalAlignment="Left" Margin="371,22,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="RB"/>
+                    <Button Content="B" HorizontalAlignment="Left" Margin="218,77,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Back"/>
+                    <Button Content="G" HorizontalAlignment="Left" Margin="265,77,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Guide"/>
+                    <Button Content="S" HorizontalAlignment="Left" Margin="312,77,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Start"/>
+                    <Button Content="LS" HorizontalAlignment="Left" Margin="56,77,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="LS"/>
+                    <Button Content="RS" HorizontalAlignment="Left" Margin="338,184,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="RS"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Joystick">
                 <Grid Background="#FFE5E5E5"/>
