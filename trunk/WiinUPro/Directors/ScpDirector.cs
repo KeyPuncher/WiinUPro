@@ -7,7 +7,7 @@ using ScpControl;
 
 namespace WiinUPro
 {
-    class ScpDirector
+    public class ScpDirector
     {
         public const int MAX_XINPUT_INSTNACES = 4;
 

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using InputManager;
+using ScpControl;
 
 namespace WiinUPro
 {
@@ -27,6 +28,8 @@ namespace WiinUPro
         private List<VirtualKeyCode> _selectedKeys;
         private List<MouseInput> _selectedMouseDirections;
         private List<InputManager.Mouse.MouseKeys> _selectedMouseButtons;
+        private List<X360Button> _selectedXInputButtons;
+        private List<X360Axis> _selectedXInputAxes;
 
         public InputsWindow()
         {
@@ -38,6 +41,8 @@ namespace WiinUPro
             _selectedKeys = new List<VirtualKeyCode>();
             _selectedMouseDirections = new List<MouseInput>();
             _selectedMouseButtons = new List<InputManager.Mouse.MouseKeys>();
+            _selectedXInputButtons = new List<X360Button>();
+            _selectedXInputAxes = new List<X360Axis>();
         }
 
         public InputsWindow(AssignmentCollection collection) : this()
@@ -84,6 +89,16 @@ namespace WiinUPro
             AddToList(sender, _selectedMouseButtons);
         }
 
+        private void ToggleXInputButton(object sender, RoutedEventArgs e)
+        {
+            AddToList(sender, _selectedXInputButtons);
+        }
+
+        private void ToggleXInputAxis(object sender, RoutedEventArgs e)
+        {
+            AddToList(sender, _selectedXInputAxes);
+        }
+
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
         {
             foreach (var key in _selectedKeys)
@@ -99,6 +114,11 @@ namespace WiinUPro
             foreach (var mBtn in _selectedMouseButtons)
             {
                 Result.Add(new MouseButtonAssignment(mBtn));
+            }
+
+            foreach (var xBtn in _selectedXInputButtons)
+            {
+                Result.Add(new XInputButtonAssignment(xBtn));
             }
 
             Close();
