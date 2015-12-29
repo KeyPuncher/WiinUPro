@@ -118,12 +118,15 @@ namespace WiinUPro
 
         public void Apply(XInput_Device device = XInput_Device.Device_A)
         {
-            // TODO: Send Bus through
+            this[(int)device].Update();
         }
 
         public void ApplyAll()
         {
-            // TODO: Send all reports
+            foreach (var bus in _xInstances)
+            {
+                bus.Update();
+            }
         }
 
         public enum XInput_Device : int
@@ -229,9 +232,6 @@ namespace WiinUPro
 
             public void Update()
             {
-                // TODO: Replace dummy
-                int dummy = 0;
-
                 byte[] rumble = new byte[8];
                 byte[] output = new byte[28];
 
@@ -245,34 +245,82 @@ namespace WiinUPro
                 output[9] = 0x14;
 
                 // buttons
-                output[(uint)X360Axis.BT_Lo] = 0x00;
-                output[(uint)X360Axis.BT_Hi] = 0x00;
+                int buttonFlags = 0x00;             // try X360Button.Up here instead
+                buttonFlags |= (byte)(inputs.Up     ? 1 << 0 : 0);
+                buttonFlags |= (byte)(inputs.Down   ? 1 << 1 : 0);
+                buttonFlags |= (byte)(inputs.Right  ? 1 << 2 : 0);
+                buttonFlags |= (byte)(inputs.Left   ? 1 << 3 : 0);
+                buttonFlags |= (byte)(inputs.Start  ? 1 << 4 : 0);
+                buttonFlags |= (byte)(inputs.Back   ? 1 << 5 : 0);
+                buttonFlags |= (byte)(inputs.LS     ? 1 << 6 : 0);
+                buttonFlags |= (byte)(inputs.RS     ? 1 << 2 : 0);
+                buttonFlags |= (byte)(inputs.LB     ? 1 << 8 : 0);
+                buttonFlags |= (byte)(inputs.RB     ? 1 << 9 : 0);
+                buttonFlags |= (byte)(inputs.Guide  ? 1 << 10 : 0);
+                buttonFlags |= (byte)(inputs.A      ? 1 << 12 : 0);
+                buttonFlags |= (byte)(inputs.B      ? 1 << 13 : 0);
+                buttonFlags |= (byte)(inputs.X      ? 1 << 14 : 0);
+                buttonFlags |= (byte)(inputs.Y      ? 1 << 15 : 0);
+                output[(uint)X360Axis.BT_Lo] = (byte)((buttonFlags >> 0) & 0xFF);
+                output[(uint)X360Axis.BT_Hi] = (byte)((buttonFlags >> 8) & 0xFF);
 
                 // triggers
-                output[(uint)X360Axis.LT] = (byte)dummy;
-                output[(uint)X360Axis.RT] = (byte)dummy;
+                output[(uint)X360Axis.LT] = GetRawTrigger(inputs.LT);
+                output[(uint)X360Axis.RT] = GetRawTrigger(inputs.RT);
 
                 // Left Joystick
-                output[(uint)X360Axis.LX_Lo] = (byte)((dummy >> 0) & 0xFF);
-                output[(uint)X360Axis.LX_Hi] = (byte)((dummy >> 8) & 0xFF);
-                output[(uint)X360Axis.LY_Lo] = (byte)((dummy >> 0) & 0xFF);
-                output[(uint)X360Axis.LY_Hi] = (byte)((dummy >> 8) & 0xFF);
+                int rawLX = GetRawAxis(inputs.LX);
+                int rawLY = GetRawAxis(inputs.LY);
+                output[(uint)X360Axis.LX_Lo] = (byte)((rawLX >> 0) & 0xFF);
+                output[(uint)X360Axis.LX_Hi] = (byte)((rawLX >> 8) & 0xFF);
+                output[(uint)X360Axis.LY_Lo] = (byte)((rawLY >> 0) & 0xFF);
+                output[(uint)X360Axis.LY_Hi] = (byte)((rawLY >> 8) & 0xFF);
 
                 // Right Joystick
-                output[(uint)X360Axis.RX_Lo] = (byte)((dummy >> 0) & 0xFF);
-                output[(uint)X360Axis.RX_Hi] = (byte)((dummy >> 8) & 0xFF);
-                output[(uint)X360Axis.RY_Lo] = (byte)((dummy >> 0) & 0xFF);
-                output[(uint)X360Axis.RY_Hi] = (byte)((dummy >> 8) & 0xFF);
+                int rawRX = GetRawAxis(inputs.RX);
+                int rawRY = GetRawAxis(inputs.RY);
+                output[(uint)X360Axis.RX_Lo] = (byte)((rawRX >> 0) & 0xFF);
+                output[(uint)X360Axis.RX_Hi] = (byte)((rawRX >> 8) & 0xFF);
+                output[(uint)X360Axis.RY_Lo] = (byte)((rawRY >> 0) & 0xFF);
+                output[(uint)X360Axis.RY_Hi] = (byte)((rawRY >> 8) & 0xFF);
 
                 if (Report(output, rumble))
                 {
                     // True on rumble state change
                     if (rumble[1] == 0x08)
                     {
-                        // rumble
+                        // TODO: rumble
                         // perhaps rumble even if change flag not set
                     }
                 }
+            }
+
+            public int GetRawAxis(float axis)
+            {
+                if (axis > 1.0f)
+                {
+                    return 32767;
+                }
+                if (axis < -1.0f)
+                {
+                    return -32767;
+                }
+
+                return (int)(axis * 32767);
+            }
+
+            public byte GetRawTrigger(float trigger)
+            {
+                if (trigger > 1.0f)
+                {
+                    return 0xFF;
+                }
+                if (trigger < 0.0f)
+                {
+                    return 0;
+                }
+
+                return (byte)(trigger * 0xFF);
             }
         }
     }
