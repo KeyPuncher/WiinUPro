@@ -139,6 +139,9 @@ namespace WiinUPro
                 }
             }
 
+            // Send any XInput changes
+            ScpDirector.Access.ApplyAll();
+
             // Visaul should only be updated if tab is in view
             Dispatcher.Invoke(new Action(() =>
             {
