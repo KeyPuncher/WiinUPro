@@ -128,5 +128,15 @@ namespace WiinUPro
         {
             Close();
         }
+
+        private void xInputConnect_Click(object sender, RoutedEventArgs e)
+        {
+            ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_A);
+        }
+
+        private void xInputDisconnect_Click(object sender, RoutedEventArgs e)
+        {
+            ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_B);
+        }
     }
 }

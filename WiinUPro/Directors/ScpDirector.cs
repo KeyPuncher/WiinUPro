@@ -77,8 +77,7 @@ namespace WiinUPro
 
             for (int i = 0; i <= (int)device; i++)
             {
-                this[i].Open();
-                result = this[i].Start();
+                result = this[i].Connect();
 
                 if (!result)
                 {
@@ -101,15 +100,13 @@ namespace WiinUPro
 
             for (int i = _xInstances.Count - 1; i >= (int)device; i--)
             {
-                this[i].Stop();
-                result = this[i].Close();
+                result = this[i].Disconnect();
 
                 if (!result)
                 {
                     return false;
                 }
 
-                this[i].Unplug(this[i].ID);
                 _xInstances.RemoveAt(i);
             }
 
@@ -212,12 +209,41 @@ namespace WiinUPro
         {
             public XInputState inputs;
             public int ID { get; protected set; }
+            public bool PluggedIn { get; protected set; }
+            public bool Started { get; protected set; }
 
             public XInputBus(int id)
             {
                 inputs = new XInputState();
                 ID = id;
                 Plugin(id);
+            }
+
+            public bool Connect()
+            {
+                if (!PluggedIn)
+                {
+                    PluggedIn = Plugin(ID);
+                }
+
+                if (!Started)
+                {
+                    Started = Open() && Start();
+                }
+
+                return Started;
+            }
+
+            public bool Disconnect()
+            {
+                if (PluggedIn)
+                {
+                    Started = !Stop();
+                    Close();
+                    PluggedIn = !Unplug(ID);
+                }
+
+                return PluggedIn == false;
             }
 
             public void SetInput(X360Button button, bool state)
@@ -232,6 +258,8 @@ namespace WiinUPro
 
             public void Update()
             {
+                if (!Started) return;
+
                 byte[] rumble = new byte[8];
                 byte[] output = new byte[28];
 
