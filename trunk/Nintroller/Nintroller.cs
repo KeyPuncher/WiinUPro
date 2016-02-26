@@ -52,7 +52,7 @@ namespace NintrollerLib
         [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
         static extern int CM_Get_Device_ID(
            UInt32 dnDevInst,
-           char[] buffer,
+           string buffer,
            int bufferLen,
            int flags
         );
@@ -87,19 +87,19 @@ namespace NintrollerLib
 
         [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern bool SetupDiOpenDeviceInfo(
-            HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInfoSet,
-            char[] DeviceInstanceId,
+            IntPtr DeviceInfoSet,
+            string DeviceInstanceId,
             IntPtr hwndParent,
             int OpenFlags,
             ref HIDImports.SP_DEVINFO_DATA DeviceInfoData
         );
 
         [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool SetupDiDestroyDeviceInfoList(HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInfoSet);
+        static extern bool SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
 
         [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern bool SetupDiGetDeviceProperty(
-          HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInfoSet,
+          IntPtr DeviceInfoSet,
           HIDImports.SP_DEVINFO_DATA DeviceInfoData,
           DEVPROPKEY PropertyKey,
           out ulong PropertyType,
@@ -107,6 +107,12 @@ namespace NintrollerLib
           int PropertyBufferSize,
           out int RequiredSize,
           uint Flags
+        );
+
+        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern IntPtr SetupDiCreateDeviceInfoList(
+          Guid classId,
+          uint hwndParent
         );
 
         internal struct DEVPROPKEY
@@ -1392,7 +1398,7 @@ namespace NintrollerLib
             HIDImports.HidD_GetHidGuid(out hidGuid);
 
             // handle for HID devices
-            IntPtr hDevInfo = HIDImports.SetupDiGetClassDevs(ref hidGuid, null, IntPtr.Zero, HIDImports.DIGCF_DEVICEINTERFACE);
+            IntPtr hDevInfo = HIDImports.SetupDiGetClassDevs(ref hidGuid, null, IntPtr.Zero, HIDImports.DIGCF_DEVICEINTERFACE | HIDImports.DIGCF_PRESENT);
             HIDImports.SP_DEVICE_INTERFACE_DATA diData = new HIDImports.SP_DEVICE_INTERFACE_DATA();
             diData.cbSize = Marshal.SizeOf(diData);
 
@@ -1405,7 +1411,8 @@ namespace NintrollerLib
 
                 // create detail struct
                 HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA diDetail = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
+                //diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
+                diDetail.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA));
 
                 HIDImports.SP_DEVINFO_DATA deviceInfoData = new HIDImports.SP_DEVINFO_DATA();
                 deviceInfoData.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVINFO_DATA));
@@ -1450,6 +1457,7 @@ namespace NintrollerLib
 
         static void CheckBtStack(HIDImports.SP_DEVINFO_DATA data)
         {
+            IntPtr parentDeviceInfo = IntPtr.Zero;
             HIDImports.SP_DEVINFO_DATA parentData = new HIDImports.SP_DEVINFO_DATA();
             parentData.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVINFO_DATA));
 
@@ -1457,7 +1465,6 @@ namespace NintrollerLib
             int problem_number = 0;
 
             var result = CM_Get_DevNode_Status(ref status, ref problem_number, (int)data.DevInst, 0);
-
             if (result != 0)
             {
                 return;
@@ -1466,26 +1473,25 @@ namespace NintrollerLib
             uint parentDevice;
 
             result = CM_Get_Parent(out parentDevice, data.DevInst, 0);
-
             if (result != 0)
             {
                 return;
             }
 
-            char[] b = new char[200];
+            //char[] b = new char[200];
+            string deviceId = "";
 
-            result = CM_Get_Device_ID(parentDevice, b, 200, 0);
-
+            result = CM_Get_Device_ID(parentDevice, deviceId, 200, 0);
             if (result != 0)
             {
                 return;
             }
 
-            HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA parentDeviceInfo = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
-            parentDeviceInfo.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA));
-            parentDeviceInfo.DevicePath = new string(b).Replace("\0", "");
-            
-            if (!SetupDiOpenDeviceInfo(parentDeviceInfo, b, IntPtr.Zero, 0, ref parentData))
+            parentDeviceInfo = SetupDiCreateDeviceInfoList(Guid.Empty, 0);
+
+            bool success = SetupDiOpenDeviceInfo(parentDeviceInfo, deviceId, IntPtr.Zero, 0, ref parentData);
+
+            if (!success)
             {
                 SetupDiDestroyDeviceInfoList(parentDeviceInfo);
                 return;
@@ -1502,11 +1508,12 @@ namespace NintrollerLib
             SetupDiGetDeviceProperty(parentDeviceInfo, parentData, requestedKey, out device_property_type, null, 0, out required_size, 0);
 
             char[] buffer = new char[required_size];
-            bool success = SetupDiGetDeviceProperty(parentDeviceInfo, parentData, requestedKey, out device_property_type, buffer, required_size, out required_size, 0);
+            bool s = SetupDiGetDeviceProperty(parentDeviceInfo, parentData, requestedKey, out device_property_type, buffer, required_size, out required_size, 0);
 
-            if (success)
+            if (s)
             {
                 string classProvider = new string(buffer);
+                classProvider = classProvider.Replace("\0", "");
                 if (classProvider == "TOSHIBA")
                 {
                     // Toshiba Stack
