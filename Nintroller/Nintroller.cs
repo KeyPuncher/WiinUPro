@@ -1516,6 +1516,125 @@ namespace NintrollerLib
             SetupDiDestroyDeviceInfoList(parentDeviceInfo);
         }
 
+
+
+
+        /*** C++ reference code
+
+        static bool GetParentDevice(const DEVINST &child_device_instance, HDEVINFO *parent_device_info, PSP_DEVINFO_DATA parent_device_data)
+        {
+	        ULONG status;
+	        ULONG problem_number;
+	        CONFIGRET result;
+
+	        result = CM_Get_DevNode_Status(&status, &problem_number, child_device_instance, 0);
+	        if (result != CR_SUCCESS)
+	        {
+		        return false;
+	        }
+
+	        DEVINST parent_device;
+
+	        result = CM_Get_Parent(&parent_device, child_device_instance, 0);
+	        if (result != CR_SUCCESS)
+	        {
+		        return false;
+	        }
+
+	        std::vector<WCHAR> parent_device_id(MAX_DEVICE_ID_LEN);
+
+	        result = CM_Get_Device_ID(parent_device, parent_device_id.data(), (ULONG)parent_device_id.size(), 0);
+	        if (result != CR_SUCCESS)
+	        {
+		        return false;
+	        }
+
+	        (*parent_device_info) = SetupDiCreateDeviceInfoList(nullptr, nullptr);
+
+	        bool success = SetupDiOpenDeviceInfo((*parent_device_info), parent_device_id.data(), nullptr, 0, parent_device_data);
+	        if (!success)
+	        {
+		        SetupDiDestroyDeviceInfoList(parent_device_info);
+		        return false;
+	        }
+
+	        return true;
+        }
+
+        std::wstring GetDeviceProperty(const HDEVINFO &device_info, const PSP_DEVINFO_DATA device_data, const DEVPROPKEY *requested_property)
+        {
+	        DWORD required_size = 0;
+	        DEVPROPTYPE device_property_type;
+
+	        SetupDiGetDeviceProperty(device_info, device_data, requested_property, &device_property_type, nullptr, 0, &required_size, 0);
+	
+	        std::vector<BYTE> unicode_buffer(required_size, 0);
+
+	        BOOL result = SetupDiGetDeviceProperty(device_info, device_data, requested_property, &device_property_type, unicode_buffer.data(), required_size, nullptr, 0);
+	        if (!result)
+	        {
+		        return std::wstring();
+	        }
+
+	        return std::wstring((PWCHAR)unicode_buffer.data());
+        }
+
+        static bool CheckForToshibaStack(const DEVINST &hid_interface_device_instance)
+        {
+	        HDEVINFO parent_device_info = nullptr;
+	        SP_DEVINFO_DATA parent_device_data = {};
+	        parent_device_data.cbSize = sizeof(SP_DEVINFO_DATA);
+
+	        if (GetParentDevice(hid_interface_device_instance, &parent_device_info, &parent_device_data))
+	        {
+		        std::wstring class_driver_provider = GetDeviceProperty(parent_device_info, &parent_device_data, &DEVPKEY_Device_DriverProvider);
+		
+		        SetupDiDestroyDeviceInfoList(parent_device_info);
+
+		        return (class_driver_provider == L"TOSHIBA");
+	        }
+
+	        return false;
+        }
+
+        void FindWiimotes()
+        {
+	        GUID device_id;
+	        //pHidD_GetHidGuid(&device_id);
+
+	        HDEVINFO const device_info = SetupDiGetClassDevs(&device_id, nullptr, nullptr, (DIGCF_DEVICEINTERFACE | DIGCF_PRESENT));
+
+	        SP_DEVICE_INTERFACE_DATA device_data = {};
+	        device_data.cbSize = sizeof(device_data);
+	        PSP_DEVICE_INTERFACE_DETAIL_DATA detail_data = nullptr;
+
+	        for (int index = 0; SetupDiEnumDeviceInterfaces(device_info, nullptr, &device_id, index, &device_data); ++index)
+	        {
+		        DWORD len;
+		        SetupDiGetDeviceInterfaceDetail(device_info, &device_data, nullptr, 0, &len, nullptr);
+		        detail_data = (PSP_DEVICE_INTERFACE_DETAIL_DATA)malloc(len);
+		        detail_data->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
+
+		        SP_DEVINFO_DATA device_info_data = {};
+		        device_info_data.cbSize = sizeof(SP_DEVINFO_DATA);
+
+		        if (SetupDiGetDeviceInterfaceDetail(device_info, &device_data, detail_data, len, nullptr, &device_info_data))
+		        {
+			        std::basic_string<TCHAR> device_path(detail_data->DevicePath);
+			        //
+			        //
+			        bool IsUsingToshibaStack = CheckForToshibaStack(device_info_data.DevInst);
+		        }
+	        }
+        }
+
+        */
+
+
+
+
+
+
         internal static float Normalize(int raw, int min, int center, int max, int dead)
         {
             //float availableRange = 0f;
