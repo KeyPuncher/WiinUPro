@@ -14,6 +14,107 @@ namespace NintrollerLib
     /// </summary>
     public class Nintroller : IDisposable
     {
+        // This is what we should be using to fix TR remotes (broken in Windows 7)
+        [DllImport("kernel32.dll")]
+        internal extern static bool WriteFile(
+            IntPtr hFile,                    // HANDLE
+            byte[] lpBuffer,                 // LPCVOID
+            uint nNumberOfBytesToWrite,      // DWORD
+            out uint lpNumberOfBytesWritten, // LPDWORD
+            [In] ref System.Threading.NativeOverlapped lpOverlapped);          // LPOVERLAPPED
+
+        // Can be used to Get the error code after WriteFile
+        [DllImport("kernel32.dll")]
+        internal extern static int GetLastError();
+
+        // Used for BT Stack detection
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct SP_DEVINFO_DATA
+        {
+            public int cbSize;
+            public Guid ClassGuid;
+            public uint DevInst;
+            public IntPtr Reserved;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct SP_DEVICE_INTERFACE_DATA
+        {
+            public Int32 cbSize;
+            public Guid interfaceClassGuid;
+            public Int32 flags;
+            private UIntPtr reserved;
+        }
+
+        [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern bool SetupDiSetClassInstallParams(IntPtr DeviceInfoSet, ref SP_DEVINFO_DATA DeviceInfoData, IntPtr ClassInstallParams, int ClassInstallParamsSize);
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
+        static extern int CM_Get_Device_ID(
+           UInt32 dnDevInst,
+           char[] buffer,
+           int bufferLen,
+           int flags
+        );
+
+        [DllImport("setupapi.dll")]
+        static extern int CM_Get_Parent(
+            out UInt32 pdnDevInst,
+            UInt32 dnDevInst,
+            int ulFlags
+        );
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
+        internal struct SP_DEVICE_INTERFACE_DETAIL_DATA
+        {
+            public int size;
+            public string devicePath;
+        }
+
+
+        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        internal static extern Boolean SetupDiGetDeviceInterfaceDetail(
+            IntPtr hDevInfo,
+            ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData,
+            IntPtr deviceInterfaceDetailData,
+            UInt32 deviceInterfaceDetailDataSize,
+            out UInt32 requiredSize,
+            IntPtr deviceInfoData
+        );
+
+        [DllImport("setupapi.dll", SetLastError = true)]
+        static extern int CM_Get_DevNode_Status(ref int pulStatus, ref int pulProblemNumber, int dnDevInst, int ulFlags);
+
+        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern bool SetupDiOpenDeviceInfo(
+            HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInfoSet,
+            char[] DeviceInstanceId,
+            IntPtr hwndParent,
+            int OpenFlags,
+            ref HIDImports.SP_DEVINFO_DATA DeviceInfoData
+        );
+
+        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern bool SetupDiDestroyDeviceInfoList(HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInfoSet);
+
+        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern bool SetupDiGetDeviceProperty(
+          HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInfoSet,
+          HIDImports.SP_DEVINFO_DATA DeviceInfoData,
+          DEVPROPKEY PropertyKey,
+          out ulong PropertyType,
+          char[] PropertyBuffer,
+          int PropertyBufferSize,
+          out int RequiredSize,
+          uint Flags
+        );
+
+        internal struct DEVPROPKEY
+        {
+            public Guid fmtid;
+            public uint pid;
+        };
+
         #region Members
         // Events
         public event EventHandler<NintrollerStateEventArgs>     StateUpdate     = delegate { };
@@ -22,6 +123,8 @@ namespace NintrollerLib
         
         // General
         private string             _path                        = string.Empty;
+        private bool               _useWF                       = false;
+        private bool               _minReport                   = false;
         private bool               _connected                   = false;
         private INintrollerState   _state                       = new Wiimote();
         private CalibrationStorage _calibrations                = new CalibrationStorage();
@@ -314,6 +417,29 @@ namespace NintrollerLib
             #endif
         }
 
+        public static void Test()
+        {
+            
+
+            SP_DEVICE_INTERFACE_DATA device_data = new SP_DEVICE_INTERFACE_DATA();
+            device_data.cbSize = Marshal.SizeOf(device_data);
+
+            SP_DEVICE_INTERFACE_DETAIL_DATA detail_data = new SP_DEVICE_INTERFACE_DETAIL_DATA();
+            detail_data.size = Marshal.SizeOf(typeof(SP_DEVINFO_DATA));
+
+            SP_DEVINFO_DATA device_info_data = new SP_DEVINFO_DATA();
+            device_info_data.cbSize = Marshal.SizeOf(typeof(SP_DEVINFO_DATA));
+
+            
+
+
+            uint parent;
+            SP_DEVINFO_DATA da = new SP_DEVINFO_DATA();
+            da.cbSize = Marshal.SizeOf(da);
+
+            var p = CM_Get_Parent(out parent, da.DevInst, 0);
+        }
+
         #endregion
 
         #region Connectivity
@@ -363,8 +489,18 @@ namespace NintrollerLib
             try
             {
                 // Open Read 'n Write file handle
-                if (Environment.OSVersion.Version.Major > 6)
+                if (Environment.OSVersion.Version.Major > 6 || true)
                 {
+                    // Determine if Toshiba Stack
+                    uint parent;
+                    SP_DEVINFO_DATA da = new SP_DEVINFO_DATA();
+                    da.cbSize = Marshal.SizeOf(da);
+
+                    var p = CM_Get_Parent(out parent, da.DevInst, 0);
+
+                    _useWF = true;
+                    _minReport = true;
+
                     // Windows 10 can't have FileShare.None
                     _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
                 }
@@ -508,7 +644,7 @@ namespace NintrollerLib
         /// </summary>
         public void GetStatus()
         {
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[_minReport ? 2 : Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.StatusRequest;
             buffer[1] = _rumbleBit;
@@ -582,7 +718,7 @@ namespace NintrollerLib
         // Request data from the device's memory
         private void ReadMemory(int address, short size)
         {
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[_minReport ? 7 : Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.ReadMemory;
 
@@ -625,7 +761,7 @@ namespace NintrollerLib
         // Sets the reporting mode type
         private void ApplyReportingType(InputReport reportType, bool continuous = false)
         {
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[_minReport ? 3 : Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.DataReportMode;
             buffer[1] = (byte)((continuous ? 0x04 : 0x00) | _rumbleBit);
@@ -649,19 +785,26 @@ namespace NintrollerLib
             Log("Sending " + Enum.Parse(typeof(OutputReport), report[0].ToString()) + " report");
             Log(BitConverter.ToString(report));
 
-            if (_stream != null && _stream.CanWrite)
+            try
             {
-                try
+                if (_useWF)
+                {
+                    uint written = 0;
+                    var nativeOverlap = new System.Threading.NativeOverlapped();
+                    bool success = WriteFile(_fileHandle.DangerousGetHandle(), report, (uint)report.Length, out written, ref nativeOverlap);
+                    // success is most likely to be false which can mean it is being completed asynchronously
+                }
+                else if (_stream != null && _stream.CanWrite)
                 {
                     // send via the file stream
                     _stream.Write(report, 0, Constants.REPORT_LENGTH);
+                }
 
-                    // TOOD: New: Determine if and when to use HidD_SetOutputReport
-                }
-                catch (Exception ex)
-                {
-                    Log("Error while writing to the stream: " + ex.Message);
-                }
+                // TOOD: New: Determine if and when to use HidD_SetOutputReport
+            }
+            catch (Exception ex)
+            {
+                Log("Error while writing to the stream: " + ex.Message);
             }
         }
 
@@ -679,16 +822,13 @@ namespace NintrollerLib
 
             Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, 16));
 
-            // TODO: New: Remove when done testing
-            Debug.WriteLine(BitConverter.ToString(buffer));
-
             SendData(buffer);
         }
 
         // set's the device's LEDs and Rumble states
         private void ApplyLEDs()
         {
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[_minReport ? 2 : Constants.REPORT_LENGTH];
 
             buffer[0] = (byte)OutputReport.LEDs;
             buffer[1] = (byte)
@@ -1209,7 +1349,21 @@ namespace NintrollerLib
                     {
                         _state.Update(report);
                         var arg = new NintrollerStateEventArgs(_currentType, _state, BatteryLevel);
-                        StateUpdate(this, arg);
+
+                        try
+                        {
+                            // got an access violation here once
+                            //StateUpdate(this, arg);
+
+                            // let's try not including the sender
+                            StateUpdate(null, arg);
+                        }
+                        catch (Exception ex)
+                        {
+#if DEBUG
+                            Debug.WriteLine("State Update Exception: " + ex.Message);
+#endif
+                        }
                     }
                     break;
                 #endregion
@@ -1253,9 +1407,14 @@ namespace NintrollerLib
                 HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA diDetail = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
                 diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
 
+                HIDImports.SP_DEVINFO_DATA deviceInfoData = new HIDImports.SP_DEVINFO_DATA();
+                deviceInfoData.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVINFO_DATA));
+
                 // populate detail struct
-                if (HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, ref diDetail, size, out size, IntPtr.Zero))
+                if (HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, ref diDetail, size, out size, ref deviceInfoData))
                 {
+                    CheckBtStack(deviceInfoData);
+
                     // open read/write handle for the device
                     mHandle = HIDImports.CreateFile(diDetail.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
 
@@ -1287,6 +1446,74 @@ namespace NintrollerLib
             HIDImports.SetupDiDestroyDeviceInfoList(hDevInfo);
             Log("Total Controllers Found: " + result.Count.ToString());
             return result;
+        }
+
+        static void CheckBtStack(HIDImports.SP_DEVINFO_DATA data)
+        {
+            HIDImports.SP_DEVINFO_DATA parentData = new HIDImports.SP_DEVINFO_DATA();
+            parentData.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVINFO_DATA));
+
+            int status = 0;
+            int problem_number = 0;
+
+            var result = CM_Get_DevNode_Status(ref status, ref problem_number, (int)data.DevInst, 0);
+
+            if (result != 0)
+            {
+                return;
+            }
+
+            uint parentDevice;
+
+            result = CM_Get_Parent(out parentDevice, data.DevInst, 0);
+
+            if (result != 0)
+            {
+                return;
+            }
+
+            char[] b = new char[200];
+
+            result = CM_Get_Device_ID(parentDevice, b, 200, 0);
+
+            if (result != 0)
+            {
+                return;
+            }
+
+            HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA parentDeviceInfo = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
+            parentDeviceInfo.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA));
+            parentDeviceInfo.DevicePath = new string(b).Replace("\0", "");
+            
+            if (!SetupDiOpenDeviceInfo(parentDeviceInfo, b, IntPtr.Zero, 0, ref parentData))
+            {
+                SetupDiDestroyDeviceInfoList(parentDeviceInfo);
+                return;
+            }
+
+            // successfully got the parent device
+
+            int required_size = 0;
+            ulong device_property_type;
+            DEVPROPKEY requestedKey = new DEVPROPKEY();
+            requestedKey.fmtid = new Guid(0xa8b865dd, 0x2e3d, 0x4094, 0xad, 0x97, 0xe5, 0x93, 0xa7, 0xc, 0x75, 0xd6);
+            requestedKey.pid = 9;
+
+            SetupDiGetDeviceProperty(parentDeviceInfo, parentData, requestedKey, out device_property_type, null, 0, out required_size, 0);
+
+            char[] buffer = new char[required_size];
+            bool success = SetupDiGetDeviceProperty(parentDeviceInfo, parentData, requestedKey, out device_property_type, buffer, required_size, out required_size, 0);
+
+            if (success)
+            {
+                string classProvider = new string(buffer);
+                if (classProvider == "TOSHIBA")
+                {
+                    // Toshiba Stack
+                }
+            }
+
+            SetupDiDestroyDeviceInfoList(parentDeviceInfo);
         }
 
         internal static float Normalize(int raw, int min, int center, int max, int dead)
@@ -1377,7 +1604,8 @@ namespace NintrollerLib
 
         private void EnableIR()
         {
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[_minReport ? 2 : Constants.REPORT_LENGTH];
+            
             buffer[0] = (byte)OutputReport.IREnable;
             buffer[1] = (byte)(0x04);
             SendData(buffer);
@@ -1393,7 +1621,8 @@ namespace NintrollerLib
 
         private void DisableIR()
         {
-            byte[] buffer = new byte[Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[_minReport ? 2 : Constants.REPORT_LENGTH];
+            
             buffer[0] = (byte)OutputReport.IREnable;
             buffer[1] = (byte)(0x00);
             SendData(buffer);

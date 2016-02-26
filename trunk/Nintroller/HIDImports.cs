@@ -143,7 +143,7 @@ namespace NintrollerLib
             ref SP_DEVICE_INTERFACE_DETAIL_DATA deviceInterfaceDetailData,
             UInt32 deviceInterfaceDetailDataSize,
             out UInt32 requiredSize,
-            IntPtr deviceInfoData
+            ref SP_DEVINFO_DATA deviceInfoData
         );
 
         [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
