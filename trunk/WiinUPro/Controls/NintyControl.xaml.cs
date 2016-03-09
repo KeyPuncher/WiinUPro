@@ -21,6 +21,9 @@ namespace WiinUPro
     /// </summary>
     public partial class NintyControl : UserControl
     {
+        internal delegate void TypeUpdate(ControllerType type);
+        internal event TypeUpdate OnTypeChange;     // Called on extension changes
+
         internal Nintroller _nintroller;            // Physical Controller Device
         internal INintyControl _controller;         // Visual Controller Representation
         internal AssignmentCollection _clipboard;   // Assignments to be pasted

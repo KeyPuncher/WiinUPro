@@ -17,7 +17,7 @@
                 </TabItem.Header>
                 
             </TabItem>
-            <TabItem Header="+" Width="26" IsEnabled="False">
+            <TabItem Header="+" Width="26" IsEnabled="True" MouseUp="AddController">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
