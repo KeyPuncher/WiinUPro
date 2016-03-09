@@ -25,7 +25,7 @@ namespace NintrollerLib
 
         // Can be used to Get the error code after WriteFile
         [DllImport("kernel32.dll")]
-        internal extern static int GetLastError();
+        internal extern static uint GetLastError();
 
         // Used for BT Stack detection
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -52,7 +52,8 @@ namespace NintrollerLib
         [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
         static extern int CM_Get_Device_ID(
            UInt32 dnDevInst,
-           string buffer,
+           //string buffer,
+           char[] buffer,
            int bufferLen,
            int flags
         );
@@ -85,12 +86,22 @@ namespace NintrollerLib
         [DllImport("setupapi.dll", SetLastError = true)]
         static extern int CM_Get_DevNode_Status(ref int pulStatus, ref int pulProblemNumber, int dnDevInst, int ulFlags);
 
-        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        //[DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        //static extern bool SetupDiOpenDeviceInfo(
+        //    IntPtr DeviceInfoSet,
+        //    //string DeviceInstanceId,
+        //    char[] DeviceInstanceId,
+        //    IntPtr hwndParent,
+        //    int OpenFlags,
+        //    ref HIDImports.SP_DEVINFO_DATA DeviceInfoData
+        //);
+
+        [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern bool SetupDiOpenDeviceInfo(
-            IntPtr DeviceInfoSet,
-            string DeviceInstanceId,
-            IntPtr hwndParent,
-            int OpenFlags,
+            IntPtr DevInfoSet,
+            string Enumerator,
+            IntPtr hWndParent,
+            uint Flags,
             ref HIDImports.SP_DEVINFO_DATA DeviceInfoData
         );
 
@@ -1411,8 +1422,8 @@ namespace NintrollerLib
 
                 // create detail struct
                 HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA diDetail = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                //diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
-                diDetail.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA));
+                diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
+                //diDetail.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA));
 
                 HIDImports.SP_DEVINFO_DATA deviceInfoData = new HIDImports.SP_DEVINFO_DATA();
                 deviceInfoData.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVINFO_DATA));
@@ -1420,8 +1431,6 @@ namespace NintrollerLib
                 // populate detail struct
                 if (HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, ref diDetail, size, out size, ref deviceInfoData))
                 {
-                    CheckBtStack(deviceInfoData);
-
                     // open read/write handle for the device
                     mHandle = HIDImports.CreateFile(diDetail.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
 
@@ -1435,6 +1444,7 @@ namespace NintrollerLib
                         // check if it matches what we are looking for
                         if (attrib.VendorID == Constants.VID && (attrib.ProductID == Constants.PID1 || attrib.ProductID == Constants.PID2))
                         {
+                            CheckBtStack(deviceInfoData);
                             result.Add(diDetail.DevicePath);
                         }
                     }
@@ -1478,21 +1488,27 @@ namespace NintrollerLib
                 return;
             }
 
-            //char[] b = new char[200];
-            string deviceId = "";
+            char[] parentId = new char[200];
+            //string deviceId = "";
+            //byte[] bytes = new byte[200];
 
-            result = CM_Get_Device_ID(parentDevice, deviceId, 200, 0);
+            result = CM_Get_Device_ID(parentDevice, parentId, 200, 0);
             if (result != 0)
             {
                 return;
             }
 
+            string idString = new string(parentId).Replace("\0", "");
+            parentId = idString.ToCharArray();
+
             parentDeviceInfo = SetupDiCreateDeviceInfoList(Guid.Empty, 0);
 
-            bool success = SetupDiOpenDeviceInfo(parentDeviceInfo, deviceId, IntPtr.Zero, 0, ref parentData);
+            //bool success = SetupDiOpenDeviceInfo(parentDeviceInfo, parentId, IntPtr.Zero, 0, ref parentData);
+            bool success = SetupDiOpenDeviceInfo(parentDeviceInfo, idString, IntPtr.Zero, 0, ref parentData);
 
             if (!success)
             {
+                var err = GetLastError();
                 SetupDiDestroyDeviceInfoList(parentDeviceInfo);
                 return;
             }
