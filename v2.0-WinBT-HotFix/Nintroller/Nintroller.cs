@@ -379,8 +379,15 @@ namespace NintrollerLib
                     _useWF = true;
                     _minReport = true;
 
-                    // Windows 10 can't have FileShare.None
-                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+                    // Windows 10 (some builds) can't have FileShare.None
+					if (Environment.OSVersion.Version.Build < 10586)
+					{
+						_fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+					}
+                    else
+					{
+						_fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
+					}
                 }
                 else
                 {
@@ -403,6 +410,7 @@ namespace NintrollerLib
 
         public bool ConnectTest()
         {
+            return true;
             // TODO: use a timer + FileStream.Read to manually timeout the read
             // Open Stream
             // Request Status Report
