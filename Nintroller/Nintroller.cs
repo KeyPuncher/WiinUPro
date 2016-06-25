@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,124 +13,6 @@ namespace NintrollerLib
     /// </summary>
     public class Nintroller : IDisposable
     {
-        // This is what we should be using to fix TR remotes (broken in Windows 7)
-        [DllImport("kernel32.dll")]
-        internal extern static bool WriteFile(
-            IntPtr hFile,                    // HANDLE
-            byte[] lpBuffer,                 // LPCVOID
-            uint nNumberOfBytesToWrite,      // DWORD
-            out uint lpNumberOfBytesWritten, // LPDWORD
-            [In] ref System.Threading.NativeOverlapped lpOverlapped);          // LPOVERLAPPED
-
-        // Can be used to Get the error code after WriteFile
-        [DllImport("kernel32.dll")]
-        internal extern static uint GetLastError();
-
-        // Used for BT Stack detection
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct SP_DEVINFO_DATA
-        {
-            public int cbSize;
-            public Guid ClassGuid;
-            public uint DevInst;
-            public IntPtr Reserved;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct SP_DEVICE_INTERFACE_DATA
-        {
-            public Int32 cbSize;
-            public Guid interfaceClassGuid;
-            public Int32 flags;
-            private UIntPtr reserved;
-        }
-
-        [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern bool SetupDiSetClassInstallParams(IntPtr DeviceInfoSet, ref SP_DEVINFO_DATA DeviceInfoData, IntPtr ClassInstallParams, int ClassInstallParamsSize);
-
-        [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
-        static extern int CM_Get_Device_ID(
-           UInt32 dnDevInst,
-           //string buffer,
-           char[] buffer,
-           int bufferLen,
-           int flags
-        );
-
-        [DllImport("setupapi.dll")]
-        static extern int CM_Get_Parent(
-            out UInt32 pdnDevInst,
-            UInt32 dnDevInst,
-            int ulFlags
-        );
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 1)]
-        internal struct SP_DEVICE_INTERFACE_DETAIL_DATA
-        {
-            public int size;
-            public string devicePath;
-        }
-
-
-        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern Boolean SetupDiGetDeviceInterfaceDetail(
-            IntPtr hDevInfo,
-            ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData,
-            IntPtr deviceInterfaceDetailData,
-            UInt32 deviceInterfaceDetailDataSize,
-            out UInt32 requiredSize,
-            IntPtr deviceInfoData
-        );
-
-        [DllImport("setupapi.dll", SetLastError = true)]
-        static extern int CM_Get_DevNode_Status(ref int pulStatus, ref int pulProblemNumber, int dnDevInst, int ulFlags);
-
-        //[DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        //static extern bool SetupDiOpenDeviceInfo(
-        //    IntPtr DeviceInfoSet,
-        //    //string DeviceInstanceId,
-        //    char[] DeviceInstanceId,
-        //    IntPtr hwndParent,
-        //    int OpenFlags,
-        //    ref HIDImports.SP_DEVINFO_DATA DeviceInfoData
-        //);
-
-        [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool SetupDiOpenDeviceInfo(
-            IntPtr DevInfoSet,
-            string Enumerator,
-            IntPtr hWndParent,
-            uint Flags,
-            ref HIDImports.SP_DEVINFO_DATA DeviceInfoData
-        );
-
-        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
-
-        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool SetupDiGetDeviceProperty(
-          IntPtr DeviceInfoSet,
-          HIDImports.SP_DEVINFO_DATA DeviceInfoData,
-          DEVPROPKEY PropertyKey,
-          out ulong PropertyType,
-          char[] PropertyBuffer,
-          int PropertyBufferSize,
-          out int RequiredSize,
-          uint Flags
-        );
-
-        [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern IntPtr SetupDiCreateDeviceInfoList(
-          Guid classId,
-          uint hwndParent
-        );
-
-        internal struct DEVPROPKEY
-        {
-            public Guid fmtid;
-            public uint pid;
-        };
-
         #region Members
         // Events
         public event EventHandler<NintrollerStateEventArgs>     StateUpdate     = delegate { };
@@ -139,9 +20,7 @@ namespace NintrollerLib
         public event EventHandler<LowBatteryEventArgs>          LowBattery      = delegate { };
         
         // General
-        private string             _path                        = string.Empty;
-        private bool               _useWF                       = false;
-        private bool               _minReport                   = false;
+        [Obsolete]
         private bool               _connected                   = false;
         private INintrollerState   _state                       = new Wiimote();
         private CalibrationStorage _calibrations                = new CalibrationStorage();
@@ -155,8 +34,7 @@ namespace NintrollerLib
         private bool               _led1, _led2, _led3, _led4;
 
         // Read/Writing Variables
-        private SafeFileHandle   _fileHandle;                // Handle for Reading and Writing
-        private /*File*/Stream   _stream;                    // Read and Write Stream
+        private Stream           _stream;                    // Read and Write Stream
         private bool             _reading    = false;        // true if actively reading
         private readonly object  _readingObj = new object(); // for locking/blocking
         
@@ -172,10 +50,6 @@ namespace NintrollerLib
         /// True if the controller is open to communication.
         /// </summary>
         public bool Connected { get { return _connected; } }
-        /// <summary>
-        /// The HID path of the controller.
-        /// </summary>
-        public string HIDPath { get { return _path; } }
         /// <summary>
         /// The data stream to the controller.
         /// </summary>
@@ -411,14 +285,18 @@ namespace NintrollerLib
         #region Necessities
 
         /// <summary>
-        /// Creates a controller with it's known location.
-        /// (Ideally connection ready)
+        /// Creates an instance using the provided data stream.
         /// </summary>
-        /// <param name="devicePath">The HID Path</param>
-        public Nintroller(string devicePath = "")
+        /// <param name="dataStream">Stream to the controller.</param>
+        public Nintroller(Stream dataStream)
         {
             _state = null;
-            _path = devicePath;
+            _stream = dataStream;
+        }
+
+        public Nintroller(Stream dataStream, ControllerType hintType) : this(dataStream)
+        {
+            _currentType = hintType;
         }
         
         public void Dispose()
@@ -434,199 +312,35 @@ namespace NintrollerLib
             #endif
         }
 
-        public static void Test()
-        {
-            
-
-            SP_DEVICE_INTERFACE_DATA device_data = new SP_DEVICE_INTERFACE_DATA();
-            device_data.cbSize = Marshal.SizeOf(device_data);
-
-            SP_DEVICE_INTERFACE_DETAIL_DATA detail_data = new SP_DEVICE_INTERFACE_DETAIL_DATA();
-            detail_data.size = Marshal.SizeOf(typeof(SP_DEVINFO_DATA));
-
-            SP_DEVINFO_DATA device_info_data = new SP_DEVINFO_DATA();
-            device_info_data.cbSize = Marshal.SizeOf(typeof(SP_DEVINFO_DATA));
-
-            
-
-
-            uint parent;
-            SP_DEVINFO_DATA da = new SP_DEVINFO_DATA();
-            da.cbSize = Marshal.SizeOf(da);
-
-            var p = CM_Get_Parent(out parent, da.DevInst, 0);
-        }
-
         #endregion
 
         #region Connectivity
-
-        /// <summary>
-        /// Holds onto to controller to prevent other applications for reading it.
-        /// </summary>
-        /// <returns>Successful</returns>
-        public bool Hold()
-        {
-            if (!_connected)
-            {
-                try
-                {
-                    // Open Read 'n Write file handle
-                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
-
-                    // create a stream from the file
-                    _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
-                    
-                    return _stream != null;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+        
         /// <summary>
         /// Opens a connection stream to the device.
         /// (Reading is not yet started)
         /// </summary>
         /// <returns>Success</returns>
+        [Obsolete("Open the stream instead then use BeginReading instead.")]
         public bool Connect()
         {
-            if (string.IsNullOrWhiteSpace(_path))
-            {
-                Log("The HID Path is empty! Can't Connection.");
-                return false;
-            }
-
             try
             {
-                // Open Read 'n Write file handle
-                if (Environment.OSVersion.Version.Major > 6 || true)
-                {
-                    // Determine if Toshiba Stack
-                    uint parent;
-                    SP_DEVINFO_DATA da = new SP_DEVINFO_DATA();
-                    da.cbSize = Marshal.SizeOf(da);
-
-                    var p = CM_Get_Parent(out parent, da.DevInst, 0);
-
-                    _useWF = true;
-                    _minReport = true;
-
-                    // Windows 10 can't have FileShare.None
-                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
-                }
-                else
-                {
-                    _fileHandle = HIDImports.CreateFile(_path, FileAccess.ReadWrite, FileShare.None, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
-                }
-
-                // create a stream from the file
-                _stream = new FileStream(_fileHandle, FileAccess.ReadWrite, Constants.REPORT_LENGTH, true);
-                //_stream = new FileStream(_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, Constants.REPORT_LENGTH, true);
-                
-                // TODO: try checking CanRead and CanWrite properties of the stream
-
-                _connected = true;
-                Log("Connected to device (" + _path + ")");
-                return true;
+                _connected = _stream != null && _stream.CanRead && _stream.CanWrite;
+                Log("Connected to device");
             }
             catch (Exception ex)
             {
-                Log("Error Connecting to device (" + _path + "): " + ex.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Connects to the controller using a given System.IO.Stream.
-        /// </summary>
-        /// <param name="dataStream">The data stream to the controller</param>
-        /// <returns>If the stream can be read from and written to.</returns>
-        public bool Connect(Stream dataStream)
-        {
-            if (_connected)
-            {
-                Log("This device is already connected!");
-                return false;
+                Log("Error Connecting to device: " + ex.Message);
             }
 
-            _stream = dataStream;
-            _connected = _stream.CanRead && _stream.CanWrite;
             return _connected;
         }
-
-        /// <summary>
-        /// Attempts to open a file stream using the HID Path and read from the device.
-        /// </summary>
-        /// <returns></returns>
-        public bool ConnectTest()
-        {
-            // TODO: use a timer + FileStream.Read to manually timeout the read
-            // Open Stream
-            // Request Status Report
-            // Check Extension if connected
-
-            // Can't check the device if we can't open a stream
-            if (!Connect()) return false;
-
-            bool success = false;
-
-            try
-            {
-                System.Timers.Timer timeouter = new System.Timers.Timer(500);
-                timeouter.AutoReset = false;
-                timeouter.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) =>
-                    {
-                        _stream.Close();
-                    };
-
-                timeouter.Start();
-                GetStatus();
-                byte[] result = new byte[Constants.REPORT_LENGTH];
-
-                // reset timer
-                timeouter.Stop();
-                timeouter.Start();
-
-                _stream.Read(result, 0, result.Length);
-                timeouter.Stop();
-                ParseReport(result);
-
-                timeouter.Start();
-                if (_currentType == ControllerType.Unknown)
-                {
-                    while (_currentType == ControllerType.Unknown)
-                    {
-                        _stream.Read(result, 0, result.Length);
-                        ParseReport(result);
-                    }
-                }
-                timeouter.Stop();
-
-                success = true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                success = false;
-            }
-            finally
-            {
-                Disconnect();
-            }
-
-            return success;
-        }
-
+        
         /// <summary>
         /// Closes the connection stream to the device.
         /// </summary>
+        [Obsolete("Use StopReading instead and then close the stream.")]
         public void Disconnect()
         {
             _reading = false;
@@ -634,13 +348,11 @@ namespace NintrollerLib
             if (_stream != null)
                 _stream.Close();
 
-            if (_fileHandle != null)
-                _fileHandle.Close();
-
             _connected = false;
 
-            Log("Disconnected device (" + _path + ")");
+            Log("Disconnected device");
         }
+
         #endregion
 
         #region Data Requesting
@@ -649,6 +361,8 @@ namespace NintrollerLib
         /// </summary>
         public void BeginReading()
         {
+            _connected = true;
+            
             // kickoff the reading process if it hasn't started already
             if (!_reading && _stream != null)
             {
@@ -656,23 +370,25 @@ namespace NintrollerLib
                 ReadAsync();
             }
         }
+
         /// <summary>
         /// Sends a status request to the device.
         /// </summary>
         public void GetStatus()
         {
-            byte[] buffer = new byte[_minReport ? 2 : Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[2];
 
             buffer[0] = (byte)OutputReport.StatusRequest;
             buffer[1] = _rumbleBit;
 
             SendData(buffer);
         }
+
         /// <summary>
         /// Changes the device's reporting type.
         /// </summary>
         /// <param name="reportType">The report type to set to.</param>
-        public void SetReportType(InputReport reportType)
+        public void SetReportType(InputReport reportType, bool continuous = false)
         {
             if (reportType == InputReport.Acknowledge ||
                 reportType == InputReport.ReadMem ||
@@ -682,7 +398,7 @@ namespace NintrollerLib
             }
             else
             {
-                ApplyReportingType(reportType);
+                ApplyReportingType(reportType, continuous);
             }
         }
 
@@ -697,7 +413,7 @@ namespace NintrollerLib
                     
                     try
                     {
-                        _stream.BeginRead(readResult, 0, readResult.Length, new AsyncCallback(RecieveDataAsync), readResult);
+                        _stream.BeginRead(readResult, 0, readResult.Length, RecieveDataAsync, readResult);
                     }
                     catch (ObjectDisposedException)
                     {
@@ -735,7 +451,7 @@ namespace NintrollerLib
         // Request data from the device's memory
         private void ReadMemory(int address, short size)
         {
-            byte[] buffer = new byte[_minReport ? 7 : Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[7];
 
             buffer[0] = (byte)OutputReport.ReadMemory;
 
@@ -778,7 +494,7 @@ namespace NintrollerLib
         // Sets the reporting mode type
         private void ApplyReportingType(InputReport reportType, bool continuous = false)
         {
-            byte[] buffer = new byte[_minReport ? 3 : Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[3];
 
             buffer[0] = (byte)OutputReport.DataReportMode;
             buffer[1] = (byte)((continuous ? 0x04 : 0x00) | _rumbleBit);
@@ -804,20 +520,7 @@ namespace NintrollerLib
 
             try
             {
-                if (_useWF)
-                {
-                    uint written = 0;
-                    var nativeOverlap = new System.Threading.NativeOverlapped();
-                    bool success = WriteFile(_fileHandle.DangerousGetHandle(), report, (uint)report.Length, out written, ref nativeOverlap);
-                    // success is most likely to be false which can mean it is being completed asynchronously
-                }
-                else if (_stream != null && _stream.CanWrite)
-                {
-                    // send via the file stream
-                    _stream.Write(report, 0, Constants.REPORT_LENGTH);
-                }
-
-                // TOOD: New: Determine if and when to use HidD_SetOutputReport
+                _stream.Write(report, 0, report.Length);
             }
             catch (Exception ex)
             {
@@ -845,7 +548,7 @@ namespace NintrollerLib
         // set's the device's LEDs and Rumble states
         private void ApplyLEDs()
         {
-            byte[] buffer = new byte[_minReport ? 2 : Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[2];
 
             buffer[0] = (byte)OutputReport.LEDs;
             buffer[1] = (byte)
@@ -991,7 +694,7 @@ namespace NintrollerLib
                             bool typeChange = false;
                             ControllerType newType = ControllerType.PartiallyInserted;
 
-                            if (_currentType != (ControllerType)type)
+                            if (_currentType != (ControllerType)type || _state == null)
                             {
                                 typeChange = true;
                                 newType = (ControllerType)type;
@@ -1394,270 +1097,7 @@ namespace NintrollerLib
         #endregion
 
         #region General
-        /// <summary>
-        /// Builds a list of HID paths for Nintendo Controllers.
-        /// </summary>
-        /// <returns>A list of HID paths</returns>
-        public static List<string> GetControllerPaths()
-        {
-            List<string> result = new List<string>();
-            Guid hidGuid;
-            int index = 0;
-            SafeFileHandle mHandle;
-
-            // Get GUID of the HID class
-            HIDImports.HidD_GetHidGuid(out hidGuid);
-
-            // handle for HID devices
-            IntPtr hDevInfo = HIDImports.SetupDiGetClassDevs(ref hidGuid, null, IntPtr.Zero, HIDImports.DIGCF_DEVICEINTERFACE | HIDImports.DIGCF_PRESENT);
-            HIDImports.SP_DEVICE_INTERFACE_DATA diData = new HIDImports.SP_DEVICE_INTERFACE_DATA();
-            diData.cbSize = Marshal.SizeOf(diData);
-
-            // Step through all devices
-            while (HIDImports.SetupDiEnumDeviceInterfaces(hDevInfo, IntPtr.Zero, ref hidGuid, index, ref diData))
-            {
-                UInt32 size;
-                // get device buffer size
-                HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, IntPtr.Zero, 0, out size, IntPtr.Zero);
-
-                // create detail struct
-                HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA diDetail = new HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                diDetail.cbSize = (uint)(IntPtr.Size == 8 ? 8 : 5);
-                //diDetail.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVICE_INTERFACE_DETAIL_DATA));
-
-                HIDImports.SP_DEVINFO_DATA deviceInfoData = new HIDImports.SP_DEVINFO_DATA();
-                deviceInfoData.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVINFO_DATA));
-
-                // populate detail struct
-                if (HIDImports.SetupDiGetDeviceInterfaceDetail(hDevInfo, ref diData, ref diDetail, size, out size, ref deviceInfoData))
-                {
-                    // open read/write handle for the device
-                    mHandle = HIDImports.CreateFile(diDetail.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, HIDImports.EFileAttributes.Overlapped, IntPtr.Zero);
-
-                    // create attributes structure
-                    HIDImports.HIDD_ATTRIBUTES attrib = new HIDImports.HIDD_ATTRIBUTES();
-                    attrib.Size = Marshal.SizeOf(attrib);
-
-                    // populate attributes
-                    if (HIDImports.HidD_GetAttributes(mHandle.DangerousGetHandle(), ref attrib))
-                    {
-                        // check if it matches what we are looking for
-                        if (attrib.VendorID == Constants.VID && (attrib.ProductID == Constants.PID1 || attrib.ProductID == Constants.PID2))
-                        {
-                            CheckBtStack(deviceInfoData);
-                            result.Add(diDetail.DevicePath);
-                        }
-                    }
-
-                    mHandle.Close();
-                }
-                else
-                {
-                    Log("Failed to get info on a device.");
-                }
-
-                index += 1;
-            }
-
-            // clean up
-            HIDImports.SetupDiDestroyDeviceInfoList(hDevInfo);
-            Log("Total Controllers Found: " + result.Count.ToString());
-            return result;
-        }
-
-        static void CheckBtStack(HIDImports.SP_DEVINFO_DATA data)
-        {
-            IntPtr parentDeviceInfo = IntPtr.Zero;
-            HIDImports.SP_DEVINFO_DATA parentData = new HIDImports.SP_DEVINFO_DATA();
-            parentData.cbSize = (uint)Marshal.SizeOf(typeof(HIDImports.SP_DEVINFO_DATA));
-
-            int status = 0;
-            int problem_number = 0;
-
-            var result = CM_Get_DevNode_Status(ref status, ref problem_number, (int)data.DevInst, 0);
-            if (result != 0)
-            {
-                return;
-            }
-
-            uint parentDevice;
-
-            result = CM_Get_Parent(out parentDevice, data.DevInst, 0);
-            if (result != 0)
-            {
-                return;
-            }
-
-            char[] parentId = new char[200];
-            //string deviceId = "";
-            //byte[] bytes = new byte[200];
-
-            result = CM_Get_Device_ID(parentDevice, parentId, 200, 0);
-            if (result != 0)
-            {
-                return;
-            }
-
-            string idString = new string(parentId).Replace("\0", "");
-            parentId = idString.ToCharArray();
-
-            parentDeviceInfo = SetupDiCreateDeviceInfoList(Guid.Empty, 0);
-
-            //bool success = SetupDiOpenDeviceInfo(parentDeviceInfo, parentId, IntPtr.Zero, 0, ref parentData);
-            bool success = SetupDiOpenDeviceInfo(parentDeviceInfo, idString, IntPtr.Zero, 0, ref parentData);
-
-            if (!success)
-            {
-                var err = GetLastError();
-                SetupDiDestroyDeviceInfoList(parentDeviceInfo);
-                return;
-            }
-
-            // successfully got the parent device
-
-            int required_size = 0;
-            ulong device_property_type;
-            DEVPROPKEY requestedKey = new DEVPROPKEY();
-            requestedKey.fmtid = new Guid(0xa8b865dd, 0x2e3d, 0x4094, 0xad, 0x97, 0xe5, 0x93, 0xa7, 0xc, 0x75, 0xd6);
-            requestedKey.pid = 9;
-
-            SetupDiGetDeviceProperty(parentDeviceInfo, parentData, requestedKey, out device_property_type, null, 0, out required_size, 0);
-
-            char[] buffer = new char[required_size];
-            bool s = SetupDiGetDeviceProperty(parentDeviceInfo, parentData, requestedKey, out device_property_type, buffer, required_size, out required_size, 0);
-
-            if (s)
-            {
-                string classProvider = new string(buffer);
-                classProvider = classProvider.Replace("\0", "");
-                if (classProvider == "TOSHIBA")
-                {
-                    // Toshiba Stack
-                }
-            }
-
-            SetupDiDestroyDeviceInfoList(parentDeviceInfo);
-        }
-
-
-
-
-        /*** C++ reference code
-
-        static bool GetParentDevice(const DEVINST &child_device_instance, HDEVINFO *parent_device_info, PSP_DEVINFO_DATA parent_device_data)
-        {
-	        ULONG status;
-	        ULONG problem_number;
-	        CONFIGRET result;
-
-	        result = CM_Get_DevNode_Status(&status, &problem_number, child_device_instance, 0);
-	        if (result != CR_SUCCESS)
-	        {
-		        return false;
-	        }
-
-	        DEVINST parent_device;
-
-	        result = CM_Get_Parent(&parent_device, child_device_instance, 0);
-	        if (result != CR_SUCCESS)
-	        {
-		        return false;
-	        }
-
-	        std::vector<WCHAR> parent_device_id(MAX_DEVICE_ID_LEN);
-
-	        result = CM_Get_Device_ID(parent_device, parent_device_id.data(), (ULONG)parent_device_id.size(), 0);
-	        if (result != CR_SUCCESS)
-	        {
-		        return false;
-	        }
-
-	        (*parent_device_info) = SetupDiCreateDeviceInfoList(nullptr, nullptr);
-
-	        bool success = SetupDiOpenDeviceInfo((*parent_device_info), parent_device_id.data(), nullptr, 0, parent_device_data);
-	        if (!success)
-	        {
-		        SetupDiDestroyDeviceInfoList(parent_device_info);
-		        return false;
-	        }
-
-	        return true;
-        }
-
-        std::wstring GetDeviceProperty(const HDEVINFO &device_info, const PSP_DEVINFO_DATA device_data, const DEVPROPKEY *requested_property)
-        {
-	        DWORD required_size = 0;
-	        DEVPROPTYPE device_property_type;
-
-	        SetupDiGetDeviceProperty(device_info, device_data, requested_property, &device_property_type, nullptr, 0, &required_size, 0);
-	
-	        std::vector<BYTE> unicode_buffer(required_size, 0);
-
-	        BOOL result = SetupDiGetDeviceProperty(device_info, device_data, requested_property, &device_property_type, unicode_buffer.data(), required_size, nullptr, 0);
-	        if (!result)
-	        {
-		        return std::wstring();
-	        }
-
-	        return std::wstring((PWCHAR)unicode_buffer.data());
-        }
-
-        static bool CheckForToshibaStack(const DEVINST &hid_interface_device_instance)
-        {
-	        HDEVINFO parent_device_info = nullptr;
-	        SP_DEVINFO_DATA parent_device_data = {};
-	        parent_device_data.cbSize = sizeof(SP_DEVINFO_DATA);
-
-	        if (GetParentDevice(hid_interface_device_instance, &parent_device_info, &parent_device_data))
-	        {
-		        std::wstring class_driver_provider = GetDeviceProperty(parent_device_info, &parent_device_data, &DEVPKEY_Device_DriverProvider);
-		
-		        SetupDiDestroyDeviceInfoList(parent_device_info);
-
-		        return (class_driver_provider == L"TOSHIBA");
-	        }
-
-	        return false;
-        }
-
-        void FindWiimotes()
-        {
-	        GUID device_id;
-	        //pHidD_GetHidGuid(&device_id);
-
-	        HDEVINFO const device_info = SetupDiGetClassDevs(&device_id, nullptr, nullptr, (DIGCF_DEVICEINTERFACE | DIGCF_PRESENT));
-
-	        SP_DEVICE_INTERFACE_DATA device_data = {};
-	        device_data.cbSize = sizeof(device_data);
-	        PSP_DEVICE_INTERFACE_DETAIL_DATA detail_data = nullptr;
-
-	        for (int index = 0; SetupDiEnumDeviceInterfaces(device_info, nullptr, &device_id, index, &device_data); ++index)
-	        {
-		        DWORD len;
-		        SetupDiGetDeviceInterfaceDetail(device_info, &device_data, nullptr, 0, &len, nullptr);
-		        detail_data = (PSP_DEVICE_INTERFACE_DETAIL_DATA)malloc(len);
-		        detail_data->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
-
-		        SP_DEVINFO_DATA device_info_data = {};
-		        device_info_data.cbSize = sizeof(SP_DEVINFO_DATA);
-
-		        if (SetupDiGetDeviceInterfaceDetail(device_info, &device_data, detail_data, len, nullptr, &device_info_data))
-		        {
-			        std::basic_string<TCHAR> device_path(detail_data->DevicePath);
-			        //
-			        //
-			        bool IsUsingToshibaStack = CheckForToshibaStack(device_info_data.DevInst);
-		        }
-	        }
-        }
-
-        */
-
-
-
-
-
-
+        
         internal static float Normalize(int raw, int min, int center, int max, int dead)
         {
             //float availableRange = 0f;
@@ -1746,7 +1186,7 @@ namespace NintrollerLib
 
         private void EnableIR()
         {
-            byte[] buffer = new byte[_minReport ? 2 : Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[2];
             
             buffer[0] = (byte)OutputReport.IREnable;
             buffer[1] = (byte)(0x04);
@@ -1763,7 +1203,7 @@ namespace NintrollerLib
 
         private void DisableIR()
         {
-            byte[] buffer = new byte[_minReport ? 2 : Constants.REPORT_LENGTH];
+            byte[] buffer = new byte[2];
             
             buffer[0] = (byte)OutputReport.IREnable;
             buffer[1] = (byte)(0x00);
@@ -1844,6 +1284,12 @@ namespace NintrollerLib
             {
                 GetStatus();
             }
+        }
+
+        public void StopReading()
+        {
+            _reading = false;
+            _connected = false;
         }
 
         #endregion

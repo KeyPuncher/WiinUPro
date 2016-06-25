@@ -10,6 +10,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Shared;
+using Shared.Windows;
 
 namespace WiinUSoft
 {
@@ -20,13 +22,13 @@ namespace WiinUSoft
     {
         public static MainWindow Instance { get; private set; }
 
-        private List<string> hidList;
+        private List<DeviceInfo> hidList;
         private List<DeviceControl> deviceList;
 
         public MainWindow()
         {
             //Nintroller.UseModestConfigs = true;
-            hidList = new List<string>();
+            hidList = new List<DeviceInfo>();
             deviceList = new List<DeviceControl>();
 
             InitializeComponent();
@@ -64,17 +66,16 @@ namespace WiinUSoft
 
         private void Refresh()
         {
-            //hidList = Nintroller.FindControllers();
-            hidList = Nintroller.GetControllerPaths();
+            hidList = WinBtStream.GetPaths();
             List<KeyValuePair<int, DeviceControl>> connectSeq = new List<KeyValuePair<int, DeviceControl>>();
             
-            foreach (string hid in hidList)
+            foreach (var hid in hidList)
             {
                 DeviceControl existingDevice = null;
 
                 foreach (DeviceControl d in deviceList)
                 {
-                    if (d.Device.HIDPath == hid)
+                    if (d.DevicePath == hid.DevicePath)
                     {
                         existingDevice = d;
                         break;
@@ -94,22 +95,18 @@ namespace WiinUSoft
                 }
                 else
                 {
-                    Nintroller n = new Nintroller(hid);
+                    var stream = new WinBtStream(hid.DevicePath);
+                    Nintroller n = new Nintroller(stream);
 
-                    if (n.ConnectTest())
+                    if (stream.OpenConnection() && n.Connect())
                     {
-                        deviceList.Add(new DeviceControl(n));
+                        deviceList.Add(new DeviceControl(n, hid.DevicePath));
                         deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
                         deviceList[deviceList.Count - 1].RefreshState();
                         if (deviceList[deviceList.Count - 1].properties.autoConnect)
                         {
                             connectSeq.Add(new KeyValuePair<int, DeviceControl>(deviceList[deviceList.Count - 1].properties.autoNum, deviceList[deviceList.Count - 1]));
                         }
-                    }
-                    else
-                    {
-                        // device isn't connected, but prevent other applications form trying to use it
-                        n.Hold();
                     }
                 }
             }

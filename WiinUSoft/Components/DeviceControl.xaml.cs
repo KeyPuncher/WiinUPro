@@ -22,8 +22,9 @@ namespace WiinUSoft
     public partial class DeviceControl : UserControl
     {
         #region Members
-        
+
         // private members
+        private string devicePath;
         private Nintroller device;
         private DeviceState state;
         private float rumbleAmount      = 0;
@@ -68,6 +69,8 @@ namespace WiinUSoft
 
         internal ControllerType DeviceType { get; private set; }
 
+        internal string DevicePath { get; private set; }
+
         internal bool Connected
         {
             get
@@ -108,32 +111,25 @@ namespace WiinUSoft
             InitializeComponent();
         }
 
-        public DeviceControl(Nintroller nintroller)
+        public DeviceControl(Nintroller nintroller, string path)
             : this()
         {
             Device = nintroller;
-            //RefreshState();
+            devicePath = path;
         }
 
         public void RefreshState()
         {
-            if (Device.Connected || Device.ConnectTest())
+            if (Device.Connected)
             {
                 if (state != DeviceState.Connected_XInput)
                     ConnectionState = DeviceState.Discovered;
-
-                // I forgot the purpose for this...
-                //if (device.Type != ControllerType.ProController && device.Type != ControllerType.BalanceBoard)
-                //{
-                //    device.Connect();
-                //    device.Disconnect();
-                //}
 
                 UpdateIcon(device.Type);
                 SetName(device.Type.ToString());
 
                 // Load Properties
-                properties = UserPrefs.Instance.GetDevicePref(device.HIDPath);
+                properties = UserPrefs.Instance.GetDevicePref(devicePath);
                 if (properties != null)
                 {
                     SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
@@ -141,7 +137,7 @@ namespace WiinUSoft
                 }
                 else
                 {
-                    properties = new Property(device.HIDPath);
+                    properties = new Property(devicePath);
                 }
             }
             else

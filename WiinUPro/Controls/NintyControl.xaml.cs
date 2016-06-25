@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NintrollerLib;
+using Shared.Windows;
 
 namespace WiinUPro
 {
@@ -24,6 +25,7 @@ namespace WiinUPro
         internal delegate void TypeUpdate(ControllerType type);
         internal event TypeUpdate OnTypeChange;     // Called on extension changes
 
+        internal WinBtStream _stream;               // Controller stream to the device
         internal Nintroller _nintroller;            // Physical Controller Device
         internal INintyControl _controller;         // Visual Controller Representation
         internal AssignmentCollection _clipboard;   // Assignments to be pasted
@@ -54,19 +56,19 @@ namespace WiinUPro
             InitializeComponent();
         }
 
-        public NintyControl(string devicePath) : this()
+        public NintyControl(Shared.DeviceInfo deviceInfo) : this()
         {
-            _testAssignments = new Dictionary<string, AssignmentCollection>[ShiftAssignment.SHIFT_STATE_COUNT]
-            {
+            _testAssignments = new[] {
                 new Dictionary<string, AssignmentCollection>(),
                 new Dictionary<string, AssignmentCollection>(),
                 new Dictionary<string, AssignmentCollection>(),
                 new Dictionary<string, AssignmentCollection>()
             };
-            _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment>() { new TestMouseAssignment(true) }));
-            _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment>() { new TestMouseAssignment(false) }));
+            _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment> { new TestMouseAssignment(true) }));
+            _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment> { new TestMouseAssignment(false) }));
 
-            _nintroller = new Nintroller(devicePath);
+            _stream = new WinBtStream(deviceInfo.DevicePath);
+            _nintroller = new Nintroller(_stream, deviceInfo.Type);
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
             _nintroller.LowBattery += _nintroller_LowBattery;
@@ -169,7 +171,10 @@ namespace WiinUPro
 
             //bool success = false;
 
-            if (_nintroller.Connect())
+            // We can set the sharing mode type, None fixes DS and may work on Windows 10 now.
+            _stream.SharingMode = System.IO.FileShare.None;
+
+            if (_stream.OpenConnection())
             {
                 btnConnect.IsEnabled = false;
                 _nintroller.BeginReading();
@@ -177,13 +182,15 @@ namespace WiinUPro
                 _nintroller.SetPlayerLED(1);
 
                 // We need a function we can await for the type to come back
-                //switch (_nintroller.Type)
-                //{
-                //    case ControllerType.ProController:
-                //        _controller = new ProControl();
-                //        break;
-                //}
-                /*
+                // But the hint type may be present
+                switch (_nintroller.Type)
+                {
+                    case ControllerType.ProController:
+                        // TODO: Discover why this causes an access violation exceptions
+                        _controller = new ProControl();
+                        break;
+                }
+                
                 if (_controller != null)
                 {
                     _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
@@ -195,8 +202,10 @@ namespace WiinUPro
                     ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
                     ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
 
-                    success = true;
-                }*/
+                    //success = true;
+
+                    _nintroller.SetReportType(InputReport.ExtOnly);
+                }
                 btnDisconnect.IsEnabled = true;
             }
 #if DEBUG
@@ -234,7 +243,7 @@ namespace WiinUPro
         {
             btnDisconnect.IsEnabled = false;
 
-            _nintroller.Disconnect();
+            _stream.Close();
             _view.Child = null;
             _controller = null;
 

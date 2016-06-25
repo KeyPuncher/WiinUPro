@@ -199,6 +199,7 @@
     <Resource Include="Images\Controllers\Pro\proWhitezr.png" />
     <Resource Include="Images\Controllers\Pro\proWhitezr2.png" />
   </ItemGroup>
+  <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
