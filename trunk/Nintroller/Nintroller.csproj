@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="DeviceManagement.cs" />
-    <Compile Include="HIDImports.cs" />
     <Compile Include="Calibrations.cs" />
     <Compile Include="ComponentStructs.cs" />
     <Compile Include="ControllerStructs.cs" />
