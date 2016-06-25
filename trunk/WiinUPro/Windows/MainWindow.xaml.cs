@@ -24,14 +24,13 @@ namespace WiinUPro
         {
             InitializeComponent();
 
-
             #region Test
-            foreach (var path in NintrollerLib.Nintroller.GetControllerPaths())
+            var devices =  Shared.Windows.WinBtStream.GetPaths();
+            foreach (var info in devices)
             {
                 TabItem t = new TabItem();
-                //t.Header = "New";
-                var stack = new StackPanel() { Orientation = Orientation.Horizontal };
-                stack.Children.Add(new Image()
+                var stack = new StackPanel { Orientation = Orientation.Horizontal };
+                stack.Children.Add(new Image
                 {
                     Source = new BitmapImage(new Uri("../Images/Icons/ProController_black_24.png", UriKind.Relative)),
                     Height = 12,
@@ -39,21 +38,27 @@ namespace WiinUPro
                     VerticalAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Left
                 });
-                stack.Children.Add(new TextBlock() { Text = "TEST" + tabControl.Items.Count.ToString() });
+                stack.Children.Add(new TextBlock { Text = "Real" + tabControl.Items.Count });
                 t.Header = stack;
-                NintyControl n = new NintyControl(path);
-                n.OnTypeChange += (NintrollerLib.ControllerType type) => { ChangeIcon(t, type); };
+                NintyControl n = new NintyControl(info);
+                n.OnTypeChange += (type) => { ChangeIcon(t, type); };
                 t.Content = n;
-                tabControl.Items.Add(t);
+                tabControl.Items.Insert(tabControl.Items.Count - 1, t);
             }
             #endregion
         }
+
+        /***********
+         * The strategy here is once the program launches, it will gather all controller paths
+         * and all saved information on each device and use what was saved about the device
+         * to help populate details on each tab. The users can click on each tab and then
+         * attempt to connect that controller then they are good to go.
+         */
 
         private void AddController(object sender, MouseButtonEventArgs e)
         {
             // More testing
             TabItem test = new TabItem();
-            //test.Header = "TEST" + tabControl.Items.Count.ToString();
             var stack = new StackPanel() { Orientation = Orientation.Horizontal };
             stack.Children.Add(new Image()
             {
@@ -65,7 +70,7 @@ namespace WiinUPro
             });
             stack.Children.Add(new TextBlock() { Text = "TEST" + tabControl.Items.Count.ToString() });
             test.Header = stack;
-            NintyControl nin = new NintyControl("");
+            NintyControl nin = new NintyControl(new Shared.DeviceInfo() { DevicePath = "", Type = NintrollerLib.ControllerType.ProController });
             nin.OnTypeChange += (NintrollerLib.ControllerType type) =>
             {
                 ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/ProController_white_24.png", UriKind.Relative));
