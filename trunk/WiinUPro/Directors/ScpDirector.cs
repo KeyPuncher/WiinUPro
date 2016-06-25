@@ -75,7 +75,7 @@ namespace WiinUPro
         {
             bool result = false;
 
-            for (int i = 0; i <= (int)device; i++)
+            for (int i = (int)XInput_Device.Device_A; i <= (int)device; i++)
             {
                 result = this[i].Connect();
 
@@ -128,10 +128,10 @@ namespace WiinUPro
 
         public enum XInput_Device : int
         {
-            Device_A = 0,
-            Device_B = 1,
-            Device_C = 2,
-            Device_D = 3
+            Device_A = 1,
+            Device_B = 2,
+            Device_C = 3,
+            Device_D = 4
         }
 
         public struct XInputState
@@ -221,14 +221,15 @@ namespace WiinUPro
 
             public bool Connect()
             {
-                if (!PluggedIn)
-                {
-                    PluggedIn = Plugin(ID);
-                }
-
                 if (!Started)
                 {
                     Started = Open() && Start();
+                }
+
+                if (!PluggedIn)
+                {
+                    Unplug(ID);
+                    PluggedIn = Plugin(ID);
                 }
 
                 return Started;
