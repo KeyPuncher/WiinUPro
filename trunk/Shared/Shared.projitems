@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>123cebe5-8d00-4ccb-906e-ac69e0a57219</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DeviceInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DummyDevice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\NativeImports.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\WinBtStream.cs" />
+  </ItemGroup>
+</Project>
