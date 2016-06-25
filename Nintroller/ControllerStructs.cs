@@ -235,24 +235,30 @@ namespace NintrollerLib
                 case InputReport.ExtOnly:
                     offset = 1;
                     break;
+                case InputReport.Status:
+                    offset = -1;
+                    break;
                 default:
                     return;
             }
 
-            // Buttons
-            C = (data[offset + 5] & 0x02) == 0;
-            Z = (data[offset + 5] & 0x01) == 0;
+            if (offset > 0)
+            {
+                // Buttons
+                C = (data[offset + 5] & 0x02) == 0;
+                Z = (data[offset + 5] & 0x01) == 0;
 
-            // Joystick
-            joystick.rawX = data[offset];
-            joystick.rawY = data[offset + 1];
+                // Joystick
+                joystick.rawX = data[offset];
+                joystick.rawY = data[offset + 1];
 
-            // Accelerometer
-            accelerometer.Parse(data, offset + 2);
+                // Accelerometer
+                accelerometer.Parse(data, offset + 2);
 
-            // Normalize
-            joystick.Normalize();
-            accelerometer.Normalize();
+                // Normalize
+                joystick.Normalize();
+                accelerometer.Normalize();
+            }
 
             wiimote.Update(data);
         }
@@ -495,42 +501,45 @@ namespace NintrollerLib
                     return;
             }
 
-            // Buttons
-            A     = (data[offset + 5] & 0x10) == 0;
-            B     = (data[offset + 5] & 0x40) == 0;
-            X     = (data[offset + 5] & 0x08) == 0;
-            Y     = (data[offset + 5] & 0x20) == 0;
-            LFull = (data[offset + 4] & 0x20) == 0;  // Until the Click
-            RFull = (data[offset + 4] & 0x02) == 0;  // Until the Click
-            ZL    = (data[offset + 5] & 0x80) == 0;
-            ZR    = (data[offset + 5] & 0x04) == 0;
-            Plus  = (data[offset + 4] & 0x04) == 0;
-            Minus = (data[offset + 4] & 0x10) == 0;
-            Home  = (data[offset + 4] & 0x08) == 0;
+            if (offset > 0)
+            {
+                // Buttons
+                A     = (data[offset + 5] & 0x10) == 0;
+                B     = (data[offset + 5] & 0x40) == 0;
+                X     = (data[offset + 5] & 0x08) == 0;
+                Y     = (data[offset + 5] & 0x20) == 0;
+                LFull = (data[offset + 4] & 0x20) == 0;  // Until the Click
+                RFull = (data[offset + 4] & 0x02) == 0;  // Until the Click
+                ZL    = (data[offset + 5] & 0x80) == 0;
+                ZR    = (data[offset + 5] & 0x04) == 0;
+                Plus  = (data[offset + 4] & 0x04) == 0;
+                Minus = (data[offset + 4] & 0x10) == 0;
+                Home  = (data[offset + 4] & 0x08) == 0;
 
-            // Dpad
-            Up    = (data[offset + 5] & 0x01) == 0;
-            Down  = (data[offset + 4] & 0x40) == 0;
-            Left  = (data[offset + 5] & 0x02) == 0;
-            Right = (data[offset + 4] & 0x80) == 0;
+                // Dpad
+                Up    = (data[offset + 5] & 0x01) == 0;
+                Down  = (data[offset + 4] & 0x40) == 0;
+                Left  = (data[offset + 5] & 0x02) == 0;
+                Right = (data[offset + 4] & 0x80) == 0;
 
-            // Joysticks
-            LJoy.rawX = (byte)(data[offset    ] & 0x3F);
-            LJoy.rawY = (byte)(data[offset + 1] & 0x03F);
-            RJoy.rawX = (byte)(data[offset + 2] >> 7 | (data[offset + 1] & 0xC0) >> 5 | (data[offset] & 0xC0) >> 3);
-            RJoy.rawY = (byte)(data[offset + 2] & 0x1F);
+                // Joysticks
+                LJoy.rawX = (byte)(data[offset] & 0x3F);
+                LJoy.rawY = (byte)(data[offset + 1] & 0x03F);
+                RJoy.rawX = (byte)(data[offset + 2] >> 7 | (data[offset + 1] & 0xC0) >> 5 | (data[offset] & 0xC0) >> 3);
+                RJoy.rawY = (byte)(data[offset + 2] & 0x1F);
 
-            // Triggers
-            L.rawValue = (byte)(((data[offset + 2] & 0x60) >> 2) | (data[offset + 3] >> 5));
-            R.rawValue = (byte)(data[offset + 3] & 0x1F);
-            L.full = LFull;
-            R.full = RFull;
+                // Triggers
+                L.rawValue = (byte)(((data[offset + 2] & 0x60) >> 2) | (data[offset + 3] >> 5));
+                R.rawValue = (byte)(data[offset + 3] & 0x1F);
+                L.full = LFull;
+                R.full = RFull;
 
-            // Normalize
-            LJoy.Normalize();
-            RJoy.Normalize();
-            L.Normalize();
-            R.Normalize();
+                // Normalize
+                LJoy.Normalize();
+                RJoy.Normalize();
+                L.Normalize();
+                R.Normalize();
+            }
 
             wiimote.Update(data);
         }
@@ -805,34 +814,37 @@ namespace NintrollerLib
                     return;
             }
 
-            // Buttons
-            A     = (data[offset + 5] & 0x10) == 0;
-            B     = (data[offset + 5] & 0x40) == 0;
-            X     = (data[offset + 5] & 0x08) == 0;
-            Y     = (data[offset + 5] & 0x20) == 0;
-            L     = (data[offset + 4] & 0x20) == 0;
-            R     = (data[offset + 4] & 0x02) == 0;
-            ZL    = (data[offset + 5] & 0x80) == 0;
-            ZR    = (data[offset + 5] & 0x04) == 0;
-            Plus  = (data[offset + 4] & 0x04) == 0;
-            Minus = (data[offset + 4] & 0x10) == 0;
-            Home  = (data[offset + 4] & 0x08) == 0;
+            if (offset > 0)
+            {
+                // Buttons
+                A     = (data[offset + 5] & 0x10) == 0;
+                B     = (data[offset + 5] & 0x40) == 0;
+                X     = (data[offset + 5] & 0x08) == 0;
+                Y     = (data[offset + 5] & 0x20) == 0;
+                L     = (data[offset + 4] & 0x20) == 0;
+                R     = (data[offset + 4] & 0x02) == 0;
+                ZL    = (data[offset + 5] & 0x80) == 0;
+                ZR    = (data[offset + 5] & 0x04) == 0;
+                Plus  = (data[offset + 4] & 0x04) == 0;
+                Minus = (data[offset + 4] & 0x10) == 0;
+                Home  = (data[offset + 4] & 0x08) == 0;
 
-            // Dpad
-            Up    = (data[offset + 5] & 0x01) == 0;
-            Down  = (data[offset + 4] & 0x40) == 0;
-            Left  = (data[offset + 5] & 0x02) == 0;
-            Right = (data[offset + 4] & 0x80) == 0;
+                // Dpad
+                Up    = (data[offset + 5] & 0x01) == 0;
+                Down  = (data[offset + 4] & 0x40) == 0;
+                Left  = (data[offset + 5] & 0x02) == 0;
+                Right = (data[offset + 4] & 0x80) == 0;
 
-            // Joysticks
-            LJoy.rawX = (byte)(data[offset] & 0x3F);
-            LJoy.rawY = (byte)(data[offset + 1] & 0x03F);
-            RJoy.rawX = (byte)(data[offset + 2] >> 7 | (data[offset + 1] & 0xC0) >> 5 | (data[offset] & 0xC0) >> 3);
-            RJoy.rawY = (byte)(data[offset + 2] & 0x1F);
+                // Joysticks
+                LJoy.rawX = (byte)(data[offset] & 0x3F);
+                LJoy.rawY = (byte)(data[offset + 1] & 0x03F);
+                RJoy.rawX = (byte)(data[offset + 2] >> 7 | (data[offset + 1] & 0xC0) >> 5 | (data[offset] & 0xC0) >> 3);
+                RJoy.rawY = (byte)(data[offset + 2] & 0x1F);
 
-            // Normalize
-            LJoy.Normalize();
-            RJoy.Normalize();
+                // Normalize
+                LJoy.Normalize();
+                RJoy.Normalize();
+            }
 
             wiimote.Update(data);
         }
@@ -1053,8 +1065,19 @@ namespace NintrollerLib
                 case InputReport.BtnsAccIRExt:
                     offset = 16;
                     break;
+                case InputReport.Status:
+                    Plus  = (data[1] & 0x04) == 0;
+                    Home  = (data[1] & 0x08) == 0;
+                    Minus = (data[1] & 0x10) == 0;
+                    Down  = (data[1] & 0x40) == 0;
+                    Right = (data[1] & 0x80) == 0;
+                    Up    = (data[2] & 0x01) == 0;
+                    Left  = (data[2] & 0x02) == 0;
+                    A     = (data[2] & 0x10) == 0;
+                    B     = (data[2] & 0x40) == 0;
+                    return;
                 default:
-                    break;
+                    return;
             }
 
             // Buttons
