@@ -499,7 +499,7 @@ namespace WiinUSoft.Holders
         {
             get
             {
-                // if it hans't been created create one
+                // if it hasn't been created create one
                 if (defaultInstance == null)
                 {
                     defaultInstance = new XBus();

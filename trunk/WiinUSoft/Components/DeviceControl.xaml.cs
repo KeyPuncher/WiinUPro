@@ -183,8 +183,8 @@ namespace WiinUSoft
                     //btnVjoy.IsEnabled     = false;
                     btnConfig.IsEnabled     = false;
                     btnDetatch.IsEnabled    = false;
-                    btnConfig.Visibility    = System.Windows.Visibility.Hidden;
-                    btnDetatch.Visibility   = System.Windows.Visibility.Hidden;
+                    btnConfig.Visibility    = Visibility.Hidden;
+                    btnDetatch.Visibility   = Visibility.Hidden;
                     break;
 
                 case DeviceState.Discovered:
@@ -194,8 +194,8 @@ namespace WiinUSoft
                     //btnVjoy.IsEnabled     = true;
                     btnConfig.IsEnabled     = false;
                     btnDetatch.IsEnabled    = false;
-                    btnConfig.Visibility    = System.Windows.Visibility.Hidden;
-                    btnDetatch.Visibility   = System.Windows.Visibility.Hidden;
+                    btnConfig.Visibility    = Visibility.Hidden;
+                    btnDetatch.Visibility   = Visibility.Hidden;
                     break;
 
                 case DeviceState.Connected_XInput:
@@ -205,8 +205,8 @@ namespace WiinUSoft
                     //btnVjoy.IsEnabled     = false;
                     btnConfig.IsEnabled     = true;
                     btnDetatch.IsEnabled    = true;
-                    btnConfig.Visibility    = System.Windows.Visibility.Visible;
-                    btnDetatch.Visibility   = System.Windows.Visibility.Visible;
+                    btnConfig.Visibility    = Visibility.Visible;
+                    btnDetatch.Visibility   = Visibility.Visible;
 
                     var xHolder = new Holders.XInputHolder(device.Type);
                     LoadProfile(properties.profile, xHolder);
