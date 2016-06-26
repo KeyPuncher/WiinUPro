@@ -33,6 +33,7 @@ namespace WiinUPro
         internal ShiftState _currentState;          // Current shift state being applied
 
         internal Dictionary<string, AssignmentCollection>[] _testAssignments;
+        internal ScpDirector _scp;
 
         public int ShiftIndex
         {
@@ -72,6 +73,8 @@ namespace WiinUPro
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
             _nintroller.LowBattery += _nintroller_LowBattery;
+
+            _scp = ScpDirector.Access;
         }
 
         public void ChangeState(ShiftState newState)
@@ -145,7 +148,8 @@ namespace WiinUPro
             }
 
             // Send any XInput changes
-            ScpDirector.Access.ApplyAll();
+            //ScpDirector.Access.ApplyAll();
+            _scp.ApplyAll();
 
             // Visaul should only be updated if tab is in view
             Dispatcher.Invoke(new Action(() =>

@@ -118,7 +118,7 @@ namespace WiinUPro
 
             foreach (var xBtn in _selectedXInputButtons)
             {
-                Result.Add(new XInputButtonAssignment(xBtn));
+                Result.Add(new XInputButtonAssignment(xBtn) { Device = ScpDirector.XInput_Device.Device_A });
             }
 
             Close();
@@ -136,7 +136,7 @@ namespace WiinUPro
 
         private void xInputDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_B);
+            ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_A);
         }
     }
 }

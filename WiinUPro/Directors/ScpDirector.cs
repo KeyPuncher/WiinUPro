@@ -23,46 +23,56 @@ namespace WiinUPro
         #endregion
 
         protected List<XInputBus> _xInstances;
+        protected bool[] _deviceStatus;
 
         /// <summary>
         /// Gets the desired XInputBus (0 to 3).
         /// </summary>
         /// <param name="index">Any out of range index will return the first device.</param>
         /// <returns>The XInputBus</returns>
-        protected XInputBus this[int index]
-        {
-            get
-            {
-                if (index < 0 || index >= MAX_XINPUT_INSTNACES)
-                {
-                    index = 0;
-                }
-                
-                while (index >= _xInstances.Count)
-                {
-                    _xInstances.Add(new XInputBus(index));
-                }
-
-                return _xInstances[index];
-            }
-        }
+        //protected XInputBus this[int index]
+        //{
+        //    get
+        //    {
+        //        if (index < 0 || index >= MAX_XINPUT_INSTNACES)
+        //        {
+        //            index = 0;
+        //        }
+        //        
+        //        while (index >= _xInstances.Count)
+        //        {
+        //            _xInstances.Add(new XInputBus(index));
+        //        }
+        //
+        //        return _xInstances[index];
+        //    }
+        //}
 
         public bool Available { get; protected set; }
         public int Instances { get { return _xInstances.Count; } }
 
         public ScpDirector()
         {
-            _xInstances = new List<XInputBus>();
+            _xInstances = new List<XInputBus>
+            {
+                new XInputBus((int)XInput_Device.Device_A),
+                new XInputBus((int)XInput_Device.Device_B),
+                new XInputBus((int)XInput_Device.Device_C),
+                new XInputBus((int)XInput_Device.Device_D)
+            };
+            _deviceStatus = new bool[] { false, false, false, false };
         }
 
         public void SetButton(X360Button button, bool pressed, XInput_Device device = XInput_Device.Device_A)
         {
-            this[(int)device].SetInput(button, pressed);
+            //this[(int)device].SetInput(button, pressed);
+            _xInstances[(int)device - 1].SetInput(button, pressed);
         }
 
         public void SetAxis(X360Axis axis, float value, XInput_Device device = XInput_Device.Device_A)
         {
-            this[(int)device].SetInput(axis, value);
+            //this[(int)device].SetInput(axis, value);
+            _xInstances[(int)device - 1].SetInput(axis, value);
         }
 
         /// <summary>
@@ -73,16 +83,26 @@ namespace WiinUPro
         /// <returns>If all connections are successful.</returns>
         public bool ConnectDevice(XInput_Device device)
         {
-            bool result = false;
+            //bool result = false;
 
-            for (int i = (int)XInput_Device.Device_A; i <= (int)device; i++)
+            //for (int i = (int)XInput_Device.Device_A; i <= (int)device; i++)
+            //{
+            //    result = this[i].Connect();
+            //
+            //    if (!result)
+            //    {
+            //        return false;
+            //    }
+            //}
+
+            //return result;
+
+            bool result = _deviceStatus[(int)device - 1];
+
+            if (!result)
             {
-                result = this[i].Connect();
-
-                if (!result)
-                {
-                    return false;
-                }
+                //result = BusAccess.Instance.Plugin((int)device);
+                result = _xInstances[(int)device - 1].Connect();
             }
 
             return result;
@@ -96,33 +116,45 @@ namespace WiinUPro
         /// <returns>If all devices were disconnected</returns>
         public bool DisconnectDevice(XInput_Device device)
         {
-            bool result = false;
+            //bool result = false;
+            //
+            //for (int i = _xInstances.Count - 1; i >= (int)device; i--)
+            //{
+            //    result = this[i].Disconnect();
+            //
+            //    if (!result)
+            //    {
+            //        return false;
+            //    }
+            //
+            //    _xInstances.RemoveAt(i);
+            //}
+            //
+            //return result;
 
-            for (int i = _xInstances.Count - 1; i >= (int)device; i--)
+            if (_deviceStatus[(int)device - 1])
             {
-                result = this[i].Disconnect();
-
-                if (!result)
-                {
-                    return false;
-                }
-
-                _xInstances.RemoveAt(i);
+                return true;
             }
-
-            return result;
+            else
+            {
+                //return BusAccess.Instance.Unplug((int)device);
+                return _xInstances[(int)device - 1].Disconnect();
+            }
         }
 
         public void Apply(XInput_Device device = XInput_Device.Device_A)
         {
-            this[(int)device].Update();
+            //this[(int)device].Update();
+            _xInstances[(int)device - 1].Update();
         }
 
         public void ApplyAll()
         {
             foreach (var bus in _xInstances)
             {
-                bus.Update();
+                if (bus.PluggedIn)
+                    bus.Update();
             }
         }
 
@@ -205,43 +237,71 @@ namespace WiinUPro
             }
         }
 
-        protected class XInputBus : BusDevice
+        protected class BusAccess : BusDevice
+        {
+            public static BusAccess Instance
+            {
+                get
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new BusAccess();
+                        _instance.Open();
+                        _instance.Start();
+                    }
+
+                    return _instance;
+                }
+            }
+
+            public static BusAccess _instance;
+
+            protected BusAccess()
+            {
+                App.Current.Exit += App_Exit;
+            }
+
+            private void App_Exit(object sender, System.Windows.ExitEventArgs e)
+            {
+                if (_instance != null)
+                {
+                    _instance.Stop();
+                    _instance.Close();
+                }
+            }
+        }
+
+        protected class XInputBus
         {
             public XInputState inputs;
             public int ID { get; protected set; }
             public bool PluggedIn { get; protected set; }
-            public bool Started { get; protected set; }
+
+            protected BusAccess busRef;
 
             public XInputBus(int id)
             {
                 inputs = new XInputState();
                 ID = id;
-                Plugin(id);
+                busRef = BusAccess.Instance;
             }
 
             public bool Connect()
             {
-                if (!Started)
-                {
-                    Started = Open() && Start();
-                }
-
                 if (!PluggedIn)
                 {
-                    Unplug(ID);
-                    PluggedIn = Plugin(ID);
+                    busRef.Unplug(ID);
+                    PluggedIn = busRef.Plugin(ID);
                 }
 
-                return Started;
+                return PluggedIn;
             }
 
             public bool Disconnect()
             {
                 if (PluggedIn)
                 {
-                    Started = !Stop();
-                    Close();
-                    PluggedIn = !Unplug(ID);
+                    PluggedIn = !busRef.Unplug(ID);
                 }
 
                 return PluggedIn == false;
@@ -259,39 +319,33 @@ namespace WiinUPro
 
             public void Update()
             {
-                if (!Started) return;
+                //if (!Started) return;
 
                 byte[] rumble = new byte[8];
                 byte[] output = new byte[28];
 
                 // Fill the output to be sent
-                int serial = IndexToSerial((byte)ID);
                 output[0] = 0x1C;
-                output[4] = (byte)((serial >> 0) & 0xFF);
-                output[5] = (byte)((serial >> 8) & 0xFF);
-                output[6] = (byte)((serial >> 16) & 0xFF);
-                output[7] = (byte)((serial >> 24) & 0xFF);
+                output[4] = (byte)ID;
                 output[9] = 0x14;
 
                 // buttons
-                int buttonFlags = 0x00;             // try X360Button.Up here instead
-                buttonFlags |= (byte)(inputs.Up     ? 1 << 0 : 0);
-                buttonFlags |= (byte)(inputs.Down   ? 1 << 1 : 0);
-                buttonFlags |= (byte)(inputs.Right  ? 1 << 2 : 0);
-                buttonFlags |= (byte)(inputs.Left   ? 1 << 3 : 0);
-                buttonFlags |= (byte)(inputs.Start  ? 1 << 4 : 0);
-                buttonFlags |= (byte)(inputs.Back   ? 1 << 5 : 0);
-                buttonFlags |= (byte)(inputs.LS     ? 1 << 6 : 0);
-                buttonFlags |= (byte)(inputs.RS     ? 1 << 2 : 0);
-                buttonFlags |= (byte)(inputs.LB     ? 1 << 8 : 0);
-                buttonFlags |= (byte)(inputs.RB     ? 1 << 9 : 0);
-                buttonFlags |= (byte)(inputs.Guide  ? 1 << 10 : 0);
-                buttonFlags |= (byte)(inputs.A      ? 1 << 12 : 0);
-                buttonFlags |= (byte)(inputs.B      ? 1 << 13 : 0);
-                buttonFlags |= (byte)(inputs.X      ? 1 << 14 : 0);
-                buttonFlags |= (byte)(inputs.Y      ? 1 << 15 : 0);
-                output[(uint)X360Axis.BT_Lo] = (byte)((buttonFlags >> 0) & 0xFF);
-                output[(uint)X360Axis.BT_Hi] = (byte)((buttonFlags >> 8) & 0xFF);
+                int buttonFlags = 0x00;
+                output[10] |= (byte)(inputs.Up     ? 1 << 0 : 0);
+                output[10] |= (byte)(inputs.Down   ? 1 << 1 : 0);
+                output[10] |= (byte)(inputs.Left   ? 1 << 2 : 0);
+                output[10] |= (byte)(inputs.Right  ? 1 << 3 : 0);
+                output[10] |= (byte)(inputs.Start  ? 1 << 4 : 0);
+                output[10] |= (byte)(inputs.Back   ? 1 << 5 : 0);
+                output[10] |= (byte)(inputs.LS     ? 1 << 6 : 0);
+                output[10] |= (byte)(inputs.RS     ? 1 << 7 : 0);
+                output[11] |= (byte)(inputs.LB     ? 1 << 0 : 0);
+                output[11] |= (byte)(inputs.RB     ? 1 << 1 : 0);
+                output[11] |= (byte)(inputs.Guide  ? 1 << 2 : 0);
+                output[11] |= (byte)(inputs.A      ? 1 << 4 : 0);
+                output[11] |= (byte)(inputs.B      ? 1 << 5 : 0);
+                output[11] |= (byte)(inputs.X      ? 1 << 6 : 0);
+                output[11] |= (byte)(inputs.Y      ? 1 << 7 : 0);
 
                 // triggers
                 output[(uint)X360Axis.LT] = GetRawTrigger(inputs.LT);
@@ -313,7 +367,7 @@ namespace WiinUPro
                 output[(uint)X360Axis.RY_Lo] = (byte)((rawRY >> 0) & 0xFF);
                 output[(uint)X360Axis.RY_Hi] = (byte)((rawRY >> 8) & 0xFF);
 
-                if (Report(output, rumble))
+                if (busRef.Report(output, rumble))
                 {
                     // True on rumble state change
                     if (rumble[1] == 0x08)
