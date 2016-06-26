@@ -96,9 +96,9 @@ namespace WiinUSoft
                 else
                 {
                     var stream = new WinBtStream(hid.DevicePath);
-                    Nintroller n = new Nintroller(stream);
+                    Nintroller n = new Nintroller(stream, hid.Type);
 
-                    if (stream.OpenConnection() && n.Connect())
+                    if (stream.OpenConnection() && stream.CanRead)
                     {
                         deviceList.Add(new DeviceControl(n, hid.DevicePath));
                         deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;

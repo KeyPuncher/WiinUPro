@@ -120,8 +120,8 @@ namespace WiinUSoft
 
         public void RefreshState()
         {
-            if (Device.Connected)
-            {
+            //if (device.Connected)
+            //{
                 if (state != DeviceState.Connected_XInput)
                     ConnectionState = DeviceState.Discovered;
 
@@ -139,11 +139,11 @@ namespace WiinUSoft
                 {
                     properties = new Property(devicePath);
                 }
-            }
-            else
-            {
-                ConnectionState = DeviceState.None;
-            }
+            //}
+            //else
+            //{
+            //    ConnectionState = DeviceState.None;
+            //}
         }
 
         public void SetName(string newName)
@@ -154,7 +154,7 @@ namespace WiinUSoft
 
         public void Detatch()
         {
-            device.Disconnect();
+            device.StopReading();
             holder.Close();
             lowBatteryFired = false;
             ConnectionState = DeviceState.Discovered;
@@ -672,7 +672,7 @@ namespace WiinUSoft
 
         private void XOption_Click(object sender, RoutedEventArgs e)
         {
-            if (device.Connect())
+            if (device.DataStream.CanRead)
             {
                 device.BeginReading();
                 device.GetStatus();
@@ -743,24 +743,19 @@ namespace WiinUSoft
         {
             bool wasConnected = Connected;
 
-            if (wasConnected || device.Connect())
+            if (wasConnected || device.DataStream.CanRead)
             {
-                //if (holder != null && device.Type == ControllerType.ProController)
-                //{
-                //    holder.Flags[Inputs.Flags.RUMBLE] = true;
-                //    Delay(2000).ContinueWith(o => holder.Flags[Inputs.Flags.RUMBLE] = false);
-                //}
-                //else
-                //{
-                    identifying = true;
-                    device.RumbleEnabled = true;
-                    Delay(2000).ContinueWith(o =>
-                    {
-                        identifying = false;
-                        device.RumbleEnabled = false;
-                        if (!wasConnected) device.Disconnect();
-                    });
-                //}
+                if (!wasConnected)
+                    device.BeginReading();
+
+                identifying = true;
+                device.RumbleEnabled = true;
+                Delay(2000).ContinueWith(o =>
+                {
+                    identifying = false;
+                    device.RumbleEnabled = false;
+                    if (!wasConnected) device.StopReading();
+                });
 
                 // light show
                 device.SetPlayerLED(1);
