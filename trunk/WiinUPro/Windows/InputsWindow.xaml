@@ -5,38 +5,111 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="InputsWindow" Height="371.958" Width="580.8">
+        Title="InputsWindow" Height="371.958" Width="784.3">
     <Grid>
         <TabControl x:Name="tabControl" Margin="0,0,0.4,31.6">
             <TabItem Header="Keyboard">
                 <Grid Background="#FFE5E5E5">
                     <!-- Key Buttons -->
-                    <Button Content="Q" HorizontalAlignment="Left" Margin="50,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_Q"/>
-                    <Button Content="W" HorizontalAlignment="Left" Margin="97,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_W"/>
-                    <Button Content="E" HorizontalAlignment="Left" Margin="144,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_E"/>
-                    <Button Content="R" HorizontalAlignment="Left" Margin="191,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_R"/>
-                    <Button Content="T" HorizontalAlignment="Left" Margin="238,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_T"/>
-                    <Button Content="Y" HorizontalAlignment="Left" Margin="285,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_Y"/>
-                    <Button Content="U" HorizontalAlignment="Left" Margin="332,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_U"/>
-                    <Button Content="I" HorizontalAlignment="Left" Margin="379,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_I"/>
-                    <Button Content="O" HorizontalAlignment="Left" Margin="426,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_O"/>
-                    <Button Content="P" HorizontalAlignment="Left" Margin="473,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_P"/>
-                    <Button Content="A" HorizontalAlignment="Left" Margin="62,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_A"/>
-                    <Button Content="S" HorizontalAlignment="Left" Margin="109,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_S"/>
-                    <Button Content="D" HorizontalAlignment="Left" Margin="156,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_D"/>
-                    <Button Content="F" HorizontalAlignment="Left" Margin="203,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_F"/>
-                    <Button Content="G" HorizontalAlignment="Left" Margin="250,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_G"/>
-                    <Button Content="H" HorizontalAlignment="Left" Margin="297,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_H"/>
-                    <Button Content="J" HorizontalAlignment="Left" Margin="344,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_J"/>
-                    <Button Content="K" HorizontalAlignment="Left" Margin="391,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_K"/>
-                    <Button Content="L" HorizontalAlignment="Left" Margin="438,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_L"/>
-                    <Button Content="Z" HorizontalAlignment="Left" Margin="80,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_Z"/>
-                    <Button Content="X" HorizontalAlignment="Left" Margin="127,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_X"/>
-                    <Button Content="C" HorizontalAlignment="Left" Margin="174,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_C"/>
-                    <Button Content="V" HorizontalAlignment="Left" Margin="221,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_V"/>
-                    <Button Content="B" HorizontalAlignment="Left" Margin="268,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_B"/>
-                    <Button Content="N" HorizontalAlignment="Left" Margin="315,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_N"/>
-                    <Button Content="M" HorizontalAlignment="Left" Margin="362,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_M"/>
+                    <Button Content="~" HorizontalAlignment="Left" Margin="10,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_OEM_3"/>
+                    <Button Content="1" HorizontalAlignment="Left" Margin="57,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_1"/>
+                    <Button Content="2" HorizontalAlignment="Left" Margin="104,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_2"/>
+                    <Button Content="3" HorizontalAlignment="Left" Margin="151,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_3"/>
+                    <Button Content="4" HorizontalAlignment="Left" Margin="198,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_4"/>
+                    <Button Content="5" HorizontalAlignment="Left" Margin="245,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_5"/>
+                    <Button Content="6" HorizontalAlignment="Left" Margin="292,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_6"/>
+                    <Button Content="7" HorizontalAlignment="Left" Margin="339,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_7"/>
+                    <Button Content="8" HorizontalAlignment="Left" Margin="386,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_8"/>
+                    <Button Content="9" HorizontalAlignment="Left" Margin="433,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_9"/>
+                    <Button Content="0" HorizontalAlignment="Left" Margin="480,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_0"/>
+                    <Button Content="-" HorizontalAlignment="Left" Margin="527,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_OEM_MINUS"/>
+                    <Button Content="+" HorizontalAlignment="Left" Margin="574,27,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_OEM_PLUS"/>
+                    <Button Content="BACK" HorizontalAlignment="Left" Margin="621,27,0,0" VerticalAlignment="Top" Width="51" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_BACK"/>
+                    
+                    <Button Content="TAB" HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top" Width="52" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_TAB"/>
+                    <Button Content="Q" HorizontalAlignment="Left" Margin="66,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_Q"/>
+                    <Button Content="W" HorizontalAlignment="Left" Margin="113,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_W"/>
+                    <Button Content="E" HorizontalAlignment="Left" Margin="160,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_E"/>
+                    <Button Content="R" HorizontalAlignment="Left" Margin="207,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_R"/>
+                    <Button Content="T" HorizontalAlignment="Left" Margin="254,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_T"/>
+                    <Button Content="Y" HorizontalAlignment="Left" Margin="301,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_Y"/>
+                    <Button Content="U" HorizontalAlignment="Left" Margin="348,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_U"/>
+                    <Button Content="I" HorizontalAlignment="Left" Margin="395,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_I"/>
+                    <Button Content="O" HorizontalAlignment="Left" Margin="442,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_O"/>
+                    <Button Content="P" HorizontalAlignment="Left" Margin="489,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_P"/>
+                    <Button Content="[" HorizontalAlignment="Left" Margin="536,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_4"/>
+                    <Button Content="]" HorizontalAlignment="Left" Margin="583,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_6"/>
+                    <Button Content="\" HorizontalAlignment="Left" Margin="630,74,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_5"/>
+
+                    <Button Content="CAPS" HorizontalAlignment="Left" Margin="10,121,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_CAPITAL"/>
+                    <Button Content="A" HorizontalAlignment="Left" Margin="78,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_A"/>
+                    <Button Content="S" HorizontalAlignment="Left" Margin="125,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_S"/>
+                    <Button Content="D" HorizontalAlignment="Left" Margin="172,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_D"/>
+                    <Button Content="F" HorizontalAlignment="Left" Margin="219,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_F"/>
+                    <Button Content="G" HorizontalAlignment="Left" Margin="266,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_G"/>
+                    <Button Content="H" HorizontalAlignment="Left" Margin="313,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_H"/>
+                    <Button Content="J" HorizontalAlignment="Left" Margin="360,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_J"/>
+                    <Button Content="K" HorizontalAlignment="Left" Margin="407,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_K"/>
+                    <Button Content="L" HorizontalAlignment="Left" Margin="454,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_L"/>
+                    <Button HorizontalAlignment="Left" Margin="501,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_1">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Content=":" Margin="3,-10,-4,10"/>
+                                <Label Content=";" Margin="3,8,0,-8"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button HorizontalAlignment="Left" Margin="548,121,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_7">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Content="&quot;" Margin="1,-9,-2.5,8.5"/>
+                                <Label Content="'" Margin="2,10,0.5,-10.5"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button Content="ENTER" HorizontalAlignment="Left" Margin="595,121,0,0" VerticalAlignment="Top" Width="77" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_RETURN"/>
+
+                    <Button Content="L SHIFT" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="81" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LSHIFT"/>
+                    <Button Content="Z" HorizontalAlignment="Left" Margin="96,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_Z"/>
+                    <Button Content="X" HorizontalAlignment="Left" Margin="143,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_X"/>
+                    <Button Content="C" HorizontalAlignment="Left" Margin="190,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_C"/>
+                    <Button Content="V" HorizontalAlignment="Left" Margin="237,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_V"/>
+                    <Button Content="B" HorizontalAlignment="Left" Margin="284,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_B"/>
+                    <Button Content="N" HorizontalAlignment="Left" Margin="331,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_N"/>
+                    <Button Content="M" HorizontalAlignment="Left" Margin="378,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_M"/>
+                    <Button HorizontalAlignment="Left" Margin="425,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_COMMA">
+                        <Button.Content>
+                            <Grid Height="42" Width="42">
+                                <Label Content="&lt;" HorizontalAlignment="Center" Margin="9,-6,11,6"/>
+                                <Label Content="," HorizontalAlignment="Center" Margin="13,7,15,-7"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button HorizontalAlignment="Left" Margin="472,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_PERIOD">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Content="&gt;" Margin="0,-10,-0.5,10"/>
+                                <Label Content="." Margin="3,7,0,-6.5"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button HorizontalAlignment="Left" Margin="519,168,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_2">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Content="?" Margin="3,-10,-4,10"/>
+                                <Label Content="/" Margin="3,8,0,-8"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button Content="R SHIFT" HorizontalAlignment="Left" Margin="566,168,0,0" VerticalAlignment="Top" Width="106" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RSHIFT"/>
+
+                    <Button Content="L CTRL" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LCONTROL"/>
+                    <Button IsEnabled="False" Content="L WIN" HorizontalAlignment="Left" Margin="79,215,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LWIN"/>
+                    <Button Content="ALT" HorizontalAlignment="Left" Margin="148,215,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_MENU"/>
+                    <Button Content="" HorizontalAlignment="Left" Margin="195,215,0,0" VerticalAlignment="Top" Width="270" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_SPACE"/>
+                    <Button IsEnabled="False" Content="MENU" HorizontalAlignment="Left" Margin="470,215,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RMENU"/>
+                    <Button IsEnabled="False" Content="R WIN" HorizontalAlignment="Left" Margin="539,215,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RWIN"/>
+                    <Button Content="R CTRL" HorizontalAlignment="Left" Margin="608,215,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RCONTROL"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Mouse">
@@ -79,8 +152,8 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
-        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Left" Margin="10,0,0,6.4" Width="75" Click="acceptBtn_Click" Height="19" VerticalAlignment="Bottom"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Margin="0,0,15.4,6.4" Click="cancelBtn_Click" HorizontalAlignment="Right" Width="75" Height="19" VerticalAlignment="Bottom"/>
-        <Button x:Name="clearBtn" Content="Clear" Margin="393,0,106.4,6.4" Click="cancelBtn_Click" Height="19" VerticalAlignment="Bottom"/>
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9.5,7.5" Width="76" Click="acceptBtn_Click" Height="19" VerticalAlignment="Bottom"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,6.5" Click="cancelBtn_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75"/>
+        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,6.5" Click="cancelBtn_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75"/>
     </Grid>
 </Window>
