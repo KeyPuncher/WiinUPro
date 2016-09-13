@@ -32,6 +32,9 @@ namespace WiinUPro
         internal string _selectedInput;             // Controller's input to be effected by change
         internal ShiftState _currentState;          // Current shift state being applied
 
+        // For Testing
+        internal Shared.DummyDevice _dummy;
+
         internal Dictionary<string, AssignmentCollection>[] _testAssignments;
         internal ScpDirector _scp;
 
@@ -68,8 +71,18 @@ namespace WiinUPro
             _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment> { new TestMouseAssignment(true) }));
             _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment> { new TestMouseAssignment(false) }));
 
-            _stream = new WinBtStream(deviceInfo.DevicePath);
-            _nintroller = new Nintroller(_stream, deviceInfo.Type);
+            if (deviceInfo.DevicePath == "Dummy")
+            {
+                _dummy = new Shared.DummyDevice(new ProController());
+                var dumWin = new Windows.DummyWindow(_dummy);
+                dumWin.Show();
+                _nintroller = new Nintroller(_dummy, ControllerType.Wiimote);
+            }
+            else
+            {
+                _stream = new WinBtStream(deviceInfo.DevicePath);
+                _nintroller = new Nintroller(_stream, deviceInfo.Type);
+            }
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
             _nintroller.LowBattery += _nintroller_LowBattery;
@@ -175,10 +188,11 @@ namespace WiinUPro
 
             //bool success = false;
 
-            // We can set the sharing mode type, None fixes DS and may work on Windows 10 now.
-            _stream.SharingMode = System.IO.FileShare.None;
+            // We can set the sharing mode type, None fixes Dark Souls and may work on Windows 10 now.
+            if (_dummy == null)
+                _stream.SharingMode = System.IO.FileShare.None;
 
-            if (_stream.OpenConnection())
+            if (_dummy != null || _stream.OpenConnection())
             {
                 btnConnect.IsEnabled = false;
                 _nintroller.BeginReading();
@@ -247,7 +261,12 @@ namespace WiinUPro
         {
             btnDisconnect.IsEnabled = false;
 
-            _stream.Close();
+            if (_stream != null)
+                _stream.Close();
+
+            if (_dummy != null)
+                _dummy.Close();
+
             _view.Child = null;
             _controller = null;
 

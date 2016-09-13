@@ -658,6 +658,7 @@ namespace NintrollerLib
                             // Initialize
                             lock (_readingObj)
                             {
+                                // TODO: Can report[0] ever be equal to 0x04 here? Considering it has to be 0x21 to get here...
                                 if (report[0] != 0x04)
                                 {
                                     WriteToMemory(Constants.REGISTER_EXTENSION_INIT_1, new byte[] { 0x55 });
@@ -705,7 +706,7 @@ namespace NintrollerLib
 
                             if (typeChange)
                             {
-                                Log("Controller type: " + _currentType.ToString());
+                                Log("Controller type: " + newType.ToString());
                                 // TODO: New: Check parsing after applying a report type (Pro is working, CC is not)
                                 InputReport applyReport = InputReport.BtnsOnly;
                                 bool continuiousReporting = true;

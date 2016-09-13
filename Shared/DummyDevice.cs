@@ -28,6 +28,7 @@ namespace Shared
         #endregion
 
         protected byte[] _lastReport;
+        protected InputReport DataReportMode = InputReport.BtnsOnly;
 
         public DummyDevice(INintrollerState state)
         {
@@ -76,8 +77,16 @@ namespace Shared
         {
             int value = -1;
 
+            // This won't block since Read is call asynchronously
+            while (_lastReport == null && (byte)NextReport < 0x30) ;
+
             // Set Error
             buffer[4] = 0x00;
+
+            // Assuming we are sending these bytes (# read)
+            value = buffer.Length;
+
+            byte[] coreBtns = GetCoreButtons();
 
             switch (NextReport)
             {
@@ -86,8 +95,8 @@ namespace Shared
                     buffer[0] = (byte)InputReport.Status;
 
                     // BB BB - Core Buttons
-                    //buffer[1]
-                    //buffer[2]
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
 
                     // F - Flags: Battery Low, Extension, Speaker Enabled, IR Sensor Enabled
                     buffer[3] = (byte)(BatteryLow ? 0x01 : 0x00);
@@ -110,16 +119,33 @@ namespace Shared
                     buffer[0] = 0x21;
 
                     // BB BB - Core Buttons
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
 
                     // E - Error Code
                     buffer[3] = 0x00;
 
                     // S - Data Size
-                    buffer[3] += 0x00;
+                    buffer[3] += 0xF0;
 
                     // AA AA - Last 4 bytes of the requested address
+                    //buffer[4] = _lastReport[3];
+                    //buffer[5] = _lastReport[4];
 
                     // DD - Data bytes padded to 16
+
+                    // Pro Controller
+                    buffer[6] = 0x00;
+                    buffer[7] = 0x00;
+                    buffer[8] = 0xA4;
+                    buffer[9] = 0x20;
+                    buffer[10] = 0x01;
+                    buffer[11] = 0x20;
+
+                    if (_lastReport[4] == 250)
+                    {
+                        NextReport = DataReportMode;
+                    }
                     break;
 
                 case InputReport.Acknowledge: // 22 BB BB RR EE
@@ -127,6 +153,8 @@ namespace Shared
                     buffer[0] = 0x22;
 
                     // BB BB - Core Buttons
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
 
                     // RR - Output Report that is being acknowledged
 
@@ -136,34 +164,50 @@ namespace Shared
 
                 case InputReport.BtnsOnly: // 30 BB BB
                     buffer[0] = 0x30;
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
                     break;
 
                 case InputReport.BtnsAcc: // 31 BB BB AA AA AA
                     buffer[0] = 0x31;
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
                     break;
 
                 case InputReport.BtnsExt: // 32 BB BB EE EE EE EE EE EE EE EE
                     buffer[0] = 0x32;
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
                     break;
 
                 case InputReport.BtnsAccIR: // 33 BB BB AA AA AA II II II II II II II II II II II II
                     buffer[0] = 0x33;
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
                     break;
 
                 case InputReport.BtnsExtB: // 34 BB BB EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE 
                     buffer[0] = 0x34;
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
                     break;
 
                 case InputReport.BtnsAccExt: // 35 BB BB AA AA AA EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE
                     buffer[0] = 0x35;
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
                     break;
 
                 case InputReport.BtnsIRExt: // 36 BB BB II II II II II II II II II II EE EE EE EE EE EE EE EE EE
                     buffer[0] = 0x36;
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
                     break;
 
                 case InputReport.BtnsAccIRExt: // 37 BB BB AA AA AA II II II II II II II II II II EE EE EE EE EE EE
                     buffer[0] = 0x37;
+                    buffer[1] = coreBtns[0];
+                    buffer[2] = coreBtns[1];
                     break;
 
                 case InputReport.ExtOnly: // 3d EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE
@@ -171,6 +215,8 @@ namespace Shared
                     Array.Copy(GetExtension(), 0, buffer, 1, 21);
                     break;
             }
+
+            _lastReport = null;
 
             return value;
         }
@@ -197,6 +243,18 @@ namespace Shared
                     RumbleByte = buffer[1];
                     break;
 
+                case OutputReport.ReadMemory: // 21 BB BB SE AA AA DD DD DD DD DD DD DD DD DD DD DD DD DD DD DD DD
+                    if (NextReport != InputReport.ReadMem)
+                    {
+                        // Extension Step A
+                        NextReport = InputReport.ReadMem;
+                    }
+                    else
+                    {
+                        // Extension Step B
+                    }
+                    break;
+
                 case OutputReport.LEDs: // 11 LL
                     NextReport = InputReport.Acknowledge;
                     LED_1 = (buffer[1] & 0x10) != 0x00;
@@ -206,7 +264,11 @@ namespace Shared
                     break;
 
                 case OutputReport.DataReportMode: // 12 TT MM
-                    NextReport = (InputReport)buffer[2];
+                    DataReportMode = (InputReport)buffer[2];
+                    if ((byte)NextReport >= 0x30)
+                    {
+                        NextReport = DataReportMode;
+                    }
                     break;
             }
         }
@@ -216,6 +278,38 @@ namespace Shared
         protected byte[] GetCoreButtons()
         {
             byte[] buf = new byte[2];
+
+            bool a, b, one, two, plus, minus, home, up, down, left, right;
+            a = b = one = two = plus = minus = home = up = down = left = right = false;
+
+            switch (DeviceType)
+            {
+                case ControllerType.ProController:
+                    var p = (ProController)State;
+                    a = p.A;
+                    b = p.B;
+                    plus = p.Plus;
+                    minus = p.Minus;
+                    home = p.Home;
+                    up = p.Up;
+                    down = p.Down;
+                    left = p.Left;
+                    right = p.Right;
+                    break;
+            }
+
+            buf[0] |= (byte)(left  ? 0x01 : 0x00);
+            buf[0] |= (byte)(right ? 0x02 : 0x00);
+            buf[0] |= (byte)(down  ? 0x04 : 0x00);
+            buf[0] |= (byte)(up    ? 0x08 : 0x00);
+            buf[0] |= (byte)(plus  ? 0x10 : 0x00);
+
+            buf[1] |= (byte)(two   ? 0x01 : 0x00);
+            buf[1] |= (byte)(one   ? 0x02 : 0x00);
+            buf[1] |= (byte)(b     ? 0x04 : 0x00);
+            buf[1] |= (byte)(a     ? 0x08 : 0x00);
+            buf[1] |= (byte)(minus ? 0x10 : 0x00);
+            buf[1] |= (byte)(home  ? 0x80 : 0x00);
 
             return buf;
         }
@@ -250,10 +344,10 @@ namespace Shared
             {
                 var pro = (ProController)State;
 
-                var lx = BitConverter.GetBytes(pro.LJoy.rawX);
-                var ly = BitConverter.GetBytes(pro.LJoy.rawY);
-                var rx = BitConverter.GetBytes(pro.RJoy.rawX);
-                var ry = BitConverter.GetBytes(pro.RJoy.rawY);
+                var lx = BitConverter.GetBytes(2047); //pro.LJoy.rawX);
+                var ly = BitConverter.GetBytes(2047); //pro.LJoy.rawY);
+                var rx = BitConverter.GetBytes(2047); //pro.RJoy.rawX);
+                var ry = BitConverter.GetBytes(2047); //pro.RJoy.rawY);
 
                 buf[0] = lx[0];
                 buf[1] = lx[1];
@@ -265,29 +359,29 @@ namespace Shared
                 buf[7] = ry[1];
 
                 buf[8] = 0x00;
-                buf[8] += (byte)(pro.R     ? 0x02 : 0x00);
-                buf[8] += (byte)(pro.Plus  ? 0x04 : 0x00);
-                buf[8] += (byte)(pro.Home  ? 0x08 : 0x00);
-                buf[8] += (byte)(pro.Minus ? 0x10 : 0x00);
-                buf[8] += (byte)(pro.L     ? 0x20 : 0x00);
-                buf[8] += (byte)(pro.Down  ? 0x40 : 0x00);
-                buf[8] += (byte)(pro.Right ? 0x80 : 0x00);
+                buf[8] += (byte)(!pro.R     ? 0x02 : 0x00);
+                buf[8] += (byte)(!pro.Plus  ? 0x04 : 0x00);
+                buf[8] += (byte)(!pro.Home  ? 0x08 : 0x00);
+                buf[8] += (byte)(!pro.Minus ? 0x10 : 0x00);
+                buf[8] += (byte)(!pro.L     ? 0x20 : 0x00);
+                buf[8] += (byte)(!pro.Down  ? 0x40 : 0x00);
+                buf[8] += (byte)(!pro.Right ? 0x80 : 0x00);
 
                 buf[9] = 0x00;
-                buf[9] += (byte)(pro.Up   ? 0x01 : 0x00);
-                buf[9] += (byte)(pro.Left ? 0x02 : 0x00);
-                buf[9] += (byte)(pro.ZR   ? 0x04 : 0x00);
-                buf[9] += (byte)(pro.X    ? 0x08 : 0x00);
-                buf[9] += (byte)(pro.A    ? 0x10 : 0x00);
-                buf[9] += (byte)(pro.Y    ? 0x20 : 0x00);
-                buf[9] += (byte)(pro.B    ? 0x40 : 0x00);
-                buf[9] += (byte)(pro.ZL   ? 0x80 : 0x00);
+                buf[9] += (byte)(!pro.Up   ? 0x01 : 0x00);
+                buf[9] += (byte)(!pro.Left ? 0x02 : 0x00);
+                buf[9] += (byte)(!pro.ZR   ? 0x04 : 0x00);
+                buf[9] += (byte)(!pro.X    ? 0x08 : 0x00);
+                buf[9] += (byte)(!pro.A    ? 0x10 : 0x00);
+                buf[9] += (byte)(!pro.Y    ? 0x20 : 0x00);
+                buf[9] += (byte)(!pro.B    ? 0x40 : 0x00);
+                buf[9] += (byte)(!pro.ZL   ? 0x80 : 0x00);
 
                 buf[10] = 0x00;
-                buf[10] += (byte)(pro.RStick       ? 0x01 : 0x00);
-                buf[10] += (byte)(pro.LStick       ? 0x02 : 0x00);
-                buf[10] += (byte)(pro.charging     ? 0x04 : 0x00);
-                buf[10] += (byte)(pro.usbConnected ? 0x08 : 0x00);
+                buf[10] += (byte)(!pro.RStick       ? 0x01 : 0x00);
+                buf[10] += (byte)(!pro.LStick       ? 0x02 : 0x00);
+                buf[10] += (byte)(!pro.charging     ? 0x04 : 0x00);
+                buf[10] += (byte)(!pro.usbConnected ? 0x08 : 0x00);
             }
             else if (t == typeof(Nunchuk))
             {

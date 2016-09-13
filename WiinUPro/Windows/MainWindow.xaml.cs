@@ -68,9 +68,9 @@ namespace WiinUPro
                 VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Left
             });
-            stack.Children.Add(new TextBlock() { Text = "TEST" + tabControl.Items.Count.ToString() });
+            stack.Children.Add(new TextBlock() { Text = "DUMMY " + tabControl.Items.Count.ToString() });
             test.Header = stack;
-            NintyControl nin = new NintyControl(new Shared.DeviceInfo() { DevicePath = "", Type = NintrollerLib.ControllerType.ProController });
+            NintyControl nin = new NintyControl(new Shared.DeviceInfo() { DevicePath = "Dummy", Type = NintrollerLib.ControllerType.ProController });
             nin.OnTypeChange += (NintrollerLib.ControllerType type) =>
             {
                 ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/ProController_white_24.png", UriKind.Relative));
