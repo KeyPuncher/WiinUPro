@@ -71,6 +71,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\DummyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\InputsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -100,6 +104,9 @@
     </Compile>
     <Compile Include="Controls\NintyControl.xaml.cs">
       <DependentUpon>NintyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DummyWindow.xaml.cs">
+      <DependentUpon>DummyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\InputsWindow.xaml.cs">
       <DependentUpon>InputsWindow.xaml</DependentUpon>
