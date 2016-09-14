@@ -9,7 +9,7 @@
     <Grid>
         <TabControl x:Name="tabControl" Margin="0,0,0.4,31.6">
             <TabItem Header="Keyboard">
-                <Grid Background="#FFE5E5E5">
+                <Grid x:Name="keyboardGrid" Background="#FFE5E5E5">
                     <!-- Key Buttons -->
                     <Button Content="ESC" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_ESCAPE"/>
                     <Button Content="F1" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F1"/>
@@ -169,12 +169,15 @@
                     <Button Content="L" HorizontalAlignment="Left" Margin="259,40,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left"/>
                     <Button Content="M" HorizontalAlignment="Left" Margin="306,40,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle"/>
                     <Button Content="R" HorizontalAlignment="Left" Margin="353,40,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Right"/>
+
+                    <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="436,40,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up"/>
+                    <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="436,94,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Xbox 360">
                 <Grid Background="#FFE5E5E5">
-                    <Button Content="Connect" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click"/>
-                    <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click"/>
+                    <Button Content="Connect" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click"/>
+                    <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click"/>
                     <Button Content="A" HorizontalAlignment="Left" Margin="224,81,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="A"/>
                     <Button Content="B" HorizontalAlignment="Left" Margin="271,81,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="B"/>
                     <Button Content="X" HorizontalAlignment="Left" Margin="318,81,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="X"/>
@@ -190,6 +193,13 @@
                     <Button Content="S" HorizontalAlignment="Left" Margin="365,34,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Start"/>
                     <Button Content="LS" HorizontalAlignment="Left" Margin="318,175,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="LS"/>
                     <Button Content="RS" HorizontalAlignment="Left" Margin="365,175,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="RS"/>
+                    <Image x:Name="image" Margin="487,10,0,0" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Controller.png" HorizontalAlignment="Left" Width="401" Height="265" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="deviceSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectedIndex="0" SelectionChanged="deviceSelection_SelectionChanged">
+                        <ListBoxItem Content="Device A"/>
+                        <ListBoxItem Content="Device B"/>
+                        <ListBoxItem Content="Device C"/>
+                        <ListBoxItem Content="Device D"/>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Joystick">

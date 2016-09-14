@@ -323,7 +323,16 @@ namespace WiinUPro
         {
             System.Diagnostics.Debug.WriteLine(key);
 
-            InputsWindow win = new InputsWindow();
+            InputsWindow win;
+            if (_testAssignments[ShiftIndex].ContainsKey(key))
+            {
+                win = new InputsWindow(_testAssignments[ShiftIndex][key]);
+            }
+            else
+            {
+                win = new InputsWindow();
+            }
+
             win.ShowDialog();
 
             if (_testAssignments[ShiftIndex].ContainsKey(key))

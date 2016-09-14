@@ -91,6 +91,7 @@
     <Compile Include="Assignments\KeyboardAssignment.cs" />
     <Compile Include="Assignments\MouseAssignment.cs" />
     <Compile Include="Assignments\MouseButtonAssignment.cs" />
+    <Compile Include="Assignments\MouseScrollAssignment.cs" />
     <Compile Include="Assignments\ShiftAssignment.cs" />
     <Compile Include="Assignments\XInputButtonAssignment.cs" />
     <Compile Include="Directors\KeyboardDirector.cs" />
@@ -205,6 +206,9 @@
     <Resource Include="Images\Controllers\Pro\proWhitezl2.png" />
     <Resource Include="Images\Controllers\Pro\proWhitezr.png" />
     <Resource Include="Images\Controllers\Pro\proWhitezr2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\Xbox\xbox360Controller.png" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
