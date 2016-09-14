@@ -102,8 +102,6 @@ namespace WiinUPro
         /// <summary>Negative movement along the X-axis</summary>
         MoveLeft,
         /// <summary>Positive movement along the X-axis</summary>
-        MoveRight,
-        //ScrollUp,
-        //ScrollDown
+        MoveRight
     }
 }

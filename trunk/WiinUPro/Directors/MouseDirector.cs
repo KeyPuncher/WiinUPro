@@ -64,16 +64,11 @@ namespace WiinUPro
         }
 
         // Will need to change and test how the scrolling works
-        public void MouseScrollVertical(int amount)
+        public void MouseScroll(Mouse.ScrollDirection scrollDirection)
         {
-            Mouse.Scroll(Mouse.ScrollDirection.Up);
+            Mouse.Scroll(scrollDirection);
         }
-
-        public void MouseScrollHorizontal(int amount)
-        {
-            Mouse.Scroll(Mouse.ScrollDirection.Down);
-        }
-
+        
         public void Release()
         {
             foreach (var btn in _pressedButtons)
