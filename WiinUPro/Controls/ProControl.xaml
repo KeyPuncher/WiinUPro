@@ -17,9 +17,41 @@
                 <Image x:Name="led4" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED4.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="720,656,0,0" Width="47" Height="48" Opacity="0" MouseUp="led_MouseUp"/>
                 <!-- Analog Stick Images -->
                 <Image x:Name="leftStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,232,0,0" Opacity="1" Width="148" Height="148" />
-                <Image x:Name="leftStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,230,0,0" Width="151" Height="152" Opacity="0" />
+                <Image x:Name="leftStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,230,0,0" Width="151" Height="152" Opacity="0" MouseLeftButtonUp="OpenContextMenu" >
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Up" Tag="proLUp" Click="Axis_Click"/>
+                            <MenuItem Header="Left" Tag="proLLeft" Click="Axis_Click"/>
+                            <MenuItem Header="Right" Tag="proLRight" Click="Axis_Click"/>
+                            <MenuItem Header="Down" Tag="proLDown" Click="Axis_Click"/>
+                            <MenuItem Header="Stick Click" Tag="proLS" Click="Axis_Click"/>
+                            <Separator/>
+                            <MenuItem Header="Quick Assign">
+                                <MenuItem Header="Mouse" Tag="proL" Click="QuickAssign_Click"/>
+                                <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
                 <Image x:Name="rightStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstickR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,232,0,0" Opacity="1" Width="148" Height="148" />
-                <Image x:Name="rightStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,230,0,0" Width="151" Height="152" Opacity="0" />
+                <Image x:Name="rightStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,230,0,0" Width="151" Height="152" Opacity="0" MouseLeftButtonUp="OpenContextMenu" >
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Up" Tag="proRUp" Click="Axis_Click"/>
+                            <MenuItem Header="Left" Tag="proRLeft" Click="Axis_Click"/>
+                            <MenuItem Header="Right" Tag="proRRight" Click="Axis_Click"/>
+                            <MenuItem Header="Down" Tag="proRDown" Click="Axis_Click"/>
+                            <MenuItem Header="Stick Click" Tag="proRS" Click="Axis_Click"/>
+                            <Separator/>
+                            <MenuItem Header="Quick Assign">
+                                <MenuItem Header="Mouse" Tag="proR" Click="QuickAssign_Click"/>
+                                <MenuItem Header="WASD" Tag="proR" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Arrows" Tag="proR" Click="QuickAssign_Click"/>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
                 <!-- Dpad Images-->
                 <Image x:Name="dpadUp" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteupCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="382,421,0,0" Opacity="0" Width="64" Height="66" MouseLeftButtonDown="Btn_MouseLeftButtonDown" Tag="proUP" MouseRightButtonUp="Btn_MouseRightButtonUp" />
                 <Image x:Name="dpadDown" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitedownCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="382,549,0,0" Opacity="0" Width="64" Height="66" MouseLeftButtonDown="Btn_MouseLeftButtonDown" Tag="proDOWN" MouseRightButtonUp="Btn_MouseRightButtonUp" />

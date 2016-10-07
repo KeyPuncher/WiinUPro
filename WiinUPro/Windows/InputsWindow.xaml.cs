@@ -69,23 +69,56 @@ namespace WiinUPro
 
         private void AddToList<TEnum>(object obj, List<TEnum> list) where TEnum : struct
         {
-            var btn = obj as Button;
+            var elm = obj as FrameworkElement;
 
-            if (btn != null)
+            if (elm != null)
             {
                 TEnum inputType;
-                if (Enum.TryParse(btn.Tag.ToString(), out inputType))
+                if (Enum.TryParse(elm.Tag.ToString(), out inputType))
                 {
-                    if (btn.Background == keySelectedBrush && list.Contains(inputType))
+                    bool selected = list.Contains(inputType);
+
+                    // This can be a Button or an Image
+                    var btn = obj as Button;
+                    if (btn != null)
+                    {
+                        selected &= btn.Background == keySelectedBrush;
+                    }
+
+                    var img = obj as Image;
+                    if (img != null)
+                    {
+                        selected &= img.Opacity > 0;
+                    }
+
+                    if (selected)
                     {
                         // Deselect and remove from list
-                        btn.Background = keyDeselectedBrush;
                         list.Remove(inputType);
+
+                        if (btn != null)
+                        {
+                            btn.Background = keyDeselectedBrush;
+                        }
+                        
+                        if (img != null)
+                        {
+                            img.Opacity = 0;
+                        }
                     }
                     else
                     {
-                        btn.Background = keySelectedBrush;
                         list.Add(inputType);
+
+                        if (btn != null)
+                        {
+                            btn.Background = keySelectedBrush;
+                        }
+
+                        if (img != null)
+                        {
+                            img.Opacity = 100;
+                        }
                     }
                 }
             }
@@ -141,6 +174,11 @@ namespace WiinUPro
             foreach (var xBtn in _selectedXInputButtons)
             {
                 Result.Add(new XInputButtonAssignment(xBtn) { Device = _selectedDevice });
+            }
+
+            foreach (var xAxis in _selectedXInputAxes)
+            {
+                Result.Add(new XInputAxisAssignment(xAxis) { Device = _selectedDevice });
             }
 
             Close();

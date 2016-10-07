@@ -24,6 +24,7 @@ namespace WiinUPro
         public event EventHandler<bool[]> OnChangeLEDs;
         public event EventHandler<string> OnInputSelected;
         public event EventHandler<string> OnInputRightClick;
+        public event EventHandler<Dictionary<string, AssignmentCollection>> OnQuickAssign;
 
         public ProControl()
         {
@@ -100,18 +101,53 @@ namespace WiinUPro
             }
         }
 
+        private void QuickAssign(string prefix, string type)
+        {
+            Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
+            
+            if (type == "Mouse")
+            {
+                args.Add(prefix + "Up", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp) }));
+                args.Add(prefix + "Down", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown) }));
+                args.Add(prefix + "Left", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft) }));
+                args.Add(prefix + "Right", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight) }));
+            }
+            else if (type == "WASD")
+            {
+                args.Add(prefix + "Up", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_W) }));
+                args.Add(prefix + "Down", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_S) }));
+                args.Add(prefix + "Left", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_A) }));
+                args.Add(prefix + "Right", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_D) }));
+            }
+            else if (type == "Arrows")
+            {
+                args.Add(prefix + "Up", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_UP) }));
+                args.Add(prefix + "Down", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_DOWN) }));
+                args.Add(prefix + "Left", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_LEFT) }));
+                args.Add(prefix + "Right", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_RIGHT) }));
+            }
+
+            if (OnQuickAssign != null)
+                OnQuickAssign(this, args);
+        }
+
+        private void OpenInput(object sender)
+        {
+            var element = sender as FrameworkElement;
+            var tag = element == null ? "" : element.Tag as string;
+
+            // Open input assignment window
+            if (OnInputSelected != null && tag != null)
+            {
+                OnInputSelected(sender, tag);
+            }
+        }
+
         private void Btn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
             {
-                var element = sender as FrameworkElement;
-                var tag = element == null ? "" : element.Tag as string;
-
-                // Open input assignment window
-                if (OnInputSelected != null && tag != null)
-                {
-                    OnInputSelected(sender, tag);
-                }
+                OpenInput(sender);
             }
         }
 
@@ -124,6 +160,37 @@ namespace WiinUPro
             if (OnInputRightClick != null && tag != null)
             {
                 OnInputRightClick(sender, tag);
+            }
+        }
+
+        private void OpenContextMenu(object sender, MouseButtonEventArgs e)
+        {
+            var element = sender as FrameworkElement;
+
+            if (element != null && element.ContextMenu != null)
+            {
+                element.ContextMenu.IsOpen = true;
+            }
+        }
+
+        private void Axis_Click(object sender, RoutedEventArgs e)
+        {
+            OpenInput(sender);
+        }
+
+        private void QuickAssign_Click(object sender, RoutedEventArgs e)
+        {
+            var item = sender as MenuItem;
+
+            if (item != null)
+            {
+                var header = item.Header as string;
+                var tag = item.Tag as string;
+
+                if (header != null && tag != null)
+                {
+                    QuickAssign(tag, header);
+                }
             }
         }
     }

@@ -56,7 +56,8 @@ namespace Shared.Windows
 
                 // A certian build of Windows 10 seems to have fixed the FileShare.None issue
                 if (Environment.OSVersion.Version.Major == 10 &&
-                    Environment.OSVersion.Version.Build >= 10586)
+                    Environment.OSVersion.Version.Build >= 10586/* &&
+                    Environment.OSVersion.Version.Build < 14393*/)
                 {
                     SharingMode = FileShare.None;
                 }
@@ -103,6 +104,13 @@ namespace Shared.Windows
             }
             catch
             {
+                // If we were tring to get exclusive access try again
+                if (SharingMode == FileShare.None)
+                {
+                    SharingMode = FileShare.ReadWrite;
+                    return OpenConnection();
+                }
+
                 return false;
             }
 
@@ -114,7 +122,7 @@ namespace Shared.Windows
         /// Set to None to have exclusive access to the controller.
         /// Otherwise set to ReadWrite.
         /// </summary>
-        public FileShare SharingMode { get; set; } 
+        public FileShare SharingMode { get; set; } = FileShare.ReadWrite;
 
         /// <summary>
         /// Set if the user is using the Toshiba Bluetooth Stack

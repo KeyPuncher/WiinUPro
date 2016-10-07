@@ -93,6 +93,7 @@
     <Compile Include="Assignments\MouseButtonAssignment.cs" />
     <Compile Include="Assignments\MouseScrollAssignment.cs" />
     <Compile Include="Assignments\ShiftAssignment.cs" />
+    <Compile Include="Assignments\XInputAxisAssignment.cs" />
     <Compile Include="Assignments\XInputButtonAssignment.cs" />
     <Compile Include="Directors\KeyboardDirector.cs" />
     <Compile Include="Directors\KeyboardDirector_WI.cs" />
@@ -209,6 +210,23 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Controllers\Xbox\xbox360Controller.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\Xbox\xbox360A.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360B.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360Back.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360Down.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360LB.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360Left.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360LT.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360RB.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360Right.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360RT.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360Guide.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360Start.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360Up.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360X.png" />
+    <Resource Include="Images\Controllers\Xbox\xbox360Y.png" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

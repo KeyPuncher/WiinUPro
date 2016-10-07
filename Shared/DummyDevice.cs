@@ -37,6 +37,12 @@ namespace Shared
             if (t == typeof(ProController))
             {
                 DeviceType = ControllerType.ProController;
+                var pState = (ProController)state;
+                pState.LJoy.rawX = (short)pState.LJoy.centerX;
+                pState.LJoy.rawY = (short)pState.LJoy.centerY;
+                pState.RJoy.rawX = (short)pState.RJoy.centerX;
+                pState.RJoy.rawY = (short)pState.RJoy.centerY;
+                State = pState;
             }
         }
 
@@ -344,10 +350,10 @@ namespace Shared
             {
                 var pro = (ProController)State;
 
-                var lx = BitConverter.GetBytes(2047); //pro.LJoy.rawX);
-                var ly = BitConverter.GetBytes(2047); //pro.LJoy.rawY);
-                var rx = BitConverter.GetBytes(2047); //pro.RJoy.rawX);
-                var ry = BitConverter.GetBytes(2047); //pro.RJoy.rawY);
+                var lx = BitConverter.GetBytes(pro.LJoy.rawX);
+                var ly = BitConverter.GetBytes(pro.LJoy.rawY);
+                var rx = BitConverter.GetBytes(pro.RJoy.rawX);
+                var ry = BitConverter.GetBytes(pro.RJoy.rawY);
 
                 buf[0] = lx[0];
                 buf[1] = lx[1];

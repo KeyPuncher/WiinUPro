@@ -108,6 +108,7 @@ namespace WiinUPro
             bool result = true;
 
             result &= Button == other.Button;
+            result &= Device == other.Device;
             result &= InverseInput == other.InverseInput;
             result &= Threshold == other.Threshold;
             result &= TurboEnabled == other.TurboEnabled;
@@ -126,13 +127,13 @@ namespace WiinUPro
             }
             else
             {
-                return Button == other.Button;
+                return Button == other.Button && Device == other.Device;
             }
         }
 
         public override int GetHashCode()
         {
-            int hash = (int)Button + 1;
+            int hash = (int)Button + (int)Device;
             return hash;
         }
 
