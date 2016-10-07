@@ -200,6 +200,29 @@ namespace WiinUPro
                         default: break;
                     }
                 }
+
+                get
+                {
+                    switch (btn)
+                    {
+                        case X360Button.A: return A;
+                        case X360Button.B: return B;
+                        case X360Button.X: return X;
+                        case X360Button.Y: return Y;
+                        case X360Button.LB: return LB;
+                        case X360Button.RB: return RB;
+                        case X360Button.LS: return LS;
+                        case X360Button.RS: return RS;
+                        case X360Button.Up: return Up;
+                        case X360Button.Down: return Down;
+                        case X360Button.Left: return Left;
+                        case X360Button.Right: return Right;
+                        case X360Button.Start: return Start;
+                        case X360Button.Back: return Back;
+                        case X360Button.Guide: return Back;
+                        default: return false;
+                    }
+                }
             }
 
             public float this[X360Axis axis]
@@ -234,6 +257,41 @@ namespace WiinUPro
                             break;
                     }
                 }
+
+                get
+                {
+                    switch (axis)
+                    {
+                        case X360Axis.LX_Hi:
+                        case X360Axis.LX_Lo:
+                            return LX;
+                        case X360Axis.LY_Hi:
+                        case X360Axis.LY_Lo:
+                            return LY;
+                        case X360Axis.LT:
+                            return LT;
+                        case X360Axis.RX_Hi:
+                        case X360Axis.RX_Lo:
+                            return RX;
+                        case X360Axis.RY_Hi:
+                        case X360Axis.RY_Lo:
+                            return RY;
+                        case X360Axis.RT:
+                            return RT;
+                        default:
+                            return 0;
+                    }
+                }
+            }
+
+            public void Reset()
+            {
+                A = B = X = Y = false;
+                Up = Down = Left = Right = false;
+                LB = RB = LS = RS = false;
+                Start = Back = Guide = false;
+                LX = LY = LT = 0;
+                RX = RY = RT = 0;
             }
         }
 
@@ -309,12 +367,12 @@ namespace WiinUPro
 
             public void SetInput(X360Button button, bool state)
             {
-                inputs[button] = state;
+                inputs[button] = state;// || inputs[button];
             }
 
             public void SetInput(X360Axis axis, float value)
             {
-                inputs[axis] = value;
+                inputs[axis] = value;// == 0 ? inputs[axis] : value;
             }
 
             public void Update()
@@ -374,8 +432,11 @@ namespace WiinUPro
                     {
                         // TODO: rumble
                         // perhaps rumble even if change flag not set
+                        System.Diagnostics.Debug.WriteLine("rumble");
                     }
                 }
+
+                //inputs.Reset();
             }
 
             public int GetRawAxis(float axis)

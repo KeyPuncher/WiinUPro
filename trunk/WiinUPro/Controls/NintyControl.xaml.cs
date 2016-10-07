@@ -73,7 +73,7 @@ namespace WiinUPro
 
             if (deviceInfo.DevicePath == "Dummy")
             {
-                _dummy = new Shared.DummyDevice(new ProController());
+                _dummy = new Shared.DummyDevice(Calibrations.Defaults.ProControllerDefault);
                 var dumWin = new Windows.DummyWindow(_dummy);
                 dumWin.Show();
                 _nintroller = new Nintroller(_dummy, ControllerType.Wiimote);
@@ -126,6 +126,7 @@ namespace WiinUPro
                     _controller.OnChangeLEDs += SetLeds;
                     _controller.OnInputSelected += InputSelected;
                     _controller.OnInputRightClick += InputOpenMenu;
+                    _controller.OnQuickAssign += QuickAssignment;
 
                     _view.Child = _controller as UserControl;
                     ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
@@ -162,6 +163,7 @@ namespace WiinUPro
 
             // Send any XInput changes
             //ScpDirector.Access.ApplyAll();
+            // TODO: only update devices this controller is emulating
             _scp.ApplyAll();
 
             // Visaul should only be updated if tab is in view
@@ -215,6 +217,7 @@ namespace WiinUPro
                     _controller.OnChangeLEDs += SetLeds;
                     _controller.OnInputSelected += InputSelected;
                     _controller.OnInputRightClick += InputOpenMenu;
+                    _controller.OnQuickAssign += QuickAssignment;
 
                     _view.Child = _controller as UserControl;
                     ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
@@ -232,6 +235,7 @@ namespace WiinUPro
                 _controller = new ProControl();
                 _controller.OnInputSelected += InputSelected;
                 _controller.OnInputRightClick += InputOpenMenu;
+                _controller.OnQuickAssign += QuickAssignment;
                 _view.Child = _controller as UserControl;
                 ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
                 ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
@@ -350,6 +354,22 @@ namespace WiinUPro
             _selectedInput = e;
             subMenu.IsOpen = true;
         }
+
+        private void QuickAssignment(object sender, Dictionary<string, AssignmentCollection> assignments)
+        {
+            foreach (var item in assignments)
+            {
+                if (_testAssignments[ShiftIndex].ContainsKey(item.Key))
+                {
+                    _testAssignments[ShiftIndex][item.Key] = item.Value;
+                }
+                else
+                {
+                    _testAssignments[ShiftIndex].Add(item.Key, item.Value);
+                }
+            }
+        }
+
         private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _currentState = (ShiftState)dropShift.SelectedIndex;
@@ -362,6 +382,7 @@ namespace WiinUPro
         event EventHandler<bool[]> OnChangeLEDs;
         event EventHandler<string> OnInputSelected;
         event EventHandler<string> OnInputRightClick;
+        event EventHandler<Dictionary<string, AssignmentCollection>> OnQuickAssign;
 
         void ApplyInput(INintrollerState state);
         void UpdateVisual(INintrollerState state);
