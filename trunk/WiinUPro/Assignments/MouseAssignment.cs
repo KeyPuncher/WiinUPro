@@ -30,11 +30,11 @@ namespace WiinUPro
             switch (Input)
             {
                 case MouseInput.MoveUp:
-                    MouseDirector.Access.MouseMoveY(pixels);
+                    MouseDirector.Access.MouseMoveY(pixels * -1);
                     break;
 
                 case MouseInput.MoveDown:
-                    MouseDirector.Access.MouseMoveY(pixels * -1);
+                    MouseDirector.Access.MouseMoveY(pixels);
                     break;
 
                 case MouseInput.MoveLeft:

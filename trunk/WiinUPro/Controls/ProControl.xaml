@@ -20,10 +20,10 @@
                 <Image x:Name="leftStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,230,0,0" Width="151" Height="152" Opacity="0" MouseLeftButtonUp="OpenContextMenu" >
                     <Image.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Up" Tag="proLUp" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="proLLeft" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="proLRight" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="proLDown" Click="Axis_Click"/>
+                            <MenuItem Header="Up" Tag="proLUP" Click="Axis_Click"/>
+                            <MenuItem Header="Left" Tag="proLLEFT" Click="Axis_Click"/>
+                            <MenuItem Header="Right" Tag="proLRIGHT" Click="Axis_Click"/>
+                            <MenuItem Header="Down" Tag="proLDOWN" Click="Axis_Click"/>
                             <MenuItem Header="Stick Click" Tag="proLS" Click="Axis_Click"/>
                             <Separator/>
                             <MenuItem Header="Quick Assign">
@@ -38,10 +38,10 @@
                 <Image x:Name="rightStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,230,0,0" Width="151" Height="152" Opacity="0" MouseLeftButtonUp="OpenContextMenu" >
                     <Image.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Up" Tag="proRUp" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="proRLeft" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="proRRight" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="proRDown" Click="Axis_Click"/>
+                            <MenuItem Header="Up" Tag="proRUP" Click="Axis_Click"/>
+                            <MenuItem Header="Left" Tag="proRLEFT" Click="Axis_Click"/>
+                            <MenuItem Header="Right" Tag="proRRIGHT" Click="Axis_Click"/>
+                            <MenuItem Header="Down" Tag="proRDOWN" Click="Axis_Click"/>
                             <MenuItem Header="Stick Click" Tag="proRS" Click="Axis_Click"/>
                             <Separator/>
                             <MenuItem Header="Quick Assign">
