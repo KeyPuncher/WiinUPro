@@ -68,8 +68,8 @@ namespace WiinUPro
                 new Dictionary<string, AssignmentCollection>(),
                 new Dictionary<string, AssignmentCollection>()
             };
-            _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment> { new TestMouseAssignment(true) }));
-            _testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment> { new TestMouseAssignment(false) }));
+            //_testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment> { new TestMouseAssignment(true) }));
+            //_testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment> { new TestMouseAssignment(false) }));
 
             if (deviceInfo.DevicePath == "Dummy")
             {
