@@ -32,6 +32,7 @@ namespace Shared.Windows
         protected string _hidPath;
         protected SafeFileHandle _fileHandle;
         protected FileStream _fileStream;
+        protected object _writerBlock;
         #endregion
 
         public enum BtStack
@@ -55,12 +56,12 @@ namespace Shared.Windows
                 UseWriteFile = true;
 
                 // A certian build of Windows 10 seems to have fixed the FileShare.None issue
-                if (Environment.OSVersion.Version.Major == 10 &&
-                    Environment.OSVersion.Version.Build >= 10586/* &&
-                    Environment.OSVersion.Version.Build < 14393*/)
-                {
-                    SharingMode = FileShare.None;
-                }
+                //if (Environment.OSVersion.Version.Major == 10 &&
+                //    Environment.OSVersion.Version.Build >= 10586/* &&
+                //    Environment.OSVersion.Version.Build < 14393*/)
+                //{
+                //    SharingMode = FileShare.None;
+                //}
             }
             else
             {
@@ -77,6 +78,7 @@ namespace Shared.Windows
             }
             
             _hidPath = path;
+            _writerBlock = new object();
         }
 
         public WinBtStream(string path, BtStack btStack) : this(path)
@@ -99,11 +101,12 @@ namespace Shared.Windows
             try
             {
                 // Open the file handle with the specified sharing mode and an overlapped file attribute flag for asynchronous operation
-                _fileHandle = CreateFile(_hidPath, FileAccess.ReadWrite, SharingMode, IntPtr.Zero, FileMode.Open, EFileAttributes.Overlapped, IntPtr.Zero);
+                _fileHandle = CreateFile(_hidPath, FileAccess.ReadWrite, FileShare.ReadWrite /*SharingMode*/, IntPtr.Zero, FileMode.Open, EFileAttributes.Overlapped, IntPtr.Zero);
                 _fileStream = new FileStream(_fileHandle, FileAccess.ReadWrite, 22, true);
             }
             catch
             {
+                _fileHandle = null;
                 // If we were tring to get exclusive access try again
                 if (SharingMode == FileShare.None)
                 {
@@ -347,36 +350,48 @@ namespace Shared.Windows
                 buffer = buf;
             }
 
-            if (UseWriteFile)
+            lock (_writerBlock)
             {
-                uint written = 0;
-                var nativeOverlap = new NativeOverlapped();
-
-                // Provide a reset event that will get set once asynchronouse writing has completed
-                var resetEvent = new ManualResetEvent(false);
-                nativeOverlap.EventHandle = resetEvent.SafeWaitHandle.DangerousGetHandle();
-
-                // success is most likely to be false which can mean it is being completed asynchronously, in this case we need to wait
-                bool success = WriteFile(_fileHandle.DangerousGetHandle(), buffer, (uint)buffer.Length, out written, ref nativeOverlap);
-                uint error = GetLastError();
-
-                // Wait for the async operation to complete
-                if (!success && error == 997)
+                if (UseWriteFile)
                 {
-                    resetEvent.WaitOne();
-                }
+                    uint written = 0;
+                    var nativeOverlap = new NativeOverlapped();
 
-                // Example for async and callback
-                //bool success = WriteFileEx(_fileHandle.DangerousGetHandle(), buffer, out written, ref nativeOverlap, 
-                //    (errorCode, bytesTransfered, nativeOver) =>
-                //{
-                //    System.Diagnostics.Debug.Write(errorCode);
-                //});
-            }
-            else
-            {
-                _fileStream?.Write(buffer, 0, buffer.Length);
-                // Should we even bother using SetOutputReport?
+                    // Provide a reset event that will get set once asynchronouse writing has completed
+                    var resetEvent = new ManualResetEvent(false);
+                    nativeOverlap.EventHandle = resetEvent.SafeWaitHandle.DangerousGetHandle();
+
+                    // success is most likely to be false which can mean it is being completed asynchronously, in this case we need to wait
+                    var dh = _fileHandle.DangerousGetHandle();
+                    bool success = false;
+                    try
+                    {
+                        success = WriteFile(dh, buffer, (uint)buffer.Length, out written, ref nativeOverlap);
+                    }
+                    catch
+                    {
+                        System.Diagnostics.Debug.WriteLine("caught!");
+                    }
+                    uint error = GetLastError();
+
+                    // Wait for the async operation to complete
+                    if (!success && error == 997)
+                    {
+                        resetEvent.WaitOne();
+                    }
+
+                    // Example for async and callback
+                    //bool success = WriteFileEx(_fileHandle.DangerousGetHandle(), buffer, out written, ref nativeOverlap, 
+                    //    (errorCode, bytesTransfered, nativeOver) =>
+                    //{
+                    //    System.Diagnostics.Debug.Write(errorCode);
+                    //});
+                }
+                else
+                {
+                    _fileStream?.Write(buffer, 0, buffer.Length);
+                    // Should we even bother using SetOutputReport?
+                }
             }
         }
 
