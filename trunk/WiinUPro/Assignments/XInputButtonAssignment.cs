@@ -52,9 +52,10 @@ namespace WiinUPro
         private bool _lastState = false;
         private int _lastApplied = 0;
 
-        public XInputButtonAssignment(X360Button button)
+        public XInputButtonAssignment(X360Button button, ScpDirector.XInput_Device device = ScpDirector.XInput_Device.Device_A)
         {
             Button = button;
+            Device = device;
         }
 
         public void Apply(float value)

@@ -19,9 +19,10 @@ namespace WiinUPro
         /// </summary>
         public X360Axis Axis { get; set; }
 
-        public XInputAxisAssignment(X360Axis axis)
+        public XInputAxisAssignment(X360Axis axis, ScpDirector.XInput_Device device = ScpDirector.XInput_Device.Device_A)
         {
             Axis = axis;
+            Device = device;
         }
 
         public void Apply(float value)

@@ -175,7 +175,7 @@ namespace WiinUPro
 
             public float LX, LY, LT;
             public float RX, RY, RT;
-
+            
             public bool this[X360Button btn]
             {
                 set
@@ -232,23 +232,31 @@ namespace WiinUPro
                     switch (axis)
                     {
                         case X360Axis.LX_Hi:
-                        case X360Axis.LX_Lo:
                             LX = value;
                             break;
+                        case X360Axis.LX_Lo:
+                            LX = -value;
+                            break;
                         case X360Axis.LY_Hi:
-                        case X360Axis.LY_Lo:
                             LY = value;
+                            break;
+                        case X360Axis.LY_Lo:
+                            LY = -value;
                             break;
                         case X360Axis.LT:
                             LT = value;
                             break;
                         case X360Axis.RX_Hi:
-                        case X360Axis.RX_Lo:
                             RX = value;
                             break;
+                        case X360Axis.RX_Lo:
+                            RX = -value;
+                            break;
                         case X360Axis.RY_Hi:
-                        case X360Axis.RY_Lo:
                             RY = value;
+                            break;
+                        case X360Axis.RY_Lo:
+                            RY = -value;
                             break;
                         case X360Axis.RT:
                             RT = value;
@@ -337,6 +345,11 @@ namespace WiinUPro
 
             protected BusAccess busRef;
 
+            private float tempLX = -10;
+            private float tempLY = -10;
+            private float tempRX = -10;
+            private float tempRY = -10;
+
             public XInputBus(int id)
             {
                 inputs = new XInputState();
@@ -372,12 +385,59 @@ namespace WiinUPro
 
             public void SetInput(X360Axis axis, float value)
             {
-                inputs[axis] = value;// == 0 ? inputs[axis] : value;
+                switch (axis)
+                {
+                    case X360Axis.LX_Hi:
+                    case X360Axis.LX_Lo:
+                        if (value > tempLX)
+                        {
+                            tempLX = value;
+                            inputs[axis] = value;
+                        }
+                        break;
+
+                    case X360Axis.LY_Hi:
+                    case X360Axis.LY_Lo:
+                        if (value > tempLY)
+                        {
+                            tempLY = value;
+                            inputs[axis] = value;
+                        }
+                        break;
+
+                    case X360Axis.RX_Hi:
+                    case X360Axis.RX_Lo:
+                        if (value > tempRX)
+                        {
+                            tempRX = value;
+                            inputs[axis] = value;
+                        }
+                        break;
+
+                    case X360Axis.RY_Hi:
+                    case X360Axis.RY_Lo:
+                        if (value > tempRY)
+                        {
+                            tempRY = value;
+                            inputs[axis] = value;
+                        }
+                        break;
+
+                    default:
+                        inputs[axis] = value;// == 0 ? inputs[axis] : value;
+                        break;
+                }
             }
 
             public void Update()
             {
                 //if (!Started) return;
+
+                // reset temps
+                tempLX = -10;
+                tempLY = -10;
+                tempRX = -10;
+                tempRY = -10;
 
                 byte[] rumble = new byte[8];
                 byte[] output = new byte[28];
@@ -408,7 +468,7 @@ namespace WiinUPro
                 // triggers
                 output[(uint)X360Axis.LT] = GetRawTrigger(inputs.LT);
                 output[(uint)X360Axis.RT] = GetRawTrigger(inputs.RT);
-
+                
                 // Left Joystick
                 int rawLX = GetRawAxis(inputs.LX);
                 int rawLY = GetRawAxis(inputs.LY);
