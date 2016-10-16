@@ -81,7 +81,7 @@ namespace WiinUPro
             else
             {
                 _stream = new WinBtStream(deviceInfo.DevicePath);
-                _nintroller = new Nintroller(_stream, deviceInfo.Type);
+                _nintroller = new Nintroller(_stream);//, deviceInfo.Type);
             }
             _nintroller.StateUpdate += _nintroller_StateUpdate; 
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
@@ -152,12 +152,15 @@ namespace WiinUPro
             // Use the input to apply assignments.
             // This should only be done if not modifying the assignments
             //_controller.ApplyInput(e.state);
-            foreach (var input in e.state)
+            if (_testAssignments != null)
             {
-                //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
-                if (_testAssignments[ShiftIndex].ContainsKey(input.Key))
+                foreach (var input in e.state)
                 {
-                    _testAssignments[ShiftIndex][input.Key].ApplyAll(input.Value);
+                    //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
+                    if (_testAssignments[ShiftIndex].ContainsKey(input.Key))
+                    {
+                        _testAssignments[ShiftIndex][input.Key].ApplyAll(input.Value);
+                    }
                 }
             }
 
@@ -191,8 +194,8 @@ namespace WiinUPro
             //bool success = false;
 
             // We can set the sharing mode type, None fixes Dark Souls and may work on Windows 10 now.
-            if (_dummy == null)
-                _stream.SharingMode = System.IO.FileShare.None;
+            //if (_dummy == null)
+            //    _stream.SharingMode = System.IO.FileShare.None;
 
             if (_dummy != null || _stream.OpenConnection())
             {
@@ -210,7 +213,7 @@ namespace WiinUPro
                         _controller = new ProControl();
                         break;
                 }
-                
+
                 if (_controller != null)
                 {
                     _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
@@ -243,11 +246,11 @@ namespace WiinUPro
                 btnDisconnect.IsEnabled = true;
             }
 #else
-            else
-            {
-                MessageBox.Show("Could not connect to device!");
-                btnConnect.IsEnabled = true;
-            }
+        else
+        {
+            MessageBox.Show("Could not connect to device!");
+            btnConnect.IsEnabled = true;
+        }
 #endif
 
             //if (success)

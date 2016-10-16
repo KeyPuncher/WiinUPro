@@ -149,10 +149,10 @@
                     <Button Content="PG UP" HorizontalAlignment="Left" Margin="852,0,0,0" VerticalAlignment="Top" Width="61" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_PRIOR"/>
                     <Button Content="PG DN" HorizontalAlignment="Left" Margin="852,47,0,0" VerticalAlignment="Top" Width="61" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NEXT"/>
 
-                    <Button Content="Rt" HorizontalAlignment="Left" Margin="559,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RIGHT"/>
-                    <Button Content="Lt" HorizontalAlignment="Left" Margin="418,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LEFT"/>
-                    <Button Content="Up" HorizontalAlignment="Left" Margin="465,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_UP"/>
-                    <Button Content="Dn" HorizontalAlignment="Left" Margin="512,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_DOWN"/>
+                    <Button Content="Rt" HorizontalAlignment="Left" Margin="559,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RIGHT" ToolTip="Right Arrow"/>
+                    <Button Content="Lt" HorizontalAlignment="Left" Margin="418,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LEFT" ToolTip="Left Arrow"/>
+                    <Button Content="Up" HorizontalAlignment="Left" Margin="465,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_UP" ToolTip="Up Arrow"/>
+                    <Button Content="Dn" HorizontalAlignment="Left" Margin="512,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_DOWN" ToolTip="Down Arrow"/>
 
                     <Button Content="Prt" HorizontalAlignment="Left" Margin="680,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_SNAPSHOT"/>
                     <Button Content="Scr" HorizontalAlignment="Left" Margin="680,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_SCROLL"/>
@@ -178,38 +178,87 @@
                 <Grid Background="#FFE5E5E5">
                     <Button Content="Connect" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click"/>
                     <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click"/>
-                    <Button Content="A" HorizontalAlignment="Left" Margin="224,81,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="A"/>
-                    <Button Content="B" HorizontalAlignment="Left" Margin="271,81,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="B"/>
-                    <Button Content="X" HorizontalAlignment="Left" Margin="318,81,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="X"/>
-                    <Button Content="Y" HorizontalAlignment="Left" Margin="365,81,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Y"/>
-                    <Button Content="Up" HorizontalAlignment="Left" Margin="224,128,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Up"/>
-                    <Button Content="Dn" HorizontalAlignment="Left" Margin="271,128,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Down"/>
-                    <Button Content="Lt" HorizontalAlignment="Left" Margin="318,128,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Left"/>
-                    <Button Content="Rt" HorizontalAlignment="Left" Margin="365,128,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Right"/>
-                    <Button Content="LB" HorizontalAlignment="Left" Margin="224,175,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="LB"/>
-                    <Button Content="RB" HorizontalAlignment="Left" Margin="271,175,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="RB"/>
-                    <Button Content="B" HorizontalAlignment="Left" Margin="271,34,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Back"/>
-                    <Button Content="G" HorizontalAlignment="Left" Margin="318,34,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Guide"/>
-                    <Button Content="S" HorizontalAlignment="Left" Margin="365,34,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="Start"/>
-                    <Button Content="LS" HorizontalAlignment="Left" Margin="318,175,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="LS"/>
-                    <Button Content="RS" HorizontalAlignment="Left" Margin="365,175,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleXInputButton"  Tag="RS"/>
                     <Grid>
                         <Image x:Name="xbox" Margin="139,10,0,0" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Controller.png" Width="400" Height="250" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <Image x:Name="xA" Margin="441,148,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360A.png" Width="33" Height="27" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="A"/>
                         <Image x:Name="xB" Margin="474,119,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360B.png" Width="31" Height="29" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="B"/>
                         <Image x:Name="xX" Margin="411,122,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360X.png" Width="32" Height="28" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="X"/>
                         <Image x:Name="xY" Margin="443,94,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Y.png" Width="33" Height="30" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Y"/>
-                        <Image x:Name="xUp" Margin="265,172,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Up.png" Width="28" Height="23" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Up"/>
-                        <Image x:Name="xDn" Margin="266,203,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Down.png" Width="28" Height="23" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Down"/>
-                        <Image x:Name="xLt" Margin="248,188,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Left.png" Width="23" Height="21" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Left"/>
-                        <Image x:Name="xRt" Margin="287,188,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Right.png" Width="23" Height="21" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Right"/>
-                        <Image x:Name="xLB" Margin="180,37,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LB.png" Width="75" Height="44" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="LB"/>
-                        <Image x:Name="xRB" Margin="423,48,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RB.png" Width="78" Height="33" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="RB"/>
-                        <Image x:Name="xLT" Margin="217,17,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LT.png" Width="31" Height="34" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputAxis" Tag="LT"/>
-                        <Image x:Name="xRT" Margin="435,15,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RT.png" Width="28" Height="36" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputAxis" Tag="RT"/>
-                        <Image x:Name="xBack" Margin="286,129,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Back.png" Width="24" Height="17" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Back"/>
-                        <Image x:Name="xGuide" Margin="319,119,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Guide.png" Width="41" Height="34" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Guide"/>
-                        <Image x:Name="xStart" Margin="371,129,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Start.png" Width="23" Height="18" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Start"/>
+                        <Image x:Name="xUp" Margin="265,172,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Up.png" Width="28" Height="23" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Up" ToolTip="Up"/>
+                        <Image x:Name="xDn" Margin="266,203,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Down.png" Width="28" Height="23" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Down" ToolTip="Down"/>
+                        <Image x:Name="xLt" Margin="248,188,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Left.png" Width="23" Height="21" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Left" ToolTip="Left"/>
+                        <Image x:Name="xRt" Margin="287,188,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Right.png" Width="23" Height="21" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Right" ToolTip="Right"/>
+                        <Image x:Name="xLB" Margin="180,37,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LB.png" Width="75" Height="44" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="LB" ToolTip="Left Bumper"/>
+                        <Image x:Name="xRB" Margin="423,48,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RB.png" Width="78" Height="33" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="RB" ToolTip="Right Bumper"/>
+                        <Image x:Name="xLT" Margin="217,17,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LT.png" Width="31" Height="34" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputAxis" Tag="LT" ToolTip="Left Trigger"/>
+                        <Image x:Name="xRT" Margin="435,15,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RT.png" Width="28" Height="36" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputAxis" Tag="RT" ToolTip="Right Trigger"/>
+                        <Image x:Name="xBack" Margin="286,129,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Back.png" Width="24" Height="17" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Back" ToolTip="Back"/>
+                        <Image x:Name="xGuide" Margin="319,119,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Guide.png" Width="41" Height="34" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Guide" ToolTip="Guide"/>
+                        <Image x:Name="xStart" Margin="371,129,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Start.png" Width="23" Height="18" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Start" ToolTip="Start"/>
+                        <Ellipse x:Name="xLS" Fill="#8042FFAD" HorizontalAlignment="Left" Height="16" Margin="210,144,0,0" VerticalAlignment="Top" Width="17" MouseLeftButtonDown="ToggleXInputButton" ToolTip="Left Stick Click" Tag="LS" Opacity="0"/>
+                        <Image x:Name="xLUp" HorizontalAlignment="Left" Height="33" Margin="206,108,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LY_Hi" ToolTip="Left Stick Up" Opacity="0"/>
+                        <Image x:Name="xLRight" HorizontalAlignment="Left" Height="33" Margin="235,136,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LX_Hi" ToolTip="Left Stick Right" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                        <Image x:Name="xLDown" HorizontalAlignment="Left" Height="33" Margin="206,163,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LY_Lo" ToolTip="Left Stick Down" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="180"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                        <Image x:Name="xLLeft" HorizontalAlignment="Left" Height="33" Margin="176,136,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LX_Lo" ToolTip="Left Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                        <Ellipse x:Name="xRS" Fill="#8042FFAD" HorizontalAlignment="Left" Height="16" Margin="387,201,0,0" VerticalAlignment="Top" Width="16" MouseLeftButtonDown="ToggleXInputButton" ToolTip="Right Stick Click" Tag="RS" Opacity="0"/>
+                        <Image x:Name="xRUp" HorizontalAlignment="Left" Height="33" Margin="383,165,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RY_Hi" ToolTip="Right Stick Up" Opacity="0"/>
+                        <Image x:Name="xRRight" HorizontalAlignment="Left" Height="33" Margin="411,193,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Hi" ToolTip="Right Stick Right" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                        <Image x:Name="xRDown" HorizontalAlignment="Left" Height="33" Margin="383,220,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RY_Lo" ToolTip="Right Stick Down" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="180"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                        <Image x:Name="xRLeft" HorizontalAlignment="Left" Height="33" Margin="353,193,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Lo" ToolTip="Right Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
                     </Grid>
                     <ComboBox x:Name="deviceSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectedIndex="0" SelectionChanged="deviceSelection_SelectionChanged">
                         <ListBoxItem Content="Device A"/>

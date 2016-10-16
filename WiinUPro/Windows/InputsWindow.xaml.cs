@@ -78,7 +78,7 @@ namespace WiinUPro
                 {
                     bool selected = list.Contains(inputType);
 
-                    // This can be a Button or an Image
+                    // This can be a Button or an Image or a shape
                     var btn = obj as Button;
                     if (btn != null)
                     {
@@ -89,6 +89,12 @@ namespace WiinUPro
                     if (img != null)
                     {
                         selected &= img.Opacity > 0;
+                    }
+
+                    var shape = obj as Shape;
+                    if (shape != null)
+                    {
+                        selected &= shape.Opacity > 0;
                     }
 
                     if (selected)
@@ -105,6 +111,11 @@ namespace WiinUPro
                         {
                             img.Opacity = 0;
                         }
+
+                        if (shape != null)
+                        {
+                            shape.Opacity = 0;
+                        }
                     }
                     else
                     {
@@ -118,6 +129,11 @@ namespace WiinUPro
                         if (img != null)
                         {
                             img.Opacity = 100;
+                        }
+
+                        if (shape != null)
+                        {
+                            shape.Opacity = 100;
                         }
                     }
                 }
