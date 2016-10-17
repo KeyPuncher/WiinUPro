@@ -272,7 +272,26 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
             <TabItem Header="Shift">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,35,0,0" VerticalAlignment="Top" Height="212" Width="220">
+                        <Grid>
+                            <RadioButton x:Name="radioNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="ShiftHold" IsChecked="True"/>
+                            <RadioButton x:Name="radioRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="ShiftHold"/>
+                            <RadioButton x:Name="radioBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" GroupName="ShiftHold"/>
+                            <RadioButton x:Name="radioGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" GroupName="ShiftHold"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="shiftToggleGroup" Header="                 " HorizontalAlignment="Left" Margin="302,35,0,0" VerticalAlignment="Top" Height="212" Width="241" IsEnabled="False">
+                        <Grid>
+                            <CheckBox x:Name="checkNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                            <CheckBox x:Name="checkRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                            <CheckBox x:Name="checkBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                            <CheckBox x:Name="checkGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="True"/>
+                        </Grid>
+                    </GroupBox>
+                    <RadioButton x:Name="radioHold" Content="Hold" HorizontalAlignment="Left" Margin="49,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsChecked="True" Click="ChangeShiftType"/>
+                    <RadioButton x:Name="radioToggle" Content="Toggle" HorizontalAlignment="Left" Margin="311,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" Click="ChangeShiftType"/>
+                </Grid>
             </TabItem>
         </TabControl>
         <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9.5,7.5" Width="76" Click="acceptBtn_Click" Height="19" VerticalAlignment="Bottom"/>

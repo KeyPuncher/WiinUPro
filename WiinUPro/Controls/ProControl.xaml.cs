@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Shared;
 using NintrollerLib;
 
 namespace WiinUPro
@@ -21,10 +22,10 @@ namespace WiinUPro
     /// </summary>
     public partial class ProControl : UserControl, INintyControl
     {
-        public event EventHandler<bool[]> OnChangeLEDs;
-        public event EventHandler<string> OnInputSelected;
-        public event EventHandler<string> OnInputRightClick;
-        public event EventHandler<Dictionary<string, AssignmentCollection>> OnQuickAssign;
+        public event Delegates.BoolArrDel OnChangeLEDs;
+        public event Delegates.StringDel OnInputSelected;
+        public event Delegates.StringDel OnInputRightClick;
+        public event AssignmentCollection.AssignDelegate OnQuickAssign;
 
         public ProControl()
         {
@@ -113,7 +114,7 @@ namespace WiinUPro
             defaults.Add(INPUT_NAMES.PRO_CONTROLLER.HOME, new AssignmentCollection(new List<IAssignment> { new XInputButtonAssignment(ScpControl.X360Button.Guide) }));
 
             if (OnQuickAssign != null)
-                OnQuickAssign(this, defaults);
+                OnQuickAssign(defaults);
         }
 
         private void led_MouseUp(object sender, MouseButtonEventArgs e)
@@ -132,7 +133,7 @@ namespace WiinUPro
                 leds[2] = led3.Opacity > 0.1;
                 leds[3] = led4.Opacity > 0.1;
 
-                OnChangeLEDs(this, leds);
+                OnChangeLEDs(leds);
             }
         }
 
@@ -163,7 +164,7 @@ namespace WiinUPro
             }
 
             if (OnQuickAssign != null)
-                OnQuickAssign(this, args);
+                OnQuickAssign(args);
         }
 
         private void OpenInput(object sender)
@@ -174,7 +175,7 @@ namespace WiinUPro
             // Open input assignment window
             if (OnInputSelected != null && tag != null)
             {
-                OnInputSelected(sender, tag);
+                OnInputSelected(tag);
             }
         }
 
@@ -194,7 +195,7 @@ namespace WiinUPro
             // Open Context menu
             if (OnInputRightClick != null && tag != null)
             {
-                OnInputRightClick(sender, tag);
+                OnInputRightClick(tag);
             }
         }
 

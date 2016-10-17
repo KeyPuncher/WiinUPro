@@ -16,7 +16,17 @@ namespace WiinUPro
 
     public class AssignmentCollection : IEnumerable<IAssignment>
     {
+        public delegate void AssignDelegate(Dictionary<string, AssignmentCollection> collection);
+
         public List<IAssignment> Assignments { get; protected set; }
+
+        public bool ShiftAssignment
+        {
+            get
+            {
+                return Assignments.Count == 1 && Assignments[0] is ShiftAssignment;
+            }
+        }
 
         public AssignmentCollection()
         {

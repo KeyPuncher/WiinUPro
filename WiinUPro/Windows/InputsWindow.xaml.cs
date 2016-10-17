@@ -26,6 +26,7 @@ namespace WiinUPro
         public SolidColorBrush keyDeselectedBrush;
 
         protected ScpDirector.XInput_Device _selectedDevice = ScpDirector.XInput_Device.Device_A;
+        protected NintyControl _control;
 
         private List<VirtualKeyCode> _selectedKeys;
         private List<MouseInput> _selectedMouseDirections;
@@ -49,7 +50,12 @@ namespace WiinUPro
             _selectedXInputAxes = new List<X360Axis>();
         }
 
-        public InputsWindow(AssignmentCollection collection) : this()
+        public InputsWindow(NintyControl control) : this()
+        {
+            _control = control;
+        }
+
+        public InputsWindow(NintyControl control, AssignmentCollection collection) : this(control)
         {
             // fill the window with current assignments
             foreach (var item in collection)
@@ -63,6 +69,10 @@ namespace WiinUPro
                         btn.Background = keySelectedBrush;
                         _selectedKeys.Add(key);
                     }
+                }
+                else if (item is XInputButtonAssignment)
+                {
+                    var xb = (item as XInputButtonAssignment).Button;
                 }
             }
         }
@@ -172,29 +182,82 @@ namespace WiinUPro
 
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var key in _selectedKeys)
+            // If on the Shift Tab, that is the only assignments that can be had
+            if (tabControl.SelectedIndex == 4)
             {
-                Result.Add(new KeyboardAssignment(key));
-            }
+                var shifty = new ShiftAssignment(_control);
+                shifty.Toggles = radioToggle.IsChecked ?? false;
 
-            foreach (var mDir in _selectedMouseDirections)
-            {
-                Result.Add(new MouseAssignment(mDir, 1.0f));
-            }
+                if (shifty.Toggles)
+                {
+                    if (checkNone.IsChecked ?? false)
+                    {
+                        shifty.ToggleStates.Add(ShiftState.None);
+                    }
 
-            foreach (var mBtn in _selectedMouseButtons)
-            {
-                Result.Add(new MouseButtonAssignment(mBtn));
-            }
+                    if (checkRed.IsChecked ?? false)
+                    {
+                        shifty.ToggleStates.Add(ShiftState.Red);
+                    }
 
-            foreach (var xBtn in _selectedXInputButtons)
-            {
-                Result.Add(new XInputButtonAssignment(xBtn) { Device = _selectedDevice });
-            }
+                    if (checkBlue.IsChecked ?? false)
+                    {
+                        shifty.ToggleStates.Add(ShiftState.Blue);
+                    }
 
-            foreach (var xAxis in _selectedXInputAxes)
+                    if (checkGreen.IsChecked ?? false)
+                    {
+                        shifty.ToggleStates.Add(ShiftState.Green);
+                    }
+                }
+                else
+                {
+                    if (radioNone.IsChecked ?? false)
+                    {
+                        shifty.TargetState = ShiftState.None;
+                    }
+                    else if (radioRed.IsChecked ?? false)
+                    {
+                        shifty.TargetState = ShiftState.Red;
+                    }
+                    else if (radioBlue.IsChecked ?? false)
+                    {
+                        shifty.TargetState = ShiftState.Blue;
+                    }
+                    else if (radioGreen.IsChecked ?? false)
+                    {
+                        shifty.TargetState = ShiftState.Green;
+                    }
+                }
+
+                Result.Add(shifty);
+            }
+            else
             {
-                Result.Add(new XInputAxisAssignment(xAxis) { Device = _selectedDevice });
+                foreach (var key in _selectedKeys)
+                {
+                    Result.Add(new KeyboardAssignment(key));
+                }
+
+                foreach (var mDir in _selectedMouseDirections)
+                {
+                    Result.Add(new MouseAssignment(mDir, 1.0f));
+                }
+
+                foreach (var mBtn in _selectedMouseButtons)
+                {
+                    Result.Add(new MouseButtonAssignment(mBtn));
+                }
+
+                foreach (var xBtn in _selectedXInputButtons)
+                {
+                    Result.Add(new XInputButtonAssignment(xBtn, _selectedDevice));
+                }
+
+                foreach (var xAxis in _selectedXInputAxes)
+                {
+                    Result.Add(new XInputAxisAssignment(xAxis, _selectedDevice));
+                }
             }
 
             Close();
@@ -223,6 +286,21 @@ namespace WiinUPro
             else if (deviceSelection.SelectedIndex == 3) _selectedDevice = ScpDirector.XInput_Device.Device_D;
 
             // TODO: Display the inputs for this specific device
+        }
+
+        private void ChangeShiftType(object sender, RoutedEventArgs e)
+        {
+            if (radioHold.IsChecked ?? false)
+            {
+                shiftToggleGroup.IsEnabled = false;
+                shiftHoldGroup.IsEnabled = true;
+            }
+
+            if (radioToggle.IsChecked ?? false)
+            {
+                shiftToggleGroup.IsEnabled = true;
+                shiftHoldGroup.IsEnabled = false;
+            }
         }
     }
 }

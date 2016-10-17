@@ -35,7 +35,7 @@ namespace WiinUPro
         // For Testing
         internal Shared.DummyDevice _dummy;
 
-        internal Dictionary<string, AssignmentCollection>[] _testAssignments;
+        internal Dictionary<string, AssignmentCollection>[] _assignments;
         internal ScpDirector _scp;
 
         public int ShiftIndex
@@ -62,7 +62,7 @@ namespace WiinUPro
 
         public NintyControl(Shared.DeviceInfo deviceInfo) : this()
         {
-            _testAssignments = new[] {
+            _assignments = new[] {
                 new Dictionary<string, AssignmentCollection>(),
                 new Dictionary<string, AssignmentCollection>(),
                 new Dictionary<string, AssignmentCollection>(),
@@ -94,9 +94,20 @@ namespace WiinUPro
         {
             if (_currentState != newState)
             {
+                // TODO: This would unpress any keys from all controllers, make it device specific
                 KeyboardDirector.Access.Release();
                 MouseDirector.Access.Release();
                 _currentState = newState;
+
+                _nintroller.SetPlayerLED((int)newState + 1);
+
+                Dispatcher.Invoke(new Action(() =>
+                 {
+                    if (newState == ShiftState.None) _controller.ChangeLEDs(true, false, false, false);
+                    else if (newState == ShiftState.Red) _controller.ChangeLEDs(false, true, false, false);
+                    else if (newState == ShiftState.Blue) _controller.ChangeLEDs(false, false, true, false);
+                    else if (newState == ShiftState.Green) _controller.ChangeLEDs(false, false, false, true);
+                }));
             }
         }
 
@@ -152,14 +163,14 @@ namespace WiinUPro
             // Use the input to apply assignments.
             // This should only be done if not modifying the assignments
             //_controller.ApplyInput(e.state);
-            if (_testAssignments != null)
+            if (_assignments != null)
             {
                 foreach (var input in e.state)
                 {
                     //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
-                    if (_testAssignments[ShiftIndex].ContainsKey(input.Key))
+                    if (_assignments[ShiftIndex].ContainsKey(input.Key))
                     {
-                        _testAssignments[ShiftIndex][input.Key].ApplyAll(input.Value);
+                        _assignments[ShiftIndex][input.Key].ApplyAll(input.Value);
                     }
                 }
             }
@@ -228,7 +239,7 @@ namespace WiinUPro
 
                     //success = true;
 
-                    _nintroller.SetReportType(InputReport.ExtOnly);
+                    _nintroller.SetReportType(InputReport.ExtOnly, true);
                 }
                 btnDisconnect.IsEnabled = true;
             }
@@ -282,40 +293,40 @@ namespace WiinUPro
 
         private void AssignMenu_Click(object sender, RoutedEventArgs e)
         {
-            InputSelected(sender, _selectedInput);
+            InputSelected(_selectedInput);
         }
 
         private void CopyMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_testAssignments[ShiftIndex].ContainsKey(_selectedInput))
+            if (_assignments[ShiftIndex].ContainsKey(_selectedInput))
             {
-                _clipboard = _testAssignments[ShiftIndex][_selectedInput];
+                _clipboard = _assignments[ShiftIndex][_selectedInput];
             }
         }
 
         private void PasteMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_testAssignments[ShiftIndex].ContainsKey(_selectedInput))
+            if (_assignments[ShiftIndex].ContainsKey(_selectedInput))
             {
-                _testAssignments[ShiftIndex][_selectedInput] = _clipboard;
+                _assignments[ShiftIndex][_selectedInput] = _clipboard;
             }
             else
             {
-                _testAssignments[ShiftIndex].Add(_selectedInput, _clipboard);
+                _assignments[ShiftIndex].Add(_selectedInput, _clipboard);
             }
         }
 
         private void ClearMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_testAssignments[ShiftIndex].ContainsKey(_selectedInput))
+            if (_assignments[ShiftIndex].ContainsKey(_selectedInput))
             {
-                _testAssignments[ShiftIndex].Remove(_selectedInput);
+                _assignments[ShiftIndex].Remove(_selectedInput);
             }
         }
         #endregion
 
         #region Control Events
-        private void SetLeds(object sender, bool[] values)
+        private void SetLeds(bool[] values)
         {
             if (_nintroller != null && (values ?? new bool[0]).Length == 4)
             {
@@ -326,49 +337,80 @@ namespace WiinUPro
             }
         }
 
-        private void InputSelected(object sender, string key)
+        private void InputSelected(string key)
         {
             System.Diagnostics.Debug.WriteLine(key);
 
             InputsWindow win;
-            if (_testAssignments[ShiftIndex].ContainsKey(key))
+            if (_assignments[ShiftIndex].ContainsKey(key))
             {
-                win = new InputsWindow(_testAssignments[ShiftIndex][key]);
+                win = new InputsWindow(this, _assignments[ShiftIndex][key]);
             }
             else
             {
-                win = new InputsWindow();
+                win = new InputsWindow(this);
             }
 
             win.ShowDialog();
 
-            if (_testAssignments[ShiftIndex].ContainsKey(key))
+            if (_assignments[ShiftIndex].ContainsKey(key))
             {
-                _testAssignments[ShiftIndex][key] = win.Result;
+                // TODO: if replacing a Shift Assignment, clear others that were set from the code below
+                _assignments[ShiftIndex][key] = win.Result;
             }
             else
             {
-                _testAssignments[ShiftIndex].Add(key, win.Result);
+                _assignments[ShiftIndex].Add(key, win.Result);
+            }
+
+            // Shift assignments need to be the same on each ShiftIndex
+            if (win.Result.ShiftAssignment)
+            {
+                var shift = win.Result.Assignments[0] as ShiftAssignment;
+
+                if (shift.Toggles)
+                {
+                    foreach (var state in shift.ToggleStates)
+                    {
+                        InputSet(state, key, win.Result);
+                    }
+                }
+                else
+                {
+                    InputSet(shift.TargetState, key, win.Result);
+                }
             }
         }
 
-        private void InputOpenMenu(object sender, string e)
+        private void InputSet(ShiftState shift, string key, AssignmentCollection assignments)
+        {
+            if (_assignments[(int)shift].ContainsKey(key))
+            {
+                _assignments[(int)shift][key] = assignments;
+            }
+            else
+            {
+                _assignments[(int)shift].Add(key, assignments);
+            }
+        }
+
+        private void InputOpenMenu(string e)
         {
             _selectedInput = e;
             subMenu.IsOpen = true;
         }
 
-        private void QuickAssignment(object sender, Dictionary<string, AssignmentCollection> assignments)
+        private void QuickAssignment(Dictionary<string, AssignmentCollection> assignments)
         {
             foreach (var item in assignments)
             {
-                if (_testAssignments[ShiftIndex].ContainsKey(item.Key))
+                if (_assignments[ShiftIndex].ContainsKey(item.Key))
                 {
-                    _testAssignments[ShiftIndex][item.Key] = item.Value;
+                    _assignments[ShiftIndex][item.Key] = item.Value;
                 }
                 else
                 {
-                    _testAssignments[ShiftIndex].Add(item.Key, item.Value);
+                    _assignments[ShiftIndex].Add(item.Key, item.Value);
                 }
             }
         }
@@ -382,10 +424,10 @@ namespace WiinUPro
 
     public interface INintyControl
     {
-        event EventHandler<bool[]> OnChangeLEDs;
-        event EventHandler<string> OnInputSelected;
-        event EventHandler<string> OnInputRightClick;
-        event EventHandler<Dictionary<string, AssignmentCollection>> OnQuickAssign;
+        event Shared.Delegates.BoolArrDel OnChangeLEDs;
+        event Shared.Delegates.StringDel OnInputSelected;
+        event Shared.Delegates.StringDel OnInputRightClick;
+        event AssignmentCollection.AssignDelegate OnQuickAssign;
 
         void ApplyInput(INintrollerState state);
         void UpdateVisual(INintrollerState state);
