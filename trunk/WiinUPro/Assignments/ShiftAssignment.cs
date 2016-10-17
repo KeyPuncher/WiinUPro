@@ -42,6 +42,7 @@ namespace WiinUPro
         public ShiftAssignment(NintyControl control)
         {
             _control = control;
+            ToggleStates = new List<ShiftState>();
         }
 
         public void Apply(float value)
@@ -60,9 +61,9 @@ namespace WiinUPro
                         {
                             int index = ToggleStates.IndexOf(_control.CurrentShiftState);
                             
-                            if (ToggleStates.Count > index)
+                            if (ToggleStates.Count > index + 1)
                             {
-                                _control.ChangeState(ToggleStates[index]);
+                                _control.ChangeState(ToggleStates[index + 1]);
                             }
                             else
                             {
