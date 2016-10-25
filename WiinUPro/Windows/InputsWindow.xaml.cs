@@ -69,13 +69,68 @@ namespace WiinUPro
                         btn.Background = keySelectedBrush;
                         _selectedKeys.Add(key);
                     }
+
+                    keyTurboCheck.IsChecked = (item as KeyboardAssignment).TurboEnabled;
+                    keyTurboRate.Value = (item as KeyboardAssignment).TurboRate / 50;
+                    keyInverseCheck.IsChecked = (item as KeyboardAssignment).InverseInput;
                 }
                 else if (item is XInputButtonAssignment)
                 {
+                    // TODO: for specific Device (later)
                     var xb = (item as XInputButtonAssignment).Button;
+                    var img = xboxGrid.Children.OfType<Image>().ToList().Find((i) => i.Tag.ToString() == xb.ToString());
+                    if (img != null)
+                    {
+                        img.Opacity = 100;
+                        _selectedXInputButtons.Add(xb);
+                    }
+                    else
+                    {
+                        var shape = xboxGrid.Children.OfType<Shape>().ToList().Find((s) => s.Tag.ToString() == xb.ToString());
+                        if (shape != null)
+                        {
+                            shape.Opacity = 100;
+                            _selectedXInputButtons.Add(xb);
+                        }
+                    }
+                }
+                else if (item is XInputAxisAssignment)
+                {
+                    var xa = (item as XInputAxisAssignment).Axis;
+                    var img = xboxGrid.Children.OfType<Image>().ToList().Find((i) => i.Tag.ToString() == xa.ToString());
+                    if (img != null)
+                    {
+                        img.Opacity = 100;
+                        _selectedXInputAxes.Add(xa);
+                    }
                 }
             }
         }
+
+        // This is meant to change what selections are made for each XInput device (a, b, c, d)
+        // Currently an assigment collection can only be tied to one XInput device at a time
+        //void UpdateXboxVisual(ScpDirector.XInput_Device target)
+        //{
+        //    // Clear all the visuals
+        //    foreach (var child in xboxGrid.Children)
+        //    {
+        //        var img = child as Image;
+        //        if (img != null && !string.IsNullOrEmpty(img.Tag.ToString()) && img.Tag.ToString() != "bg")
+        //        {
+        //            img.Opacity = 0;
+        //        }
+        //        else if (child is Shape)
+        //        {
+        //            (child as Shape).Opacity = 0;
+        //        }
+        //    }
+
+        //    // Set the visuals
+        //    foreach (var xb in _selectedXInputButtons)
+        //    {
+        //        if (xb)
+        //    }
+        //}
 
         private void AddToList<TEnum>(object obj, List<TEnum> list) where TEnum : struct
         {
@@ -157,7 +212,32 @@ namespace WiinUPro
 
         private void ToggleMouseDirection(object sender, RoutedEventArgs e)
         {
-            AddToList<MouseInput>(sender, _selectedMouseDirections);
+            AddToList(sender, _selectedMouseDirections);
+
+            // Can't have both in opposite directions
+            if (_selectedMouseDirections.Contains(MouseInput.MoveUp) && _selectedMouseDirections.Contains(MouseInput.MoveDown))
+            {
+                if ((sender as Button).Tag.ToString() == MouseInput.MoveUp.ToString())
+                {
+                    AddToList(mouseDown, _selectedMouseDirections);
+                }
+                else
+                {
+                    AddToList(mouseUp, _selectedMouseDirections);
+                }
+            }
+
+            if (_selectedMouseDirections.Contains(MouseInput.MoveLeft) && _selectedMouseDirections.Contains(MouseInput.MoveRight))
+            {
+                if ((sender as Button).Tag.ToString() == MouseInput.MoveLeft.ToString())
+                {
+                    AddToList(mouseRight, _selectedMouseDirections);
+                }
+                else
+                {
+                    AddToList(mouseLeft, _selectedMouseDirections);
+                }
+            }
         }
 
         private void ToggleMouseButton(object sender, RoutedEventArgs e)
@@ -236,7 +316,12 @@ namespace WiinUPro
             {
                 foreach (var key in _selectedKeys)
                 {
-                    Result.Add(new KeyboardAssignment(key));
+                    Result.Add(new KeyboardAssignment(key)
+                    {
+                        TurboEnabled = keyTurboCheck.IsChecked ?? false,
+                        TurboRate = (int)keyTurboRate.Value * 50,
+                        InverseInput = keyInverseCheck.IsChecked ?? false
+                    });
                 }
 
                 foreach (var mDir in _selectedMouseDirections)
@@ -251,7 +336,12 @@ namespace WiinUPro
 
                 foreach (var xBtn in _selectedXInputButtons)
                 {
-                    Result.Add(new XInputButtonAssignment(xBtn, _selectedDevice));
+                    Result.Add(new XInputButtonAssignment(xBtn, _selectedDevice)
+                    {
+                        TurboEnabled = xTurboCheck.IsChecked ?? false,
+                        TurboRate = (int)xTurboRate.Value * 50,
+                        InverseInput = xInverseCheck.IsChecked ?? false
+                    });
                 }
 
                 foreach (var xAxis in _selectedXInputAxes)
@@ -285,7 +375,8 @@ namespace WiinUPro
             else if (deviceSelection.SelectedIndex == 2) _selectedDevice = ScpDirector.XInput_Device.Device_C;
             else if (deviceSelection.SelectedIndex == 3) _selectedDevice = ScpDirector.XInput_Device.Device_D;
 
-            // TODO: Display the inputs for this specific device
+            // TODO: Display the inputs for this specific device (later)
+            // once a single assignment can have multiple XInput devices
         }
 
         private void ChangeShiftType(object sender, RoutedEventArgs e)

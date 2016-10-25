@@ -355,7 +355,26 @@ namespace WiinUPro
 
             if (_assignments[ShiftIndex].ContainsKey(key))
             {
-                // TODO: if replacing a Shift Assignment, clear others that were set from the code below
+                // If replacing a Shift Assignment, clear others that were set from the code below
+                if (_assignments[ShiftIndex][key].Assignments.Count == 1 && _assignments[ShiftIndex][key].Assignments[0] is ShiftAssignment)
+                {
+                    var shift = _assignments[ShiftIndex][key].Assignments[0] as ShiftAssignment;
+                    if (shift.Toggles)
+                    {
+                        foreach (var state in shift.ToggleStates)
+                        {
+                            if ((int)state != ShiftIndex)
+                            {
+                                _assignments[(int)state].Remove(key);
+                            }
+                        }
+                    }
+                    else if ((int)shift.TargetState != ShiftIndex)
+                    {
+                        _assignments[(int)shift.TargetState].Remove(key);
+                    }
+                }
+
                 _assignments[ShiftIndex][key] = win.Result;
             }
             else
