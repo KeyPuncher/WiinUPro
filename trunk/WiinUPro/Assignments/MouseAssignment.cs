@@ -9,7 +9,7 @@ namespace WiinUPro
 {
     public class MouseAssignment : IAssignment
     {
-        public const int PIXEL_RATE = 10;
+        public const int PIXEL_RATE = 4;
 
         public MouseInput Input { get; set; }
 
