@@ -74,6 +74,44 @@ namespace WiinUPro
                     keyTurboRate.Value = (item as KeyboardAssignment).TurboRate / 50;
                     keyInverseCheck.IsChecked = (item as KeyboardAssignment).InverseInput;
                 }
+                else if (item is MouseAssignment)
+                {
+                    var mMov = (item as MouseAssignment).Input;
+                    var btn = mouseMovGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mMov.ToString());
+                    if (btn != null)
+                    {
+                        btn.Background = keySelectedBrush;
+                        _selectedMouseDirections.Add(mMov);
+                    }
+
+                    mMovementRate.Value = (item as MouseAssignment).Rate;
+                }
+                else if (item is MouseButtonAssignment)
+                {
+                    var mBtn = (item as MouseButtonAssignment).MouseButton;
+                    var btn = mouseBtnGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mBtn.ToString());
+                    if (btn != null)
+                    {
+                        btn.Background = keySelectedBrush;
+                        _selectedMouseButtons.Add(mBtn);
+                    }
+
+                    mButtonTurboCheck.IsChecked = (item as MouseButtonAssignment).TurboEnabled;
+                    mButtonTurboRate.Value = (item as MouseButtonAssignment).TurboRate / 50;
+                    mButtonInverseCheck.IsChecked = (item as MouseButtonAssignment).InverseInput;
+                }
+                else if (item is MouseScrollAssignment)
+                {
+                    var mScroll = (item as MouseScrollAssignment).ScrollDirection;
+                    var btn = mouseScrollGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mScroll.ToString());
+                    if (btn != null)
+                    {
+                        btn.Background = keySelectedBrush;
+                        _selectedMouseScroll.Add(mScroll);
+                    }
+
+                    mScrollContinuousCheck.IsChecked = (item as MouseScrollAssignment).Continuous;
+                }
                 else if (item is XInputButtonAssignment)
                 {
                     // TODO: for specific Device (later)
@@ -326,12 +364,25 @@ namespace WiinUPro
 
                 foreach (var mDir in _selectedMouseDirections)
                 {
-                    Result.Add(new MouseAssignment(mDir, 1.0f));
+                    Result.Add(new MouseAssignment(mDir, (float)mMovementRate.Value));
                 }
 
                 foreach (var mBtn in _selectedMouseButtons)
                 {
-                    Result.Add(new MouseButtonAssignment(mBtn));
+                    Result.Add(new MouseButtonAssignment(mBtn)
+                    {
+                        TurboEnabled = mButtonTurboCheck.IsChecked ?? false,
+                        TurboRate = (int)mButtonTurboRate.Value * 50,
+                        InverseInput = mButtonInverseCheck.IsChecked ?? false
+                    });
+                }
+
+                foreach (var mScroll in _selectedMouseScroll)
+                {
+                    Result.Add(new MouseScrollAssignment(mScroll)
+                    {
+                        Continuous = mScrollContinuousCheck.IsChecked ?? false
+                    });
                 }
 
                 foreach (var xBtn in _selectedXInputButtons)
