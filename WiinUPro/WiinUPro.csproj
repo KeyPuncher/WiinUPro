@@ -68,6 +68,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\NumPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -81,6 +85,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\InputsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\JoyCalibrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -100,6 +108,9 @@
     <Compile Include="Assignments\ShiftAssignment.cs" />
     <Compile Include="Assignments\XInputAxisAssignment.cs" />
     <Compile Include="Assignments\XInputButtonAssignment.cs" />
+    <Compile Include="Controls\NumPicker.xaml.cs">
+      <DependentUpon>NumPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Directors\KeyboardDirector.cs" />
     <Compile Include="Directors\KeyboardDirector_WI.cs" />
     <Compile Include="Directors\MouseDirector.cs" />
@@ -117,6 +128,9 @@
     </Compile>
     <Compile Include="Windows\InputsWindow.xaml.cs">
       <DependentUpon>InputsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\JoyCalibrationWindow.xaml.cs">
+      <DependentUpon>JoyCalibrationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
