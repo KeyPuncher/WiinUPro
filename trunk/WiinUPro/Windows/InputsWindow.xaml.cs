@@ -22,6 +22,7 @@ namespace WiinUPro
     public partial class InputsWindow : Window
     {
         public AssignmentCollection Result { get; protected set; }
+        public bool Cancelled { get; protected set; }
         public SolidColorBrush keySelectedBrush;
         public SolidColorBrush keyDeselectedBrush;
 
@@ -132,6 +133,9 @@ namespace WiinUPro
                             _selectedXInputButtons.Add(xb);
                         }
                     }
+
+                    // Remove once multiple xinput devices can be selected
+                    deviceSelection.SelectedIndex = (int)(item as XInputButtonAssignment).Device - 1;
                 }
                 else if (item is XInputAxisAssignment)
                 {
@@ -142,6 +146,9 @@ namespace WiinUPro
                         img.Opacity = 100;
                         _selectedXInputAxes.Add(xa);
                     }
+
+                    // Remove once multiple xinput devices can be selected
+                    deviceSelection.SelectedIndex = (int)(item as XInputAxisAssignment).Device - 1;
                 }
             }
         }
@@ -407,6 +414,12 @@ namespace WiinUPro
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Cancelled = true;
+            Close();
+        }
+
+        private void clearBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }

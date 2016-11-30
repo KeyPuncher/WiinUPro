@@ -339,8 +339,6 @@ namespace WiinUPro
 
         private void InputSelected(string key)
         {
-            System.Diagnostics.Debug.WriteLine(key);
-
             InputsWindow win;
             if (_assignments[ShiftIndex].ContainsKey(key))
             {
@@ -352,6 +350,8 @@ namespace WiinUPro
             }
 
             win.ShowDialog();
+
+            if (win.Cancelled) return;
 
             if (_assignments[ShiftIndex].ContainsKey(key))
             {
