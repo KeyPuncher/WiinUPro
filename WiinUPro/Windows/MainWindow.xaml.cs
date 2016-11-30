@@ -113,5 +113,15 @@ namespace WiinUPro
                 ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/" + img, UriKind.Relative));
             }
         }
+
+        private void settingExclusiveMode_Checked(object sender, RoutedEventArgs e)
+        {
+            Shared.Windows.WinBtStream.OverrideSharingMode = settingExclusiveMode.IsChecked ?? false;
+            
+            if (settingExclusiveMode.IsChecked ?? false)
+            {
+                Shared.Windows.WinBtStream.OverridenFileShare = System.IO.FileShare.None;
+            }
+        }
     }
 }
