@@ -227,9 +227,9 @@
                         <Grid x:Name="mouseScrollGrid">
                             <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up"/>
                             <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down"/>
-                            <CheckBox x:Name="mScrollContinuousCheck" Content="Continuous" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-                            <Slider x:Name="mScrollRate" HorizontalAlignment="Left" Margin="10,241,0,0" VerticalAlignment="Top" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" TickPlacement="BottomRight" IsDirectionReversed="True" IsSnapToTickEnabled="True" Visibility="Hidden"/>
-                            <Label Content="Scroll Rate" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+                            <CheckBox x:Name="mScrollContinuousCheck" Content="Continuous" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top"/>
+                            <Slider x:Name="mScrollRate" HorizontalAlignment="Left" Margin="10,241,0,0" VerticalAlignment="Top" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" TickPlacement="BottomRight" IsDirectionReversed="True" IsSnapToTickEnabled="True"/>
+                            <Label Content="Scroll Rate" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top"/>
                         </Grid>
                     </GroupBox>
                 </Grid>

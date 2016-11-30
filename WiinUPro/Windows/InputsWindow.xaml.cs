@@ -111,6 +111,7 @@ namespace WiinUPro
                     }
 
                     mScrollContinuousCheck.IsChecked = (item as MouseScrollAssignment).Continuous;
+                    mScrollRate.Value = (item as MouseScrollAssignment).ScrollRate / 50;
                 }
                 else if (item is XInputButtonAssignment)
                 {
@@ -381,7 +382,8 @@ namespace WiinUPro
                 {
                     Result.Add(new MouseScrollAssignment(mScroll)
                     {
-                        Continuous = mScrollContinuousCheck.IsChecked ?? false
+                        Continuous = mScrollContinuousCheck.IsChecked ?? false,
+                        ScrollRate = (int)mScrollRate.Value * 50
                     });
                 }
 
