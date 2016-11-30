@@ -11,12 +11,14 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
+                        <!-- TODO: Change to Home icon -->
                         <Image Source="/WiinUPro;component/Images/Icons/ProController_black_24.png" HorizontalAlignment="Left" Height="12" Margin="0,0,4,0" VerticalAlignment="Center" />
-                        <TextBlock Text="Controller 1" />
+                        <TextBlock Text="Home" />
                     </StackPanel>
                 </TabItem.Header>
                 
             </TabItem>
+            <!-- TODO: Remove Add Tab -->
             <TabItem Header="+" Width="26" IsEnabled="True" MouseUp="AddController">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
