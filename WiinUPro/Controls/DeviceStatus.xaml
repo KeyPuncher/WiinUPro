@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="WiinUPro.Controls.DeviceStatus"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WiinUPro.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="300">
+    <Grid>
+        <Image x:Name="icon" Height="100" Width="100" Source="/WiinUPro;component/Images/Icons/ProController_white_24.png" HorizontalAlignment="Left"/>
+        <Label x:Name="nickname" Content="Unidentified Controller" HorizontalAlignment="Left" Margin="105,0,0,0" VerticalAlignment="Top" Width="195"/>
+        <Label x:Name="status" Content="Not Connected" HorizontalAlignment="Left" Margin="105,31,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="connectBtn" Content="Connect" HorizontalAlignment="Left" Margin="105,62,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="connectAsBtn" Content="Connect As" HorizontalAlignment="Left" Margin="185,62,0,0" VerticalAlignment="Top" Width="75"/>
+
+    </Grid>
+</UserControl>

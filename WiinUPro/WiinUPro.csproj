@@ -68,6 +68,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\DeviceStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\NumPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -108,6 +112,9 @@
     <Compile Include="Assignments\ShiftAssignment.cs" />
     <Compile Include="Assignments\XInputAxisAssignment.cs" />
     <Compile Include="Assignments\XInputButtonAssignment.cs" />
+    <Compile Include="Controls\DeviceStatus.xaml.cs">
+      <DependentUpon>DeviceStatus.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NumPicker.xaml.cs">
       <DependentUpon>NumPicker.xaml</DependentUpon>
     </Compile>
