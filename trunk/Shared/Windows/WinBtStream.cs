@@ -27,12 +27,38 @@ namespace Shared.Windows
     public class WinBtStream : Stream
     {
         #region Members
+        public static bool OverrideSharingMode = false;
+        public static FileShare OverridenFileShare = FileShare.None;
+
         static Dictionary<string, BtStack> AssociatedStack;
 
         protected string _hidPath;
         protected SafeFileHandle _fileHandle;
         protected FileStream _fileStream;
         protected object _writerBlock;
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Set to None to have exclusive access to the controller.
+        /// Otherwise set to ReadWrite.
+        /// </summary>
+        public FileShare SharingMode { get; set; } = FileShare.ReadWrite;
+
+        /// <summary>
+        /// Set if the user is using the Toshiba Bluetooth Stack
+        /// </summary>
+        public bool UseToshiba { get; set; }
+
+        /// <summary>
+        /// Set to use the WriteFile method (allows use with the Microsoft Bluetooth Stack)
+        /// </summary>
+        public bool UseWriteFile { get; set; }
+
+        /// <summary>
+        /// Set when using to use 22 byte reports when sending data (use with Toshiba Stack or Set_Output_Report)
+        /// </summary>
+        public bool UseFullReportSize { get; set; }
         #endregion
 
         public enum BtStack
@@ -100,8 +126,15 @@ namespace Shared.Windows
 
             try
             {
-                // Open the file handle with the specified sharing mode and an overlapped file attribute flag for asynchronous operation
-                _fileHandle = CreateFile(_hidPath, FileAccess.ReadWrite, FileShare.ReadWrite /*SharingMode*/, IntPtr.Zero, FileMode.Open, EFileAttributes.Overlapped, IntPtr.Zero);
+                if (OverrideSharingMode)
+                {
+                    _fileHandle = CreateFile(_hidPath, FileAccess.ReadWrite, OverridenFileShare, IntPtr.Zero, FileMode.Open, EFileAttributes.Overlapped, IntPtr.Zero);
+                }
+                else
+                {
+                    // Open the file handle with the specified sharing mode and an overlapped file attribute flag for asynchronous operation
+                    _fileHandle = CreateFile(_hidPath, FileAccess.ReadWrite, SharingMode, IntPtr.Zero, FileMode.Open, EFileAttributes.Overlapped, IntPtr.Zero);
+                }
                 _fileStream = new FileStream(_fileHandle, FileAccess.ReadWrite, 22, true);
             }
             catch
@@ -120,30 +153,6 @@ namespace Shared.Windows
             return true;
         }
 
-        #region Properties
-        /// <summary>
-        /// Set to None to have exclusive access to the controller.
-        /// Otherwise set to ReadWrite.
-        /// </summary>
-        public FileShare SharingMode { get; set; } = FileShare.ReadWrite;
-
-        /// <summary>
-        /// Set if the user is using the Toshiba Bluetooth Stack
-        /// </summary>
-        public bool UseToshiba { get; set; }
-
-        /// <summary>
-        /// Set to use the WriteFile method (allows use with the Microsoft Bluetooth Stack)
-        /// </summary>
-        public bool UseWriteFile { get; set; }
-
-        /// <summary>
-        /// Set when using to use 22 byte reports when sending data (use with Toshiba Stack or Set_Output_Report)
-        /// </summary>
-        public bool UseFullReportSize { get; set; }
-        #endregion
-
-        
         public static BtStack CheckBtStack(SP_DEVINFO_DATA data)
         {
             // Assume it is the Microsoft Stack
