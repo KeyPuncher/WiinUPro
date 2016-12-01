@@ -286,7 +286,7 @@ namespace WiinUPro
             var didConnect = Connect();
 
             btnDisconnect.IsEnabled = didConnect;
-            btnConnect.IsEnabled = !didConnect;
+            //btnConnect.IsEnabled = !didConnect;
 
             //if (success)
             //{
@@ -303,7 +303,7 @@ namespace WiinUPro
         {
             btnDisconnect.IsEnabled = false;
             Disconnect();
-            btnConnect.IsEnabled = true;
+            //btnConnect.IsEnabled = true;
         }
 
         private void AssignMenu_Click(object sender, RoutedEventArgs e)
