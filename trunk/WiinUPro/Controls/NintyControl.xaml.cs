@@ -148,7 +148,8 @@ namespace WiinUPro
                 }
                 else
                 {
-                    // Controller type not supported, teardown?
+                    // Controller type not supported or unknown, teardown?
+                    success = true;
                 }
             }
 #if DEBUG
