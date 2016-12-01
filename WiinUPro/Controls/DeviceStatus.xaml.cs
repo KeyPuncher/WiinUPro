@@ -38,7 +38,7 @@ namespace WiinUPro
             switch (type)
             {
                 case NintrollerLib.ControllerType.ProController:
-                    img = "ProController_white_24.png";
+                    img = "ProController_black_24.png";
                     nickname.Content = "Pro Controller";
                     break;
 

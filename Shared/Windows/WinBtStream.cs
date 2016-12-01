@@ -186,7 +186,7 @@ namespace Shared.Windows
             HidD_GetHidGuid(out g);
             parentDeviceInfo = SetupDiCreateDeviceInfoList(ref g, IntPtr.Zero);
 
-            // TODO: This doesn't succeed with MS BT, check Toshiba
+            // TODO: This fails, something not right
             bool success = SetupDiOpenDeviceInfo(parentDeviceInfo, id, IntPtr.Zero, 0, ref parentData);
 
             if (success)

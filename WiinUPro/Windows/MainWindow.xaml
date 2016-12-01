@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="MainWindow" Height="417.857" Width="505.714" MinWidth="400" MinHeight="350">
+        Title="WiinUPro" Height="380" Width="480" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico">
     <Grid>
         <TabControl x:Name="tabControl" Margin="10" >
             <TabItem>
@@ -17,13 +17,13 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <GroupBox x:Name="deviceGroup" Header="Devices" HorizontalAlignment="Left" Margin="10,10,0,10.5" Width="252">
+                    <GroupBox x:Name="deviceGroup" Header="Devices" HorizontalAlignment="Left" Margin="10,10,0,11" Width="252">
                         <Grid>
                             <StackPanel x:Name="statusStack">
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="settingsGroup" Header="Setings" HorizontalAlignment="Left" Margin="267,10,0,0" VerticalAlignment="Top" Height="322" Width="197">
+                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,10,4,11">
                         <Grid>
                             <CheckBox x:Name="settingAutoStart" Content="Auto Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                             <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>

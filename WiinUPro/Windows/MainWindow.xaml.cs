@@ -25,6 +25,7 @@ namespace WiinUPro
 
         public MainWindow()
         {
+            availableDevices = new List<DeviceStatus>();
             InitializeComponent();
 
             #region Test
