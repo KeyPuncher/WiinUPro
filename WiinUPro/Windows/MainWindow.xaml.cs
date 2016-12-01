@@ -148,5 +148,10 @@ namespace WiinUPro
                 WinBtStream.OverridenFileShare = System.IO.FileShare.None;
             }
         }
+
+        private void settingToshibaMode_Checked(object sender, RoutedEventArgs e)
+        {
+            WinBtStream.ForceToshibaMode = settingToshibaMode.IsChecked ?? false;
+        }
     }
 }

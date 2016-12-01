@@ -29,6 +29,7 @@ namespace Shared.Windows
         #region Members
         public static bool OverrideSharingMode = false;
         public static FileShare OverridenFileShare = FileShare.None;
+        public static bool ForceToshibaMode = false;
 
         static Dictionary<string, BtStack> AssociatedStack;
 
@@ -48,7 +49,7 @@ namespace Shared.Windows
         /// <summary>
         /// Set if the user is using the Toshiba Bluetooth Stack
         /// </summary>
-        public bool UseToshiba { get; set; }
+        public static bool UseToshiba { get; set; }
 
         /// <summary>
         /// Set to use the WriteFile method (allows use with the Microsoft Bluetooth Stack)
@@ -75,6 +76,8 @@ namespace Shared.Windows
 
         public WinBtStream(string path)
         {
+            UseToshiba = ForceToshibaMode;
+
             // Default Windows 8/10 to ReadWrite (non exclusive)
             if (Environment.OSVersion.Version.Major > 6)
             {
@@ -96,7 +99,7 @@ namespace Shared.Windows
             }
 
             // Determine if using the Toshiba Stack
-            if (AssociatedStack.ContainsKey(path) && AssociatedStack[path] == BtStack.Toshiba)
+            if (UseToshiba || (AssociatedStack.ContainsKey(path) && AssociatedStack[path] == BtStack.Toshiba))
             {
                 SharingMode = FileShare.None;
                 UseFullReportSize = true;

@@ -11,8 +11,9 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <!-- TODO: Change to Home icon -->
+                        <!-- TODO: Change to Home icon
                         <Image Source="/WiinUPro;component/Images/Icons/ProController_black_24.png" HorizontalAlignment="Left" Height="12" Margin="0,0,4,0" VerticalAlignment="Center" />
+                        -->
                         <TextBlock Text="Home" />
                     </StackPanel>
                 </TabItem.Header>
@@ -28,6 +29,7 @@
                             <CheckBox x:Name="settingAutoStart" Content="Auto Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                             <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                             <CheckBox x:Name="settingExclusiveMode" Content="Use Exclusive Mode" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Checked="settingExclusiveMode_Checked"/>
+                            <CheckBox x:Name="settingToshibaMode" Content="Use Toshiba Mode" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Checked="settingToshibaMode_Checked"/>
                         </Grid>
                     </GroupBox>
 
