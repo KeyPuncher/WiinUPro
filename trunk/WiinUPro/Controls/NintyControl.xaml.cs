@@ -111,6 +111,80 @@ namespace WiinUPro
             }
         }
 
+        public bool Connect()
+        {
+            bool success = false;
+
+            if (_dummy != null || _stream.OpenConnection())
+            {
+                _nintroller.BeginReading();
+                _nintroller.GetStatus();
+                _nintroller.SetPlayerLED(1);
+
+                // We need a function we can await for the type to come back
+                // But the hint type may be present
+                switch (_nintroller.Type)
+                {
+                    case ControllerType.ProController:
+                        // TODO: Discover why this causes an access violation exceptions
+                        _controller = new ProControl();
+                        break;
+                }
+
+                if (_controller != null)
+                {
+                    _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
+                    _controller.OnChangeLEDs += SetLeds;
+                    _controller.OnInputSelected += InputSelected;
+                    _controller.OnInputRightClick += InputOpenMenu;
+                    _controller.OnQuickAssign += QuickAssignment;
+
+                    _view.Child = _controller as UserControl;
+                    ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
+                    ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+
+                    success = true;
+                    _nintroller.SetReportType(InputReport.ExtOnly, true);
+                }
+                else
+                {
+                    // Controller type not supported, teardown?
+                }
+            }
+#if DEBUG
+            else
+            {
+                _controller = new ProControl();
+                _controller.OnInputSelected += InputSelected;
+                _controller.OnInputRightClick += InputOpenMenu;
+                _controller.OnQuickAssign += QuickAssignment;
+                _view.Child = _controller as UserControl;
+                ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
+                ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+                success = true;
+            }
+#else
+            else
+            {
+                MessageBox.Show("Could not connect to device!");
+                btnConnect.IsEnabled = true;
+            }
+#endif
+            return success;
+        }
+
+        public void Disconnect()
+        {
+            if (_stream != null)
+                _stream.Close();
+
+            if (_dummy != null)
+                _dummy.Close();
+
+            _view.Child = null;
+            _controller = null;
+        }
+
         #region Nintroller Events
         private void _nintroller_LowBattery(object sender, LowBatteryEventArgs e)
         {
@@ -208,61 +282,10 @@ namespace WiinUPro
             //if (_dummy == null)
             //    _stream.SharingMode = System.IO.FileShare.None;
 
-            if (_dummy != null || _stream.OpenConnection())
-            {
-                btnConnect.IsEnabled = false;
-                _nintroller.BeginReading();
-                _nintroller.GetStatus();
-                _nintroller.SetPlayerLED(1);
+            var didConnect = Connect();
 
-                // We need a function we can await for the type to come back
-                // But the hint type may be present
-                switch (_nintroller.Type)
-                {
-                    case ControllerType.ProController:
-                        // TODO: Discover why this causes an access violation exceptions
-                        _controller = new ProControl();
-                        break;
-                }
-
-                if (_controller != null)
-                {
-                    _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
-                    _controller.OnChangeLEDs += SetLeds;
-                    _controller.OnInputSelected += InputSelected;
-                    _controller.OnInputRightClick += InputOpenMenu;
-                    _controller.OnQuickAssign += QuickAssignment;
-
-                    _view.Child = _controller as UserControl;
-                    ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
-                    ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
-
-                    //success = true;
-
-                    _nintroller.SetReportType(InputReport.ExtOnly, true);
-                }
-                btnDisconnect.IsEnabled = true;
-            }
-#if DEBUG
-            else
-            {
-                _controller = new ProControl();
-                _controller.OnInputSelected += InputSelected;
-                _controller.OnInputRightClick += InputOpenMenu;
-                _controller.OnQuickAssign += QuickAssignment;
-                _view.Child = _controller as UserControl;
-                ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
-                ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
-                //success = true;
-                btnDisconnect.IsEnabled = true;
-            }
-#else
-        else
-        {
-            MessageBox.Show("Could not connect to device!");
-            btnConnect.IsEnabled = true;
-        }
-#endif
+            btnDisconnect.IsEnabled = didConnect;
+            btnConnect.IsEnabled = !didConnect;
 
             //if (success)
             //{
@@ -278,16 +301,7 @@ namespace WiinUPro
         private void btnDisconnect_Click(object sender, RoutedEventArgs e)
         {
             btnDisconnect.IsEnabled = false;
-
-            if (_stream != null)
-                _stream.Close();
-
-            if (_dummy != null)
-                _dummy.Close();
-
-            _view.Child = null;
-            _controller = null;
-
+            Disconnect();
             btnConnect.IsEnabled = true;
         }
 
