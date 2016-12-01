@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Shared.Windows;
 
 namespace WiinUPro
 {
@@ -20,12 +21,14 @@ namespace WiinUPro
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<DeviceStatus> availableDevices;
+
         public MainWindow()
         {
             InitializeComponent();
 
             #region Test
-            var devices =  Shared.Windows.WinBtStream.GetPaths();
+            var devices =  WinBtStream.GetPaths();
             foreach (var info in devices)
             {
                 TabItem t = new TabItem();
@@ -46,6 +49,27 @@ namespace WiinUPro
                 tabControl.Items.Insert(tabControl.Items.Count - 1, t);
             }
             #endregion
+
+            Refresh();
+        }
+
+        public void Refresh()
+        {
+            var devices = WinBtStream.GetPaths();
+
+            foreach (var info in devices)
+            {
+                // Check if we are already showing this one
+                DeviceStatus existing = availableDevices.Find((d) => d.Info.DevicePath == info.DevicePath);
+
+                // If not add it
+                if (existing == null)
+                {
+                    var status = new DeviceStatus(info);
+                    availableDevices.Add(status);
+                    statusStack.Children.Add(status);
+                }
+            }
         }
 
         /***********
@@ -116,11 +140,11 @@ namespace WiinUPro
 
         private void settingExclusiveMode_Checked(object sender, RoutedEventArgs e)
         {
-            Shared.Windows.WinBtStream.OverrideSharingMode = settingExclusiveMode.IsChecked ?? false;
+            WinBtStream.OverrideSharingMode = settingExclusiveMode.IsChecked ?? false;
             
             if (settingExclusiveMode.IsChecked ?? false)
             {
-                Shared.Windows.WinBtStream.OverridenFileShare = System.IO.FileShare.None;
+                WinBtStream.OverridenFileShare = System.IO.FileShare.None;
             }
         }
     }
