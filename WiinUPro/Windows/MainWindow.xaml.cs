@@ -28,7 +28,11 @@ namespace WiinUPro
             availableDevices = new List<DeviceStatus>();
             InitializeComponent();
 
+            WinBtStream.OverrideSharingMode = true;
+            WinBtStream.OverridenFileShare = System.IO.FileShare.ReadWrite;
+
             #region Test
+            /*
             var devices =  WinBtStream.GetPaths();
             foreach (var info in devices)
             {
@@ -49,6 +53,7 @@ namespace WiinUPro
                 t.Content = n;
                 tabControl.Items.Insert(tabControl.Items.Count - 1, t);
             }
+            */
             #endregion
 
             Refresh();
@@ -67,9 +72,52 @@ namespace WiinUPro
                 if (existing == null)
                 {
                     var status = new DeviceStatus(info);
+                    status.ConnectClick = DoConnect;
+                    status.TypeUpdated = (s, t) =>
+                    {
+                        foreach (var tab in tabControl.Items)
+                        {
+                            if (tab is TabItem && (tab as TabItem).Content == s)
+                            {
+                                ChangeIcon(tab as TabItem, t);
+                            }
+                        }
+                    };
                     availableDevices.Add(status);
                     statusStack.Children.Add(status);
                 }
+            }
+        }
+
+        private void DoConnect(DeviceStatus status)
+        {
+            // If connection to device succeeds add a tab
+            if (status.Ninty.Connect())
+            {
+                TabItem tab = new TabItem();
+                StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal };
+                stack.Children.Add(new Image
+                {
+                    Source = status.Icon,
+                    Height = 12,
+                    Margin = new Thickness(0, 0, 4, 0),
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Left
+                });
+                stack.Children.Add(new TextBlock { Text = status.nickname.Content.ToString() });
+                tab.Header = stack;
+                tab.Content = status.Ninty;
+
+#if DEBUG
+                tabControl.Items.Insert(tabControl.Items.Count - 1, tab);
+#else
+            tabControl.Items.Add(tab);
+#endif
+            }
+            else
+            {
+                // Display message
+                MessageBox.Show("Unable to Connect Device", "Failed", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
 
@@ -141,11 +189,16 @@ namespace WiinUPro
 
         private void settingExclusiveMode_Checked(object sender, RoutedEventArgs e)
         {
-            WinBtStream.OverrideSharingMode = settingExclusiveMode.IsChecked ?? false;
+            //WinBtStream.OverrideSharingMode = settingExclusiveMode.IsChecked ?? false;
+            WinBtStream.OverrideSharingMode = true;
             
             if (settingExclusiveMode.IsChecked ?? false)
             {
                 WinBtStream.OverridenFileShare = System.IO.FileShare.None;
+            }
+            else
+            {
+                WinBtStream.OverridenFileShare = System.IO.FileShare.ReadWrite;
             }
         }
 
