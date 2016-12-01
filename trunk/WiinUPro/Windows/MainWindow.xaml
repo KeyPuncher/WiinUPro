@@ -19,7 +19,8 @@
                 <Grid>
                     <GroupBox x:Name="deviceGroup" Header="Devices" HorizontalAlignment="Left" Margin="10,10,0,10.5" Width="252">
                         <Grid>
-                            
+                            <StackPanel x:Name="statusStack">
+                            </StackPanel>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="settingsGroup" Header="Setings" HorizontalAlignment="Left" Margin="267,10,0,0" VerticalAlignment="Top" Height="322" Width="197">
