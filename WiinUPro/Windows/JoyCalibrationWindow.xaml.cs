@@ -34,25 +34,17 @@ namespace WiinUPro.Windows
         {
             if (limitYPos == null || limitYNeg == null) return;
             if (limitXPos == null || limitXNeg == null) return;
-
+            
+            // Calculate Points
             var top    = 500 - limitYPos.Value * 5;
             var left   = 500 - limitXNeg.Value * 5;
             var bottom = 500 + limitYNeg.Value * 5;
             var right  = 500 + limitXPos.Value * 5;
 
-            // Adjust top of circle
+            // Adjust Points of the circle
             limitQ1Arc.Point = new Point(500, top);
-            limitQ2Path.StartPoint = new Point(500, top);
-
-            // Left
             limitQ2Arc.Point = new Point(left, 500);
-            limitQ3Path.StartPoint = new Point(left, 500);
-
-            // Bottom
             limitQ3Arc.Point = new Point(500, bottom);
-            limitQ4Path.StartPoint = new Point(500, bottom);
-
-            // Right
             limitQ4Arc.Point = new Point(right, 500);
             limitQ1Path.StartPoint = new Point(right, 500);
 

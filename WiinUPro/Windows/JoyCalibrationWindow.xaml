@@ -18,48 +18,23 @@
         <Viewbox Margin="10,10,10,10" Grid.Row="0" Grid.Column="0">
             <Canvas x:Name="canvas" Width="1000" Height="1000">
                 <Grid Canvas.Top="-10">
-                    <Ellipse x:Name="rawMax" Height="1000" Width="1000" Fill="#FFEAEAEA"/>
-                    <Ellipse x:Name="soutMax" Height="1000" Stroke="#FF515151" Width="1000"/>
-                    <Ellipse x:Name="rawDeadzone" Height="100" Width="100" Fill="#FFA6A6A6"/>
-                    <Ellipse x:Name="antiDeadzone" Height="100" Stroke="#FF0F38C5" Width="100" StrokeThickness="4"/>
-                    <Ellipse x:Name="out" Height="10" Width="10" Fill="#FF23FF00"/>
-                    <Ellipse x:Name="raw" Height="10" Width="10" Fill="Red"/>
-                    <Path Stroke="Orange" StrokeThickness="10">
+                    <Path x:Name="rawMax" Height="1000" Width="1000" Fill="#FFEAEAEA">
                         <Path.Data>
                             <PathGeometry>
                                 <PathFigure x:Name="limitQ1Path" StartPoint="1000,500">
                                     <ArcSegment x:Name="limitQ1Arc" Point="500, 0" Size="500, 500"/>
-                                </PathFigure>
-                            </PathGeometry>
-                        </Path.Data>
-                    </Path>
-                    <Path Stroke="Orange" StrokeThickness="10">
-                        <Path.Data>
-                            <PathGeometry>
-                                <PathFigure x:Name="limitQ2Path" StartPoint="500,0">
                                     <ArcSegment x:Name="limitQ2Arc" Point="0, 500" Size="500, 500"/>
-                                </PathFigure>
-                            </PathGeometry>
-                        </Path.Data>
-                    </Path>
-                    <Path Stroke="Orange" StrokeThickness="10">
-                        <Path.Data>
-                            <PathGeometry>
-                                <PathFigure x:Name="limitQ3Path" StartPoint="0,500">
                                     <ArcSegment x:Name="limitQ3Arc" Point="500, 1000" Size="500, 500"/>
-                                </PathFigure>
-                            </PathGeometry>
-                        </Path.Data>
-                    </Path>
-                    <Path Stroke="Orange" StrokeThickness="10">
-                        <Path.Data>
-                            <PathGeometry>
-                                <PathFigure x:Name="limitQ4Path" StartPoint="500,1000">
                                     <ArcSegment x:Name="limitQ4Arc" Point="1000, 500" Size="500, 500"/>
                                 </PathFigure>
                             </PathGeometry>
                         </Path.Data>
                     </Path>
+                    <Ellipse x:Name="soutMax" Height="1000" Stroke="#FF515151" Width="1000"/>
+                    <Ellipse x:Name="rawDeadzone" Height="100" Width="100" Fill="#FFA6A6A6"/>
+                    <Ellipse x:Name="antiDeadzone" Height="100" Stroke="#FF0F38C5" Width="100" StrokeThickness="4"/>
+                    <Ellipse x:Name="out" Height="10" Width="10" Fill="#FF23FF00"/>
+                    <Ellipse x:Name="raw" Height="10" Width="10" Fill="Red"/>
                 </Grid>
             </Canvas>
         </Viewbox>
