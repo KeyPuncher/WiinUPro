@@ -77,9 +77,22 @@ namespace WiinUPro
                     {
                         foreach (var tab in tabControl.Items)
                         {
-                            if (tab is TabItem && (tab as TabItem).Content == s)
+                            if (tab is TabItem && (tab as TabItem).Content == s.Ninty)
                             {
                                 ChangeIcon(tab as TabItem, t);
+                            }
+                        }
+                    };
+                    status.CloseTab = (s) =>
+                    {
+                        // Find associated tab, skip first as it is home
+                        for (int i = 1; i < tabControl.Items.Count; i++)
+                        {
+                            var tab = tabControl.Items[i];
+                            if (tab is TabItem && (tab as TabItem).Content == s.Ninty)
+                            {
+                                tabControl.Items.RemoveAt(i);
+                                break;
                             }
                         }
                     };
@@ -89,10 +102,10 @@ namespace WiinUPro
             }
         }
 
-        private void DoConnect(DeviceStatus status)
+        private void DoConnect(DeviceStatus status, bool result)
         {
             // If connection to device succeeds add a tab
-            if (status.Ninty.Connect())
+            if (result)
             {
                 TabItem tab = new TabItem();
                 StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal };
