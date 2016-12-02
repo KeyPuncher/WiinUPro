@@ -48,8 +48,11 @@ namespace WiinUPro
 
         private void Ninty_OnTypeChange(ControllerType type)
         {
-            UpdateType(type);
-            TypeUpdated?.Invoke(this, type);
+            Dispatcher.Invoke(new Action(() =>
+            {
+                UpdateType(type);
+                TypeUpdated?.Invoke(this, type);
+            }));
         }
 
         public void UpdateType(ControllerType type)

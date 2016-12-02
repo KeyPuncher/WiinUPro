@@ -80,6 +80,7 @@ namespace WiinUPro
                             if (tab is TabItem && (tab as TabItem).Content == s.Ninty)
                             {
                                 ChangeIcon(tab as TabItem, t);
+                                ChangeTitle(tab as TabItem, t.ToString());
                             }
                         }
                     };
@@ -172,7 +173,7 @@ namespace WiinUPro
             switch (type)
             {
                 case NintrollerLib.ControllerType.ProController:
-                    img = "ProController_white_24.png";
+                    img = "ProController_black_24.png";
                     break;
 
                 case NintrollerLib.ControllerType.Wiimote:
@@ -197,6 +198,15 @@ namespace WiinUPro
             if (stack != null && stack.Children.Count > 0 && stack.Children[0].GetType() == typeof(Image))
             {
                 ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/" + img, UriKind.Relative));
+            }
+        }
+
+        private void ChangeTitle(TabItem target, string name)
+        {
+            var stack = target.Header as StackPanel;
+            if (stack != null && stack.Children.Count > 1 && stack.Children[1].GetType() == typeof(TextBlock))
+            {
+                ((TextBlock)stack.Children[1]).Text = name;
             }
         }
 
