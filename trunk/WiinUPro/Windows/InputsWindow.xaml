@@ -208,6 +208,7 @@
                             </Button>
                             <Slider x:Name="mMovementRate" HorizontalAlignment="Left" Margin="10,247,0,0" VerticalAlignment="Top" Width="204" Minimum="0.1" Value="1" Maximum="3" SmallChange="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True" TickFrequency="0.1"/>
                             <Label Content="Movement Speed" HorizontalAlignment="Left" Margin="10,216,0,0" VerticalAlignment="Top"/>
+                            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="124,221,0,0" TextWrapping="Wrap" Text="{Binding ElementName=mMovementRate, Path=Value, StringFormat={}{0:P0}}" VerticalAlignment="Top"/>
 
                         </Grid>
                     </GroupBox>
