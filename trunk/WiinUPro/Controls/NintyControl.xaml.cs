@@ -197,6 +197,8 @@ namespace WiinUPro
 
         private void _nintroller_ExtensionChange(object sender, NintrollerExtensionEventArgs e)
         {
+            OnTypeChange?.Invoke(e.controllerType);
+
             // Handle the extension change
             Dispatcher.Invoke(new Action(() =>
             {
