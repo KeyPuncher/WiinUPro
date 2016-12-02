@@ -53,6 +53,8 @@ namespace WiinUPro
                 t.Content = n;
                 tabControl.Items.Insert(tabControl.Items.Count - 1, t);
             }
+            Windows.JoyCalibrationWindow j = new Windows.JoyCalibrationWindow();
+            j.Show();
             */
             #endregion
 
