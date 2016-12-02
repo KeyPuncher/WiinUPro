@@ -23,8 +23,9 @@ namespace WiinUPro
     {
         public DeviceInfo Info;
         public NintyControl Ninty;
-        public Action<DeviceStatus> ConnectClick;
+        public Action<DeviceStatus, bool> ConnectClick;
         public Action<DeviceStatus, ControllerType> TypeUpdated;
+        public Action<DeviceStatus> CloseTab;
 
         public ImageSource Icon { get { return icon.Source; } }
 
@@ -35,7 +36,14 @@ namespace WiinUPro
             Info = info;
             Ninty = new NintyControl(Info);
             Ninty.OnTypeChange += Ninty_OnTypeChange;
+            Ninty.OnDisconnect += Ninty_OnDisconnect;
             UpdateType(info.Type);
+        }
+
+        private void Ninty_OnDisconnect()
+        {
+            connectBtn.IsEnabled = true;
+            CloseTab?.Invoke(this);
         }
 
         private void Ninty_OnTypeChange(ControllerType type)
@@ -83,7 +91,14 @@ namespace WiinUPro
 
         private void connectBtn_Click(object sender, RoutedEventArgs e)
         {
-            ConnectClick?.Invoke(this);
+            var result = Ninty.Connect();
+
+            if (result)
+            {
+                connectBtn.IsEnabled = false;
+            }
+
+            ConnectClick?.Invoke(this, result);
         }
     }
 }

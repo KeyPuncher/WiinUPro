@@ -24,6 +24,7 @@ namespace WiinUPro
     {
         internal delegate void TypeUpdate(ControllerType type);
         internal event TypeUpdate OnTypeChange;     // Called on extension changes
+        internal event Action OnDisconnect;         // Called when disconnected
 
         internal WinBtStream _stream;               // Controller stream to the device
         internal Nintroller _nintroller;            // Physical Controller Device
@@ -31,6 +32,7 @@ namespace WiinUPro
         internal AssignmentCollection _clipboard;   // Assignments to be pasted
         internal string _selectedInput;             // Controller's input to be effected by change
         internal ShiftState _currentState;          // Current shift state being applied
+        internal Shared.DeviceInfo _info;           // Info on this device, HID path, Type
 
         // For Testing
         internal Shared.DummyDevice _dummy;
@@ -68,25 +70,8 @@ namespace WiinUPro
                 new Dictionary<string, AssignmentCollection>(),
                 new Dictionary<string, AssignmentCollection>()
             };
-            //_testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LX, new AssignmentCollection( new List<IAssignment> { new TestMouseAssignment(true) }));
-            //_testAssignments[0].Add(INPUT_NAMES.PRO_CONTROLLER.LY, new AssignmentCollection(new List<IAssignment> { new TestMouseAssignment(false) }));
 
-            if (deviceInfo.DevicePath == "Dummy")
-            {
-                _dummy = new Shared.DummyDevice(Calibrations.Defaults.ProControllerDefault);
-                var dumWin = new Windows.DummyWindow(_dummy);
-                dumWin.Show();
-                _nintroller = new Nintroller(_dummy, ControllerType.Wiimote);
-            }
-            else
-            {
-                _stream = new WinBtStream(deviceInfo.DevicePath);
-                _nintroller = new Nintroller(_stream);//, deviceInfo.Type);
-            }
-            _nintroller.StateUpdate += _nintroller_StateUpdate; 
-            _nintroller.ExtensionChange += _nintroller_ExtensionChange;
-            _nintroller.LowBattery += _nintroller_LowBattery;
-
+            _info = deviceInfo;
             _scp = ScpDirector.Access;
         }
 
@@ -114,6 +99,22 @@ namespace WiinUPro
         public bool Connect()
         {
             bool success = false;
+
+            if (_info.DevicePath == "Dummy")
+            {
+                _dummy = new Shared.DummyDevice(Calibrations.Defaults.ProControllerDefault);
+                var dumWin = new Windows.DummyWindow(_dummy);
+                dumWin.Show();
+                _nintroller = new Nintroller(_dummy, ControllerType.Wiimote);
+            }
+            else
+            {
+                _stream = new WinBtStream(_info.DevicePath);
+                _nintroller = new Nintroller(_stream);//, deviceInfo.Type);
+            }
+            _nintroller.StateUpdate += _nintroller_StateUpdate;
+            _nintroller.ExtensionChange += _nintroller_ExtensionChange;
+            _nintroller.LowBattery += _nintroller_LowBattery;
 
             if (_dummy != null || _stream.OpenConnection())
             {
@@ -184,6 +185,8 @@ namespace WiinUPro
 
             _view.Child = null;
             _controller = null;
+
+            OnDisconnect?.Invoke();
         }
 
         #region Nintroller Events
@@ -222,7 +225,7 @@ namespace WiinUPro
 
                     if (success)
                     {
-                        btnDisconnect.IsEnabled = true;
+                        //btnDisconnect.IsEnabled = true;
                     }
                     else
                     {
@@ -264,7 +267,6 @@ namespace WiinUPro
                 }
             }));
         }
-
         #endregion
 
         #region GUI Events
@@ -285,7 +287,7 @@ namespace WiinUPro
 
             var didConnect = Connect();
 
-            btnDisconnect.IsEnabled = didConnect;
+            //btnDisconnect.IsEnabled = didConnect;
             //btnConnect.IsEnabled = !didConnect;
 
             //if (success)
@@ -301,7 +303,7 @@ namespace WiinUPro
 
         private void btnDisconnect_Click(object sender, RoutedEventArgs e)
         {
-            btnDisconnect.IsEnabled = false;
+            //btnDisconnect.IsEnabled = false;
             Disconnect();
             //btnConnect.IsEnabled = true;
         }
