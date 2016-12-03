@@ -22,7 +22,7 @@ namespace WiinUPro.Windows
         protected short rawXLimitMax, rawXLimitMin, rawYLimitMax, rawYLimitMin;
         
         protected short rawXDeadMax, rawXDeadMin, rawYDeadMax, rawYDeadMin;
-       
+        
         protected Joystick _joystick;
 
         public JoyCalibrationWindow()
@@ -53,6 +53,37 @@ namespace WiinUPro.Windows
             limitQ2Arc.Size = new Size(500 - left, 500 - top);
             limitQ3Arc.Size = new Size(500 - left, bottom - 500);
             limitQ4Arc.Size = new Size(right - 500, bottom - 500);
+        }
+
+        private void DeadzoneUpdated(int ignore)
+        {
+            if (deadYPos == null || deadYNeg == null) return;
+            if (deadXPos == null || deadXNeg == null) return;
+
+            // Calculate Points
+            var top    = 500 - deadYPos.Value * 5;
+            var left   = 500 - deadXNeg.Value * 5;
+            var bottom = 500 + deadYNeg.Value * 5;
+            var right  = 500 + deadXPos.Value * 5;
+
+            // Adjust Points of the circle
+            deadQ1Arc.Point = new Point(500, top);
+            deadQ2Arc.Point = new Point(left, 500);
+            deadQ3Arc.Point = new Point(500, bottom);
+            deadQ4Arc.Point = new Point(right, 500);
+            deadQ1Path.StartPoint = new Point(right, 500);
+
+            // Adjust Radii
+            deadQ1Arc.Size = new Size(right - 500, 500 - top);
+            deadQ2Arc.Size = new Size(500 - left, 500 - top);
+            deadQ3Arc.Size = new Size(500 - left, bottom - 500);
+            deadQ4Arc.Size = new Size(right - 500, bottom - 500);
+        }
+
+        private void antiDeadzoneSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            antiDeadzone.Height = antiDeadzone.Width = e.NewValue * 10;
+            antiDeadzoneLabel.Content = e.NewValue.ToString() + " %";
         }
     }
 }
