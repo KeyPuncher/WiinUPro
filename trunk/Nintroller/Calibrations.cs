@@ -339,11 +339,15 @@ namespace NintrollerLib
                     minX    = 1023,
                     maxX    = 3071,
                     deadX   = 128,
+                    deadXp  = 128,
+                    deadXn  = -128,
 
                     centerY = 2047,
                     minY    = 1023,
                     maxY    = 3071,
-                    deadY   = 128
+                    deadY   = 128,
+                    deadYp  = 128,
+                    deadYn  = -128
                 },
                 RJoy = new Joystick()
                 {
@@ -351,11 +355,15 @@ namespace NintrollerLib
                     minX    = 1023,
                     maxX    = 3071,
                     deadX   = 128,
+                    deadXp  = 128,
+                    deadXn  = -128,
 
                     centerY = 2047,
                     minY    = 1023,
                     maxY    = 3071,
-                    deadY   = 128
+                    deadY   = 128,
+                    deadYp  = 128,
+                    deadYn  = -128
                 }
             };
 

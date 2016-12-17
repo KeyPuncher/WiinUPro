@@ -27,6 +27,9 @@ namespace WiinUPro
         public event Delegates.StringDel OnInputRightClick;
         public event AssignmentCollection.AssignDelegate OnQuickAssign;
 
+        protected Windows.JoyCalibrationWindow _openJoyWindow = null;
+        protected bool _rightJoyOpen = false;
+
         public ProControl()
         {
             InitializeComponent();
@@ -71,6 +74,11 @@ namespace WiinUPro
                 leftStickBtn.Margin = new Thickness(196 + 50 * pro.LJoy.X, 230 - 50 * pro.LJoy.Y, 0, 0);
                 rightStick.Margin = new Thickness(980 + 50 * pro.RJoy.X, 232 - 50 * pro.RJoy.Y, 0, 0);
                 rightStickBtn.Margin = new Thickness(980 + 50 * pro.RJoy.X, 230 - 50 * pro.RJoy.Y, 0, 0);
+
+                if (_openJoyWindow != null)
+                {
+                    _openJoyWindow.Update(_rightJoyOpen ? pro.RJoy : pro.LJoy);
+                }
             }
         }
 
@@ -233,6 +241,17 @@ namespace WiinUPro
         private void quickXboxbtn_Click(object sender, RoutedEventArgs e)
         {
             XboxAssign();
+        }
+
+        private void Calibrate_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Show dialog
+            _rightJoyOpen = (sender as FrameworkElement).Tag == "JoyR";
+            Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(_rightJoyOpen ? 
+                Calibrations.Defaults.ProControllerDefault.RJoy :
+                Calibrations.Defaults.ProControllerDefault.LJoy);
+            _openJoyWindow = joyCal;
+            joyCal.Show();// Dialog();
         }
     }
 }

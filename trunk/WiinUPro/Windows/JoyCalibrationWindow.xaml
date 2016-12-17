@@ -17,36 +17,34 @@
         </Grid.RowDefinitions>
         <Viewbox Margin="10,10,10,10" Grid.Row="0" Grid.Column="0">
             <Canvas x:Name="canvas" Width="1000" Height="1000">
-                <Grid Canvas.Top="-10">
-                    <Path x:Name="rawMax" Height="1000" Width="1000" Fill="#FFEAEAEA">
-                        <Path.Data>
-                            <PathGeometry>
-                                <PathFigure x:Name="limitQ1Path" StartPoint="1000,500">
-                                    <ArcSegment x:Name="limitQ1Arc" Point="500, 0" Size="500, 500"/>
-                                    <ArcSegment x:Name="limitQ2Arc" Point="0, 500" Size="500, 500"/>
-                                    <ArcSegment x:Name="limitQ3Arc" Point="500, 1000" Size="500, 500"/>
-                                    <ArcSegment x:Name="limitQ4Arc" Point="1000, 500" Size="500, 500"/>
-                                </PathFigure>
-                            </PathGeometry>
-                        </Path.Data>
-                    </Path>
-                    <Ellipse x:Name="soutMax" Height="1000" Stroke="#FF515151" Width="1000"/>
-                    <Path x:Name="rawDeadzone" Height="1000" Width="1000" Fill="#FFA6A6A6">
-                        <Path.Data>
-                            <PathGeometry>
-                                <PathFigure x:Name="deadQ1Path" StartPoint="550,500">
-                                    <ArcSegment x:Name="deadQ1Arc" Point="500, 450" Size="50, 50"/>
-                                    <ArcSegment x:Name="deadQ2Arc" Point="450, 500" Size="50, 50"/>
-                                    <ArcSegment x:Name="deadQ3Arc" Point="500, 550" Size="50, 50"/>
-                                    <ArcSegment x:Name="deadQ4Arc" Point="550, 500" Size="50, 50"/>
-                                </PathFigure>
-                            </PathGeometry>
-                        </Path.Data>
-                    </Path>
-                    <Ellipse x:Name="antiDeadzone" Height="0" Stroke="#FF0F38C5" Width="0" StrokeThickness="4"/>
-                    <Ellipse x:Name="out" Height="10" Width="10" Fill="#FF23FF00"/>
-                    <Ellipse x:Name="raw" Height="10" Width="10" Fill="Red"/>
-                </Grid>
+                <Path x:Name="rawMax" Height="1000" Width="1000" Fill="#FFEAEAEA">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure x:Name="limitQ1Path" StartPoint="1000,500">
+                                <ArcSegment x:Name="limitQ1Arc" Point="500, 0" Size="500, 500"/>
+                                <ArcSegment x:Name="limitQ2Arc" Point="0, 500" Size="500, 500"/>
+                                <ArcSegment x:Name="limitQ3Arc" Point="500, 1000" Size="500, 500"/>
+                                <ArcSegment x:Name="limitQ4Arc" Point="1000, 500" Size="500, 500"/>
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+                <Ellipse x:Name="soutMax" Height="1000" Stroke="#FF515151" Width="1000"/>
+                <Path x:Name="rawDeadzone" Height="1000" Width="1000" Fill="#FFA6A6A6">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure x:Name="deadQ1Path" StartPoint="550,500">
+                                <ArcSegment x:Name="deadQ1Arc" Point="500, 450" Size="50, 50"/>
+                                <ArcSegment x:Name="deadQ2Arc" Point="450, 500" Size="50, 50"/>
+                                <ArcSegment x:Name="deadQ3Arc" Point="500, 550" Size="50, 50"/>
+                                <ArcSegment x:Name="deadQ4Arc" Point="550, 500" Size="50, 50"/>
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+                <Ellipse x:Name="antiDeadzone" Height="0" Stroke="#FF0F38C5" Width="0" StrokeThickness="4" Canvas.Left="500" Canvas.Top="500"/>
+                <Ellipse x:Name="out" Height="20" Width="20" Fill="#FF23FF00" Canvas.Left="490" Canvas.Top="490"/>
+                <Ellipse x:Name="raw" Height="10" Width="10" Fill="Red" Canvas.Left="495" Canvas.Top="495"/>
             </Canvas>
         </Viewbox>
         <GroupBox x:Name="groupLimits" Header="Limits" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="175" Width="298" Grid.Column="1">
@@ -55,9 +53,9 @@
                 <Label x:Name="label" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top"/>
                 <WiinUPro:NumPicker x:Name="limitYNeg" HorizontalAlignment="Left" Margin="101,106,0,0" VerticalAlignment="Top" Max="100" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
                 <Label x:Name="label_Copy" Content="-Y" HorizontalAlignment="Left" Margin="71,106,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="limitXNeg" HorizontalAlignment="Left" Margin="35,59,0,0" VerticalAlignment="Top" OnValueUpdate="LimitsUpdated"/>
+                <WiinUPro:NumPicker x:Name="limitXNeg" HorizontalAlignment="Left" Margin="35,59,0,0" VerticalAlignment="Top" Max="100" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
                 <Label x:Name="label_Copy1" Content="-X" HorizontalAlignment="Left" Margin="5,59,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="limitXPos" HorizontalAlignment="Left" Margin="167,59,0,0" VerticalAlignment="Top" OnValueUpdate="LimitsUpdated"/>
+                <WiinUPro:NumPicker x:Name="limitXPos" HorizontalAlignment="Left" Margin="167,59,0,0" VerticalAlignment="Top" Max="100" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
                 <Label x:Name="label_Copy2" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>

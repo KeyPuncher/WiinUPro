@@ -34,11 +34,11 @@ namespace WiinUPro
         internal ShiftState _currentState;          // Current shift state being applied
         internal Shared.DeviceInfo _info;           // Info on this device, HID path, Type
 
+        internal ScpDirector _scp;                  // Quick reference to SCP Director
+        internal Dictionary<string, AssignmentCollection>[] _assignments;
+
         // For Testing
         internal Shared.DummyDevice _dummy;
-
-        internal Dictionary<string, AssignmentCollection>[] _assignments;
-        internal ScpDirector _scp;
 
         public int ShiftIndex
         {
@@ -105,7 +105,11 @@ namespace WiinUPro
                 _dummy = new Shared.DummyDevice(Calibrations.Defaults.ProControllerDefault);
                 var dumWin = new Windows.DummyWindow(_dummy);
                 dumWin.Show();
-                _nintroller = new Nintroller(_dummy, ControllerType.Wiimote);
+                _nintroller = new Nintroller(_dummy);
+                OnDisconnect += () =>
+                {
+                    dumWin.Close();
+                };
             }
             else
             {

@@ -136,6 +136,7 @@
     <Compile Include="Windows\DummyWindow.xaml.cs">
       <DependentUpon>DummyWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ICalibrationWindow.cs" />
     <Compile Include="Windows\InputsWindow.xaml.cs">
       <DependentUpon>InputsWindow.xaml</DependentUpon>
     </Compile>
