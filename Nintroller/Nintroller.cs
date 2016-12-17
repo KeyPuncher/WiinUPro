@@ -1097,38 +1097,6 @@ namespace NintrollerLib
         
         internal static float Normalize(int raw, int min, int center, int max, int dead)
         {
-            //float availableRange = 0f;
-            //float actualValue = 0f;
-
-            //if (Math.Abs(center - raw) < dead)
-            //{
-            //    return 0f;
-            //}
-            //else if (raw - center > 0)
-            //{
-            //    availableRange = max - (center + dead);
-            //    actualValue = raw - (center + dead);
-
-            //    if (availableRange == 0)
-            //    {
-            //        return 0f;
-            //    }
-
-            //    return (actualValue / availableRange);
-            //}
-            //else
-            //{
-            //    availableRange = center - dead - min;
-            //    actualValue = raw - center;
-
-            //    if (availableRange == 0)
-            //    {
-            //        return 0f;
-            //    }
-
-            //    return (actualValue / availableRange) - 1f;
-            //}
-
             float actual = 0;
             float range = 0;
 
@@ -1147,6 +1115,35 @@ namespace NintrollerLib
                 {
                     actual = raw - (center - dead);
                     range = (center - dead) - min;
+                }
+            }
+
+            if (range == 0)
+                return 0f;
+
+            return actual / range;
+        }
+
+        internal static float Normalize(int raw, int min, int center, int max, int deadP, int deadN)
+        {
+            float actual = 0;
+            float range = 0;
+
+            if (center - raw <= deadP && center - raw >= deadN)
+            {
+                return 0f;
+            }
+            else
+            {
+                if (raw > center)
+                {
+                    actual = raw - (center + deadP);
+                    range = max - (center + deadP);
+                }
+                else if (raw < center)
+                {
+                    actual = raw - (center + deadN);
+                    range = (center + deadN) - min;
                 }
             }
 

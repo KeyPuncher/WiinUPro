@@ -29,9 +29,13 @@ namespace Shared
 
         protected byte[] _lastReport;
         protected InputReport DataReportMode = InputReport.BtnsOnly;
+        protected Queue<InputReport> _nextQueue;
+        protected Queue<byte[]> _reportQueue;
 
         public DummyDevice(INintrollerState state)
         {
+            _nextQueue = new Queue<InputReport>();
+            _reportQueue = new Queue<byte[]>();
             State = state;
             Type t = State.GetType();
             if (t == typeof(ProController))
@@ -84,7 +88,7 @@ namespace Shared
             int value = -1;
 
             // This won't block since Read is call asynchronously
-            while (_lastReport == null && (byte)NextReport < 0x30) ;
+            while (_reportQueue.Count == 0 && (_nextQueue.Count != 0 && (byte)_nextQueue.Peek() < 0x30)) ;
 
             // Set Error
             buffer[4] = 0x00;
@@ -93,6 +97,16 @@ namespace Shared
             value = buffer.Length;
 
             byte[] coreBtns = GetCoreButtons();
+
+            if (_nextQueue.Count > 0)
+                NextReport = _nextQueue.Dequeue();
+            else
+                NextReport = DataReportMode;
+
+            if (_reportQueue.Count > 0)
+                _lastReport = _reportQueue.Dequeue();
+            else
+                _lastReport = null;
 
             switch (NextReport)
             {
@@ -150,7 +164,8 @@ namespace Shared
 
                     if (_lastReport[4] == 250)
                     {
-                        NextReport = DataReportMode;
+                        //NextReport = DataReportMode;
+                        _nextQueue.Enqueue(DataReportMode);
                     }
                     break;
 
@@ -239,21 +254,25 @@ namespace Shared
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            _lastReport = buffer;
+            //_lastReport = buffer;
+            _reportQueue.Enqueue(buffer);
             OutputReport output = (OutputReport)buffer[0];
 
             switch (output)
             {
                 case OutputReport.StatusRequest:
-                    NextReport = InputReport.Status;
+                    //NextReport = InputReport.Status;
+                    _nextQueue.Enqueue(InputReport.Status);
                     RumbleByte = buffer[1];
                     break;
 
                 case OutputReport.ReadMemory: // 21 BB BB SE AA AA DD DD DD DD DD DD DD DD DD DD DD DD DD DD DD DD
-                    if (NextReport != InputReport.ReadMem)
+                    //if (NextReport != InputReport.ReadMem)
+                    if (!_nextQueue.Contains(InputReport.ReadMem))
                     {
                         // Extension Step A
-                        NextReport = InputReport.ReadMem;
+                        //NextReport = InputReport.ReadMem;
+                        _nextQueue.Enqueue(InputReport.ReadMem);
                     }
                     else
                     {
@@ -262,7 +281,8 @@ namespace Shared
                     break;
 
                 case OutputReport.LEDs: // 11 LL
-                    NextReport = InputReport.Acknowledge;
+                    //NextReport = InputReport.Acknowledge;
+                    _nextQueue.Enqueue(InputReport.Acknowledge);
                     LED_1 = (buffer[1] & 0x10) != 0x00;
                     LED_2 = (buffer[1] & 0x20) != 0x00;
                     LED_3 = (buffer[1] & 0x30) != 0x00;
@@ -271,9 +291,13 @@ namespace Shared
 
                 case OutputReport.DataReportMode: // 12 TT MM
                     DataReportMode = (InputReport)buffer[2];
-                    if ((byte)NextReport >= 0x30)
+                    //if ((byte)NextReport >= 0x30)
+                    //{
+                    //    NextReport = DataReportMode;
+                    //}
+                    if (_nextQueue.Count == 0 || (byte)_nextQueue.Peek() >= 0x30)
                     {
-                        NextReport = DataReportMode;
+                        _nextQueue.Enqueue(DataReportMode);
                     }
                     break;
             }

@@ -24,9 +24,13 @@ namespace WiinUPro.Windows
         protected short rawXDeadMax, rawXDeadMin, rawYDeadMax, rawYDeadMin;
         
         protected Joystick _joystick;
+        protected Joystick _default;
 
-        public JoyCalibrationWindow()
+        public string[] Assignments { get; protected set; }
+
+        public JoyCalibrationWindow(Joystick defaultCalibration)
         {
+            _default = defaultCalibration;
             InitializeComponent();
         }
 
@@ -83,7 +87,45 @@ namespace WiinUPro.Windows
         private void antiDeadzoneSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             antiDeadzone.Height = antiDeadzone.Width = e.NewValue * 10;
+            Canvas.SetTop(antiDeadzone, 500 - antiDeadzone.Height / 2);
+            Canvas.SetLeft(antiDeadzone, 500 - antiDeadzone.Width / 2);
             antiDeadzoneLabel.Content = e.NewValue.ToString() + " %";
+        }
+
+        public void Update(INintrollerState stateUpdate)
+        {
+            // TODO: Update the visual
+        }
+
+        public void Update(Joystick joy)
+        {
+            var rawY = joy.rawY / (double)(_default.maxY - _default.minY) * 1000;
+            var rawX = joy.rawX / (double)(_default.maxX - _default.minX) * 1000;
+            Canvas.SetTop(raw, 1500 - rawY - raw.Height / 2);
+            Canvas.SetLeft(raw, rawX - 500 - raw.Width / 2);
+
+            // TODO: calculate out (anti-deadzone)
+            joy.maxX = (int)Math.Round(_default.maxX * (limitXPos.Value / 100d));
+            joy.minX = (int)Math.Round(_default.minX * (limitXNeg.Value / 100d));
+            joy.maxY = (int)Math.Round(_default.maxY * (limitYPos.Value / 100d));
+            joy.minY = (int)Math.Round(_default.minY * (limitYNeg.Value / 100d));
+            // deadzones are not symetrical
+            //joy.deadX = (int)Math.Round((_default.maxX - _default.minX) * (deadXPos.Value/* - deadXNeg.Value*/) / 100d);
+            //joy.deadY = (int)Math.Round((_default.maxY - _default.minY) * (deadYPos.Value/* - deadYNeg.Value*/) / 100d);
+
+            // TODO: weirdness as deadzone value increases, not working?
+            joy.deadXp = (int)Math.Round((_default.maxX - _default.minX) * (deadXPos.Value / 100d));
+            joy.deadXn = (int)Math.Round((_default.maxX - _default.minX) * (deadXNeg.Value / 100d));
+            joy.deadYp = (int)Math.Round((_default.maxY - _default.minY) * (deadYPos.Value / 100d));
+            joy.deadYn = (int)Math.Round((_default.maxY - _default.minY) * (deadYNeg.Value / 100d));
+            joy.Normalize();
+
+            //var deadX = (int)Math.Round((_default.maxX - _default.minX) * (deadXPos.Value - deadXNeg.Value) / 100d);
+            //var deadY = (int)Math.Round((_default.maxY - _default.minY) * (deadYPos.Value - deadYNeg.Value) / 100d);
+            //System.Diagnostics.Debug.WriteLine(deadX);
+            
+            Canvas.SetTop(@out, joy.Y * -500 + 500 - @out.Height / 2);
+            Canvas.SetLeft(@out, joy.X * 500 + 500 - @out.Width / 2);
         }
     }
 }

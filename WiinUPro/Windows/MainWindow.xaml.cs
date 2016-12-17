@@ -162,10 +162,14 @@ namespace WiinUPro
             NintyControl nin = new NintyControl(new Shared.DeviceInfo() { DevicePath = "Dummy", Type = NintrollerLib.ControllerType.ProController });
             nin.OnTypeChange += (NintrollerLib.ControllerType type) =>
             {
-                ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/ProController_white_24.png", UriKind.Relative));
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/ProController_white_24.png", UriKind.Relative));
+                }));
             };
             test.Content = nin;
             tabControl.Items.Insert(tabControl.Items.Count - 1, test);
+            nin.Connect();
         }
 
         private void ChangeIcon(TabItem target, NintrollerLib.ControllerType type)

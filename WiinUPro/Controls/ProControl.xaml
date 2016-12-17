@@ -31,6 +31,7 @@
                                 <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
                                 <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
                             </MenuItem>
+                            <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>
@@ -49,6 +50,7 @@
                                 <MenuItem Header="WASD" Tag="proR" Click="QuickAssign_Click"/>
                                 <MenuItem Header="Arrows" Tag="proR" Click="QuickAssign_Click"/>
                             </MenuItem>
+                            <MenuItem Header="Calibrate" Tag="JoyR" Click="Calibrate_Click"/>
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>

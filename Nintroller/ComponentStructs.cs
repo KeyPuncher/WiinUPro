@@ -251,6 +251,7 @@ namespace NintrollerLib
         public int minX, minY;
         public int maxX, maxY;
         public int deadX, deadY;
+        public int deadXp, deadXn, deadYp, deadYn;
 
         public void Calibrate(Joystick calibration)
         {
@@ -263,14 +264,37 @@ namespace NintrollerLib
             maxX = calibration.maxX;
             maxY = calibration.maxY;
 
-            deadX = calibration.deadX;
-            deadY = calibration.deadY;
+            if (calibration.deadXp == 0 && calibration.deadXn == 0)
+            {
+                deadX = calibration.deadX;
+                deadXp = deadX;
+                deadXn = -deadXp;
+            }
+            else
+            {
+                deadXp = calibration.deadXp;
+                deadXn = calibration.deadXn;
+                deadX = deadXp;
+            }
+
+            if (calibration.deadYp == 0 && calibration.deadYn == 0)
+            {
+                deadY = calibration.deadY;
+                deadYp = deadY;
+                deadYn = -deadY;
+            }
+            else
+            {
+                deadYp = calibration.deadYp;
+                deadYn = calibration.deadYn;
+                deadY = deadYp;
+            }
         }
 
         public void Normalize()
         {
-            X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadX);
-            Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadY);
+            X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadXp, deadYn);
+            Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadYp, deadYn);
         }
 
         public override string ToString()
