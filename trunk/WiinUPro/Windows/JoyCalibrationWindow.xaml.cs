@@ -28,9 +28,9 @@ namespace WiinUPro.Windows
 
         public string[] Assignments { get; protected set; }
 
-        public JoyCalibrationWindow(Joystick defaultCalibration)
+        public JoyCalibrationWindow(Joystick noneCalibration)
         {
-            _default = defaultCalibration;
+            _default = noneCalibration;
             InitializeComponent();
         }
 
