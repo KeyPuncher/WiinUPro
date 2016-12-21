@@ -248,8 +248,8 @@ namespace WiinUPro
             // TODO: Show dialog
             _rightJoyOpen = (sender as FrameworkElement).Tag == "JoyR";
             Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(_rightJoyOpen ? 
-                Calibrations.Defaults.ProControllerDefault.RJoy :
-                Calibrations.Defaults.ProControllerDefault.LJoy);
+                Calibrations.None.ProControllerRaw.RJoy :
+                Calibrations.None.ProControllerRaw.LJoy);
             _openJoyWindow = joyCal;
             joyCal.Show();// Dialog();
         }
