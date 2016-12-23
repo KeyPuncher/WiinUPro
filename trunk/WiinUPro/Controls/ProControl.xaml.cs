@@ -246,7 +246,7 @@ namespace WiinUPro
         private void Calibrate_Click(object sender, RoutedEventArgs e)
         {
             // TODO: Show dialog
-            _rightJoyOpen = (sender as FrameworkElement).Tag == "JoyR";
+            _rightJoyOpen = (sender as FrameworkElement).Tag.Equals("JoyR");
             Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(_rightJoyOpen ? 
                 Calibrations.None.ProControllerRaw.RJoy :
                 Calibrations.None.ProControllerRaw.LJoy);

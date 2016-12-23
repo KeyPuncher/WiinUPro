@@ -293,7 +293,7 @@ namespace NintrollerLib
 
         public void Normalize()
         {
-            X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadXp, deadYn);
+            X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadXp, deadXn);
             Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadYp, deadYn);
         }
 

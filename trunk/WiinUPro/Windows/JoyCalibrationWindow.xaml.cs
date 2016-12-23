@@ -99,10 +99,11 @@ namespace WiinUPro.Windows
 
         public void Update(Joystick joy)
         {
-            var rawY = joy.rawY / (double)(_default.maxY - _default.minY) * 1000;
-            var rawX = joy.rawX / (double)(_default.maxX - _default.minX) * 1000;
-            Canvas.SetTop(raw, 1500 - rawY - raw.Height / 2);
-            Canvas.SetLeft(raw, rawX - 500 - raw.Width / 2);
+            _default.rawX = joy.rawX;
+            _default.rawY = joy.rawY;
+            _default.Normalize();
+            Canvas.SetLeft(raw, 500 * _default.X + 500 - raw.Width / 2);
+            Canvas.SetTop(raw, -500 * _default.Y + 500 - raw.Height / 2);
 
             // TODO: calculate out (anti-deadzone)
             joy.maxX = (int)Math.Round(_default.maxX * (limitXPos.Value / 100d));
@@ -114,10 +115,10 @@ namespace WiinUPro.Windows
             //joy.deadY = (int)Math.Round((_default.maxY - _default.minY) * (deadYPos.Value/* - deadYNeg.Value*/) / 100d);
 
             // TODO: weirdness as deadzone value increases, not working?
-            joy.deadXp = (int)Math.Round((_default.maxX - _default.minX) * (deadXPos.Value / 100d));
-            joy.deadXn = (int)Math.Round((_default.maxX - _default.minX) * (deadXNeg.Value / 100d));
-            joy.deadYp = (int)Math.Round((_default.maxY - _default.minY) * (deadYPos.Value / 100d));
-            joy.deadYn = (int)Math.Round((_default.maxY - _default.minY) * (deadYNeg.Value / 100d));
+            joy.deadXp =  (int)Math.Round((_default.maxX - _default.centerX) * (deadXPos.Value / 100d));
+            joy.deadXn = -(int)Math.Round((_default.maxX - _default.centerX) * (deadXNeg.Value / 100d));
+            joy.deadYp =  (int)Math.Round((_default.maxY - _default.centerY) * (deadYPos.Value / 100d));
+            joy.deadYn = -(int)Math.Round((_default.maxY - _default.centerY) * (deadYNeg.Value / 100d));
             joy.Normalize();
 
             //var deadX = (int)Math.Round((_default.maxX - _default.minX) * (deadXPos.Value - deadXNeg.Value) / 100d);
