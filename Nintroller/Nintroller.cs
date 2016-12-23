@@ -1128,8 +1128,8 @@ namespace NintrollerLib
         {
             float actual = 0;
             float range = 0;
-
-            if (center - raw <= deadP && center - raw >= deadN)
+            
+            if (raw - center <= deadP && raw - center >= deadN)
             {
                 return 0f;
             }
