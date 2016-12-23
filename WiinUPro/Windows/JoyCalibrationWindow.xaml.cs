@@ -99,32 +99,41 @@ namespace WiinUPro.Windows
 
         public void Update(Joystick joy)
         {
+            // Display Raw Value (no deadzone & expected limits)
             _default.rawX = joy.rawX;
             _default.rawY = joy.rawY;
             _default.Normalize();
             Canvas.SetLeft(raw, 500 * _default.X + 500 - raw.Width / 2);
             Canvas.SetTop(raw, -500 * _default.Y + 500 - raw.Height / 2);
 
-            // TODO: calculate out (anti-deadzone)
+            // Apply Limits
             joy.maxX = (int)Math.Round(_default.maxX * (limitXPos.Value / 100d));
             joy.minX = (int)Math.Round(_default.minX * (limitXNeg.Value / 100d));
             joy.maxY = (int)Math.Round(_default.maxY * (limitYPos.Value / 100d));
             joy.minY = (int)Math.Round(_default.minY * (limitYNeg.Value / 100d));
-            // deadzones are not symetrical
-            //joy.deadX = (int)Math.Round((_default.maxX - _default.minX) * (deadXPos.Value/* - deadXNeg.Value*/) / 100d);
-            //joy.deadY = (int)Math.Round((_default.maxY - _default.minY) * (deadYPos.Value/* - deadYNeg.Value*/) / 100d);
-
-            // TODO: weirdness as deadzone value increases, not working?
+            
+            // Apply Deadzone (not symetrical)
             joy.deadXp =  (int)Math.Round((_default.maxX - _default.centerX) * (deadXPos.Value / 100d));
             joy.deadXn = -(int)Math.Round((_default.maxX - _default.centerX) * (deadXNeg.Value / 100d));
             joy.deadYp =  (int)Math.Round((_default.maxY - _default.centerY) * (deadYPos.Value / 100d));
             joy.deadYn = -(int)Math.Round((_default.maxY - _default.centerY) * (deadYNeg.Value / 100d));
             joy.Normalize();
 
-            //var deadX = (int)Math.Round((_default.maxX - _default.minX) * (deadXPos.Value - deadXNeg.Value) / 100d);
-            //var deadY = (int)Math.Round((_default.maxY - _default.minY) * (deadYPos.Value - deadYNeg.Value) / 100d);
-            //System.Diagnostics.Debug.WriteLine(deadX);
+            // Apply Anti Deadzone
+            var anti = (float)antiDeadzoneSlider.Value / 100f;
+            if (joy.X != 0)
+            {
+                var xRange = 1f - anti;
+                joy.X = joy.X * xRange + anti * Math.Sign(joy.X);
+            }
+            if (joy.Y != 0)
+            {
+                var yRange = 1f - anti;
+                joy.Y = joy.Y * yRange + anti * Math.Sign(joy.Y);
+            }
             
+            
+            // Display Output
             Canvas.SetTop(@out, joy.Y * -500 + 500 - @out.Height / 2);
             Canvas.SetLeft(@out, joy.X * 500 + 500 - @out.Width / 2);
         }
