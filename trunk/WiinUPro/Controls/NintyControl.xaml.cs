@@ -60,6 +60,10 @@ namespace WiinUPro
         {
             _currentState = ShiftState.None;
             InitializeComponent();
+
+            // Speech test
+            //System.Speech.Synthesis.SpeechSynthesizer s = new System.Speech.Synthesis.SpeechSynthesizer();
+            //s.SpeakAsync("Controller Found");
         }
 
         public NintyControl(Shared.DeviceInfo deviceInfo) : this()
@@ -120,6 +124,7 @@ namespace WiinUPro
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
             _nintroller.LowBattery += _nintroller_LowBattery;
 
+            // TODO: Seems OpenConnection() can still succeed on toshiba w/o device connected
             if (_dummy != null || _stream.OpenConnection())
             {
                 _nintroller.BeginReading();
@@ -128,25 +133,11 @@ namespace WiinUPro
 
                 // We need a function we can await for the type to come back
                 // But the hint type may be present
-                switch (_nintroller.Type)
-                {
-                    case ControllerType.ProController:
-                        // TODO: Discover why this causes an access violation exceptions
-                        _controller = new ProControl();
-                        break;
-                }
+                CreateController(_nintroller.Type);
 
                 if (_controller != null)
                 {
-                    _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
-                    _controller.OnChangeLEDs += SetLeds;
-                    _controller.OnInputSelected += InputSelected;
-                    _controller.OnInputRightClick += InputOpenMenu;
-                    _controller.OnQuickAssign += QuickAssignment;
-
-                    _view.Child = _controller as UserControl;
-                    ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
-                    ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+                    SetupController();
 
                     success = true;
                     _nintroller.SetReportType(InputReport.ExtOnly, true);
@@ -154,6 +145,7 @@ namespace WiinUPro
                 else
                 {
                     // Controller type not supported or unknown, teardown?
+                    //success = false;
                     success = true;
                 }
             }
@@ -161,12 +153,7 @@ namespace WiinUPro
             else
             {
                 _controller = new ProControl();
-                _controller.OnInputSelected += InputSelected;
-                _controller.OnInputRightClick += InputOpenMenu;
-                _controller.OnQuickAssign += QuickAssignment;
-                _view.Child = _controller as UserControl;
-                ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
-                ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+                SetupController();
                 success = true;
             }
 #else
@@ -193,6 +180,48 @@ namespace WiinUPro
             OnDisconnect?.Invoke();
         }
 
+        private void CreateController(ControllerType type)
+        {
+            switch (type)
+            {
+                case ControllerType.ProController:
+                    // TODO: Discover why this causes an access violation exceptions
+                    _controller = new ProControl();
+                    ((ProControl)_controller).OnJoyCalibrated += (j, rJoy) =>
+                    {
+                        var currentProCal = _nintroller.StoredCalibrations.ProCalibration;
+
+                        if (rJoy)
+                        {
+                            currentProCal.RJoy = j;
+                        }
+                        else
+                        {
+                            currentProCal.LJoy = j;
+                        }
+
+                        _nintroller.SetCalibration(currentProCal);
+                    };
+                    break;
+            }
+        }
+
+        private void SetupController()
+        {
+            if (_controller != null)
+            {
+                _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
+                _controller.OnChangeLEDs += SetLeds;
+                _controller.OnInputSelected += InputSelected;
+                _controller.OnInputRightClick += InputOpenMenu;
+                _controller.OnQuickAssign += QuickAssignment;
+
+                _view.Child = _controller as UserControl;
+                ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
+                ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+            }
+        }
+
         #region Nintroller Events
         private void _nintroller_LowBattery(object sender, LowBatteryEventArgs e)
         {
@@ -206,38 +235,15 @@ namespace WiinUPro
             // Handle the extension change
             Dispatcher.Invoke(new Action(() =>
             {
-                bool success = false;
-
-                switch (e.controllerType)
-                {
-                    case ControllerType.ProController:
-                        _controller = new ProControl();
-                        break;
-                }
+                CreateController(e.controllerType);
 
                 if (_controller != null)
                 {
-                    _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
-                    _controller.OnChangeLEDs += SetLeds;
-                    _controller.OnInputSelected += InputSelected;
-                    _controller.OnInputRightClick += InputOpenMenu;
-                    _controller.OnQuickAssign += QuickAssignment;
-
-                    _view.Child = _controller as UserControl;
-                    ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
-                    ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
-
-                    success = true;
-
-                    if (success)
-                    {
-                        //btnDisconnect.IsEnabled = true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Device or Extension not supported.");
-                        //btnConnect.IsEnabled = true;
-                    }
+                    SetupController();
+                }
+                else
+                {
+                    MessageBox.Show("Device or Extension not supported.");
                 }
             }));
         }

@@ -19,15 +19,18 @@ namespace WiinUPro.Windows
     /// </summary>
     public partial class JoyCalibrationWindow : Window
     {
+        public bool Cancelled { get; protected set; }
+        public Joystick Calibration { get { return _joystick; } }
+        public float AntiDeadzone { get; protected set; }
+
         protected short rawXLimitMax, rawXLimitMin, rawYLimitMax, rawYLimitMin;
-        
         protected short rawXDeadMax, rawXDeadMin, rawYDeadMax, rawYDeadMin;
         
         protected Joystick _joystick;
         protected Joystick _default;
 
         public string[] Assignments { get; protected set; }
-
+        
         public JoyCalibrationWindow(Joystick noneCalibration)
         {
             _default = noneCalibration;
@@ -65,10 +68,10 @@ namespace WiinUPro.Windows
             if (deadXPos == null || deadXNeg == null) return;
 
             // Calculate Points
-            var top    = 500 - deadYPos.Value * 5;
-            var left   = 500 - deadXNeg.Value * 5;
-            var bottom = 500 + deadYNeg.Value * 5;
-            var right  = 500 + deadXPos.Value * 5;
+            var top    = 500 - Math.Max(deadYPos.Value, 1) * 5;
+            var left   = 500 - Math.Max(deadXNeg.Value, 1) * 5;
+            var bottom = 500 + Math.Max(deadYNeg.Value, 1) * 5;
+            var right  = 500 + Math.Max(deadXPos.Value, 1) * 5;
 
             // Adjust Points of the circle
             deadQ1Arc.Point = new Point(500, top);
@@ -82,19 +85,6 @@ namespace WiinUPro.Windows
             deadQ2Arc.Size = new Size(500 - left, 500 - top);
             deadQ3Arc.Size = new Size(500 - left, bottom - 500);
             deadQ4Arc.Size = new Size(right - 500, bottom - 500);
-        }
-
-        private void antiDeadzoneSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            antiDeadzone.Height = antiDeadzone.Width = e.NewValue * 10;
-            Canvas.SetTop(antiDeadzone, 500 - antiDeadzone.Height / 2);
-            Canvas.SetLeft(antiDeadzone, 500 - antiDeadzone.Width / 2);
-            antiDeadzoneLabel.Content = e.NewValue.ToString() + " %";
-        }
-
-        public void Update(INintrollerState stateUpdate)
-        {
-            // TODO: Update the visual
         }
 
         public void Update(Joystick joy)
@@ -136,6 +126,40 @@ namespace WiinUPro.Windows
             // Display Output
             Canvas.SetTop(@out, joy.Y * -500 + 500 - @out.Height / 2);
             Canvas.SetLeft(@out, joy.X * 500 + 500 - @out.Width / 2);
+            xLabel.Content = string.Format("X: {0}%", Math.Round(joy.X * 100));
+            yLabel.Content = string.Format("Y: {0}%", Math.Round(joy.Y * 100));
+        }
+
+        private void antiDeadzoneSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            antiDeadzone.Height = antiDeadzone.Width = e.NewValue * 10;
+            Canvas.SetTop(antiDeadzone, 500 - antiDeadzone.Height / 2);
+            Canvas.SetLeft(antiDeadzone, 500 - antiDeadzone.Width / 2);
+            antiDeadzoneLabel.Content = e.NewValue.ToString() + " %";
+        }
+
+        private void acceptBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AntiDeadzone = (float)antiDeadzoneSlider.Value / 10f;
+            _joystick = new Joystick();
+            _joystick.centerX = _default.centerX;
+            _joystick.centerY = _default.centerY;
+            _joystick.maxX = (int)Math.Round(_default.maxX * (limitXPos.Value / 100d));
+            _joystick.minX = (int)Math.Round(_default.minX * (limitXNeg.Value / 100d));
+            _joystick.maxY = (int)Math.Round(_default.maxY * (limitYPos.Value / 100d));
+            _joystick.minY = (int)Math.Round(_default.minY * (limitYNeg.Value / 100d));
+            _joystick.deadXp = (int)Math.Round((_default.maxX - _default.centerX) * (deadXPos.Value / 100d));
+            _joystick.deadXn = -(int)Math.Round((_default.maxX - _default.centerX) * (deadXNeg.Value / 100d));
+            _joystick.deadYp = (int)Math.Round((_default.maxY - _default.centerY) * (deadYPos.Value / 100d));
+            _joystick.deadYn = -(int)Math.Round((_default.maxY - _default.centerY) * (deadYNeg.Value / 100d));
+
+            Close();
+        }
+
+        private void cancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Cancelled = true;
+            Close();
         }
     }
 }

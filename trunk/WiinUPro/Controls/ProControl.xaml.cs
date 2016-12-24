@@ -25,6 +25,7 @@ namespace WiinUPro
         public event Delegates.BoolArrDel OnChangeLEDs;
         public event Delegates.StringDel OnInputSelected;
         public event Delegates.StringDel OnInputRightClick;
+        public event Delegates.JoystickeDel OnJoyCalibrated;
         public event AssignmentCollection.AssignDelegate OnQuickAssign;
 
         protected Windows.JoyCalibrationWindow _openJoyWindow = null;
@@ -245,13 +246,20 @@ namespace WiinUPro
 
         private void Calibrate_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Show dialog
             _rightJoyOpen = (sender as FrameworkElement).Tag.Equals("JoyR");
+
             Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(_rightJoyOpen ? 
                 Calibrations.None.ProControllerRaw.RJoy :
                 Calibrations.None.ProControllerRaw.LJoy);
             _openJoyWindow = joyCal;
-            joyCal.Show();// Dialog();
+            joyCal.ShowDialog();
+
+            if (!joyCal.Cancelled)
+            {
+                OnJoyCalibrated?.Invoke(joyCal.Calibration, _rightJoyOpen);
+            }
+
+            _openJoyWindow = null;
         }
     }
 }

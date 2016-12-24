@@ -59,6 +59,11 @@ namespace WiinUPro
             #endregion
 
             Refresh();
+
+            // Speech test
+            //System.Speech.Synthesis.SpeechSynthesizer s = new System.Speech.Synthesis.SpeechSynthesizer();
+            //s.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Female);
+            //s.SpeakAsync("Welcome");
         }
 
         public void Refresh()
