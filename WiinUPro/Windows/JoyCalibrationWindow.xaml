@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WiinUPro.Windows"
         xmlns:WiinUPro="clr-namespace:WiinUPro" x:Class="WiinUPro.Windows.JoyCalibrationWindow"
         mc:Ignorable="d"
-        Title="JoyCalibrationWindow" Height="488.79" Width="791.514">
+        Title="JoyCalibrationWindow" Height="526.79" Width="791.514">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115*"/>
@@ -15,9 +15,9 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Viewbox Margin="10,10,10,10" Grid.Row="0" Grid.Column="0">
-            <Canvas x:Name="canvas" Width="1000" Height="1000">
-                <Path x:Name="rawMax" Height="1000" Width="1000" Fill="#FFEAEAEA">
+        <Viewbox Margin="10,10,10,40" Grid.Row="0" Grid.Column="0">
+            <Canvas x:Name="canvas" Width="1200" Height="1200">
+                <Path Margin="100,100" x:Name="rawMax" Height="1000" Width="1000" Fill="#FFEAEAEA">
                     <Path.Data>
                         <PathGeometry>
                             <PathFigure x:Name="limitQ1Path" StartPoint="1000,500">
@@ -29,8 +29,8 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
-                <Ellipse x:Name="soutMax" Height="1000" Stroke="#FF515151" Width="1000"/>
-                <Path x:Name="rawDeadzone" Height="1000" Width="1000" Fill="#FFA6A6A6">
+                <Ellipse Margin="100,100"  x:Name="soutMax" Height="1000" Stroke="#FF515151" Width="1000"/>
+                <Path Margin="100,100"  x:Name="rawDeadzone" Height="1000" Width="1000" Fill="#FFA6A6A6">
                     <Path.Data>
                         <PathGeometry>
                             <PathFigure x:Name="deadQ1Path" StartPoint="550,500">
@@ -42,9 +42,9 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
-                <Ellipse x:Name="antiDeadzone" Height="0" Stroke="#FF0F38C5" Width="0" StrokeThickness="4" Canvas.Left="500" Canvas.Top="500"/>
-                <Ellipse x:Name="out" Height="20" Width="20" Fill="#FF23FF00" Canvas.Left="490" Canvas.Top="490"/>
-                <Ellipse x:Name="raw" Height="10" Width="10" Fill="Red" Canvas.Left="495" Canvas.Top="495"/>
+                <Ellipse Margin="100,100"  x:Name="antiDeadzone" Height="0" Stroke="#FF0F38C5" Width="0" StrokeThickness="4" Canvas.Left="500" Canvas.Top="500"/>
+                <Ellipse Margin="100,100"  x:Name="out" Height="20" Width="20" Fill="#FF23FF00" Canvas.Left="490" Canvas.Top="490"/>
+                <Ellipse Margin="100,100"  x:Name="raw" Height="10" Width="10" Fill="Red" Canvas.Left="495" Canvas.Top="495"/>
             </Canvas>
         </Viewbox>
         <GroupBox x:Name="groupLimits" Header="Limits" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="175" Width="298" Grid.Column="1">
@@ -74,5 +74,9 @@
         <Label x:Name="label2" Content="Anti-Deadzone" HorizontalAlignment="Left" Margin="10,379,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="103"/>
         <Slider x:Name="antiDeadzoneSlider" HorizontalAlignment="Left" Margin="60,414,0,0" VerticalAlignment="Top" Width="248" Grid.Column="1" Height="34" TickPlacement="BottomRight" Maximum="50" Interval="1" ValueChanged="antiDeadzoneSlider_ValueChanged" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
         <Label x:Name="antiDeadzoneLabel" Content="0 %" Grid.Column="1" HorizontalAlignment="Left" Margin="247,379,0,0" VerticalAlignment="Top" Width="61" HorizontalContentAlignment="Right"/>
+        <Button x:Name="acceptBtn" Content="Accept" Grid.Column="1" HorizontalAlignment="Left" Margin="233,466,0,0" VerticalAlignment="Top" Width="75" Click="acceptBtn_Click"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Grid.Column="1" HorizontalAlignment="Left" Margin="140,466,0,0" VerticalAlignment="Top" Width="75" Click="cancelBtn_Click"/>
+        <Label x:Name="xLabel" Content="X: 0%" HorizontalAlignment="Left" Margin="10,463,0,0" VerticalAlignment="Top" Width="59"/>
+        <Label x:Name="yLabel" Content="Y: 0%" HorizontalAlignment="Left" Margin="74,463,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
