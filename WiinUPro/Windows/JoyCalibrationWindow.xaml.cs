@@ -37,7 +37,7 @@ namespace WiinUPro.Windows
             deadXNeg.Value = -(int)Math.Round(prevCalibration.deadXn / (double)(_default.maxX - _default.centerX) * 100d);
             deadYPos.Value = (int)Math.Round(prevCalibration.deadYp / (double)(_default.maxY - _default.centerY) * 100d);
             deadYNeg.Value = -(int)Math.Round(prevCalibration.deadYn / (double)(_default.maxY - _default.centerY) * 100d);
-            antiDeadzoneSlider.Value = prevCalibration.antiDeadzone * 10d;
+            antiDeadzoneSlider.Value = Math.Round(prevCalibration.antiDeadzone * 10);
         }
 
         private void CenterXUpdated(int x)
