@@ -27,6 +27,7 @@ namespace WiinUPro
         public event Delegates.StringDel OnInputRightClick;
         public event Delegates.JoystickeDel OnJoyCalibrated;
         public event AssignmentCollection.AssignDelegate OnQuickAssign;
+        public ProController CurrentCalibration;
 
         protected Windows.JoyCalibrationWindow _openJoyWindow = null;
         protected bool _rightJoyOpen = false;
@@ -34,6 +35,12 @@ namespace WiinUPro
         public ProControl()
         {
             InitializeComponent();
+            CurrentCalibration = Calibrations.None.ProControllerRaw;
+        }
+
+        public ProControl(ProController currentCalibration) : this()
+        {
+            CurrentCalibration = currentCalibration;
         }
 
         public void ApplyInput(INintrollerState state)
@@ -248,15 +255,18 @@ namespace WiinUPro
         {
             _rightJoyOpen = (sender as FrameworkElement).Tag.Equals("JoyR");
 
-            Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(_rightJoyOpen ? 
-                Calibrations.None.ProControllerRaw.RJoy :
-                Calibrations.None.ProControllerRaw.LJoy);
+            Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(
+                _rightJoyOpen ? Calibrations.None.ProControllerRaw.RJoy : Calibrations.None.ProControllerRaw.LJoy,
+                _rightJoyOpen ? CurrentCalibration.RJoy : CurrentCalibration.LJoy);
             _openJoyWindow = joyCal;
             joyCal.ShowDialog();
 
             if (!joyCal.Cancelled)
             {
                 OnJoyCalibrated?.Invoke(joyCal.Calibration, _rightJoyOpen);
+
+                if (_rightJoyOpen) CurrentCalibration.RJoy = joyCal.Calibration;
+                else CurrentCalibration.LJoy = joyCal.Calibration;
             }
 
             _openJoyWindow = null;

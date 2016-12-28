@@ -57,7 +57,7 @@ namespace WiinUPro
 
         public void UpdateType(ControllerType type)
         {
-            // TODO: Default to unknown
+            // TODO: Default to unknown icon
             string img = "ProController_black_24.png";
 
             switch (type)

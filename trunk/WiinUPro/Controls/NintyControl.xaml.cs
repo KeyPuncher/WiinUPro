@@ -152,7 +152,7 @@ namespace WiinUPro
 #if DEBUG
             else
             {
-                _controller = new ProControl();
+                _controller = new ProControl(Calibrations.Defaults.ProControllerDefault);
                 SetupController();
                 success = true;
             }
@@ -186,7 +186,7 @@ namespace WiinUPro
             {
                 case ControllerType.ProController:
                     // TODO: Discover why this causes an access violation exceptions
-                    _controller = new ProControl();
+                    _controller = new ProControl(Calibrations.Defaults.ProControllerDefault);
                     ((ProControl)_controller).OnJoyCalibrated += (j, rJoy) =>
                     {
                         var currentProCal = _nintroller.StoredCalibrations.ProCalibration;

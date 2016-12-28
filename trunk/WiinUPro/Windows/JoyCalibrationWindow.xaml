@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WiinUPro.Windows"
         xmlns:WiinUPro="clr-namespace:WiinUPro" x:Class="WiinUPro.Windows.JoyCalibrationWindow"
         mc:Ignorable="d"
-        Title="JoyCalibrationWindow" Height="526.79" Width="791.514">
+        Title="JoyCalibrationWindow" Height="578" Width="890">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115*"/>
@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <Viewbox Margin="10,10,10,40" Grid.Row="0" Grid.Column="0">
             <Canvas x:Name="canvas" Width="1200" Height="1200">
-                <Path Margin="100,100" x:Name="rawMax" Height="1000" Width="1000" Fill="#FFEAEAEA">
+                <Path Margin="100,100" x:Name="rawMax" Height="1200" Width="1200" Fill="#FFEAEAEA">
                     <Path.Data>
                         <PathGeometry>
                             <PathFigure x:Name="limitQ1Path" StartPoint="1000,500">
@@ -47,19 +47,19 @@
                 <Ellipse Margin="100,100"  x:Name="raw" Height="10" Width="10" Fill="Red" Canvas.Left="495" Canvas.Top="495"/>
             </Canvas>
         </Viewbox>
-        <GroupBox x:Name="groupLimits" Header="Limits" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="175" Width="298" Grid.Column="1">
+        <GroupBox x:Name="groupLimits" Header="Limits" HorizontalAlignment="Left" Margin="10.5,76,0,0" VerticalAlignment="Top" Height="175" Width="298" Grid.Column="1">
             <Grid>
-                <WiinUPro:NumPicker x:Name="limitYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="100" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
+                <WiinUPro:NumPicker x:Name="limitYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
                 <Label x:Name="label" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="limitYNeg" HorizontalAlignment="Left" Margin="101,106,0,0" VerticalAlignment="Top" Max="100" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
+                <WiinUPro:NumPicker x:Name="limitYNeg" HorizontalAlignment="Left" Margin="101,106,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
                 <Label x:Name="label_Copy" Content="-Y" HorizontalAlignment="Left" Margin="71,106,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="limitXNeg" HorizontalAlignment="Left" Margin="35,59,0,0" VerticalAlignment="Top" Max="100" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
+                <WiinUPro:NumPicker x:Name="limitXNeg" HorizontalAlignment="Left" Margin="35,59,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
                 <Label x:Name="label_Copy1" Content="-X" HorizontalAlignment="Left" Margin="5,59,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="limitXPos" HorizontalAlignment="Left" Margin="167,59,0,0" VerticalAlignment="Top" Max="100" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
+                <WiinUPro:NumPicker x:Name="limitXPos" HorizontalAlignment="Left" Margin="167,59,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
                 <Label x:Name="label_Copy2" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupDeadzone" Header="Deadzone" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" Height="175" Width="298" Grid.Column="1">
+        <GroupBox x:Name="groupDeadzone" Header="Deadzone" HorizontalAlignment="Left" Margin="10.5,256,0,0" VerticalAlignment="Top" Height="175" Width="298" Grid.Column="1">
             <Grid>
                 <WiinUPro:NumPicker x:Name="deadYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
                 <Label x:Name="label1" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top"/>
@@ -71,12 +71,20 @@
                 <Label x:Name="label_Copy5" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>
-        <Label x:Name="label2" Content="Anti-Deadzone" HorizontalAlignment="Left" Margin="10,379,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="103"/>
-        <Slider x:Name="antiDeadzoneSlider" HorizontalAlignment="Left" Margin="60,414,0,0" VerticalAlignment="Top" Width="248" Grid.Column="1" Height="34" TickPlacement="BottomRight" Maximum="50" Interval="1" ValueChanged="antiDeadzoneSlider_ValueChanged" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
-        <Label x:Name="antiDeadzoneLabel" Content="0 %" Grid.Column="1" HorizontalAlignment="Left" Margin="247,379,0,0" VerticalAlignment="Top" Width="61" HorizontalContentAlignment="Right"/>
-        <Button x:Name="acceptBtn" Content="Accept" Grid.Column="1" HorizontalAlignment="Left" Margin="233,466,0,0" VerticalAlignment="Top" Width="75" Click="acceptBtn_Click"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Grid.Column="1" HorizontalAlignment="Left" Margin="140,466,0,0" VerticalAlignment="Top" Width="75" Click="cancelBtn_Click"/>
-        <Label x:Name="xLabel" Content="X: 0%" HorizontalAlignment="Left" Margin="10,463,0,0" VerticalAlignment="Top" Width="59"/>
-        <Label x:Name="yLabel" Content="Y: 0%" HorizontalAlignment="Left" Margin="74,463,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label2" Content="Anti-Deadzone" HorizontalAlignment="Left" Margin="10.5,445,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="102"/>
+        <Slider x:Name="antiDeadzoneSlider" HorizontalAlignment="Left" Margin="60.5,480,0,0" VerticalAlignment="Top" Width="248" Grid.Column="1" Height="34" TickPlacement="BottomRight" Maximum="50" Interval="1" ValueChanged="antiDeadzoneSlider_ValueChanged" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
+        <Label x:Name="antiDeadzoneLabel" Content="0 %" Grid.Column="1" HorizontalAlignment="Left" Margin="247.5,445,0,0" VerticalAlignment="Top" Width="61" HorizontalContentAlignment="Right"/>
+        <Button x:Name="acceptBtn" Content="Accept" Grid.Column="1" HorizontalAlignment="Left" Margin="232.5,0,0,13.5" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Grid.Column="1" HorizontalAlignment="Left" Margin="140.5,0,0,13.5" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click"/>
+        <Label x:Name="xLabel" Content="X: 0%" HorizontalAlignment="Left" Margin="10,0,0,10.5" VerticalAlignment="Bottom" Width="59"/>
+        <Label x:Name="yLabel" Content="Y: 0%" HorizontalAlignment="Left" Margin="74,0,0,10.5" VerticalAlignment="Bottom"/>
+        <GroupBox x:Name="groupCenter" Header="Center" HorizontalAlignment="Left" Margin="10.5,10,0,0" VerticalAlignment="Top" Height="69" Width="298" Grid.Column="1">
+            <Grid>
+                <WiinUPro:NumPicker x:Name="centerX" HorizontalAlignment="Left" Margin="35,9,0,0" VerticalAlignment="Top" Max="4000" Min="-4000" Value="0" OnValueUpdate="CenterXUpdated" Width="100"/>
+                <Label x:Name="label_Copy7" Content="X" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
+                <WiinUPro:NumPicker x:Name="centerY" HorizontalAlignment="Left" Margin="168,8,0,0" VerticalAlignment="Top" Max="4000" Min="-4000" Value="0" OnValueUpdate="CenterYUpdated" Width="100"/>
+                <Label x:Name="label_Copy8" Content="Y" HorizontalAlignment="Left" Margin="146,9,0,0" VerticalAlignment="Top"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>
