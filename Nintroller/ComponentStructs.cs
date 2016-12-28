@@ -252,6 +252,7 @@ namespace NintrollerLib
         public int maxX, maxY;
         public int deadX, deadY;
         public int deadXp, deadXn, deadYp, deadYn;
+        public float antiDeadzone;
 
         public void Calibrate(Joystick calibration)
         {
@@ -289,12 +290,23 @@ namespace NintrollerLib
                 deadYn = calibration.deadYn;
                 deadY = deadYp;
             }
+
+            antiDeadzone = calibration.antiDeadzone;
         }
 
         public void Normalize()
         {
             X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadXp, deadXn);
             Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadYp, deadYn);
+
+            if (antiDeadzone != 0)
+            {
+                if (X != 0)
+                    X = X * (1f - antiDeadzone) + antiDeadzone * Math.Sign(X);
+
+                if (Y != 0)
+                    Y = Y * (1f - antiDeadzone) + antiDeadzone * Math.Sign(Y);
+            }
         }
 
         public override string ToString()
