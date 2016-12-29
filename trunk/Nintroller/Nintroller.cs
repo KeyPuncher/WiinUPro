@@ -1296,8 +1296,11 @@ namespace NintrollerLib
         /// <param name="preset">Preset to be used.</param>
         public void SetCalibration(Calibrations.CalibrationPreset preset)
         {
-            _state.SetCalibration(preset);
-            _calibrations.SetCalibrations(preset);
+            if (_state != null)
+                _state.SetCalibration(preset);
+
+            if (_calibrations != null)
+                _calibrations.SetCalibrations(preset);
         }
         /// <summary>
         /// Sets the device's calibrations based on a string.
@@ -1373,7 +1376,7 @@ namespace NintrollerLib
         {
             _calibrations.ProCalibration = proCalibration;
 
-            if (_currentType == ControllerType.ProController)
+            if (_state != null && _currentType == ControllerType.ProController)
             {
                 _state.SetCalibration(proCalibration);
             }
