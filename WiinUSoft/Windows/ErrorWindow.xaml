@@ -4,7 +4,7 @@
         Title="Application Error" Height="439" Width="436">
     <Grid>
         <Label Content="Uh-oh, something went wrong..." HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="_errorMessage" Content="Message" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="272" IsEnabled="False" Foreground="Black" FontWeight="Bold"/>
+        <Label x:Name="_errorMessage" Content="Message" Margin="10,41,10,0" VerticalAlignment="Top" IsEnabled="False" Foreground="Black" FontWeight="Bold"/>
         <TextBox x:Name="_errorStack" Margin="10,71,8,125" TextWrapping="Wrap" Text="More Info" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" IsReadOnly="True" FontStyle="Italic"/>
         <Button x:Name="_sendBtn" Content="Send" Margin="0,0,8,6" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="_sendBtn_Click"/>
         <Button x:Name="_dontSendBtn" Content="Don't Send" Margin="0,0,97,6" HorizontalAlignment="Right" Width="75" Height="21" VerticalAlignment="Bottom" Click="_dontSendBtn_Click"/>
