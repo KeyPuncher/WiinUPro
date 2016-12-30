@@ -1142,7 +1142,7 @@ namespace NintrollerLib
                 }
                 else if (raw < center)
                 {
-                    actual = raw - (center + deadN);
+                    actual = raw - deadN - center;
                     range = (center + deadN) - min;
                 }
             }

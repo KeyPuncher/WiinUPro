@@ -114,10 +114,10 @@ namespace WiinUPro.Windows
             joy.centerY = _default.centerY + rawYCenter;
 
             // Apply Limits
-            joy.maxX = (int)Math.Round(_default.maxX * (limitXPos.Value / 100d));
-            joy.minX = (int)Math.Round(_default.minX * (limitXNeg.Value / 100d));
-            joy.maxY = (int)Math.Round(_default.maxY * (limitYPos.Value / 100d));
-            joy.minY = (int)Math.Round(_default.minY * (limitYNeg.Value / 100d));
+            joy.maxX = (int)Math.Round((_default.maxX - _default.centerX) * (limitXPos.Value / 100d)) + _default.centerX;
+            joy.minX = _default.centerX - (int)Math.Round((_default.centerX - _default.minX) * (limitXNeg.Value / 100d));
+            joy.maxY = (int)Math.Round((_default.maxY - _default.centerY) * (limitYPos.Value / 100d)) + _default.centerX;
+            joy.minY = _default.centerY - (int)Math.Round((_default.centerY - _default.minY) * (limitYNeg.Value / 100d));
             
             // Apply Deadzone (not symetrical)
             joy.deadXp =  (int)Math.Round((_default.maxX - _default.centerX) * (deadXPos.Value / 100d));
