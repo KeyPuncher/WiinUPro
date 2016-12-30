@@ -52,7 +52,12 @@ namespace WiinUSoft
             WindowState = System.Windows.WindowState.Normal;
         }
 
-        public void ShowBalloon(string title, string message, BalloonIcon icon, SystemSound sound = null)
+        public void ShowBalloon(string title, string message, BalloonIcon icon)
+        {
+            ShowBalloon(title, message, icon, null);
+        }
+
+        public void ShowBalloon(string title, string message, BalloonIcon icon, SystemSound sound)
         {
             //if (trayIcon.Visibility == System.Windows.Visibility.Hidden)
             //    trayIcon.Visibility = System.Windows.Visibility.Visible;

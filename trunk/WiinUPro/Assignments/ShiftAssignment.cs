@@ -159,7 +159,7 @@ namespace WiinUPro
             {
                 foreach (var state in ToggleStates)
                 {
-                    result += state.ToString();
+                    result += state;
                 }
             }
             else

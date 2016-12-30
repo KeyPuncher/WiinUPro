@@ -55,7 +55,7 @@ namespace WiinUPro
 
         public void UpdateVisual(INintrollerState state)
         {
-            if (state.GetType() == typeof(ProController))
+            if (state is ProController)
             {
                 var pro = (ProController)state;
 
