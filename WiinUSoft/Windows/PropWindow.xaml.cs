@@ -13,7 +13,9 @@ namespace WiinUSoft
         public bool customCalibrate = false;
         public Property props;
 
-        public PropWindow(Property org, string defalutName = "")
+        PropWindow(Property org) : this(org, "Controller") { }
+
+        public PropWindow(Property org, string defalutName)
         {
             InitializeComponent();
 

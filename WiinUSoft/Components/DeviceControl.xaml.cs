@@ -456,7 +456,7 @@ namespace WiinUSoft
             holder.SetValue(Inputs.Wiimote.ACC_SHAKE_Z, wm.accelerometer.Z > 1.15);
         }
 
-        private void HolderUpdate(object state)
+        private void HolderUpdate(object holderState)
         {
             if (holder == null) return;
 

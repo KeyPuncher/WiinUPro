@@ -47,7 +47,7 @@ namespace WiinUPro
         //        return _xInstances[index];
         //    }
         //}
-
+                
         public bool Available { get; protected set; }
         public int Instances { get { return _xInstances.Count; } }
 
@@ -63,13 +63,23 @@ namespace WiinUPro
             _deviceStatus = new bool[] { false, false, false, false };
         }
 
-        public void SetButton(X360Button button, bool pressed, XInput_Device device = XInput_Device.Device_A)
+        public void SetButton(X360Button button, bool pressed)
+        {
+            SetButton(button, pressed, XInput_Device.Device_A);
+        }
+
+        public void SetButton(X360Button button, bool pressed, XInput_Device device)
         {
             //this[(int)device].SetInput(button, pressed);
             _xInstances[(int)device - 1].SetInput(button, pressed);
         }
 
-        public void SetAxis(X360Axis axis, float value, XInput_Device device = XInput_Device.Device_A)
+        public void SetAxis(X360Axis axis, float value)
+        {
+            SetAxis(axis, value, XInput_Device.Device_A);
+        }
+
+        public void SetAxis(X360Axis axis, float value, XInput_Device device)
         {
             //this[(int)device].SetInput(axis, value);
             _xInstances[(int)device - 1].SetInput(axis, value);
@@ -99,11 +109,11 @@ namespace WiinUPro
 
             bool result = _deviceStatus[(int)device - 1];
 
-            if (!result)
-            {
+                if (!result)
+                {
                 //result = BusAccess.Instance.Plugin((int)device);
                 result = _xInstances[(int)device - 1].Connect();
-            }
+                }
 
             return result;
         }
@@ -133,9 +143,9 @@ namespace WiinUPro
             //return result;
 
             if (_deviceStatus[(int)device - 1])
-            {
+                {
                 return true;
-            }
+                }
             else
             {
                 //return BusAccess.Instance.Unplug((int)device);
@@ -143,7 +153,7 @@ namespace WiinUPro
             }
         }
 
-        public void Apply(XInput_Device device = XInput_Device.Device_A)
+        public void Apply(XInput_Device device)
         {
             //this[(int)device].Update();
             _xInstances[(int)device - 1].Update();
@@ -154,7 +164,7 @@ namespace WiinUPro
             foreach (var bus in _xInstances)
             {
                 if (bus.PluggedIn)
-                    bus.Update();
+                bus.Update();
             }
         }
 
@@ -175,7 +185,7 @@ namespace WiinUPro
 
             public float LX, LY, LT;
             public float RX, RY, RT;
-            
+
             public bool this[X360Button btn]
             {
                 set
@@ -325,12 +335,12 @@ namespace WiinUPro
             protected BusAccess()
             {
                 App.Current.Exit += App_Exit;
-            }
+        }
 
             private void App_Exit(object sender, System.Windows.ExitEventArgs e)
             {
                 if (_instance != null)
-                {
+        {
                     _instance.Stop();
                     _instance.Close();
                 }
@@ -392,8 +402,8 @@ namespace WiinUPro
                         if (value > tempLX)
                         {
                             tempLX = value;
-                            inputs[axis] = value;
-                        }
+                inputs[axis] = value;
+            }
                         break;
 
                     case X360Axis.LY_Hi:
@@ -468,7 +478,7 @@ namespace WiinUPro
                 // triggers
                 output[(uint)X360Axis.LT] = GetRawTrigger(inputs.LT);
                 output[(uint)X360Axis.RT] = GetRawTrigger(inputs.RT);
-                
+
                 // Left Joystick
                 int rawLX = GetRawAxis(inputs.LX);
                 int rawLY = GetRawAxis(inputs.LY);
