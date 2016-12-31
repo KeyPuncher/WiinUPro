@@ -13,5 +13,6 @@ namespace WiinUPro
     /// </summary>
     public partial class App : Application
     {
+        internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";
     }
 }

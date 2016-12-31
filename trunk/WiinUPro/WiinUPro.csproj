@@ -108,6 +108,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Assignments\AssignmentProfile.cs" />
     <Compile Include="Assignments\IAssignment.cs" />
     <Compile Include="Assignments\KeyboardAssignment.cs" />
     <Compile Include="Assignments\MouseAssignment.cs" />

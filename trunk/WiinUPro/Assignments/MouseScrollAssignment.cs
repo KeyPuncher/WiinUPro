@@ -38,6 +38,8 @@ namespace WiinUPro
         private float _threashold = 0.1f;
         private bool _lastState = false;
         private int _lastApplied = 0;
+
+        public MouseScrollAssignment() { }
         
         public MouseScrollAssignment(Mouse.ScrollDirection dir)
         {

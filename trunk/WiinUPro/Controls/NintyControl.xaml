@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WiinUPro"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" Width="379.266">
     <Grid ContextMenuService.IsEnabled="False">
         <!-- TODO: Remove Connect button, leave up to first tab, 
             when disconnect is pressed remove this tab 
@@ -19,6 +19,8 @@
             <MenuItem Foreground="Blue" Header="Blue" Padding="-24,0,0,0" IsHitTestVisible="False"/>
             <MenuItem Foreground="Green" Header="Green" Padding="-24,0,0,0" IsHitTestVisible="False"/>
         </ComboBox>
+        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click"/>
+        <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnLoad_Click"/>
         <Grid.ContextMenu>
             <ContextMenu x:Name="subMenu">
                 <MenuItem Header="Assign" Click="AssignMenu_Click"/>
