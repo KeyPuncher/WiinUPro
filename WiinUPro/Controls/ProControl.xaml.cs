@@ -261,7 +261,7 @@ namespace WiinUPro
             _openJoyWindow = joyCal;
             joyCal.ShowDialog();
 
-            if (!joyCal.Cancelled)
+            if (joyCal.Apply)
             {
                 OnJoyCalibrated?.Invoke(joyCal.Calibration, _rightJoyOpen);
 

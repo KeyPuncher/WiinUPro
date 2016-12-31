@@ -441,7 +441,7 @@ namespace WiinUPro
 
             win.ShowDialog();
 
-            if (win.Cancelled) return;
+            if (!win.Apply) return;
 
             if (_assignments[ShiftIndex].ContainsKey(key))
             {
