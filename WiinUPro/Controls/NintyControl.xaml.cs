@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 using NintrollerLib;
 using Shared.Windows;
 
@@ -320,6 +322,65 @@ namespace WiinUPro
             //btnConnect.IsEnabled = true;
         }
 
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = _nintroller.Type.ToString() + "_profile";
+            dialog.DefaultExt = ".wup";
+            dialog.Filter = App.PROFILE_FILTER;
+
+            bool? doSave = dialog.ShowDialog();
+
+            if (doSave == true)
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
+
+                using (FileStream stream = File.Create(dialog.FileName))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    serializer.Serialize(writer, new AssignmentProfile(_assignments));
+                    writer.Close();
+                    stream.Close();
+                }
+            }
+        }
+
+        private void btnLoad_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.FileName = _nintroller.Type.ToString() + "_profile";
+            dialog.DefaultExt = ".wup";
+            dialog.Filter = App.PROFILE_FILTER;
+
+            bool? doLoad = dialog.ShowDialog();
+            AssignmentProfile loadedProfile = null;
+
+            if (doLoad == true && dialog.CheckFileExists)
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
+
+                    using (FileStream stream = File.OpenRead(dialog.FileName))
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        loadedProfile = serializer.Deserialize(reader) as AssignmentProfile;
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
+                catch (Exception err)
+                {
+                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                if (loadedProfile != null)
+                {
+                    _assignments = loadedProfile.ToAssignmentArray();
+                }
+            }
+        }
+
         private void AssignMenu_Click(object sender, RoutedEventArgs e)
         {
             InputSelected(_selectedInput);
@@ -468,6 +529,7 @@ namespace WiinUPro
             _currentState = (ShiftState)dropShift.SelectedIndex;
         }
         #endregion
+
     }
 
     public interface INintyControl

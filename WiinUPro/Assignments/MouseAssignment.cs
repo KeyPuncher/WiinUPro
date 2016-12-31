@@ -17,6 +17,8 @@ namespace WiinUPro
 
         //public bool Absolute { get; set; }
 
+        public MouseAssignment() { }
+
         public MouseAssignment(MouseInput inputType) : this(inputType, 1.0f) { }
 
         public MouseAssignment(MouseInput inputType, float rate)

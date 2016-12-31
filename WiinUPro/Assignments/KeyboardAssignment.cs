@@ -47,6 +47,8 @@ namespace WiinUPro
         private bool _lastState = false;
         private int _lastApplied = 0;
 
+        public KeyboardAssignment() { }
+
         public KeyboardAssignment(VirtualKeyCode key)
         {
             KeyCode = key;

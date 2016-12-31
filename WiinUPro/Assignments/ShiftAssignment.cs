@@ -39,6 +39,8 @@ namespace WiinUPro
         private float _threashold = 0.1f;
         private bool _isEnabled = false;
 
+        public ShiftAssignment() { }
+
         public ShiftAssignment(NintyControl control)
         {
             _control = control;
