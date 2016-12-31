@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Serialization;
 using NintrollerLib;
 
 namespace WiinUPro.Windows
@@ -26,25 +28,14 @@ namespace WiinUPro.Windows
         {
             _default = noneCalibration;
             InitializeComponent();
-
-            centerX.Value = prevCalibration.centerX - _default.centerX;
-            centerY.Value = prevCalibration.centerY - _default.centerY;
-            limitXPos.Value = (int)Math.Round(prevCalibration.maxX / (double)_default.maxX * 100d);
-            limitXNeg.Value = (int)Math.Round(prevCalibration.minX / (double)_default.minX * 100d);
-            limitYPos.Value = (int)Math.Round(prevCalibration.maxY / (double)_default.maxY * 100d);
-            limitYNeg.Value = (int)Math.Round(prevCalibration.minY / (double)_default.minY * 100d);
-            deadXPos.Value = (int)Math.Round(prevCalibration.deadXp / (double)(_default.maxX - _default.centerX) * 100d);
-            deadXNeg.Value = -(int)Math.Round(prevCalibration.deadXn / (double)(_default.maxX - _default.centerX) * 100d);
-            deadYPos.Value = (int)Math.Round(prevCalibration.deadYp / (double)(_default.maxY - _default.centerY) * 100d);
-            deadYNeg.Value = -(int)Math.Round(prevCalibration.deadYn / (double)(_default.maxY - _default.centerY) * 100d);
-            antiDeadzoneSlider.Value = Math.Round(prevCalibration.antiDeadzone * 10);
+            Set(prevCalibration);
         }
 
         private void CenterXUpdated(int x)
         {
             rawXCenter = x;
         }
-
+        
         private void CenterYUpdated(int y)
         {
             rawYCenter = y;
@@ -151,15 +142,22 @@ namespace WiinUPro.Windows
             yLabel.Content = string.Format("Y: {0}%", Math.Round(joy.Y * 100));
         }
 
-        private void antiDeadzoneSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        public void Set(Joystick prevCalibration)
         {
-            antiDeadzone.Height = antiDeadzone.Width = e.NewValue * 10;
-            Canvas.SetTop(antiDeadzone, 500 - antiDeadzone.Height / 2);
-            Canvas.SetLeft(antiDeadzone, 500 - antiDeadzone.Width / 2);
-            antiDeadzoneLabel.Content = e.NewValue.ToString() + " %";
+            centerX.Value = prevCalibration.centerX - _default.centerX;
+            centerY.Value = prevCalibration.centerY - _default.centerY;
+            limitXPos.Value = (int)Math.Round(prevCalibration.maxX / (double)_default.maxX * 100d);
+            limitXNeg.Value = (int)Math.Round(prevCalibration.minX / (double)_default.minX * 100d);
+            limitYPos.Value = (int)Math.Round(prevCalibration.maxY / (double)_default.maxY * 100d);
+            limitYNeg.Value = (int)Math.Round(prevCalibration.minY / (double)_default.minY * 100d);
+            deadXPos.Value = (int)Math.Round(prevCalibration.deadXp / (double)(_default.maxX - _default.centerX) * 100d);
+            deadXNeg.Value = -(int)Math.Round(prevCalibration.deadXn / (double)(_default.maxX - _default.centerX) * 100d);
+            deadYPos.Value = (int)Math.Round(prevCalibration.deadYp / (double)(_default.maxY - _default.centerY) * 100d);
+            deadYNeg.Value = -(int)Math.Round(prevCalibration.deadYn / (double)(_default.maxY - _default.centerY) * 100d);
+            antiDeadzoneSlider.Value = Math.Round(prevCalibration.antiDeadzone * 10);
         }
 
-        private void acceptBtn_Click(object sender, RoutedEventArgs e)
+        protected void Convert()
         {
             _joystick = new Joystick();
             _joystick.centerX = _default.centerX + rawXCenter;
@@ -173,7 +171,19 @@ namespace WiinUPro.Windows
             _joystick.deadYp = (int)Math.Round((_default.maxY - _default.centerY) * (deadYPos.Value / 100d));
             _joystick.deadYn = -(int)Math.Round((_default.maxY - _default.centerY) * (deadYNeg.Value / 100d));
             _joystick.antiDeadzone = (float)antiDeadzoneSlider.Value / 10f;
+        }
 
+        private void antiDeadzoneSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            antiDeadzone.Height = antiDeadzone.Width = e.NewValue * 10;
+            Canvas.SetTop(antiDeadzone, 500 - antiDeadzone.Height / 2);
+            Canvas.SetLeft(antiDeadzone, 500 - antiDeadzone.Width / 2);
+            antiDeadzoneLabel.Content = e.NewValue.ToString() + " %";
+        }
+
+        private void acceptBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Convert();
             Apply = true;
             Close();
         }
@@ -181,6 +191,67 @@ namespace WiinUPro.Windows
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void saveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Convert();
+
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = "joystick_calibration";
+            dialog.DefaultExt = ".joy";
+            dialog.Filter = App.JOY_CAL_FILTER;
+
+            bool? doSave = dialog.ShowDialog();
+
+            if (doSave == true)
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Joystick));
+
+                using (FileStream stream = File.Create(dialog.FileName))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    serializer.Serialize(writer, _joystick);
+                    writer.Close();
+                    stream.Close();
+                }
+            }
+        }
+
+        private void loadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.FileName ="joystick_Calibration";
+            dialog.DefaultExt = ".joy";
+            dialog.Filter = App.JOY_CAL_FILTER;
+
+            bool? doLoad = dialog.ShowDialog();
+            Joystick? loadedConfig = null;
+
+            if (doLoad == true && dialog.CheckFileExists)
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Joystick));
+
+                    using (FileStream stream = File.OpenRead(dialog.FileName))
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        loadedConfig = serializer.Deserialize(reader) as Joystick?;
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
+                catch (Exception err)
+                {
+                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                if (loadedConfig != null && loadedConfig.HasValue)
+                {
+                    Set(loadedConfig.Value);
+                }
+            }
         }
     }
 }

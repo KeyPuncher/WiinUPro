@@ -86,5 +86,7 @@
                 <Label x:Name="label_Copy8" Content="Y" HorizontalAlignment="Left" Margin="146,9,0,0" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>
+        <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="432,0,0,10.667" VerticalAlignment="Bottom" Width="76" Click="loadBtn_Click"/>
+        <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="351,0,0,9.667" VerticalAlignment="Bottom" Width="76" Click="saveBtn_Click"/>
     </Grid>
 </Window>
