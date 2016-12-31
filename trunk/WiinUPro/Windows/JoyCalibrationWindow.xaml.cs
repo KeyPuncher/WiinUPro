@@ -103,11 +103,15 @@ namespace WiinUPro.Windows
         public void Update(Joystick joy)
         {
             // Display Raw Value (no deadzone & expected limits)
-            _default.rawX = joy.rawX;
-            _default.rawY = joy.rawY;
-            _default.Normalize();
-            Canvas.SetLeft(raw, 500 * _default.X + 500 - raw.Width / 2);
-            Canvas.SetTop(raw, -500 * _default.Y + 500 - raw.Height / 2);
+            Joystick rawDisplay = new Joystick();
+            rawDisplay.Calibrate(_default);
+            rawDisplay.rawX = joy.rawX;
+            rawDisplay.rawY = joy.rawY;
+            rawDisplay.centerX = _default.centerX + rawXCenter;
+            rawDisplay.centerY = _default.centerY + rawYCenter;
+            rawDisplay.Normalize();
+            Canvas.SetLeft(raw, 500 * rawDisplay.X + 500 - raw.Width / 2);
+            Canvas.SetTop(raw, -500 * rawDisplay.Y + 500 - raw.Height / 2);
 
             // Apply Center
             joy.centerX = _default.centerX + rawXCenter;
