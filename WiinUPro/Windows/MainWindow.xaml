@@ -24,7 +24,7 @@
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,10,4,11">
+                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,10,4.333,0" Height="113" VerticalAlignment="Top">
                         <Grid>
                             <CheckBox x:Name="settingAutoStart" Content="Auto Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                             <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
@@ -32,7 +32,16 @@
                             <CheckBox x:Name="settingToshibaMode" Content="Use Toshiba Mode" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Checked="settingToshibaMode_Checked"/>
                         </Grid>
                     </GroupBox>
-
+                    <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,128,4.333,10.667">
+                        <Grid>
+                            <Button x:Name="btnAddXinput" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Margin="10,10,0,0" Click="btnAddXinput_Click"/>
+                            <Button x:Name="btnRemoveXinput" Content="Remove" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Margin="79,10,0,0" Click="btnRemoveXinput_Click"/>
+                            <Label x:Name="xlabel1" Content="Device 1: Disconnected" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
+                            <Label x:Name="xlabel2" Content="Device 2: Disconnected" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
+                            <Label x:Name="xlabel3" Content="Device 3: Disconnected" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
+                            <Label x:Name="xlabel4" Content="Device 4: Disconnected" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <!-- TODO: Remove Add Tab -->

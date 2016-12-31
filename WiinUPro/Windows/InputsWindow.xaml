@@ -237,8 +237,8 @@
             </TabItem>
             <TabItem Header="Xbox 360">
                 <Grid Background="#FFE5E5E5">
-                    <Button Content="Connect" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click"/>
-                    <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click"/>
+                    <Button Content="Connect" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click" Visibility="Hidden"/>
+                    <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click" Visibility="Hidden"/>
                     <Grid x:Name="xboxGrid">
                         <Image x:Name="xbox" Margin="139,10,0,0" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Controller.png" Width="400" Height="250" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="bg"/>
                         <Image x:Name="xA" Margin="441,148,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360A.png" Width="33" Height="27" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="A" Opacity="0"/>
