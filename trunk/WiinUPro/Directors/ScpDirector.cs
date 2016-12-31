@@ -109,11 +109,11 @@ namespace WiinUPro
 
             bool result = _deviceStatus[(int)device - 1];
 
-                if (!result)
-                {
+            if (!result)
+            {
                 //result = BusAccess.Instance.Plugin((int)device);
                 result = _xInstances[(int)device - 1].Connect();
-                }
+            }
 
             return result;
         }
@@ -151,6 +151,11 @@ namespace WiinUPro
                 //return BusAccess.Instance.Unplug((int)device);
                 return _xInstances[(int)device - 1].Disconnect();
             }
+        }
+
+        public bool IsConnected(XInput_Device device)
+        {
+            return _xInstances[(int)device - 1].PluggedIn;
         }
 
         public void Apply(XInput_Device device)

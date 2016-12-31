@@ -240,5 +240,73 @@ namespace WiinUPro
         {
             WinBtStream.ForceToshibaMode = settingToshibaMode.IsChecked ?? false;
         }
+
+        private void btnAddXinput_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
+            {
+                if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_A))
+                {
+                    btnRemoveXinput.IsEnabled = true;
+                    xlabel1.Content = "Device 1: Connected";
+                }
+            }
+            else if (!ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
+            {
+                if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_B))
+                {
+                    xlabel2.Content = "Device 2: Connected";
+                }
+            }
+            else if (!ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
+            {
+                if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_C))
+                {
+                    xlabel3.Content = "Device 3: Connected";
+                }
+            }
+            else if (!ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
+            {
+                if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_D))
+                {
+                    btnAddXinput.IsEnabled = false;
+                    xlabel4.Content = "Device 4: Connected";
+                }
+            }
+        }
+
+        private void btnRemoveXinput_Click(object sender, RoutedEventArgs e)
+        {
+            if (ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
+            {
+                if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_D))
+                {
+                    btnAddXinput.IsEnabled = true;
+                    xlabel4.Content = "Device 4: Disconnected";
+                }
+            }
+            else if (ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
+            {
+                if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_C))
+                {
+                    xlabel3.Content = "Device 3: Disconnected";
+                }
+            }
+            else if (ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
+            {
+                if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_B))
+                {
+                    xlabel2.Content = "Device 2: Disconnected";
+                }
+            }
+            else if (ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
+            {
+                if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_A))
+                {
+                    btnRemoveXinput.IsEnabled = false;
+                    xlabel1.Content = "Device 1: Disconnected";
+                }
+            }
+        }
     }
 }
