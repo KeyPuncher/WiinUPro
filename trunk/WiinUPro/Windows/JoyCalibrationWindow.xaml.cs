@@ -10,7 +10,7 @@ namespace WiinUPro.Windows
     /// </summary>
     public partial class JoyCalibrationWindow : Window
     {
-        public bool Cancelled { get; protected set; }
+        public bool Apply { get; protected set; }
         public Joystick Calibration { get { return _joystick; } }
 
         protected int rawXCenter, rawYCenter;
@@ -174,12 +174,12 @@ namespace WiinUPro.Windows
             _joystick.deadYn = -(int)Math.Round((_default.maxY - _default.centerY) * (deadYNeg.Value / 100d));
             _joystick.antiDeadzone = (float)antiDeadzoneSlider.Value / 10f;
 
+            Apply = true;
             Close();
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
-            Cancelled = true;
             Close();
         }
     }

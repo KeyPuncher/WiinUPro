@@ -22,7 +22,7 @@ namespace WiinUPro
     public partial class InputsWindow : Window
     {
         public AssignmentCollection Result { get; protected set; }
-        public bool Cancelled { get; protected set; }
+        public bool Apply { get; protected set; }
         public SolidColorBrush keySelectedBrush;
         public SolidColorBrush keyDeselectedBrush;
 
@@ -410,17 +410,18 @@ namespace WiinUPro
                 }
             }
 
+            Apply = true;
             Close();
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
-            Cancelled = true;
             Close();
         }
 
         private void clearBtn_Click(object sender, RoutedEventArgs e)
         {
+            Apply = true;
             Close();
         }
 
