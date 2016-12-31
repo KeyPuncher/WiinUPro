@@ -14,5 +14,6 @@ namespace WiinUPro
     public partial class App : Application
     {
         internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";
+        internal const string JOY_CAL_FILTER = "Joystick Calibration|*.joy";
     }
 }
