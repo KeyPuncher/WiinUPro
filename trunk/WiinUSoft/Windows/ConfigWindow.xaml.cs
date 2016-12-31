@@ -428,7 +428,7 @@ namespace WiinUSoft
             dialog.DefaultExt = ".wsp";
             dialog.Filter = App.PROFILE_FILTER;
 
-            Nullable<bool> doSave = dialog.ShowDialog();
+            bool? doSave = dialog.ShowDialog();
 
             if (doSave == true)
             {
@@ -451,7 +451,7 @@ namespace WiinUSoft
             dialog.DefaultExt = ".wsp";
             dialog.Filter = App.PROFILE_FILTER;
 
-            Nullable<bool> doLoad = dialog.ShowDialog();
+            bool? doLoad = dialog.ShowDialog();
             Profile loadedProfile = null;
 
             if (doLoad == true && dialog.CheckFileExists)
