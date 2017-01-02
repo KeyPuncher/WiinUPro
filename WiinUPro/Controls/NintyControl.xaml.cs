@@ -162,7 +162,7 @@ namespace WiinUPro
             else
             {
                 MessageBox.Show("Could not connect to device!");
-                btnConnect.IsEnabled = true;
+                success = false;
             }
 #endif
             return success;
