@@ -97,6 +97,7 @@ namespace NintrollerLib
 
         public void Normalize()
         {
+            // TODO: Use Cubic (or spherical) deadzone
             X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadX);
             Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadY);
             Z = Nintroller.Normalize(rawZ, minZ, centerZ, maxZ, deadZ);
@@ -296,8 +297,16 @@ namespace NintrollerLib
 
         public void Normalize()
         {
-            X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadXp, deadXn);
-            Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadYp, deadYn);
+            // This is a square deadzone
+            if ((rawX < deadXp && rawX > deadXn) && (rawY < deadYp && rawY > deadYn))
+            {
+                X = 0;
+                Y = 0;
+                return;
+            }
+
+            X = Nintroller.Normalize(rawX, minX, centerX, maxX);//, deadXp, deadXn);
+            Y = Nintroller.Normalize(rawY, minY, centerY, maxY);//, deadYp, deadYn);
 
             if (antiDeadzone != 0)
             {
