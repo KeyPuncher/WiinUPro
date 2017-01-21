@@ -1094,6 +1094,27 @@ namespace NintrollerLib
         #endregion
 
         #region General
+
+        internal static float Normalize(int raw, int min, int center, int max)
+        {
+            if (raw == center) return 0;
+
+            float actual = raw - center;
+            float range = 0;
+
+            if (raw > center)
+            {
+                range = max - center;
+            }
+            else
+            {
+                range = center - min;
+            }
+
+            if (range == 0) return 0;
+
+            return actual / range;
+        }
         
         internal static float Normalize(int raw, int min, int center, int max, int dead)
         {
