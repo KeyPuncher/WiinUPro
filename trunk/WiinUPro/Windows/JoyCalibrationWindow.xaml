@@ -30,7 +30,8 @@
                     </Path.Data>
                 </Path>
                 <Ellipse Margin="100,100"  x:Name="soutMax" Height="1000" Stroke="#FF515151" Width="1000"/>
-                <Path Margin="100,100"  x:Name="rawDeadzone" Height="1000" Width="1000" Fill="#FFA6A6A6">
+                <Rectangle Margin="550,550" x:Name="rawDeadzoneSqr" Height="100" Width="100" Fill="#FFA6A6A6"/>
+                <Path Margin="100,100"  x:Name="rawDeadzone" Height="1000" Width="1000" Fill="#FFA6A6A6" Visibility="Hidden">
                     <Path.Data>
                         <PathGeometry>
                             <PathFigure x:Name="deadQ1Path" StartPoint="550,500">

@@ -89,6 +89,11 @@ namespace WiinUPro.Windows
             deadQ2Arc.Size = new Size(500 - left, 500 - top);
             deadQ3Arc.Size = new Size(500 - left, bottom - 500);
             deadQ4Arc.Size = new Size(right - 500, bottom - 500);
+
+            // Square
+            rawDeadzoneSqr.Width = Math.Max((deadXPos.Value + deadXNeg.Value) * 5, 1);
+            rawDeadzoneSqr.Height = Math.Max((deadYPos.Value + deadYNeg.Value) * 5, 1);
+            rawDeadzoneSqr.Margin = new Thickness(600 - Math.Max(deadXNeg.Value * 5, 1), 600 - Math.Max(deadYPos.Value * 5, 1), 0, 0);
         }
 
         public void Update(Joystick joy)
