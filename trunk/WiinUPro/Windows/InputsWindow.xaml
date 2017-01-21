@@ -161,6 +161,7 @@
                     <Slider x:Name="keyTurboRate" HorizontalAlignment="Left" Margin="167,291,0,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="5" SmallChange="1" TickPlacement="BottomRight" IsDirectionReversed="True" IsSnapToTickEnabled="True"/>
                     <Label x:Name="label" Content="Turbo Rate" HorizontalAlignment="Left" Margin="85,286,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="keyInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="396,292,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="detectBox" HorizontalAlignment="Left" Height="23" Margin="730,289,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="184" IsReadOnly="True" KeyDown="detectBox_KeyDown"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Mouse">
