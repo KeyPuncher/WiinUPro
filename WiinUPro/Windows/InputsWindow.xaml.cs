@@ -464,7 +464,6 @@ namespace WiinUPro
         private void detectBox_KeyDown(object sender, KeyEventArgs e)
         {
             var detectedKey = ToVK(e.Key);
-            System.Diagnostics.Debug.WriteLine(ToVK(e.Key));
             
             if (detectedKey == null)
             {
@@ -473,6 +472,8 @@ namespace WiinUPro
             else
             {
                 detectBox.Text = "Detected key " + detectedKey.ToString().Replace("VK_", "").Replace("K_", "");
+                var btn = keyboardGrid.Children.OfType<Button>().Where(x => x.Tag.ToString() == detectedKey.ToString()).FirstOrDefault();
+                ToggleKey(btn, null);
             }
         }
 
