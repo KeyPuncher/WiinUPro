@@ -97,7 +97,15 @@ namespace NintrollerLib
 
         public void Normalize()
         {
-            // TODO: Use Cubic (or spherical) deadzone
+            // Cubic deadzone
+            if (Math.Abs(rawX) < deadX && Math.Abs(rawY) < deadY && Math.Abs(rawZ) < deadZ)
+            {
+                X = 0;
+                Y = 0;
+                Z = 0;
+                return;
+            }
+
             X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadX);
             Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadY);
             Z = Nintroller.Normalize(rawZ, minZ, centerZ, maxZ, deadZ);
