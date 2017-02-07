@@ -606,8 +606,9 @@ namespace NintrollerLib
                             //_led4 = (report[3] & 0x80) != 0;
 
                             // Extension/Type
+                            // Not relyable for Pro Controller U
                             bool ext = (report[3] & 0x02) != 0;
-                            if (ext)
+                            if (ext || true)
                             {
                                 //lock (_readingObj)
                                 //{
