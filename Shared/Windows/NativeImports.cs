@@ -188,6 +188,136 @@ namespace Shared.Windows
 
         #endregion
 
+        #region bthprops.cpl & irprops.cpl
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern UInt32 BluetoothGetRadioInfo(IntPtr hRadio, ref Bluetooth_Radio_Info pRadioInfo);
+
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern IntPtr BluetoothFindFirstRadio(ref Bluetooth_Find_Radio_Params pbtfrp, out IntPtr phRadio);
+
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern bool BluetoothFindNextRadio(ref Bluetooth_Find_Radio_Params hFind, out IntPtr phRadio);
+
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern bool BluetoothFindRadioClose(ref IntPtr hFind);
+
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern IntPtr BluetoothFindFirstDevice(ref BLUETOOTH_DEVICE_SEARCH_PARAMS searchParams, ref BluetoothDeviceInfo deviceInfo);
+
+        [DllImport("Irprops.cpl", SetLastError = true)]
+        public static extern bool BluetoothFindNextDevice(IntPtr hFind, ref BluetoothDeviceInfo pbtdi);
+
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern uint BluetoothRemoveDevice(ref UInt64 pAddress);
+
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern uint BluetoothAuthenticateDevice(IntPtr hwndParent, IntPtr hRadio, ref BluetoothDeviceInfo pbtdi, [MarshalAs(UnmanagedType.LPWStr)]string pszPasskey, ulong ulPasskeyLength);
+
+        [DllImport("bthprops.cpl", SetLastError = true)]
+        //[DllImport("irprops.cpl", SetLastError = true)]
+        public static extern uint BluetoothAuthenticateDeviceEx(
+            IntPtr hwndParentIn, 
+            IntPtr hRadioIn, 
+            ref BluetoothDeviceInfo pbtdiInout, 
+            /*BLUETOOTH_OOB_DATA*/ object pbtOobData, 
+            uint authenticationRequirement);
+
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern uint BluetoothEnumerateInstalledServices(IntPtr hRadio, ref BluetoothDeviceInfo pbtdi, ref uint pcServices, Guid[] pGuidServices);
+
+        [DllImport("irprops.cpl", SetLastError = true)]
+        public static extern uint BluetoothSetServiceState(IntPtr hRadio, ref BluetoothDeviceInfo pbtdi, ref Guid pGuidService, byte dwServiceFlags);
+
+        [DllImportAttribute("irprops.cpl", EntryPoint = "BluetoothEnableDiscovery", SetLastError = true)]
+        [return: MarshalAsAttribute(UnmanagedType.Bool)]
+        public static extern bool BluetoothEnableDiscovery(
+            IntPtr hRadio,
+            [MarshalAsAttribute(UnmanagedType.Bool)] bool fEnabled);
+
+        public enum AUTHENTICATION_REQUIREMENTS
+        {
+            MITMProtectionNotRequired = 0x00,
+            MITMProtectionRequired = 0x01,
+            MITMProtectionNotRequiredBonding = 0x02,
+            MITMProtectionRequiredBonding = 0x03,
+            MITMProtectionNotRequiredGeneralBonding = 0x04,
+            MITMProtectionRequiredGeneralBonding = 0x05,
+            MITMProtectionNotDefined = 0xff
+        };
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct BluetoothDeviceInfo
+        {
+            public UInt32 dwSize;
+            public UInt64 Address;
+            public uint ulClassofDevice;
+            public bool fConnected;
+            public bool fRemembered;
+            public bool fAuthenticated;
+            public SYSTEMTIME stLastSeen;
+            public SYSTEMTIME stLastUsed;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 248)]
+            public string szName;
+
+            public void Initialize()
+            {
+                this.dwSize = (uint)Marshal.SizeOf(typeof(BluetoothDeviceInfo));
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SYSTEMTIME
+        {
+            [MarshalAs(UnmanagedType.U2)]
+            public short Year;
+            [MarshalAs(UnmanagedType.U2)]
+            public short Month;
+            [MarshalAs(UnmanagedType.U2)]
+            public short DayOfWeek;
+            [MarshalAs(UnmanagedType.U2)]
+            public short Day;
+            [MarshalAs(UnmanagedType.U2)]
+            public short Hour;
+            [MarshalAs(UnmanagedType.U2)]
+            public short Minute;
+            [MarshalAs(UnmanagedType.U2)]
+            public short Second;
+            [MarshalAs(UnmanagedType.U2)]
+            public short Milliseconds;
+
+            public SYSTEMTIME(DateTime dt)
+            {
+                dt = dt.ToUniversalTime();  // SetSystemTime expects the SYSTEMTIME in UTC
+                Year = (short)dt.Year;
+                Month = (short)dt.Month;
+                DayOfWeek = (short)dt.DayOfWeek;
+                Day = (short)dt.Day;
+                Hour = (short)dt.Hour;
+                Minute = (short)dt.Minute;
+                Second = (short)dt.Second;
+                Milliseconds = (short)dt.Millisecond;
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct BLUETOOTH_DEVICE_SEARCH_PARAMS
+        {
+            internal UInt32 dwSize;
+            internal bool fReturnAuthenticated;
+            internal bool fReturnRemembered;
+            internal bool fReturnUnknown;
+            internal bool fReturnConnected;
+            internal bool fIssueInquiry;
+            internal byte cTimeoutMultiplier;
+            internal IntPtr hRadio;
+
+            internal void Initialize()
+            {
+                this.dwSize = (uint)Marshal.SizeOf(typeof(BLUETOOTH_DEVICE_SEARCH_PARAMS));
+            }
+        }
+        #endregion
+
         #region Structures
 
         // Used for BT Stack detection
@@ -231,11 +361,50 @@ namespace Shared.Windows
             public short ProductID;
             public short VersionNumber;
         }
+        
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Bluetooth_Find_Radio_Params
+        {
+            internal UInt32 dwSize;
+            internal void Initialize()
+            {
+                this.dwSize = (UInt32)Marshal.SizeOf(typeof(Bluetooth_Find_Radio_Params));
+            }
+        }
 
+        private const int BLUETOOTH_MAX_NAME_SIZE = 248;
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct Bluetooth_Radio_Info
+        {
+            internal UInt32 dwSize;
+            internal UInt64 address;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = BLUETOOTH_MAX_NAME_SIZE)]
+            internal string szName;
+            internal UInt32 ulClassOfDevice;
+            internal UInt16 lmpSubversion;
+            internal UInt16 manufacturer;
+
+            public string Address
+            {
+                get
+                {
+                    var bytes = BitConverter.GetBytes(address);
+                    StringBuilder str = new StringBuilder();
+                    for (int i = bytes.Length - 1; i >= 0; i--)
+                        str.Append(bytes[i].ToString("X2"));
+                    return str.ToString();
+                }
+            }
+
+            internal void Initialize()
+            {
+                this.dwSize = (UInt32)Marshal.SizeOf(typeof(Bluetooth_Radio_Info));
+            }
+        }
         #endregion
 
         #region Flags
-        
+
         /// <summary>
         /// Provided to SetupDiGetClassDevs to specify what to included in the device information
         /// </summary>
