@@ -34,6 +34,8 @@ namespace WiinUSoft
             InitializeComponent();
 
             Instance = this;
+
+            //Test();
         }
 
         public void HideWindow()
@@ -279,6 +281,11 @@ namespace WiinUSoft
             UserPrefs.SavePrefs();
         }
 
+        private void menu_SetDefaultCalibration_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         #region Shortcut Creation
         public void CreateShortcut(string path)
         {
@@ -322,6 +329,162 @@ namespace WiinUSoft
             void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
         }
         #endregion
+
+        public void Test()
+        {
+            Guid HumanInterfaceDeviceServiceClass_UUID = Guid.Parse("{0x00001124,0x0000,0x1000,{0x80,0x00,0x00,0x80,0x5F,0x9B,0x34,0xFB}}");
+
+            IntPtr[] hRadios = new IntPtr[256];
+            int nRadios;
+            int nPaired = 0;
+
+            // Enumerate BT radios
+            IntPtr hFindRadio;
+            NativeImports.Bluetooth_Find_Radio_Params radioParam;
+
+            System.Diagnostics.Debug.WriteLine("Enumerating radios..");
+            radioParam = new NativeImports.Bluetooth_Find_Radio_Params();
+            radioParam.Initialize();
+
+            nRadios = 0;
+            hFindRadio = NativeImports.BluetoothFindFirstRadio(ref radioParam, out hRadios[nRadios++]);
+            
+            /*
+            if (hFindRadio != IntPtr.Zero)
+            {
+                System.Diagnostics.Debug.WriteLine("Found Radio");
+                while (NativeImports.BluetoothFindNextRadio(ref radioParam, out hRadios[nRadios++])) ;
+                NativeImports.BluetoothFindRadioClose(ref hFindRadio);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Done Looking");
+            }
+
+            nRadios--;
+            */
+            System.Diagnostics.Debug.WriteLine(string.Format("Found {0} Radios", nRadios));
+
+            if (hFindRadio != IntPtr.Zero)
+            {
+                while (nPaired == 0)
+                {
+                    int radio;
+
+                    for (radio = 0; radio < nRadios; radio++)
+                    {
+                        NativeImports.Bluetooth_Radio_Info radioInfo;
+                        IntPtr hFind;
+                        NativeImports.BluetoothDeviceInfo btdi;
+                        NativeImports.BLUETOOTH_DEVICE_SEARCH_PARAMS srch;
+
+                        radioInfo = new NativeImports.Bluetooth_Radio_Info();
+                        radioInfo.Initialize();
+                        btdi = new NativeImports.BluetoothDeviceInfo();
+                        btdi.Initialize();
+                        srch = new NativeImports.BLUETOOTH_DEVICE_SEARCH_PARAMS();
+                        srch.Initialize();
+
+                        var err = NativeImports.BluetoothGetRadioInfo(hRadios[radio], ref radioInfo);
+                        System.Diagnostics.Debug.WriteLine("Bluetooth Get Radio Info Exited with error code: " + err.ToString());
+
+                        System.Diagnostics.Debug.WriteLine(string.Format("Radio {0}: {1} {2}", radio, radioInfo.szName, radioInfo.Address));
+
+                        srch.fReturnAuthenticated = true;
+                        srch.fReturnRemembered = true;
+                        srch.fReturnConnected = true;
+                        srch.fReturnUnknown = true;
+                        srch.fIssueInquiry = true;
+                        srch.cTimeoutMultiplier = 2;
+                        srch.hRadio = hRadios[radio];
+
+                        System.Diagnostics.Debug.WriteLine("Scanning");
+                        
+                        hFind = NativeImports.BluetoothFindFirstDevice(ref srch, ref btdi);
+
+                        if (hFind == IntPtr.Zero)
+                        {
+                            System.Diagnostics.Debug.WriteLine("No Devices Found");
+                        }
+                        else
+                        {
+                            do
+                            {
+                                System.Diagnostics.Debug.WriteLine("Found: " + btdi.szName);
+                                System.Diagnostics.Debug.WriteLine(radioInfo.Address);
+
+                                if (btdi.szName.Contains("Nintendo RVL-CNT-01") || btdi.szName.Contains("Nintendo RVL-WBC-01"))
+                                {
+                                    StringBuilder pass = new StringBuilder();
+                                    uint pcServices = 16;
+                                    Guid[] guids = new Guid[16];
+                                    bool error = false;
+
+                                    if (!error)
+                                    {
+                                        if (btdi.fRemembered)
+                                        {
+                                            // Make Windows forget pairing
+                                            var eCode = NativeImports.BluetoothRemoveDevice(ref btdi.Address);
+                                            error = eCode == 0;
+                                        }
+                                    }
+
+                                    // MAC address is passphrase
+                                    var bytes = BitConverter.GetBytes(radioInfo.address);
+                                    pass.Append((char)bytes[0]);
+                                    pass.Append((char)bytes[1]);
+                                    pass.Append((char)bytes[2]);
+                                    pass.Append((char)bytes[3]);
+                                    pass.Append((char)bytes[4]);
+                                    pass.Append((char)bytes[5]);
+
+                                    //System.Diagnostics.Debug.WriteLine("Password Copied to cliboard " + pass.ToString());
+                                    //Clipboard.SetText(pass.ToString());
+
+                                    if (!error)
+                                    {
+                                        // Pair
+                                        var ePair = NativeImports.BluetoothAuthenticateDevice(IntPtr.Zero, hRadios[radio], ref btdi, pass.ToString(), 6);
+                                        //var ePair = NativeImports.BluetoothAuthenticateDeviceEx(IntPtr.Zero, hRadios[radio], ref btdi, null, 0x00);
+                                        error = ePair != 0;
+                                        System.Diagnostics.Debug.WriteLine("Authed: " + error);
+                                    }
+
+                                    if (!error)
+                                    {
+                                        var eServ = NativeImports.BluetoothEnumerateInstalledServices(hRadios[radio], ref btdi, ref pcServices, guids);
+                                        error = eServ != 0;
+                                        System.Diagnostics.Debug.WriteLine("Services Installed: " + error);
+                                    }
+
+                                    if (!error)
+                                    {
+                                        // Activate Service
+                                        var eAct = NativeImports.BluetoothSetServiceState(hRadios[radio], ref btdi, ref HumanInterfaceDeviceServiceClass_UUID, 0x01);
+                                        error = eAct != 0;
+                                        System.Diagnostics.Debug.WriteLine("Activated Service: " + error);
+                                    }
+
+                                    if (!error)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("Paired Device!");
+                                        nPaired++;
+                                    }
+                                }
+
+                            } while (NativeImports.BluetoothFindNextDevice(hFind, ref btdi));
+                        }
+                    }
+                }
+
+                // Clean up
+                for (var r = 0; r < nRadios; r++)
+                {
+                    NativeImports.CloseHandle(hRadios[r]);
+                }
+            }
+        }
     }
 
     class ShowWindowCommand : ICommand
