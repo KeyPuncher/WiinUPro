@@ -21,7 +21,7 @@ namespace WiinUPro
             Access.Available = true;
         }
         #endregion
-
+        
         protected List<XInputBus> _xInstances;
         protected bool[] _deviceStatus;
 
@@ -93,25 +93,10 @@ namespace WiinUPro
         /// <returns>If all connections are successful.</returns>
         public bool ConnectDevice(XInput_Device device)
         {
-            //bool result = false;
-
-            //for (int i = (int)XInput_Device.Device_A; i <= (int)device; i++)
-            //{
-            //    result = this[i].Connect();
-            //
-            //    if (!result)
-            //    {
-            //        return false;
-            //    }
-            //}
-
-            //return result;
-
             bool result = _deviceStatus[(int)device - 1];
 
             if (!result)
             {
-                //result = BusAccess.Instance.Plugin((int)device);
                 result = _xInstances[(int)device - 1].Connect();
             }
 
@@ -126,29 +111,12 @@ namespace WiinUPro
         /// <returns>If all devices were disconnected</returns>
         public bool DisconnectDevice(XInput_Device device)
         {
-            //bool result = false;
-            //
-            //for (int i = _xInstances.Count - 1; i >= (int)device; i--)
-            //{
-            //    result = this[i].Disconnect();
-            //
-            //    if (!result)
-            //    {
-            //        return false;
-            //    }
-            //
-            //    _xInstances.RemoveAt(i);
-            //}
-            //
-            //return result;
-
             if (_deviceStatus[(int)device - 1])
-                {
+            {
                 return true;
-                }
+            }
             else
             {
-                //return BusAccess.Instance.Unplug((int)device);
                 return _xInstances[(int)device - 1].Disconnect();
             }
         }
@@ -171,6 +139,11 @@ namespace WiinUPro
                 if (bus.PluggedIn)
                 bus.Update();
             }
+        }
+
+        public void SetModifier(int value)
+        {
+            XInputBus.Modifier = value;
         }
 
         public enum XInput_Device : int
@@ -354,12 +327,19 @@ namespace WiinUPro
 
         protected class XInputBus
         {
+            public static int Modifier;
+
             public XInputState inputs;
-            public int ID { get; protected set; }
+            public int ID
+            {
+                get { return _id + Modifier; }
+                protected set { _id = value; }
+            }
             public bool PluggedIn { get; protected set; }
 
             protected BusAccess busRef;
 
+            private int _id;
             private float tempLX = -10;
             private float tempLY = -10;
             private float tempRX = -10;
