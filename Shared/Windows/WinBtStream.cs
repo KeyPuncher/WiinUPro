@@ -72,6 +72,9 @@ namespace Shared.Windows
         static WinBtStream()
         {
             AssociatedStack = new Dictionary<string, BtStack>();
+            
+            // When true, Windows Stack is enabled
+            var a = BluetoothEnableDiscovery(IntPtr.Zero, true);
         }
 
         public WinBtStream(string path)
