@@ -43,6 +43,17 @@ namespace WiinUPro
             keySelectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xBF, 0x5F, 0x0F));
             keyDeselectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD));
 
+            vJoyOffLabel.Visibility = VJoyDirector.Access.Available ? Visibility.Collapsed : Visibility.Visible;
+            if (vJoyOffLabel.Visibility == Visibility.Collapsed && VJoyDirector.Access.Devices.Count > 0)
+            {
+                foreach (var joyDevice in VJoyDirector.Access.Devices)
+                {
+                    joystickSelection.Items.Add("Joystick " + joyDevice.ID);
+                }
+
+                joystickSelection.SelectedIndex = 0;
+            }
+
             _selectedKeys = new List<VirtualKeyCode>();
             _selectedMouseDirections = new List<MouseInput>();
             _selectedMouseButtons = new List<InputManager.Mouse.MouseKeys>();
@@ -151,6 +162,11 @@ namespace WiinUPro
                     deviceSelection.SelectedIndex = (int)(item as XInputAxisAssignment).Device - 1;
                 }
             }
+        }
+
+        private void SetupJoystick(uint id)
+        {
+
         }
 
         // This is meant to change what selections are made for each XInput device (a, b, c, d)
@@ -663,6 +679,11 @@ namespace WiinUPro
             }
 
             return null;
+        }
+
+        private void joystickSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetupJoystick(VJoyDirector.Access.Devices[joystickSelection.SelectedIndex].ID);
         }
     }
 }
