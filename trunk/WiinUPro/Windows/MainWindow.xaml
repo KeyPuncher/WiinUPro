@@ -18,13 +18,13 @@
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <GroupBox x:Name="deviceGroup" Header="Devices" HorizontalAlignment="Left" Margin="10,10,0,11" Width="252">
+                    <GroupBox x:Name="deviceGroup" Header="Devices" HorizontalAlignment="Left" Margin="10,26,0,8" Width="252">
                         <Grid>
                             <StackPanel x:Name="statusStack">
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,10,4.333,0" Height="113" VerticalAlignment="Top">
+                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,26,4,0" Height="108" VerticalAlignment="Top">
                         <Grid>
                             <CheckBox x:Name="settingAutoStart" Content="Auto Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                             <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
@@ -32,7 +32,7 @@
                             <CheckBox x:Name="settingToshibaMode" Content="Use Toshiba Mode" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Checked="settingToshibaMode_Checked"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,128,4.333,10.667">
+                    <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,131,4,8">
                         <Grid>
                             <Button x:Name="btnAddXinput" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Margin="10,10,0,0" Click="btnAddXinput_Click"/>
                             <Button x:Name="btnRemoveXinput" Content="Remove" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Margin="79,10,0,0" Click="btnRemoveXinput_Click"/>
@@ -42,6 +42,8 @@
                             <Label x:Name="xlabel4" Content="Device 4: Disconnected" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
                         </Grid>
                     </GroupBox>
+                    <Button x:Name="btnSync" Content="Sync" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="36" Click="btnSync_Click"/>
+                    <Label x:Name="label" Content="(Windows BT Stack Only)" HorizontalAlignment="Left" Margin="51,0,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <!-- TODO: Remove Add Tab -->
