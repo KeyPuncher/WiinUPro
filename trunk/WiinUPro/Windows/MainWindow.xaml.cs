@@ -245,7 +245,15 @@ namespace WiinUPro
         {
             if (!ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
             {
-                if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_A))
+                bool connected = false;
+                for (int i = 0; i < 4; i++)
+                {
+                    ScpDirector.Access.SetModifier(i);
+                    connected = ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_A);
+                    if (connected) break;
+                }
+
+                if (connected)
                 {
                     btnRemoveXinput.IsEnabled = true;
                     xlabel1.Content = "Device 1: Connected";
