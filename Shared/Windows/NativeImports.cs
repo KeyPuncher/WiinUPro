@@ -10,6 +10,8 @@ namespace Shared.Windows
 {
     public static class NativeImports
     {
+        public const string HID_GUID = "{0x00001124,0x0000,0x1000,{0x80,0x00,0x00,0x80,0x5F,0x9B,0x34,0xFB}}";
+
         #region kernel32.dll
 
         /// <summary>
