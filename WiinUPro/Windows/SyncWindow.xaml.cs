@@ -178,8 +178,14 @@ namespace WiinUPro.Windows
             t.Start();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            cancelled = true;
+        }
+
+        private void cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Prompt("Cancelling");
             cancelled = true;
         }
     }
