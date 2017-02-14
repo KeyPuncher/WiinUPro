@@ -136,7 +136,7 @@ namespace WiinUPro
                 // We need a function we can await for the type to come back
                 // But the hint type may be present
                 CreateController(_nintroller.Type);
-
+                
                 if (_controller != null)
                 {
                     SetupController();
@@ -150,8 +150,10 @@ namespace WiinUPro
                     //success = false;
                     success = true;
                 }
+
+                _nintroller.Disconnected += _nintroller_Disconnected;
             }
-#if DEBUG
+#if DEBUGz
             else
             {
                 _controller = new ProControl(Calibrations.Defaults.ProControllerDefault);
@@ -161,7 +163,7 @@ namespace WiinUPro
 #else
             else
             {
-                MessageBox.Show("Could not connect to device!");
+                //MessageBox.Show("Could not connect to device!");
                 success = false;
             }
 #endif
@@ -228,6 +230,15 @@ namespace WiinUPro
         private void _nintroller_LowBattery(object sender, LowBatteryEventArgs e)
         {
             // Indicate that this controller's battery is low
+        }
+
+        private void _nintroller_Disconnected(object sender, DisconnectedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                Disconnect();
+                MessageBox.Show("Lost Controller Connection");
+            }));
         }
 
         private void _nintroller_ExtensionChange(object sender, NintrollerExtensionEventArgs e)
