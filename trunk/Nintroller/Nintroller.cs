@@ -14,6 +14,7 @@ namespace NintrollerLib
         public event EventHandler<NintrollerStateEventArgs>     StateUpdate     = delegate { };
         public event EventHandler<NintrollerExtensionEventArgs> ExtensionChange = delegate { };
         public event EventHandler<LowBatteryEventArgs>          LowBattery      = delegate { };
+        public event EventHandler<DisconnectedEventArgs>        Disconnected    = delegate { };
         
         // General
         [Obsolete]
@@ -415,6 +416,12 @@ namespace NintrollerLib
                     {
                         Log("Can't read, the stream was disposed");
                     }
+                    catch (IOException e)
+                    {
+                        Log("Error Begining Read, is it not connected?");
+                        StopReading();
+                        Disconnected?.Invoke(this, new DisconnectedEventArgs(e));
+                    }
                 }
             }
         }
@@ -441,6 +448,12 @@ namespace NintrollerLib
             catch (OperationCanceledException)
             {
                 Log("Async Read Was Cancelled");
+            }
+            catch (IOException e)
+            {
+                Log("IO Error, is the device not connected?");
+                StopReading();
+                Disconnected?.Invoke(this, new DisconnectedEventArgs(e));
             }
         }
 
@@ -1302,6 +1315,9 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Stop reading from the device
+        /// </summary>
         public void StopReading()
         {
             _reading = false;
@@ -1440,6 +1456,16 @@ namespace NintrollerLib
         public LowBatteryEventArgs(BatteryStatus level)
         {
             batteryLevel = level;
+        }
+    }
+
+    public class DisconnectedEventArgs : EventArgs
+    {
+        public Exception error;
+
+        public DisconnectedEventArgs(Exception err)
+        {
+            error = err;
         }
     }
 
