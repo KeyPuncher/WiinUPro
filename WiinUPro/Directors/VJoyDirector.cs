@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using vJoyInterfaceWrap;
 
 namespace WiinUPro
 {
@@ -14,14 +15,78 @@ namespace WiinUPro
         {
             Access = new VJoyDirector();
         }
+        
+        public bool Available
+        {
+            get
+            {
+                uint verDll = 0;
+                uint verDriver = 0;
+                return _interface.vJoyEnabled() && _interface.DriverMatch(ref verDll, ref verDriver);
+            }
+        }
+
+        public int ControllerCount { get { return _devices.Count; } }
+
+        public List<JoyDevice> Devices { get { return _devices; } }
+
+        protected static vJoy _interface;
+        protected List<JoyDevice> _devices;
 
         public VJoyDirector()
         {
-            // TODO Director: Initilize vJoy
+            _interface = new vJoy();
+            _devices = new List<JoyDevice>();
+
+            if (Available)
+            {
+                for (uint i = 1; i <= 16; i++)
+                {
+                    if (_interface.isVJDExists(i))
+                    {
+                        var status = _interface.GetVJDStatus(i);
+
+                        if (status == VjdStat.VJD_STAT_FREE || status == VjdStat.VJD_STAT_OWN)
+                        {
+                            _devices.Add(new JoyDevice(i));
+                        }
+                    }
+                }
+            }
         }
 
-        public bool Available { get; protected set; }
+        public class JoyDevice
+        {
+            public uint ID { get; protected set; }
+            public int Buttons { get; protected set; }
+            public int POVs { get; protected set; }
+            public int POV4Ds { get; protected set; }
+            public bool hasX { get; protected set; }
+            public bool hasY { get; protected set; }
+            public bool hasZ { get; protected set; }
+            public bool hasRx { get; protected set; }
+            public bool hasRy { get; protected set; }
+            public bool hasRz { get; protected set; }
+            public bool hasSlider { get; protected set; }
+            public bool hasSlider2 { get; protected set; }
+            public bool ForceFeedback { get; protected set; }
 
-        public int ControllerCount { get; protected set; }
+            public JoyDevice(uint id)
+            {
+                ID            = id;
+                Buttons       = _interface.GetVJDButtonNumber(id);
+                POVs          = _interface.GetVJDContPovNumber(id);
+                POV4Ds        = _interface.GetVJDDiscPovNumber(id);
+                hasX          = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_X);
+                hasY          = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_Y);
+                hasZ          = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_Z);
+                hasRx         = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RX);
+                hasRy         = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RY);
+                hasRz         = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_RZ);
+                hasSlider     = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_SL0);
+                hasSlider2    = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_SL1);
+                ForceFeedback = _interface.IsDeviceFfb(id);
+            }
+        }
     }
 }
