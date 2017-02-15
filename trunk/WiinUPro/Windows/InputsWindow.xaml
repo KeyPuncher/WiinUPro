@@ -342,23 +342,18 @@
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="vJoyOffLabel" Content="vJoy is not available" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
                     <ComboBox x:Name="joystickSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="joystickSelection_SelectionChanged"/>
-                    <StackPanel HorizontalAlignment="Left" Height="272" Margin="10,37,0,0" VerticalAlignment="Top" Width="902" Orientation="Horizontal">
-                        <GroupBox x:Name="joyBtnGroup" Header="Buttons" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254">
-                            <WrapPanel Margin="0,10,0,-12">
-                                <Button Content="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="X-"/>
+                    <StackPanel x:Name="groupStack" HorizontalAlignment="Left" Height="272" Margin="10,37,0,0" VerticalAlignment="Top" Width="902" Orientation="Horizontal">
+                        <GroupBox x:Name="joyBtnGroup" Header="Buttons" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed">
+                            <WrapPanel x:Name="buttonsWrap" Margin="0,10,0,-12" ItemHeight="50" ItemWidth="50">
                             </WrapPanel>
                         </GroupBox>
-                        <GroupBox x:Name="joyAxisGroup" Header="Axis" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254">
-                            <Grid>
-                                <Button Content="-X" HorizontalAlignment="Left" Margin="24,25,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="X-"/>
-                                <Button Content="X+" HorizontalAlignment="Left" Margin="82,25,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="X+"/>
-                            </Grid>
+                        <GroupBox x:Name="joyAxisGroup" Header="Axis" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed">
+                            <StackPanel x:Name="axisStack" VerticalAlignment="Top">
+                            </StackPanel>
                         </GroupBox>
-                        <GroupBox x:Name="joyPOVGroup" Header="POVs" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254">
-                            <Grid>
-                                <Button Content="-X" HorizontalAlignment="Left" Margin="24,25,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="X-"/>
-                                <Button Content="X+" HorizontalAlignment="Left" Margin="82,25,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="X+"/>
-                            </Grid>
+                        <GroupBox x:Name="joyPOVGroup" Header="POVs" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed">
+                            <StackPanel x:Name="povStack" VerticalAlignment="Top">
+                            </StackPanel>
                         </GroupBox>
                     </StackPanel>
                 </Grid>
