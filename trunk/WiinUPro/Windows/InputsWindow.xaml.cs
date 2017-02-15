@@ -35,6 +35,9 @@ namespace WiinUPro
         private List<InputManager.Mouse.ScrollDirection> _selectedMouseScroll;
         private List<X360Button> _selectedXInputButtons;
         private List<X360Axis> _selectedXInputAxes;
+        private List<int> _selectedVJoyButtons;
+        private List<VJoyDirector.VJoyAxis> _selectedVJoyAxes;
+        private List<VJoyDirector.POVDirection> _selectedVJoyPOVs;
 
         public InputsWindow()
         {
@@ -60,6 +63,9 @@ namespace WiinUPro
             _selectedMouseScroll = new List<InputManager.Mouse.ScrollDirection>();
             _selectedXInputButtons = new List<X360Button>();
             _selectedXInputAxes = new List<X360Axis>();
+            _selectedVJoyButtons = new List<int>();
+            _selectedVJoyAxes = new List<VJoyDirector.VJoyAxis>();
+            _selectedVJoyPOVs = new List<VJoyDirector.POVDirection>();
         }
 
         public InputsWindow(NintyControl control) : this()
@@ -460,6 +466,79 @@ namespace WiinUPro
             }
         }
 
+        private void AddToList(object obj, List<int> list)
+        {
+            var elm = obj as FrameworkElement;
+
+            if (elm != null)
+            {
+                int inputType;
+                if (int.TryParse(elm.Tag.ToString(), out inputType))
+                {
+                    bool selected = list.Contains(inputType);
+
+                    // This can be a Button or an Image or a shape
+                    var btn = obj as Button;
+                    if (btn != null)
+                    {
+                        selected &= btn.Background == keySelectedBrush;
+                    }
+
+                    var img = obj as Image;
+                    if (img != null)
+                    {
+                        selected &= img.Opacity > 0;
+                    }
+
+                    var shape = obj as Shape;
+                    if (shape != null)
+                    {
+                        selected &= shape.Opacity > 0;
+                    }
+
+                    if (selected)
+                    {
+                        // Deselect and remove from list
+                        list.Remove(inputType);
+
+                        if (btn != null)
+                        {
+                            btn.Background = keyDeselectedBrush;
+                        }
+
+                        if (img != null)
+                        {
+                            img.Opacity = 0;
+                        }
+
+                        if (shape != null)
+                        {
+                            shape.Opacity = 0;
+                        }
+                    }
+                    else
+                    {
+                        list.Add(inputType);
+
+                        if (btn != null)
+                        {
+                            btn.Background = keySelectedBrush;
+                        }
+
+                        if (img != null)
+                        {
+                            img.Opacity = 100;
+                        }
+
+                        if (shape != null)
+                        {
+                            shape.Opacity = 100;
+                        }
+                    }
+                }
+            }
+        }
+
         private void ToggleKey(object sender, RoutedEventArgs e)
         {
             AddToList<VirtualKeyCode>(sender, _selectedKeys);
@@ -517,17 +596,17 @@ namespace WiinUPro
 
         private void ToggleVJoyButton(object sender, RoutedEventArgs e)
         {
-            // TODO
+            AddToList(sender, _selectedVJoyButtons);
         }
 
         private void ToggleVJoyAxis(object sender, RoutedEventArgs e)
         {
-            // TODO
+            AddToList(sender, _selectedXInputAxes);
         }
 
         private void ToggleVJoyPOV(object sender, RoutedEventArgs e)
         {
-            // TODO
+            AddToList(sender, _selectedVJoyPOVs);
         }
 
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
