@@ -99,5 +99,40 @@ namespace WiinUPro
                 if (hasSlider2) Axes.Add("Slider 2");
             }
         }
+
+        public enum VJoyAxis
+        {
+            X,
+            Y,
+            Z,
+            Rx,
+            Ry,
+            Rz,
+            Slider1,
+            Slider2
+        }
+
+        public enum POVDirection
+        {
+            Up1,
+            Down1,
+            Left1,
+            Right1,
+
+            Up2,
+            Down2,
+            Left2,
+            Right2,
+
+            Up3,
+            Down3,
+            Left3,
+            Right3,
+
+            Up4,
+            Down4,
+            Left4,
+            Right4
+        }
     }
 }
