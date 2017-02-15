@@ -70,6 +70,7 @@ namespace WiinUPro
             public bool hasSlider { get; protected set; }
             public bool hasSlider2 { get; protected set; }
             public bool ForceFeedback { get; protected set; }
+            public List<string> Axes { get; protected set; }
 
             public JoyDevice(uint id)
             {
@@ -86,6 +87,16 @@ namespace WiinUPro
                 hasSlider     = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_SL0);
                 hasSlider2    = _interface.GetVJDAxisExist(id, HID_USAGES.HID_USAGE_SL1);
                 ForceFeedback = _interface.IsDeviceFfb(id);
+                Axes = new List<string>();
+
+                if (hasX) Axes.Add("X Axis");
+                if (hasY) Axes.Add("Y Axis");
+                if (hasZ) Axes.Add("Z Axis");
+                if (hasRx) Axes.Add("Rx Axis");
+                if (hasRy) Axes.Add("Ry Axis");
+                if (hasRz) Axes.Add("Rz Axis");
+                if (hasSlider) Axes.Add("Slider 1");
+                if (hasSlider2) Axes.Add("Slider 2");
             }
         }
     }

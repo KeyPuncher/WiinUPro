@@ -166,7 +166,196 @@ namespace WiinUPro
 
         private void SetupJoystick(uint id)
         {
+            var device = VJoyDirector.Access.Devices.Find((d) => d.ID == id);
 
+            if (device != null)
+            {
+                // Add buttons
+                for (int b = 1; b <= device.Buttons; b++)
+                {
+                    var btn = new Button()
+                    {
+                        Content = b.ToString(),
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Width = 42,
+                        Height = 42,
+                        Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD)),
+                        BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 16,
+                        Tag = b
+                    };
+                    btn.Click += ToggleVJoyButton;
+                    buttonsWrap.Children.Add(btn);
+                }
+
+                joyBtnGroup.Visibility = device.Buttons > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+                // Add Axes
+                foreach (var axis in device.Axes)
+                {
+                    var stack = new StackPanel()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Height = 50,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top
+                    };
+
+                    var lbl = new Label()
+                    {
+                        Content = axis,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Width = 136
+                    };
+
+                    var pos = new Button()
+                    {
+                        Content = "+",
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Width = 42,
+                        Height = 42,
+                        Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD)),
+                        BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 16,
+                        Tag = "+" + axis,
+                        Margin = new Thickness(10, 0, 0, 0)
+                    };
+
+                    var neg = new Button()
+                    {
+                        Content = "-",
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Width = 42,
+                        Height = 42,
+                        Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD)),
+                        BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 16,
+                        Tag = "-" + axis,
+                        Margin = new Thickness(10, 0, 0, 0)
+                    };
+
+                    pos.Click += ToggleVJoyAxis;
+                    neg.Click += ToggleVJoyAxis;
+
+                    stack.Children.Add(lbl);
+                    stack.Children.Add(neg);
+                    stack.Children.Add(pos);
+
+                    axisStack.Children.Add(stack);
+                }
+
+                joyAxisGroup.Visibility = device.Axes.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+                // Add POVs
+                for (int i = 0; i < device.POVs + device.POV4Ds; i++)
+                {
+                    var stack = new StackPanel()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Height = 50,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top
+                    };
+
+                    string txt;
+                    switch (i)
+                    {
+                        case 0: txt = "1st"; break;
+                        case 1: txt = "2nd"; break;
+                        case 2: txt = "3rd"; break;
+                        case 3: txt = "4th"; break;
+                        default: txt = "POV"; break;
+                    }
+
+                    var lbl = new Label()
+                    {
+                        Content = txt,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Width = 32
+                    };
+
+                    var up = new Button()
+                    {
+                        Content = "Up",
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Width = 42,
+                        Height = 42,
+                        Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD)),
+                        BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 16,
+                        Tag = i + "Up",
+                        Margin = new Thickness(10, 0, 0, 0)
+                    };
+
+                    var down = new Button()
+                    {
+                        Content = "Dn",
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Width = 42,
+                        Height = 42,
+                        Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD)),
+                        BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 16,
+                        Tag = i + "Down",
+                        Margin = new Thickness(10, 0, 0, 0)
+                    };
+
+                    var left = new Button()
+                    {
+                        Content = "Lt",
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Width = 42,
+                        Height = 42,
+                        Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD)),
+                        BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 16,
+                        Tag = i + "Left",
+                        Margin = new Thickness(10, 0, 0, 0)
+                    };
+
+                    var right = new Button()
+                    {
+                        Content = "Rt",
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Width = 42,
+                        Height = 42,
+                        Background = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD)),
+                        BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
+                        FontWeight = FontWeights.Bold,
+                        FontSize = 16,
+                        Tag = i + "Right",
+                        Margin = new Thickness(10, 0, 0, 0)
+                    };
+
+                    up.Click += ToggleVJoyPOV;
+                    down.Click += ToggleVJoyPOV;
+                    left.Click += ToggleVJoyPOV;
+                    right.Click += ToggleVJoyPOV;
+
+                    stack.Children.Add(lbl);
+                    stack.Children.Add(up);
+                    stack.Children.Add(down);
+                    stack.Children.Add(left);
+                    stack.Children.Add(right);
+
+                    povStack.Children.Add(stack);
+                }
+
+                joyPOVGroup.Visibility = device.POVs + device.POV4Ds > 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
         // This is meant to change what selections are made for each XInput device (a, b, c, d)
@@ -320,6 +509,21 @@ namespace WiinUPro
         private void ToggleXInputAxis(object sender, RoutedEventArgs e)
         {
             AddToList(sender, _selectedXInputAxes);
+        }
+
+        private void ToggleVJoyButton(object sender, RoutedEventArgs e)
+        {
+            // TODO
+        }
+
+        private void ToggleVJoyAxis(object sender, RoutedEventArgs e)
+        {
+            // TODO
+        }
+
+        private void ToggleVJoyPOV(object sender, RoutedEventArgs e)
+        {
+            // TODO
         }
 
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
