@@ -166,6 +166,10 @@ namespace WiinUPro
 
         private void SetupJoystick(uint id)
         {
+            buttonsWrap.Children.Clear();
+            axisStack.Children.Clear();
+            povStack.Children.Clear();
+
             var device = VJoyDirector.Access.Devices.Find((d) => d.ID == id);
 
             if (device != null)
