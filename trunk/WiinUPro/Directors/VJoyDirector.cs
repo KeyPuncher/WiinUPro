@@ -32,11 +32,13 @@ namespace WiinUPro
 
         protected static vJoy _interface;
         protected List<JoyDevice> _devices;
+        protected Dictionary<uint, vJoy.JoystickState> _states;
 
         public VJoyDirector()
         {
             _interface = new vJoy();
             _devices = new List<JoyDevice>();
+            _states = new Dictionary<uint, vJoy.JoystickState>();
 
             if (Available)
             {
@@ -52,6 +54,98 @@ namespace WiinUPro
                         }
                     }
                 }
+            }
+        }
+
+        public bool AquireDevice(uint id)
+        {
+            var result = _interface.AcquireVJD(id);
+
+            if (result)
+            {
+                _states.Add(id, new vJoy.JoystickState()
+                {
+                    bDevice = (byte)id
+                });
+            }
+
+            return result;
+        }
+
+        public void ReleaseDevice(uint id)
+        {
+            _states.Remove(id);
+            _interface.RelinquishVJD(id);
+        }
+
+        public void SetButton(int button, bool state, uint id)
+        {
+            if (_states.ContainsKey(id))
+            {
+                var current = _states[id];
+                current.Buttons &= ~(1u << (button - 1));
+                if (state)
+                {
+                    current.Buttons |= 1u << (button - 1);
+                }
+                _states[id] = current;
+            }
+        }
+
+        public void SetAxis(HID_USAGES axis, float value, uint id)
+        {
+            if (_states.ContainsKey(id) && _interface.GetVJDAxisExist(id, axis))
+            {
+                var current = _states[id];
+                long max = 0;
+                long min = 0;
+
+                _interface.GetVJDAxisMax(id, axis, ref max);
+                _interface.GetVJDAxisMin(id, axis, ref min);
+
+                float norm = value + 1f;
+                norm /= 2f;
+                int output = (int)Math.Round(Math.Max(Math.Min(max * norm - min, min), max));
+
+                switch (axis)
+                {
+                    case HID_USAGES.HID_USAGE_X:
+                        current.AxisX = output;
+                        break;
+                    case HID_USAGES.HID_USAGE_Y:
+                        current.AxisY = output;
+                        break;
+                    case HID_USAGES.HID_USAGE_Z:
+                        current.AxisZ = output;
+                        break;
+                    case HID_USAGES.HID_USAGE_RX:
+                        current.AxisXRot = output;
+                        break;
+                    case HID_USAGES.HID_USAGE_RY:
+                        current.AxisYRot = output;
+                        break;
+                    case HID_USAGES.HID_USAGE_RZ:
+                        current.AxisZRot = output;
+                        break;
+                    case HID_USAGES.HID_USAGE_SL0:
+                        current.Slider = output;
+                        break;
+                    case HID_USAGES.HID_USAGE_SL1:
+                        current.Dial = output;
+                        break;
+                }
+
+                _states[id] = current;
+            }
+        }
+
+        public void SetPOV(int pov, POVDirection direction, bool state, uint id)
+        {
+            if (_states.ContainsKey(id))
+            {
+                var current = _states[id];
+
+                // TODO
             }
         }
 
@@ -98,18 +192,6 @@ namespace WiinUPro
                 if (hasSlider) Axes.Add("Slider 1");
                 if (hasSlider2) Axes.Add("Slider 2");
             }
-        }
-
-        public enum VJoyAxis
-        {
-            X,
-            Y,
-            Z,
-            Rx,
-            Ry,
-            Rz,
-            Slider1,
-            Slider2
         }
 
         public enum POVDirection
