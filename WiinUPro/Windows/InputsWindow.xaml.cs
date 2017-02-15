@@ -36,7 +36,7 @@ namespace WiinUPro
         private List<X360Button> _selectedXInputButtons;
         private List<X360Axis> _selectedXInputAxes;
         private List<int> _selectedVJoyButtons;
-        private List<VJoyDirector.VJoyAxis> _selectedVJoyAxes;
+        private List<HID_USAGES> _selectedVJoyAxes;
         private List<VJoyDirector.POVDirection> _selectedVJoyPOVs;
 
         public InputsWindow()
@@ -64,7 +64,7 @@ namespace WiinUPro
             _selectedXInputButtons = new List<X360Button>();
             _selectedXInputAxes = new List<X360Axis>();
             _selectedVJoyButtons = new List<int>();
-            _selectedVJoyAxes = new List<VJoyDirector.VJoyAxis>();
+            _selectedVJoyAxes = new List<HID_USAGES>();
             _selectedVJoyPOVs = new List<VJoyDirector.POVDirection>();
         }
 
