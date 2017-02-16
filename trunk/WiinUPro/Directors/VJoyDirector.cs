@@ -204,6 +204,24 @@ namespace WiinUPro
             }
         }
 
+        public void ApplyAll()
+        {
+            foreach (var state in _states)
+            {
+                vJoy.JoystickState s = state.Value;
+                _interface.UpdateVJD(state.Key, ref s);
+            }
+        }
+
+        public void Apply(uint deviceId)
+        {
+            if (_states.ContainsKey(deviceId))
+            {
+                vJoy.JoystickState s = _states[deviceId];
+                _interface.UpdateVJD(deviceId, ref s);
+            }
+        }
+
         public class JoyDevice
         {
             public uint ID { get; protected set; }

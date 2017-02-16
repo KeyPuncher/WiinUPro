@@ -283,6 +283,9 @@ namespace WiinUPro
             // TODO: only update devices this controller is emulating
             _scp.ApplyAll();
 
+            // Send VJoy Changes
+            VJoyDirector.Access.ApplyAll();
+
             // Visaul should only be updated if tab is in view
             Dispatcher.Invoke(new Action(() =>
             {
