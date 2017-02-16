@@ -9,6 +9,7 @@ namespace WiinUPro
     {
         public uint DeviceId { get; set; }
         public HID_USAGES Axis { get; set; }
+        // TODO: we need to specify direction
 
         public VJoyAxisAssignment() { }
 
