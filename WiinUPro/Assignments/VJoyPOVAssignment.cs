@@ -39,6 +39,21 @@ namespace WiinUPro
         private bool _lastState = false;
         private int _lastApplied = 0;
 
+        public VJoyPOVAssignment() { }
+
+        public VJoyPOVAssignment(VJoyDirector.POVDirection direction, uint device = 1, int povNum = -1)
+        {
+            Direction = direction;
+            DeviceId = device;
+
+            if (povNum == -1)
+            {
+                int.TryParse(direction.ToString().Substring(1, 1), out povNum);
+            }
+
+            POVNum = povNum;
+        }
+
         public void Apply(float value)
         {
             bool isDown = value >= Threshold;
