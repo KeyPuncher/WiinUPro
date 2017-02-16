@@ -200,11 +200,11 @@ namespace WiinUPro
                         switch (direction.ToString().Substring(2))
                         {
                             case "Up":
-                                if (existing > 4500 && existing < 18000) value = 4500;
+                                if (existing > 0 && existing < 18000) value = 4500;
                                 else if (existing > 18000 && existing < 36000) value = 31500;
                                 break;
                             case "Right":
-                                if (existing < 4500 || existing > 31500) value = 4500;
+                                if (existing < 9000 || existing > 27000) value = 4500;
                                 else if (existing > 9000 && existing < 27000) value = 13500;
                                 break;
                             case "Down":
@@ -224,11 +224,11 @@ namespace WiinUPro
                         switch (direction.ToString().Substring(2))
                         {
                             case "Up":
-                                if (existing > 4500 && existing < 18000) value = 9000;
+                                if (existing > 0 && existing < 18000) value = 9000;
                                 else if (existing > 18000 && existing < 36000) value = 27000;
                                 break;
                             case "Right":
-                                if (existing < 4500 || existing > 31500) value = 0;
+                                if (existing < 9000 || existing > 27000) value = 0;
                                 else if (existing > 9000 && existing < 27000) value = 18000;
                                 break;
                             case "Down":
