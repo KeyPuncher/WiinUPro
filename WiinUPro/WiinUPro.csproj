@@ -90,6 +90,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Assignments\VJoyAxisAssignment.cs" />
+    <Compile Include="Assignments\VJoyButtonAssignment.cs" />
+    <Compile Include="Assignments\VJoyPOVAssignment.cs" />
     <Compile Include="Windows\SyncWindow.xaml.cs">
       <DependentUpon>SyncWindow.xaml</DependentUpon>
     </Compile>

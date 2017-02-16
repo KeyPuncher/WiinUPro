@@ -7,7 +7,7 @@ using vJoyInterfaceWrap;
 
 namespace WiinUPro
 {
-    class VJoyDirector
+    public class VJoyDirector
     {
         public static VJoyDirector Access { get; protected set; }
 
