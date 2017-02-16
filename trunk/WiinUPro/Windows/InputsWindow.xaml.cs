@@ -601,7 +601,8 @@ namespace WiinUPro
 
         private void ToggleVJoyAxis(object sender, RoutedEventArgs e)
         {
-            AddToList(sender, _selectedXInputAxes);
+            // -X is not an axis
+            AddToList(sender, _selectedVJoyAxes);
         }
 
         private void ToggleVJoyPOV(object sender, RoutedEventArgs e)
@@ -710,6 +711,28 @@ namespace WiinUPro
                 foreach (var xAxis in _selectedXInputAxes)
                 {
                     Result.Add(new XInputAxisAssignment(xAxis, _selectedDevice));
+                }
+
+                uint vDevice = 1;
+                if (joystickSelection.SelectedIndex > -1)
+                {
+                    uint.TryParse(joystickSelection.SelectedValue.ToString().Replace("Joystick ", ""), out vDevice);
+                    VJoyDirector.Access.AquireDevice(vDevice);
+                }
+
+                foreach (var vBtn in _selectedVJoyButtons)
+                {
+                    Result.Add(new VJoyButtonAssignment(vBtn, vDevice));
+                }
+
+                foreach (var vAxis in _selectedVJoyAxes)
+                {
+                    Result.Add(new VJoyAxisAssignment(vAxis, vDevice));
+                }
+
+                foreach (var vPOV in _selectedVJoyPOVs)
+                {
+                    Result.Add(new VJoyPOVAssignment(vPOV, vDevice));
                 }
             }
 

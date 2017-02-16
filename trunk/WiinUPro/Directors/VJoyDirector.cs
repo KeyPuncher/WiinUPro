@@ -59,8 +59,13 @@ namespace WiinUPro
 
         public bool AquireDevice(uint id)
         {
-            var result = _interface.AcquireVJD(id);
+            if (_interface.GetVJDStatus(id) == VjdStat.VJD_STAT_OWN)
+            {
+                return true;
+            }
 
+            var result = _interface.AcquireVJD(id);
+            
             if (result)
             {
                 _states.Add(id, new vJoy.JoystickState()
