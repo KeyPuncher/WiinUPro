@@ -147,18 +147,18 @@ namespace WiinUPro
                 uint value = 0xFF;
                 if (state)
                 {
-                    switch (direction)
+                    switch (direction.ToString().Substring(2))
                     {
-                        case POVDirection.Up:
+                        case "Up":
                             value = 0x00;
                             break;
-                        case POVDirection.Right:
+                        case "Right":
                             value = 0x01;
                             break;
-                        case POVDirection.Down:
+                        case "Down":
                             value = 0x02;
                             break;
-                        case POVDirection.Left:
+                        case "Left":
                             value = 0x03;
                             break;
                         default: break;
@@ -251,10 +251,25 @@ namespace WiinUPro
 
         public enum POVDirection
         {
-            Up,
-            Down,
-            Left,
-            Right
+            _1Up,
+            _1Down,
+            _1Left,
+            _1Right,
+
+            _2Up,
+            _2Down,
+            _2Left,
+            _2Right,
+
+            _3Up,
+            _3Down,
+            _3Left,
+            _3Right,
+
+            _4Up,
+            _4Down,
+            _4Left,
+            _4Right,
         }
     }
 }

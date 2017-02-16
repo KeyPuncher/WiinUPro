@@ -301,7 +301,7 @@ namespace WiinUPro
                         BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
-                        Tag = i + "Up",
+                        Tag = "_" + i + "Up",
                         Margin = new Thickness(10, 0, 0, 0)
                     };
 
@@ -316,7 +316,7 @@ namespace WiinUPro
                         BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
-                        Tag = i + "Down",
+                        Tag = "_" + i + "Down",
                         Margin = new Thickness(10, 0, 0, 0)
                     };
 
@@ -331,7 +331,7 @@ namespace WiinUPro
                         BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
-                        Tag = i + "Left",
+                        Tag = "_" + i + "Left",
                         Margin = new Thickness(10, 0, 0, 0)
                     };
 
@@ -346,7 +346,7 @@ namespace WiinUPro
                         BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
-                        Tag = i + "Right",
+                        Tag = "_" + i + "Right",
                         Margin = new Thickness(10, 0, 0, 0)
                     };
 
