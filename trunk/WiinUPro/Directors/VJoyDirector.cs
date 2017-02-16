@@ -33,12 +33,14 @@ namespace WiinUPro
         protected static vJoy _interface;
         protected List<JoyDevice> _devices;
         protected Dictionary<uint, vJoy.JoystickState> _states;
+        protected Dictionary<uint, Dictionary<POVDirection, bool>> _activeDirections;
 
         public VJoyDirector()
         {
             _interface = new vJoy();
             _devices = new List<JoyDevice>();
             _states = new Dictionary<uint, vJoy.JoystickState>();
+            _activeDirections = new Dictionary<uint, Dictionary<POVDirection, bool>>();
 
             if (Available)
             {
@@ -72,6 +74,26 @@ namespace WiinUPro
                 {
                     bDevice = (byte)id
                 });
+
+                _activeDirections.Add(id, new Dictionary<POVDirection, bool>
+                {
+                    { POVDirection._1Up, false },
+                    { POVDirection._1Down, false },
+                    { POVDirection._1Left, false },
+                    { POVDirection._1Right, false },
+                    { POVDirection._2Up, false },
+                    { POVDirection._2Down, false },
+                    { POVDirection._2Left, false },
+                    { POVDirection._2Right, false },
+                    { POVDirection._3Up, false },
+                    { POVDirection._3Down, false },
+                    { POVDirection._3Left, false },
+                    { POVDirection._3Right, false },
+                    { POVDirection._4Up, false },
+                    { POVDirection._4Down, false },
+                    { POVDirection._4Left, false },
+                    { POVDirection._4Right, false }
+                });
             }
 
             return result;
@@ -80,6 +102,7 @@ namespace WiinUPro
         public void ReleaseDevice(uint id)
         {
             _states.Remove(id);
+            _activeDirections.Remove(id);
             _interface.RelinquishVJD(id);
         }
 
@@ -146,152 +169,199 @@ namespace WiinUPro
 
         public void SetPOV(int pov, POVDirection direction, bool state, uint id)
         {
-            if (_states.ContainsKey(id))
+            if (_states.ContainsKey(id) && _activeDirections.ContainsKey(id))
             {
+                _activeDirections[id][direction] = state;
                 var current = _states[id];
+                var device = Devices.Find((d) => d.ID == id);
                 uint value = 0xFF;
-                if (state)
-                {
-                    switch (direction.ToString().Substring(2))
-                    {
-                        case "Up":
-                            value = 0x00;
-                            break;
-                        case "Right":
-                            value = 0x01;
-                            break;
-                        case "Down":
-                            value = 0x02;
-                            break;
-                        case "Left":
-                            value = 0x03;
-                            break;
-                        default: break;
-                    }
-                }
 
-                if (_interface.GetVJDContPovNumber(id) > 0)
+                if (device != null)
                 {
-                    uint existing = 0xFFFFFFFF;
-                    switch (pov)
+                    // If using a 4 direction POV Hat
+                    if (device.POV4Ds > 0)
                     {
-                        case 1:
-                            existing = current.bHats;
-                            break;
-                        case 2:
-                            existing = current.bHatsEx1;
-                            break;
-                        case 3:
-                            existing = current.bHatsEx2;
-                            break;
-                        case 4:
-                            existing = current.bHatsEx3;
-                            break;
-                        default: break;
-                    }
+                        string dir = direction.ToString().Substring(2);
 
-                    if (state && existing == 0xFFFFFFFF)
-                    {
-                        value *= 9000;
-                    }
-                    else if (state)
-                    {
-                        // TODO: Fix direction switching, Down 2 Right & Left 2 Up and back both work as expected
-                        switch (direction.ToString().Substring(2))
+                        // If this direction is being released, look for another active direciton
+                        if (!state)
+                        {
+                            POVDirection d = POVDirection._1Up;
+                            if (Enum.TryParse("_" + pov + "Up", true, out d) && _activeDirections[id][d])
+                            {
+                                dir = "Up";
+                            }
+                            else if (Enum.TryParse("_" + pov + "Right", true, out d) && _activeDirections[id][d])
+                            {
+                                dir = "Right";
+                            }
+                            else if (Enum.TryParse("_" + pov + "Down", true, out d) && _activeDirections[id][d])
+                            {
+                                dir = "Down";
+                            }
+                            else if (Enum.TryParse("_" + pov + "Left", true, out d) && _activeDirections[id][d])
+                            {
+                                dir = "Left";
+                            }
+                            else
+                            {
+                                dir = "Neutral";
+                            }
+                        }
+                         
+                        // Set the value based ont he direction to be applied
+                        switch (dir)
                         {
                             case "Up":
-                                if (existing > 0 && existing < 18000) value = 4500;
-                                else if (existing > 18000 && existing < 36000) value = 31500;
+                                value = 0x00;
                                 break;
                             case "Right":
-                                if (existing < 9000 || existing > 27000) value = 4500;
-                                else if (existing > 9000 && existing < 27000) value = 13500;
+                                value = 0x01;
                                 break;
                             case "Down":
-                                if (existing < 18000 && existing > 0) value = 13500;
-                                else if (existing > 18000 && existing < 36000) value = 22500;
+                                value = 0x02;
                                 break;
                             case "Left":
-                                if (existing > 27000 || existing < 9000) value = 31500;
-                                else if (existing < 27000 && existing > 9000) value = 22500;
+                                value = 0x03;
                                 break;
-                            default: break;
+                            default:
+                                value = 0xFF;
+                                break;
                         }
+
+                        // Set new Hat value
+                        var shift = ((pov - 1) * 4);
+                        current.bHats &= (0xFFFFFFFF & (uint)(0x00 << shift));
+                        current.bHats |= (value << shift);
                     }
                     else
                     {
                         value = 0xFFFFFFFF;
-                        switch (direction.ToString().Substring(2))
+                        POVDirection d = POVDirection._1Up;
+                        bool up = false;
+                        bool left = false;
+                        bool down = false;
+                        bool right = false;
+                        if (Enum.TryParse("_" + pov + "Up", true, out d))
                         {
-                            case "Up":
-                                if (existing > 0 && existing < 18000) value = 9000;
-                                else if (existing > 18000 && existing < 36000) value = 27000;
+                            up = _activeDirections[id][d];
+                        }
+                        if (Enum.TryParse("_" + pov + "Right", true, out d))
+                        {
+                            right = _activeDirections[id][d];
+                        }
+                        if (Enum.TryParse("_" + pov + "Down", true, out d))
+                        {
+                            down = _activeDirections[id][d];
+                        }
+                        if (Enum.TryParse("_" + pov + "Left", true, out d))
+                        {
+                            left = _activeDirections[id][d];
+                        }
+
+                        if (state)
+                        {
+                            // New state takes priority
+                            string dir = direction.ToString().Substring(2);
+
+                            switch (dir)
+                            {
+                                case "Up":
+                                    if (left)
+                                        value = 31500;
+                                    else if (right)
+                                        value = 4500;
+                                    else
+                                        value = 0;
+                                    break;
+                                case "Right":
+                                    if (up)
+                                        value = 4500;
+                                    else if (down)
+                                        value = 13500;
+                                    else
+                                        value = 9000;
+                                    break;
+                                case "Down":
+                                    if (right)
+                                        value = 13500;
+                                    else if (left)
+                                        value = 22500;
+                                    else
+                                        value = 18000;
+                                    break;
+                                case "Left":
+                                    if (up)
+                                        value = 31500;
+                                    else if (down)
+                                        value = 22500;
+                                    else
+                                        value = 27000;
+                                    break;
+                                default:
+                                    value = 0xFFFFFFFF;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            if (up)
+                            {
+                                if (left)
+                                    value = 31500;
+                                else if (right)
+                                    value = 4500;
+                                else
+                                    value = 0;
+                            }
+                            else if (right)
+                            {
+                                // up & right already handled
+                                if (down)
+                                    value = 13500;
+                                else
+                                    value = 9000;
+                            }
+                            else if (down)
+                            {
+                                // down & right already handled
+                                if (left)
+                                    value = 22500;
+                                else
+                                    value = 18000;
+                            }
+                            else if (left)
+                            {
+                                // up & left, down & left already handled
+                                value = 27000;
+                            }
+                            else
+                            {
+                                value = 0xFFFFFFFF;
+                            }
+                        }
+
+                        // Set the new Hat value
+                        switch (pov)
+                        {
+                            case 1:
+                                current.bHats = value;
                                 break;
-                            case "Right":
-                                if (existing < 9000 || existing > 27000) value = 0;
-                                else if (existing > 9000 && existing < 27000) value = 18000;
+                            case 2:
+                                current.bHatsEx1 = value;
                                 break;
-                            case "Down":
-                                if (existing < 18000 && existing > 0) value = 9000;
-                                else if (existing > 18000 && existing < 36000) value = 18000;
+                            case 3:
+                                current.bHatsEx2 = value;
                                 break;
-                            case "Left":
-                                if (existing > 27000 || existing < 9000) value = 0;
-                                else if (existing < 27000 && existing > 9000) value = 18000;
+                            case 4:
+                                current.bHatsEx3 = value;
                                 break;
                             default: break;
                         }
                     }
-
-                    switch (pov)
-                    {
-                        case 1:
-                            current.bHats = value;
-                            break;
-                        case 2:
-                            current.bHatsEx1 = value;
-                            break;
-                        case 3:
-                            current.bHatsEx2 = value;
-                            break;
-                        case 4:
-                            current.bHatsEx3 = value;
-                            break;
-                        default: break;
-                    }
+                
+                    _states[id] = current;
                 }
-                else
-                {
-                    var shift = ((pov - 1) * 4);
-
-                    if (!state)
-                    {
-                        uint existing = current.bHats & (uint)(0xFF << shift);
-                        existing = existing >> shift;
-
-                        switch (direction.ToString().Substring(2))
-                        {
-                            case "Up":
-                                if (existing != 0x00) value = existing;
-                                break;
-                            case "Right":
-                                if (existing != 0x01) value = existing;
-                                break;
-                            case "Down":
-                                if (existing != 0x02) value = existing;
-                                break;
-                            case "Left":
-                                if (existing != 0x03) value = existing;
-                                break;
-                            default: break;
-                        }
-                    }
-
-                    current.bHats &= (0xFFFFFFFF & (uint)(0x00 << shift));
-                    current.bHats |= (value << shift);
-                }
-
-                _states[id] = current;
             }
         }
 
