@@ -201,6 +201,30 @@ namespace WiinUPro
                 else
                 {
                     var shift = ((pov - 1) * 4);
+
+                    if (!state)
+                    {
+                        uint existing = current.bHats & (uint)(0xFF << shift);
+                        existing = existing >> shift;
+
+                        switch (direction.ToString().Substring(2))
+                        {
+                            case "Up":
+                                if (existing != 0x00) value = existing;
+                                break;
+                            case "Right":
+                                if (existing != 0x01) value = existing;
+                                break;
+                            case "Down":
+                                if (existing != 0x02) value = existing;
+                                break;
+                            case "Left":
+                                if (existing != 0x03) value = existing;
+                                break;
+                            default: break;
+                        }
+                    }
+
                     current.bHats &= (0xFFFFFFFF & (uint)(0x00 << shift));
                     current.bHats |= (value << shift);
                 }
