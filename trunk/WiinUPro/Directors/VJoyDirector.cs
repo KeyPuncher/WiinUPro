@@ -172,13 +172,75 @@ namespace WiinUPro
 
                 if (_interface.GetVJDContPovNumber(id) > 0)
                 {
-                    if (state)
+                    uint existing = 0xFFFFFFFF;
+                    switch (pov)
+                    {
+                        case 1:
+                            existing = current.bHats;
+                            break;
+                        case 2:
+                            existing = current.bHatsEx1;
+                            break;
+                        case 3:
+                            existing = current.bHatsEx2;
+                            break;
+                        case 4:
+                            existing = current.bHatsEx3;
+                            break;
+                        default: break;
+                    }
+
+                    if (state && existing == 0xFFFFFFFF)
                     {
                         value *= 9000;
+                    }
+                    else if (state)
+                    {
+                        // TODO: Fix direction switching, Down 2 Right & Left 2 Up and back both work as expected
+                        switch (direction.ToString().Substring(2))
+                        {
+                            case "Up":
+                                if (existing > 4500 && existing < 18000) value = 4500;
+                                else if (existing > 18000 && existing < 36000) value = 31500;
+                                break;
+                            case "Right":
+                                if (existing < 4500 || existing > 31500) value = 4500;
+                                else if (existing > 9000 && existing < 27000) value = 13500;
+                                break;
+                            case "Down":
+                                if (existing < 18000 && existing > 0) value = 13500;
+                                else if (existing > 18000 && existing < 36000) value = 22500;
+                                break;
+                            case "Left":
+                                if (existing > 27000 || existing < 9000) value = 31500;
+                                else if (existing < 27000 && existing > 9000) value = 22500;
+                                break;
+                            default: break;
+                        }
                     }
                     else
                     {
                         value = 0xFFFFFFFF;
+                        switch (direction.ToString().Substring(2))
+                        {
+                            case "Up":
+                                if (existing > 4500 && existing < 18000) value = 9000;
+                                else if (existing > 18000 && existing < 36000) value = 27000;
+                                break;
+                            case "Right":
+                                if (existing < 4500 || existing > 31500) value = 0;
+                                else if (existing > 9000 && existing < 27000) value = 18000;
+                                break;
+                            case "Down":
+                                if (existing < 18000 && existing > 0) value = 9000;
+                                else if (existing > 18000 && existing < 36000) value = 18000;
+                                break;
+                            case "Left":
+                                if (existing > 27000 || existing < 9000) value = 0;
+                                else if (existing < 27000 && existing > 9000) value = 18000;
+                                break;
+                            default: break;
+                        }
                     }
 
                     switch (pov)
