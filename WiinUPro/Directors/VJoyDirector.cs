@@ -144,8 +144,63 @@ namespace WiinUPro
             if (_states.ContainsKey(id))
             {
                 var current = _states[id];
+                uint value = 0x05;
+                if (state)
+                {
+                    switch (direction)
+                    {
+                        case POVDirection.Up:
+                            value = 0x00;
+                            break;
+                        case POVDirection.Right:
+                            value = 0x01;
+                            break;
+                        case POVDirection.Down:
+                            value = 0x02;
+                            break;
+                        case POVDirection.Left:
+                            value = 0x03;
+                            break;
+                        default: break;
+                    }
+                }
 
-                // TODO
+                if (_interface.GetVJDContPovNumber(id) > 0)
+                {
+                    if (state)
+                    {
+                        value *= 9000;
+                    }
+                    else
+                    {
+                        value = 0xFFFFFFFF;
+                    }
+
+                    switch (pov)
+                    {
+                        case 1:
+                            current.bHats = value;
+                            break;
+                        case 2:
+                            current.bHatsEx1 = value;
+                            break;
+                        case 3:
+                            current.bHatsEx2 = value;
+                            break;
+                        case 4:
+                            current.bHatsEx3 = value;
+                            break;
+                        default: break;
+                    }
+                }
+                else
+                {
+                    var shift = ((pov - 1) * 4);
+                    current.bHats &= (0xFFFFFFFF & (uint)(0x00 << shift));
+                    current.bHats |= (value << shift);
+                }
+
+                _states[id] = current;
             }
         }
 
@@ -196,25 +251,10 @@ namespace WiinUPro
 
         public enum POVDirection
         {
-            Up1,
-            Down1,
-            Left1,
-            Right1,
-
-            Up2,
-            Down2,
-            Left2,
-            Right2,
-
-            Up3,
-            Down3,
-            Left3,
-            Right3,
-
-            Up4,
-            Down4,
-            Left4,
-            Right4
+            Up,
+            Down,
+            Left,
+            Right
         }
     }
 }
