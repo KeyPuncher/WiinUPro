@@ -167,6 +167,38 @@ namespace WiinUPro
                     // Remove once multiple xinput devices can be selected
                     deviceSelection.SelectedIndex = (int)(item as XInputAxisAssignment).Device - 1;
                 }
+                else if (item is VJoyButtonAssignment)
+                {
+                    var vb = (item as VJoyButtonAssignment);
+                    if (joystickSelection.HasItems && joystickSelection.Items.Contains("Joystick " + vb.DeviceId))
+                    {
+                        joystickSelection.SelectedItem = "Joystick " + vb.DeviceId;
+                        var btn = buttonsWrap.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == vb.Button.ToString());
+                        if (btn != null)
+                        {
+                            btn.Background = keySelectedBrush;
+                            _selectedVJoyButtons.Add(vb.Button);
+                        }
+                    }
+                }
+                else if (item is VJoyAxisAssignment)
+                {
+                    var va = (item as VJoyAxisAssignment);
+                    if (joystickSelection.HasItems && joystickSelection.Items.Contains("Joystick " + va.DeviceId))
+                    {
+                        joystickSelection.SelectedItem = "Joystick " + va.DeviceId;
+                        string lblStr = va.Axis.ToString().Replace("HID_USAGE_", "");
+                        if (lblStr.Length > 2) lblStr = lblStr.Substring(0, 2);
+                        foreach (StackPanel stack in axisStack.Children)
+                        {
+                            if ((stack.Children[0] as Label).Content.ToString().StartsWith(lblStr))
+                            {
+
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
 
