@@ -144,7 +144,7 @@ namespace WiinUPro
             if (_states.ContainsKey(id))
             {
                 var current = _states[id];
-                uint value = 0x05;
+                uint value = 0xFF;
                 if (state)
                 {
                     switch (direction)
