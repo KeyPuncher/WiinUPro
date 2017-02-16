@@ -263,7 +263,7 @@ namespace WiinUPro
                 joyAxisGroup.Visibility = device.Axes.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
                 // Add POVs
-                for (int i = 0; i < device.POVs + device.POV4Ds; i++)
+                for (int i = 1; i <= device.POVs + device.POV4Ds; i++)
                 {
                     var stack = new StackPanel()
                     {
@@ -276,10 +276,10 @@ namespace WiinUPro
                     string txt;
                     switch (i)
                     {
-                        case 0: txt = "1st"; break;
-                        case 1: txt = "2nd"; break;
-                        case 2: txt = "3rd"; break;
-                        case 3: txt = "4th"; break;
+                        case 1: txt = "1st"; break;
+                        case 2: txt = "2nd"; break;
+                        case 3: txt = "3rd"; break;
+                        case 4: txt = "4th"; break;
                         default: txt = "POV"; break;
                     }
 
