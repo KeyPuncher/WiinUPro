@@ -528,6 +528,8 @@ namespace WiinUPro
             X_Neg,
             Y_Pos,
             Y_Neg,
+            Z_Pos,
+            Z_Neg,
             RX_Pos,
             RX_Neg,
             RY_Pos,
