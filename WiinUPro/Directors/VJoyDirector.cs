@@ -501,7 +501,7 @@ namespace WiinUPro
 
         public enum POVDirection
         {
-            _1Up,
+            _1Up = 0,
             _1Down,
             _1Left,
             _1Right,
@@ -524,7 +524,7 @@ namespace WiinUPro
 
         public enum AxisDirection
         {
-            X_Pos,
+            X_Pos = 0,
             X_Neg,
             Y_Pos,
             Y_Neg,

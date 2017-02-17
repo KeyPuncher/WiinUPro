@@ -216,6 +216,22 @@ namespace WiinUPro
                         }
                     }
                 }
+                else if (item is VJoyPOVAssignment)
+                {
+                    var vp = (item as VJoyPOVAssignment);
+                    if (joystickSelection.HasItems && joystickSelection.Items.Contains("Joystick " + vp.DeviceId))
+                    {
+                        joystickSelection.SelectedItem = "Joystick " + vp.DeviceId;
+                        int index = vp.POVNum - 1;
+                        if (povStack.Children.Count > index)
+                        {
+                            StackPanel stack = povStack.Children[index] as StackPanel;
+                            var btn = stack.Children[(int)vp.Direction % 4 + 1] as Button;
+                            btn.Background = keySelectedBrush;
+                            _selectedVJoyPOVs.Add(vp.Direction);
+                        }
+                    }
+                }
             }
         }
 
