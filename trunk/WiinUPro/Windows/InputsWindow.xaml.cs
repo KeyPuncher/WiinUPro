@@ -36,7 +36,7 @@ namespace WiinUPro
         private List<X360Button> _selectedXInputButtons;
         private List<X360Axis> _selectedXInputAxes;
         private List<int> _selectedVJoyButtons;
-        private List<HID_USAGES> _selectedVJoyAxes;
+        private List<VJoyDirector.AxisDirection> _selectedVJoyAxes;
         private List<VJoyDirector.POVDirection> _selectedVJoyPOVs;
 
         public InputsWindow()
@@ -64,7 +64,7 @@ namespace WiinUPro
             _selectedXInputButtons = new List<X360Button>();
             _selectedXInputAxes = new List<X360Axis>();
             _selectedVJoyButtons = new List<int>();
-            _selectedVJoyAxes = new List<HID_USAGES>();
+            _selectedVJoyAxes = new List<VJoyDirector.AxisDirection>();
             _selectedVJoyPOVs = new List<VJoyDirector.POVDirection>();
         }
 
@@ -237,6 +237,36 @@ namespace WiinUPro
                 // Add Axes
                 foreach (var axis in device.Axes)
                 {
+                    string tag = "";
+                    switch (axis)
+                    {
+                        case "X Axis":
+                            tag = "X";
+                            break;
+                        case "Y Axis":
+                            tag = "Y";
+                            break;
+                        case "Z Axis":
+                            tag = "Z";
+                            break;
+                        case "Rx Axis":
+                            tag = "RX";
+                            break;
+                        case "Ry Axis":
+                            tag = "RY";
+                            break;
+                        case "Rz Axis":
+                            tag = "RZ";
+                            break;
+                        case "Slider 1":
+                            tag = "SL0";
+                            break;
+                        case "Slider 2":
+                            tag = "SL1";
+                            break;
+                        default: tag = "X"; break;
+                    }
+
                     var stack = new StackPanel()
                     {
                         Orientation = Orientation.Horizontal,
@@ -263,7 +293,7 @@ namespace WiinUPro
                         BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
-                        Tag = "+" + axis,
+                        Tag = tag + "_Pos",
                         Margin = new Thickness(10, 0, 0, 0)
                     };
 
@@ -278,7 +308,7 @@ namespace WiinUPro
                         BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
-                        Tag = "-" + axis,
+                        Tag = tag + "_Neg",
                         Margin = new Thickness(10, 0, 0, 0)
                     };
 
@@ -633,7 +663,6 @@ namespace WiinUPro
 
         private void ToggleVJoyAxis(object sender, RoutedEventArgs e)
         {
-            // -X is not an axis
             AddToList(sender, _selectedVJoyAxes);
         }
 
@@ -759,7 +788,8 @@ namespace WiinUPro
 
                 foreach (var vAxis in _selectedVJoyAxes)
                 {
-                    Result.Add(new VJoyAxisAssignment(vAxis, vDevice));
+                    bool p = false;
+                    Result.Add(new VJoyAxisAssignment(ToHidAxis(vAxis, out p), p, vDevice));
                 }
 
                 foreach (var vPOV in _selectedVJoyPOVs)
@@ -833,6 +863,11 @@ namespace WiinUPro
                 var btn = keyboardGrid.Children.OfType<Button>().Where(x => x.Tag.ToString() == detectedKey.ToString()).FirstOrDefault();
                 ToggleKey(btn, null);
             }
+        }
+
+        private void joystickSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetupJoystick(VJoyDirector.Access.Devices[joystickSelection.SelectedIndex].ID);
         }
 
         static VirtualKeyCode? ToVK(Key key)
@@ -1023,9 +1058,11 @@ namespace WiinUPro
             return null;
         }
 
-        private void joystickSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        static HID_USAGES ToHidAxis(VJoyDirector.AxisDirection axis, out bool positive)
         {
-            SetupJoystick(VJoyDirector.Access.Devices[joystickSelection.SelectedIndex].ID);
+            var split = axis.ToString().Split('_');
+            positive = split[1] == "Pos";
+            return (HID_USAGES)Enum.Parse(typeof(HID_USAGES), "HID_USAGE_" + split[0]);
         }
     }
 }

@@ -120,50 +120,83 @@ namespace WiinUPro
             }
         }
 
-        public void SetAxis(HID_USAGES axis, float value, uint id)
+        public void SetAxis(HID_USAGES axis, float value, bool positive, uint id)
         {
             if (_states.ContainsKey(id) && _interface.GetVJDAxisExist(id, axis))
             {
                 var current = _states[id];
                 long max = 0;
                 long min = 0;
+                long mid = 0;
+                if (!positive)
+                    value *= -1;
 
                 _interface.GetVJDAxisMax(id, axis, ref max);
                 _interface.GetVJDAxisMin(id, axis, ref min);
+                mid = (max - min) / 2;
 
                 float norm = value + 1f;
                 norm /= 2f;
-                int output = (int)Math.Round(Math.Max(Math.Min(max * norm - min, min), max));
+                int output = (int)Math.Round(Math.Min(Math.Max(max * norm - min, min), max));
 
+                if (Math.Abs(output - mid) < 4)
+                    output = (int)mid;
+
+                // Set on the correct axis, only if current value matches
                 switch (axis)
                 {
                     case HID_USAGES.HID_USAGE_X:
-                        current.AxisX = output;
+                        if (SameDirection(mid, current.AxisX, positive))
+                        {
+                            current.AxisX = output;
+                        }
                         break;
                     case HID_USAGES.HID_USAGE_Y:
-                        current.AxisY = output;
+                        if (SameDirection(mid, current.AxisY, positive))
+                            current.AxisY = output;
                         break;
                     case HID_USAGES.HID_USAGE_Z:
-                        current.AxisZ = output;
+                        if (SameDirection(mid, current.AxisZ, positive))
+                            current.AxisZ = output;
                         break;
                     case HID_USAGES.HID_USAGE_RX:
-                        current.AxisXRot = output;
+                        if (SameDirection(mid, current.AxisXRot, positive))
+                            current.AxisXRot = output;
                         break;
                     case HID_USAGES.HID_USAGE_RY:
-                        current.AxisYRot = output;
+                        if (SameDirection(mid, current.AxisYRot, positive))
+                            current.AxisYRot = output;
                         break;
                     case HID_USAGES.HID_USAGE_RZ:
-                        current.AxisZRot = output;
+                        if (SameDirection(mid, current.AxisZRot, positive))
+                            current.AxisZRot = output;
                         break;
                     case HID_USAGES.HID_USAGE_SL0:
-                        current.Slider = output;
+                        if (SameDirection(mid, current.Slider, positive))
+                            current.Slider = output;
                         break;
                     case HID_USAGES.HID_USAGE_SL1:
-                        current.Dial = output;
+                        if (SameDirection(mid, current.Dial, positive))
+                            current.Dial = output;
                         break;
                 }
 
                 _states[id] = current;
+            }
+        }
+
+        protected bool SameDirection(long mid, int current, bool positive)
+        {
+            if (current == mid)
+                return true;
+
+            if (positive)
+            {
+                return current >= mid;
+            }
+            else
+            {
+                return current <= mid;
             }
         }
 
@@ -449,6 +482,24 @@ namespace WiinUPro
             _4Down,
             _4Left,
             _4Right,
+        }
+
+        public enum AxisDirection
+        {
+            X_Pos,
+            X_Neg,
+            Y_Pos,
+            Y_Neg,
+            RX_Pos,
+            RX_Neg,
+            RY_Pos,
+            RY_Neg,
+            RZ_Pos,
+            RZ_Neg,
+            SL0_Pos,
+            SL0_Neg,
+            SL1_Pos,
+            SL1_Neg
         }
     }
 }
