@@ -344,16 +344,17 @@
                     <ComboBox x:Name="joystickSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="joystickSelection_SelectionChanged"/>
                     <StackPanel x:Name="groupStack" HorizontalAlignment="Left" Height="272" Margin="10,37,0,0" VerticalAlignment="Top" Width="902" Orientation="Horizontal">
                         <GroupBox x:Name="joyBtnGroup" Header="Buttons" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed">
-                            <WrapPanel x:Name="buttonsWrap" Margin="0,10,0,-12" ItemHeight="50" ItemWidth="50">
-                            </WrapPanel>
+                            <ScrollViewer>
+                                <WrapPanel x:Name="buttonsWrap" Margin="0,5" ItemHeight="50" ItemWidth="50"/>
+                            </ScrollViewer>
                         </GroupBox>
-                        <GroupBox x:Name="joyAxisGroup" Header="Axis" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed">
-                            <StackPanel x:Name="axisStack" VerticalAlignment="Top">
-                            </StackPanel>
+                        <GroupBox x:Name="joyAxisGroup" Header="Axis" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="284" Visibility="Collapsed">
+                            <ScrollViewer>
+                                <StackPanel x:Name="axisStack" VerticalAlignment="Top" />
+                            </ScrollViewer>
                         </GroupBox>
                         <GroupBox x:Name="joyPOVGroup" Header="POVs" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed">
-                            <StackPanel x:Name="povStack" VerticalAlignment="Top">
-                            </StackPanel>
+                            <StackPanel x:Name="povStack" VerticalAlignment="Top"/>
                         </GroupBox>
                     </StackPanel>
                 </Grid>
