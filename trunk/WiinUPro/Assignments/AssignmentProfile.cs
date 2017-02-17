@@ -124,6 +124,21 @@ namespace WiinUPro
                     info.type = AssignmentType.XboxButton;
                     info.xinputButtonAssignment = (XInputButtonAssignment)a;
                 }
+                else if (a is VJoyButtonAssignment)
+                {
+                    info.type = AssignmentType.VJoyButton;
+                    info.vjoyButtonAssignment = (VJoyButtonAssignment)a;
+                }
+                else if (a is VJoyAxisAssignment)
+                {
+                    info.type = AssignmentType.VJoyAxis;
+                    info.vjoyAxisAssignment = (VJoyAxisAssignment)a;
+                }
+                else if (a is VJoyPOVAssignment)
+                {
+                    info.type = AssignmentType.VJoyPOV;
+                    info.vjoyPOVAssignment = (VJoyPOVAssignment)a;
+                }
 
                 collection.Add(info);
             }
@@ -144,6 +159,9 @@ namespace WiinUPro
                     case AssignmentType.Shift:       result.Add(c.shiftAssignment); break;
                     case AssignmentType.XboxAxis:    result.Add(c.xinputAxisAssignment); break;
                     case AssignmentType.XboxButton:  result.Add(c.xinputButtonAssignment); break;
+                    case AssignmentType.VJoyButton:  result.Add(c.vjoyButtonAssignment); break;
+                    case AssignmentType.VJoyAxis:    result.Add(c.vjoyAxisAssignment); break;
+                    case AssignmentType.VJoyPOV:     result.Add(c.vjoyPOVAssignment); break;
                 }
             }
 
@@ -161,6 +179,9 @@ namespace WiinUPro
         public ShiftAssignment shiftAssignment;
         public XInputAxisAssignment xinputAxisAssignment;
         public XInputButtonAssignment xinputButtonAssignment;
+        public VJoyButtonAssignment vjoyButtonAssignment;
+        public VJoyAxisAssignment vjoyAxisAssignment;
+        public VJoyPOVAssignment vjoyPOVAssignment;
     }
 
     public enum AssignmentType
@@ -171,6 +192,9 @@ namespace WiinUPro
         MouseScroll,
         Shift,
         XboxAxis,
-        XboxButton
+        XboxButton,
+        VJoyButton,
+        VJoyAxis,
+        VJoyPOV
     }
 }

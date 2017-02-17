@@ -872,6 +872,7 @@ namespace NintrollerLib
                     if (report[4] == 0x03)
                     {
                         Log("Possible Error with Operation");
+                        Log(BitConverter.ToString(report));
                         return;
                     }
 
