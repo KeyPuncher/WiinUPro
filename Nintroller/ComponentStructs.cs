@@ -306,7 +306,7 @@ namespace NintrollerLib
         public void Normalize()
         {
             // This is a square deadzone
-            if ((rawX < deadXp && rawX > deadXn) && (rawY < deadYp && rawY > deadYn))
+            if ((rawX - centerX < deadXp && rawX - centerX > deadXn) && (rawY - centerY < deadYp && rawY - centerY > deadYn))
             {
                 X = 0;
                 Y = 0;
