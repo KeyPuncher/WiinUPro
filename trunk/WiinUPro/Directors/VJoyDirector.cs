@@ -159,6 +159,9 @@ namespace WiinUPro
         {
             if (_states.ContainsKey(id) && _interface.GetVJDAxisExist(id, axis))
             {
+                // Y axis is inverted
+                if (axis == HID_USAGES.HID_USAGE_Y) positive = !positive;
+
                 var current = _states[id];
                 long max = 0;
                 long min = 0;
