@@ -191,10 +191,27 @@ namespace WiinUPro
                         if (lblStr.Length > 2) lblStr = lblStr.Substring(0, 2);
                         foreach (StackPanel stack in axisStack.Children)
                         {
-                            if ((stack.Children[0] as Label).Content.ToString().StartsWith(lblStr))
+                            if ((stack.Children[0] as Label).Content.ToString().ToUpper().StartsWith(lblStr.ToUpper()))
                             {
+                                VJoyDirector.AxisDirection e;
+                                int index = va.Positive ? 2 : 1;
 
-                                break;
+                                if (va.Axis == HID_USAGES.HID_USAGE_SL0 && (stack.Children[index] as Button).Tag.ToString().Contains("1"))
+                                {
+                                    continue;
+                                }
+
+                                if (va.Axis == HID_USAGES.HID_USAGE_SL1 && (stack.Children[index] as Button).Tag.ToString().Contains("0"))
+                                {
+                                    continue;
+                                }
+
+                                    if (Enum.TryParse((stack.Children[index] as Button).Tag.ToString(), out e))
+                                {
+                                    (stack.Children[index] as Button).Background = keySelectedBrush;
+                                    _selectedVJoyAxes.Add(e);
+                                    break;
+                                }
                             }
                         }
                     }
