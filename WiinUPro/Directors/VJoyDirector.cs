@@ -70,10 +70,45 @@ namespace WiinUPro
             
             if (result)
             {
-                _states.Add(id, new vJoy.JoystickState()
+                // Set to neutral state
+                var neutral = new vJoy.JoystickState()
                 {
                     bDevice = (byte)id
-                });
+                };
+
+                for (HID_USAGES axis = HID_USAGES.HID_USAGE_X; axis <= HID_USAGES.HID_USAGE_WHL; axis++)
+                {
+                    if (_interface.GetVJDAxisExist(id, axis))
+                    {
+                        long min = 0;
+                        long max = 0;
+                        _interface.GetVJDAxisMax(id, axis, ref max);
+                        _interface.GetVJDAxisMin(id, axis, ref min);
+                        long mid = (max - min) / 2;
+
+                        switch (axis)
+                        {
+                            case HID_USAGES.HID_USAGE_X: neutral.AxisX = (int)mid; break;
+                            case HID_USAGES.HID_USAGE_Y: neutral.AxisY = (int)mid; break;
+                            case HID_USAGES.HID_USAGE_Z: neutral.AxisZ = (int)mid; break;
+                            case HID_USAGES.HID_USAGE_RX: neutral.AxisXRot = (int)mid; break;
+                            case HID_USAGES.HID_USAGE_RY: neutral.AxisYRot = (int)mid; break;
+                            case HID_USAGES.HID_USAGE_RZ: neutral.AxisZRot = (int)mid; break;
+                            case HID_USAGES.HID_USAGE_SL0: neutral.Slider = (int)mid; break;
+                            case HID_USAGES.HID_USAGE_SL1: neutral.Dial = (int)mid; break;
+                            case HID_USAGES.HID_USAGE_WHL: neutral.Wheel = (int)mid; break;
+                        }
+                    }
+                }
+
+                neutral.bHats = 0xFFFFFFFF;
+                neutral.bHatsEx1 = 0xFFFFFFFF;
+                neutral.bHatsEx2 = 0xFFFFFFFF;
+                neutral.bHatsEx3 = 0xFFFFFFFF;
+
+                _interface.UpdateVJD(id, ref neutral);
+
+                _states.Add(id, neutral);
 
                 _activeDirections.Add(id, new Dictionary<POVDirection, bool>
                 {
