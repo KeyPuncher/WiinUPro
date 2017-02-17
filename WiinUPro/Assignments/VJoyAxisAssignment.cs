@@ -9,19 +9,20 @@ namespace WiinUPro
     {
         public uint DeviceId { get; set; }
         public HID_USAGES Axis { get; set; }
-        // TODO: we need to specify direction
+        public bool Positive { get; set; }
 
         public VJoyAxisAssignment() { }
 
-        public VJoyAxisAssignment(HID_USAGES axis, uint device = 1)
+        public VJoyAxisAssignment(HID_USAGES axis, bool positive = true, uint device = 1)
         {
             Axis = axis;
+            Positive = positive;
             DeviceId = device;
         }
 
         public void Apply(float value)
         {
-            VJoyDirector.Access.SetAxis(Axis, value, DeviceId);
+            VJoyDirector.Access.SetAxis(Axis, value, Positive, DeviceId);
         }
 
         public bool SameAs(IAssignment assignment)
@@ -37,6 +38,7 @@ namespace WiinUPro
 
             result &= Axis == other.Axis;
             result &= DeviceId == other.DeviceId;
+            result &= Positive == other.Positive;
 
             return result;
         }
