@@ -74,7 +74,7 @@
                 <Image x:Name="homeBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitehome.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="625,325,0,0" Width="72" Height="73" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" Tag="proHOME" MouseRightButtonUp="Btn_MouseRightButtonUp" />
                 <Image x:Name="minusBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteminus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="515,323,0,0" Width="72" Height="73" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" Tag="proSELECT" MouseRightButtonUp="Btn_MouseRightButtonUp" />
                 <Image x:Name="plusBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteplus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="736,324,0,0" Width="72" Height="73" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" Tag="proSTART" MouseRightButtonUp="Btn_MouseRightButtonUp" />
-                <Button x:Name="quickXboxbtn" Content="Set for Xbox" HorizontalAlignment="Left" Margin="610,802,0,0" VerticalAlignment="Top" Width="145" Height="58" Click="quickXboxbtn_Click"/>
+                <Button x:Name="quickXboxbtn" Content="Set for Xbox" HorizontalAlignment="Left" Margin="538,835,0,0" VerticalAlignment="Top" Width="255" Height="88" Click="quickXboxbtn_Click" FontSize="26.667"/>
             </Grid>
         </Canvas>
     </Viewbox>
