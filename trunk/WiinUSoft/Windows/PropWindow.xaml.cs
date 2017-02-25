@@ -138,11 +138,21 @@ namespace WiinUSoft
                         break;
 
                     case 4:
-                        props.calPref = Property.CalibrationPreference.Custom;
-                        customCalibrate = true;
-                        Hide();
+                        //props.calPref = Property.CalibrationPreference.Custom;
+                        //customCalibrate = true;
+                        //Hide();
                         break;
                 }
+            }
+        }
+
+        private void calibrationSelection_DropDownClosed(object sender, EventArgs e)
+        {
+            if (props != null && calibrationSelection.SelectedIndex == 4)
+            {
+                props.calPref = Property.CalibrationPreference.Custom;
+                customCalibrate = true;
+                Hide();
             }
         }
     }

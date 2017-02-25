@@ -21,6 +21,7 @@
             <System:String>Controller 2</System:String>
             <System:String>Controller 3</System:String>
             <System:String>Controller 4</System:String>
+            <System:String>First Available</System:String>
         </ComboBox>
         <ComboBox x:Name="rumbleSelection" HorizontalAlignment="Left" Margin="120,108,0,0" VerticalAlignment="Top" Width="180" SelectedIndex="2" SelectionChanged="Rumble_SelectionChanged">
             <System:String>Disabled</System:String>
@@ -29,7 +30,7 @@
             <System:String>High</System:String>
             <System:String>Maximum</System:String>
         </ComboBox>
-        <ComboBox x:Name="calibrationSelection" HorizontalAlignment="Left" Margin="120,140,0,0" VerticalAlignment="Top" Width="180" SelectedIndex="0" SelectionChanged="Calibration_SelectionChanged">
+        <ComboBox x:Name="calibrationSelection" HorizontalAlignment="Left" Margin="120,140,0,0" VerticalAlignment="Top" Width="180" SelectedIndex="0" SelectionChanged="Calibration_SelectionChanged" DropDownClosed="calibrationSelection_DropDownClosed">
             <System:String>Default</System:String>
             <System:String>Minimum</System:String>
             <System:String>Moderate</System:String>
