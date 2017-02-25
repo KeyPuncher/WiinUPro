@@ -116,34 +116,29 @@ namespace WiinUSoft
         {
             Device = nintroller;
             devicePath = path;
-        }
 
+            Device.Disconnected += device_Disconnected;
+        }
+        
         public void RefreshState()
         {
-            //if (device.Connected)
-            //{
-                if (state != DeviceState.Connected_XInput)
-                    ConnectionState = DeviceState.Discovered;
+            if (state != DeviceState.Connected_XInput)
+                ConnectionState = DeviceState.Discovered;
 
-                UpdateIcon(device.Type);
-                SetName(device.Type.ToString());
+            UpdateIcon(device.Type);
+            SetName(device.Type.ToString());
 
-                // Load Properties
-                properties = UserPrefs.Instance.GetDevicePref(devicePath);
-                if (properties != null)
-                {
-                    SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
-                    ApplyCalibration(properties.calPref, properties.calString ?? "");
-                }
-                else
-                {
-                    properties = new Property(devicePath);
-                }
-            //}
-            //else
-            //{
-            //    ConnectionState = DeviceState.None;
-            //}
+            // Load Properties
+            properties = UserPrefs.Instance.GetDevicePref(devicePath);
+            if (properties != null)
+            {
+                SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
+                ApplyCalibration(properties.calPref, properties.calString ?? "");
+            }
+            else
+            {
+                properties = new Property(devicePath);
+            }
         }
 
         public void SetName(string newName)
@@ -427,6 +422,18 @@ namespace WiinUSoft
 
             // Resumes the timer in case this method is not called withing 100ms
             if (updateTimer != null) updateTimer.Change(100, UPDATE_SPEED);
+        }
+
+        private void device_Disconnected(object sender, DisconnectedEventArgs e)
+        {
+            Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background,
+                new Action(() =>
+                {
+                    Detatch();
+                    ConnectionState = device.Connected ? DeviceState.Discovered : DeviceState.None;
+                    MessageBox.Show("Failed to communicate with device." + Environment.NewLine + "It may no longer be connected.", "Failed", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
+            ));
         }
 
         private void SetWiimoteInputs(Wiimote wm)
