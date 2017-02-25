@@ -118,6 +118,36 @@ namespace WiinUSoft
                 }
             }
 
+            int target = 0;
+            while (!Holders.XInputHolder.availabe[target] && target < 4)
+            {
+                target++;
+            }
+
+            // Auto Connect First Available devices
+            for (int a = 0; a < connectSeq.Count; a++)
+            {
+                var thingy = connectSeq[a];
+
+                if (thingy.Key == 5)
+                {
+                    var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
+                    new System.Threading.Timer(_ => tcs.SetResult(null)).Change(1000, -1);
+                    tcs.Task.Wait();
+
+                    if (Holders.XInputHolder.availabe[target] && target < 4 && thingy.Value.Device.Connect())
+                    {
+                        thingy.Value.targetXDevice = target + 1;
+                        thingy.Value.ConnectionState = DeviceState.Connected_XInput;
+                        thingy.Value.Device.BeginReading();
+                        thingy.Value.Device.GetStatus();
+                        target++;
+                    }
+
+                    connectSeq.Remove(thingy);
+                }
+            }
+
             // Auto connect in preferred order
             for (int i = 1; i < connectSeq.Count; i++)
             {
@@ -129,13 +159,7 @@ namespace WiinUSoft
                     i = 0;
                 }
             }
-
-            int target = 0;
-            while(!Holders.XInputHolder.availabe[target] && target < 4)
-            {
-                target++;
-            }
-
+            
             foreach(KeyValuePair<int, DeviceControl> d in connectSeq)
             {
                 var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
