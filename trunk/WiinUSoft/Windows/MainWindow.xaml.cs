@@ -135,13 +135,17 @@ namespace WiinUSoft
                     new System.Threading.Timer(_ => tcs.SetResult(null)).Change(1000, -1);
                     tcs.Task.Wait();
 
-                    if (Holders.XInputHolder.availabe[target] && target < 4 && thingy.Value.Device.Connect())
+                    if (Holders.XInputHolder.availabe[target] && target < 4)
                     {
-                        thingy.Value.targetXDevice = target + 1;
-                        thingy.Value.ConnectionState = DeviceState.Connected_XInput;
-                        thingy.Value.Device.BeginReading();
-                        thingy.Value.Device.GetStatus();
-                        target++;
+                        if (thingy.Value.Device.Connected || (thingy.Value.Device.DataStream as WinBtStream).OpenConnection())
+                        {
+                            thingy.Value.targetXDevice = target + 1;
+                            thingy.Value.ConnectionState = DeviceState.Connected_XInput;
+                            thingy.Value.Device.BeginReading();
+                            thingy.Value.Device.GetStatus();
+                            thingy.Value.Device.SetPlayerLED(target + 1);
+                            target++;
+                        }
                     }
 
                     connectSeq.Remove(thingy);
@@ -166,13 +170,17 @@ namespace WiinUSoft
                 new System.Threading.Timer(_ => tcs.SetResult(null)).Change(1000, -1);
                 tcs.Task.Wait();
 
-                if (Holders.XInputHolder.availabe[target] && target < 4 && d.Value.Device.Connect())
+                if (Holders.XInputHolder.availabe[target] && target < 4)
                 {
-                    d.Value.targetXDevice = target + 1;
-                    d.Value.ConnectionState = DeviceState.Connected_XInput;
-                    d.Value.Device.BeginReading();
-                    d.Value.Device.GetStatus();
-                    target++;
+                    if (d.Value.Device.Connected || (d.Value.Device.DataStream as WinBtStream).OpenConnection())
+                    {
+                        d.Value.targetXDevice = target + 1;
+                        d.Value.ConnectionState = DeviceState.Connected_XInput;
+                        d.Value.Device.BeginReading();
+                        d.Value.Device.GetStatus();
+                        d.Value.Device.SetPlayerLED(target + 1);
+                        target++;
+                    }
                 }
             }
         }
@@ -254,7 +262,7 @@ namespace WiinUSoft
             Refresh();
         }
 
-        private void Window_StateChanged(object sender, System.EventArgs e)
+        private void Window_StateChanged(object sender, EventArgs e)
         {
             HideWindow();
         }
@@ -526,6 +534,6 @@ namespace WiinUSoft
             return true;
         }
 
-        public event System.EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged;
     }
 }
