@@ -17,7 +17,6 @@ namespace NintrollerLib
         public event EventHandler<DisconnectedEventArgs>        Disconnected    = delegate { };
         
         // General
-        [Obsolete]
         private bool               _connected                   = false;
         private INintrollerState   _state                       = new Wiimote();
         private CalibrationStorage _calibrations                = new CalibrationStorage();
@@ -385,6 +384,7 @@ namespace NintrollerLib
         /// Changes the device's reporting type.
         /// </summary>
         /// <param name="reportType">The report type to set to.</param>
+        /// <param name="continuous">If data should be sent repeatingly or only on changes.</param>
         public void SetReportType(InputReport reportType, bool continuous = false)
         {
             if (reportType == InputReport.Acknowledge ||
@@ -404,13 +404,17 @@ namespace NintrollerLib
         {
             if (_stream != null && _stream.CanRead)
             {
+                IAsyncResult ar = null;
+                System.Threading.WaitHandle wh = null;
+
                 lock (_readingObj)
                 {
                     byte[] readResult = new byte[Constants.REPORT_LENGTH];
                     
                     try
                     {
-                        _stream.BeginRead(readResult, 0, readResult.Length, RecieveDataAsync, readResult);
+                        ar = _stream.BeginRead(readResult, 0, readResult.Length, RecieveDataAsync, readResult);
+                        wh = ar.AsyncWaitHandle;
                     }
                     catch (ObjectDisposedException)
                     {
@@ -423,6 +427,24 @@ namespace NintrollerLib
                         Disconnected?.Invoke(this, new DisconnectedEventArgs(e));
                     }
                 }
+
+                // Wait 3 seconds for a response in the background
+                System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
+                {
+                    try
+                    {
+                        if (wh != null && !wh.SafeWaitHandle.IsClosed && !wh.WaitOne(3000))
+                        {
+                            // If read is not completed send a status report to check connection status
+                            GetStatus();
+                        }
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        Log("Disposed");
+                    }
+                });
+                t.Start();
             }
         }
 
@@ -452,8 +474,11 @@ namespace NintrollerLib
             catch (IOException e)
             {
                 Log("IO Error, is the device not connected?");
-                StopReading();
-                Disconnected?.Invoke(this, new DisconnectedEventArgs(e));
+                if (_reading || _connected)
+                {
+                    StopReading();
+                    Disconnected?.Invoke(this, new DisconnectedEventArgs(e));
+                }
             }
         }
 
