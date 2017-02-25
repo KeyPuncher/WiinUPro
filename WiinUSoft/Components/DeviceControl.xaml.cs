@@ -431,7 +431,16 @@ namespace WiinUSoft
                 {
                     Detatch();
                     ConnectionState = device.Connected ? DeviceState.Discovered : DeviceState.None;
-                    MessageBox.Show("Failed to communicate with device." + Environment.NewLine + "It may no longer be connected.", "Failed", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+                    // Show balloon if minimized, otherwise a popup dialog
+                    if (MainWindow.Instance.trayIcon.Visibility == Visibility.Visible)
+                    {
+                        MainWindow.Instance.ShowBalloon("Connection Lost", "Failed to communicate with controller. It may no longer be connected.", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to communicate with controller." + Environment.NewLine + "It may no longer be connected.", "Connection Lost", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             ));
         }
@@ -540,7 +549,7 @@ namespace WiinUSoft
                     new Action(() =>
                         {
                             statusGradient.Color = (Color)FindResource("LowBattery");
-                            if (MainWindow.Instance.trayIcon.Visibility == System.Windows.Visibility.Visible)
+                            if (MainWindow.Instance.trayIcon.Visibility == Visibility.Visible)
                             {
                                 lowBatteryFired = true;
                                 MainWindow.Instance.ShowBalloon
