@@ -69,7 +69,11 @@ namespace WiinUSoft
 
         internal ControllerType DeviceType { get; private set; }
 
-        internal string DevicePath { get; private set; }
+        internal string DevicePath
+        {
+            get { return devicePath; }
+            private set { devicePath = value; }
+        }
 
         internal bool Connected
         {
