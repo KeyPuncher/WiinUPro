@@ -76,6 +76,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Windows\CalDefaultWindow.xaml.cs">
+      <DependentUpon>CalDefaultWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CalibrateWindow.xaml.cs">
       <DependentUpon>CalibrateWindow.xaml</DependentUpon>
     </Compile>
@@ -90,6 +93,10 @@
     </Compile>
     <Compile Include="SingleInstance.cs" />
     <Compile Include="UserPrefs.cs" />
+    <Page Include="Windows\CalDefaultWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\CalibrateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

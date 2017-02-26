@@ -50,6 +50,7 @@
                 <ContextMenu>
                     <MenuItem x:Name="menu_AutoStart" Header="Auto Startup" Click="menu_AutoStart_Click"/>
                     <MenuItem x:Name="menu_StartMinimized" Header="Start Minimized" Click="menu_StartMinimized_Click"/>
+                    <MenuItem x:Name="menu_SetDefaultCalibration" Header="Set Default Calibration" Click="menu_SetDefaultCalibration_Click"/>
                     <MenuItem x:Name="menu_version" Header="version 2.0" IsEnabled="False"/>
                 </ContextMenu>
             </Button.ContextMenu>
