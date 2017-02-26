@@ -764,7 +764,7 @@ namespace WiinUSoft
         {
             bool wasConnected = Connected;
 
-            if (wasConnected || device.DataStream.CanRead)
+            if (wasConnected || ((device.DataStream as WinBtStream).OpenConnection() && device.DataStream.CanRead))
             {
                 if (!wasConnected)
                     device.BeginReading();
