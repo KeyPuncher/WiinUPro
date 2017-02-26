@@ -7,8 +7,10 @@ using System.Media;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Threading;
 using System.Windows.Input;
 using Shared;
 using Shared.Windows;
@@ -24,6 +26,9 @@ namespace WiinUSoft
 
         private List<DeviceInfo> hidList;
         private List<DeviceControl> deviceList;
+        private Task _refreshTask;
+        private CancellationTokenSource _refreshToken;
+        private bool _refreshing;
 
         public MainWindow()
         {
@@ -131,10 +136,6 @@ namespace WiinUSoft
 
                 if (thingy.Key == 5)
                 {
-                    var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
-                    new System.Threading.Timer(_ => tcs.SetResult(null)).Change(1000, -1);
-                    tcs.Task.Wait();
-
                     if (Holders.XInputHolder.availabe[target] && target < 4)
                     {
                         if (thingy.Value.Device.Connected || (thingy.Value.Device.DataStream as WinBtStream).OpenConnection())
@@ -166,10 +167,6 @@ namespace WiinUSoft
             
             foreach(KeyValuePair<int, DeviceControl> d in connectSeq)
             {
-                var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
-                new System.Threading.Timer(_ => tcs.SetResult(null)).Change(1000, -1);
-                tcs.Task.Wait();
-
                 if (Holders.XInputHolder.availabe[target] && target < 4)
                 {
                     if (d.Value.Device.Connected || (d.Value.Device.DataStream as WinBtStream).OpenConnection())
@@ -182,6 +179,31 @@ namespace WiinUSoft
                         target++;
                     }
                 }
+            }
+        }
+
+        private void AutoRefresh(bool set)
+        {
+            if (set && !_refreshing)
+            {
+                _refreshing = true;
+                _refreshToken = new CancellationTokenSource();
+                _refreshTask = new Task(new Action(() =>
+                {
+                    while (!_refreshToken.IsCancellationRequested)
+                    {
+                        Thread.Sleep(5000);
+                        if (_refreshToken.IsCancellationRequested) break;
+                        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => Refresh()));
+                    }
+
+                    _refreshing = false;
+                }), _refreshToken.Token);
+                _refreshTask.Start();
+            }
+            else if (!set && _refreshing)
+            {
+                _refreshToken.Cancel();
             }
         }
 
@@ -223,9 +245,9 @@ namespace WiinUSoft
                     groupXinput.Children.Remove(sender);
                     break;
 
-                case DeviceState.Connected_VJoy:
-                    groupXinput.Children.Remove(sender);
-                    break;
+                //case DeviceState.Connected_VJoy:
+                //    groupXinput.Children.Remove(sender);
+                //    break;
             }
 
             switch (newState)
@@ -238,12 +260,14 @@ namespace WiinUSoft
                     groupXinput.Children.Add(sender);
                     break;
 
-                case DeviceState.Connected_VJoy:
-                    groupXinput.Children.Add(sender);
-                    break;
+                //case DeviceState.Connected_VJoy:
+                //    groupXinput.Children.Add(sender);
+                //    break;
             }
+            
+            AutoRefresh(groupAvailable.Children.Count + groupXinput.Children.Count == 0);
         }
-
+        
         private void btnDetatchAllXInput_Click(object sender, RoutedEventArgs e)
         {
             List<DeviceControl> detatchList = new List<DeviceControl>();
