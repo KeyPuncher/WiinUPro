@@ -219,13 +219,11 @@ namespace WiinUSoft
             if (UserPrefs.Instance.startMinimized)
             {
                 menu_StartMinimized.IsChecked = true;
-                WindowState = System.Windows.WindowState.Minimized;
+                WindowState = WindowState.Minimized;
             }
-
-            if (UserPrefs.Instance.autoStartup)
-            {
-                menu_AutoStart.IsChecked = true;
-            }
+            
+            menu_AutoStart.IsChecked = UserPrefs.Instance.autoStartup;
+            menu_AutoRefresh.IsChecked = UserPrefs.Instance.autoRefresh;
 
             Refresh();
         }
@@ -265,7 +263,10 @@ namespace WiinUSoft
                 //    break;
             }
             
-            AutoRefresh(groupAvailable.Children.Count + groupXinput.Children.Count == 0);
+            if (menu_AutoRefresh.IsChecked)
+            {
+                AutoRefresh(groupAvailable.Children.Count + groupXinput.Children.Count == 0);
+            }
         }
         
         private void btnDetatchAllXInput_Click(object sender, RoutedEventArgs e)
@@ -335,6 +336,14 @@ namespace WiinUSoft
             menu_StartMinimized.IsChecked = !menu_StartMinimized.IsChecked;
             UserPrefs.Instance.startMinimized = menu_StartMinimized.IsChecked;
             UserPrefs.SavePrefs();
+        }
+
+        private void menu_AutoRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            menu_AutoRefresh.IsChecked = !menu_AutoRefresh.IsChecked;
+            UserPrefs.Instance.autoRefresh = menu_AutoRefresh.IsChecked;
+            UserPrefs.SavePrefs();
+            AutoRefresh(menu_AutoRefresh.IsChecked && groupAvailable.Children.Count + groupXinput.Children.Count == 0);
         }
 
         private void menu_SetDefaultCalibration_Click(object sender, RoutedEventArgs e)
