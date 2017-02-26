@@ -93,6 +93,7 @@ namespace WiinUSoft
 
         public List<Property> devicePrefs;
         public Profile defaultProfile;
+        public Property defaultProperty;
         public bool autoStartup;
         public bool startMinimized;
 
@@ -117,6 +118,9 @@ namespace WiinUSoft
                     }
 
                     successful = true;
+
+                    if (_instance != null && _instance.devicePrefs != null)
+                        _instance.defaultProperty = _instance.devicePrefs.Find((p) => p.hid.ToLower().Equals("all"));
                 }
             }
             catch (Exception e) 
@@ -176,7 +180,7 @@ namespace WiinUSoft
                 }
             }
 
-            return null;
+            return defaultProperty;
         }
 
         public void AddDevicePref(Property property)

@@ -315,7 +315,8 @@ namespace WiinUSoft
 
         private void menu_SetDefaultCalibration_Click(object sender, RoutedEventArgs e)
         {
-            
+            var dWin = new Windows.CalDefaultWindow();
+            dWin.ShowDialog();
         }
 
         #region Shortcut Creation
