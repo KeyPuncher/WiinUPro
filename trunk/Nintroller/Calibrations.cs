@@ -5,29 +5,70 @@ using System.Text;
 
 namespace NintrollerLib
 {
+    /// <summary>
+    /// Set of Preset Calibrations
+    /// </summary>
     public static class Calibrations
     {
+        /// <summary>
+        /// Possible pre built calibration types
+        /// </summary>
         public enum CalibrationPreset
         {
+            /// <summary>
+            /// Default (expected) calibration
+            /// </summary>
             Default = 0,
+            /// <summary>
+            /// Calibration with smaller deadzones
+            /// </summary>
             Minimum = 1,
+            /// <summary>
+            /// Calibration with more room for error
+            /// </summary>
             Modest  = 2,
+            /// <summary>
+            /// Calibration with largest deadzones and shorter ranges.
+            /// </summary>
             Extra   = 3,
-
+            /// <summary>
+            /// No deadzone and uses exact expected range
+            /// </summary>
             None    = -1
         }
 
         #region Properties
+        /// <summary>
+        /// Calibrations without a deadzone and exact range and center settings.
+        /// </summary>
         public static readonly Raw None = new Raw();
+        /// <summary>
+        /// Calibrations with small deadzones and larger active ranges.
+        /// </summary>
         public static readonly Minimal Minimum = new Minimal();
+        /// <summary>
+        /// Default calibrations with some deadzone.
+        /// </summary>
         public static readonly Default Defaults = new Default();
+        /// <summary>
+        /// Calibrations with larger deadzones and shorter active ranges.
+        /// </summary>
         public static readonly Modest Moderate = new Modest();
+        /// <summary>
+        /// Calibrations with the largest deadzones and shortest active ranges.
+        /// </summary>
         public static readonly Extra Extras = new Extra();
         #endregion
 
         #region Inner Classes (Calibration Types)
+        /// <summary>
+        /// Class containing all Raw calibrations
+        /// </summary>
         public class Raw
         {
+            /// <summary>
+            /// Raw callibration for the Wii U Pro Controller
+            /// </summary>
             public ProController ProControllerRaw = new ProController()
             {
                 LJoy = new Joystick()
@@ -56,6 +97,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Raw calibration for the Wii Remote
+            /// </summary>
             public Wiimote WiimoteRaw = new Wiimote()
             {
                 accelerometer = new Accelerometer()
@@ -77,6 +121,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Raw calibration for the Wii Nunchuk
+            /// </summary>
             public Nunchuk NunchukRaw = new Nunchuk()
             {
                 joystick = new Joystick()
@@ -110,6 +157,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Raw calibration for the Wii Classic Controller
+            /// </summary>
             public ClassicController ClassicControllerRaw = new ClassicController()
             {
                 LJoy = new Joystick()
@@ -148,6 +198,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Raw calibration for the Wii Classic Controller Pro
+            /// </summary>
             public ClassicControllerPro ClassicControllerProRaw = new ClassicControllerPro()
             {
                 LJoy = new Joystick()
@@ -177,8 +230,14 @@ namespace NintrollerLib
             };
         }
 
+        /// <summary>
+        /// Class containing all the Minimal calibrations
+        /// </summary>
         public class Minimal
         {
+            /// <summary>
+            /// Minimal calibration for the Wii U Pro Controller
+            /// </summary>
             public ProController ProControllerMinimal = new ProController()
             {
                 LJoy = new Joystick()
@@ -206,7 +265,10 @@ namespace NintrollerLib
                     deadY   = 64
                 }
             };
-
+            
+            /// <summary>
+            /// Minimum calibration for the Wii Remote
+            /// </summary>
             public Wiimote WiimoteMinimal = new Wiimote()
             {
                 accelerometer = new Accelerometer()
@@ -228,6 +290,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Minimum calibration for the Wii Nunchuk
+            /// </summary>
             public Nunchuk NunchukMinimal = new Nunchuk()
             {
                 joystick = new Joystick()
@@ -261,6 +326,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Minimum calibration for the Wii Classic Controller
+            /// </summary>
             public ClassicController ClassicControllerMinimal = new ClassicController()
             {
                 LJoy = new Joystick()
@@ -299,6 +367,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Minimum calibration for the Wii Classic Controller Pro
+            /// </summary>
             public ClassicControllerPro ClassicControllerProMinimal = new ClassicControllerPro()
             {
                 LJoy = new Joystick()
@@ -329,8 +400,14 @@ namespace NintrollerLib
         }
 
         // TODO: Calibration - Optimize Defaults
+        /// <summary>
+        /// Class containing all the Default calibrations
+        /// </summary>
         public class Default
         {
+            /// <summary>
+            /// Default calibration for the Wii U Pro Controller
+            /// </summary>
             public ProController ProControllerDefault = new ProController()
             {
                 LJoy = new Joystick()
@@ -367,6 +444,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Default calibration for the Wii Remote
+            /// </summary>
             public Wiimote WiimoteDefault = new Wiimote()
             {
                 accelerometer = new Accelerometer()
@@ -388,6 +468,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Default calibration for the Wii Nunchuk
+            /// </summary>
             public Nunchuk NunchukDefault = new Nunchuk()
             {
                 joystick = new Joystick()
@@ -421,6 +504,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Default calibration for the Wii Classic Controller
+            /// </summary>
             public ClassicController ClassicControllerDefault = new ClassicController()
             {
                 LJoy = new Joystick()
@@ -459,6 +545,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Default calibration for the Wii Classic Controller Pro
+            /// </summary>
             public ClassicControllerPro ClassicControllerProDefault = new ClassicControllerPro()
             {
                 LJoy = new Joystick()
@@ -488,8 +577,14 @@ namespace NintrollerLib
             };
         }
 
+        /// <summary>
+        /// Class containing all the Modest Calibrations (larger deadzones)
+        /// </summary>
         public class Modest
         {
+            /// <summary>
+            /// Modest calibration for the Wii U Pro Controller
+            /// </summary>
             public ProController ProControllerModest = new ProController()
             {
                 LJoy = new Joystick()
@@ -518,6 +613,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Modest calibration for the Wii Remote
+            /// </summary>
             public Wiimote WiimoteModest = new Wiimote()
             {
                 accelerometer = new Accelerometer()
@@ -539,6 +637,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Modest calibration for the Wii Nunchuk
+            /// </summary>
             public Nunchuk NunchukModest = new Nunchuk()
             {
                 joystick = new Joystick()
@@ -572,6 +673,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Modest calibration for the Wii Classic Controller
+            /// </summary>
             public ClassicController ClassicControllerModest = new ClassicController()
             {
                 LJoy = new Joystick()
@@ -610,6 +714,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Modest calibration for the Wii Classic Controler Pro
+            /// </summary>
             public ClassicControllerPro ClassicControllerProModest = new ClassicControllerPro()
             {
                 LJoy = new Joystick()
@@ -639,8 +746,14 @@ namespace NintrollerLib
             };
         }
 
+        /// <summary>
+        /// Class containing all the Extra Calibrations (largets deadzones, shortest ranges)
+        /// </summary>
         public class Extra
         {
+            /// <summary>
+            /// Extra calibration for the Wii U Pro Controller
+            /// </summary>
             public ProController ProControllerExtra = new ProController()
             {
                 LJoy = new Joystick()
@@ -669,6 +782,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Extra calibration for the Wii Remote
+            /// </summary>
             public Wiimote WiimoteExtra = new Wiimote()
             {
                 accelerometer = new Accelerometer()
@@ -690,6 +806,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Extra calibration for the Wii Nunchuk
+            /// </summary>
             public Nunchuk NunchukExtra = new Nunchuk()
             {
                 joystick = new Joystick()
@@ -723,6 +842,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Extra calibration for the Wii Classic Controller
+            /// </summary>
             public ClassicController ClassicControllerExtra = new ClassicController()
             {
                 LJoy = new Joystick()
@@ -761,6 +883,9 @@ namespace NintrollerLib
                 }
             };
 
+            /// <summary>
+            /// Extra calibration for the Classic Controller Pro
+            /// </summary>
             public ClassicControllerPro ClassicControllerProExtra = new ClassicControllerPro()
             {
                 LJoy = new Joystick()
@@ -792,14 +917,35 @@ namespace NintrollerLib
         #endregion
     }
 
+    /// <summary>
+    /// Class for easily storying calibrations.
+    /// </summary>
     public class CalibrationStorage
     {
+        /// <summary>
+        /// Holder for Wii U Pro Controller Calibration
+        /// </summary>
         public ProController ProCalibration;
+        /// <summary>
+        /// Holder for Wii Remote calibration
+        /// </summary>
         public Wiimote WiimoteCalibration;
+        /// <summary>
+        /// Holder for Wii Nunchuk calibration
+        /// </summary>
         public Nunchuk NunchukCalibration;
+        /// <summary>
+        /// Holder for Wii Classic Controller calibration
+        /// </summary>
         public ClassicController ClassicCalibration;
+        /// <summary>
+        /// Holder for Wii Classic Controller Pro calibration
+        /// </summary>
         public ClassicControllerPro ClassicProCalibration;
 
+        /// <summary>
+        /// Default constructor setting all calibrations to their defaults.
+        /// </summary>
         public CalibrationStorage()
         {
             ProCalibration        = Calibrations.Defaults.ProControllerDefault;
@@ -809,11 +955,19 @@ namespace NintrollerLib
             ClassicProCalibration = Calibrations.Defaults.ClassicControllerProDefault;
         }
 
-        public CalibrationStorage(string storageString)
+        /// <summary>
+        /// Constructor that takes the ToString of this class and converts it to calibrations.
+        /// </summary>
+        /// <param name="storageString"></param>
+        public CalibrationStorage(string storageString) : base()
         {
             SetCalibrations(storageString);
         }
 
+        /// <summary>
+        /// Sets calibrations based on the ToString of this class.
+        /// </summary>
+        /// <param name="storageString"></param>
         public void SetCalibrations(string storageString)
         {
             if (storageString == null) return;
@@ -845,6 +999,10 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Sets calibrations based on a preset.
+        /// </summary>
+        /// <param name="preset"></param>
         public void SetCalibrations(Calibrations.CalibrationPreset preset)
         {
             switch (preset)
@@ -891,6 +1049,10 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Converts the calibrations in this class to a string format.
+        /// </summary>
+        /// <returns>String format of curent calibrations in this class</returns>
         public override string ToString()
         {
             string text = "";
