@@ -28,6 +28,6 @@ namespace NintrollerLib
 
     public interface INintrollerBounds
     {
-        bool InBounds(int x, int y = 0, int z = 0);
+        bool InBounds(float x, float y = 0);
     }
 }

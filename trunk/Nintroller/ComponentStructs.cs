@@ -129,6 +129,7 @@ namespace NintrollerLib
         public IRPoint point1, point2, point3, point4;
         public float rotation, distance;
         public float X, Y;
+        public INintrollerBounds boundingArea;
 
         public void Parse(byte[] input, int offset = 0)
         {
@@ -190,12 +191,41 @@ namespace NintrollerLib
 
         public void Normalize()
         {
-            X = (point2.rawX - point1.rawX) / 2f;
-            Y = (point2.rawY - point1.rawX) / 2f;
+            if (!point1.visible)
+            {
+                X = 0;
+                Y = 0;
+                rotation = 0;
+                distance = 0;
+            }
+            else if (!point2.visible)
+            {
+                X = point1.rawX;
+                Y = point1.rawY;
+                rotation = 0;
+                distance = 0;
 
-            float denominator = (point2.rawX - point1.rawX);
-            rotation = denominator == 0 ? 0f : (180 / 3.14159f) * (float)Math.Sin((point2.rawY - point1.rawX) / denominator);
-            distance = (float)Math.Sqrt(Math.Pow(point2.rawX - point1.rawX, 2) + Math.Pow(point2.rawY - point1.rawY, 2));
+                if (boundingArea != null && boundingArea.InBounds(X, Y))
+                {
+                    X = 0;
+                    Y = 0;
+                }
+            }
+            else
+            {
+                X = (point2.rawX - point1.rawX) / 2f;
+                Y = (point2.rawY - point1.rawX) / 2f;
+
+                float denominator = (point2.rawX - point1.rawX);
+                rotation = denominator == 0 ? 0f : (180 / 3.14159f) * (float)Math.Sin((point2.rawY - point1.rawX) / denominator);
+                distance = (float)Math.Sqrt(Math.Pow(point2.rawX - point1.rawX, 2) + Math.Pow(point2.rawY - point1.rawY, 2));
+
+                if (boundingArea != null && boundingArea.InBounds(X, Y))
+                {
+                    X = 0;
+                    Y = 0;
+                }
+            }
         }
 
         public override string ToString()
@@ -356,7 +386,7 @@ namespace NintrollerLib
             this.radius = radius;
         }
 
-        public bool InBounds(int x, int y = 0, int z = 0)
+        public bool InBounds(float x, float y = 0)
         {
             var dist = Math.Sqrt(Math.Pow(center_x - x, 2) + Math.Pow(center_y - y, 2));
 
@@ -371,20 +401,22 @@ namespace NintrollerLib
     {
         public int center_x;
         public int center_y;
-        public int size;
+        public int width;
+        public int height;
 
-        public SquareBoundry(int x, int y, int s)
+        public SquareBoundry(int x, int y, int w, int h)
         {
             center_x = x;
             center_y = y;
-            size = s;
+            width = w;
+            height = h;
         }
 
-        public bool InBounds(int x, int y = 0, int z = 0)
+        public bool InBounds(float x, float y = 0)
         {
-            if (x > (center_x - size/2) && x < (center_x + size/2))
+            if (x > (center_x - width/2) && x < (center_x + width/2))
             {
-                if (y > (center_y - size/2) && y < (center_y + size/2))
+                if (y > (center_y - height/2) && y < (center_y + height/2))
                 {
                     return true;
                 }
