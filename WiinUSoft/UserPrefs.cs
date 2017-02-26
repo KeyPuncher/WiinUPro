@@ -96,6 +96,7 @@ namespace WiinUSoft
         public Property defaultProperty;
         public bool autoStartup;
         public bool startMinimized;
+        public bool autoRefresh = true;
 
         public UserPrefs()
         { }
