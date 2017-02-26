@@ -6,6 +6,7 @@ using System.Windows.Media;
 using NintrollerLib;
 using System.Xml.Serialization;
 using System.IO;
+using Shared.Windows;
 
 namespace WiinUSoft
 {
@@ -692,7 +693,7 @@ namespace WiinUSoft
 
         private void XOption_Click(object sender, RoutedEventArgs e)
         {
-            if (device.DataStream.CanRead)
+            if ((device.DataStream as WinBtStream).OpenConnection() && device.DataStream.CanRead)
             {
                 device.BeginReading();
                 device.GetStatus();
