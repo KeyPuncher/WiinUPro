@@ -8,7 +8,7 @@
         <Button x:Name="btnSave" Content="Save" Canvas.Left="400" Canvas.Top="324" Width="128" Height="32" Click="btnSave_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}" FontWeight="Bold"/>
         <Button x:Name="btnLoad" Content="Load" Canvas.Left="400" Canvas.Top="369" Width="128" Height="32" Click="btnLoad_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
         <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="550" Canvas.Top="414" Width="128" Height="32" Click="btnCancel_Click" BorderBrush="{DynamicResource BrushAntemBlue}" Background="{DynamicResource ButonFillBrush1}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
-        <Line x:Name="guideMeet" X1="178" X2="518" Canvas.Left="0" Canvas.Top="30" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5"/>
+        <Line x:Name="guideMeet" X1="174" X2="538" Canvas.Left="0" Canvas.Top="30" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5"/>
         <Polygon Points="-2,-2 32,15 -2,32" Fill="{DynamicResource BrushJohnTheRevelator}" Canvas.Left="330" Canvas.Top="15" />
         <Polygon Points="0,0 30,15 0,30" Fill="{DynamicResource BrushAntemBlue}" Canvas.Left="330" Canvas.Top="15" />
         <!-- Mapped Device (360 Controller) -->
@@ -46,8 +46,8 @@
             <Rectangle x:Name="mouseClick" HorizontalAlignment="Left" Height="20" Margin="190,-42,0,200" VerticalAlignment="Top" Width="118" ToolTip="MM" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="map_MouseDown" Stroke="Black" StrokeThickness="0" Fill="#00000000" Visibility="Collapsed"/>
             -->
         </Grid>
-        <Line x:Name="guideMap" X1="0" Y2="150" Canvas.Left="518" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False"/>
-        <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="500" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
+        <Line x:Name="guideMap" X1="0" Y2="150" Canvas.Left="538" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False"/>
+        <Ellipse x:Name="selectionMap" Height="36" Canvas.Left="520" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
         <Label x:Name="mapLabel" Content="Guide" Canvas.Left="365" Canvas.Top="-2" Width="100" FontWeight="Bold"/>
         <!-- Device to Map (Pro Controller) -->
         <Grid x:Name="ProGrid" Canvas.Left="10" Canvas.Top="94" Height="200" Visibility="Visible">
@@ -178,8 +178,8 @@
             <Rectangle x:Name="nk_aRollClick" HorizontalAlignment="Left" Height="18" Margin="41,179,0,0" VerticalAlignment="Top" Width="17" ToolTip="Tilt Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
             <Rectangle x:Name="nk_aRollNegClick" HorizontalAlignment="Left" Height="18" Margin="21,168,0,0" VerticalAlignment="Top" Width="17" ToolTip="Tilt Left" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
         </Grid>
-        <Ellipse x:Name="selectionDevice" Height="36" Canvas.Left="160" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
-        <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="178" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False"/>
+        <Ellipse x:Name="selectionDevice" Height="36" Canvas.Left="158" Stroke="{DynamicResource BrushAntemBlue}" Canvas.Top="178" Width="36" StrokeThickness="5" IsHitTestVisible="False"/>
+        <Line x:Name="guideDevice" X1="0" Y2="150" Canvas.Left="176" Canvas.Top="28" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False"/>
         <Label x:Name="deviceLabel" Content="Home" Canvas.Left="220" Canvas.Top="-2" HorizontalContentAlignment="Right" Width="100" BorderThickness="1,0,0,0" FontWeight="Bold"/>
     </Canvas>
 </Window>
