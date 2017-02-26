@@ -31,6 +31,7 @@ namespace WiinUSoft
             Wiimote_acc_y_range,
             Wiimote_acc_z_center,
             Wiimote_acc_z_range,
+            // TODO: Wiimote ir
 
             Nunchuk_acc_x_center,   // first step for nunchuk
             Nunchuk_acc_x_range,
