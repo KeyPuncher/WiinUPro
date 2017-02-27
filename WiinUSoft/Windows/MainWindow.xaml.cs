@@ -282,8 +282,15 @@ namespace WiinUSoft
             }
         }
 
-        private void btnIdentify_Click(object sender, RoutedEventArgs e)
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
+            Refresh();
+        }
+
+        private void btnSync_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.SyncWindow sync = new Windows.SyncWindow();
+            sync.ShowDialog();
             Refresh();
         }
 

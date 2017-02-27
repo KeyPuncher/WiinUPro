@@ -3,12 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="ConfigWindow" Height="485.925" Width="716" Icon="../Images/WiinUSoft_Icon32.png" Background="{DynamicResource BrushAntemWhite}">
     <Canvas x:Name="configCanvas">
+<<<<<<< .mine
+        <Button x:Name="btnApply" Content="Apply" Canvas.Left="550" Canvas.Top="324" Width="128" Height="32" Click="btnApply_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+        <Button x:Name="btnDefault" Content="Default" Canvas.Left="550" Canvas.Top="369" Width="128" Height="32" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Click="btnDefault_Click" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+        <Button x:Name="btnSave" Content="Save" Canvas.Left="400" Canvas.Top="324" Width="128" Height="32" Click="btnSave_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}" FontWeight="Bold"/>
+        <Button x:Name="btnLoad" Content="Load" Canvas.Left="400" Canvas.Top="369" Width="128" Height="32" Click="btnLoad_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+        <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="550" Canvas.Top="414" Width="128" Height="32" Click="btnCancel_Click" BorderBrush="{DynamicResource BrushAntemBlue}" Background="{DynamicResource ButonFillBrush1}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+        <Line x:Name="guideMeet" X1="178" X2="536" Canvas.Left="0" Canvas.Top="30" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5"/>
+||||||| .r394
+        <Button x:Name="btnApply" Content="Apply" Canvas.Left="550" Canvas.Top="324" Width="128" Height="32" Click="btnApply_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}"/>
+        <Button x:Name="btnDefault" Content="Default" Canvas.Left="550" Canvas.Top="369" Width="128" Height="32" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Click="btnDefault_Click" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}"/>
+        <Button x:Name="btnSave" Content="Save" Canvas.Left="400" Canvas.Top="324" Width="128" Height="32" Click="btnSave_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Foreground="{DynamicResource BrushAntemWhite}" FontWeight="Bold"/>
+        <Button x:Name="btnLoad" Content="Load" Canvas.Left="400" Canvas.Top="369" Width="128" Height="32" Click="btnLoad_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}"/>
+        <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="550" Canvas.Top="414" Width="128" Height="32" Click="btnCancel_Click" BorderBrush="{DynamicResource BrushAntemBlue}" Background="{DynamicResource ButonFillBrush1}" FontWeight="Bold" Foreground="{DynamicResource BrushAntemWhite}"/>
+        <Line x:Name="guideMeet" X1="178" X2="518" Canvas.Left="0" Canvas.Top="30" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5"/>
+=======
         <Button x:Name="btnApply" Content="Apply" Canvas.Left="550" Canvas.Top="324" Width="128" Height="32" Click="btnApply_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
         <Button x:Name="btnDefault" Content="Default" Canvas.Left="550" Canvas.Top="369" Width="128" Height="32" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Click="btnDefault_Click" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
         <Button x:Name="btnSave" Content="Save" Canvas.Left="400" Canvas.Top="324" Width="128" Height="32" Click="btnSave_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}" FontWeight="Bold"/>
         <Button x:Name="btnLoad" Content="Load" Canvas.Left="400" Canvas.Top="369" Width="128" Height="32" Click="btnLoad_Click" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
         <Button x:Name="btnCancel" Content="Cancel" Canvas.Left="550" Canvas.Top="414" Width="128" Height="32" Click="btnCancel_Click" BorderBrush="{DynamicResource BrushAntemBlue}" Background="{DynamicResource ButonFillBrush1}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
         <Line x:Name="guideMeet" X1="174" X2="538" Canvas.Left="0" Canvas.Top="30" Stroke="{DynamicResource BrushAntemBlue}" StrokeThickness="5"/>
+>>>>>>> .r410
         <Polygon Points="-2,-2 32,15 -2,32" Fill="{DynamicResource BrushJohnTheRevelator}" Canvas.Left="330" Canvas.Top="15" />
         <Polygon Points="0,0 30,15 0,30" Fill="{DynamicResource BrushAntemBlue}" Canvas.Left="330" Canvas.Top="15" />
         <!-- Mapped Device (360 Controller) -->
