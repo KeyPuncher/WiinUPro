@@ -39,15 +39,20 @@ namespace WiinUPro.Windows
             radioParams.Initialize();
 
             handle = NativeImports.BluetoothFindFirstRadio(ref radioParams, out foundRadio);
+            bool next = handle != IntPtr.Zero;
 
-            if (foundRadio != IntPtr.Zero)
+            do
             {
-                btRadios.Add(foundRadio);
+                if (foundRadio != IntPtr.Zero)
+                {
+                    btRadios.Add(foundRadio);
+                }
+
+                next = NativeImports.BluetoothFindNextRadio(ref radioParams, out foundRadio);
             }
-
-            // TODO: More Radios
-
-            if (handle != IntPtr.Zero)
+            while (next);
+            
+            if (btRadios.Count > 0)
             {
                 Prompt("Searching...");
 
@@ -55,6 +60,7 @@ namespace WiinUPro.Windows
                 {
                     for (int r = 0; r < btRadios.Count; r++)
                     {
+                        //Prompt("Radio: " + r.ToString());
                         IntPtr found;
                         NativeImports.Bluetooth_Radio_Info radioInfo = new NativeImports.Bluetooth_Radio_Info();
                         NativeImports.BluetoothDeviceInfo deviceInfo = new NativeImports.BluetoothDeviceInfo();
