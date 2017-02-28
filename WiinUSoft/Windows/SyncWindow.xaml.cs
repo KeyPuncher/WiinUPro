@@ -13,6 +13,7 @@ namespace WiinUSoft.Windows
     public partial class SyncWindow : Window
     {
         public bool Cancelled { get; protected set; }
+        public int Count { get; protected set; }
 
         public SyncWindow()
         {
@@ -26,7 +27,6 @@ namespace WiinUSoft.Windows
             List<IntPtr> btRadios = new List<IntPtr>();
             IntPtr foundRadio;
             IntPtr foundResult;
-            int count = 0;
 
             radioParams.Initialize();
 
@@ -50,7 +50,7 @@ namespace WiinUSoft.Windows
                 Prompt("Searching for controllers...");
 
                 // Search until cancelled or at least one device is paired
-                while (count == 0 && !Cancelled)
+                while (Count == 0 && !Cancelled)
                 {
                     foreach (var radio in btRadios)
                     {
@@ -126,7 +126,7 @@ namespace WiinUSoft.Windows
                                         if (success)
                                         {
                                             Prompt("Successfully Paired!");
-                                            count += 1;
+                                            Count += 1;
                                         }
                                         else
                                         {
@@ -186,7 +186,7 @@ namespace WiinUSoft.Windows
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!Cancelled)
+            if (!Cancelled && Count == 0)
             {
                 Cancelled = true;
                 Prompt("Cancelling");
