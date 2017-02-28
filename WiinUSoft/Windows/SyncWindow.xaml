@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUSoft.Windows"
         mc:Ignorable="d"
-        Title="Sync Devices" Height="300" Width="300" Icon="../Images/WiinUSoft_Icon32.png" Background="{DynamicResource BrushSocialBlue}" StateChanged="Window_StateChanged">
+        Title="Sync Devices" Height="204.735" Width="300" Icon="../Images/WiinUSoft_Icon32.png" Background="{DynamicResource BrushSocialBlue}" Closing="Window_Closing" Loaded="Window_Loaded">
     <Grid>
-        
+        <TextBlock x:Name="info" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="43"><Run Text="Press the red sync button on the controller to pair."/></TextBlock>
+        <TextBox x:Name="prompt" TextWrapping="Wrap" Margin="10,58,10,43.5" IsReadOnly="True" Background="{DynamicResource BrushAntemWhite}"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="0,0,10,10" Background="{DynamicResource ButonFillBrush1}" BorderBrush="{DynamicResource BrushAntemBlue}" FontWeight="Bold" Foreground="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}" HorizontalAlignment="Right" Width="64" Height="26" VerticalAlignment="Bottom" Click="cancelBtn_Click"/>
+
     </Grid>
 </Window>
