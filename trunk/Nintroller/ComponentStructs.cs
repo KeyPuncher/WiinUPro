@@ -1,29 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NintrollerLib
 {
+    /// <summary>
+    /// Standard buttons included on a Wii Remote
+    /// </summary>
     public struct CoreButtons : INintrollerParsable
     {
+        /// <summary></summary>
         public bool A, B;
+        /// <summary></summary>
         public bool One, Two;
+        /// <summary></summary>
         public bool Up, Down, Left, Right;
+        /// <summary></summary>
         public bool Plus, Minus, Home;
 
+        /// <summary>
+        /// Start is the same as Plus
+        /// </summary>
         public bool Start
         {
             get { return Plus; }
             set { Plus = value; }
         }
 
+        /// <summary>
+        /// Select is the same as Minus
+        /// </summary>
         public bool Select
         {
             get { return Minus; }
             set { Minus = value; }
         }
 
+        /// <summary>
+        /// Parses core buttons based on 2 bytes from the input data.
+        /// </summary>
+        /// <param name="input">Byte array of controller data.</param>
+        /// <param name="offset">Starting index of Core Button bytes.</param>
         public void Parse(byte[] input, int offset = 0)
         {
             InputReport type = (InputReport)input[0];
@@ -45,17 +61,35 @@ namespace NintrollerLib
         }
     }
 
+    /// <summary>
+    /// Class to hold Accerlerometer data.
+    /// </summary>
     public struct Accelerometer : INintrollerParsable, INintrollerNormalizable
     {
+        /// <summary>
+        /// Raw Value
+        /// </summary>
         public int rawX, rawY, rawZ;
+        /// <summary>
+        /// Normalized Value
+        /// </summary>
         public float X, Y, Z;
 
         // calibration values
+        /// <summary>Middle / Neutral position.</summary>
         public int centerX, centerY, centerZ;
+        /// <summary>Minimum position (registers as -1 when normalized)</summary>
         public int minX, minY, minZ;
+        /// <summary>Maximum position (registers as +1 when normalized)</summary>
         public int maxX, maxY, maxZ;
+        /// <summary>Magnitude where positions should be ignored when within.</summary>
         public int deadX, deadY, deadZ;
 
+        /// <summary>
+        /// Parses 3 byte accelerometer raw data.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="offset"></param>
         public void Parse(byte[] input, int offset = 0)
         {
             InputReport type = (InputReport)input[0];
@@ -76,6 +110,10 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Copy calibration members from provided Accelerometer structure.
+        /// </summary>
+        /// <param name="calibration"></param>
         public void Calibrate(Accelerometer calibration)
         {
             centerX = calibration.centerX;
@@ -95,6 +133,9 @@ namespace NintrollerLib
             deadZ = calibration.deadZ;
         }
 
+        /// <summary>
+        /// Calculates the normalized values.
+        /// </summary>
         public void Normalize()
         {
             // Cubic deadzone
@@ -111,26 +152,61 @@ namespace NintrollerLib
             Z = Nintroller.Normalize(rawZ, minZ, centerZ, maxZ, deadZ);
         }
 
+        /// <summary>
+        /// Converts normalized values to displayable string.
+        /// </summary>
+        /// <returns>String values of X, Y, Z</returns>
         public override string ToString()
         {
             return string.Format("X:{0} Y:{1} Z{2}", X, Y, Z);
         }
     }
 
+    /// <summary>
+    /// Individual IR sensor point.
+    /// </summary>
     public struct IRPoint
     {
+        /// <summary></summary>
         public int rawX, rawY, size;
         //public float x, y;
+        /// <summary>
+        /// If this point is visible or not
+        /// </summary>
         public bool visible;
     }
 
+    /// <summary>
+    /// Collection of IR sensor data
+    /// </summary>
     public struct IR : INintrollerParsable, INintrollerNormalizable
     {
+        /// <summary>
+        /// Individual IR Point
+        /// </summary>
         public IRPoint point1, point2, point3, point4;
-        public float rotation, distance;
+        /// <summary>
+        /// Calculated rotation angle
+        /// </summary>
+        public float rotation;
+        /// <summary>
+        /// Distance between points 1 and 2
+        /// </summary>
+        public float distance;
+        /// <summary>
+        /// Normalized pointer position
+        /// </summary>
         public float X, Y;
+        /// <summary>
+        /// Area in which normalization returns 0
+        /// </summary>
         public INintrollerBounds boundingArea;
 
+        /// <summary>
+        /// Parse IR sensor data
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="offset"></param>
         public void Parse(byte[] input, int offset = 0)
         {
             InputReport type = (InputReport)input[0];
@@ -189,6 +265,9 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Calculates (X,Y) point, rotation, and distance
+        /// </summary>
         public void Normalize()
         {
             if (!point1.visible)
@@ -228,21 +307,44 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Creates a readable string of the IR normalized oint.
+        /// </summary>
+        /// <returns>String representing IR Point</returns>
         public override string ToString()
         {
             return string.Format("X:{0} Y:{1}", X, Y);
         }
     }
 
+    /// <summary>
+    /// Class to represent Trigger input
+    /// </summary>
     public struct Trigger : INintrollerParsable, INintrollerNormalizable
     {
+        /// <summary>
+        /// Raw input value
+        /// </summary>
         public short rawValue;
+        /// <summary>
+        /// Normalized input value
+        /// </summary>
         public float value;
+        /// <summary>
+        /// Fully pressed
+        /// </summary>
         public bool full;
 
-        // calibration values
+        /// <summary>
+        /// Calibration
+        /// </summary>
         public int min, max;
 
+        /// <summary>
+        /// Parses trigger data
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="offset"></param>
         public void Parse(byte[] input, int offset = 0)
         {
             Parse(input, offset, false);
@@ -261,12 +363,19 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Copy calibration members from another Trigger object
+        /// </summary>
+        /// <param name="calibration">Calibration data to copy</param>
         public void Calibrate(Trigger calibration)
         {
             min = calibration.min;
             max = calibration.max;
         }
 
+        /// <summary>
+        /// Normalize value
+        /// </summary>
         public void Normalize()
         {
             if (rawValue < min)
@@ -280,19 +389,38 @@ namespace NintrollerLib
         }
     }
 
+    /// <summary>
+    /// Class representing joystick data
+    /// </summary>
     public struct Joystick : INintrollerNormalizable
     {
+        /// <summary>
+        /// Raw value
+        /// </summary>
         public short rawX, rawY;
+        /// <summary>
+        /// Normalized value
+        /// </summary>
         public float X, Y;
 
         // calibration values
+        /// <summary>Middle / Neutral position.</summary>
         public int centerX, centerY;
+        /// <summary>Minimum position (registers as -1 when normalized)</summary>
         public int minX, minY;
+        /// <summary>Maximum position (registers as +1 when normalized)</summary>
         public int maxX, maxY;
+        /// <summary>Magnitude where positions should be ignored when within.</summary>
         public int deadX, deadY;
+        /// <summary>Asymetrical positions should be ignored when within.</summary>
         public int deadXp, deadXn, deadYp, deadYn;
+        /// <summary>Minimum normalized output amount</summary>
         public float antiDeadzone;
 
+        /// <summary>
+        /// Copy calibration values from another Joystick object
+        /// </summary>
+        /// <param name="calibration">Joystick data to copy from</param>
         public void Calibrate(Joystick calibration)
         {
             centerX = calibration.centerX;
@@ -333,6 +461,9 @@ namespace NintrollerLib
             antiDeadzone = calibration.antiDeadzone;
         }
 
+        /// <summary>
+        /// Normalizes raw values to calculate X and Y
+        /// </summary>
         public void Normalize()
         {
             // This is a square deadzone
@@ -356,6 +487,10 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Creates a readable string value representing X and Y
+        /// </summary>
+        /// <returns>String of X and Y Axes</returns>
         public override string ToString()
         {
             return string.Format("X:{0} Y:{1}", X, Y);
@@ -373,12 +508,24 @@ namespace NintrollerLib
 
     // Calculate other members (like weight distribution)
 
+    /// <summary>
+    /// Represents a circular boundry
+    /// </summary>
     public struct CircularBoundry : INintrollerBounds
     {
+        /// <summary>Center X of circle</summary>
         public int center_x;
+        /// <summary>Center Y of circle</summary>
         public int center_y;
+        /// <summary>Size of the circle</summary>
         public int radius;
 
+        /// <summary>
+        /// Creates a circular boundry with the given parameters.
+        /// </summary>
+        /// <param name="center_x">Center point X</param>
+        /// <param name="center_y">Center point Y</param>
+        /// <param name="radius">Size of the boundy</param>
         public CircularBoundry(int center_x, int center_y, int radius)
         {
             this.center_x = center_x;
@@ -386,6 +533,12 @@ namespace NintrollerLib
             this.radius = radius;
         }
 
+        /// <summary>
+        /// Checks if point is within boundry.
+        /// </summary>
+        /// <param name="x">X point</param>
+        /// <param name="y">Y point</param>
+        /// <returns>True if within boundry</returns>
         public bool InBounds(float x, float y = 0)
         {
             var dist = Math.Sqrt(Math.Pow(center_x - x, 2) + Math.Pow(center_y - y, 2));
@@ -397,13 +550,27 @@ namespace NintrollerLib
         }
     }
 
+    /// <summary>
+    /// Represents a square/rectangular boundry
+    /// </summary>
     public struct SquareBoundry : INintrollerBounds
     {
+        /// <summary>Center X point of box</summary>
         public int center_x;
+        /// <summary>Center Y point of box</summary>
         public int center_y;
+        /// <summary>Width of box</summary>
         public int width;
+        /// <summary>Height of box</summary>
         public int height;
 
+        /// <summary>
+        /// Creates a bounding area based on the given parameters.
+        /// </summary>
+        /// <param name="x">Center X</param>
+        /// <param name="y">Center Y</param>
+        /// <param name="w">Width</param>
+        /// <param name="h">Height</param>
         public SquareBoundry(int x, int y, int w, int h)
         {
             center_x = x;
@@ -412,6 +579,12 @@ namespace NintrollerLib
             height = h;
         }
 
+        /// <summary>
+        /// Checks if the given point is in the boundry
+        /// </summary>
+        /// <param name="x">X value</param>
+        /// <param name="y">Y value</param>
+        /// <returns>True if within the boundry</returns>
         public bool InBounds(float x, float y = 0)
         {
             if (x > (center_x - width/2) && x < (center_x + width/2))

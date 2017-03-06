@@ -143,7 +143,7 @@ namespace Shared.Windows
                 }
                 _fileStream = new FileStream(_fileHandle, FileAccess.ReadWrite, 22, true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _fileHandle = null;
                 // If we were tring to get exclusive access try again

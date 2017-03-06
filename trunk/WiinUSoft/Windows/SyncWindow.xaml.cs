@@ -22,7 +22,7 @@ namespace WiinUSoft.Windows
 
         public void Sync()
         {
-            var radioParams = new NativeImports.Bluetooth_Find_Radio_Params();
+            var radioParams = new NativeImports.BLUETOOTH_FIND_RADIO_PARAMS();
             Guid HidServiceClass = Guid.Parse(NativeImports.HID_GUID);
             List<IntPtr> btRadios = new List<IntPtr>();
             IntPtr foundRadio;
@@ -55,8 +55,8 @@ namespace WiinUSoft.Windows
                     foreach (var radio in btRadios)
                     {
                         IntPtr found;
-                        var radioInfo = new NativeImports.Bluetooth_Radio_Info();
-                        var deviceInfo = new NativeImports.BluetoothDeviceInfo();
+                        var radioInfo = new NativeImports.BLUETOOTH_RADIO_INFO();
+                        var deviceInfo = new NativeImports.BLUETOOTH_DEVICE_INFO();
                         var searchParams = new NativeImports.BLUETOOTH_DEVICE_SEARCH_PARAMS();
 
                         radioInfo.Initialize();
