@@ -34,7 +34,7 @@ namespace WiinUPro.Windows
             int pairedCount = 0;
             IntPtr foundRadio;
             IntPtr handle;
-            NativeImports.Bluetooth_Find_Radio_Params radioParams = new NativeImports.Bluetooth_Find_Radio_Params();
+            NativeImports.BLUETOOTH_FIND_RADIO_PARAMS radioParams = new NativeImports.BLUETOOTH_FIND_RADIO_PARAMS();
 
             radioParams.Initialize();
 
@@ -62,8 +62,8 @@ namespace WiinUPro.Windows
                     {
                         //Prompt("Radio: " + r.ToString());
                         IntPtr found;
-                        NativeImports.Bluetooth_Radio_Info radioInfo = new NativeImports.Bluetooth_Radio_Info();
-                        NativeImports.BluetoothDeviceInfo deviceInfo = new NativeImports.BluetoothDeviceInfo();
+                        NativeImports.BLUETOOTH_RADIO_INFO radioInfo = new NativeImports.BLUETOOTH_RADIO_INFO();
+                        NativeImports.BLUETOOTH_DEVICE_INFO deviceInfo = new NativeImports.BLUETOOTH_DEVICE_INFO();
                         NativeImports.BLUETOOTH_DEVICE_SEARCH_PARAMS searchParams = new NativeImports.BLUETOOTH_DEVICE_SEARCH_PARAMS();
 
                         radioInfo.Initialize();

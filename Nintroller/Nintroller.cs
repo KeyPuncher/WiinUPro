@@ -11,9 +11,21 @@ namespace NintrollerLib
     {
         #region Members
         // Events
+        /// <summary>
+        /// Called with updated controller input states.
+        /// </summary>
         public event EventHandler<NintrollerStateEventArgs>     StateUpdate     = delegate { };
+        /// <summary>
+        /// Called when an extension change is detected in the controller.
+        /// </summary>
         public event EventHandler<NintrollerExtensionEventArgs> ExtensionChange = delegate { };
+        /// <summary>
+        /// Called when the controller's battery get low.
+        /// </summary>
         public event EventHandler<LowBatteryEventArgs>          LowBattery      = delegate { };
+        /// <summary>
+        /// Called when the connection loss is detected.
+        /// </summary>
         public event EventHandler<DisconnectedEventArgs>        Disconnected    = delegate { };
         
         // General
@@ -290,15 +302,26 @@ namespace NintrollerLib
             _stream = dataStream;
         }
 
+        /// <summary>
+        /// Creates an instance using the provided data stream and expected controller type.
+        /// </summary>
+        /// <param name="dataStream">Stream to the controller.</param>
+        /// <param name="hintType">Expected type of the controller.</param>
         public Nintroller(Stream dataStream, ControllerType hintType) : this(dataStream)
         {
             _currentType = hintType;
         }
         
+        /// <summary>
+        /// Disposes
+        /// </summary>
         public void Dispose()
         {
-            Disconnect();
+            StopReading();
             GC.SuppressFinalize(this);
+
+            if (_stream != null)
+                _stream.Close();
         }
 
         internal static void Log(string message)
@@ -1451,44 +1474,92 @@ namespace NintrollerLib
 
     #region New Event Args
 
+    /// <summary>
+    /// Class for controller state update.
+    /// </summary>
     public class NintrollerStateEventArgs : EventArgs
     {
+        /// <summary>
+        /// The controller type being updated.
+        /// </summary>
         public ControllerType controllerType;
+        /// <summary>
+        /// The controller's updated state.
+        /// </summary>
         public INintrollerState state;
+        /// <summary>
+        /// The controller's last known battery level.
+        /// </summary>
         public BatteryStatus batteryLevel;
         
-        public NintrollerStateEventArgs(ControllerType type, INintrollerState state, BatteryStatus battery)
+        /// <summary>
+        /// Create the event argument with provided parameters.
+        /// </summary>
+        /// <param name="type">The controller type.</param>
+        /// <param name="newState">The updated controller state.</param>
+        /// <param name="battery">The controller's last known battery level.</param>
+        public NintrollerStateEventArgs(ControllerType type, INintrollerState newState, BatteryStatus battery)
         {
-            this.controllerType = type;
-            this.state          = state;
-            this.batteryLevel   = battery;
+            controllerType = type;
+            state          = newState;
+            batteryLevel   = battery;
         }
     }
 
+    /// <summary>
+    /// Class for extension change event.
+    /// </summary>
     public class NintrollerExtensionEventArgs : EventArgs
     {
+        /// <summary>
+        /// The updated controller type.
+        /// </summary>
         public ControllerType controllerType;
 
+        /// <summary>
+        /// Create an instance with the provided new type.
+        /// </summary>
+        /// <param name="type">The new type of the controller</param>
         public NintrollerExtensionEventArgs(ControllerType type)
         {
             controllerType = type;
         }
     }
 
+    /// <summary>
+    /// Class for low battery event.
+    /// </summary>
     public class LowBatteryEventArgs : EventArgs
     {
+        /// <summary>
+        /// The current battery level of the controller.
+        /// </summary>
         public BatteryStatus batteryLevel;
 
+        /// <summary>
+        /// Create an instance with the changed battery level.
+        /// </summary>
+        /// <param name="level">Current battery level of the controller.</param>
         public LowBatteryEventArgs(BatteryStatus level)
         {
             batteryLevel = level;
         }
     }
 
+    /// <summary>
+    /// Class for disconnected event.
+    /// </summary>
     public class DisconnectedEventArgs : EventArgs
     {
+        /// <summary>
+        /// Exception thrown if applicable.
+        /// </summary>
         public Exception error;
 
+        /// <summary>
+        /// Creates instance using provided exception.
+        /// </summary>
+        /// <param name="err">Exception thrown when disconnect detected.</param>
         public DisconnectedEventArgs(Exception err)
         {
             error = err;
