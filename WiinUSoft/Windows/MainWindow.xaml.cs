@@ -220,7 +220,14 @@ namespace WiinUSoft
             }
             
             menu_AutoStart.IsChecked = UserPrefs.Instance.autoStartup;
+            menu_NoSharing.IsChecked = UserPrefs.Instance.greedyMode;
             menu_AutoRefresh.IsChecked = UserPrefs.Instance.autoRefresh;
+
+            if (UserPrefs.Instance.greedyMode)
+            {
+                WinBtStream.OverrideSharingMode = true;
+                WinBtStream.OverridenFileShare = FileShare.None;
+            }
 
             Refresh();
         }
@@ -340,6 +347,18 @@ namespace WiinUSoft
             menu_StartMinimized.IsChecked = !menu_StartMinimized.IsChecked;
             UserPrefs.Instance.startMinimized = menu_StartMinimized.IsChecked;
             UserPrefs.SavePrefs();
+        }
+
+        private void menu_NoSharing_Click(object sender, RoutedEventArgs e)
+        {
+            menu_NoSharing.IsChecked = !menu_NoSharing.IsChecked;
+            UserPrefs.Instance.greedyMode = menu_NoSharing.IsChecked;
+            UserPrefs.SavePrefs();
+            WinBtStream.OverrideSharingMode = UserPrefs.Instance.greedyMode;
+            if (UserPrefs.Instance.greedyMode)
+            {
+                WinBtStream.OverridenFileShare = FileShare.None;
+            }
         }
 
         private void menu_AutoRefresh_Click(object sender, RoutedEventArgs e)
