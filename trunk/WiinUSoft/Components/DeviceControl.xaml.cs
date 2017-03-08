@@ -313,6 +313,7 @@ namespace WiinUSoft
 
                 case ControllerType.Wiimote:
                     Wiimote wm = (Wiimote)e.state;
+                    wm.irSensor.Normalize();
                     SetWiimoteInputs(wm);
                     break;
 
@@ -761,6 +762,8 @@ namespace WiinUSoft
                 {
                     holder.SetMapping(pair.Key, pair.Value);
                 }
+
+                // TODO: check for IR Use
             }
         }
 

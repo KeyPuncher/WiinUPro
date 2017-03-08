@@ -270,40 +270,49 @@ namespace NintrollerLib
         /// </summary>
         public void Normalize()
         {
-            if (!point1.visible)
+            if (!point1.visible && !point2.visible)
             {
                 X = 0;
                 Y = 0;
                 rotation = 0;
                 distance = 0;
+                return;
             }
-            else if (!point2.visible)
-            {
-                X = point1.rawX;
-                Y = point1.rawY;
-                rotation = 0;
-                distance = 0;
 
-                if (boundingArea != null && boundingArea.InBounds(X, Y))
+            IRPoint midPoint = new IRPoint();
+
+            if (point1.visible && point2.visible)
+            {
+                midPoint.rawX = point1.rawX + (point2.rawX - point1.rawX)/2;
+                midPoint.rawY = point1.rawY + (point2.rawY - point1.rawY)/2;
+                midPoint.visible = true;
+            }
+            else if (point1.visible)
+            {
+                midPoint = point1;
+            }
+            else if (point2.visible)
+            {
+                midPoint = point2;
+            }
+
+            if (midPoint.visible)
+            {
+                if (boundingArea != null && boundingArea.InBounds(midPoint.rawX, midPoint.rawY))
                 {
                     X = 0;
                     Y = 0;
+                }
+                else
+                {
+                    X = (midPoint.rawX - 512) / -256f;
+                    Y = (midPoint.rawY - 512) / -256f;
                 }
             }
             else
             {
-                X = (point2.rawX - point1.rawX) / 2f;
-                Y = (point2.rawY - point1.rawX) / 2f;
-
-                float denominator = (point2.rawX - point1.rawX);
-                rotation = denominator == 0 ? 0f : (180 / 3.14159f) * (float)Math.Sin((point2.rawY - point1.rawX) / denominator);
-                distance = (float)Math.Sqrt(Math.Pow(point2.rawX - point1.rawX, 2) + Math.Pow(point2.rawY - point1.rawY, 2));
-
-                if (boundingArea != null && boundingArea.InBounds(X, Y))
-                {
-                    X = 0;
-                    Y = 0;
-                }
+                X = 0;
+                Y = 0;
             }
         }
 
