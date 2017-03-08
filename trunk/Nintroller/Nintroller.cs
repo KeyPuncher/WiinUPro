@@ -775,6 +775,19 @@ namespace NintrollerLib
 
                                 switch(newType)
                                 {
+                                    case ControllerType.Wiimote:
+                                        _state = new Wiimote();
+                                        if (_calibrations.WiimoteCalibration.CalibrationEmpty)
+                                        {
+                                            _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                        }
+                                        else
+                                        {
+                                            _state.SetCalibration(_calibrations.WiimoteCalibration);
+                                        }
+                                        applyReport = InputReport.BtnsAcc;
+                                        break;
+
                                     case ControllerType.ProController:
                                         _state = new ProController();
                                         if (_calibrations.ProCalibration.CalibrationEmpty)
