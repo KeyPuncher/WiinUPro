@@ -79,7 +79,7 @@ namespace Shared.Windows
 
         public WinBtStream(string path)
         {
-            UseToshiba = ForceToshibaMode || !BluetoothEnableDiscovery(IntPtr.Zero, true);
+            UseToshiba = ForceToshibaMode;// || !BluetoothEnableDiscovery(IntPtr.Zero, true);
 
             // Default Windows 8/10 to ReadWrite (non exclusive)
             if (Environment.OSVersion.Version.Major > 6)
