@@ -74,12 +74,12 @@ namespace Shared.Windows
             AssociatedStack = new Dictionary<string, BtStack>();
             
             // When true, Windows Stack is enabled
-            var a = BluetoothEnableDiscovery(IntPtr.Zero, true);
+            //var a = BluetoothEnableDiscovery(IntPtr.Zero, true);
         }
 
         public WinBtStream(string path)
         {
-            UseToshiba = ForceToshibaMode;
+            UseToshiba = ForceToshibaMode || !BluetoothEnableDiscovery(IntPtr.Zero, true);
 
             // Default Windows 8/10 to ReadWrite (non exclusive)
             if (Environment.OSVersion.Version.Major > 6)
@@ -279,8 +279,10 @@ namespace Shared.Windows
                         if (attrib.VendorID == 0x057e && (attrib.ProductID == 0x0306 || attrib.ProductID == 0x0330))
                         {
                             // TODO: Debug
-                            var associatedStack = CheckBtStack(deviceInfoData);
+                            //var associatedStack = CheckBtStack(deviceInfoData);
                             //var associatedStack = BtStack.Microsoft;
+
+                            var associatedStack = BluetoothEnableDiscovery(IntPtr.Zero, true) ? BtStack.Microsoft : BtStack.Toshiba;
 
                             if (!AssociatedStack.ContainsKey(diDetail.devicePath))
                             {
