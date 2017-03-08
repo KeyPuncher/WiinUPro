@@ -46,13 +46,13 @@ namespace WiinUSoft
             switch (deviceType)
             {
                 case ControllerType.ProController:
-                    ProGrid.Visibility = System.Windows.Visibility.Visible;
+                    ProGrid.Visibility = Visibility.Visible;
                     break;
 
                 case ControllerType.ClassicController:
-                    ProGrid.Visibility = System.Windows.Visibility.Hidden;
-                    CCGrid.Visibility = System.Windows.Visibility.Visible;
-                    WmGrid.Visibility = System.Windows.Visibility.Visible;
+                    ProGrid.Visibility = Visibility.Hidden;
+                    CCGrid.Visibility = Visibility.Visible;
+                    WmGrid.Visibility = Visibility.Visible;
 
                     // Reposition Wiimote Grid
                     Canvas.SetLeft(WmGrid, 70);
@@ -61,9 +61,9 @@ namespace WiinUSoft
                     break;
 
                 case ControllerType.ClassicControllerPro:
-                    ProGrid.Visibility = System.Windows.Visibility.Hidden;
-                    CCPGrid.Visibility = System.Windows.Visibility.Visible;
-                    WmGrid.Visibility = System.Windows.Visibility.Visible;
+                    ProGrid.Visibility = Visibility.Hidden;
+                    CCPGrid.Visibility = Visibility.Visible;
+                    WmGrid.Visibility = Visibility.Visible;
 
                     // Reposition Wiimote Grid
                     Canvas.SetLeft(WmGrid, 70);
@@ -73,14 +73,14 @@ namespace WiinUSoft
 
                 case ControllerType.Nunchuk:
                 case ControllerType.NunchukB:
-                    ProGrid.Visibility = System.Windows.Visibility.Hidden;
-                    NkGrid.Visibility = System.Windows.Visibility.Visible;
-                    WmGrid.Visibility = System.Windows.Visibility.Visible;
+                    ProGrid.Visibility = Visibility.Hidden;
+                    NkGrid.Visibility = Visibility.Visible;
+                    WmGrid.Visibility = Visibility.Visible;
                     break;
 
                 case ControllerType.Wiimote:
-                    ProGrid.Visibility = System.Windows.Visibility.Hidden;
-                    WmGrid.Visibility = System.Windows.Visibility.Visible;
+                    ProGrid.Visibility = Visibility.Hidden;
+                    WmGrid.Visibility = Visibility.Visible;
                     break;
             }
         }
@@ -187,25 +187,28 @@ namespace WiinUSoft
             else
             {
                 #region Wiimote Clickalbes
-                // TODO: more wiimote maps (Acc, IR) (not for 1st release)
-                deviceShapes.Add(wm_aClick,      Inputs.Wiimote.A);
-                deviceShapes.Add(wm_bClick,      Inputs.Wiimote.B);
-                deviceShapes.Add(wm_upClick,     Inputs.Wiimote.UP);
-                deviceShapes.Add(wm_downClick,   Inputs.Wiimote.DOWN);
-                deviceShapes.Add(wm_leftClick,   Inputs.Wiimote.LEFT);
-                deviceShapes.Add(wm_rightClick,  Inputs.Wiimote.RIGHT);
-                deviceShapes.Add(wm_oneClick,    Inputs.Wiimote.ONE);
-                deviceShapes.Add(wm_twoClick,    Inputs.Wiimote.TWO);
-                deviceShapes.Add(wm_homeClick,   Inputs.Wiimote.HOME);
-                deviceShapes.Add(wm_selectClick, Inputs.Wiimote.MINUS);
-                deviceShapes.Add(wm_startClick,  Inputs.Wiimote.PLUS);
-                deviceShapes.Add(wm_accXClick, Inputs.Wiimote.ACC_SHAKE_X);
-                deviceShapes.Add(wm_accYClick, Inputs.Wiimote.ACC_SHAKE_Y);
-                deviceShapes.Add(wm_accZClick, Inputs.Wiimote.ACC_SHAKE_Z);
-                deviceShapes.Add(wm_aRollClick, Inputs.Wiimote.TILT_RIGHT);
-                deviceShapes.Add(wm_aRollNegClick, Inputs.Wiimote.TILT_LEFT);
-                deviceShapes.Add(wm_aPitchClick, Inputs.Wiimote.TILT_UP);
+                deviceShapes.Add(wm_aClick,         Inputs.Wiimote.A);
+                deviceShapes.Add(wm_bClick,         Inputs.Wiimote.B);
+                deviceShapes.Add(wm_upClick,        Inputs.Wiimote.UP);
+                deviceShapes.Add(wm_downClick,      Inputs.Wiimote.DOWN);
+                deviceShapes.Add(wm_leftClick,      Inputs.Wiimote.LEFT);
+                deviceShapes.Add(wm_rightClick,     Inputs.Wiimote.RIGHT);
+                deviceShapes.Add(wm_oneClick,       Inputs.Wiimote.ONE);
+                deviceShapes.Add(wm_twoClick,       Inputs.Wiimote.TWO);
+                deviceShapes.Add(wm_homeClick,      Inputs.Wiimote.HOME);
+                deviceShapes.Add(wm_selectClick,    Inputs.Wiimote.MINUS);
+                deviceShapes.Add(wm_startClick,     Inputs.Wiimote.PLUS);
+                deviceShapes.Add(wm_accXClick,      Inputs.Wiimote.ACC_SHAKE_X);
+                deviceShapes.Add(wm_accYClick,      Inputs.Wiimote.ACC_SHAKE_Y);
+                deviceShapes.Add(wm_accZClick,      Inputs.Wiimote.ACC_SHAKE_Z);
+                deviceShapes.Add(wm_aRollClick,     Inputs.Wiimote.TILT_RIGHT);
+                deviceShapes.Add(wm_aRollNegClick,  Inputs.Wiimote.TILT_LEFT);
+                deviceShapes.Add(wm_aPitchClick,    Inputs.Wiimote.TILT_UP);
                 deviceShapes.Add(wm_aPitchNegClick, Inputs.Wiimote.TILT_DOWN);
+                deviceShapes.Add(wm_irRightClick,   Inputs.Wiimote.IR_RIGHT);
+                deviceShapes.Add(wm_irLeftClick,    Inputs.Wiimote.IR_LEFT);
+                deviceShapes.Add(wm_irUpClick,      Inputs.Wiimote.IR_UP);
+                deviceShapes.Add(wm_irDownClick,    Inputs.Wiimote.IR_DOWN);
                 #endregion
 
                 if (deviceType == ControllerType.ClassicController)
