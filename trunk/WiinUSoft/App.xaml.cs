@@ -40,8 +40,11 @@ namespace WiinUSoft
             // TODO: set the exception properties and close other windows
             SingleInstance<App>.Cleanup();
             System.Diagnostics.Debug.WriteLine("Caught an Exception: " + e.Message);
-            var box = new ErrorWindow(e);
-            box.ShowDialog();
+            Current.Dispatcher.Invoke(new Action(() => 
+            {
+                var box = new ErrorWindow(e);
+                box.ShowDialog();
+            }));
         }
 
         public bool SignalExternalCommandLineArgs(IList<string> args)
