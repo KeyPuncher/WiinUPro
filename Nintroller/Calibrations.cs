@@ -118,6 +118,17 @@ namespace NintrollerLib
                     minZ    = 95,
                     maxZ    = 159,
                     deadZ   = 0
+                },
+
+                irSensor = new IR()
+                {
+                    boundingArea = new SquareBoundry()
+                    {
+                        center_x = 512,
+                        center_y = 512,
+                        width = 0,
+                        height = 0
+                    }
                 }
             };
 
@@ -287,6 +298,17 @@ namespace NintrollerLib
                     minZ = 79,
                     maxZ = 175,
                     deadZ = 4
+                },
+
+                irSensor = new IR()
+                {
+                    boundingArea = new SquareBoundry()
+                    {
+                        center_x = 512,
+                        center_y = 512,
+                        width = 64,
+                        height = 64
+                    }
                 }
             };
 
@@ -645,6 +667,17 @@ namespace NintrollerLib
                     minZ    = 83,
                     maxZ    = 171,
                     deadZ   = 8
+                },
+
+                irSensor = new IR()
+                {
+                    boundingArea = new SquareBoundry()
+                    {
+                        center_x = 512,
+                        center_y = 512,
+                        width = 192,
+                        height = 192
+                    }
                 }
             };
 
@@ -814,6 +847,17 @@ namespace NintrollerLib
                     minZ    = 91,
                     maxZ    = 163,
                     deadZ   = 12
+                },
+
+                irSensor = new IR()
+                {
+                    boundingArea = new SquareBoundry()
+                    {
+                        center_x = 512,
+                        center_y = 512,
+                        width = 224,
+                        height = 224
+                    }
                 }
             };
 
