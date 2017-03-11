@@ -216,6 +216,10 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Wiimote.TILT_LEFT, "");
                     result.Add(Inputs.Wiimote.TILT_UP, "");
                     result.Add(Inputs.Wiimote.TILT_DOWN, "");
+                    result.Add(Inputs.Wiimote.IR_RIGHT, "");
+                    result.Add(Inputs.Wiimote.IR_LEFT, "");
+                    result.Add(Inputs.Wiimote.IR_UP, "");
+                    result.Add(Inputs.Wiimote.IR_DOWN, "");
                     break;
             }
 
@@ -318,7 +322,11 @@ namespace WiinUSoft.Holders
 
                 if (writeReport.ContainsKey(map.Value))
                 {
-                    writeReport[map.Value] += Values[map.Key];
+                    try
+                    {
+                        writeReport[map.Value] += Values[map.Key];
+                    }
+                    catch(KeyNotFoundException) { }
                 }
                 else
                 {
