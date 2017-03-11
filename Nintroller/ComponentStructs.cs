@@ -298,7 +298,18 @@ namespace NintrollerLib
 
             if (midPoint.visible)
             {
-                if (boundingArea != null && boundingArea.InBounds(midPoint.rawX, midPoint.rawY))
+                if (boundingArea == null)
+                {
+                    boundingArea = new SquareBoundry()
+                    {
+                        center_x = 512,
+                        center_y = 512,
+                        width = 128,
+                        height = 128
+                    };
+                }
+
+                if (/*boundingArea != null && */boundingArea.InBounds(midPoint.rawX, midPoint.rawY))
                 {
                     X = 0;
                     Y = 0;
