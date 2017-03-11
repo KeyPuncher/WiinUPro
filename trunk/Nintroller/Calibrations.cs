@@ -465,6 +465,17 @@ namespace NintrollerLib
                     minZ    = 79,
                     maxZ    = 175,
                     deadZ   = 4
+                },
+
+                irSensor = new IR()
+                {
+                    boundingArea = new SquareBoundry()
+                    {
+                        center_x = 512,
+                        center_y = 512,
+                        width = 128,
+                        height = 128
+                    }
                 }
             };
 
@@ -970,7 +981,7 @@ namespace NintrollerLib
         /// <param name="storageString"></param>
         public void SetCalibrations(string storageString)
         {
-            if (storageString == null) return;
+            if (string.IsNullOrEmpty(storageString)) return;
 
             string[] chunks = storageString.Split(new char[] { '-' });
 
