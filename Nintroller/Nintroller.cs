@@ -1421,11 +1421,12 @@ namespace NintrollerLib
         {
             _calibrations.WiimoteCalibration = wiimoteCalibration;
 
-            if (_currentType == ControllerType.Wiimote || 
+            if (_state != null &&(
+                _currentType == ControllerType.Wiimote || 
                 _currentType == ControllerType.Nunchuk || 
                 _currentType == ControllerType.NunchukB ||
                 _currentType == ControllerType.ClassicController || 
-                _currentType == ControllerType.ClassicControllerPro)
+                _currentType == ControllerType.ClassicControllerPro))
             {
                 _state.SetCalibration(wiimoteCalibration);
             }
