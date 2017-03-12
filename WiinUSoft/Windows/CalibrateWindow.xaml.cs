@@ -1,15 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 using NintrollerLib;
 
@@ -482,22 +473,24 @@ namespace WiinUSoft
                     group1_min.IsEnabled    = false;
                     group1_max.IsEnabled    = false;
                     group1_dead.IsEnabled   = false;
-                    group1.Visibility = System.Windows.Visibility.Visible;
+                    group1.Visibility       = Visibility.Visible;
                     group2.Header = "Y-Axis";
                     group2_center.IsEnabled = false;
                     group2_min.IsEnabled    = false;
                     group2_max.IsEnabled    = false;
                     group2_dead.IsEnabled   = false;
-                    group2.Visibility = System.Windows.Visibility.Visible;
+                    group2.Visibility       = Visibility.Visible;
                     group3.Header = "Z-Axis";
                     group3_center.IsEnabled = false;
                     group3_min.IsEnabled    = false;
                     group3_max.IsEnabled    = false;
                     group3_dead.IsEnabled   = false;
-                    group3.Visibility = System.Windows.Visibility.Visible;
-                    group4.Visibility = System.Windows.Visibility.Hidden;
-                    groupL.Visibility = System.Windows.Visibility.Hidden;
-                    groupR.Visibility = System.Windows.Visibility.Hidden;
+                    group5.Visibility       = Visibility.Visible;
+                    group5.IsEnabled        = false;
+                    group3.Visibility       = Visibility.Visible;
+                    group4.Visibility       = Visibility.Hidden;
+                    groupL.Visibility       = Visibility.Hidden;
+                    groupR.Visibility       = Visibility.Hidden;
                     break;
 
                 case CalibrationStep.Wiimote_acc_x_range:
@@ -547,22 +540,23 @@ namespace WiinUSoft
                     group1_min.IsEnabled    = false;
                     group1_max.IsEnabled    = false;
                     group1_dead.IsEnabled   = false;
-                    group1.Visibility = System.Windows.Visibility.Visible;
+                    group1.Visibility = Visibility.Visible;
                     group2.Header = "Y-Axis";
                     group2_center.IsEnabled = false;
                     group2_min.IsEnabled    = false;
                     group2_max.IsEnabled    = false;
                     group2_dead.IsEnabled   = false;
-                    group2.Visibility = System.Windows.Visibility.Visible;
+                    group2.Visibility = Visibility.Visible;
                     group3.Header = "Z-Axis";
                     group3_center.IsEnabled = false;
                     group3_min.IsEnabled    = false;
                     group3_max.IsEnabled    = false;
                     group3_dead.IsEnabled   = false;
-                    group3.Visibility = System.Windows.Visibility.Visible;
-                    group4.Visibility = System.Windows.Visibility.Hidden;
-                    groupL.Visibility = System.Windows.Visibility.Hidden;
-                    groupR.Visibility = System.Windows.Visibility.Hidden;
+                    group3.Visibility = Visibility.Visible;
+                    group4.Visibility = Visibility.Hidden;
+                    group5.Visibility = Visibility.Hidden;
+                    groupL.Visibility = Visibility.Hidden;
+                    groupR.Visibility = Visibility.Hidden;
                     break;
 
                 case CalibrationStep.Nunchuk_acc_x_range:
@@ -616,17 +610,17 @@ namespace WiinUSoft
                     group1_min.IsEnabled = false;
                     group1_max.IsEnabled = false;
                     group1_dead.IsEnabled = false;
-                    group1.Visibility = System.Windows.Visibility.Visible;
+                    group1.Visibility = Visibility.Visible;
                     group2.Header = "Y-Axis";
                     group2_center.IsEnabled = false;
                     group2_min.IsEnabled = false;
                     group2_max.IsEnabled = false;
                     group2_dead.IsEnabled = false;
-                    group2.Visibility = System.Windows.Visibility.Visible;
-                    group3.Visibility = System.Windows.Visibility.Hidden;
-                    group4.Visibility = System.Windows.Visibility.Hidden;
-                    groupL.Visibility = System.Windows.Visibility.Hidden;
-                    groupR.Visibility = System.Windows.Visibility.Hidden;
+                    group2.Visibility = Visibility.Visible;
+                    group3.Visibility = Visibility.Hidden;
+                    group4.Visibility = Visibility.Hidden;
+                    groupL.Visibility = Visibility.Hidden;
+                    groupR.Visibility = Visibility.Hidden;
                     break;
 
                 case CalibrationStep.Nunchuk_joy_range:
@@ -658,33 +652,34 @@ namespace WiinUSoft
                     group1_min.IsEnabled    = false;
                     group1_max.IsEnabled    = false;
                     group1_dead.IsEnabled   = false;
-                    group1.Visibility = System.Windows.Visibility.Visible;
+                    group1.Visibility = Visibility.Visible;
                     group2.Header = "Left Y-Axis";
                     group2_center.IsEnabled = false;
                     group2_min.IsEnabled    = false;
                     group2_max.IsEnabled    = false;
                     group2_dead.IsEnabled   = false;
-                    group2.Visibility = System.Windows.Visibility.Visible;
+                    group2.Visibility = Visibility.Visible;
                     group3.Header = "Right X-Axis";
                     group3_center.IsEnabled = false;
                     group3_min.IsEnabled    = false;
                     group3_max.IsEnabled    = false;
                     group3_dead.IsEnabled   = false;
-                    group3.Visibility = System.Windows.Visibility.Visible;
+                    group3.Visibility = Visibility.Visible;
                     group4.Header = "Right Y-Axis";
                     group4_center.IsEnabled = false;
                     group4_min.IsEnabled    = false;
                     group4_max.IsEnabled    = false;
                     group4_dead.IsEnabled   = false;
-                    group4.Visibility = System.Windows.Visibility.Visible;
+                    group4.Visibility = Visibility.Visible;
                     groupL.Header = "Left Trigger";
                     groupL_min.IsEnabled    = false;
                     groupL_max.IsEnabled    = false;
-                    groupL.Visibility = System.Windows.Visibility.Visible;
+                    groupL.Visibility = Visibility.Visible;
                     groupR.Header = "Right Trigger";
                     groupR_min.IsEnabled    = false;
                     groupR_max.IsEnabled    = false;
-                    groupR.Visibility = System.Windows.Visibility.Visible;
+                    groupR.Visibility = Visibility.Visible;
+                    group5.Visibility = Visibility.Hidden;
                     break;
 
                 case CalibrationStep.Classic_joy_range:
@@ -726,27 +721,28 @@ namespace WiinUSoft
                     group1_min.IsEnabled = false;
                     group1_max.IsEnabled = false;
                     group1_dead.IsEnabled = false;
-                    group1.Visibility = System.Windows.Visibility.Visible;
+                    group1.Visibility = Visibility.Visible;
                     group2.Header = "Left Y-Axis";
                     group2_center.IsEnabled = false;
                     group2_min.IsEnabled = false;
                     group2_max.IsEnabled = false;
                     group2_dead.IsEnabled = false;
-                    group2.Visibility = System.Windows.Visibility.Visible;
+                    group2.Visibility = Visibility.Visible;
                     group3.Header = "Right X-Axis";
                     group3_center.IsEnabled = false;
                     group3_min.IsEnabled = false;
                     group3_max.IsEnabled = false;
                     group3_dead.IsEnabled = false;
-                    group3.Visibility = System.Windows.Visibility.Visible;
+                    group3.Visibility = Visibility.Visible;
                     group4.Header = "Right Y-Axis";
                     group4_center.IsEnabled = false;
                     group4_min.IsEnabled = false;
                     group4_max.IsEnabled = false;
                     group4_dead.IsEnabled = false;
-                    group4.Visibility = System.Windows.Visibility.Visible;
-                    groupL.Visibility = System.Windows.Visibility.Hidden;
-                    groupR.Visibility = System.Windows.Visibility.Hidden;
+                    group4.Visibility = Visibility.Visible;
+                    group5.Visibility = Visibility.Hidden;
+                    groupL.Visibility = Visibility.Hidden;
+                    groupR.Visibility = Visibility.Hidden;
                     break;
 
                 case CalibrationStep.Pro_joy_center:
@@ -762,27 +758,28 @@ namespace WiinUSoft
                     group1_min.IsEnabled = false;
                     group1_max.IsEnabled = false;
                     group1_dead.IsEnabled = false;
-                    group1.Visibility = System.Windows.Visibility.Visible;
+                    group1.Visibility = Visibility.Visible;
                     group2.Header = "Left Y-Axis";
                     group2_center.IsEnabled = false;
                     group2_min.IsEnabled = false;
                     group2_max.IsEnabled = false;
                     group2_dead.IsEnabled = false;
-                    group2.Visibility = System.Windows.Visibility.Visible;
+                    group2.Visibility = Visibility.Visible;
                     group3.Header = "Right X-Axis";
                     group3_center.IsEnabled = false;
                     group3_min.IsEnabled = false;
                     group3_max.IsEnabled = false;
                     group3_dead.IsEnabled = false;
-                    group3.Visibility = System.Windows.Visibility.Visible;
+                    group3.Visibility = Visibility.Visible;
                     group4.Header = "Right Y-Axis";
                     group4_center.IsEnabled = false;
                     group4_min.IsEnabled = false;
                     group4_max.IsEnabled = false;
                     group4_dead.IsEnabled = false;
-                    group4.Visibility = System.Windows.Visibility.Visible;
-                    groupL.Visibility = System.Windows.Visibility.Hidden;
-                    groupR.Visibility = System.Windows.Visibility.Hidden;
+                    group4.Visibility = Visibility.Visible;
+                    group5.Visibility = Visibility.Hidden;
+                    groupL.Visibility = Visibility.Hidden;
+                    groupR.Visibility = Visibility.Hidden;
                     break;
 
                 case CalibrationStep.ClassicPro_joy_range:
@@ -837,6 +834,13 @@ namespace WiinUSoft
                     _calibrations.WiimoteCalibration.accelerometer.minZ    = group3_min.Value;
                     _calibrations.WiimoteCalibration.accelerometer.maxZ    = group3_max.Value;
                     _calibrations.WiimoteCalibration.accelerometer.deadZ   = group3_dead.Value;
+                    _calibrations.WiimoteCalibration.irSensor.boundingArea = new SquareBoundry
+                    {
+                        center_x = group5_centerX.Value,
+                        center_y = group5_centerY.Value,
+                        width = group5_width.Value,
+                        height = group5_height.Value
+                    };
                     _calibratedTypes.Add(ControllerType.Wiimote);
                     break;
 
@@ -853,6 +857,8 @@ namespace WiinUSoft
                     _calibrations.NunchukCalibration.accelerometer.minZ    = group3_min.Value;
                     _calibrations.NunchukCalibration.accelerometer.maxZ    = group3_max.Value;
                     _calibrations.NunchukCalibration.accelerometer.deadZ   = group3_dead.Value;
+                    _calibratedTypes.Add(ControllerType.Nunchuk);
+                    _calibratedTypes.Add(ControllerType.NunchukB);
                     break;
 
                 case ControllerType.NunchukB:
@@ -962,6 +968,7 @@ namespace WiinUSoft
                         group3_min.IsEnabled  = true;
                         group3_max.IsEnabled  = true;
                         group3_dead.IsEnabled = true;
+                        group5.IsEnabled = true;
                         break;
 
                     case CalibrationStep.Nunchuk_acc_x_center: _step = CalibrationStep.Nunchuk_acc_x_range; break;
