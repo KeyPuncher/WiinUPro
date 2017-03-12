@@ -75,18 +75,22 @@ namespace NintrollerLib
             if (from.GetType() == typeof(Wiimote))
             {
                 accelerometer.Calibrate(((Wiimote)from).accelerometer);
+                irSensor.boundingArea = ((Wiimote)from).irSensor.boundingArea;
             }
             else if (from.GetType() == typeof(Nunchuk))
             {
                 accelerometer.Calibrate(((Nunchuk)from).wiimote.accelerometer);
+                irSensor.boundingArea = ((Nunchuk)from).wiimote.irSensor.boundingArea;
             }
             else if (from.GetType() == typeof(ClassicController))
             {
                 accelerometer.Calibrate(((ClassicController)from).wiimote.accelerometer);
+                irSensor.boundingArea = ((ClassicController)from).wiimote.irSensor.boundingArea;
             }
             else if (from.GetType() == typeof(ClassicControllerPro))
             {
                 accelerometer.Calibrate(((ClassicControllerPro)from).wiimote.accelerometer);
+                irSensor.boundingArea = ((ClassicControllerPro)from).wiimote.irSensor.boundingArea;
             }
         }
 
@@ -129,6 +133,49 @@ namespace NintrollerLib
                         }
                     }
                 }
+                else if (component.StartsWith("irSqr"))
+                {
+                    SquareBoundry sBoundry = new SquareBoundry();
+                    string[] sqrConfig = component.Split(new char[] { '|' });
+
+                    for (int s = 1; s < sqrConfig.Length; s++)
+                    {
+                        int value = 0;
+                        if (int.TryParse(sqrConfig[s], out value))
+                        {
+                            switch (s)
+                            {
+                                case 1: sBoundry.center_x = value; break;
+                                case 2: sBoundry.center_y = value; break;
+                                case 3: sBoundry.width = value; break;
+                                case 4: sBoundry.height = value; break;
+                            }
+                        }
+                    }
+
+                    irSensor.boundingArea = sBoundry;
+                }
+                else if (component.StartsWith("irCir"))
+                {
+                    CircularBoundry sBoundry = new CircularBoundry();
+                    string[] cirConfig = component.Split(new char[] { '|' });
+
+                    for (int c = 1; c < cirConfig.Length; c++)
+                    {
+                        int value = 0;
+                        if (int.TryParse(cirConfig[c], out value))
+                        {
+                            switch (c)
+                            {
+                                case 1: sBoundry.center_x = value; break;
+                                case 2: sBoundry.center_y = value; break;
+                                case 3: sBoundry.radius = value; break;
+                            }
+                        }
+                    }
+
+                    irSensor.boundingArea = sBoundry;
+                }
             }
         }
 
@@ -157,8 +204,27 @@ namespace NintrollerLib
                     sb.Append("|"); sb.Append(accelerometer.minZ);
                     sb.Append("|"); sb.Append(accelerometer.maxZ);
                     sb.Append("|"); sb.Append(accelerometer.deadZ);
-
-            // there is no IR settings yet
+                
+            if (irSensor.boundingArea != null)
+            {
+                if (irSensor.boundingArea is SquareBoundry)
+                {
+                    SquareBoundry sqr = (SquareBoundry)irSensor.boundingArea;
+                    sb.Append(":irSqr");
+                        sb.Append("|"); sb.Append(sqr.center_x);
+                        sb.Append("|"); sb.Append(sqr.center_y);
+                        sb.Append("|"); sb.Append(sqr.width);
+                        sb.Append("|"); sb.Append(sqr.height);
+                }
+                else if (irSensor.boundingArea is CircularBoundry)
+                {
+                    CircularBoundry cir = (CircularBoundry)irSensor.boundingArea;
+                    sb.Append(":irCir");
+                        sb.Append("|"); sb.Append(cir.center_x);
+                        sb.Append("|"); sb.Append(cir.center_y);
+                        sb.Append("|"); sb.Append(cir.radius);
+                }
+            }
 
             return sb.ToString();
         }
