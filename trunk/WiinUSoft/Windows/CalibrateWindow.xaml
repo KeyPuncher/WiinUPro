@@ -68,7 +68,22 @@
                 <local:NumPicker x:Name="group4_dead" HorizontalAlignment="Left" Margin="83,130,0,0" VerticalAlignment="Top" Value="4"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupL" Header="Left Trigger" HorizontalAlignment="Left" VerticalAlignment="Top" Height="69" Width="385" BorderBrush="#FF397FAA" Margin="10,272,0,0">
+        <GroupBox x:Name="group5" Visibility="Visible" Header="IR Pointer Bounding Box (Dead Zone)" HorizontalAlignment="Left" VerticalAlignment="Top" Height="69" Width="775" BorderBrush="#FF397FAA" Margin="10,272,0,0">
+            <Grid>
+                <Label Content="Center X:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <local:NumPicker x:Name="group5_centerX" HorizontalAlignment="Left" Margin="82,10,0,0" VerticalAlignment="Top" Max="1020" Min="2" Value="512"/>
+
+                <Label Content="Center Y:" HorizontalAlignment="Left" Margin="205,10,0,0" VerticalAlignment="Top"/>
+                <local:NumPicker x:Name="group5_centerY" HorizontalAlignment="Left" Margin="278,10,0,0" VerticalAlignment="Top" Max="1020" Min="2" Value="512"/>
+
+                <Label Content="Width:" HorizontalAlignment="Left" Margin="400,10,0,0" VerticalAlignment="Top"/>
+                <local:NumPicker x:Name="group5_width" HorizontalAlignment="Left" Margin="473,10,0,0" VerticalAlignment="Top" Min="0" Max="512" Value="128"/>
+
+                <Label Content="Height:" HorizontalAlignment="Left" Margin="595,10,0,0" VerticalAlignment="Top"/>
+                <local:NumPicker x:Name="group5_height" HorizontalAlignment="Left" Margin="668,10,0,0" VerticalAlignment="Top" Min="0" Max="512" Value="128"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupL" Visibility="Hidden" Header="Left Trigger" HorizontalAlignment="Left" VerticalAlignment="Top" Height="69" Width="385" BorderBrush="#FF397FAA" Margin="10,272,0,0">
             <Grid>
                 <Label Content="Minimum:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <local:NumPicker x:Name="groupL_min" HorizontalAlignment="Left" Margin="83,10,0,0" VerticalAlignment="Top" Max="32"/>
@@ -77,7 +92,7 @@
                 <local:NumPicker x:Name="groupL_max" HorizontalAlignment="Left" Margin="278,10,0,0" VerticalAlignment="Top" Max="64" Value="32"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupR" Header="Right Trigger" HorizontalAlignment="Left" VerticalAlignment="Top" Height="69" Width="385" BorderBrush="#FF397FAA" Margin="400,272,0,0">
+        <GroupBox x:Name="groupR" Visibility="Hidden" Header="Right Trigger" HorizontalAlignment="Left" VerticalAlignment="Top" Height="69" Width="385" BorderBrush="#FF397FAA" Margin="400,272,0,0">
             <Grid>
                 <Label Content="Minimum:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <local:NumPicker x:Name="groupR_min" HorizontalAlignment="Left" Margin="83,10,0,0" VerticalAlignment="Top" Max="32" Value="0"/>
