@@ -166,7 +166,7 @@ namespace WiinUSoft.Holders
                     result.Add(Inputs.Nunchuk.UP,    Inputs.Xbox360.LUP);
                     result.Add(Inputs.Nunchuk.DOWN,  Inputs.Xbox360.LDOWN);
                     result.Add(Inputs.Nunchuk.LEFT,  Inputs.Xbox360.LLEFT);
-                    result.Add(Inputs.Nunchuk.RIGHT, Inputs.Xbox360.RRIGHT);
+                    result.Add(Inputs.Nunchuk.RIGHT, Inputs.Xbox360.LRIGHT);
                     result.Add(Inputs.Nunchuk.Z,     Inputs.Xbox360.RT);
                     result.Add(Inputs.Nunchuk.C,     Inputs.Xbox360.LT);
                     result.Add(Inputs.Nunchuk.TILT_RIGHT, "");
