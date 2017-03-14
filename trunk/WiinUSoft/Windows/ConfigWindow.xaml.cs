@@ -56,7 +56,7 @@ namespace WiinUSoft
 
                     // Reposition Wiimote Grid
                     Canvas.SetLeft(WmGrid, 70);
-                    Canvas.SetTop(WmGrid, -7);
+                    Canvas.SetTop(WmGrid, -50);
                     WmGrid.RenderTransform = rt;
                     break;
 
@@ -67,7 +67,7 @@ namespace WiinUSoft
 
                     // Reposition Wiimote Grid
                     Canvas.SetLeft(WmGrid, 70);
-                    Canvas.SetTop(WmGrid, -7);
+                    Canvas.SetTop(WmGrid, -50);
                     WmGrid.RenderTransform = rt;
                     break;
 
@@ -323,13 +323,13 @@ namespace WiinUSoft
                 top += WmGrid.Width - s.Margin.Left;
                 top += selector.Width / 2;
                 top -= s.Width / 2;
-                top -= 10;
+                top -= 22;
 
                 left = Canvas.GetTop((UIElement)s.Parent);
                 left += s.Margin.Top;
                 left += selector.Height / 2;
                 left += s.Height / 2;
-                left += 7;
+                left += 20;
             }
             else
             {
