@@ -110,9 +110,9 @@
             <Label x:Name="wm_irYPos" Content="Y+" HorizontalAlignment="Left" Margin="50,3,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
             <Label x:Name="wm_irYNeg" Content="Y-" HorizontalAlignment="Left" Margin="50,42,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
             <Rectangle x:Name="wm_irRightClick" HorizontalAlignment="Left" Height="16" Margin="86,29,0,0" VerticalAlignment="Top" Width="17" ToolTip="IR Pointer Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
-            <Rectangle x:Name="wm_irLeftClick" HorizontalAlignment="Left" Height="16" Margin="13,29,0,0" VerticalAlignment="Top" Width="17" ToolTip="IR Pointer Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
-            <Rectangle x:Name="wm_irUpClick" HorizontalAlignment="Left" Height="16" Margin="53,10,0,0" VerticalAlignment="Top" Width="17" ToolTip="IR Pointer Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
-            <Rectangle x:Name="wm_irDownClick" HorizontalAlignment="Left" Height="16" Margin="52,47,0,0" VerticalAlignment="Top" Width="17" ToolTip="IR Pointer Right" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="wm_irLeftClick" HorizontalAlignment="Left" Height="16" Margin="13,29,0,0" VerticalAlignment="Top" Width="17" ToolTip="IR Pointer Left" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="wm_irUpClick" HorizontalAlignment="Left" Height="16" Margin="53,10,0,0" VerticalAlignment="Top" Width="17" ToolTip="IR Pointer Up" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
+            <Rectangle x:Name="wm_irDownClick" HorizontalAlignment="Left" Height="16" Margin="52,47,0,0" VerticalAlignment="Top" Width="17" ToolTip="IR Pointer Down" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave" MouseDown="device_MouseDown" Fill="#00000000" Stroke="Black" StrokeThickness="0"/>
         </Grid>
 
         <!-- Device to Map (Classic Controller) -->
