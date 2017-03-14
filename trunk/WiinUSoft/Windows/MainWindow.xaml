@@ -36,11 +36,13 @@
                 <StackPanel HorizontalAlignment="Left" Margin="4,4,0,0" Width="280"/>
             </ScrollViewer>
         </Border>
-        <Label Content="Available Devices" HorizontalAlignment="Left" Margin="91,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Available Devices" HorizontalAlignment="Left" Margin="68,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Connected as Xbox 360 Controller (XInput)" HorizontalAlignment="Left" Margin="337,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-        <Button x:Name="btnSync" Content="Sync" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="46" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" Background="{DynamicResource ButonFillBrush1}" Click="btnSync_Click" />
-        <Button x:Name="btnRefresh" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" Background="{DynamicResource ButonFillBrush1}" Click="btnRefresh_Click">
+        <Button x:Name="btnSync" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Sync" Background="{DynamicResource ButonFillBrush1}" Click="btnSync_Click" >
+            <Image Source="../Images/Bluetooth.png"/>
+        </Button>
+        <Button x:Name="btnRefresh" HorizontalAlignment="Left" Margin="39,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" Background="{DynamicResource ButonFillBrush1}" Click="btnRefresh_Click">
             <Image Source="../Images/Refresh.png" />
         </Button>
         <Button x:Name="btnDetatchAllXInput" HorizontalAlignment="Left" Margin="308,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" Click="btnDetatchAllXInput_Click" ToolTip="Detatch All" Background="{DynamicResource ButonFillBrush1}">
