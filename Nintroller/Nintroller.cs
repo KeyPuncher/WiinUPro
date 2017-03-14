@@ -786,7 +786,8 @@ namespace NintrollerLib
                                             _state.SetCalibration(_calibrations.WiimoteCalibration);
                                         }
                                         applyReport = InputReport.BtnsAccIR;
-                                        IRMode = IRCamMode.Basic;
+                                        _irMode = IRCamMode.Basic;
+                                        EnableIR();
                                         break;
 
                                     case ControllerType.ProController:
