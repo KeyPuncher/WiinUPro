@@ -474,18 +474,18 @@ namespace NintrollerLib
                 accelerometer = new Accelerometer()
                 {
                     centerX = 127,
-                    minX    = 79,
-                    maxX    = 175,
+                    minX    = 79 + 32,
+                    maxX    = 175 - 32,
                     deadX   = 4,
 
                     centerY = 127,
-                    minY    = 79,
-                    maxY    = 175,
+                    minY    = 79 + 32,
+                    maxY    = 175 - 32,
                     deadY   = 4,
 
                     centerZ = 127,
-                    minZ    = 79,
-                    maxZ    = 175,
+                    minZ    = 79 + 32,
+                    maxZ    = 175 - 32,
                     deadZ   = 4
                 },
 
@@ -521,18 +521,18 @@ namespace NintrollerLib
                 accelerometer = new Accelerometer()
                 {
                     centerX = 127,
-                    minX    = 79,
-                    maxX    = 175,
+                    minX    = 79 + 32,
+                    maxX    = 175 - 32,
                     deadX   = 4,
 
                     centerY = 127,
-                    minY    = 79,
-                    maxY    = 175,
+                    minY    = 79 + 32,
+                    maxY    = 175 - 32,
                     deadY   = 4,
 
                     centerZ = 127,
-                    minZ    = 79,
-                    maxZ    = 175,
+                    minZ    = 79 + 32,
+                    maxZ    = 175 - 32,
                     deadZ   = 4
                 }
             };
@@ -654,18 +654,18 @@ namespace NintrollerLib
                 accelerometer = new Accelerometer()
                 {
                     centerX = 127,
-                    minX    = 83,
-                    maxX    = 171,
+                    minX    = 83 + 32,
+                    maxX    = 171 - 32,
                     deadX   = 8,
 
                     centerY = 127,
-                    minY    = 83,
-                    maxY    = 171,
+                    minY    = 83 + 32,
+                    maxY    = 171 - 32,
                     deadY   = 8,
 
                     centerZ = 127,
-                    minZ    = 83,
-                    maxZ    = 171,
+                    minZ    = 83 + 32,
+                    maxZ    = 171 - 32,
                     deadZ   = 8
                 },
 
@@ -701,18 +701,18 @@ namespace NintrollerLib
                 accelerometer = new Accelerometer()
                 {
                     centerX = 127,
-                    minX    = 75,
-                    maxX    = 179,
+                    minX    = 75 + 32,
+                    maxX    = 179 - 32,
                     deadX   = 8,
 
                     centerY = 127,
-                    minY    = 75,
-                    maxY    = 179,
+                    minY    = 75 + 32,
+                    maxY    = 179 - 32,
                     deadY   = 8,
 
                     centerZ = 127,
-                    minZ    = 75,
-                    maxZ    = 179,
+                    minZ    = 75 + 32,
+                    maxZ    = 179 - 32,
                     deadZ   = 8
                 }
             };
@@ -834,18 +834,18 @@ namespace NintrollerLib
                 accelerometer = new Accelerometer()
                 {
                     centerX = 127,
-                    minX    = 91,
-                    maxX    = 163,
+                    minX    = 91 + 32,
+                    maxX    = 163 - 32,
                     deadX   = 12,
 
                     centerY = 127,
-                    minY    = 91,
-                    maxY    = 163,
+                    minY    = 91 + 32,
+                    maxY    = 163 - 32,
                     deadY   = 12,
 
                     centerZ = 127,
-                    minZ    = 91,
-                    maxZ    = 163,
+                    minZ    = 91 + 32,
+                    maxZ    = 163 - 32,
                     deadZ   = 12
                 },
 
@@ -881,18 +881,18 @@ namespace NintrollerLib
                 accelerometer = new Accelerometer()
                 {
                     centerX = 127,
-                    minX    = 91,
-                    maxX    = 163,
+                    minX    = 91 + 32,
+                    maxX    = 163 - 32,
                     deadX   = 12,
 
                     centerY = 127,
-                    minY    = 91,
-                    maxY    = 163,
+                    minY    = 91 + 32,
+                    maxY    = 163 - 32,
                     deadY   = 12,
 
                     centerZ = 127,
-                    minZ    = 91,
-                    maxZ    = 163,
+                    minZ    = 91 + 32,
+                    maxZ    = 163 - 32,
                     deadZ   = 12
                 }
             };
