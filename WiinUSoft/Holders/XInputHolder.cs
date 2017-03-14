@@ -313,8 +313,11 @@ namespace WiinUSoft.Holders
 
             ResetReport();
 
-            foreach (KeyValuePair<string, string> map in Mappings)
+            //foreach (KeyValuePair<string, string> map in Mappings)
+            for (int i = 0; i < Mappings.Count; i++)
             {
+                var map = Mappings.ElementAt(i);
+
                 if (!Values.ContainsKey(map.Key))
                 {
                     continue;
