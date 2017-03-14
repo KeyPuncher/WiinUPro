@@ -313,7 +313,6 @@ namespace WiinUSoft
 
                 case ControllerType.Wiimote:
                     Wiimote wm = (Wiimote)e.state;
-                    wm.irSensor.Normalize();
                     SetWiimoteInputs(wm);
                     break;
 
@@ -453,6 +452,8 @@ namespace WiinUSoft
 
         private void SetWiimoteInputs(Wiimote wm)
         {
+            wm.irSensor.Normalize();
+
             holder.SetValue(Inputs.Wiimote.A, wm.buttons.A);
             holder.SetValue(Inputs.Wiimote.B, wm.buttons.B);
             holder.SetValue(Inputs.Wiimote.ONE, wm.buttons.One);
@@ -612,6 +613,7 @@ namespace WiinUSoft
                 for (int i = 0; i < Math.Min(loadedProfile.controllerMapKeys.Count, loadedProfile.controllerMapValues.Count); i++)
                 {
                     h.SetMapping(loadedProfile.controllerMapKeys[i], loadedProfile.controllerMapValues[i]);
+                    CheckIR(loadedProfile.controllerMapKeys[i]);
                 }
             }
         }
@@ -678,6 +680,19 @@ namespace WiinUSoft
                     device.SetCalibration(calStor.ClassicProCalibration);
                     device.SetCalibration(calStor.WiimoteCalibration);
                     break;
+            }
+        }
+
+        private void CheckIR(string assignment)
+        {
+            if (assignment.StartsWith("wIR") && device != null && device.IRMode == IRCamMode.Off)
+            {
+                if (device.Type == ControllerType.Wiimote ||
+                    device.Type == ControllerType.Nunchuk ||
+                    device.Type == ControllerType.NunchukB)
+                {
+                    device.IRMode = IRCamMode.Basic;
+                }
             }
         }
 
@@ -761,9 +776,8 @@ namespace WiinUSoft
                 foreach (KeyValuePair<string, string> pair in config.map)
                 {
                     holder.SetMapping(pair.Key, pair.Value);
+                    CheckIR(pair.Key);
                 }
-
-                // TODO: check for IR Use
             }
         }
 
