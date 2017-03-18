@@ -42,7 +42,7 @@ namespace Shared.Windows
         public extern static bool WriteFileEx(
             IntPtr hFile, 
             byte[] lpBuffer,
-            out uint nNumberOfBytesToWrite, 
+            uint nNumberOfBytesToWrite, 
             [In] ref NativeOverlapped lpOverlapped,
             WriteFileCompletionDelegate lpCompletionRoutine);
 

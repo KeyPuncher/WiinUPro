@@ -373,8 +373,6 @@ namespace Shared.Windows
                 {
                     uint written = 0;
                     var nativeOverlap = new NativeOverlapped();
-                    nativeOverlap.InternalHigh = IntPtr.Zero;
-                    nativeOverlap.InternalLow = IntPtr.Zero;
 
                     // Provide a reset event that will get set once asynchronouse writing has completed
                     var resetEvent = new ManualResetEvent(false);
@@ -396,7 +394,7 @@ namespace Shared.Windows
                     // Wait for the async operation to complete
                     if (!success && error == 997)
                     {
-                        resetEvent.WaitOne();
+                        resetEvent.WaitOne(8000);
                     }
 
                     // Example for async and callback
