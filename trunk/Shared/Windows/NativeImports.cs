@@ -46,6 +46,12 @@ namespace Shared.Windows
             [In] ref NativeOverlapped lpOverlapped,
             WriteFileCompletionDelegate lpCompletionRoutine);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public extern static bool ReadFile(
+            IntPtr hFile,
+            byte[] lpBuffer,
+            uint nNumberofBytesToRead,
+            ref NativeOverlapped lpOverlapped);
 
         /// <summary>
         /// Used to Get the error code after WriteFile
