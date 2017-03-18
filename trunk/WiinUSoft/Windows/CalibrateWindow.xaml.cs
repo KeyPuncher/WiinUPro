@@ -153,8 +153,8 @@ namespace WiinUSoft
                         }
                         else
                         {
-                            if (group1_min.Value + 32 > ((Wiimote)e.state).accelerometer.rawX) group1_min.Value = ((Wiimote)e.state).accelerometer.rawX;
-                            if (group1_max.Value - 32 < ((Wiimote)e.state).accelerometer.rawX) group1_max.Value = ((Wiimote)e.state).accelerometer.rawX;
+                            if (group1_min.Value > ((Wiimote)e.state).accelerometer.rawX) group1_min.Value = ((Wiimote)e.state).accelerometer.rawX;
+                            if (group1_max.Value < ((Wiimote)e.state).accelerometer.rawX) group1_max.Value = ((Wiimote)e.state).accelerometer.rawX;
                         }
                         break;
 
@@ -170,8 +170,8 @@ namespace WiinUSoft
                         }
                         else
                         {
-                            if (group2_min.Value + 32 > ((Wiimote)e.state).accelerometer.rawY) group2_min.Value = ((Wiimote)e.state).accelerometer.rawY;
-                            if (group2_max.Value - 32 < ((Wiimote)e.state).accelerometer.rawY) group2_max.Value = ((Wiimote)e.state).accelerometer.rawY;
+                            if (group2_min.Value > ((Wiimote)e.state).accelerometer.rawY) group2_min.Value = ((Wiimote)e.state).accelerometer.rawY;
+                            if (group2_max.Value < ((Wiimote)e.state).accelerometer.rawY) group2_max.Value = ((Wiimote)e.state).accelerometer.rawY;
                         }
                         break;
 
@@ -187,8 +187,8 @@ namespace WiinUSoft
                         }
                         else
                         {
-                            if (group3_min.Value + 32 > ((Wiimote)e.state).accelerometer.rawZ) group3_min.Value = ((Wiimote)e.state).accelerometer.rawZ;
-                            if (group3_max.Value - 32 < ((Wiimote)e.state).accelerometer.rawZ) group3_max.Value = ((Wiimote)e.state).accelerometer.rawZ;
+                            if (group3_min.Value > ((Wiimote)e.state).accelerometer.rawZ) group3_min.Value = ((Wiimote)e.state).accelerometer.rawZ;
+                            if (group3_max.Value < ((Wiimote)e.state).accelerometer.rawZ) group3_max.Value = ((Wiimote)e.state).accelerometer.rawZ;
                         }
                         break;
                     #endregion
@@ -206,8 +206,8 @@ namespace WiinUSoft
                         }
                         else
                         {
-                            if (group1_min.Value + 32 > ((Nunchuk)e.state).accelerometer.rawX) group1_min.Value = ((Nunchuk)e.state).accelerometer.rawX;
-                            if (group1_max.Value - 32 < ((Nunchuk)e.state).accelerometer.rawX) group1_max.Value = ((Nunchuk)e.state).accelerometer.rawX;
+                            if (group1_min.Value > ((Nunchuk)e.state).accelerometer.rawX) group1_min.Value = ((Nunchuk)e.state).accelerometer.rawX;
+                            if (group1_max.Value < ((Nunchuk)e.state).accelerometer.rawX) group1_max.Value = ((Nunchuk)e.state).accelerometer.rawX;
                         }
                         break;
 
@@ -223,8 +223,8 @@ namespace WiinUSoft
                         }
                         else
                         {
-                            if (group2_min.Value + 32 > ((Nunchuk)e.state).accelerometer.rawY) group2_min.Value = ((Nunchuk)e.state).accelerometer.rawY;
-                            if (group2_max.Value - 32 < ((Nunchuk)e.state).accelerometer.rawY) group2_max.Value = ((Nunchuk)e.state).accelerometer.rawY;
+                            if (group2_min.Value > ((Nunchuk)e.state).accelerometer.rawY) group2_min.Value = ((Nunchuk)e.state).accelerometer.rawY;
+                            if (group2_max.Value < ((Nunchuk)e.state).accelerometer.rawY) group2_max.Value = ((Nunchuk)e.state).accelerometer.rawY;
                         }
                         break;
 
@@ -240,8 +240,8 @@ namespace WiinUSoft
                         }
                         else
                         {
-                            if (group3_min.Value + 32 > ((Nunchuk)e.state).accelerometer.rawZ) group3_min.Value = ((Nunchuk)e.state).accelerometer.rawZ;
-                            if (group3_max.Value - 32 < ((Nunchuk)e.state).accelerometer.rawZ) group3_max.Value = ((Nunchuk)e.state).accelerometer.rawZ;
+                            if (group3_min.Value > ((Nunchuk)e.state).accelerometer.rawZ) group3_min.Value = ((Nunchuk)e.state).accelerometer.rawZ;
+                            if (group3_max.Value < ((Nunchuk)e.state).accelerometer.rawZ) group3_max.Value = ((Nunchuk)e.state).accelerometer.rawZ;
                         }
                         break;
 
