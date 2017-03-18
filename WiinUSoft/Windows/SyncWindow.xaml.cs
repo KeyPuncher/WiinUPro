@@ -15,6 +15,8 @@ namespace WiinUSoft.Windows
         public bool Cancelled { get; protected set; }
         public int Count { get; protected set; }
 
+        bool _notCompatable = false;
+
         public SyncWindow()
         {
             InitializeComponent();
@@ -86,6 +88,7 @@ namespace WiinUSoft.Windows
                             {
                                 do
                                 {
+                                    // Note: Switch Pro Controller is simply called "Pro Controller"
                                     if (deviceInfo.szName.StartsWith("Nintendo"))
                                     {
                                         Prompt("Found " + deviceInfo.szName);
@@ -156,6 +159,8 @@ namespace WiinUSoft.Windows
                     "No compatable Bluetooth Radios found." + 
                     Environment.NewLine + 
                     "This only works for the Microsoft Bluetooth Stack.");
+                _notCompatable = true;
+                return;
             }
 
             // Close this window
@@ -180,13 +185,18 @@ namespace WiinUSoft.Windows
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (_notCompatable)
+            {
+                Close();
+            }
+
             Prompt("Cancelling");
             Cancelled = true;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!Cancelled && Count == 0)
+            if (!Cancelled && Count == 0 && !_notCompatable)
             {
                 Cancelled = true;
                 Prompt("Cancelling");
