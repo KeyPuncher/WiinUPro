@@ -124,14 +124,11 @@ namespace WiinUSoft
 
             Device.Disconnected += device_Disconnected;
         }
-        
+
         public void RefreshState()
         {
             if (state != DeviceState.Connected_XInput)
                 ConnectionState = DeviceState.Discovered;
-
-            UpdateIcon(device.Type);
-            SetName(device.Type.ToString());
 
             // Load Properties
             properties = UserPrefs.Instance.GetDevicePref(devicePath);
@@ -139,10 +136,16 @@ namespace WiinUSoft
             {
                 SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
                 ApplyCalibration(properties.calPref, properties.calString ?? "");
+                if (!string.IsNullOrEmpty(properties.lastIcon))
+                {
+                    icon.Source = (ImageSource)Application.Current.Resources[properties.lastIcon];
+                }
             }
             else
             {
                 properties = new Property(devicePath);
+                UpdateIcon(device.Type);
+                SetName(device.Type.ToString());
             }
         }
 
@@ -624,20 +627,25 @@ namespace WiinUSoft
             {
                 case ControllerType.ProController:
                     icon.Source = (ImageSource)Application.Current.Resources["ProIcon"];
+                    UserPrefs.Instance.UpdateDeviceIcon(devicePath, "ProIcon");
                     break;
                 case ControllerType.ClassicControllerPro:
                     icon.Source = (ImageSource)Application.Current.Resources["CCPIcon"];
+                    UserPrefs.Instance.UpdateDeviceIcon(devicePath, "CCPIcon");
                     break;
                 case ControllerType.ClassicController:
                     icon.Source = (ImageSource)Application.Current.Resources["CCIcon"];
+                    UserPrefs.Instance.UpdateDeviceIcon(devicePath, "CCIcon");
                     break;
                 case ControllerType.Nunchuk:
                 case ControllerType.NunchukB:
                     icon.Source = (ImageSource)Application.Current.Resources["WNIcon"];
+                    UserPrefs.Instance.UpdateDeviceIcon(devicePath, "WNIcon");
                     break;
 
                 default:
                     icon.Source = (ImageSource)Application.Current.Resources["WIcon"];
+                    UserPrefs.Instance.UpdateDeviceIcon(devicePath, "WIcon");
                     break;
             }
         }

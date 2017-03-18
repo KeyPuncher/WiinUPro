@@ -206,6 +206,29 @@ namespace WiinUSoft
 
             devicePrefs.Add(property);
         }
+
+        public void UpdateDeviceIcon(string path, string icon)
+        {
+            var prop = devicePrefs.FindIndex((p) => p.hid == path);
+
+            if (prop >= 0)
+            {
+                devicePrefs[prop].lastIcon = icon;
+                SavePrefs();
+            }
+        }
+
+        public string GetDeviceIcon(string path)
+        {
+            var prop = devicePrefs.FindIndex((p) => p.hid == path);
+
+            if (prop >= 0)
+            {
+                return devicePrefs[prop].lastIcon;
+            }
+
+            return "";
+        }
     }
 
     public class Property
@@ -228,6 +251,7 @@ namespace WiinUSoft
 
         public string hid = "";
         public string name = "";
+        public string lastIcon = "";
         public bool autoConnect = false;
         public bool useRumble = true;
         public int autoNum = 0;
