@@ -273,7 +273,7 @@
     <Resource Include="Images\WiinUSoft_Icon32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Bluetooth.png" />
+    <Resource Include="Images\Sync.png" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

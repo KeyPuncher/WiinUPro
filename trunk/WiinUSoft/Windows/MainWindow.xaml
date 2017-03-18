@@ -40,7 +40,7 @@
         <Label Content="Connected as Xbox 360 Controller (XInput)" HorizontalAlignment="Left" Margin="337,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Connected as VJoy Device (Direct Input)" HorizontalAlignment="Left" Margin="637,10,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
         <Button x:Name="btnSync" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Sync" Background="{DynamicResource ButonFillBrush1}" Click="btnSync_Click" >
-            <Image Source="../Images/Bluetooth.png"/>
+            <Image Source="/WiinUSoft;component/Images/sync.png"/>
         </Button>
         <Button x:Name="btnRefresh" HorizontalAlignment="Left" Margin="39,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Refresh" Background="{DynamicResource ButonFillBrush1}" Click="btnRefresh_Click">
             <Image Source="../Images/Refresh.png" />
