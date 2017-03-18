@@ -620,11 +620,6 @@ namespace WiinUSoft
 
         private void UpdateIcon(ControllerType cType)
         {
-            if (icon.Source == (ImageSource)Application.Current.Resources["ProIcon"])
-            {
-                return;
-            }
-
             switch (cType)
             {
                 case ControllerType.ProController:
