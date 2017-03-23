@@ -1,5 +1,5 @@
 #define MyAppName "WiinUSoft"
-#define MyAppVersion "2.1"
+#define MyAppVersion "3.0"
 #define MyAppPublisher "Justin Keys"
 #define MyAppURL "http://www.wiinupro.com/"
 #define MyAppExeName "WiinUSoft.exe"
@@ -69,6 +69,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "..\WiinUSoft\bin\Release\WiinUSoft.exe"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUSoft\bin\Release\Nintroller.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
+Source: "..\WiinUSoft\bin\Release\RestSharp.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUSoft\bin\Release\ScpControl.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUSoft\bin\Release\Hardcodet.Wpf.TaskbarNotification.dll"; Components: main; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\WiinUSoft\ReadMe.txt"; DestDir: "{app}"; Components: main; Flags: ignoreversion isreadme
