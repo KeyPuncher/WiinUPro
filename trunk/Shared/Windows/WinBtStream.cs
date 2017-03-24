@@ -31,8 +31,6 @@ namespace Shared.Windows
         public static FileShare OverridenFileShare = FileShare.None;
         public static bool ForceToshibaMode = false;
 
-        static Dictionary<string, BtStack> AssociatedStack;
-
         protected string _hidPath;
         protected SafeFileHandle _fileHandle;
         protected FileStream _fileStream;
@@ -71,8 +69,6 @@ namespace Shared.Windows
 
         static WinBtStream()
         {
-            AssociatedStack = new Dictionary<string, BtStack>();
-            
             // When true, Windows Stack is enabled
             //var a = BluetoothEnableDiscovery(IntPtr.Zero, true);
         }
@@ -102,7 +98,7 @@ namespace Shared.Windows
             }
 
             // Determine if using the Toshiba Stack
-            if (UseToshiba || (AssociatedStack.ContainsKey(path) && AssociatedStack[path] == BtStack.Toshiba))
+            if (UseToshiba)
             {
                 SharingMode = FileShare.None;
                 UseFullReportSize = true;
@@ -117,10 +113,14 @@ namespace Shared.Windows
         {
             if (btStack == BtStack.Toshiba)
             {
-                SharingMode = FileShare.None;
                 UseFullReportSize = true;
                 UseWriteFile = true;
             }
+        }
+
+        public WinBtStream(string path, BtStack btStack, FileShare sharingMode) : this(path, btStack)
+        {
+            SharingMode = sharingMode;
         }
 
         public bool OpenConnection()
@@ -282,12 +282,12 @@ namespace Shared.Windows
                             //var associatedStack = CheckBtStack(deviceInfoData);
                             //var associatedStack = BtStack.Microsoft;
 
-                            var associatedStack = BluetoothEnableDiscovery(IntPtr.Zero, true) ? BtStack.Microsoft : BtStack.Toshiba;
-
-                            if (!AssociatedStack.ContainsKey(diDetail.devicePath))
-                            {
-                                AssociatedStack.Add(diDetail.devicePath, associatedStack);
-                            }
+                            //var associatedStack = BluetoothEnableDiscovery(IntPtr.Zero, true) ? BtStack.Microsoft : BtStack.Toshiba;
+                            //
+                            //if (!AssociatedStack.ContainsKey(diDetail.devicePath))
+                            //{
+                            //    AssociatedStack.Add(diDetail.devicePath, associatedStack);
+                            //}
 
                             result.Add(new DeviceInfo
                             {
