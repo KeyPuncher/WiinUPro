@@ -104,7 +104,10 @@ namespace WiinUSoft
                 }
                 else
                 {
-                    var stream = new WinBtStream(hid.DevicePath);
+                    var stream = new WinBtStream(
+                        hid.DevicePath, 
+                        UserPrefs.Instance.toshibaMode ? WinBtStream.BtStack.Toshiba : WinBtStream.BtStack.Microsoft, 
+                        UserPrefs.Instance.greedyMode ? FileShare.None : FileShare.ReadWrite);
                     Nintroller n = new Nintroller(stream, hid.Type);
 
                     if (stream.OpenConnection() && stream.CanRead)
@@ -222,6 +225,7 @@ namespace WiinUSoft
             menu_AutoStart.IsChecked = UserPrefs.Instance.autoStartup;
             menu_NoSharing.IsChecked = UserPrefs.Instance.greedyMode;
             menu_AutoRefresh.IsChecked = UserPrefs.Instance.autoRefresh;
+            menu_MsBluetooth.IsChecked = !UserPrefs.Instance.toshibaMode;
 
             if (UserPrefs.Instance.greedyMode)
             {
@@ -373,6 +377,13 @@ namespace WiinUSoft
         {
             var dWin = new Windows.CalDefaultWindow();
             dWin.ShowDialog();
+        }
+
+        private void menu_MsBluetooth_Click(object sender, RoutedEventArgs e)
+        {
+            WinBtStream.ForceToshibaMode = !menu_MsBluetooth.IsChecked;
+            UserPrefs.Instance.toshibaMode = !menu_MsBluetooth.IsChecked;
+            UserPrefs.SavePrefs();
         }
 
         #region Shortcut Creation

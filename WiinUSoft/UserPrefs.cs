@@ -31,6 +31,9 @@ namespace WiinUSoft
                         _instance = new UserPrefs();
                         _instance.devicePrefs = new List<Property>();
                         _instance.defaultProfile = new Profile();
+                        // we could, but just in case lets not
+                        //_instance.greedyMode = Environment.OSVersion.Version.Major < 10; 
+                        //_instance.toshibaMode = !Shared.Windows.NativeImports.BluetoothEnableDiscovery(IntPtr.Zero, true);
                         DataPath = AppDomain.CurrentDomain.BaseDirectory + @"\prefs.config";
                         
                         if (!SavePrefs())
@@ -97,6 +100,7 @@ namespace WiinUSoft
         public bool autoStartup;
         public bool startMinimized;
         public bool greedyMode;
+        public bool toshibaMode;
         public bool autoRefresh = true;
 
         public UserPrefs()
