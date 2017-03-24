@@ -49,7 +49,7 @@ namespace WiinUSoft
                 appVersion = string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Revision);
 
                 Version nVersion = System.Reflection.Assembly.LoadFrom("Nintroller.dll").GetName().Version;
-                nintrollerVersion = string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+                nintrollerVersion = string.Format("{0}.{1}.{2}.{3}", nVersion.Major, nVersion.Minor, nVersion.Build, nVersion.Revision);
 
                 installLocation = System.Reflection.Assembly.GetEntryAssembly().Location;
 
