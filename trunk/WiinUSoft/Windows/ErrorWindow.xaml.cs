@@ -37,14 +37,37 @@ namespace WiinUSoft
 
         private void _sendBtn_Click(object sender, RoutedEventArgs e)
         {
-            string messageBody = "Test Body";
+            string messageBody = "";
+            string appVersion = "";
+            string nintrollerVersion = "";
+            string installLocation = "";
+            string user = "";
 
-            messageBody = string.Format("Date: {2}\n\nOS: {3}\n\nUser Comments: {4}\n\nMessage: {0}\n\nStack:\n {1}",
+            try
+            {
+                Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
+                appVersion = string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Revision);
+
+                Version nVersion = System.Reflection.Assembly.LoadFrom("Nintroller.dll").GetName().Version;
+                nintrollerVersion = string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+
+                installLocation = System.Reflection.Assembly.GetEntryAssembly().Location;
+
+                // Just so we know if we are getting repeating errors from the same person
+                user = Environment.UserName;
+            }
+            catch { }
+
+            messageBody = string.Format("Date: {2}\n\nOS: {3}\n\nWiinUSoft Version: {5}\n\nNintroller Version: {6}\n\nInstall Location: {7}\n\nUser: {8}\n\nUser Comments: {4}\n\nMessage: {0}\n\nStack:\n {1}",
                     _exception.Message,                     // 0
                     _exception.StackTrace,                  // 1
                     DateTime.Now,                           // 2
                     Environment.OSVersion.ToString(),       // 3
-                    _userInfo.Text);                        // 4
+                    _userInfo.Text,                         // 4
+                    appVersion,                             // 5
+                    nintrollerVersion,                      // 6
+                    installLocation,                        // 7
+                    user);                                  // 8
 
             if (_exception.InnerException != null)
             {

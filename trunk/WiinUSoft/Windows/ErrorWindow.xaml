@@ -8,8 +8,7 @@
         <TextBox x:Name="_errorStack" Margin="10,71,8,125" TextWrapping="Wrap" Text="More Info" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" IsReadOnly="True" FontStyle="Italic"/>
         <Button x:Name="_sendBtn" Content="Send" Margin="0,0,8,6" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="_sendBtn_Click"/>
         <Button x:Name="_dontSendBtn" Content="Don't Send" Margin="0,0,97,6" HorizontalAlignment="Right" Width="75" Height="21" VerticalAlignment="Bottom" Click="_dontSendBtn_Click"/>
-        <TextBox x:Name="_userInfo" Margin="10,0,8,32" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Height="56" VerticalAlignment="Bottom" Text="optional"/>
-        <Label Content="Comments, Email, ect." HorizontalAlignment="Left" Margin="10,0,0,93" VerticalAlignment="Bottom"/>
-
+        <TextBox x:Name="_userInfo" Margin="10,0,8,32" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Height="56" VerticalAlignment="Bottom" Text="Description of what was happening before this window appeared."/>
+        <Label Content="Helpful comments, Email for resolution, ect." HorizontalAlignment="Left" Margin="10,0,0,93" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
