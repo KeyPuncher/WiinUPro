@@ -97,6 +97,19 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 Filename: "{app}\SCP_Driver\ScpDriver.exe"; Components: scp
 
 [Code]
+/////////////////////////////////////////////////////////////////////
+function GetUninstallString(): String;
+var
+  sUnInstPath: String;
+  sUnInstallString: String;
+begin
+  sUnInstPath := ExpandConstant('Software\Microsoft\Windows\CurrentVersion\Uninstall\{#emit SetupSetting("AppId")}_is1');
+  sUnInstallString := '';
+  if not RegQueryStringValue(HKLM, sUnInstPath, 'UninstallString', sUnInstallString) then
+    RegQueryStringValue(HKCU, sUnInstPath, 'UninstallString', sUnInstallString);
+  Result := sUnInstallString;
+end;
+
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
   FileName: String;
@@ -105,10 +118,17 @@ begin
   begin
     FileName := ExpandConstant('{userappdata}') + '\WiinUSoft_prefs.config';
     if FileExists(FileName) then
-      if MsgBox('Do you want to delete your saved WiinUSoft preferences ?',
-        mbConfirmation, MB_YESNO) = IDYES
-      then
-        DeleteFile(FileName);
+      begin
+        if (GetUninstallString() = '') then
+          begin
+            if MsgBox('Do you want to delete your saved WiinUSoft preferences ?',
+              mbConfirmation, MB_YESNO) = IDYES
+            then
+              DeleteFile(FileName);
+          end
+        else
+          DeleteFile(FileName);
+      end
   end;
 end;
 
@@ -206,4 +226,60 @@ begin
   end
 
   Result := False;
+end;
+
+// code for uninstalling the previous version
+
+
+
+/////////////////////////////////////////////////////////////////////
+function IsUpgrade(): Boolean;
+begin
+  Result := False;
+  if (GetUninstallString() <> '') then
+  begin
+    if MsgBox('There is another version of WiinUSoft installed. Uninstall it?',
+      mbConfirmation, MB_YESNO) = IDYES
+    then
+      Result := True;
+  end
+end;
+
+
+/////////////////////////////////////////////////////////////////////
+function UnInstallOldVersion(): Integer;
+var
+  sUnInstallString: String;
+  iResultCode: Integer;
+begin
+// Return Values:
+// 1 - uninstall string is empty
+// 2 - error executing the UnInstallString
+// 3 - successfully executed the UnInstallString
+
+  // default return value
+  Result := 0;
+
+  // get the uninstall string of the old app
+  sUnInstallString := GetUninstallString();
+  if sUnInstallString <> '' then begin
+    sUnInstallString := RemoveQuotes(sUnInstallString);
+    if Exec(sUnInstallString, '/SILENT /NORESTART /SUPPRESSMSGBOXES','', SW_HIDE, ewWaitUntilTerminated, iResultCode) then
+      Result := 3
+    else
+      Result := 2;
+  end else
+    Result := 1;
+end;
+
+/////////////////////////////////////////////////////////////////////
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if (CurStep=ssInstall) then
+  begin
+    if (IsUpgrade()) then
+    begin
+      UnInstallOldVersion();
+    end;
+  end;
 end;
