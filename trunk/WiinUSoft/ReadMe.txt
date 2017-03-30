@@ -1,5 +1,5 @@
 ======================
-WiinUSoft 2.1
+WiinUSoft 3.0
 ======================
 
  WiinUSoft is a program that allows you to use your Nintendo
@@ -33,18 +33,37 @@ Supported Controllers
 
  = 3rd Party Controllers =
  - HORI Battle Pad
+ - PDP Fightpad
+ - Pro Controller U
 
 
 ======================
 Change Log
 ======================
 
+ = version 3.0 =
+ - Using v2.5 of the Nintroller library (not backwards compatible)
+ - Added ability to sync & pair controllers to the Windows BT Stack
+ - Support for both Windows & Toshiba Bluetooth Stacks
+ - Added Wiimote IR Sensor support
+ - Added auto refresh of device list
+ - Added "Greedy Mode" option (Dark Souls Fix)
+ - Added ability to set a default calibration setting
+ - Added connect to first available XInput device auto connect option
+ - Updated error reporting
+ - Fixed crash involving applying controller calibration
+ - Fixed controller icon detection
+ - Adjusted Accelerometer calibration values (less tilting needed to reach maximum)
+ - Minor UI Tweaks
+ - PDP Fightpad tested and works (shoulders are digital by design)
+ - Pro Controller U support added (works as Wiimote + Classic Controller)
+
  = version 2.1 =
  - Fixed Rumble not working
  - Various crash fixes
 
  = version 2.0 =
- - Using v.2 of the Nintroller library
+ - Using v2 of the Nintroller library
  - Fixed Windows 10 crash (removes blocked access)
  - Fixed file access issue when saving prefs.config
  - Added controller calibration options
@@ -61,7 +80,7 @@ Change Log
  - Added ability to disable rumble
  - Added rumble patterns to account for various rumble intensities
  - Added ability to adjust rumble intensity
- - HORI Battle Pad test and works fully
+ - HORI Battle Pad tested and works fully
 
  = version 1.0 =
  - First Release
