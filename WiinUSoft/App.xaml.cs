@@ -36,10 +36,8 @@ namespace WiinUSoft
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
-
-            // TODO: set the exception properties and close other windows
+            
             SingleInstance<App>.Cleanup();
-            System.Diagnostics.Debug.WriteLine("Caught an Exception: " + e.Message);
             Current.Dispatcher.Invoke(new Action(() => 
             {
                 var box = new ErrorWindow(e);
