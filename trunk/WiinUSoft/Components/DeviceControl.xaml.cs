@@ -157,8 +157,8 @@ namespace WiinUSoft
 
         public void Detatch()
         {
-            device.StopReading();
-            holder.Close();
+            device?.StopReading();
+            holder?.Close();
             lowBatteryFired = false;
             ConnectionState = DeviceState.Discovered;
             Dispatcher.BeginInvoke
