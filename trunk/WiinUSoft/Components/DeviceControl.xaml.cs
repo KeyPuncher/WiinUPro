@@ -28,6 +28,8 @@ namespace WiinUSoft
         private string devicePath;
         private Nintroller device;
         private DeviceState state;
+        private IR     previousIR;
+        private bool  snapIRpointer = false;
         private float rumbleAmount      = 0;
         private int   rumbleStepCount   = 0;
         private int   rumbleStepPeriod  = 10;
@@ -136,6 +138,7 @@ namespace WiinUSoft
             {
                 SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
                 ApplyCalibration(properties.calPref, properties.calString ?? "");
+                snapIRpointer = properties.pointerMode != Property.PointerOffScreenMode.Center;
                 if (!string.IsNullOrEmpty(properties.lastIcon))
                 {
                     icon.Source = (ImageSource)Application.Current.Resources[properties.lastIcon];
@@ -480,10 +483,27 @@ namespace WiinUSoft
             holder.SetValue(Inputs.Wiimote.ACC_SHAKE_Y, wm.accelerometer.Y > 1.15);
             holder.SetValue(Inputs.Wiimote.ACC_SHAKE_Z, wm.accelerometer.Z > 1.15);
 
+            if (snapIRpointer && !wm.irSensor.point1.visible && !wm.irSensor.point2.visible)
+            {
+                if (properties.pointerMode == Property.PointerOffScreenMode.SnapX ||
+                    properties.pointerMode == Property.PointerOffScreenMode.SnapXY)
+                {
+                    wm.irSensor.X = previousIR.X;
+                }
+
+                if (properties.pointerMode == Property.PointerOffScreenMode.SnapY ||
+                    properties.pointerMode == Property.PointerOffScreenMode.SnapXY)
+                {
+                    wm.irSensor.Y = previousIR.Y;
+                }
+            }
+
             holder.SetValue(Inputs.Wiimote.IR_RIGHT, wm.irSensor.X > 0 ? wm.irSensor.X : 0);
             holder.SetValue(Inputs.Wiimote.IR_LEFT, wm.irSensor.X < 0 ? wm.irSensor.X : 0);
             holder.SetValue(Inputs.Wiimote.IR_UP, wm.irSensor.Y > 0 ? wm.irSensor.Y : 0);
             holder.SetValue(Inputs.Wiimote.IR_DOWN, wm.irSensor.Y < 0 ? wm.irSensor.Y : 0);
+
+            previousIR = wm.irSensor;
         }
 
         private void HolderUpdate(object holderState)
@@ -655,7 +675,7 @@ namespace WiinUSoft
             // Load calibration settings
             switch (calPref)
             {
-                case Property.CalibrationPreference.Defalut:
+                case Property.CalibrationPreference.Default:
                     device.SetCalibration(Calibrations.CalibrationPreset.Default);
                     break;
 
@@ -862,7 +882,7 @@ namespace WiinUSoft
                 }
                 else
                 {
-                    win.Close();
+                    win.Show();
                 }
             }
 

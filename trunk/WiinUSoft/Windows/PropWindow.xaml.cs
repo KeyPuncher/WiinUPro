@@ -33,7 +33,7 @@ namespace WiinUSoft
             }
             switch (props.calPref)
             {
-                case Property.CalibrationPreference.Defalut:
+                case Property.CalibrationPreference.Default:
                     calibrationSelection.SelectedIndex = 0;
                     break;
                 case Property.CalibrationPreference.Minimal:
@@ -118,7 +118,7 @@ namespace WiinUSoft
                 switch (calibrationSelection.SelectedIndex)
                 {
                     case 0:
-                        props.calPref = Property.CalibrationPreference.Defalut;
+                        props.calPref = Property.CalibrationPreference.Default;
                         customCalibrate = false;
                         break;
 
@@ -153,6 +153,14 @@ namespace WiinUSoft
                 props.calPref = Property.CalibrationPreference.Custom;
                 customCalibrate = true;
                 Hide();
+            }
+        }
+
+        private void pointerSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (props != null)
+            {
+                props.pointerMode = (Property.PointerOffScreenMode)pointerSelection.SelectedIndex;
             }
         }
     }
