@@ -1,5 +1,5 @@
 ======================
-WiinUSoft 3.0
+WiinUSoft 3.1
 ======================
 
  WiinUSoft is a program that allows you to use your Nintendo
@@ -40,6 +40,10 @@ Supported Controllers
 ======================
 Change Log
 ======================
+
+ = version 3.1 =
+ - Added option for changing the Wiimote's IR pointer off screen behavior
+ - Various crash fixes
 
  = version 3.0 =
  - Using v2.5 of the Nintroller library (not backwards compatible)
