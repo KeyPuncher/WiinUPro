@@ -42,18 +42,18 @@ namespace WiinUSoft
 
         public void HideWindow()
         {
-            if (WindowState == System.Windows.WindowState.Minimized)
+            if (WindowState == WindowState.Minimized)
             {
-                trayIcon.Visibility = System.Windows.Visibility.Visible;
+                trayIcon.Visibility = Visibility.Visible;
                 Hide();
             }
         }
 
         public void ShowWindow()
         {
-            trayIcon.Visibility = System.Windows.Visibility.Hidden;
+            trayIcon.Visibility = Visibility.Hidden;
             Show();
-            WindowState = System.Windows.WindowState.Normal;
+            WindowState = WindowState.Normal;
         }
 
         public void ShowBalloon(string title, string message, BalloonIcon icon)
