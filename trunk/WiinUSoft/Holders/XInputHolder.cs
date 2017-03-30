@@ -331,7 +331,7 @@ namespace WiinUSoft.Holders
                     }
                     catch(KeyNotFoundException) { }
                 }
-                else
+                else if (Values.ContainsKey(map.Key))
                 {
                     switch (map.Value)
                     {
@@ -399,7 +399,7 @@ namespace WiinUSoft.Holders
                 {
                     // Check if it's strong enough to rumble
                     int strength = BitConverter.ToInt32(new byte[] { rumble[4], rumble[3], 0x00, 0x00 }, 0);
-                    System.Diagnostics.Debug.WriteLine(strength);
+                    //System.Diagnostics.Debug.WriteLine(strength);
                     Flags[Inputs.Flags.RUMBLE] = (strength > minRumble);
                     //Values[Inputs.Flags.RUMBLE] = strength > minRumble ? strength : 0;
                     RumbleAmount = strength > minRumble ? strength : 0;
