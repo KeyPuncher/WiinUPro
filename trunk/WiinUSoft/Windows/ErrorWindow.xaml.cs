@@ -27,6 +27,23 @@ namespace WiinUSoft
 
             _errorMessage.Content = ex.Message;
             _errorStack.Text = ex.StackTrace;
+
+            if (ex.Message.Contains("NintrollerLib"))
+            {
+                Version nVersion = System.Reflection.Assembly.LoadFrom("Nintroller.dll").GetName().Version;
+                if (nVersion < new Version(2, 5))
+                {
+                    _errorMessage.Content = "Then Nintroller library is out of date.";
+                    _errorStack.Text = "Please try the following:" + Environment.NewLine +
+                        Environment.NewLine + "1) Uninstall WiinUSoft" + 
+                        Environment.NewLine + "2) Reinstall WiinUSoft using the latest installer" +
+                        Environment.NewLine + "3) Verify that the installed Nintroller.dll in the installation folder" +
+                        " is version 2.5 by right clicking the file, choosing Properties, and choose the Details tab.";
+                    _userInfo.Visibility = Visibility.Collapsed;
+                    _dontSendBtn.Content = "Close";
+                    _sendBtn.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         private void _dontSendBtn_Click(object sender, RoutedEventArgs e)
@@ -102,6 +119,11 @@ namespace WiinUSoft
             }
 
             Application.Current.Shutdown();
+        }
+
+        private void _userInfo_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            _sendBtn.IsEnabled = _userInfo.Text.Length > 5;
         }
     }
 }
