@@ -20,7 +20,7 @@ namespace WiinUSoft.Windows
                 {
                     case Property.CalibrationPreference.Minimal:
                         radioMin.IsChecked = true; break;
-                    case Property.CalibrationPreference.Defalut:
+                    case Property.CalibrationPreference.Default:
                         radioDefault.IsChecked = true; break;
                     case Property.CalibrationPreference.More:
                         radioMod.IsChecked = true; break;
@@ -51,7 +51,7 @@ namespace WiinUSoft.Windows
             
             if (radioDefault.IsChecked ?? false)
             {
-                prop.calPref = Property.CalibrationPreference.Defalut;
+                prop.calPref = Property.CalibrationPreference.Default;
             }
             else if (radioMin.IsChecked ?? false)
             {

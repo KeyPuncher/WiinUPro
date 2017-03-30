@@ -247,10 +247,19 @@ namespace WiinUSoft
         {
             Raw     = -2,
             Minimal = -1,
+            Default = 0,
             Defalut = 0,
             More    = 1,
             Extra   = 2,
             Custom  = 3
+        }
+
+        public enum PointerOffScreenMode
+        {
+            Center = 0,
+            SnapX  = 1,
+            SnapY  = 2,
+            SnapXY = 3
         }
 
         public string hid = "";
@@ -264,19 +273,22 @@ namespace WiinUSoft
         public string profile = "";
         public CalibrationPreference calPref;
         public string calString = ""; // not the best solution for saving the custom config but makes it easy
+        public PointerOffScreenMode pointerMode = PointerOffScreenMode.Center;
 
         public Property()
         {
             hid = "";
             connType = ProfHolderType.XInput;
-            calPref = CalibrationPreference.Defalut;
+            calPref = CalibrationPreference.Default;
+            pointerMode = PointerOffScreenMode.Center;
         }
 
         public Property(string ID)
         {
             hid = ID;
             connType = ProfHolderType.XInput;
-            calPref = CalibrationPreference.Defalut;
+            calPref = CalibrationPreference.Default;
+            pointerMode = PointerOffScreenMode.Center;
         }
 
         public Property(Property copy)
@@ -291,6 +303,7 @@ namespace WiinUSoft
             profile = copy.profile;
             calPref = copy.calPref;
             calString = copy.calString;
+            pointerMode = copy.pointerMode;
         }
     }
 
