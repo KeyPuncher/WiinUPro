@@ -49,6 +49,7 @@ namespace WiinUSoft
                     calibrationSelection.SelectedIndex = 4;
                     break;
             }
+            pointerSelection.SelectedIndex = (int)org.pointerMode;
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
