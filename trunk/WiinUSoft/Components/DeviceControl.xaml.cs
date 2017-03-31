@@ -890,6 +890,7 @@ namespace WiinUSoft
             {
                 ApplyCalibration(win.props.calPref, win.props.calString);
                 properties = new Property(win.props);
+                snapIRpointer = properties.pointerMode != Property.PointerOffScreenMode.Center;
                 SetName(properties.name);
                 UserPrefs.Instance.AddDevicePref(properties);
                 UserPrefs.SavePrefs();
