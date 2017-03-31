@@ -335,16 +335,16 @@ namespace WiinUSoft.Holders
                 {
                     switch (map.Value)
                     {
-                        case Inputs.Xbox360.LLEFT : LX -= Values[map.Key]; break;
-                        case Inputs.Xbox360.LRIGHT: LX += Values[map.Key]; break;
-                        case Inputs.Xbox360.LUP   : LY += Values[map.Key]; break;
-                        case Inputs.Xbox360.LDOWN : LY -= Values[map.Key]; break;
-                        case Inputs.Xbox360.RLEFT : RX -= Values[map.Key]; break;
-                        case Inputs.Xbox360.RRIGHT: RX += Values[map.Key]; break;
-                        case Inputs.Xbox360.RUP   : RY += Values[map.Key]; break;
-                        case Inputs.Xbox360.RDOWN : RY -= Values[map.Key]; break;
-                        case Inputs.Xbox360.LT    : LT += Values[map.Key]; break;
-                        case Inputs.Xbox360.RT    : RT += Values[map.Key]; break;
+                        case Inputs.Xbox360.LLEFT : try { LX -= Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.LRIGHT: try { LX += Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.LUP   : try { LY += Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.LDOWN : try { LY -= Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.RLEFT : try { RX -= Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.RRIGHT: try { RX += Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.RUP   : try { RY += Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.RDOWN : try { RY -= Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.LT    : try { LT += Values[map.Key]; } catch { } break;
+                        case Inputs.Xbox360.RT    : try { RT += Values[map.Key]; } catch { } break;
 
 #if MouseMode
                         case "MouseMode": 
