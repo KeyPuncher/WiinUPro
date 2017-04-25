@@ -4,6 +4,176 @@
              xmlns:local="clr-namespace:WiinUPro"
              StartupUri="Windows\MainWindow.xaml">
     <Application.Resources>
-         
+        <!--#region Colors-->
+        <!-- Color Palette Based on https://dribbble.com/shots/2318226-Colors -->
+        <!-- Accent Colors -->
+        <Color x:Key="Red">#FFE54C3E</Color>
+        <Color x:Key="RedDark">#FFC1392B</Color>
+        <Color x:Key="Pink">#FFF15354</Color>
+        <Color x:Key="PinkDark">#FFE63A38</Color>
+        <Color x:Key="Orange">#FFE67F23</Color>
+        <Color x:Key="OrangeDark">#FFD55300</Color>
+        <Color x:Key="Gold">#FFF1C40F</Color>
+        <Color x:Key="GoldDark">#FFE59701</Color>
+        <Color x:Key="Yellow">#FFEAE05A</Color>
+        <Color x:Key="YellowDark">#FFD9C322</Color>
+        <Color x:Key="Green">#FF2FCC71</Color>
+        <Color x:Key="GreenDark">#FF28AC60</Color>
+        <Color x:Key="Pea">#FFa5C53C</Color>
+        <Color x:Key="PeaDark">#FF8EAF20</Color>
+        <!-- Blues -->
+        <Color x:Key="Denim">#FF22374C</Color>
+        <Color x:Key="DenimDark">#FF040A18</Color>
+        <Color x:Key="Spruce">#FF34495A</Color>
+        <Color x:Key="SpruceDark">#FF2E4354</Color>
+        <Color x:Key="Cobalt">#FF0076A8</Color>
+        <Color x:Key="CobaltDark">#FF00548A</Color>
+        <Color x:Key="Blue">#FF3497DB</Color>
+        <Color x:Key="BlueDark">#FF297FB8</Color>
+        <Color x:Key="Aegean">#FF3A6f81</Color>
+        <Color x:Key="AegeanDark">#FF376272</Color>
+        <Color x:Key="Turquoise">#FF2D848E</Color>
+        <Color x:Key="TurquoiseDark">#FF18656F</Color>
+        <Color x:Key="Teal">#FF74CCD0</Color>
+        <Color x:Key="TealDark">#FF389FA8</Color>
+        <!-- Base Colors -->
+        <Color x:Key="B800">#FF2B2B2B</Color>
+        <Color x:Key="B850">#FF262626</Color>
+        <Color x:Key="B700">#FF344851</Color>
+        <Color x:Key="B750">#FF0B1419</Color>
+        <Color x:Key="B600">#FF67767D</Color>
+        <Color x:Key="B650">#FF2A373F</Color>
+        <Color x:Key="B500">#FF99A2A7</Color>
+        <Color x:Key="B550">#FF5C6971</Color>
+        <Color x:Key="B400">#FF95A5A5</Color>
+        <Color x:Key="B450">#FF7F8D8E</Color>
+        <Color x:Key="B300">#FFCCD2D2</Color>
+        <Color x:Key="B350">#FFA3ABAE</Color>
+        <Color x:Key="B200">#FFEBF1F1</Color>
+        <Color x:Key="B250">#FFBEC3C7</Color>
+        <!--#endregion-->
+
+        <!--#region Brushes-->
+        <!-- Named by ideal use -->
+        <SolidColorBrush x:Key="BackgroundMain" Color="{StaticResource B800}" />
+        <SolidColorBrush x:Key="BackgroundSub" Color="{StaticResource B500}" />
+        <SolidColorBrush x:Key="Tab" Color="{StaticResource B200}" />
+        <SolidColorBrush x:Key="TabSelected" Color="{StaticResource Blue}" />
+        <SolidColorBrush x:Key="TextHeader" Color="{StaticResource B700}" />
+        <SolidColorBrush x:Key="TextBody" Color="{StaticResource B850}" />
+        <SolidColorBrush x:Key="Outline" Color="{StaticResource Denim}" />
+        <SolidColorBrush x:Key="OutlineHighlight" Color ="{StaticResource Blue}" />
+        <SolidColorBrush x:Key="ButtonBasic" Color="{StaticResource DenimDark}" />
+        <!--#endregion-->
+
+        <!--#region Control Styles-->
+        <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
+        <Style TargetType="GroupBox" x:Key="GroupBoxStyle" >
+            <Setter Property="Foreground" Value="{StaticResource TextBody}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Outline}"/>
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupBox}">
+                        <Grid SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="6" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="6" />
+                            </Grid.RowDefinitions>
+                            <Border CornerRadius="4" Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="Transparent" Background="{TemplateBinding Background}" />
+                            <Border Name="Header" Padding="3,1,3,0" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+                                <ContentPresenter ContentSource="Header" RecognizesAccessKey="true" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Border>
+                            <ContentPresenter Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <Border Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="4"  BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="3">
+                                <Border.OpacityMask>
+                                    <MultiBinding Converter="{StaticResource BorderGapMaskConverter}" ConverterParameter="7">
+                                        <Binding ElementName="Header" Path="ActualWidth" />
+                                        <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                        <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                    </MultiBinding>
+                                </Border.OpacityMask>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontWeight="Bold"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Button" x:Key="BasicButton">
+            <Setter Property="Foreground" Value="{StaticResource ButtonBasic}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="grid">
+                            <Border x:Name="border" CornerRadius="5" BorderBrush="{StaticResource Outline}" BorderThickness="2">
+                                <Border.Background>
+                                    <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                        <RadialGradientBrush.RelativeTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                                                <TranslateTransform X="0.02" Y="0.3"/>
+                                            </TransformGroup>
+                                        </RadialGradientBrush.RelativeTransform>
+                                        <GradientStop Offset="1" Color="{StaticResource Cobalt}"/>
+                                        <GradientStop Offset="0.3" Color="{StaticResource Teal}"/>
+                                    </RadialGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border">
+                                    <Setter.Value>
+                                        <RadialGradientBrush GradientOrigin="0.496,1.052">
+                                            <RadialGradientBrush.RelativeTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                                                    <TranslateTransform X="0.02" Y="0.3"/>
+                                                </TransformGroup>
+                                            </RadialGradientBrush.RelativeTransform>
+                                            <GradientStop Offset="1" Color="{StaticResource CobaltDark}"/>
+                                            <GradientStop Offset="0.3" Color="{StaticResource TealDark}"/>
+                                        </RadialGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource OutlineHighlight}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="grid" Value="0.25"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--#endregion-->
+
+        <!-- Examples
+        <LinearGradientBrush x:Key="ButonFillBrush1" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#FFDCEEF8" Offset="0"/>
+            <GradientStop Color="#FF7CA3CA" Offset="0.5"/>
+            <GradientStop Color="#FFADCCEB" Offset="1"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="BrushAntemWhite" Color="#FFF3F6FB"/>
+        <BitmapImage x:Key="ProIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="Images/ProController_white_32.png"/>
+        -->
     </Application.Resources>
 </Application>
