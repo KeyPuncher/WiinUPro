@@ -5,26 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="WiinUPro" Height="380" Width="480" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico">
+        Title="WiinUPro" Height="380" Width="480" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}">
     <Grid>
-        <TabControl x:Name="tabControl" Margin="10" >
+        <TabControl x:Name="tabControl" Margin="10" Background="{StaticResource BackgroundSub}" >
+            <TabControl.Resources>
+                <!-- The following is for styling the tab -->
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <!-- Border -->
+                                <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="{StaticResource Outline}" CornerRadius="2,2,0,0" Margin="-2, 0, 2, 0">
+                                    <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                                </Border>
+                                <!-- States -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource TabSelected}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource Tab}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <!-- TODO: Change to Home icon
                         <Image Source="/WiinUPro;component/Images/Icons/ProController_black_24.png" HorizontalAlignment="Left" Height="12" Margin="0,0,4,0" VerticalAlignment="Center" />
                         -->
-                        <TextBlock Text="Home" />
+                        <TextBlock Text="Home" Foreground="{StaticResource TextBody}" FontWeight="Bold" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
-                    <GroupBox x:Name="deviceGroup" Header="Devices" HorizontalAlignment="Left" Margin="10,26,0,8" Width="252">
+                    <GroupBox x:Name="deviceGroup" Header="Devices" HorizontalAlignment="Left" Margin="10,26,0,8" Width="252" Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <StackPanel x:Name="statusStack">
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,26,4,0" Height="108" VerticalAlignment="Top">
+                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,26,4,0" Height="108" VerticalAlignment="Top" Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <CheckBox x:Name="settingAutoStart" Content="Auto Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                             <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
@@ -32,23 +60,23 @@
                             <CheckBox x:Name="settingToshibaMode" Content="Use Toshiba Mode" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Checked="settingToshibaMode_Checked"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,131,4,8">
+                    <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,131,4,8" Style="{StaticResource GroupBoxStyle}">
                         <Grid>
-                            <Button x:Name="btnAddXinput" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Margin="10,10,0,0" Click="btnAddXinput_Click"/>
-                            <Button x:Name="btnRemoveXinput" Content="Remove" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="57" Margin="79,10,0,0" Click="btnRemoveXinput_Click"/>
+                            <Button x:Name="btnAddXinput" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Margin="10,10,0,0" Click="btnAddXinput_Click" Style="{StaticResource BasicButton}"/>
+                            <Button x:Name="btnRemoveXinput" Content="Remove" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Margin="80,10,0,0" Click="btnRemoveXinput_Click" Style="{StaticResource BasicButton}"/>
                             <Label x:Name="xlabel1" Content="Device 1: Disconnected" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
                             <Label x:Name="xlabel2" Content="Device 2: Disconnected" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
                             <Label x:Name="xlabel3" Content="Device 3: Disconnected" HorizontalAlignment="Left" Margin="10,84,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
                             <Label x:Name="xlabel4" Content="Device 4: Disconnected" HorizontalAlignment="Left" Margin="10,108,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667"/>
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="btnSync" Content="Sync" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="36" Click="btnSync_Click"/>
+                    <Button x:Name="btnSync" Content="Sync" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="36" Click="btnSync_Click" Style="{StaticResource BasicButton}"/>
                     <Label x:Name="label" Content="(Windows BT Stack Only)" HorizontalAlignment="Left" Margin="51,0,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <!-- TODO: Remove Add Tab -->
             <TabItem Header="+" Width="26" IsEnabled="True" MouseUp="AddController" Visibility="Collapsed">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid/>
             </TabItem>
         </TabControl>
 
