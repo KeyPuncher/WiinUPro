@@ -10,8 +10,8 @@
         <Image x:Name="icon" Height="64" Width="64" Source="/WiinUPro;component/Images/Icons/ProController_black_24.png" HorizontalAlignment="Left"/>
         <Label x:Name="nickname" Content="Unidentified Controller" HorizontalAlignment="Left" Margin="69,0,0,0" VerticalAlignment="Top" Width="171"/>
         <Label x:Name="status" Content="Not Connected" HorizontalAlignment="Left" Margin="69,16,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="connectBtn" Content="Connect" HorizontalAlignment="Left" Margin="71,42,0,0" VerticalAlignment="Top" Width="75" Click="connectBtn_Click"/>
-        <Button x:Name="connectAsBtn" Content="Connect As" HorizontalAlignment="Left" Margin="151,42,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+        <Button x:Name="connectBtn" Content="Connect" HorizontalAlignment="Left" Margin="71,42,0,0" VerticalAlignment="Top" Width="75" Click="connectBtn_Click" Style="{StaticResource BasicButton}" />
+        <Button x:Name="connectAsBtn" Content="Connect As" HorizontalAlignment="Left" Margin="151,42,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Style="{StaticResource BasicButton}" />
 
     </Grid>
 </UserControl>
