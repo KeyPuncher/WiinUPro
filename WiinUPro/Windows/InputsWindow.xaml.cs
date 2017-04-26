@@ -25,6 +25,7 @@ namespace WiinUPro
         public bool Apply { get; protected set; }
         public SolidColorBrush keySelectedBrush;
         public SolidColorBrush keyDeselectedBrush;
+        public Style keySelectedStyle;
 
         protected ScpDirector.XInput_Device _selectedDevice = ScpDirector.XInput_Device.Device_A;
         protected NintyControl _control;
@@ -45,6 +46,8 @@ namespace WiinUPro
             Result = new AssignmentCollection();
             keySelectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xBF, 0x5F, 0x0F));
             keyDeselectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD));
+
+            keySelectedStyle = (Style)Application.Current.Resources["KeyButtonActive"];
 
             vJoyOffLabel.Visibility = VJoyDirector.Access.Available ? Visibility.Collapsed : Visibility.Visible;
             if (vJoyOffLabel.Visibility == Visibility.Collapsed && VJoyDirector.Access.Devices.Count > 0)
@@ -84,7 +87,8 @@ namespace WiinUPro
                     var btn = keyboardGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == key.ToString());
                     if (btn != null)
                     {
-                        btn.Background = keySelectedBrush;
+                        //btn.Background = keySelectedBrush;
+                        btn.Style = keySelectedStyle;
                         _selectedKeys.Add(key);
                     }
 
@@ -544,7 +548,8 @@ namespace WiinUPro
 
                         if (btn != null)
                         {
-                            btn.Background = keySelectedBrush;
+                            //btn.Background = keySelectedBrush;
+                            btn.Style = keySelectedStyle;
                         }
 
                         if (img != null)

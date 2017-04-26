@@ -5,158 +5,186 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="InputsWindow" Height="410.293" Width="935.8">
+        Title="InputsWindow" Height="410.293" Width="935.8" Background="{StaticResource BackgroundMain}">
     <Grid>
-        <TabControl x:Name="tabControl" Margin="0,0,0.4,31.6">
+        <TabControl x:Name="tabControl" Margin="0,0,0.4,31.6" Background="{StaticResource BackgroundSub}">
+            <TabControl.Resources>
+                <!-- The following is for styling the tab -->
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <!-- Border -->
+                                <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="{StaticResource Outline}" CornerRadius="2,2,0,0" Margin="-2, 0, 2, 0">
+                                    <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                                </Border>
+                                <!-- States -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource TabSelected}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource Tab}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
             <TabItem Header="Keyboard">
-                <Grid x:Name="keyboardGrid" Background="#FFE5E5E5">
+                <Grid x:Name="keyboardGrid" Background="Transparent">
                     <!-- Key Buttons -->
-                    <Button Content="ESC" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_ESCAPE"/>
-                    <Button Content="F1" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F1"/>
-                    <Button Content="F2" HorizontalAlignment="Left" Margin="125,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F2"/>
-                    <Button Content="F3" HorizontalAlignment="Left" Margin="172,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F3"/>
-                    <Button Content="F4" HorizontalAlignment="Left" Margin="219,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F4"/>
-                    <Button Content="F5" HorizontalAlignment="Left" Margin="284,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F5"/>
-                    <Button Content="F6" HorizontalAlignment="Left" Margin="331,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F6"/>
-                    <Button Content="F7" HorizontalAlignment="Left" Margin="378,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F7"/>
-                    <Button Content="F8" HorizontalAlignment="Left" Margin="425,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F8"/>
-                    <Button Content="F9" HorizontalAlignment="Left" Margin="489,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F9"/>
-                    <Button Content="F10" HorizontalAlignment="Left" Margin="536,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F10"/>
-                    <Button Content="F11" HorizontalAlignment="Left" Margin="583,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F11"/>
-                    <Button Content="F12" HorizontalAlignment="Left" Margin="630,0,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_F12"/>
+                    <Button Content="ESC" Tag="VK_ESCAPE" Margin="10,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F1"  Tag="VK_F1"  Margin="78,0,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F2"  Tag="VK_F2"  Margin="125,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F3"  Tag="VK_F3"  Margin="172,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F4"  Tag="VK_F4"  Margin="219,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F5"  Tag="VK_F5"  Margin="284,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F6"  Tag="VK_F6"  Margin="331,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F7"  Tag="VK_F7"  Margin="378,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F8"  Tag="VK_F8"  Margin="425,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F9"  Tag="VK_F9"  Margin="489,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F10" Tag="VK_F10" Margin="536,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F11" Tag="VK_F11" Margin="583,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F12" Tag="VK_F12" Margin="630,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="~" HorizontalAlignment="Left" Margin="10,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_OEM_3"/>
-                    <Button Content="1" HorizontalAlignment="Left" Margin="57,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_1"/>
-                    <Button Content="2" HorizontalAlignment="Left" Margin="104,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_2"/>
-                    <Button Content="3" HorizontalAlignment="Left" Margin="151,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_3"/>
-                    <Button Content="4" HorizontalAlignment="Left" Margin="198,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_4"/>
-                    <Button Content="5" HorizontalAlignment="Left" Margin="245,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_5"/>
-                    <Button Content="6" HorizontalAlignment="Left" Margin="292,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_6"/>
-                    <Button Content="7" HorizontalAlignment="Left" Margin="339,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_7"/>
-                    <Button Content="8" HorizontalAlignment="Left" Margin="386,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_8"/>
-                    <Button Content="9" HorizontalAlignment="Left" Margin="433,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_9"/>
-                    <Button Content="0" HorizontalAlignment="Left" Margin="480,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_0"/>
-                    <Button Content="-" HorizontalAlignment="Left" Margin="527,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_OEM_MINUS"/>
-                    <Button Content="+" HorizontalAlignment="Left" Margin="574,47,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_OEM_PLUS"/>
-                    <Button Content="BACK" HorizontalAlignment="Left" Margin="621,47,0,0" VerticalAlignment="Top" Width="51" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_BACK"/>
+                    <Button Content="~" Tag="VK_OEM_3" Margin="10,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="1" Tag="K_1" Margin="57,47,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="2" Tag="K_2" Margin="104,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="3" Tag="K_3" Margin="151,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="4" Tag="K_4" Margin="198,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="5" Tag="K_5" Margin="245,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="6" Tag="K_6" Margin="292,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="7" Tag="K_7" Margin="339,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="8" Tag="K_8" Margin="386,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="9" Tag="K_9" Margin="433,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="0" Tag="K_0" Margin="480,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="-" Tag="VK_OEM_MINUS" Margin="527,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="+" Tag="VK_OEM_PLUS" Margin="574,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="BACK" Tag="VK_BACK" Margin="621,47,0,0" Click="ToggleKey" Width="51" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="TAB" HorizontalAlignment="Left" Margin="10,94,0,0" VerticalAlignment="Top" Width="52" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_TAB"/>
-                    <Button Content="Q" HorizontalAlignment="Left" Margin="66,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_Q"/>
-                    <Button Content="W" HorizontalAlignment="Left" Margin="113,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_W"/>
-                    <Button Content="E" HorizontalAlignment="Left" Margin="160,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_E"/>
-                    <Button Content="R" HorizontalAlignment="Left" Margin="207,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_R"/>
-                    <Button Content="T" HorizontalAlignment="Left" Margin="254,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_T"/>
-                    <Button Content="Y" HorizontalAlignment="Left" Margin="301,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_Y"/>
-                    <Button Content="U" HorizontalAlignment="Left" Margin="348,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_U"/>
-                    <Button Content="I" HorizontalAlignment="Left" Margin="395,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_I"/>
-                    <Button Content="O" HorizontalAlignment="Left" Margin="442,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_O"/>
-                    <Button Content="P" HorizontalAlignment="Left" Margin="489,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_P"/>
-                    <Button Content="[" HorizontalAlignment="Left" Margin="536,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_4"/>
-                    <Button Content="]" HorizontalAlignment="Left" Margin="583,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_6"/>
-                    <Button Content="\" HorizontalAlignment="Left" Margin="630,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_5"/>
+                    <Button Content="TAB" Tag="VK_TAB" Margin="10,94,0,0" Click="ToggleKey" Width="52" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Q" Tag="K_Q" Margin="66,94,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="W" Tag="K_W" Margin="113,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="E" Tag="K_E" Margin="160,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="R" Tag="K_R" Margin="207,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="T" Tag="K_T" Margin="254,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Y" Tag="K_Y" Margin="301,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="U" Tag="K_U" Margin="348,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="I" Tag="K_I" Margin="395,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="O" Tag="K_O" Margin="442,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="P" Tag="K_P" Margin="489,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="[" Tag="VK_OEM_4" Margin="536,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="]" Tag="VK_OEM_6" Margin="583,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="\" Tag="VK_OEM_5" Margin="630,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="CAPS" HorizontalAlignment="Left" Margin="10,141,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_CAPITAL"/>
-                    <Button Content="A" HorizontalAlignment="Left" Margin="78,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_A"/>
-                    <Button Content="S" HorizontalAlignment="Left" Margin="125,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_S"/>
-                    <Button Content="D" HorizontalAlignment="Left" Margin="172,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_D"/>
-                    <Button Content="F" HorizontalAlignment="Left" Margin="219,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_F"/>
-                    <Button Content="G" HorizontalAlignment="Left" Margin="266,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_G"/>
-                    <Button Content="H" HorizontalAlignment="Left" Margin="313,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_H"/>
-                    <Button Content="J" HorizontalAlignment="Left" Margin="360,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_J"/>
-                    <Button Content="K" HorizontalAlignment="Left" Margin="407,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_K"/>
-                    <Button Content="L" HorizontalAlignment="Left" Margin="454,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_L"/>
-                    <Button HorizontalAlignment="Left" Margin="501,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_1">
+                    <Button Content="CAPS" Tag="VK_CAPITAL" Click="ToggleKey" Margin="10,141,0,0" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="A" Tag="K_A" Margin="78,141,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="S" Tag="K_S" Margin="125,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="D" Tag="K_D" Margin="172,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F" Tag="K_F" Margin="219,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="G" Tag="K_G" Margin="266,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="H" Tag="K_H" Margin="313,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="J" Tag="K_J" Margin="360,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="K" Tag="K_K" Margin="407,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="L" Tag="K_L" Margin="454,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Tag="VK_OEM_1" Margin="501,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
                         <Button.Content>
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Label Content=":" Margin="3,-10,-4,10"/>
-                                <Label Content=";" Margin="3,8,0,-8"/>
+                                <Label Content=":" Margin="1,-10,-4,10" FontWeight="Bold" FontSize="14"/>
+                                <Label Content=";" Margin="1,8,0,-8" FontWeight="Bold" FontFamily="14"/>
                             </Grid>
                         </Button.Content>
                     </Button>
-                    <Button HorizontalAlignment="Left" Margin="548,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_7">
+                    <Button Tag="VK_OEM_7" Margin="548,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
                         <Button.Content>
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Label Content="&quot;" Margin="1,-9,-2.5,8.5"/>
-                                <Label Content="'" Margin="2,10,0.5,-10.5"/>
+                                <Label Content="&quot;" Margin="0,-6,-2.5,8.5" FontWeight="Bold" FontSize="14"/>
+                                <Label Content="'" Margin="1,12,0.5,-10.5" FontWeight="Bold" FontSize="14"/>
                             </Grid>
                         </Button.Content>
                     </Button>
-                    <Button Content="ENTER" HorizontalAlignment="Left" Margin="595,141,0,0" VerticalAlignment="Top" Width="77" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_RETURN"/>
+                    <Button Content="ENTER" Tag="VK_RETURN" Margin="595,141,0,0" Click="ToggleKey" Width="77" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="L SHIFT" HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top" Width="81" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LSHIFT"/>
-                    <Button Content="Z" HorizontalAlignment="Left" Margin="96,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="K_Z"/>
-                    <Button Content="X" HorizontalAlignment="Left" Margin="143,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_X"/>
-                    <Button Content="C" HorizontalAlignment="Left" Margin="190,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_C"/>
-                    <Button Content="V" HorizontalAlignment="Left" Margin="237,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_V"/>
-                    <Button Content="B" HorizontalAlignment="Left" Margin="284,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_B"/>
-                    <Button Content="N" HorizontalAlignment="Left" Margin="331,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_N"/>
-                    <Button Content="M" HorizontalAlignment="Left" Margin="378,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="K_M"/>
-                    <Button HorizontalAlignment="Left" Margin="425,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_COMMA">
+                    <Button Content="L SHIFT" Tag="VK_LSHIFT" Margin="10,188,0,0" Click="ToggleKey" Width="81" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Z" Tag="K_Z" HorizontalAlignment="Left" Margin="96,188,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="X" Tag="K_X" HorizontalAlignment="Left" Margin="143,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="C" Tag="K_C" HorizontalAlignment="Left" Margin="190,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="V" Tag="K_V" HorizontalAlignment="Left" Margin="237,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="B" Tag="K_B" HorizontalAlignment="Left" Margin="284,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N" Tag="K_N" HorizontalAlignment="Left" Margin="331,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="M" Tag="K_M" HorizontalAlignment="Left" Margin="378,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Tag="VK_OEM_COMMA" Margin="425,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
                         <Button.Content>
                             <Grid Height="42" Width="42">
-                                <Label Content="&lt;" HorizontalAlignment="Center" Margin="9,-6,11,6"/>
-                                <Label Content="," HorizontalAlignment="Center" Margin="13,7,15,-7"/>
+                                <Label Content="&lt;" HorizontalAlignment="Center" Margin="9,-6,11,6" FontWeight="Bold" FontSize="14"/>
+                                <Label Content="," HorizontalAlignment="Center" Margin="13,7,15,-7" FontWeight="Bold" FontSize="14"/>
                             </Grid>
                         </Button.Content>
                     </Button>
-                    <Button HorizontalAlignment="Left" Margin="472,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_PERIOD">
+                    <Button Tag="VK_OEM_PERIOD" Margin="472,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
                         <Button.Content>
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Label Content="&gt;" Margin="0,-10,-0.5,10"/>
-                                <Label Content="." Margin="3,7,0,-6.5"/>
+                                <Label Content="&gt;" Margin="0,-10,-0.5,10" FontWeight="Bold" FontSize="14"/>
+                                <Label Content="." Margin="3,7,0,-6.5" FontWeight="Bold" FontSize="14"/>
                             </Grid>
                         </Button.Content>
                     </Button>
-                    <Button HorizontalAlignment="Left" Margin="519,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey" Tag="VK_OEM_2">
+                    <Button Tag="VK_OEM_2" Margin="519,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
                         <Button.Content>
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Label Content="?" Margin="3,-10,-4,10"/>
-                                <Label Content="/" Margin="3,8,0,-8"/>
+                                <Label Content="?" Margin="3,-10,-4,10" FontWeight="Bold" FontSize="14"/>
+                                <Label Content="/" Margin="3,6,0,-8" FontWeight="Bold" FontSize="14"/>
                             </Grid>
                         </Button.Content>
                     </Button>
-                    <Button Content="R SHIFT" HorizontalAlignment="Left" Margin="566,188,0,0" VerticalAlignment="Top" Width="106" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RSHIFT"/>
+                    <Button Content="R SHIFT" Tag="VK_RSHIFT" Margin="566,188,0,0" Click="ToggleKey" Width="106" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="L CTRL" HorizontalAlignment="Left" Margin="10,235,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LCONTROL"/>
-                    <Button Visibility="Hidden" IsEnabled="False" Content="L WIN" HorizontalAlignment="Left" Margin="79,235,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LWIN"/>
-                    <Button Content="ALT" HorizontalAlignment="Left" Margin="79,235,0,0" VerticalAlignment="Top" Width="59" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_MENU"/>
-                    <Button Content="" HorizontalAlignment="Left" Margin="143,235,0,0" VerticalAlignment="Top" Width="270" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_SPACE"/>
-                    <Button Visibility="Hidden" IsEnabled="False" Content="MENU" HorizontalAlignment="Left" Margin="470,235,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RMENU"/>
-                    <Button Visibility="Hidden" IsEnabled="False" Content="R WIN" HorizontalAlignment="Left" Margin="539,235,0,0" VerticalAlignment="Top" Width="64" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RWIN"/>
-                    <Button Content="R CTRL" HorizontalAlignment="Left" Margin="606,235,0,0" VerticalAlignment="Top" Width="66" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RCONTROL"/>
+                    <Button Content="L CTRL" Tag="VK_LCONTROL" Margin="10,235,0,0" Click="ToggleKey" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Visibility="Hidden" IsEnabled="False" Content="L WIN" Tag="VK_LWIN" Margin="79,235,0,0" Click="ToggleKey" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="ALT" Tag="VK_MENU" Margin="79,235,0,0" Click="ToggleKey" Width="59" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="" Tag="VK_SPACE" Margin="143,235,0,0" Click="ToggleKey" Width="270" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Visibility="Hidden" IsEnabled="False" Content="MENU" Tag="VK_RMENU" Margin="470,235,0,0" Click="ToggleKey" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Visibility="Hidden" IsEnabled="False" Content="R WIN" Tag="VK_RWIN" Margin="539,235,0,0" Click="ToggleKey" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="R CTRL" Tag="VK_RCONTROL" Margin="606,235,0,0" Click="ToggleKey" Width="66" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="N7" HorizontalAlignment="Left" Margin="730,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD7"/>
-                    <Button Content="N8" HorizontalAlignment="Left" Margin="777,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD8"/>
-                    <Button Content="N9" HorizontalAlignment="Left" Margin="824,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD9"/>
-                    <Button Content="N4" HorizontalAlignment="Left" Margin="730,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD4"/>
-                    <Button Content="N5" HorizontalAlignment="Left" Margin="777,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD5"/>
-                    <Button Content="N6" HorizontalAlignment="Left" Margin="824,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD6"/>
-                    <Button Content="N1" HorizontalAlignment="Left" Margin="730,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD1"/>
-                    <Button Content="N2" HorizontalAlignment="Left" Margin="777,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD2"/>
-                    <Button Content="N3" HorizontalAlignment="Left" Margin="824,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD3"/>
-                    <Button Content="N0" HorizontalAlignment="Left" Margin="777,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMPAD0"/>
-                    <Button Content="NL" HorizontalAlignment="Left" Margin="730,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NUMLOCK"/>
-                    <Button Content="." HorizontalAlignment="Left" Margin="824,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_DECIMAL"/>
-                    <Button Content="-" HorizontalAlignment="Left" Margin="871,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_SUBTRACT"/>
-                    <Button Content="+" HorizontalAlignment="Left" Margin="871,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_ADD"/>
-                    <Button Content="*" HorizontalAlignment="Left" Margin="871,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_MULTIPLY"/>
-                    <Button Content="/" HorizontalAlignment="Left" Margin="871,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_DIVIDE"/>
+                    <Button Content="N7" Margin="730,94,0,0" Click="ToggleKey" Tag="VK_NUMPAD7" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N8" Margin="777,94,0,0" Click="ToggleKey" Tag="VK_NUMPAD8" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N9" Margin="824,94,0,0" Click="ToggleKey" Tag="VK_NUMPAD9" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N4" Margin="730,141,0,0" Click="ToggleKey" Tag="VK_NUMPAD4" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N5" Margin="777,141,0,0" Click="ToggleKey" Tag="VK_NUMPAD5" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N6" Margin="824,141,0,0" Click="ToggleKey" Tag="VK_NUMPAD6" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N1" Margin="730,188,0,0" Click="ToggleKey" Tag="VK_NUMPAD1" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N2" Margin="777,188,0,0" Click="ToggleKey" Tag="VK_NUMPAD2" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N3" Margin="824,188,0,0" Click="ToggleKey" Tag="VK_NUMPAD3" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N0" Margin="777,235,0,0" Click="ToggleKey" Tag="VK_NUMPAD0" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="NL" Margin="730,235,0,0" Click="ToggleKey" Tag="VK_NUMLOCK" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="." Margin="824,235,0,0" Click="ToggleKey" Tag="VK_DECIMAL" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="-" Margin="871,94,0,0" Click="ToggleKey" Tag="VK_SUBTRACT" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="+" Margin="871,141,0,0" Click="ToggleKey" Tag="VK_ADD" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="*" Margin="871,188,0,0" Click="ToggleKey" Tag="VK_MULTIPLY" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="/" Margin="871,235,0,0" Click="ToggleKey" Tag="VK_DIVIDE" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="INS" HorizontalAlignment="Left" Margin="730,0,0,0" VerticalAlignment="Top" Width="56" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_INSERT"/>
-                    <Button Content="DEL" HorizontalAlignment="Left" Margin="730,47,0,0" VerticalAlignment="Top" Width="56" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_DELETE"/>
-                    <Button Content="HOME" HorizontalAlignment="Left" Margin="791,0,0,0" VerticalAlignment="Top" Width="56" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_HOME"/>
-                    <Button Content="END" HorizontalAlignment="Left" Margin="791,47,0,0" VerticalAlignment="Top" Width="56" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_END"/>
-                    <Button Content="PG UP" HorizontalAlignment="Left" Margin="852,0,0,0" VerticalAlignment="Top" Width="61" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_PRIOR"/>
-                    <Button Content="PG DN" HorizontalAlignment="Left" Margin="852,47,0,0" VerticalAlignment="Top" Width="61" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_NEXT"/>
+                    <Button Content="INS"  Tag="VK_INSERT" Margin="730,0,0,0"  Click="ToggleKey" Width="56" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="DEL"  Tag="VK_DELETE" Margin="730,47,0,0" Click="ToggleKey" Width="56" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="HOME"  Tag="VK_HOME"  Margin="791,0,0,0"  Click="ToggleKey" Width="56" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="END"   Tag="VK_END"   Margin="791,47,0,0" Click="ToggleKey" Width="56" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="PG UP" Tag="VK_PRIOR" Margin="852,0,0,0"  Click="ToggleKey" Width="61" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="PG DN" Tag="VK_NEXT"  Margin="852,47,0,0" Click="ToggleKey" Width="61" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="Rt" HorizontalAlignment="Left" Margin="559,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_RIGHT" ToolTip="Right Arrow"/>
-                    <Button Content="Lt" HorizontalAlignment="Left" Margin="418,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_LEFT" ToolTip="Left Arrow"/>
-                    <Button Content="Up" HorizontalAlignment="Left" Margin="465,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_UP" ToolTip="Up Arrow"/>
-                    <Button Content="Dn" HorizontalAlignment="Left" Margin="512,235,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_DOWN" ToolTip="Down Arrow"/>
+                    <Button Content="Rt" Tag="VK_RIGHT" ToolTip="Right Arrow" Margin="559,235,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Lt" Tag="VK_LEFT"  ToolTip="Left Arrow"  Margin="418,235,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Up" Tag="VK_UP"    ToolTip="Up Arrow"    Margin="465,235,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Dn" Tag="VK_DOWN"  ToolTip="Down Arrow"  Margin="512,235,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
 
-                    <Button Content="Prt" HorizontalAlignment="Left" Margin="680,94,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_SNAPSHOT"/>
-                    <Button Content="Scr" HorizontalAlignment="Left" Margin="680,141,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_SCROLL"/>
-                    <Button Content="PBr" HorizontalAlignment="Left" Margin="680,188,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleKey"  Tag="VK_PAUSE"/>
+                    <Button Content="Prt" Tag="VK_SNAPSHOT" Margin="680,94,0,0" ToolTip="Print Screen" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Scr" Tag="VK_SCROLL" Margin="680,141,0,0" ToolTip="Scroll Break" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="PBr" Tag="VK_PAUSE" Margin="680,188,0,0" ToolTip="Pause Break" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
                     <CheckBox x:Name="keyTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top"/>
                     <Slider x:Name="keyTurboRate" HorizontalAlignment="Left" Margin="167,291,0,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="5" SmallChange="1" TickPlacement="BottomRight" IsDirectionReversed="True" IsSnapToTickEnabled="True"/>
                     <Label x:Name="label" Content="Turbo Rate" HorizontalAlignment="Left" Margin="85,286,0,0" VerticalAlignment="Top"/>
@@ -165,8 +193,8 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Mouse">
-                <Grid Background="#FFE5E5E5">
-                    <GroupBox x:Name="groupBox" Header="Movement" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="304" Width="240">
+                <Grid Background="Transparent">
+                    <GroupBox x:Name="groupBox" Header="Movement" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
                         <Grid x:Name="mouseMovGrid">
                             <Button x:Name="mouseDown" HorizontalAlignment="Left" Margin="84,104,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveDown">
                                 <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4" RenderTransformOrigin="0.5,0.5">
@@ -213,7 +241,7 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox1" Header="Buttons" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Height="304" Width="240">
+                    <GroupBox x:Name="groupBox1" Header="Buttons" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
                         <Grid x:Name="mouseBtnGrid">
                             <Button Content="L" HorizontalAlignment="Left" Margin="44,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left"/>
                             <Button Content="M" HorizontalAlignment="Left" Margin="91,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle"/>
@@ -225,7 +253,7 @@
 
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox2" Header="Scroll" HorizontalAlignment="Left" Margin="500,16,0,0" VerticalAlignment="Top" Height="298" Width="240">
+                    <GroupBox x:Name="groupBox2" Header="Scroll" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Height="304" Width="240"  Style="{StaticResource GroupBoxStyle}">
                         <Grid x:Name="mouseScrollGrid">
                             <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up"/>
                             <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down"/>
@@ -237,7 +265,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Xbox 360">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="Transparent">
                     <Button Content="Connect" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click" Visibility="Hidden"/>
                     <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click" Visibility="Hidden"/>
                     <Grid x:Name="xboxGrid">
@@ -328,7 +356,7 @@
                         <ListBoxItem Content="Device C"/>
                         <ListBoxItem Content="Device D"/>
                     </ComboBox>
-                    <GroupBox x:Name="groupXBtns" Header="Button Options" HorizontalAlignment="Left" Margin="581,18,0,0" VerticalAlignment="Top" Height="114" Width="239">
+                    <GroupBox x:Name="groupXBtns" Header="Button Options" HorizontalAlignment="Left" Margin="581,18,0,0" VerticalAlignment="Top" Height="114" Width="239"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <CheckBox x:Name="xTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                             <Slider x:Name="xTurboRate" HorizontalAlignment="Left" Margin="10,61,-47,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="10" Maximum="20" SmallChange="1" TickPlacement="BottomRight" IsDirectionReversed="True" IsSnapToTickEnabled="True"/>
@@ -339,29 +367,29 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Joystick">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="Transparent">
                     <Label x:Name="vJoyOffLabel" Content="vJoy is not available" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
                     <ComboBox x:Name="joystickSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="joystickSelection_SelectionChanged"/>
                     <StackPanel x:Name="groupStack" HorizontalAlignment="Left" Height="272" Margin="10,37,0,0" VerticalAlignment="Top" Width="902" Orientation="Horizontal">
-                        <GroupBox x:Name="joyBtnGroup" Header="Buttons" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed">
+                        <GroupBox x:Name="joyBtnGroup" Header="Buttons" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed"  Style="{StaticResource GroupBoxStyle}">
                             <ScrollViewer>
                                 <WrapPanel x:Name="buttonsWrap" Margin="0,5" ItemHeight="50" ItemWidth="50"/>
                             </ScrollViewer>
                         </GroupBox>
-                        <GroupBox x:Name="joyAxisGroup" Header="Axis" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="284" Visibility="Collapsed">
+                        <GroupBox x:Name="joyAxisGroup" Header="Axis" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="284" Visibility="Collapsed"  Style="{StaticResource GroupBoxStyle}">
                             <ScrollViewer>
                                 <StackPanel x:Name="axisStack" VerticalAlignment="Top" />
                             </ScrollViewer>
                         </GroupBox>
-                        <GroupBox x:Name="joyPOVGroup" Header="POVs" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed">
+                        <GroupBox x:Name="joyPOVGroup" Header="POVs" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed" Style="{StaticResource GroupBoxStyle}">
                             <StackPanel x:Name="povStack" VerticalAlignment="Top"/>
                         </GroupBox>
                     </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Shift">
-                <Grid Background="#FFE5E5E5">
-                    <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,35,0,0" VerticalAlignment="Top" Height="212" Width="220">
+                <Grid Background="Transparent">
+                    <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,35,0,0" VerticalAlignment="Top" Height="212" Width="220"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <RadioButton x:Name="radioNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="ShiftHold" IsChecked="True"/>
                             <RadioButton x:Name="radioRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="ShiftHold"/>
@@ -369,7 +397,7 @@
                             <RadioButton x:Name="radioGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" GroupName="ShiftHold"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="shiftToggleGroup" Header="                 " HorizontalAlignment="Left" Margin="302,35,0,0" VerticalAlignment="Top" Height="212" Width="241" IsEnabled="False">
+                    <GroupBox x:Name="shiftToggleGroup" Header="                 " HorizontalAlignment="Left" Margin="302,35,0,0" VerticalAlignment="Top" Height="212" Width="241" IsEnabled="False"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <CheckBox x:Name="checkNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True"/>
                             <CheckBox x:Name="checkRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True"/>
@@ -382,8 +410,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9.5,7.5" Width="76" Click="acceptBtn_Click" Height="19" VerticalAlignment="Bottom"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,6.5" Click="cancelBtn_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75"/>
-        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,6.5" Click="clearBtn_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75"/>
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9.5,7.5" Width="76" Click="acceptBtn_Click" Height="19" VerticalAlignment="Bottom" Style="{StaticResource BasicButton}"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,6.5" Click="cancelBtn_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource BasicButton}"/>
+        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,6.5" Click="clearBtn_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource BasicButton}"/>
     </Grid>
 </Window>
