@@ -162,7 +162,7 @@ namespace Shared
                     buffer[10] = 0x01;
                     buffer[11] = 0x20;
 
-                    if (_lastReport[4] == 250)
+                    if (_lastReport.Length >= 4 && _lastReport[4] == 250)
                     {
                         //NextReport = DataReportMode;
                         _nextQueue.Enqueue(DataReportMode);
