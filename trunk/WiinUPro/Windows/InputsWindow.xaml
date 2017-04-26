@@ -270,7 +270,9 @@
                     <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click" Visibility="Hidden"/>
                     <Grid x:Name="xboxGrid">
                         <Image x:Name="xbox" Margin="139,10,0,0" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Controller.png" Width="400" Height="250" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="bg"/>
-                        <Image x:Name="xA" Margin="441,148,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360A.png" Width="33" Height="27" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="A" Opacity="0"/>
+                        <Border BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="438,146,0,0" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xA" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360A.png" Width="33" Height="27" MouseLeftButtonDown="ToggleXInputButton" Tag="A" Opacity="0"/>
+                        </Border>
                         <Image x:Name="xB" Margin="474,119,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360B.png" Width="31" Height="29" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="B"/>
                         <Image x:Name="xX" Margin="411,122,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360X.png" Width="32" Height="28" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="X"/>
                         <Image x:Name="xY" Margin="443,94,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Y.png" Width="33" Height="30" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Y"/>
@@ -410,8 +412,8 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9.5,7.5" Width="76" Click="acceptBtn_Click" Height="19" VerticalAlignment="Bottom" Style="{StaticResource BasicButton}"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,6.5" Click="cancelBtn_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource BasicButton}"/>
-        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,6.5" Click="clearBtn_Click" Height="19" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource BasicButton}"/>
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9,3" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,3" Click="cancelBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource WarningButton}"/>
+        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,3" Click="clearBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource CautionButton}"/>
     </Grid>
 </Window>

@@ -25,6 +25,7 @@ namespace WiinUPro
         public bool Apply { get; protected set; }
         public SolidColorBrush keySelectedBrush;
         public SolidColorBrush keyDeselectedBrush;
+        public Style keyStyle;
         public Style keySelectedStyle;
 
         protected ScpDirector.XInput_Device _selectedDevice = ScpDirector.XInput_Device.Device_A;
@@ -47,6 +48,7 @@ namespace WiinUPro
             keySelectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xBF, 0x5F, 0x0F));
             keyDeselectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD));
 
+            keyStyle = (Style)Application.Current.Resources["KeyButton"];
             keySelectedStyle = (Style)Application.Current.Resources["KeyButtonActive"];
 
             vJoyOffLabel.Visibility = VJoyDirector.Access.Available ? Visibility.Collapsed : Visibility.Visible;
@@ -530,6 +532,7 @@ namespace WiinUPro
                         if (btn != null)
                         {
                             btn.Background = keyDeselectedBrush;
+                            btn.Style = keyStyle;
                         }
                         
                         if (img != null)
@@ -548,7 +551,7 @@ namespace WiinUPro
 
                         if (btn != null)
                         {
-                            //btn.Background = keySelectedBrush;
+                            btn.Background = keySelectedBrush;
                             btn.Style = keySelectedStyle;
                         }
 
@@ -1101,6 +1104,22 @@ namespace WiinUPro
             var split = axis.ToString().Split('_');
             positive = split[1] == "Pos";
             return (HID_USAGES)Enum.Parse(typeof(HID_USAGES), "HID_USAGE_" + split[0]);
+        }
+
+        private void Border_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is Border)
+            {
+                (sender as Border).BorderThickness = new Thickness(1);
+            }
+        }
+
+        private void Border_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is Border)
+            {
+                (sender as Border).BorderThickness = new Thickness(0);
+            }
         }
     }
 }
