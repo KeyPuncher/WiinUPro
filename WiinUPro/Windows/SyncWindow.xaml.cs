@@ -101,6 +101,7 @@ namespace WiinUPro.Windows
                                         if (deviceInfo.fRemembered)
                                         {
                                             // Remove current pairing
+                                            Prompt("Currently paired, removing...");
                                             uint errForget = NativeImports.BluetoothRemoveDevice(ref deviceInfo.Address);
                                             success = errForget == 0;
                                         }
@@ -114,18 +115,21 @@ namespace WiinUPro.Windows
 
                                         if (success)
                                         {
+                                            Prompt("Sending Paring Code...");
                                             var errPair = NativeImports.BluetoothAuthenticateDevice(IntPtr.Zero, btRadios[r], ref deviceInfo, password.ToString(), 6);
                                             success = errPair == 0;
                                         }
 
                                         if (success)
                                         {
+                                            Prompt("Installing Service...");
                                             var errService = NativeImports.BluetoothEnumerateInstalledServices(btRadios[r], ref deviceInfo, ref pcService, guids);
                                             success = errService == 0;
                                         }
 
                                         if (success)
                                         {
+                                            Prompt("Setting HID Service...");
                                             var errActivate = NativeImports.BluetoothSetServiceState(btRadios[r], ref deviceInfo, ref HIDServiceClass, 0x01);
                                             success = errActivate == 0;
                                         }
