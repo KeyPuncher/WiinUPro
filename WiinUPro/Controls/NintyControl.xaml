@@ -11,7 +11,7 @@
             when disconnect is pressed remove this tab 
             Add calibrate button
         -->
-        <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="100,5,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click"/>
+        <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="100,5,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click" Style="{StaticResource BasicButton}"/>
         <Viewbox x:Name="_view" Margin="0,32,0,0" />
         <ComboBox x:Name="dropShift" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="80" SelectionChanged="dropShift_SelectionChanged">
             <MenuItem Header="None" Padding="-24,0,0,0" IsHitTestVisible="False"/>
@@ -19,8 +19,8 @@
             <MenuItem Foreground="Blue" Header="Blue" Padding="-24,0,0,0" IsHitTestVisible="False"/>
             <MenuItem Foreground="Green" Header="Green" Padding="-24,0,0,0" IsHitTestVisible="False"/>
         </ComboBox>
-        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click"/>
-        <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnLoad_Click"/>
+        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click" Style="{StaticResource BasicButton}" />
+        <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnLoad_Click" Style="{StaticResource BasicButton}" />
         <Grid.ContextMenu>
             <ContextMenu x:Name="subMenu">
                 <MenuItem Header="Assign" Click="AssignMenu_Click"/>
