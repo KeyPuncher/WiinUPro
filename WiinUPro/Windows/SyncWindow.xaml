@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro.Windows"
         mc:Ignorable="d"
-        Title="Sync Controllers" Height="173.371" Width="300" Loaded="Window_Loaded" Icon="/WiinUPro;component/app.ico" Closing="Window_Closing">
+        Title="Sync Controllers" Height="173.371" Width="300" Loaded="Window_Loaded" Icon="/WiinUPro;component/app.ico" Closing="Window_Closing" Background="{StaticResource BackgroundMain}">
     <Grid>
-        <TextBox x:Name="status" Margin="10,10,10,35" TextWrapping="Wrap" Text=""/>
-        <Button x:Name="cancel" Content="Cancel" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="cancel_Click"/>
+        <TextBox x:Name="status" Margin="10,10,10,35" TextWrapping="Wrap" Text="" Background="{StaticResource BackgroundSub}" Foreground="{StaticResource TextBody}"/>
+        <Button x:Name="cancel" Content="Cancel" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="cancel_Click" Style="{StaticResource BasicButton}" />
 
     </Grid>
 </Window>
