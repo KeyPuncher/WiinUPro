@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WiinUPro"
              mc:Ignorable="d" >
     <Viewbox>
-        <Canvas Width="1332" Height="976" Background="#FFE5E5E5">
+        <Canvas Width="1332" Height="976" Background="Transparent">
             <Grid Margin="10,10,0,0">
                 <!-- Base Image -->
                 <Image Source="/WiinUPro;component/Images/Controllers/Pro/proBlackBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1322" Height="966" />
