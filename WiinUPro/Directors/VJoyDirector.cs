@@ -18,6 +18,15 @@ namespace WiinUPro
         
         public bool Available
         {
+            // TODO: Check if DLL exists
+            /*
+                [DllImport("kernel32", SetLastError=true)]
+                static extern IntPtr LoadLibrary(string lpFileName);
+
+                static bool CheckLibrary(string fileName) {
+                    return LoadLibrary(fileName) == IntPtr.Zero;
+                }
+            */
             get
             {
                 uint verDll = 0;
