@@ -77,6 +77,18 @@
             <GradientStop Color="{StaticResource CobaltDark}" Offset="0.95"/>
             <GradientStop Color="{StaticResource B750}" Offset="1"/>
         </LinearGradientBrush>
+        <LinearGradientBrush x:Key="CheckBoxBrush" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+            <GradientStop Color="{DynamicResource Orange}" Offset="0.071"/>
+            <GradientStop Color="#FFEBF1F1"/>
+            <GradientStop Color="{DynamicResource B850}" Offset="0.996"/>
+            <GradientStop Color="{DynamicResource OrangeDark}" Offset="0.8"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="CheckBoxPressedBrush" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+            <GradientStop Color="{DynamicResource OrangeDark}" Offset="0.071"/>
+            <GradientStop Color="#FFEBF1F1"/>
+            <GradientStop Color="{DynamicResource B850}" Offset="0.996"/>
+            <GradientStop Color="{DynamicResource RedDark}" Offset="0.8"/>
+        </LinearGradientBrush>
         <!--#endregion-->
         
         <!-- Constants -->
@@ -407,16 +419,255 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--#endregion-->
+        <Style TargetType="CheckBox" x:Key="CheckBoxStyle">
+            <Setter Property="Foreground" Value="{StaticResource TextBody}" />
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <Border x:Name="Border" Width="14" Height="14" CornerRadius="2" Background="{StaticResource CheckBoxBrush}" BorderThickness="1" BorderBrush="{StaticResource Outline}">
+                                    <Path  Margin="2,1,0,0"
+                                        Width="9" Height="9" 
+                                        x:Name="CheckMark"
+                                        SnapsToDevicePixels="False" 
+                                        Stroke="{StaticResource Outline}"
+                                        StrokeThickness="2"
+                                        Data="M 0 0 L 7 7 M 0 7 L 7 0" />
+                                </Border>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter Margin="4,-1,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" RecognizesAccessKey="True"/>
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter TargetName="CheckMark" Property="Data" Value="M 0 7 L 7 0" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="Border" Property="BorderThickness" Value="2" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource OutlineHighlight}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource OutlineHighlight}" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource CheckBoxPressedBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundSub}" />
+                                <Setter Property="Foreground" Value="{StaticResource B700}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--#region Slider-->
+        <Style x:Key="SliderButtonStyle" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border Background="Transparent" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <!-- Examples
-        <LinearGradientBrush x:Key="ButonFillBrush1" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFDCEEF8" Offset="0"/>
-            <GradientStop Color="#FF7CA3CA" Offset="0.5"/>
-            <GradientStop Color="#FFADCCEB" Offset="1"/>
-        </LinearGradientBrush>
-        <SolidColorBrush x:Key="BrushAntemWhite" Color="#FFF3F6FB"/>
-        <BitmapImage x:Key="ProIcon" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="Images/ProController_white_32.png"/>
-        -->
+        <Style x:Key="SliderThumbStyle"
+         TargetType="{x:Type Thumb}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Ellipse x:Name="Ellipse" StrokeThickness="1" Stroke="{StaticResource Outline}" Fill="{StaticResource CheckBoxBrush}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="Ellipse">
+                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource Blue}" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="Ellipse">
+                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource Blue}" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="Ellipse">
+                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource B250}" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Ellipse>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Template when the orientation of the Slider is Horizontal.-->
+        <ControlTemplate x:Key="BasicSliderHorizontal" TargetType="{x:Type Slider}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TickBar x:Name="TopTick" SnapsToDevicePixels="True" Placement="Top" Height="4" Visibility="Collapsed" Fill="{StaticResource Outline}" />
+                <Border x:Name="TrackBackground" CornerRadius="2" Height="6" Grid.Row="1" BorderThickness="1" BorderBrush="{StaticResource Outline}" Background="{DynamicResource TextBody}" />
+                <Track Grid.Row="1" x:Name="PART_Track">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderButtonStyle}" Command="Slider.DecreaseLarge" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource SliderThumbStyle}" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderButtonStyle}" Command="Slider.IncreaseLarge" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+                <TickBar x:Name="BottomTick" SnapsToDevicePixels="True" Grid.Row="2" Fill="{StaticResource Outline}" Placement="Bottom" Height="4"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="TopLeft">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="BottomRight">
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!--Template when the orientation of the Slider is Vertical.-->
+        <ControlTemplate x:Key="BasicSliderVertical"
+                   TargetType="{x:Type Slider}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto"
+                          MinWidth="{TemplateBinding MinWidth}" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TickBar x:Name="TopTick"
+               SnapsToDevicePixels="True"
+               Placement="Left"
+               Width="4"
+               Visibility="Collapsed">
+                    <TickBar.Fill>
+                        <SolidColorBrush Color="{DynamicResource GlyphColor}" />
+                    </TickBar.Fill>
+                </TickBar>
+
+                <Border x:Name="TrackBackground"
+              Margin="0"
+              CornerRadius="2"
+              Width="4"
+              Grid.Column="1"
+              BorderThickness="1">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0,0"
+                               EndPoint="1,0">
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStopCollection>
+                                    <GradientStop Color="{DynamicResource BorderLightColor}"
+                              Offset="0.0" />
+                                    <GradientStop Color="{DynamicResource BorderDarkColor}"
+                              Offset="1.0" />
+                                </GradientStopCollection>
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+
+                    </Border.BorderBrush>
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="1,0"
+                               StartPoint="0.25,0">
+                            <GradientStop Color="{DynamicResource ControlLightColor}"
+                          Offset="0" />
+                            <GradientStop Color="{DynamicResource SliderTrackDarkColor}"
+                          Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+                <Track Grid.Column="1"
+             x:Name="PART_Track">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderButtonStyle}"
+                        Command="Slider.DecreaseLarge" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource SliderThumbStyle}" />
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderButtonStyle}"
+                        Command="Slider.IncreaseLarge" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+                <TickBar x:Name="BottomTick"
+               SnapsToDevicePixels="True"
+               Grid.Column="2"
+               Fill="{TemplateBinding Foreground}"
+               Placement="Right"
+               Width="4"
+               Visibility="Collapsed" />
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement"
+               Value="TopLeft">
+                    <Setter TargetName="TopTick"
+                Property="Visibility"
+                Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement"
+               Value="BottomRight">
+                    <Setter TargetName="BottomTick"
+                Property="Visibility"
+                Value="Visible" />
+                </Trigger>
+                <Trigger Property="TickPlacement"
+               Value="Both">
+                    <Setter TargetName="TopTick"
+                Property="Visibility"
+                Value="Visible" />
+                    <Setter TargetName="BottomTick"
+                Property="Visibility"
+                Value="Visible" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style x:Key="BasicSliderStyle" TargetType="{x:Type Slider}">
+            <Setter Property="Foreground" Value="{StaticResource Outline}" />
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="MinWidth" Value="104" />
+                    <Setter Property="MinHeight" Value="21" />
+                    <Setter Property="Template" Value="{StaticResource BasicSliderHorizontal}" />
+                </Trigger>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="MinWidth" Value="21" />
+                    <Setter Property="MinHeight" Value="104" />
+                    <Setter Property="Template" Value="{StaticResource BasicSliderVertical}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!--#endregion-->
+        <!--#endregion-->
     </Application.Resources>
 </Application>

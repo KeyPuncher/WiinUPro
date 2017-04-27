@@ -185,10 +185,10 @@
                     <Button Content="Prt" Tag="VK_SNAPSHOT" Margin="680,94,0,0" ToolTip="Print Screen" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
                     <Button Content="Scr" Tag="VK_SCROLL" Margin="680,141,0,0" ToolTip="Scroll Break" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
                     <Button Content="PBr" Tag="VK_PAUSE" Margin="680,188,0,0" ToolTip="Pause Break" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
-                    <CheckBox x:Name="keyTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top"/>
-                    <Slider x:Name="keyTurboRate" HorizontalAlignment="Left" Margin="167,291,0,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="5" SmallChange="1" TickPlacement="BottomRight" IsDirectionReversed="True" IsSnapToTickEnabled="True"/>
-                    <Label x:Name="label" Content="Turbo Rate" HorizontalAlignment="Left" Margin="85,286,0,0" VerticalAlignment="Top"/>
-                    <CheckBox x:Name="keyInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="396,292,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="keyTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                    <Slider x:Name="keyTurboRate" HorizontalAlignment="Left" Margin="167,291,0,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="5" SmallChange="1" TickPlacement="BottomRight" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
+                    <Label x:Name="label" Content="Turbo Rate" HorizontalAlignment="Left" Margin="85,286,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                    <CheckBox x:Name="keyInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="396,292,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
                     <TextBox x:Name="detectBox" HorizontalAlignment="Left" Height="23" Margin="730,289,0,0" TextWrapping="Wrap" Text="Click for key detection" VerticalAlignment="Top" Width="184" IsReadOnly="True" KeyDown="detectBox_KeyDown" Foreground="#FF444444"/>
                 </Grid>
             </TabItem>
