@@ -58,8 +58,17 @@
         <!-- Named by ideal use -->
         <SolidColorBrush x:Key="BackgroundMain" Color="{StaticResource B800}" />
         <SolidColorBrush x:Key="BackgroundSub" Color="{StaticResource B500}" />
-        <SolidColorBrush x:Key="Tab" Color="{StaticResource B200}" />
-        <SolidColorBrush x:Key="TabSelected" Color="{StaticResource Blue}" />
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" x:Key="Tab">
+            <GradientStop Color="{StaticResource B200}" Offset="0"/>
+            <GradientStop Color="{StaticResource B350}" Offset="0.95"/>
+            <GradientStop Color="{StaticResource B750}" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" x:Key="TabSelected">
+            <GradientStop Color="{StaticResource B300}" Offset="0"/>
+            <GradientStop Color="{StaticResource Blue}" Offset="0.05"/>
+            <GradientStop Color="{StaticResource BlueDark}" Offset="0.95"/>
+            <GradientStop Color="{StaticResource B750}" Offset="1"/>
+        </LinearGradientBrush>
         <SolidColorBrush x:Key="TextHeader" Color="{StaticResource B750}" />
         <SolidColorBrush x:Key="TextBody" Color="{StaticResource B850}" />
         <SolidColorBrush x:Key="Outline" Color="{StaticResource Denim}" />

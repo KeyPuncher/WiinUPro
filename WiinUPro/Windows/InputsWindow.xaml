@@ -14,7 +14,6 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <!-- Border -->
                                 <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="{StaticResource Outline}" CornerRadius="2,2,0,0" Margin="-2, 0, 2, 0">
                                     <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
@@ -22,7 +21,6 @@
                                         ContentSource="Header"
                                         Margin="10,2"/>
                                 </Border>
-                                <!-- States -->
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter TargetName="Border" Property="Background" Value="{StaticResource TabSelected}" />
@@ -36,7 +34,10 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="Keyboard">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Keyboard" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
                 <Grid x:Name="keyboardGrid" Background="Transparent">
                     <!-- Key Buttons -->
                     <Button Content="ESC" Tag="VK_ESCAPE" Margin="10,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
@@ -192,7 +193,10 @@
                     <TextBox x:Name="detectBox" HorizontalAlignment="Left" Height="23" Margin="730,289,0,0" TextWrapping="Wrap" Text="Click for key detection" VerticalAlignment="Top" Width="184" IsReadOnly="True" KeyDown="detectBox_KeyDown" Foreground="#FF444444"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Mouse">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Mouse" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
                 <Grid Background="Transparent">
                     <GroupBox x:Name="groupBox" Header="Movement" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
                         <Grid x:Name="mouseMovGrid">
@@ -263,93 +267,139 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Xbox 360">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Xbox 360" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
                 <Grid Background="Transparent">
                     <Button Content="Connect" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click" Visibility="Hidden"/>
                     <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click" Visibility="Hidden"/>
-                    <Grid x:Name="xboxGrid">
+                    <Grid x:Name="xboxGrid" HorizontalAlignment="Left" Width="924" Height="322" VerticalAlignment="Top">
                         <Image x:Name="xbox" Margin="139,10,0,0" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Controller.png" Width="400" Height="250" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="bg"/>
-                        <Border BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="438,146,0,0" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                        <Border Margin="441,147,452,148" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
                             <Image x:Name="xA" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360A.png" Width="33" Height="27" MouseLeftButtonDown="ToggleXInputButton" Tag="A" Opacity="0"/>
                         </Border>
-                        <Image x:Name="xB" Margin="474,119,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360B.png" Width="31" Height="29" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="B"/>
-                        <Image x:Name="xX" Margin="411,122,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360X.png" Width="32" Height="28" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="X"/>
-                        <Image x:Name="xY" Margin="443,94,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Y.png" Width="33" Height="30" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Y"/>
-                        <Image x:Name="xUp" Margin="265,172,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Up.png" Width="28" Height="23" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Up" ToolTip="Up"/>
-                        <Image x:Name="xDn" Margin="266,203,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Down.png" Width="28" Height="23" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Down" ToolTip="Down"/>
-                        <Image x:Name="xLt" Margin="248,188,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Left.png" Width="23" Height="21" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Left" ToolTip="Left"/>
-                        <Image x:Name="xRt" Margin="287,188,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Right.png" Width="23" Height="21" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Right" ToolTip="Right"/>
-                        <Image x:Name="xLB" Margin="180,37,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LB.png" Width="75" Height="44" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="LB" ToolTip="Left Bumper"/>
-                        <Image x:Name="xRB" Margin="423,48,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RB.png" Width="78" Height="33" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="RB" ToolTip="Right Bumper"/>
-                        <Image x:Name="xLT" Margin="217,17,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LT.png" Width="31" Height="34" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputAxis" Tag="LT" ToolTip="Left Trigger"/>
-                        <Image x:Name="xRT" Margin="435,15,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RT.png" Width="28" Height="36" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputAxis" Tag="RT" ToolTip="Right Trigger"/>
-                        <Image x:Name="xBack" Margin="286,129,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Back.png" Width="24" Height="17" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Back" ToolTip="Back"/>
-                        <Image x:Name="xGuide" Margin="319,119,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Guide.png" Width="41" Height="34" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Guide" ToolTip="Guide"/>
-                        <Image x:Name="xStart" Margin="371,129,0,0"  Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Start.png" Width="23" Height="18" Opacity="0" HorizontalAlignment="Left" VerticalAlignment="Top" MouseLeftButtonDown="ToggleXInputButton" Tag="Start" ToolTip="Start"/>
-                        <Ellipse x:Name="xLS" Fill="#8042FFAD" HorizontalAlignment="Left" Height="16" Margin="210,144,0,0" VerticalAlignment="Top" Width="17" MouseLeftButtonDown="ToggleXInputButton" ToolTip="Left Stick Click" Tag="LS" Opacity="0"/>
-                        <Image x:Name="xLUp" HorizontalAlignment="Left" Height="33" Margin="206,108,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LY_Hi" ToolTip="Left Stick Up" Opacity="0"/>
-                        <Image x:Name="xLRight" HorizontalAlignment="Left" Height="33" Margin="235,136,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LX_Hi" ToolTip="Left Stick Right" RenderTransformOrigin="0.5,0.5" Opacity="0">
-                            <Image.RenderTransform>
+                        <Border Margin="474,119,419.5,174.5" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xB" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360B.png" Width="31" Height="29" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="B"/>
+                        </Border>
+                        <Border Margin="411,122,481,172" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xX" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360X.png" Width="32" Height="28" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="X"/>
+                        </Border>
+                        <Border Margin="443,94,448,198" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xY" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Y.png" Width="33" Height="30" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Y"/>
+                        </Border>
+                        <Border Margin="265,172,631,127" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xUp" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Up.png" Width="28" Height="23" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Up" ToolTip="Up"/>
+                        </Border>
+                        <Border Margin="266,203,630,96" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xDn" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Down.png" Width="28" Height="23" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Down" ToolTip="Down"/>
+                        </Border>
+                        <Border Margin="248,188,653,113" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xLt" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Left.png" Width="23" Height="21" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Left" ToolTip="Left"/>
+                        </Border>
+                        <Border Margin="287,188,614,113" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xRt" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Right.png" Width="23" Height="21" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Right" ToolTip="Right"/>
+                        </Border>
+                        <Border Margin="180,48,669,241" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xLB" Margin="0,-11,0,0" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LB.png" Width="75" Height="44" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="LB" ToolTip="Left Bumper"/>
+                        </Border>
+                        <Border Margin="423,48,423,241" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xRB" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RB.png" Width="78" Height="33" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="RB" ToolTip="Right Bumper"/>
+                        </Border>
+                        <Border Margin="217,17,676,271" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xLT" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LT.png" Width="31" Height="34" Opacity="0" MouseLeftButtonDown="ToggleXInputAxis" Tag="LT" ToolTip="Left Trigger"/>
+                        </Border>
+                        <Border Margin="435,15,461,271" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xRT" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RT.png" Width="28" Height="36" Opacity="0" MouseLeftButtonDown="ToggleXInputAxis" Tag="RT" ToolTip="Right Trigger"/>
+                        </Border>
+                        <Border Margin="286,129,614,176" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xBack" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Back.png" Width="24" Height="17" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Back" ToolTip="Back"/>
+                        </Border>
+                        <Border Margin="319,119,564,169" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xGuide" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Guide.png" Width="41" Height="34" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Guide" ToolTip="Guide"/>
+                        </Border>
+                        <Border Margin="371,129,530,175" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xStart" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Start.png" Width="23" Height="18" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Start" ToolTip="Start"/>
+                        </Border>
+                        <Border Margin="210,144,697,162" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Ellipse x:Name="xLS" Fill="#8042FFAD" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="17" MouseLeftButtonDown="ToggleXInputButton" ToolTip="Left Stick Click" Tag="LS" Opacity="0"/>
+                        </Border>
+                        <Border Margin="206,108,692,181" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xLUp" Height="33" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LY_Hi" ToolTip="Left Stick Up" Opacity="0"/>
+                        </Border>
+                        <Border Margin="235,136,663,153" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
                                     <SkewTransform/>
                                     <RotateTransform Angle="90"/>
                                     <TranslateTransform/>
                                 </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                        <Image x:Name="xLDown" HorizontalAlignment="Left" Height="33" Margin="206,163,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LY_Lo" ToolTip="Left Stick Down" RenderTransformOrigin="0.5,0.5" Opacity="0">
-                            <Image.RenderTransform>
+                            </Border.RenderTransform>
+                            <Image x:Name="xLRight" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LX_Hi" ToolTip="Left Stick Right" RenderTransformOrigin="0.5,0.5" Opacity="0"/>
+                        </Border>
+                        <Border Margin="206,163,692,126" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
                                     <SkewTransform/>
-                                    <RotateTransform Angle="180"/>
+                                    <RotateTransform Angle="180.533"/>
                                     <TranslateTransform/>
                                 </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                        <Image x:Name="xLLeft" HorizontalAlignment="Left" Height="33" Margin="176,136,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LX_Lo" ToolTip="Left Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0">
-                            <Image.RenderTransform>
+                            </Border.RenderTransform>
+                            <Image x:Name="xLDown" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LY_Lo" ToolTip="Left Stick Down" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                            </Image>
+                        </Border>
+                        <Border Margin="176,136,722,153" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
                                     <SkewTransform/>
                                     <RotateTransform Angle="-90"/>
                                     <TranslateTransform/>
                                 </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                        <Ellipse x:Name="xRS" Fill="#8042FFAD" HorizontalAlignment="Left" Height="16" Margin="387,201,0,0" VerticalAlignment="Top" Width="16" MouseLeftButtonDown="ToggleXInputButton" ToolTip="Right Stick Click" Tag="RS" Opacity="0"/>
-                        <Image x:Name="xRUp" HorizontalAlignment="Left" Height="33" Margin="383,165,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RY_Hi" ToolTip="Right Stick Up" Opacity="0"/>
-                        <Image x:Name="xRRight" HorizontalAlignment="Left" Height="33" Margin="411,193,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Hi" ToolTip="Right Stick Right" RenderTransformOrigin="0.5,0.5" Opacity="0">
-                            <Image.RenderTransform>
+                            </Border.RenderTransform>
+                            <Image x:Name="xLLeft" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LX_Lo" ToolTip="Left Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0" />
+                        </Border>
+                        <Border Margin="387,201,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Ellipse x:Name="xRS" Fill="#8042FFAD" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="16" MouseLeftButtonDown="ToggleXInputButton" ToolTip="Right Stick Click" Tag="RS" Opacity="0"/>
+                        </Border>
+                        <Border Margin="383,165,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Image x:Name="xRUp" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RY_Hi" ToolTip="Right Stick Up" Opacity="0"/>
+                        </Border>
+                        <Border Margin="411,193,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
                                     <SkewTransform/>
                                     <RotateTransform Angle="90"/>
                                     <TranslateTransform/>
                                 </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                        <Image x:Name="xRDown" HorizontalAlignment="Left" Height="33" Margin="383,220,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RY_Lo" ToolTip="Right Stick Down" RenderTransformOrigin="0.5,0.5" Opacity="0">
-                            <Image.RenderTransform>
+                            </Border.RenderTransform>
+                            <Image x:Name="xRRight" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Hi" ToolTip="Right Stick Right" RenderTransformOrigin="0.5,0.5" Opacity="0" />
+                        </Border>
+                        <Border Margin="383,220,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
                                     <SkewTransform/>
                                     <RotateTransform Angle="180"/>
                                     <TranslateTransform/>
                                 </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                        <Image x:Name="xRLeft" HorizontalAlignment="Left" Height="33" Margin="353,193,0,0" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Lo" ToolTip="Right Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0">
-                            <Image.RenderTransform>
+                            </Border.RenderTransform>
+                            <Image x:Name="xRDown" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RY_Lo" ToolTip="Right Stick Down" RenderTransformOrigin="0.5,0.5" Opacity="0" />
+                        </Border>
+                        <Border Margin="353,193,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
                                     <SkewTransform/>
                                     <RotateTransform Angle="-90"/>
                                     <TranslateTransform/>
                                 </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
+                            </Border.RenderTransform>
+                            <Image x:Name="xRLeft" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Lo" ToolTip="Right Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0" />
+                        </Border>
                     </Grid>
                     <ComboBox x:Name="deviceSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectedIndex="0" SelectionChanged="deviceSelection_SelectionChanged">
                         <ListBoxItem Content="Device A"/>
@@ -367,7 +417,10 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Joystick">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Joystick" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
                 <Grid Background="Transparent">
                     <Label x:Name="vJoyOffLabel" Content="vJoy is not available" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
                     <ComboBox x:Name="joystickSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="joystickSelection_SelectionChanged"/>
@@ -388,7 +441,10 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Shift">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Shift" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
                 <Grid Background="Transparent">
                     <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,35,0,0" VerticalAlignment="Top" Height="212" Width="220"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
