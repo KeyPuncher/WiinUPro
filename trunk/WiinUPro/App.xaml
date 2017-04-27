@@ -60,7 +60,7 @@
         <SolidColorBrush x:Key="BackgroundSub" Color="{StaticResource B500}" />
         <SolidColorBrush x:Key="Tab" Color="{StaticResource B200}" />
         <SolidColorBrush x:Key="TabSelected" Color="{StaticResource Blue}" />
-        <SolidColorBrush x:Key="TextHeader" Color="{StaticResource B700}" />
+        <SolidColorBrush x:Key="TextHeader" Color="{StaticResource B750}" />
         <SolidColorBrush x:Key="TextBody" Color="{StaticResource B850}" />
         <SolidColorBrush x:Key="Outline" Color="{StaticResource Denim}" />
         <SolidColorBrush x:Key="OutlineHighlight" Color ="{StaticResource Blue}" />
@@ -420,7 +420,7 @@
             </Setter>
         </Style>
         <Style TargetType="CheckBox" x:Key="CheckBoxStyle">
-            <Setter Property="Foreground" Value="{StaticResource TextBody}" />
+            <Setter Property="Foreground" Value="{StaticResource TextHeader}" />
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Template">
                 <Setter.Value>
