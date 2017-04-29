@@ -58,6 +58,7 @@
         <!-- Named by ideal use -->
         <SolidColorBrush x:Key="BackgroundMain" Color="{StaticResource B800}" />
         <SolidColorBrush x:Key="BackgroundSub" Color="{StaticResource B500}" />
+        <SolidColorBrush x:Key="CheckForground" Color="{StaticResource B700}" />
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" x:Key="Tab">
             <GradientStop Color="{StaticResource B200}" Offset="0"/>
             <GradientStop Color="{StaticResource B350}" Offset="0.95"/>
@@ -465,7 +466,7 @@
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter TargetName="Border" Property="Background" Value="{StaticResource BackgroundSub}" />
-                                <Setter Property="Foreground" Value="{StaticResource B700}"/>
+                                <Setter Property="Foreground" Value="{StaticResource CheckForground}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
