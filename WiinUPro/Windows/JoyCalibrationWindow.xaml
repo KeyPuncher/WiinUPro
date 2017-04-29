@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WiinUPro.Windows"
         xmlns:WiinUPro="clr-namespace:WiinUPro" x:Class="WiinUPro.Windows.JoyCalibrationWindow"
         mc:Ignorable="d"
-        Title="JoyCalibrationWindow" Height="578" Width="890">
+        Title="JoyCalibrationWindow" Height="578" Width="890" Background="{StaticResource BackgroundMain}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115*"/>
@@ -17,7 +17,10 @@
         </Grid.RowDefinitions>
         <Viewbox Margin="10,10,10,40" Grid.Row="0" Grid.Column="0">
             <Canvas x:Name="canvas" Width="1200" Height="1200">
-                <Path Margin="100,100" x:Name="rawMax" Height="1200" Width="1200" Fill="#FFEAEAEA">
+                <Path Margin="100,100" x:Name="rawMax" Height="1200" Width="1200">
+                    <Path.Fill>
+                        <SolidColorBrush Color="{StaticResource B350}"/>
+                    </Path.Fill>
                     <Path.Data>
                         <PathGeometry>
                             <PathFigure x:Name="limitQ1Path" StartPoint="1000,500">
@@ -29,9 +32,20 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
-                <Ellipse Margin="100,100"  x:Name="soutMax" Height="1000" Stroke="#FF515151" Width="1000"/>
-                <Rectangle Margin="550,550" x:Name="rawDeadzoneSqr" Height="100" Width="100" Fill="#FFA6A6A6"/>
-                <Path Margin="100,100"  x:Name="rawDeadzone" Height="1000" Width="1000" Fill="#FFA6A6A6" Visibility="Hidden">
+                <Ellipse Margin="100,100"  x:Name="soutMax" Height="1000" Width="1000" StrokeThickness="2">
+                    <Ellipse.Stroke>
+                        <SolidColorBrush Color="{StaticResource Yellow}"/>
+                    </Ellipse.Stroke>
+                </Ellipse>
+                <Rectangle Margin="550,550" x:Name="rawDeadzoneSqr" Height="100" Width="100">
+                    <Rectangle.Fill>
+                        <SolidColorBrush Color="{StaticResource B550}"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Path Margin="100,100"  x:Name="rawDeadzone" Height="1000" Width="1000" Visibility="Hidden">
+                    <Path.Fill>
+                        <SolidColorBrush Color="{StaticResource B550}"/>
+                    </Path.Fill>
                     <Path.Data>
                         <PathGeometry>
                             <PathFigure x:Name="deadQ1Path" StartPoint="550,500">
@@ -43,51 +57,73 @@
                         </PathGeometry>
                     </Path.Data>
                 </Path>
-                <Ellipse Margin="100,100"  x:Name="antiDeadzone" Height="0" Stroke="#FF0F38C5" Width="0" StrokeThickness="4" Canvas.Left="500" Canvas.Top="500"/>
-                <Ellipse Margin="100,100"  x:Name="out" Height="20" Width="20" Fill="#FF23FF00" Canvas.Left="490" Canvas.Top="490"/>
-                <Ellipse Margin="100,100"  x:Name="raw" Height="10" Width="10" Fill="Red" Canvas.Left="495" Canvas.Top="495"/>
+                <Ellipse Margin="100,100"  x:Name="antiDeadzone" Height="0" Width="0" StrokeThickness="4" Canvas.Left="500" Canvas.Top="500">
+                    <Ellipse.Stroke>
+                        <SolidColorBrush Color="{StaticResource Blue}"/>
+                    </Ellipse.Stroke>
+                </Ellipse>
+                <Ellipse Margin="100,100"  x:Name="out" Height="20" Width="20" Canvas.Left="490" Canvas.Top="490">
+                    <Ellipse.Fill>
+                        <SolidColorBrush Color="{StaticResource Green}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <Ellipse Margin="100,100"  x:Name="raw" Height="10" Width="10" Canvas.Left="495" Canvas.Top="495">
+                    <Ellipse.Fill>
+                        <SolidColorBrush Color="{StaticResource RedDark}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
             </Canvas>
         </Viewbox>
-        <GroupBox x:Name="groupLimits" Header="Limits" HorizontalAlignment="Left" Margin="10.5,76,0,0" VerticalAlignment="Top" Height="175" Width="298" Grid.Column="1">
-            <Grid>
-                <WiinUPro:NumPicker x:Name="limitYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
-                <Label x:Name="label" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="limitYNeg" HorizontalAlignment="Left" Margin="101,106,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
-                <Label x:Name="label_Copy" Content="-Y" HorizontalAlignment="Left" Margin="71,106,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="limitXNeg" HorizontalAlignment="Left" Margin="35,59,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
-                <Label x:Name="label_Copy1" Content="-X" HorizontalAlignment="Left" Margin="5,59,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="limitXPos" HorizontalAlignment="Left" Margin="167,59,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
-                <Label x:Name="label_Copy2" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox x:Name="groupDeadzone" Header="Deadzone" HorizontalAlignment="Left" Margin="10.5,256,0,0" VerticalAlignment="Top" Height="175" Width="298" Grid.Column="1">
-            <Grid>
-                <WiinUPro:NumPicker x:Name="deadYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
-                <Label x:Name="label1" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="deadYNeg" HorizontalAlignment="Left" Margin="101,106,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
-                <Label x:Name="label_Copy3" Content="-Y" HorizontalAlignment="Left" Margin="71,106,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="deadXNeg" HorizontalAlignment="Left" Margin="35,59,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
-                <Label x:Name="label_Copy4" Content="-X" HorizontalAlignment="Left" Margin="5,59,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="deadXPos" HorizontalAlignment="Left" Margin="167,59,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
-                <Label x:Name="label_Copy5" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top"/>
-            </Grid>
-        </GroupBox>
-        <Label x:Name="label2" Content="Anti-Deadzone" HorizontalAlignment="Left" Margin="10.5,445,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="102"/>
-        <Slider x:Name="antiDeadzoneSlider" HorizontalAlignment="Left" Margin="60.5,480,0,0" VerticalAlignment="Top" Width="248" Grid.Column="1" Height="34" TickPlacement="BottomRight" Maximum="50" Interval="1" ValueChanged="antiDeadzoneSlider_ValueChanged" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
-        <Label x:Name="antiDeadzoneLabel" Content="0 %" Grid.Column="1" HorizontalAlignment="Left" Margin="247.5,445,0,0" VerticalAlignment="Top" Width="61" HorizontalContentAlignment="Right"/>
-        <Button x:Name="acceptBtn" Content="Accept" Grid.Column="1" HorizontalAlignment="Left" Margin="232.5,0,0,13.5" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Grid.Column="1" HorizontalAlignment="Left" Margin="140.5,0,0,13.5" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click"/>
-        <Label x:Name="xLabel" Content="X: 0%" HorizontalAlignment="Left" Margin="10,0,0,10.5" VerticalAlignment="Bottom" Width="59"/>
-        <Label x:Name="yLabel" Content="Y: 0%" HorizontalAlignment="Left" Margin="74,0,0,10.5" VerticalAlignment="Bottom"/>
-        <GroupBox x:Name="groupCenter" Header="Center" HorizontalAlignment="Left" Margin="10.5,10,0,0" VerticalAlignment="Top" Height="69" Width="298" Grid.Column="1">
-            <Grid>
-                <WiinUPro:NumPicker x:Name="centerX" HorizontalAlignment="Left" Margin="35,9,0,0" VerticalAlignment="Top" Max="4000" Min="-4000" Value="0" OnValueUpdate="CenterXUpdated" Width="100"/>
-                <Label x:Name="label_Copy7" Content="X" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
-                <WiinUPro:NumPicker x:Name="centerY" HorizontalAlignment="Left" Margin="168,8,0,0" VerticalAlignment="Top" Max="4000" Min="-4000" Value="0" OnValueUpdate="CenterYUpdated" Width="100"/>
-                <Label x:Name="label_Copy8" Content="Y" HorizontalAlignment="Left" Margin="146,9,0,0" VerticalAlignment="Top"/>
-            </Grid>
-        </GroupBox>
-        <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="432,0,0,10.667" VerticalAlignment="Bottom" Width="76" Click="loadBtn_Click"/>
-        <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="351,0,0,9.667" VerticalAlignment="Bottom" Width="76" Click="saveBtn_Click"/>
+        <Grid Grid.Column="1"  Background="{StaticResource BackgroundSub}">
+            <GroupBox x:Name="groupLimits" Header="Limits" HorizontalAlignment="Left" Margin="10.5,76,0,0" VerticalAlignment="Top" Height="175" Width="298" Style="{StaticResource GroupBoxStyle}">
+                <Grid>
+                    <WiinUPro:NumPicker x:Name="limitYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
+                    <Label x:Name="label" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                    <WiinUPro:NumPicker x:Name="limitYNeg" HorizontalAlignment="Left" Margin="101,106,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
+                    <Label x:Name="label_Copy" Content="-Y" HorizontalAlignment="Left" Margin="71,106,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                    <WiinUPro:NumPicker x:Name="limitXNeg" HorizontalAlignment="Left" Margin="35,59,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
+                    <Label x:Name="label_Copy1" Content="-X" HorizontalAlignment="Left" Margin="5,59,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                    <WiinUPro:NumPicker x:Name="limitXPos" HorizontalAlignment="Left" Margin="167,59,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
+                    <Label x:Name="label_Copy2" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox x:Name="groupDeadzone" Header="Deadzone" HorizontalAlignment="Left" Margin="10.5,256,0,0" VerticalAlignment="Top" Height="175" Width="298" Style="{StaticResource GroupBoxStyle}">
+                <Grid>
+                    <WiinUPro:NumPicker x:Name="deadYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
+                    <Label x:Name="label1" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                    <WiinUPro:NumPicker x:Name="deadYNeg" HorizontalAlignment="Left" Margin="101,106,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
+                    <Label x:Name="label_Copy3" Content="-Y" HorizontalAlignment="Left" Margin="71,106,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                    <WiinUPro:NumPicker x:Name="deadXNeg" HorizontalAlignment="Left" Margin="35,59,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
+                    <Label x:Name="label_Copy4" Content="-X" HorizontalAlignment="Left" Margin="5,59,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                    <WiinUPro:NumPicker x:Name="deadXPos" HorizontalAlignment="Left" Margin="167,59,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
+                    <Label x:Name="label_Copy5" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                </Grid>
+            </GroupBox>
+            <Label x:Name="label2" Content="Anti-Deadzone" HorizontalAlignment="Left" Margin="10.5,445,0,0" VerticalAlignment="Top" Height="26" Width="102" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+            <Slider x:Name="antiDeadzoneSlider" HorizontalAlignment="Left" Margin="23,472,0,0" VerticalAlignment="Top" Width="285" Height="34" TickPlacement="BottomRight" Maximum="50" Interval="1" ValueChanged="antiDeadzoneSlider_ValueChanged" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
+            <Label x:Name="antiDeadzoneLabel" Content="0 %" HorizontalAlignment="Left" Margin="247.5,445,0,0" VerticalAlignment="Top" Width="61" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+            <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Left" Margin="232.5,0,0,13.5" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click" Style="{StaticResource AcceptButton}"/>
+            <Button x:Name="cancelBtn" Content="Cancel" HorizontalAlignment="Left" Margin="140.5,0,0,13.5" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click" Style="{StaticResource WarningButton}"/>
+            <GroupBox x:Name="groupCenter" Header="Center" HorizontalAlignment="Left" Margin="10.5,10,0,0" VerticalAlignment="Top" Height="69" Width="298" Style="{StaticResource GroupBoxStyle}">
+                <Grid>
+                    <WiinUPro:NumPicker x:Name="centerX" HorizontalAlignment="Left" Margin="35,9,0,0" VerticalAlignment="Top" Max="4000" Min="-4000" Value="0" OnValueUpdate="CenterXUpdated" Width="100"/>
+                    <Label x:Name="label_Copy7" Content="X" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                    <WiinUPro:NumPicker x:Name="centerY" HorizontalAlignment="Left" Margin="168,8,0,0" VerticalAlignment="Top" Max="4000" Min="-4000" Value="0" OnValueUpdate="CenterYUpdated" Width="100"/>
+                    <Label x:Name="label_Copy8" Content="Y" HorizontalAlignment="Left" Margin="146,9,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Label x:Name="xLabel" Content="X: 0%" HorizontalAlignment="Left" Margin="10,0,0,10.5" VerticalAlignment="Bottom" Width="59">
+            <Label.Foreground>
+                <SolidColorBrush Color="{StaticResource Green}"/>
+            </Label.Foreground>
+        </Label>
+        <Label x:Name="yLabel" Content="Y: 0%" HorizontalAlignment="Left" Margin="74,0,0,10.5" VerticalAlignment="Bottom">
+            <Label.Foreground>
+                <SolidColorBrush Color="{StaticResource Green}"/>
+            </Label.Foreground>
+        </Label>
+        <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="432,0,0,10.667" VerticalAlignment="Bottom" Width="76" Click="loadBtn_Click" Style="{StaticResource BasicButton}"/>
+        <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="351,0,0,9.667" VerticalAlignment="Bottom" Width="76" Click="saveBtn_Click" Style="{StaticResource BasicButton}"/>
     </Grid>
 </Window>
