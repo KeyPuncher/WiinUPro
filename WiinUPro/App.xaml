@@ -88,16 +88,16 @@
             <GradientStop Color="{StaticResource B750}" Offset="1"/>
         </LinearGradientBrush>
         <LinearGradientBrush x:Key="CheckBoxBrush" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-            <GradientStop Color="{DynamicResource Orange}" Offset="0.071"/>
-            <GradientStop Color="#FFEBF1F1"/>
-            <GradientStop Color="{DynamicResource B850}" Offset="0.996"/>
-            <GradientStop Color="{DynamicResource OrangeDark}" Offset="0.8"/>
+            <GradientStop Color="{StaticResource B200}"/>
+            <GradientStop Color="{StaticResource Blue}" Offset="0.071"/>
+            <GradientStop Color="{StaticResource B850}" Offset="0.996"/>
+            <GradientStop Color="{StaticResource Cobalt}" Offset="0.8"/>
         </LinearGradientBrush>
         <LinearGradientBrush x:Key="CheckBoxPressedBrush" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-            <GradientStop Color="{DynamicResource OrangeDark}" Offset="0.071"/>
-            <GradientStop Color="#FFEBF1F1"/>
-            <GradientStop Color="{DynamicResource B850}" Offset="0.996"/>
-            <GradientStop Color="{DynamicResource RedDark}" Offset="0.8"/>
+            <GradientStop Color="{StaticResource B200}"/>
+            <GradientStop Color="{StaticResource BlueDark}" Offset="0.071"/>
+            <GradientStop Color="{StaticResource B850}" Offset="0.996"/>
+            <GradientStop Color="{StaticResource CobaltDark}" Offset="0.8"/>
         </LinearGradientBrush>
         <!--#endregion-->
         
@@ -486,7 +486,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="SliderThumbStyle"
          TargetType="{x:Type Thumb}">
             <Setter Property="SnapsToDevicePixels" Value="true" />
@@ -495,39 +494,21 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Ellipse x:Name="Ellipse" StrokeThickness="1" Stroke="{StaticResource Outline}" Fill="{StaticResource CheckBoxBrush}">
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="MouseOver">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="Ellipse">
-                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource Blue}" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="Ellipse">
-                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource Blue}" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="Ellipse">
-                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource B250}" />
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </Ellipse>
+                        <Ellipse x:Name="Ellipse" StrokeThickness="1" Stroke="{StaticResource Outline}" Fill="{StaticResource CheckBoxBrush}" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="Ellipse" Property="Stroke" Value="{StaticResource OutlineHighlight}" />
+                                <Setter TargetName="Ellipse" Property="Fill" Value="{StaticResource CheckBoxPressedBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="Ellipse" Property="Fill" Value="{StaticResource BackgroundSub}" />
+                                <Setter Property="Foreground" Value="{StaticResource CheckForground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
         <!--Template when the orientation of the Slider is Horizontal.-->
         <ControlTemplate x:Key="BasicSliderHorizontal" TargetType="{x:Type Slider}">
             <Grid>
@@ -564,7 +545,6 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
         <!--Template when the orientation of the Slider is Vertical.-->
         <ControlTemplate x:Key="BasicSliderVertical"
                    TargetType="{x:Type Slider}">
@@ -661,7 +641,6 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
         <Style x:Key="BasicSliderStyle" TargetType="{x:Type Slider}">
             <Setter Property="Foreground" Value="{StaticResource Outline}" />
             <Style.Triggers>
@@ -699,7 +678,8 @@
                                 <Setter TargetName="Border" Property="Stroke" Value="{StaticResource OutlineHighlight}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter TargetName="Border" Property="Stroke" Value="{StaticResource Outline}" />
+                                <Setter TargetName="Border" Property="Stroke" Value="{StaticResource OutlineHighlight}" />
+                                <Setter TargetName="Border" Property="Fill" Value="{StaticResource CheckBoxPressedBrush}"/>
                             </Trigger>
                             <Trigger Property="IsChecked" Value="true">
                                 <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />

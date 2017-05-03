@@ -156,7 +156,7 @@ namespace WiinUPro
             var stack = new StackPanel() { Orientation = Orientation.Horizontal };
             stack.Children.Add(new Image()
             {
-                Source = new BitmapImage(new Uri("../Images/Icons/ProController_black_24.png", UriKind.Relative)),
+                Source = new BitmapImage(new Uri("../Images/Icons/ProController_white_24.png", UriKind.Relative)),
                 Height = 12,
                 Margin = new Thickness(0, 0, 4, 0),
                 VerticalAlignment = VerticalAlignment.Center,
@@ -169,11 +169,12 @@ namespace WiinUPro
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/ProController_white_24.png", UriKind.Relative));
+                    ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/ProController_black_24.png", UriKind.Relative));
                 }));
             };
             test.Content = nin;
             tabControl.Items.Insert(tabControl.Items.Count - 1, test);
+            tabControl.SelectedIndex = tabControl.Items.Count - 2;
             nin.Connect();
         }
 
