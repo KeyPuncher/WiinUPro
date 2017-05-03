@@ -448,10 +448,10 @@
                 <Grid Background="Transparent">
                     <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,35,0,0" VerticalAlignment="Top" Height="212" Width="220"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
-                            <RadioButton x:Name="radioNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="ShiftHold" IsChecked="True"/>
-                            <RadioButton x:Name="radioRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="ShiftHold"/>
-                            <RadioButton x:Name="radioBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" GroupName="ShiftHold"/>
-                            <RadioButton x:Name="radioGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" GroupName="ShiftHold"/>
+                            <RadioButton x:Name="radioNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="ShiftHold" IsChecked="True" Style="{StaticResource RadioButtonStyle}" />
+                            <RadioButton x:Name="radioRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
+                            <RadioButton x:Name="radioBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
+                            <RadioButton x:Name="radioGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="shiftToggleGroup" Header="                 " HorizontalAlignment="Left" Margin="302,35,0,0" VerticalAlignment="Top" Height="212" Width="241" IsEnabled="False"  Style="{StaticResource GroupBoxStyle}">
@@ -462,8 +462,8 @@
                             <CheckBox x:Name="checkGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
                         </Grid>
                     </GroupBox>
-                    <RadioButton x:Name="radioHold" Content="Hold" HorizontalAlignment="Left" Margin="49,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsChecked="True" Click="ChangeShiftType"/>
-                    <RadioButton x:Name="radioToggle" Content="Toggle" HorizontalAlignment="Left" Margin="311,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" Click="ChangeShiftType"/>
+                    <RadioButton x:Name="radioHold" Content="Hold" HorizontalAlignment="Left" Margin="49,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsChecked="True" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}"/>
+                    <RadioButton x:Name="radioToggle" Content="Toggle" HorizontalAlignment="Left" Margin="311,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}"/>
                 </Grid>
             </TabItem>
         </TabControl>

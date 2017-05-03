@@ -678,6 +678,41 @@
             </Style.Triggers>
         </Style>
         <!--#endregion-->
+        <Style TargetType="{x:Type RadioButton}" x:Key="RadioButtonStyle">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <Grid Width="13" Height="13">
+                                    <Ellipse x:Name="Border" StrokeThickness="1"  Fill="{StaticResource CheckBoxBrush}" Stroke="{StaticResource Outline}" />
+                                    <Ellipse x:Name="CheckMark" Margin="4" Visibility="Collapsed" Fill="{StaticResource Outline}" />
+                                </Grid>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" RecognizesAccessKey="True" />
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="Border" Property="Stroke" Value="{StaticResource OutlineHighlight}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="Border" Property="Stroke" Value="{StaticResource Outline}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="Border" Property="Fill" Value="{StaticResource BackgroundSub}" />
+                                <Setter Property="Foreground" Value="{StaticResource CheckForground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!--#endregion-->
     </Application.Resources>
 </Application>
