@@ -8,8 +8,8 @@
              d:DesignHeight="28" d:DesignWidth="88"
              Width="88">
     <Grid>
-        <Button x:Name="btnDown" HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" FontSize="32" ToolTip="Identify" Click="btnDown_Click" Content="&lt;" Padding="-2,-12,2,0" FontWeight="Bold" />
-        <TextBox x:Name="lblValue" Height="28" Text="100" UndoLimit="0" VerticalAlignment="Top" Margin="28,0" TextAlignment="Center" MaxLines="1" MaxLength="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" TextChanged="lblValue_TextChanged" BorderBrush="#FF707070"/>
-        <Button x:Name="btnUp" HorizontalAlignment="Right" VerticalAlignment="Top" Width="28" Height="28" FontSize="32" ToolTip="Identify" Click="btnUp_Click" Content="&gt;" Padding="2,-12,-2,0" FontWeight="Bold" />
+        <Button x:Name="btnDown" HorizontalAlignment="Left" Width="28" Height="28" ToolTip="Identify" Click="btnDown_Click" Content="&lt;" Style="{StaticResource NumButton}"/>
+        <TextBox x:Name="lblValue" Height="28" Text="100" UndoLimit="0" VerticalAlignment="Top" Margin="28,0" TextAlignment="Center" MaxLines="1" MaxLength="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" TextChanged="lblValue_TextChanged" BorderBrush="{StaticResource Outline}" Foreground="{DynamicResource TextBody}"/>
+        <Button x:Name="btnUp" HorizontalAlignment="Right" Width="28" Height="28" ToolTip="Identify" Click="btnUp_Click" Content="&gt;" Style="{StaticResource NumButton}" />
     </Grid>
 </UserControl>

@@ -99,6 +99,18 @@
             <GradientStop Color="{StaticResource B850}" Offset="0.996"/>
             <GradientStop Color="{StaticResource CobaltDark}" Offset="0.8"/>
         </LinearGradientBrush>
+        <LinearGradientBrush x:Key="NumPickerBrush" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="{DynamicResource B350}" Offset="0"/>
+            <GradientStop Color="{DynamicResource TealDark}" Offset="0.05"/>
+            <GradientStop Color="{DynamicResource TurquoiseDark}" Offset="0.95"/>
+            <GradientStop Color="{StaticResource B750}" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="NumPickerDownBrush" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="{DynamicResource B350}" Offset="0"/>
+            <GradientStop Color="{DynamicResource Turquoise}" Offset="0.05"/>
+            <GradientStop Color="{DynamicResource Teal}" Offset="0.95"/>
+            <GradientStop Color="{StaticResource B750}" Offset="1"/>
+        </LinearGradientBrush>
         <!--#endregion-->
         
         <!-- Constants -->
@@ -352,6 +364,33 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style TargetType="Button" x:Key="NumButton">
+            <Setter Property="Foreground" Value="{StaticResource TextBody}" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="grid">
+                            <Border Margin="0" x:Name="border" BorderBrush="{StaticResource Outline}" BorderThickness="1" Background="{StaticResource NumPickerBrush}">
+                                <ContentPresenter Margin="0,-13, 0, 0" HorizontalAlignment="Center" VerticalAlignment="Top" TextElement.FontWeight="Bold" TextElement.FontSize="32" />
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource NumPickerDownBrush}">
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource OutlineHighlight}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" TargetName="grid" Value="0.25"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="Button" x:Key="KeyButton">
             <Setter Property="Foreground" Value="{StaticResource ButtonBasic}" />
             <Setter Property="VerticalAlignment" Value="Top" />
@@ -473,7 +512,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--#region Slider-->
         <Style x:Key="SliderButtonStyle" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="IsTabStop" Value="false" />
@@ -656,7 +694,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <!--#endregion-->
+
         <Style TargetType="{x:Type RadioButton}" x:Key="RadioButtonStyle">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
