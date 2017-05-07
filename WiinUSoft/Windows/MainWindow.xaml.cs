@@ -381,6 +381,7 @@ namespace WiinUSoft
 
         private void menu_MsBluetooth_Click(object sender, RoutedEventArgs e)
         {
+            menu_MsBluetooth.IsChecked = !menu_MsBluetooth.IsChecked;
             WinBtStream.ForceToshibaMode = !menu_MsBluetooth.IsChecked;
             UserPrefs.Instance.toshibaMode = !menu_MsBluetooth.IsChecked;
             UserPrefs.SavePrefs();
