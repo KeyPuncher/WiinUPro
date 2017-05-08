@@ -202,7 +202,7 @@
                 <Grid Background="Transparent">
                     <GroupBox x:Name="groupBox" Header="Movement" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
                         <Grid x:Name="mouseMovGrid">
-                            <Button x:Name="mouseDown" HorizontalAlignment="Left" Margin="84,104,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveDown">
+                            <Button x:Name="mouseDown" HorizontalAlignment="Left" Margin="84,104,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveDown" Style="{StaticResource KeyButton}">
                                 <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4" RenderTransformOrigin="0.5,0.5">
                                     <Image.RenderTransform>
                                         <TransformGroup>
@@ -214,7 +214,7 @@
                                     </Image.RenderTransform>
                                 </Image>
                             </Button>
-                            <Button x:Name="mouseLeft" HorizontalAlignment="Left" Margin="37,57,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveLeft">
+                            <Button x:Name="mouseLeft" HorizontalAlignment="Left" Margin="37,57,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveLeft" Style="{StaticResource KeyButton}">
                                 <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4" RenderTransformOrigin="0.5,0.5">
                                     <Image.RenderTransform>
                                         <TransformGroup>
@@ -226,10 +226,10 @@
                                     </Image.RenderTransform>
                                 </Image>
                             </Button>
-                            <Button x:Name="mouseUp" HorizontalAlignment="Left" Margin="84,10,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveUp">
+                            <Button x:Name="mouseUp" HorizontalAlignment="Left" Margin="84,10,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveUp" Style="{StaticResource KeyButton}">
                                 <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4"/>
                             </Button>
-                            <Button x:Name="mouseRight" HorizontalAlignment="Left" Margin="131,57,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveRight">
+                            <Button x:Name="mouseRight" HorizontalAlignment="Left" Margin="131,57,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveRight" Style="{StaticResource KeyButton}">
                                 <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4" RenderTransformOrigin="0.5,0.5">
                                     <Image.RenderTransform>
                                         <TransformGroup>
@@ -250,9 +250,9 @@
                     </GroupBox>
                     <GroupBox x:Name="groupBox1" Header="Buttons" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
                         <Grid x:Name="mouseBtnGrid">
-                            <Button Content="L" HorizontalAlignment="Left" Margin="44,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left"/>
-                            <Button Content="M" HorizontalAlignment="Left" Margin="91,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle"/>
-                            <Button Content="R" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Right"/>
+                            <Button Content="L" HorizontalAlignment="Left" Margin="44,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left" Style="{StaticResource KeyButton}"/>
+                            <Button Content="M" HorizontalAlignment="Left" Margin="91,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle" Style="{StaticResource KeyButton}"/>
+                            <Button Content="R" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Right" Style="{StaticResource KeyButton}"/>
                             <CheckBox x:Name="mButtonTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
                             <Slider x:Name="mButtonTurboRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
                             <Label Content="Turbo Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
@@ -263,8 +263,8 @@
                     </GroupBox>
                     <GroupBox x:Name="groupBox2" Header="Scroll" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Height="304" Width="240"  Style="{StaticResource GroupBoxStyle}">
                         <Grid x:Name="mouseScrollGrid">
-                            <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up"/>
-                            <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down"/>
+                            <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up" Style="{StaticResource KeyButton}"/>
+                            <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down" Style="{StaticResource KeyButton}"/>
                             <CheckBox x:Name="mScrollContinuousCheck" Content="Continuous" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
                             <Slider x:Name="mScrollRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
                             <Label Content="Scroll Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
