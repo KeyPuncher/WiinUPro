@@ -571,6 +571,10 @@
                 <TickBar x:Name="BottomTick" SnapsToDevicePixels="True" Grid.Row="2" Fill="{StaticResource Outline}" Placement="Bottom" Height="4"/>
             </Grid>
             <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="None">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Collapsed" />
+                </Trigger>
                 <Trigger Property="TickPlacement" Value="TopLeft">
                     <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
                 </Trigger>
