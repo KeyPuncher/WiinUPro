@@ -265,7 +265,8 @@ namespace WiinUPro
                         BorderBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0x21, 0x21, 0x21)),
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
-                        Tag = b
+                        Tag = b,
+                        Style = FindResource("KeyButton") as Style
                     };
                     btn.Click += ToggleVJoyButton;
                     buttonsWrap.Children.Add(btn);
@@ -333,7 +334,8 @@ namespace WiinUPro
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
                         Tag = tag + "_Pos",
-                        Margin = new Thickness(10, 0, 0, 0)
+                        Margin = new Thickness(10, 0, 0, 0),
+                        Style = FindResource("KeyButton") as Style
                     };
 
                     var neg = new Button()
@@ -348,7 +350,8 @@ namespace WiinUPro
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
                         Tag = tag + "_Neg",
-                        Margin = new Thickness(10, 0, 0, 0)
+                        Margin = new Thickness(10, 0, 0, 0),
+                        Style = FindResource("KeyButton") as Style
                     };
 
                     pos.Click += ToggleVJoyAxis;
@@ -403,7 +406,8 @@ namespace WiinUPro
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
                         Tag = "_" + i + "Up",
-                        Margin = new Thickness(10, 0, 0, 0)
+                        Margin = new Thickness(10, 0, 0, 0),
+                        Style = FindResource("KeyButton") as Style
                     };
 
                     var down = new Button()
@@ -418,7 +422,8 @@ namespace WiinUPro
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
                         Tag = "_" + i + "Down",
-                        Margin = new Thickness(10, 0, 0, 0)
+                        Margin = new Thickness(10, 0, 0, 0),
+                        Style = FindResource("KeyButton") as Style
                     };
 
                     var left = new Button()
@@ -433,7 +438,8 @@ namespace WiinUPro
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
                         Tag = "_" + i + "Left",
-                        Margin = new Thickness(10, 0, 0, 0)
+                        Margin = new Thickness(10, 0, 0, 0),
+                        Style = FindResource("KeyButton") as Style
                     };
 
                     var right = new Button()
@@ -448,7 +454,8 @@ namespace WiinUPro
                         FontWeight = FontWeights.Bold,
                         FontSize = 16,
                         Tag = "_" + i + "Right",
-                        Margin = new Thickness(10, 0, 0, 0)
+                        Margin = new Thickness(10, 0, 0, 0),
+                        Style = FindResource("KeyButton") as Style
                     };
 
                     up.Click += ToggleVJoyPOV;
@@ -509,7 +516,7 @@ namespace WiinUPro
                     var btn = obj as Button;
                     if (btn != null)
                     {
-                        selected &= btn.Background == keySelectedBrush;
+                        selected &= btn.Style == keySelectedStyle;
                     }
 
                     var img = obj as Image;
@@ -531,7 +538,6 @@ namespace WiinUPro
 
                         if (btn != null)
                         {
-                            btn.Background = keyDeselectedBrush;
                             btn.Style = keyStyle;
                         }
                         
@@ -551,7 +557,6 @@ namespace WiinUPro
 
                         if (btn != null)
                         {
-                            btn.Background = keySelectedBrush;
                             btn.Style = keySelectedStyle;
                         }
 
@@ -584,7 +589,7 @@ namespace WiinUPro
                     var btn = obj as Button;
                     if (btn != null)
                     {
-                        selected &= btn.Background == keySelectedBrush;
+                        selected &= btn.Style == keySelectedStyle;
                     }
 
                     var img = obj as Image;
@@ -606,7 +611,7 @@ namespace WiinUPro
 
                         if (btn != null)
                         {
-                            btn.Background = keyDeselectedBrush;
+                            btn.Style = keyStyle;
                         }
 
                         if (img != null)
@@ -625,7 +630,7 @@ namespace WiinUPro
 
                         if (btn != null)
                         {
-                            btn.Background = keySelectedBrush;
+                            btn.Style = keySelectedStyle;
                         }
 
                         if (img != null)
