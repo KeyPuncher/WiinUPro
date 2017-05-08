@@ -447,7 +447,7 @@ namespace WiinUPro
 
         public void ApplyAll()
         {
-            foreach (var state in _states)
+            foreach (var state in _states.ToArray())
             {
                 vJoy.JoystickState s = state.Value;
                 _interface.UpdateVJD(state.Key, ref s);

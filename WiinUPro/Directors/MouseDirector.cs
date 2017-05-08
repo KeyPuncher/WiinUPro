@@ -71,7 +71,7 @@ namespace WiinUPro
         
         public void Release()
         {
-            foreach (var btn in _pressedButtons)
+            foreach (var btn in _pressedButtons.ToArray())
             {
                 Mouse.ButtonUp(btn);
             }

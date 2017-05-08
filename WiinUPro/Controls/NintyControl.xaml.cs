@@ -268,7 +268,7 @@ namespace WiinUPro
             //_controller.ApplyInput(e.state);
             if (_assignments != null)
             {
-                foreach (var input in e.state)
+                foreach (var input in e.state.ToArray())
                 {
                     //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
                     if (_assignments[ShiftIndex].ContainsKey(input.Key))
