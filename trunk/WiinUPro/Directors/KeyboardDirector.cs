@@ -55,7 +55,7 @@ namespace WiinUPro
 
         public void Release()
         {
-            foreach (var key in _pressedKeys)
+            foreach (var key in _pressedKeys.ToArray())
             {
                 Keyboard.KeyUp((uint)key);
             }

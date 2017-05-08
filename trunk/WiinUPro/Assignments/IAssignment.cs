@@ -53,7 +53,7 @@ namespace WiinUPro
 
         public void ApplyAll(float value)
         {
-            foreach (var assignment in Assignments)
+            foreach (var assignment in Assignments.ToArray())
             {
                 assignment.Apply(value);
             }

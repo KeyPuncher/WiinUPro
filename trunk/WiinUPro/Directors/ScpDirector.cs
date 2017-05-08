@@ -134,7 +134,7 @@ namespace WiinUPro
 
         public void ApplyAll()
         {
-            foreach (var bus in _xInstances)
+            foreach (var bus in _xInstances.ToArray())
             {
                 if (bus.PluggedIn)
                 bus.Update();
