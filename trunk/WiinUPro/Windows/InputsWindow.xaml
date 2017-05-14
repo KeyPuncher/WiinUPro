@@ -408,7 +408,7 @@
                             <Image x:Name="xRLeft" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Lo" ToolTip="Right Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0" />
                         </Border>
                     </Grid>
-                    <ComboBox x:Name="deviceSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectedIndex="0" SelectionChanged="deviceSelection_SelectionChanged">
+                    <ComboBox x:Name="deviceSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectedIndex="0" SelectionChanged="deviceSelection_SelectionChanged" FontWeight="Bold">
                         <ListBoxItem Content="Device A"/>
                         <ListBoxItem Content="Device B"/>
                         <ListBoxItem Content="Device C"/>
