@@ -319,7 +319,9 @@ namespace WiinUPro
                     {
                         Content = axis,
                         VerticalContentAlignment = VerticalAlignment.Center,
-                        Width = 136
+                        Width = 136,
+                        FontWeight = FontWeights.Bold,
+                        Foreground = FindResource("TextHeader") as SolidColorBrush
                     };
 
                     var pos = new Button()
@@ -391,7 +393,9 @@ namespace WiinUPro
                     {
                         Content = txt,
                         VerticalContentAlignment = VerticalAlignment.Center,
-                        Width = 32
+                        Width = 32,
+                        FontWeight = FontWeights.Bold,
+                        Foreground = FindResource("TextHeader") as SolidColorBrush
                     };
 
                     var up = new Button()
