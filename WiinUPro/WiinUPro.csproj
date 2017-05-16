@@ -80,10 +80,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -148,9 +144,7 @@
       <DependentUpon>NumPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Directors\KeyboardDirector.cs" />
-    <Compile Include="Directors\KeyboardDirector_WI.cs" />
     <Compile Include="Directors\MouseDirector.cs" />
-    <Compile Include="Directors\MouseDirector_WI.cs" />
     <Compile Include="Directors\VJoyDirector.cs" />
     <Compile Include="Directors\ScpDirector.cs" />
     <Compile Include="Controls\ProControl.xaml.cs">
@@ -196,7 +190,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
