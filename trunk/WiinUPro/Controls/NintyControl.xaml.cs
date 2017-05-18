@@ -39,6 +39,8 @@ namespace WiinUPro
         internal ScpDirector _scp;                  // Quick reference to SCP Director
         internal Dictionary<string, AssignmentCollection>[] _assignments;
 
+        private bool[] _rumbleSubscriptions = new bool[4];
+
         // For Testing
         internal Shared.DummyDevice _dummy;
 
@@ -395,6 +397,31 @@ namespace WiinUPro
             }
         }
 
+        private void btnAddRumble_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new Windows.RumbleWindow(_rumbleSubscriptions);
+            win.ShowDialog();
+
+            for (byte i = 0; i < 4; i++)
+            {
+                if (win.Result[i])
+                {
+                    ScpDirector.Access.SubscribeToRumble((ScpDirector.XInput_Device)(i + 1), ApplyRumble);
+                }
+                else if (_rumbleSubscriptions[i])
+                {
+                    ScpDirector.Access.UnSubscribeToRumble((ScpDirector.XInput_Device)(i + 1), ApplyRumble);
+                }
+            }
+
+            _rumbleSubscriptions = win.Result;
+        }
+
+        private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _currentState = (ShiftState)dropShift.SelectedIndex;
+        }
+
         private void AssignMenu_Click(object sender, RoutedEventArgs e)
         {
             InputSelected(_selectedInput);
@@ -537,13 +564,20 @@ namespace WiinUPro
                 }
             }
         }
-
-        private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        
+        private void ApplyRumble(byte leftMotor, byte rightMotor)
         {
-            _currentState = (ShiftState)dropShift.SelectedIndex;
+            if (leftMotor == 0 && rightMotor == 0)
+            {
+                _nintroller.RumbleEnabled = false;
+            }
+            else
+            {
+                // TODO: Handle soft rumble
+                _nintroller.RumbleEnabled = true;
+            }
         }
         #endregion
-
     }
 
     public interface INintyControl
