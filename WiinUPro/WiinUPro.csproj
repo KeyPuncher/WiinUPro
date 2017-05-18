@@ -89,6 +89,9 @@
     <Compile Include="Assignments\VJoyAxisAssignment.cs" />
     <Compile Include="Assignments\VJoyButtonAssignment.cs" />
     <Compile Include="Assignments\VJoyPOVAssignment.cs" />
+    <Compile Include="Windows\RumbleWindow.xaml.cs">
+      <DependentUpon>RumbleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SyncWindow.xaml.cs">
       <DependentUpon>SyncWindow.xaml</DependentUpon>
     </Compile>
@@ -166,6 +169,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\RumbleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\SyncWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
