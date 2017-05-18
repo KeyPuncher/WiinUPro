@@ -51,6 +51,9 @@ namespace WiinUPro
         public bool Available { get; protected set; }
         public int Instances { get { return _xInstances.Count; } }
 
+        // Left motor is the larger one
+        public delegate void RumbleChangeDelegate(byte leftMotor, byte rightMotor);
+
         public ScpDirector()
         {
             _xInstances = new List<XInputBus>
@@ -144,6 +147,16 @@ namespace WiinUPro
         public void SetModifier(int value)
         {
             XInputBus.Modifier = value;
+        }
+
+        public void SubscribeToRumble(XInput_Device device, RumbleChangeDelegate callback)
+        {
+            _xInstances[(int)device - 1].RumbleEvent += callback;
+        }
+
+        public void UnSubscribeToRumble(XInput_Device device, RumbleChangeDelegate callback)
+        {
+            _xInstances[(int)device - 1].RumbleEvent -= callback;
         }
 
         public enum XInput_Device : int
@@ -330,6 +343,8 @@ namespace WiinUPro
             public static int Modifier;
 
             public XInputState inputs;
+            public event RumbleChangeDelegate RumbleEvent;
+
             public int ID
             {
                 get { return _id + Modifier; }
@@ -485,9 +500,7 @@ namespace WiinUPro
                     // True on rumble state change
                     if (rumble[1] == 0x08)
                     {
-                        // TODO: rumble
-                        // perhaps rumble even if change flag not set
-                        System.Diagnostics.Debug.WriteLine("rumble");
+                        RumbleEvent?.Invoke(rumble[3], rumble[4]);
                     }
                 }
 
