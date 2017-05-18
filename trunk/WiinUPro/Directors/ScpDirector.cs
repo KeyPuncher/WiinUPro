@@ -383,6 +383,7 @@ namespace WiinUPro
                 if (PluggedIn)
                 {
                     PluggedIn = !busRef.Unplug(ID);
+                    RumbleEvent?.Invoke(0, 0);
                 }
 
                 return PluggedIn == false;
