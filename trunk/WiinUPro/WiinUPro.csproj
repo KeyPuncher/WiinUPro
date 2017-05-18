@@ -86,6 +86,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Assignments\RumbleAssignment.cs" />
     <Compile Include="Assignments\VJoyAxisAssignment.cs" />
     <Compile Include="Assignments\VJoyButtonAssignment.cs" />
     <Compile Include="Assignments\VJoyPOVAssignment.cs" />

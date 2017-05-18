@@ -174,6 +174,8 @@ namespace WiinUPro
 
         public void Disconnect()
         {
+            _nintroller.RumbleEnabled = false;
+
             if (_stream != null)
                 _stream.Close();
 
@@ -184,6 +186,12 @@ namespace WiinUPro
             _controller = null;
 
             OnDisconnect?.Invoke();
+        }
+
+        public void AddRumble(bool state)
+        {
+            // TODO: Consider when one is turned off while another is still on
+            _nintroller.RumbleEnabled = state;
         }
 
         private void CreateController(ControllerType type)

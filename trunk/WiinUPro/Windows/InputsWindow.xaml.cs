@@ -238,6 +238,10 @@ namespace WiinUPro
                         }
                     }
                 }
+                else if (item is RumbleAssignment)
+                {
+                    rumbleOnPress.IsChecked = true;
+                }
             }
         }
 
@@ -723,6 +727,12 @@ namespace WiinUPro
 
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
         {
+            // Check if Rumble should occur when pressed
+            if (rumbleOnPress.IsChecked ?? false)
+            {
+                Result.Add(new RumbleAssignment(_control.AddRumble));
+            }
+
             // If on the Shift Tab, that is the only assignments that can be had
             if (tabControl.SelectedIndex == 4)
             {
