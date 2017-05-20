@@ -240,6 +240,9 @@ namespace WiinUPro
         private void _nintroller_LowBattery(object sender, LowBatteryEventArgs e)
         {
             // Indicate that this controller's battery is low
+            System.Speech.Synthesis.SpeechSynthesizer s = new System.Speech.Synthesis.SpeechSynthesizer();
+            s.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Female);
+            s.SpeakAsync("Low Battery");
         }
 
         private void _nintroller_Disconnected(object sender, DisconnectedEventArgs e)
