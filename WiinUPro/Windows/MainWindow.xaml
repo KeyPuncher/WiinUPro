@@ -75,7 +75,7 @@
                 </Grid>
             </TabItem>
             <!-- TODO: Remove Add Tab -->
-            <TabItem Header="+" Width="26" IsEnabled="True" MouseUp="AddController" Visibility="Collapsed">
+            <TabItem Header="+" Width="26" IsEnabled="True" MouseUp="AddController" Visibility="Visible">
                 <Grid/>
             </TabItem>
         </TabControl>

@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="WiinUPro.WiiControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WiinUPro"
+             mc:Ignorable="d">
+    <StackPanel Orientation="Horizontal">
+        <!-- Wiimote -->
+        <Viewbox x:Name="viewWiimote" Width="700">
+            <Canvas Width="1600" Height="1600" Background="Transparent">
+                <Grid Margin="0,0,0,0">
+                    <Image Source="/WiinUPro;component/Images/Controllers/Wiimote/Wii_temp.jpg" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1600" Height="1600"/>
+                </Grid>
+            </Canvas>
+        </Viewbox>
+        <!-- Nunchuck -->
+        <Viewbox x:Name="viewNunchuk" Width="545" Visibility="Collapsed">
+            <Canvas Width="1179" Height="1500" Background="Transparent">
+                <Grid Margin="0,0,0,0">
+                    <Image Source="/WiinUPro;component/Images/Controllers/Nunchuk/Nun_temp.jpg" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1179" Height="1500"/>
+                </Grid>
+            </Canvas>
+        </Viewbox>
+        <!-- Classic Controller -->
+        <Viewbox x:Name="viewClassicController" Width="1270" Visibility="Collapsed">
+            <Canvas Width="640" Height="342" Background="Transparent">
+                <Grid Margin="0,0,0,0">
+                    <Image Source="../Images/Controllers/Classic/CC_temp.jpg" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="640" Height="342"/>
+                </Grid>
+            </Canvas>
+        </Viewbox>
+        <!-- Classic Controller Pro -->
+        <Viewbox x:Name="viewClassicControllerPro" Width="1100" Visibility="Collapsed">
+            <Canvas Width="812" Height="500" Background="Transparent">
+                <Grid Margin="0,0,0,0">
+                    <Image Source="/WiinUPro;component/Images/Controllers/ClassicPro/CCP_temp.jpg" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="812" Height="500"/>
+                </Grid>
+            </Canvas>
+        </Viewbox>
+    </StackPanel>
+</UserControl>

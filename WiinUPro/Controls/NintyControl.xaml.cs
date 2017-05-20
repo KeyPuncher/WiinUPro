@@ -194,12 +194,15 @@ namespace WiinUPro
             _nintroller.RumbleEnabled = state;
         }
 
+        // This attribute will allow Access Violation exceptions to be caught in try/catch
+        [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         private void CreateController(ControllerType type)
         {
             switch (type)
             {
                 case ControllerType.ProController:
                     // TODO: Discover why this causes an access violation exceptions
+                    // TODO: Load saved calibration
                     _controller = new ProControl(Calibrations.Defaults.ProControllerDefault);
                     ((ProControl)_controller).OnJoyCalibrated += (j, rJoy) =>
                     {
@@ -216,6 +219,21 @@ namespace WiinUPro
 
                         _nintroller.SetCalibration(currentProCal);
                     };
+                    break;
+
+                case ControllerType.Wiimote:
+                case ControllerType.PartiallyInserted:
+                    // TODO: Load Wiimote visual
+                    break;
+
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                    break;
+
+                case ControllerType.ClassicController:
+                    break;
+
+                case ControllerType.ClassicControllerPro:
                     break;
             }
         }
@@ -598,7 +616,7 @@ namespace WiinUPro
         event Shared.Delegates.StringDel OnInputRightClick;
         event AssignmentCollection.AssignDelegate OnQuickAssign;
 
-        void ApplyInput(INintrollerState state);
+        void ApplyInput(INintrollerState state); // TOOD: I have forgotten what I want to use this for
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);
     }
