@@ -64,7 +64,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Speech" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -90,6 +92,9 @@
     <Compile Include="Assignments\VJoyAxisAssignment.cs" />
     <Compile Include="Assignments\VJoyButtonAssignment.cs" />
     <Compile Include="Assignments\VJoyPOVAssignment.cs" />
+    <Compile Include="Controls\WiiControl.xaml.cs">
+      <DependentUpon>WiiControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RumbleWindow.xaml.cs">
       <DependentUpon>RumbleWindow.xaml</DependentUpon>
     </Compile>
@@ -109,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\NintyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WiiControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -313,6 +322,13 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Images\Controllers\Classic\CC_temp.jpg" />
+    <Resource Include="Images\Controllers\Nunchuk\Nun_temp.jpg" />
+    <Resource Include="Images\Controllers\ClassicPro\CCP_temp.jpg" />
+    <Resource Include="Images\Controllers\Wiimote\Wii_temp.jpg" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
