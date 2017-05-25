@@ -80,6 +80,15 @@ namespace WiinUPro
 
         public InputsWindow(NintyControl control, AssignmentCollection collection) : this(control)
         {
+            var xImages = new List<Image>();
+            foreach (var border in xboxGrid.Children.OfType<Border>().ToList())
+            {
+                if (border.Child is Image)
+                {
+                    xImages.Add(border.Child as Image);
+                }
+            }
+
             // fill the window with current assignments
             foreach (var item in collection)
             {
@@ -141,7 +150,7 @@ namespace WiinUPro
                 {
                     // TODO: for specific Device (later)
                     var xb = (item as XInputButtonAssignment).Button;
-                    var img = xboxGrid.Children.OfType<Image>().ToList().Find((i) => i.Tag.ToString() == xb.ToString());
+                    var img = xImages.Find((i) => i.Tag.ToString() == xb.ToString());
                     if (img != null)
                     {
                         img.Opacity = 100;
