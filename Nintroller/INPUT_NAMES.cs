@@ -50,6 +50,9 @@ namespace NintrollerLib
             public const string C            = "nC";
             public const string Z            = "nZ";
 
+            public const string JOY_X        = "nJoyX";
+            public const string JOY_Y        = "nJoyY";
+
             public const string UP           = "nUP";
             public const string DOWN         = "nDOWN";
             public const string LEFT         = "nLEFT";
@@ -58,6 +61,13 @@ namespace NintrollerLib
             public const string ACC_X        = "nAccX";
             public const string ACC_Y        = "nAccY";
             public const string ACC_Z        = "nAccZ";
+            // tilting the controler with the wrist
+            public const string TILT_RIGHT   = "nTILTRIGHT";
+            public const string TILT_LEFT    = "nTILTLEFT";
+            public const string TILT_UP      = "nTILTUP";
+            public const string TILT_DOWN    = "nTILTDOWN";
+            public const string FACE_UP      = "nTILTFACEUP";
+            public const string FACE_DOWN    = "nTILTFACEDOWN";
         }
 
         public static class CLASSIC_CONTROLLER

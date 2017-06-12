@@ -533,10 +533,34 @@ namespace NintrollerLib
 
         public IEnumerator<KeyValuePair<string, float>> GetEnumerator()
         {
+            // Wiimote
             foreach (var input in wiimote)
             {
                 yield return input;
             }
+            
+            // Buttons
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.C, C ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.Z, Z ? 1.0f : 0.0f);
+
+            // Joystick
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.JOY_X, joystick.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.JOY_Y, joystick.Y);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.UP, joystick.Y > 0 ? joystick.Y : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.DOWN, joystick.Y > 0 ? 0 : -joystick.Y);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.LEFT, joystick.X > 0 ? 0 : -joystick.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.RIGHT, joystick.X > 0 ? joystick.X : 0);
+
+            // Accelerometer
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.ACC_X, accelerometer.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.ACC_Y, accelerometer.Y);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.ACC_Z, accelerometer.Z);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.TILT_LEFT, accelerometer.X > 0 ? 0 : -accelerometer.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.TILT_RIGHT, accelerometer.X > 0 ? accelerometer.X : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.TILT_UP, accelerometer.Y > 0 ? accelerometer.Y : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.TILT_DOWN, accelerometer.Y > 0 ? 0 : -accelerometer.Y);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.FACE_UP, accelerometer.Z > 0 ? accelerometer.Z : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.FACE_DOWN, accelerometer.Z > 0 ? 0 : -accelerometer.Z);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
