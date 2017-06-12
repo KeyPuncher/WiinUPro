@@ -28,14 +28,21 @@ namespace NintrollerLib
             public const string ACC_X       = "wAccX";
             public const string ACC_Y       = "wAccY";
             public const string ACC_Z       = "wAccZ";
+            // tilting the controler with the wrist
+            public const string TILT_RIGHT  = "wTILTRIGHT";
+            public const string TILT_LEFT   = "wTILTLEFT";
+            public const string TILT_UP     = "wTILTUP";
+            public const string TILT_DOWN   = "wTILTDOWN";
+            public const string FACE_UP     = "wTILTFACEUP";
+            public const string FACE_DOWN   = "wTILTFACEDOWN";
 
             // Pointer from IR camera
-            public const string IR_X         = "wIRX";
-            public const string IR_Y         = "wIRY";
-            public const string IR_UP        = "wIRUP";
-            public const string IR_DOWN      = "wIRDOWN";
-            public const string IR_LEFT      = "wIRLEFT";
-            public const string IR_RIGHT     = "wIRRIGHT";
+            public const string IR_X        = "wIRX";
+            public const string IR_Y        = "wIRY";
+            public const string IR_UP       = "wIRUP";
+            public const string IR_DOWN     = "wIRDOWN";
+            public const string IR_LEFT     = "wIRLEFT";
+            public const string IR_RIGHT    = "wIRRIGHT";
         }
 
         public static class NUNCHUK

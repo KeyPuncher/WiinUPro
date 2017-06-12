@@ -269,6 +269,17 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.IR_DOWN, irSensor.Y < 0 ? irSensor.Y : 0);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.IR_LEFT, irSensor.X < 0 ? irSensor.X : 0);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.IR_RIGHT, irSensor.X > 0 ? irSensor.X : 0);
+
+            // Accelerometer
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.ACC_X, accelerometer.X);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.ACC_Y, accelerometer.Y);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.ACC_Z, accelerometer.Z);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.TILT_LEFT, accelerometer.X < 0 ? accelerometer.X : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.TILT_RIGHT, accelerometer.X > 0 ? accelerometer.X : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.TILT_UP, accelerometer.Y > 0 ? accelerometer.Y : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.TILT_DOWN, accelerometer.Y < 0 ? accelerometer.Y : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.FACE_UP, accelerometer.Z > 0 ? accelerometer.Z : 0);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.FACE_DOWN, accelerometer.Z < 0 ? accelerometer.Z : 0);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
