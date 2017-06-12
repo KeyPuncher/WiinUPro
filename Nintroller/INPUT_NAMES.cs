@@ -9,43 +9,43 @@ namespace NintrollerLib
     {
         public static class WIIMOTE
         {
-            public const string A           = "wA";
-            public const string B           = "wB";
-            public const string ONE         = "wONE";
-            public const string TWO         = "wTWO";
+            public const string A           = "wmA";
+            public const string B           = "wmB";
+            public const string ONE         = "wmONE";
+            public const string TWO         = "wmTWO";
 
             // dpad when wiimote is vertical
-            public const string UP          = "wUP";
-            public const string DOWN        = "wDOWN";
-            public const string LEFT        = "wLEFT";
-            public const string RIGHT       = "wRIGHT";
+            public const string UP          = "wmUP";
+            public const string DOWN        = "wmDOWN";
+            public const string LEFT        = "wmLEFT";
+            public const string RIGHT       = "wmRIGHT";
 
-            public const string MINUS       = "wMINUS";
-            public const string PLUS        = "wPLUS";
-            public const string HOME        = "wHOME";
+            public const string MINUS       = "wmMINUS";
+            public const string PLUS        = "wmPLUS";
+            public const string HOME        = "wmHOME";
 
-            public const string ACC_X       = "wAccX";
-            public const string ACC_Y       = "wAccY";
-            public const string ACC_Z       = "wAccZ";
+            public const string ACC_X       = "wmAccX";
+            public const string ACC_Y       = "wmAccY";
+            public const string ACC_Z       = "wmAccZ";
 
             // Pointer from IR camera
-            public const string IR_X         = "wIRX";
-            public const string IR_Y         = "wIRY";
+            public const string IR_X         = "wmIRX";
+            public const string IR_Y         = "wmIRY";
         }
 
         public static class NUNCHUK
         {
-            public const string C            = "nC";
-            public const string Z            = "nZ";
+            public const string C            = "nunC";
+            public const string Z            = "nunZ";
 
-            public const string UP           = "nUP";
-            public const string DOWN         = "nDOWN";
-            public const string LEFT         = "nLEFT";
-            public const string RIGHT        = "nRIGHT";
+            public const string UP           = "nunUP";
+            public const string DOWN         = "nunDOWN";
+            public const string LEFT         = "nunLEFT";
+            public const string RIGHT        = "nunRIGHT";
 
-            public const string ACC_X        = "nAccX";
-            public const string ACC_Y        = "nAccY";
-            public const string ACC_Z        = "nAccZ";
+            public const string ACC_X        = "nunAccX";
+            public const string ACC_Y        = "nunAccY";
+            public const string ACC_Z        = "nunAccZ";
         }
 
         public static class CLASSIC_CONTROLLER
