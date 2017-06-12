@@ -124,6 +124,11 @@ namespace NintrollerLib
             public const string ZL     = "ccpZL";
             public const string ZR     = "ccpZR";
 
+            public const string LX     = "ccpLX";
+            public const string LY     = "ccpLY";
+            public const string RX     = "ccpRX";
+            public const string RY     = "ccpRY";
+
             public const string LUP    = "ccpLUP";
             public const string LDOWN  = "ccpLDOWN";
             public const string LLEFT  = "ccpLLEFT";
