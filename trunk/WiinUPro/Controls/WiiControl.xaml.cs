@@ -38,7 +38,25 @@ namespace WiinUPro
 
         public void UpdateVisual(INintrollerState state)
         {
-            // Update
+            if (state is Wiimote)
+            {
+                UpdateWiimoteVisual((Wiimote)state);
+            }
+            else if (state is Nunchuk)
+            {
+                var nun = (Nunchuk)state;
+                UpdateWiimoteVisual(nun.wiimote);
+            }
+            else if (state is ClassicController)
+            {
+                var cc = (ClassicController)state;
+                UpdateWiimoteVisual(cc.wiimote);
+            }
+            else if (state is ClassicControllerPro)
+            {
+                var ccp = (ClassicControllerPro)state;
+                UpdateWiimoteVisual(ccp.wiimote);
+            }
         }
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)
@@ -137,6 +155,54 @@ namespace WiinUPro
 
             if (OnQuickAssign != null)
                 OnQuickAssign(defaults);
+        }
+
+        private void UpdateWiimoteVisual(Wiimote wiimote)
+        {
+            wBtnA.Opacity     = wiimote.buttons.A ? 1 : 0;
+            wBtnB.Opacity     = wiimote.buttons.B ? 1 : 0;
+            wBtnOne.Opacity   = wiimote.buttons.One ? 1 : 0;
+            wBtnTwo.Opacity   = wiimote.buttons.Two ? 1 : 0;
+            wBtnUp.Opacity    = wiimote.buttons.Up ? 1 : 0;
+            wBtnRight.Opacity = wiimote.buttons.Right ? 1 : 0;
+            wBtnDown.Opacity  = wiimote.buttons.Down ? 1 : 0;
+            wBtnLeft.Opacity  = wiimote.buttons.Left ? 1 : 0;
+            wBtnMinus.Opacity = wiimote.buttons.Minus ? 1 : 0;
+            wBtnPlus.Opacity  = wiimote.buttons.Plus ? 1 : 0;
+            wBtnHome.Opacity  = wiimote.buttons.Home ? 1 : 0;
+            wCenterPad.Opacity = wiimote.buttons.Up || wiimote.buttons.Down || wiimote.buttons.Left || wiimote.buttons.Right ? 1 : 0;
+       }
+
+        private void OpenInput(object sender)
+        {
+            var element = sender as FrameworkElement;
+            var tag = element == null ? "" : element.Tag as string;
+
+            // Open input assignment window
+            if (OnInputSelected != null && tag != null)
+            {
+                OnInputSelected(tag);
+            }
+        }
+
+        private void Btn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                OpenInput(sender);
+            }
+        }
+
+        private void Btn_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var element = sender as FrameworkElement;
+            var tag = element == null ? "" : element.Tag as string;
+
+            // Open Context menu
+            if (OnInputRightClick != null && tag != null)
+            {
+                OnInputRightClick(tag);
+            }
         }
     }
 }

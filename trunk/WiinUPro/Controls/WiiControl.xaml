@@ -8,9 +8,24 @@
     <StackPanel Orientation="Horizontal">
         <!-- Wiimote -->
         <Viewbox x:Name="viewWiimote" Width="700">
-            <Canvas Width="1600" Height="1600" Background="Transparent">
+            <Canvas Width="600" Height="700" Background="Transparent">
                 <Grid Margin="0,0,0,0">
-                    <Image Source="/WiinUPro;component/Images/Controllers/Wiimote/Wii_temp.jpg" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1600" Height="1600"/>
+                    <Image Source="/WiinUPro;component/Images/Controllers/Wiimote/wiimote_front.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="200" Height="697"/>
+                    <Image Source="/WiinUPro;component/Images/Controllers/Wiimote/wiimote_back.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="200,0,0,0" Width="200" Height="697"/>
+                    <Image Source="/WiinUPro;component/Images/Controllers/Wiimote/wiimote_top.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="400,0,0,0" Width="170" Height="151"/>
+                    <!-- Buttons -->
+                    <Image x:Name="wBtnA" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmA.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="57,190,0,0" Width="52" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmA" />
+                    <Image x:Name="wBtnUp" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmUp.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,71,0,0" Width="28" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmUP" />
+                    <Image x:Name="wBtnRight" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmRight.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="94,99,0,0" Width="30" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmRIGHT" />
+                    <Image x:Name="wBtnDown" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmDown.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,125,0,0" Width="28" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmDOWN" />
+                    <Image x:Name="wBtnLeft" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmLeft.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="41,99,0,0" Width="30" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmLEFT" />
+                    <Image x:Name="wCenterPad" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmCenterPad.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="68,98,0,0" Width="29" Opacity="0" />
+                    <Image x:Name="wBtnMinus" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmMinus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="23,319,0,0" Width="28" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmMINUS" />
+                    <Image x:Name="wBtnHome" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmHome.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,319,0,0" Width="28" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmHOME" />
+                    <Image x:Name="wBtnPlus" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmPlus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="117,319,0,0" Width="28" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmPLUS" />
+                    <Image x:Name="wBtnOne" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmOne.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="66,494,0,0" Width="36" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmONE" />
+                    <Image x:Name="wBtnTwo" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmTwo.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="66,555,0,0" Width="36" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmTWO" />
+                    <Image x:Name="wBtnB" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmB.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="251,108,0,0" Width="66" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wmB" />
                 </Grid>
             </Canvas>
         </Viewbox>

@@ -326,6 +326,21 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Images\Controllers\Classic\CC_temp.jpg" />
+    <Resource Include="Images\Controllers\Wiimote\wiimote_top.png" />
+    <Resource Include="Images\Controllers\Wiimote\wiimote_back.png" />
+    <Resource Include="Images\Controllers\Wiimote\wiimote_front.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmA.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmB.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmCenterPad.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmDown.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmHome.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmLeft.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmMinus.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmOne.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmPlus.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmRight.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmTwo.png" />
+    <Resource Include="Images\Controllers\Wiimote\wmUp.png" />
     <Resource Include="Images\Controllers\Nunchuk\Nun_temp.jpg" />
     <Resource Include="Images\Controllers\ClassicPro\CCP_temp.jpg" />
     <Resource Include="Images\Controllers\Wiimote\Wii_temp.jpg" />
