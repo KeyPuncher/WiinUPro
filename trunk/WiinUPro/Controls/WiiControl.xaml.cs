@@ -40,20 +40,56 @@ namespace WiinUPro
         {
             if (state is Wiimote)
             {
+                if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
+                if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
+                if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
+
                 UpdateWiimoteVisual((Wiimote)state);
             }
             else if (state is Nunchuk)
             {
+                if (viewNunchuk.Visibility != Visibility.Visible) viewNunchuk.Visibility = Visibility.Visible;
+                if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
+                if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
+
                 var nun = (Nunchuk)state;
                 UpdateWiimoteVisual(nun.wiimote);
             }
             else if (state is ClassicController)
             {
+                if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
+                if (viewClassicController.Visibility != Visibility.Visible) viewClassicController.Visibility = Visibility.Visible;
+                if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
+
                 var cc = (ClassicController)state;
                 UpdateWiimoteVisual(cc.wiimote);
+
+                // TODO: Make L & R Triggers work
+                ccBtnA.Opacity = cc.A ? 1 : 0;
+                ccBtnB.Opacity = cc.B ? 1 : 0;
+                ccBtnX.Opacity = cc.X ? 1 : 0;
+                ccBtnY.Opacity = cc.Y ? 1 : 0;
+                ccBtnUp.Opacity = cc.Up ? 1 : 0;
+                ccBtnDown.Opacity = cc.Down ? 1 : 0;
+                ccBtnRight.Opacity = cc.Right ? 1 : 0;
+                ccBtnLeft.Opacity = cc.Left ? 1 : 0;
+                ccPadCenter.Opacity = cc.Up || cc.Down || cc.Left || cc.Right ? 1 : 0;
+                ccBtnHome.Opacity = cc.Home ? 1 : 0;
+                ccBtnSelect.Opacity = cc.Select ? 1 : 0;
+                ccBtnStart.Opacity = cc.Start ? 1 : 0;
+                ccBtnZL.Opacity = cc.ZL ? 1 : 0;
+                ccBtnZR.Opacity = cc.ZR ? 1 : 0;
+                ccL.Opacity = cc.L.value > 0 ? 1 : 0;
+                ccR.Opacity = cc.R.value > 0 ? 1 : 0;
+                ccLeftStick.Margin = new Thickness(208 + 30 * cc.LJoy.X, 210 - 30 * cc.LJoy.Y, 0, 0);
+                ccRightStick.Margin = new Thickness(364 + 30 * cc.RJoy.X, 210 - 30 * cc.RJoy.Y, 0, 0);
             }
             else if (state is ClassicControllerPro)
             {
+                if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
+                if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
+                if (viewClassicControllerPro.Visibility != Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Visible;
+
                 var ccp = (ClassicControllerPro)state;
                 UpdateWiimoteVisual(ccp.wiimote);
             }
@@ -173,7 +209,7 @@ namespace WiinUPro
             wCenterPad.Opacity = wiimote.buttons.Up || wiimote.buttons.Down || wiimote.buttons.Left || wiimote.buttons.Right ? 1 : 0;
        }
 
-        private void OpenInput(object sender)
+        private void OpenInput(object sender, RoutedEventArgs e = null)
         {
             var element = sender as FrameworkElement;
             var tag = element == null ? "" : element.Tag as string;
@@ -202,6 +238,16 @@ namespace WiinUPro
             if (OnInputRightClick != null && tag != null)
             {
                 OnInputRightClick(tag);
+            }
+        }
+
+        private void OpenContextMenu(object sender, MouseButtonEventArgs e)
+        {
+            var element = sender as FrameworkElement;
+
+            if (element != null && element.ContextMenu != null)
+            {
+                element.ContextMenu.IsOpen = true;
             }
         }
     }
