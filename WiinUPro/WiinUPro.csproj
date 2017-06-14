@@ -325,7 +325,25 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Resource Include="Images\Controllers\Classic\ccA.png" />
+    <Resource Include="Images\Controllers\Classic\ccB.png" />
+    <Resource Include="Images\Controllers\Classic\ccCenterPad.png" />
+    <Resource Include="Images\Controllers\Classic\ccDown.png" />
+    <Resource Include="Images\Controllers\Classic\ccHome.png" />
+    <Resource Include="Images\Controllers\Classic\ccJoy.png" />
+    <Resource Include="Images\Controllers\Classic\ccL.png" />
+    <Resource Include="Images\Controllers\Classic\ccLeft.png" />
+    <Resource Include="Images\Controllers\Classic\ccMinus.png" />
+    <Resource Include="Images\Controllers\Classic\ccPlus.png" />
+    <Resource Include="Images\Controllers\Classic\ccR.png" />
+    <Resource Include="Images\Controllers\Classic\ccRight.png" />
+    <Resource Include="Images\Controllers\Classic\ccUp.png" />
+    <Resource Include="Images\Controllers\Classic\ccX.png" />
+    <Resource Include="Images\Controllers\Classic\ccY.png" />
+    <Resource Include="Images\Controllers\Classic\ccZL.png" />
+    <Resource Include="Images\Controllers\Classic\ccZR.png" />
     <Content Include="Images\Controllers\Classic\CC_temp.jpg" />
+    <Resource Include="Images\Controllers\Classic\classicBase.png" />
     <Resource Include="Images\Controllers\Wiimote\wiimote_top.png" />
     <Resource Include="Images\Controllers\Wiimote\wiimote_back.png" />
     <Resource Include="Images\Controllers\Wiimote\wiimote_front.png" />
@@ -343,7 +361,6 @@
     <Resource Include="Images\Controllers\Wiimote\wmUp.png" />
     <Resource Include="Images\Controllers\Nunchuk\Nun_temp.jpg" />
     <Resource Include="Images\Controllers\ClassicPro\CCP_temp.jpg" />
-    <Resource Include="Images\Controllers\Wiimote\Wii_temp.jpg" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

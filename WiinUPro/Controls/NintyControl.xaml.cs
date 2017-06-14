@@ -223,18 +223,11 @@ namespace WiinUPro
 
                 case ControllerType.Wiimote:
                 case ControllerType.PartiallyInserted:
-                    // TODO: Load Wiimote visual
-                    _controller = new WiiControl();
-                    break;
-
                 case ControllerType.Nunchuk:
                 case ControllerType.NunchukB:
-                    break;
-
                 case ControllerType.ClassicController:
-                    break;
-
                 case ControllerType.ClassicControllerPro:
+                    _controller = new WiiControl();
                     break;
             }
         }
