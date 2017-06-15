@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="WiinUPro.NumPicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WiinUPro"
+             mc:Ignorable="d" 
+             d:DesignHeight="28" d:DesignWidth="88"
+             Width="88">
+    <Grid>
+        <Button x:Name="btnDown" HorizontalAlignment="Left" Width="28" Height="28" ToolTip="Identify" Click="btnDown_Click" Content="&lt;" Style="{StaticResource NumButton}"/>
+        <TextBox x:Name="lblValue" Height="28" Text="100" UndoLimit="0" VerticalAlignment="Top" Margin="28,0" TextAlignment="Center" MaxLines="1" MaxLength="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" TextChanged="lblValue_TextChanged" BorderBrush="{StaticResource Outline}" Foreground="{DynamicResource TextBody}"/>
+        <Button x:Name="btnUp" HorizontalAlignment="Right" Width="28" Height="28" ToolTip="Identify" Click="btnUp_Click" Content="&gt;" Style="{StaticResource NumButton}" />
+    </Grid>
+</UserControl>

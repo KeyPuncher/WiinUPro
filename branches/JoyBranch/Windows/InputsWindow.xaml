@@ -1,0 +1,488 @@
+﻿<Window x:Class="WiinUPro.InputsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WiinUPro"
+        mc:Ignorable="d"
+        Title="InputsWindow" Height="410.293" Width="935.8" Background="{StaticResource BackgroundMain}">
+    <Grid>
+        <TabControl x:Name="tabControl" Margin="0,0,0.4,31.6" Background="{StaticResource BackgroundSub}">
+            <TabControl.Resources>
+                <!-- The following is for styling the tab -->
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="{StaticResource Outline}" CornerRadius="2,2,0,0" Margin="-2, 0, 2, 0">
+                                    <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource TabSelected}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource Tab}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Keyboard" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
+                <Grid x:Name="keyboardGrid" Background="Transparent">
+                    <!-- Key Buttons -->
+                    <Button Content="ESC" Tag="VK_ESCAPE" Margin="10,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F1"  Tag="VK_F1"  Margin="78,0,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F2"  Tag="VK_F2"  Margin="125,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F3"  Tag="VK_F3"  Margin="172,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F4"  Tag="VK_F4"  Margin="219,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F5"  Tag="VK_F5"  Margin="284,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F6"  Tag="VK_F6"  Margin="331,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F7"  Tag="VK_F7"  Margin="378,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F8"  Tag="VK_F8"  Margin="425,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F9"  Tag="VK_F9"  Margin="489,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F10" Tag="VK_F10" Margin="536,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F11" Tag="VK_F11" Margin="583,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F12" Tag="VK_F12" Margin="630,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="~" Tag="VK_OEM_3" Margin="10,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="1" Tag="K_1" Margin="57,47,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="2" Tag="K_2" Margin="104,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="3" Tag="K_3" Margin="151,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="4" Tag="K_4" Margin="198,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="5" Tag="K_5" Margin="245,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="6" Tag="K_6" Margin="292,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="7" Tag="K_7" Margin="339,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="8" Tag="K_8" Margin="386,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="9" Tag="K_9" Margin="433,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="0" Tag="K_0" Margin="480,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="-" Tag="VK_OEM_MINUS" Margin="527,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="+" Tag="VK_OEM_PLUS" Margin="574,47,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="BACK" Tag="VK_BACK" Margin="621,47,0,0" Click="ToggleKey" Width="51" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="TAB" Tag="VK_TAB" Margin="10,94,0,0" Click="ToggleKey" Width="52" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Q" Tag="K_Q" Margin="66,94,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="W" Tag="K_W" Margin="113,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="E" Tag="K_E" Margin="160,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="R" Tag="K_R" Margin="207,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="T" Tag="K_T" Margin="254,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Y" Tag="K_Y" Margin="301,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="U" Tag="K_U" Margin="348,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="I" Tag="K_I" Margin="395,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="O" Tag="K_O" Margin="442,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="P" Tag="K_P" Margin="489,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="[" Tag="VK_OEM_4" Margin="536,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="]" Tag="VK_OEM_6" Margin="583,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="\" Tag="VK_OEM_5" Margin="630,94,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="CAPS" Tag="VK_CAPITAL" Click="ToggleKey" Margin="10,141,0,0" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="A" Tag="K_A" Margin="78,141,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="S" Tag="K_S" Margin="125,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="D" Tag="K_D" Margin="172,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="F" Tag="K_F" Margin="219,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="G" Tag="K_G" Margin="266,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="H" Tag="K_H" Margin="313,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="J" Tag="K_J" Margin="360,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="K" Tag="K_K" Margin="407,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="L" Tag="K_L" Margin="454,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Tag="VK_OEM_1" Margin="501,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Content=":" Margin="1,-10,-4,10" FontWeight="Bold" FontSize="14"/>
+                                <Label Content=";" Margin="1,8,0,-8" FontWeight="Bold" FontFamily="14"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button Tag="VK_OEM_7" Margin="548,141,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Content="&quot;" Margin="0,-6,-2.5,8.5" FontWeight="Bold" FontSize="14"/>
+                                <Label Content="'" Margin="1,12,0.5,-10.5" FontWeight="Bold" FontSize="14"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button Content="ENTER" Tag="VK_RETURN" Margin="595,141,0,0" Click="ToggleKey" Width="77" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="L SHIFT" Tag="VK_LSHIFT" Margin="10,188,0,0" Click="ToggleKey" Width="81" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Z" Tag="K_Z" HorizontalAlignment="Left" Margin="96,188,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="X" Tag="K_X" HorizontalAlignment="Left" Margin="143,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="C" Tag="K_C" HorizontalAlignment="Left" Margin="190,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="V" Tag="K_V" HorizontalAlignment="Left" Margin="237,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="B" Tag="K_B" HorizontalAlignment="Left" Margin="284,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N" Tag="K_N" HorizontalAlignment="Left" Margin="331,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="M" Tag="K_M" HorizontalAlignment="Left" Margin="378,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Tag="VK_OEM_COMMA" Margin="425,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
+                        <Button.Content>
+                            <Grid Height="42" Width="42">
+                                <Label Content="&lt;" HorizontalAlignment="Center" Margin="9,-6,11,6" FontWeight="Bold" FontSize="14"/>
+                                <Label Content="," HorizontalAlignment="Center" Margin="13,7,15,-7" FontWeight="Bold" FontSize="14"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button Tag="VK_OEM_PERIOD" Margin="472,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Content="&gt;" Margin="0,-10,-0.5,10" FontWeight="Bold" FontSize="14"/>
+                                <Label Content="." Margin="3,7,0,-6.5" FontWeight="Bold" FontSize="14"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button Tag="VK_OEM_2" Margin="519,188,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}">
+                        <Button.Content>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Content="?" Margin="3,-10,-4,10" FontWeight="Bold" FontSize="14"/>
+                                <Label Content="/" Margin="3,6,0,-8" FontWeight="Bold" FontSize="14"/>
+                            </Grid>
+                        </Button.Content>
+                    </Button>
+                    <Button Content="R SHIFT" Tag="VK_RSHIFT" Margin="566,188,0,0" Click="ToggleKey" Width="106" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="L CTRL" Tag="VK_LCONTROL" Margin="10,235,0,0" Click="ToggleKey" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Visibility="Hidden" IsEnabled="False" Content="L WIN" Tag="VK_LWIN" Margin="79,235,0,0" Click="ToggleKey" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="ALT" Tag="VK_MENU" Margin="79,235,0,0" Click="ToggleKey" Width="59" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="" Tag="VK_SPACE" Margin="143,235,0,0" Click="ToggleKey" Width="270" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Visibility="Hidden" IsEnabled="False" Content="MENU" Tag="VK_RMENU" Margin="470,235,0,0" Click="ToggleKey" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Visibility="Hidden" IsEnabled="False" Content="R WIN" Tag="VK_RWIN" Margin="539,235,0,0" Click="ToggleKey" Width="64" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="R CTRL" Tag="VK_RCONTROL" Margin="606,235,0,0" Click="ToggleKey" Width="66" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="N7" Margin="730,94,0,0" Click="ToggleKey" Tag="VK_NUMPAD7" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N8" Margin="777,94,0,0" Click="ToggleKey" Tag="VK_NUMPAD8" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N9" Margin="824,94,0,0" Click="ToggleKey" Tag="VK_NUMPAD9" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N4" Margin="730,141,0,0" Click="ToggleKey" Tag="VK_NUMPAD4" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N5" Margin="777,141,0,0" Click="ToggleKey" Tag="VK_NUMPAD5" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N6" Margin="824,141,0,0" Click="ToggleKey" Tag="VK_NUMPAD6" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N1" Margin="730,188,0,0" Click="ToggleKey" Tag="VK_NUMPAD1" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N2" Margin="777,188,0,0" Click="ToggleKey" Tag="VK_NUMPAD2" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N3" Margin="824,188,0,0" Click="ToggleKey" Tag="VK_NUMPAD3" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="N0" Margin="777,235,0,0" Click="ToggleKey" Tag="VK_NUMPAD0" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="NL" Margin="730,235,0,0" Click="ToggleKey" Tag="VK_NUMLOCK" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="." Margin="824,235,0,0" Click="ToggleKey" Tag="VK_DECIMAL" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="-" Margin="871,94,0,0" Click="ToggleKey" Tag="VK_SUBTRACT" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="+" Margin="871,141,0,0" Click="ToggleKey" Tag="VK_ADD" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="*" Margin="871,188,0,0" Click="ToggleKey" Tag="VK_MULTIPLY" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="/" Margin="871,235,0,0" Click="ToggleKey" Tag="VK_DIVIDE" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="INS"  Tag="VK_INSERT" Margin="730,0,0,0"  Click="ToggleKey" Width="56" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="DEL"  Tag="VK_DELETE" Margin="730,47,0,0" Click="ToggleKey" Width="56" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="HOME"  Tag="VK_HOME"  Margin="791,0,0,0"  Click="ToggleKey" Width="56" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="END"   Tag="VK_END"   Margin="791,47,0,0" Click="ToggleKey" Width="56" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="PG UP" Tag="VK_PRIOR" Margin="852,0,0,0"  Click="ToggleKey" Width="61" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="PG DN" Tag="VK_NEXT"  Margin="852,47,0,0" Click="ToggleKey" Width="61" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="Rt" Tag="VK_RIGHT" ToolTip="Right Arrow" Margin="559,235,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Lt" Tag="VK_LEFT"  ToolTip="Left Arrow"  Margin="418,235,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Up" Tag="VK_UP"    ToolTip="Up Arrow"    Margin="465,235,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Dn" Tag="VK_DOWN"  ToolTip="Down Arrow"  Margin="512,235,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+
+                    <Button Content="Prt" Tag="VK_SNAPSHOT" Margin="680,94,0,0" ToolTip="Print Screen" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="Scr" Tag="VK_SCROLL" Margin="680,141,0,0" ToolTip="Scroll Break" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <Button Content="PBr" Tag="VK_PAUSE" Margin="680,188,0,0" ToolTip="Pause Break" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
+                    <CheckBox x:Name="keyTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                    <Slider x:Name="keyTurboRate" HorizontalAlignment="Left" Margin="167,291,0,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="5" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
+                    <Label x:Name="label" Content="Turbo Rate" HorizontalAlignment="Left" Margin="85,286,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+                    <CheckBox x:Name="keyInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="396,292,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                    <TextBox x:Name="detectBox" HorizontalAlignment="Left" Height="23" Margin="730,289,0,0" TextWrapping="Wrap" Text="Click for key detection" VerticalAlignment="Top" Width="184" IsReadOnly="True" KeyDown="detectBox_KeyDown" Foreground="#FF444444"/>
+                    <Label Content="Fast" HorizontalAlignment="Left" Margin="350,300,0,0" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                    <Label Content="Slow" HorizontalAlignment="Left" Margin="162,300,0,0" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Mouse" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
+                <Grid Background="Transparent">
+                    <GroupBox x:Name="groupBox" Header="Movement" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
+                        <Grid x:Name="mouseMovGrid">
+                            <Button x:Name="mouseDown" HorizontalAlignment="Left" Margin="84,104,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveDown" Style="{StaticResource KeyButton}">
+                                <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform Angle="180"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Button x:Name="mouseLeft" HorizontalAlignment="Left" Margin="37,57,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveLeft" Style="{StaticResource KeyButton}">
+                                <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform Angle="-90"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Button x:Name="mouseUp" HorizontalAlignment="Left" Margin="84,10,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveUp" Style="{StaticResource KeyButton}">
+                                <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4"/>
+                            </Button>
+                            <Button x:Name="mouseRight" HorizontalAlignment="Left" Margin="131,57,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveRight" Style="{StaticResource KeyButton}">
+                                <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4" RenderTransformOrigin="0.5,0.5">
+                                    <Image.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform Angle="90"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Image.RenderTransform>
+                                </Image>
+                            </Button>
+                            <Slider x:Name="mMovementRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="0.1" Value="1" Maximum="3" SmallChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1" Style="{StaticResource BasicSliderStyle}"/>
+                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                            <Label Content="Movement Speed" HorizontalAlignment="Left" Margin="10,0,0,38" Height="26" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+                            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="124,0,0,43" TextWrapping="Wrap" Text="{Binding ElementName=mMovementRate, Path=Value, StringFormat={}{0:P0}}" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox1" Header="Buttons" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
+                        <Grid x:Name="mouseBtnGrid">
+                            <Button Content="L" HorizontalAlignment="Left" Margin="44,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left" Style="{StaticResource KeyButton}"/>
+                            <Button Content="M" HorizontalAlignment="Left" Margin="91,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle" Style="{StaticResource KeyButton}"/>
+                            <Button Content="R" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Right" Style="{StaticResource KeyButton}"/>
+                            <CheckBox x:Name="mButtonTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                            <Slider x:Name="mButtonTurboRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
+                            <Label Content="Turbo Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                            <CheckBox x:Name="mButtonInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="126,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox2" Header="Scroll" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Height="304" Width="240"  Style="{StaticResource GroupBoxStyle}">
+                        <Grid x:Name="mouseScrollGrid">
+                            <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up" Style="{StaticResource KeyButton}"/>
+                            <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down" Style="{StaticResource KeyButton}"/>
+                            <CheckBox x:Name="mScrollContinuousCheck" Content="Continuous" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                            <Slider x:Name="mScrollRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
+                            <Label Content="Scroll Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Xbox 360" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
+                <Grid Background="Transparent">
+                    <Button Content="Connect" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click" Visibility="Hidden"/>
+                    <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click" Visibility="Hidden"/>
+                    <Grid x:Name="xboxGrid" HorizontalAlignment="Left" Width="924" Height="322" VerticalAlignment="Top">
+                        <Image x:Name="xbox" Margin="139,10,0,0" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Controller.png" Width="400" Height="250" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="bg"/>
+                        <Border Margin="441,147,452,148" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xA" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360A.png" Width="33" Height="27" MouseLeftButtonDown="ToggleXInputButton" Tag="A" Opacity="0"/>
+                        </Border>
+                        <Border Margin="474,119,419.5,174.5" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xB" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360B.png" Width="31" Height="29" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="B"/>
+                        </Border>
+                        <Border Margin="411,122,481,172" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xX" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360X.png" Width="32" Height="28" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="X"/>
+                        </Border>
+                        <Border Margin="443,94,448,198" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xY" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Y.png" Width="33" Height="30" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Y"/>
+                        </Border>
+                        <Border Margin="265,172,631,127" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xUp" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Up.png" Width="28" Height="23" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Up" ToolTip="Up"/>
+                        </Border>
+                        <Border Margin="266,203,630,96" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xDn" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Down.png" Width="28" Height="23" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Down" ToolTip="Down"/>
+                        </Border>
+                        <Border Margin="248,188,653,113" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xLt" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Left.png" Width="23" Height="21" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Left" ToolTip="Left"/>
+                        </Border>
+                        <Border Margin="287,188,614,113" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xRt" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Right.png" Width="23" Height="21" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Right" ToolTip="Right"/>
+                        </Border>
+                        <Border Margin="180,48,669,241" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xLB" Margin="0,-11,0,0" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LB.png" Width="75" Height="44" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="LB" ToolTip="Left Bumper"/>
+                        </Border>
+                        <Border Margin="423,48,423,241" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xRB" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RB.png" Width="78" Height="33" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="RB" ToolTip="Right Bumper"/>
+                        </Border>
+                        <Border Margin="217,17,676,271" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xLT" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360LT.png" Width="31" Height="34" Opacity="0" MouseLeftButtonDown="ToggleXInputAxis" Tag="LT" ToolTip="Left Trigger"/>
+                        </Border>
+                        <Border Margin="435,15,461,271" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xRT" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360RT.png" Width="28" Height="36" Opacity="0" MouseLeftButtonDown="ToggleXInputAxis" Tag="RT" ToolTip="Right Trigger"/>
+                        </Border>
+                        <Border Margin="286,129,614,176" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xBack" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Back.png" Width="24" Height="17" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Back" ToolTip="Back"/>
+                        </Border>
+                        <Border Margin="319,119,564,169" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xGuide" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Guide.png" Width="41" Height="34" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Guide" ToolTip="Guide"/>
+                        </Border>
+                        <Border Margin="371,129,530,175" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xStart" Source="/WiinUPro;component/Images/Controllers/Xbox/xbox360Start.png" Width="23" Height="18" Opacity="0" MouseLeftButtonDown="ToggleXInputButton" Tag="Start" ToolTip="Start"/>
+                        </Border>
+                        <Border Margin="210,144,697,162" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Ellipse x:Name="xLS" Fill="#8042FFAD" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="17" MouseLeftButtonDown="ToggleXInputButton" ToolTip="Left Stick Click" Tag="LS" Opacity="0"/>
+                        </Border>
+                        <Border Margin="206,108,692,181" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+                            <Image x:Name="xLUp" Height="33" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LY_Hi" ToolTip="Left Stick Up" Opacity="0"/>
+                        </Border>
+                        <Border Margin="235,136,663,153" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <Image x:Name="xLRight" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LX_Hi" ToolTip="Left Stick Right" RenderTransformOrigin="0.5,0.5" Opacity="0"/>
+                        </Border>
+                        <Border Margin="206,163,692,126" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="180.533"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <Image x:Name="xLDown" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LY_Lo" ToolTip="Left Stick Down" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                            </Image>
+                        </Border>
+                        <Border Margin="176,136,722,153" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <Image x:Name="xLLeft" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="LX_Lo" ToolTip="Left Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0" />
+                        </Border>
+                        <Border Margin="387,201,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Ellipse x:Name="xRS" Fill="#8042FFAD" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="16" MouseLeftButtonDown="ToggleXInputButton" ToolTip="Right Stick Click" Tag="RS" Opacity="0"/>
+                        </Border>
+                        <Border Margin="383,165,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Image x:Name="xRUp" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RY_Hi" ToolTip="Right Stick Up" Opacity="0"/>
+                        </Border>
+                        <Border Margin="411,193,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <Image x:Name="xRRight" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Hi" ToolTip="Right Stick Right" RenderTransformOrigin="0.5,0.5" Opacity="0" />
+                        </Border>
+                        <Border Margin="383,220,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="180"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <Image x:Name="xRDown" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RY_Lo" ToolTip="Right Stick Down" RenderTransformOrigin="0.5,0.5" Opacity="0" />
+                        </Border>
+                        <Border Margin="353,193,0,0" BorderThickness="0" BorderBrush="{StaticResource OutlineHighlight}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Border.RenderTransform>
+                            <Image x:Name="xRLeft" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Lo" ToolTip="Right Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0" />
+                        </Border>
+                    </Grid>
+                    <ComboBox x:Name="deviceSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectedIndex="0" SelectionChanged="deviceSelection_SelectionChanged" FontWeight="Bold">
+                        <ListBoxItem Content="Device A"/>
+                        <ListBoxItem Content="Device B"/>
+                        <ListBoxItem Content="Device C"/>
+                        <ListBoxItem Content="Device D"/>
+                    </ComboBox>
+                    <GroupBox x:Name="groupXBtns" Header="Button Options" HorizontalAlignment="Left" Margin="581,18,0,0" VerticalAlignment="Top" Height="114" Width="239"  Style="{StaticResource GroupBoxStyle}">
+                        <Grid>
+                            <CheckBox x:Name="xTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                            <Slider x:Name="xTurboRate" HorizontalAlignment="Left" Margin="10,61,-47,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
+                            <Label Content="Turbo Rate" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,70,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                            <Label Content="Slow" HorizontalAlignment="Left" Margin="5,70,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                            <CheckBox x:Name="xInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Joystick" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
+                <Grid Background="Transparent">
+                    <Label x:Name="vJoyOffLabel" Content="vJoy is not available" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Visibility="Visible" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                    <ComboBox x:Name="joystickSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="joystickSelection_SelectionChanged" Visibility="Collapsed"/>
+                    <StackPanel x:Name="groupStack" HorizontalAlignment="Left" Height="272" Margin="10,37,0,0" VerticalAlignment="Top" Width="902" Orientation="Horizontal">
+                        <GroupBox x:Name="joyBtnGroup" Header="Buttons" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed"  Style="{StaticResource GroupBoxStyle}">
+                            <ScrollViewer>
+                                <WrapPanel x:Name="buttonsWrap" Margin="0,5" ItemHeight="50" ItemWidth="50"/>
+                            </ScrollViewer>
+                        </GroupBox>
+                        <GroupBox x:Name="joyAxisGroup" Header="Axis" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="284" Visibility="Collapsed"  Style="{StaticResource GroupBoxStyle}">
+                            <ScrollViewer>
+                                <StackPanel x:Name="axisStack" VerticalAlignment="Top" />
+                            </ScrollViewer>
+                        </GroupBox>
+                        <GroupBox x:Name="joyPOVGroup" Header="POVs" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed" Style="{StaticResource GroupBoxStyle}">
+                            <StackPanel x:Name="povStack" VerticalAlignment="Top"/>
+                        </GroupBox>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Shift" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                </TabItem.Header>
+                <Grid Background="Transparent">
+                    <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,35,0,0" VerticalAlignment="Top" Height="212" Width="220"  Style="{StaticResource GroupBoxStyle}">
+                        <Grid>
+                            <RadioButton x:Name="radioNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="ShiftHold" IsChecked="True" Style="{StaticResource RadioButtonStyle}" />
+                            <RadioButton x:Name="radioRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
+                            <RadioButton x:Name="radioBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
+                            <RadioButton x:Name="radioGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="shiftToggleGroup" Header="                 " HorizontalAlignment="Left" Margin="302,35,0,0" VerticalAlignment="Top" Height="212" Width="241" IsEnabled="False"  Style="{StaticResource GroupBoxStyle}">
+                        <Grid>
+                            <CheckBox x:Name="checkNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
+                            <CheckBox x:Name="checkRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
+                            <CheckBox x:Name="checkBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
+                            <CheckBox x:Name="checkGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
+                        </Grid>
+                    </GroupBox>
+                    <RadioButton x:Name="radioHold" Content="Hold" HorizontalAlignment="Left" Margin="49,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsChecked="True" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}"/>
+                    <RadioButton x:Name="radioToggle" Content="Toggle" HorizontalAlignment="Left" Margin="311,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9,3" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,3" Click="cancelBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource WarningButton}"/>
+        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,3" Click="clearBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource CautionButton}"/>
+        <CheckBox x:Name="rumbleOnPress" Content="Rumble On Press" HorizontalAlignment="Left" Margin="708,0,0,7" VerticalAlignment="Bottom" Style="{StaticResource CheckBoxStyle}" FontWeight="Normal">
+            <CheckBox.Foreground>
+                <SolidColorBrush Color="{DynamicResource B250}"/>
+            </CheckBox.Foreground>
+        </CheckBox>
+    </Grid>
+</Window>
