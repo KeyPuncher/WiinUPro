@@ -106,7 +106,63 @@
         <Viewbox x:Name="viewClassicControllerPro" Width="1100" Visibility="Collapsed">
             <Canvas Width="812" Height="500" Background="Transparent">
                 <Grid Margin="0,0,0,0">
-                    <Image Source="/WiinUPro;component/Images/Controllers/ClassicPro/CCP_temp.jpg" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="812" Height="500"/>
+                    <Image Source="/WiinUPro;component/Images/Controllers/ClassicPro/classicProBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="812" Height="500"/>
+                    <Image x:Name="ccpBtnA" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpA.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="669,193,0,0" Width="53" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpA" />
+                    <Image x:Name="ccpBtnB" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpB.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="602,241,0,0" Width="53" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpB" />
+                    <Image x:Name="ccpBtnX" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpX.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="604,147,0,0" Width="53" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpX" />
+                    <Image x:Name="ccpBtnY" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpY.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="536,194,0,0" Width="53" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpY" />
+                    <Image x:Name="ccpBtnSelect" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpMinus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="347,207,0,0" Width="28" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpSELECT" />
+                    <Image x:Name="ccpBtnStart" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpPlus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="448,207,0,0" Width="28" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpSTART" />
+                    <Image x:Name="ccpBtnHome" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpHome.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="397,205,0,0" Width="28" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpHOME" />
+                    <Image x:Name="ccpBtnL" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpL.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="152,43,0,0" Width="104" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpL" />
+                    <Image x:Name="ccpBtnR" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="567,41,0,0" Width="104" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpR" />
+                    <Image x:Name="ccpBtnZL" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpZL.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="158,11,0,0" Width="102" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpZL" />
+                    <Image x:Name="ccpBtnZR" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpZR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="564,10,0,0" Width="102" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpZR" />
+                    <!-- D-Pad -->
+                    <Image x:Name="ccpBtnUp" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpUp.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="174,163,0,0" Width="37" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpUP" />
+                    <Image x:Name="ccpBtnRight" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpRight.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,202,0,0" Width="42" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpRIGHT" />
+                    <Image x:Name="ccpBtnDown" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpDown.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="177,231,0,0" Width="37" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpDOWN" />
+                    <Image x:Name="ccpBtnLeft" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpLeft.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,202,0,0" Width="42" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpLEFT" />
+                    <Image x:Name="ccpPadCenter" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpCenterPad.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="176,204,0,0" Width="37" Opacity="0" />
+                    <!-- Joysticks -->
+                    <Image x:Name="ccpLeftStick" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="255,279,0,0" Width="82" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
+                        <Image.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Up" Tag="ccpLUP" Click="OpenInput"/>
+                                <MenuItem Header="Left" Tag="ccpLLEFT" Click="OpenInput"/>
+                                <MenuItem Header="Right" Tag="ccpLRIGHT" Click="OpenInput"/>
+                                <MenuItem Header="Down" Tag="ccpLDOWN" Click="OpenInput"/>
+                                <Separator/>
+                                <!-- TODO: LJoy Context Menu
+                                <MenuItem Header="Quick Assign">
+                                    <MenuItem Header="Mouse" Tag="proL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
+                                </MenuItem>
+                                <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
+                                -->
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image>
+                    <Image x:Name="ccpRightStick" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="485,279,0,0" Width="82" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
+                        <Image.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Up" Tag="ccpRUP" Click="OpenInput"/>
+                                <MenuItem Header="Left" Tag="ccpRLEFT" Click="OpenInput"/>
+                                <MenuItem Header="Right" Tag="ccpRRIGHT" Click="OpenInput"/>
+                                <MenuItem Header="Down" Tag="ccpRDOWN" Click="OpenInput"/>
+                                <Separator/>
+                                <!-- TODO: LJoy Context Menu
+                                <MenuItem Header="Quick Assign">
+                                    <MenuItem Header="Mouse" Tag="proL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
+                                </MenuItem>
+                                <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
+                                -->
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image>
                 </Grid>
             </Canvas>
         </Viewbox>

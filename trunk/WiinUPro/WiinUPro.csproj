@@ -323,7 +323,25 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Controllers\ClassicPro\ccpA.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpB.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpCenterPad.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpDown.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpHome.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpJoy.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpL.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpLeft.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpMinus.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpPlus.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpR.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpUp.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpX.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpY.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpZL.png" />
+    <Resource Include="Images\Controllers\ClassicPro\ccpZR.png" />
+    <Resource Include="Images\Controllers\ClassicPro\classicProBase.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Controllers\Classic\ccA.png" />
     <Resource Include="Images\Controllers\Classic\ccB.png" />
@@ -342,7 +360,6 @@
     <Resource Include="Images\Controllers\Classic\ccY.png" />
     <Resource Include="Images\Controllers\Classic\ccZL.png" />
     <Resource Include="Images\Controllers\Classic\ccZR.png" />
-    <Content Include="Images\Controllers\Classic\CC_temp.jpg" />
     <Resource Include="Images\Controllers\Classic\classicBase.png" />
     <Resource Include="Images\Controllers\Wiimote\wiimote_top.png" />
     <Resource Include="Images\Controllers\Wiimote\wiimote_back.png" />
@@ -360,7 +377,9 @@
     <Resource Include="Images\Controllers\Wiimote\wmTwo.png" />
     <Resource Include="Images\Controllers\Wiimote\wmUp.png" />
     <Resource Include="Images\Controllers\Nunchuk\Nun_temp.jpg" />
-    <Resource Include="Images\Controllers\ClassicPro\CCP_temp.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\ClassicPro\ccpRight.png" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
