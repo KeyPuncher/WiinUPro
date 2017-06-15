@@ -58,8 +58,8 @@
                     <Image x:Name="ccBtnLeft" Source="/WiinUPro;component/Images/Controllers/Classic/ccLeft.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="90,140,0,0" Width="34" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccLEFT" />
                     <Image x:Name="ccPadCenter" Source="/WiinUPro;component/Images/Controllers/Classic/ccCenterPad.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="124,144,0,0" Width="35" Opacity="0" />
                     <!-- Triggers -->
-                    <Image x:Name="ccL" Source="/WiinUPro;component/Images/Controllers/Classic/ccL.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,20,0,0" Width="102" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccL" />
-                    <Image x:Name="ccR" Source="/WiinUPro;component/Images/Controllers/Classic/ccR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="452,21,0,0" Width="100" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccR" />
+                    <Image x:Name="ccL" Source="/WiinUPro;component/Images/Controllers/Classic/ccL.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,20,0,0" Width="102" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccLT" />
+                    <Image x:Name="ccR" Source="/WiinUPro;component/Images/Controllers/Classic/ccR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="452,21,0,0" Width="100" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccRT" />
                     <!-- Joysticks -->
                     <Image x:Name="ccLeftStick" Source="/WiinUPro;component/Images/Controllers/Classic/ccJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="208,210,0,0" Width="66" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
                         <Image.ContextMenu>
