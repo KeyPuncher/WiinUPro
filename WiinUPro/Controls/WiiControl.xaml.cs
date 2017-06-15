@@ -65,23 +65,23 @@ namespace WiinUPro
                 UpdateWiimoteVisual(cc.wiimote);
 
                 // TODO: Make L & R Triggers work
-                ccBtnA.Opacity = cc.A ? 1 : 0;
-                ccBtnB.Opacity = cc.B ? 1 : 0;
-                ccBtnX.Opacity = cc.X ? 1 : 0;
-                ccBtnY.Opacity = cc.Y ? 1 : 0;
-                ccBtnUp.Opacity = cc.Up ? 1 : 0;
-                ccBtnDown.Opacity = cc.Down ? 1 : 0;
-                ccBtnRight.Opacity = cc.Right ? 1 : 0;
-                ccBtnLeft.Opacity = cc.Left ? 1 : 0;
+                ccBtnA.Opacity      = cc.A ? 1 : 0;
+                ccBtnB.Opacity      = cc.B ? 1 : 0;
+                ccBtnX.Opacity      = cc.X ? 1 : 0;
+                ccBtnY.Opacity      = cc.Y ? 1 : 0;
+                ccBtnUp.Opacity     = cc.Up ? 1 : 0;
+                ccBtnDown.Opacity   = cc.Down ? 1 : 0;
+                ccBtnRight.Opacity  = cc.Right ? 1 : 0;
+                ccBtnLeft.Opacity   = cc.Left ? 1 : 0;
                 ccPadCenter.Opacity = cc.Up || cc.Down || cc.Left || cc.Right ? 1 : 0;
-                ccBtnHome.Opacity = cc.Home ? 1 : 0;
+                ccBtnHome.Opacity   = cc.Home ? 1 : 0;
                 ccBtnSelect.Opacity = cc.Select ? 1 : 0;
-                ccBtnStart.Opacity = cc.Start ? 1 : 0;
-                ccBtnZL.Opacity = cc.ZL ? 1 : 0;
-                ccBtnZR.Opacity = cc.ZR ? 1 : 0;
-                ccL.Opacity = cc.L.value > 0 ? 1 : 0;
-                ccR.Opacity = cc.R.value > 0 ? 1 : 0;
-                ccLeftStick.Margin = new Thickness(208 + 30 * cc.LJoy.X, 210 - 30 * cc.LJoy.Y, 0, 0);
+                ccBtnStart.Opacity  = cc.Start ? 1 : 0;
+                ccBtnZL.Opacity     = cc.ZL ? 1 : 0;
+                ccBtnZR.Opacity     = cc.ZR ? 1 : 0;
+                ccL.Opacity         = cc.L.value > 0 ? 1 : 0;
+                ccR.Opacity         = cc.R.value > 0 ? 1 : 0;
+                ccLeftStick.Margin  = new Thickness(208 + 30 * cc.LJoy.X, 210 - 30 * cc.LJoy.Y, 0, 0);
                 ccRightStick.Margin = new Thickness(364 + 30 * cc.RJoy.X, 210 - 30 * cc.RJoy.Y, 0, 0);
             }
             else if (state is ClassicControllerPro)
@@ -92,6 +92,25 @@ namespace WiinUPro
 
                 var ccp = (ClassicControllerPro)state;
                 UpdateWiimoteVisual(ccp.wiimote);
+
+                ccpBtnA.Opacity      = ccp.A ? 1 : 0;
+                ccpBtnB.Opacity      = ccp.B ? 1 : 0;
+                ccpBtnX.Opacity      = ccp.X ? 1 : 0;
+                ccpBtnY.Opacity      = ccp.Y ? 1 : 0;
+                ccpBtnUp.Opacity     = ccp.Up ? 1 : 0;
+                ccpBtnDown.Opacity   = ccp.Down ? 1 : 0;
+                ccpBtnRight.Opacity  = ccp.Right ? 1 : 0;
+                ccpBtnLeft.Opacity   = ccp.Left ? 1 : 0;
+                ccpPadCenter.Opacity = ccp.Up || ccp.Down || ccp.Left || ccp.Right ? 1 : 0;
+                ccpBtnHome.Opacity   = ccp.Home ? 1 : 0;
+                ccpBtnSelect.Opacity = ccp.Select ? 1 : 0;
+                ccpBtnStart.Opacity  = ccp.Start ? 1 : 0;
+                ccpBtnZL.Opacity     = ccp.ZL ? 1 : 0;
+                ccpBtnZR.Opacity     = ccp.ZR ? 1 : 0;
+                ccpBtnL.Opacity      = ccp.L ? 1 : 0;
+                ccpBtnR.Opacity      = ccp.R ? 1 : 0;
+                ccpLeftStick.Margin  = new Thickness(255 + 30 * ccp.LJoy.X, 279 - 30 * ccp.LJoy.Y, 0, 0);
+                ccpRightStick.Margin = new Thickness(485 + 30 * ccp.RJoy.X, 279 - 30 * ccp.RJoy.Y, 0, 0);
             }
         }
 
