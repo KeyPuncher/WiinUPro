@@ -73,11 +73,8 @@ namespace WiinUPro
             var devices = WinBtStream.GetPaths();
 
             // Direct input Devices
-            //SharpDX.DirectInput.DirectInput dInput = new SharpDX.DirectInput.DirectInput();
             DInput = new SharpDX.DirectInput.DirectInput();
             var joys = DInput.GetDevices(SharpDX.DirectInput.DeviceClass.GameControl, SharpDX.DirectInput.DeviceEnumerationFlags.AllDevices);
-
-            System.Diagnostics.Debug.WriteLine(joys.Count.ToString() + " Joysticks found");
 
             foreach (var j in joys)
             {
@@ -90,8 +87,7 @@ namespace WiinUPro
                     // Left  Joy-Con 2006
                     // Right Joy-Con 2007
                     // Switch Pro Controller 2009
-
-                    //var joystick = new SharpDX.DirectInput.Joystick(dInput, j.InstanceGuid);
+                    
                     devices.Add(new Shared.DeviceInfo()
                     {
                         InstanceGUID = j.InstanceGuid,
