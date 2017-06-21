@@ -447,6 +447,16 @@
   <ItemGroup>
     <Resource Include="Images\Controllers\JoyConL\jclShare.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\switch_jcl_black.png" />
+    <Resource Include="Images\Icons\switch_jcl_white.png" />
+    <Resource Include="Images\Icons\switch_jcr_black.png" />
+    <Resource Include="Images\Icons\switch_jcr_white.png" />
+    <Resource Include="Images\Icons\switch_jc_black.png" />
+    <Resource Include="Images\Icons\switch_jc_white.png" />
+    <Resource Include="Images\Icons\switch_pro_black.png" />
+    <Resource Include="Images\Icons\switch_pro_white.png" />
+  </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

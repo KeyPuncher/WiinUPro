@@ -136,6 +136,17 @@ namespace WiinUPro
             {
                 _stack.Children.Add((UserControl)associatedJoyCon.Control);
             }
+
+            var tab = Parent as TabItem;
+            var stack = tab == null ? null : tab.Header as StackPanel;
+            if (stack != null && stack.Children.Count > 1 && stack.Children[1].GetType() == typeof(TextBlock))
+            {
+                ((TextBlock)stack.Children[1]).Text = "Joy-Cons";
+                if (stack.Children[0].GetType() == typeof(Image))
+                {
+                    ((Image)stack.Children[0]).Source = new BitmapImage(new Uri("../Images/Icons/switch_jc_black.png", UriKind.Relative));
+                }
+            }
         }
 
         private void JoyControl_OnUpdate(Joystick joystick, JoystickUpdate[] updates)

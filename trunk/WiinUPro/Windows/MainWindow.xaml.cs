@@ -81,22 +81,6 @@ namespace WiinUPro
 
             foreach (var j in joys)
             {
-                System.Diagnostics.Debug.WriteLine(string.Format(
-                    "Name: {0}" + Environment.NewLine +
-                    "Product: {1}" + Environment.NewLine +
-                    "P GUID: {2}" + Environment.NewLine +
-                    "Instance: {3}" + Environment.NewLine +
-                    "Type: {4}" + Environment.NewLine +
-                    "Is HID: {5}" + Environment.NewLine +
-                    "FFB GUID: {6}",
-                    j.InstanceName,
-                    j.ProductName,
-                    j.ProductGuid,
-                    j.InstanceGuid,
-                    j.Type,
-                    j.IsHumanInterfaceDevice,
-                    j.ForceFeedbackDriverGuid));
-
                 string pid = j.ProductGuid.ToString().Substring(0, 4);
                 string vid = j.ProductGuid.ToString().Substring(4, 4);
 
@@ -159,30 +143,26 @@ namespace WiinUPro
 
         private void DoConnect(DeviceStatus status, bool result)
         {
-            // If connection to device succeeds add a tab
             if (result && status.Control != null)
             {
-                // TODO: Associate L & R Joy-Cons together here
+                
+                // Associate L & R Joy-Cons
                 if (status.Joy != null)
                 {
                     if (status.Joy.Type == JoyControl.JoystickType.LeftJoyCon || status.Joy.Type == JoyControl.JoystickType.RightJoyCon)
                     {
                         foreach (var item in tabControl.Items)
                         {
-                            if (item is TabItem)
+                            if (item is TabItem && ((TabItem)item).Content is JoyControl)
                             {
-                                var content = ((TabItem)item).Content;
-                                if (content is JoyControl)
+                                var jc = ((JoyControl)((TabItem)item).Content);
+                                if (jc.associatedJoyCon == null)
                                 {
-                                    var jc = ((JoyControl)content);
-                                    if (jc.associatedJoyCon == null)
+                                    if ((jc.Type == JoyControl.JoystickType.LeftJoyCon || jc.Type == JoyControl.JoystickType.RightJoyCon)
+                                        && jc.Type != status.Joy.Type)
                                     {
-                                        if ((jc.Type == JoyControl.JoystickType.LeftJoyCon || jc.Type == JoyControl.JoystickType.RightJoyCon)
-                                            && jc.Type != status.Joy.Type)
-                                        {
-                                            jc.AssociateJoyCon(status.Joy);
-                                            return;
-                                        }
+                                        jc.AssociateJoyCon(status.Joy);
+                                        return;
                                     }
                                 }
                             }
@@ -190,6 +170,7 @@ namespace WiinUPro
                     }
                 }
 
+                // If connection to device succeeds add a tab
                 TabItem tab = new TabItem();
                 StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal };
                 stack.Children.Add(new Image
