@@ -155,6 +155,7 @@ namespace WiinUPro
             {
                 foreach(var update in updates)
                 {
+                    System.Diagnostics.Debug.WriteLine(update);
                     string key = update.Offset.ToString();
                     
                     // Split PointOfView Controllers into 4

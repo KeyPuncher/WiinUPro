@@ -62,7 +62,6 @@ namespace WiinUPro
             {
                 Joy = new JoyControl(Info);
                 Joy.OnDisconnect += Ninty_OnDisconnect;
-                // TODO: Set Icon
                 if (info.PID == "2006")
                 {
                     nickname.Content = "Joy-Con (L)";
