@@ -29,7 +29,7 @@ namespace WiinUPro
         public Style keySelectedStyle;
 
         protected ScpDirector.XInput_Device _selectedDevice = ScpDirector.XInput_Device.Device_A;
-        protected NintyControl _control;
+        protected IDeviceControl _control;
 
         private List<VirtualKeyCode> _selectedKeys;
         private List<MouseInput> _selectedMouseDirections;
@@ -73,12 +73,12 @@ namespace WiinUPro
             _selectedVJoyPOVs = new List<VJoyDirector.POVDirection>();
         }
 
-        public InputsWindow(NintyControl control) : this()
+        public InputsWindow(IDeviceControl control) : this()
         {
             _control = control;
         }
 
-        public InputsWindow(NintyControl control, AssignmentCollection collection) : this(control)
+        public InputsWindow(IDeviceControl control, AssignmentCollection collection) : this(control)
         {
             var xImages = new List<Image>();
             foreach (var border in xboxGrid.Children.OfType<Border>().ToList())

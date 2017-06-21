@@ -21,6 +21,8 @@ namespace WiinUPro
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static SharpDX.DirectInput.DirectInput DInput;
+
         List<DeviceStatus> availableDevices;
 
         public MainWindow()
@@ -70,10 +72,54 @@ namespace WiinUPro
         {
             var devices = WinBtStream.GetPaths();
 
+            // Direct input Devices
+            //SharpDX.DirectInput.DirectInput dInput = new SharpDX.DirectInput.DirectInput();
+            DInput = new SharpDX.DirectInput.DirectInput();
+            var joys = DInput.GetDevices(SharpDX.DirectInput.DeviceClass.GameControl, SharpDX.DirectInput.DeviceEnumerationFlags.AllDevices);
+
+            System.Diagnostics.Debug.WriteLine(joys.Count.ToString() + " Joysticks found");
+
+            foreach (var j in joys)
+            {
+                System.Diagnostics.Debug.WriteLine(string.Format(
+                    "Name: {0}" + Environment.NewLine +
+                    "Product: {1}" + Environment.NewLine +
+                    "P GUID: {2}" + Environment.NewLine +
+                    "Instance: {3}" + Environment.NewLine +
+                    "Type: {4}" + Environment.NewLine +
+                    "Is HID: {5}" + Environment.NewLine +
+                    "FFB GUID: {6}",
+                    j.InstanceName,
+                    j.ProductName,
+                    j.ProductGuid,
+                    j.InstanceGuid,
+                    j.Type,
+                    j.IsHumanInterfaceDevice,
+                    j.ForceFeedbackDriverGuid));
+
+                string pid = j.ProductGuid.ToString().Substring(0, 4);
+                string vid = j.ProductGuid.ToString().Substring(4, 4);
+
+                // Nintendo Device
+                if (vid == "057e")
+                {
+                    // Left  Joy-Con 2006
+                    // Right Joy-Con 2007
+                    // Switch Pro Controller 2009
+
+                    //var joystick = new SharpDX.DirectInput.Joystick(dInput, j.InstanceGuid);
+                    devices.Add(new Shared.DeviceInfo()
+                    {
+                        InstanceGUID = j.InstanceGuid,
+                        PID = pid
+                    });
+                }
+            }
+
             foreach (var info in devices)
             {
                 // Check if we are already showing this one
-                DeviceStatus existing = availableDevices.Find((d) => d.Info.DevicePath == info.DevicePath);
+                DeviceStatus existing = availableDevices.Find((d) => d.Info.SameDevice(info.DevicePath));
 
                 // If not add it
                 if (existing == null)
@@ -84,7 +130,7 @@ namespace WiinUPro
                     {
                         foreach (var tab in tabControl.Items)
                         {
-                            if (tab is TabItem && (tab as TabItem).Content == s.Ninty)
+                            if (tab is TabItem && (tab as TabItem).Content == s.Control)
                             {
                                 ChangeIcon(tab as TabItem, t);
                                 ChangeTitle(tab as TabItem, t.ToString());
@@ -97,7 +143,7 @@ namespace WiinUPro
                         for (int i = 1; i < tabControl.Items.Count; i++)
                         {
                             var tab = tabControl.Items[i];
-                            if (tab is TabItem && (tab as TabItem).Content == s.Ninty)
+                            if (tab is TabItem && (tab as TabItem).Content == s.Control)
                             {
                                 tabControl.Items.RemoveAt(i);
                                 break;
@@ -108,13 +154,42 @@ namespace WiinUPro
                     statusStack.Children.Add(status);
                 }
             }
+            
         }
 
         private void DoConnect(DeviceStatus status, bool result)
         {
             // If connection to device succeeds add a tab
-            if (result)
+            if (result && status.Control != null)
             {
+                // TODO: Associate L & R Joy-Cons together here
+                if (status.Joy != null)
+                {
+                    if (status.Joy.Type == JoyControl.JoystickType.LeftJoyCon || status.Joy.Type == JoyControl.JoystickType.RightJoyCon)
+                    {
+                        foreach (var item in tabControl.Items)
+                        {
+                            if (item is TabItem)
+                            {
+                                var content = ((TabItem)item).Content;
+                                if (content is JoyControl)
+                                {
+                                    var jc = ((JoyControl)content);
+                                    if (jc.associatedJoyCon == null)
+                                    {
+                                        if ((jc.Type == JoyControl.JoystickType.LeftJoyCon || jc.Type == JoyControl.JoystickType.RightJoyCon)
+                                            && jc.Type != status.Joy.Type)
+                                        {
+                                            jc.AssociateJoyCon(status.Joy);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 TabItem tab = new TabItem();
                 StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal };
                 stack.Children.Add(new Image
@@ -127,7 +202,7 @@ namespace WiinUPro
                 });
                 stack.Children.Add(new TextBlock { Text = status.nickname.Content.ToString() });
                 tab.Header = stack;
-                tab.Content = status.Ninty;
+                tab.Content = status.Control;
 
 #if DEBUG
                 tabControl.Items.Insert(tabControl.Items.Count - 1, tab);

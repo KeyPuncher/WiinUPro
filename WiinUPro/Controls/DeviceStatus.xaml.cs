@@ -21,8 +21,24 @@ namespace WiinUPro
     /// </summary>
     public partial class DeviceStatus : UserControl
     {
+        public UserControl Control
+        {
+            get
+            {
+                if (Ninty != null)
+                {
+                    return Ninty;
+                }
+                else
+                {
+                    return Joy;
+                }
+            }
+        }
+
         public DeviceInfo Info;
         public NintyControl Ninty;
+        public JoyControl Joy;
         public Action<DeviceStatus, bool> ConnectClick;
         public Action<DeviceStatus, ControllerType> TypeUpdated;
         public Action<DeviceStatus> CloseTab;
@@ -34,10 +50,32 @@ namespace WiinUPro
             InitializeComponent();
 
             Info = info;
-            Ninty = new NintyControl(Info);
-            Ninty.OnTypeChange += Ninty_OnTypeChange;
-            Ninty.OnDisconnect += Ninty_OnDisconnect;
-            UpdateType(info.Type);
+
+            if (info.InstanceGUID.Equals(Guid.Empty))
+            {
+                Ninty = new NintyControl(Info);
+                Ninty.OnTypeChange += Ninty_OnTypeChange;
+                Ninty.OnDisconnect += Ninty_OnDisconnect;
+                UpdateType(info.Type);
+            }
+            else
+            {
+                Joy = new JoyControl(Info);
+                Joy.OnDisconnect += Ninty_OnDisconnect;
+                // TODO: Set Icon
+                if (info.PID == "2006")
+                {
+                    nickname.Content = "Joy-Con (L)";
+                }
+                else if (info.PID == "2007")
+                {
+                    nickname.Content = "Joy-Con (R)";
+                }
+                else if (info.PID == "2009")
+                {
+                    nickname.Content = "Switch Pro";
+                }
+            }
         }
 
         private void Ninty_OnDisconnect()
@@ -94,7 +132,15 @@ namespace WiinUPro
 
         private void connectBtn_Click(object sender, RoutedEventArgs e)
         {
-            var result = Ninty.Connect();
+            bool result = false;
+            if (Ninty != null)
+            {
+                result = Ninty.Connect();
+            }
+            else if (Joy != null)
+            {
+                result = Joy.Connect();
+            }
 
             if (result)
             {
@@ -103,5 +149,16 @@ namespace WiinUPro
 
             ConnectClick?.Invoke(this, result);
         }
+    }
+
+    public interface IDeviceControl
+    {
+        event Action OnDisconnect;
+        int ShiftIndex { get; }
+        ShiftState CurrentShiftState { get; }
+        void ChangeState(ShiftState newState);
+        bool Connect();
+        void Disconnect();
+        void AddRumble(bool state);
     }
 }

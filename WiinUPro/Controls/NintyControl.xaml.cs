@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Xml.Serialization;
 using NintrollerLib;
 using Shared.Windows;
@@ -22,11 +13,11 @@ namespace WiinUPro
     /// <summary>
     /// Interaction logic for NintyControl.xaml
     /// </summary>
-    public partial class NintyControl : UserControl
+    public partial class NintyControl : UserControl, IDeviceControl
     {
-        internal delegate void TypeUpdate(ControllerType type);
-        internal event TypeUpdate OnTypeChange;     // Called on extension changes
-        internal event Action OnDisconnect;         // Called when disconnected
+        public delegate void TypeUpdate(ControllerType type);
+        public event TypeUpdate OnTypeChange;       // Called on extension changes
+        public event Action OnDisconnect;           // Called when disconnected
 
         internal WinBtStream _stream;               // Controller stream to the device
         internal Nintroller _nintroller;            // Physical Controller Device
