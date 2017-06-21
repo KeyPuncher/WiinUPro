@@ -62,6 +62,14 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.0.1\lib\net40\SharpDX.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DirectInput.4.0.1\lib\net40\SharpDX.DirectInput.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -95,6 +103,15 @@
     <Compile Include="Controls\WiiControl.xaml.cs">
       <DependentUpon>WiiControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\JoyControl.xaml.cs">
+      <DependentUpon>JoyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\JoyConRControl.xaml.cs">
+      <DependentUpon>JoyConRControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\JoyConLControl.xaml.cs">
+      <DependentUpon>JoyConLControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RumbleWindow.xaml.cs">
       <DependentUpon>RumbleWindow.xaml</DependentUpon>
     </Compile>
@@ -118,6 +135,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\WiiControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\JoyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\JoyConRControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\JoyConLControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -207,6 +236,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -380,6 +410,42 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Controllers\ClassicPro\ccpRight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\JoyConL\Joy-Con-L-base.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\JoyConL\jclDown.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclJoy.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclJoyS.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclL.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclLeft.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclMinus.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclRight.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclSL.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclSR.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclUp.png" />
+    <Resource Include="Images\Controllers\JoyConL\jclZL.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\JoyConR\jcrA.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrB.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrHome.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrJoy.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrJS.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrPlus.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrR.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrSL.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrSR.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrX.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrY.png" />
+    <Resource Include="Images\Controllers\JoyConR\jcrZR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\JoyConR\Joy-Con-R-base.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\JoyConL\jclShare.png" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

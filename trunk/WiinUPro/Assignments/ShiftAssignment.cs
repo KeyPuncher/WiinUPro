@@ -34,14 +34,14 @@ namespace WiinUPro
             set { _threashold = value; }
         }
 
-        private NintyControl _control;
+        private IDeviceControl _control;
         private ShiftState _previousState;
         private float _threashold = 0.1f;
         private bool _isEnabled = false;
 
         public ShiftAssignment() { }
 
-        public ShiftAssignment(NintyControl control)
+        public ShiftAssignment(IDeviceControl control)
         {
             _control = control;
             ToggleStates = new List<ShiftState>();

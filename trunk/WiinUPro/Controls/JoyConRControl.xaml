@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="WiinUPro.JoyConRControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WiinUPro"
+             mc:Ignorable="d" 
+             d:DesignHeight="770" d:DesignWidth="470">
+    <Viewbox>
+        <Canvas Width="970" Height="1770" Background="Transparent">
+            <Grid Margin="10,10,0,0">
+                <!-- Base Image -->
+                <Image Source="/WiinUPro;component/Images/Controllers/JoyConR/Joy-Con-R-base.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="970" Height="1770" />
+                <!-- Face Buttons -->
+                <Image x:Name="aBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrA.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="639,651,0,0" Width="104" Height="104" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons0"/>
+                <Image x:Name="bBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrB.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="529,755,0,0" Width="104" Height="104" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons2"/>
+                <Image x:Name="xBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrX.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="529,546,0,0" Width="104" Height="104" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons1"/>
+                <Image x:Name="yBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrY.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="419,651,0,0" Width="104" Height="104" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons3"/>
+                <Image x:Name="plusBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrPlus.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="401,447,0,0" Width="79" Height="80" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons9"/>
+                <Image x:Name="homeBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrHome.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="463,1317,0,0" Width="82" Height="81" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons12"/>
+                <!-- Shoulder Buttons -->
+                <Image x:Name="rBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="447,208,0,0" Width="367" Height="71" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons14"/>
+                <Image x:Name="zrBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrZR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="447,10,0,0" Width="328" Height="152" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons15"/>
+                <Image x:Name="slBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrSL.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="198,1233,0,0" Width="53" Height="120" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons4"/>
+                <Image x:Name="srBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrSR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="198,664,0,0" Width="53" Height="120" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons5"/>
+                <!-- Joystick -->
+                <Image x:Name="joyStick" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="476,990,0,0" Opacity="1" Width="209" Height="208" />
+                <Image x:Name="joyStickButton" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrJS.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="476,990,0,0" Opacity="0" Width="209" Height="208" MouseLeftButtonUp="OpenContextMenu">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Up" Tag="pov0E" Click="Axis_Click"/>
+                            <MenuItem Header="Left" Tag="pov0N" Click="Axis_Click"/>
+                            <MenuItem Header="Right" Tag="pov0S" Click="Axis_Click"/>
+                            <MenuItem Header="Down" Tag="pov0W" Click="Axis_Click"/>
+                            <MenuItem Header="Stick Click" Tag="Buttons11" Click="Axis_Click"/>
+                            <!--
+                            <Separator/>
+                            <MenuItem Header="Quick Assign">
+                                <MenuItem Header="Mouse" Tag="proR" Click="QuickAssign_Click"/>
+                                <MenuItem Header="WASD" Tag="proR" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Arrows" Tag="proR" Click="QuickAssign_Click"/>
+                            </MenuItem>
+                            <MenuItem Header="Calibrate" Tag="Joy" Click="Calibrate_Click"/>-->
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
+            </Grid>
+        </Canvas>
+    </Viewbox>
+</UserControl>
