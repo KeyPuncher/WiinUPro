@@ -38,6 +38,7 @@ namespace WiinUPro
         public Dictionary<JoystickOffset, AxisCalibration> calibrations;
 
         internal Joystick _joystick;
+        internal JoystickState _state;
         internal IJoyControl _controller;
         internal AssignmentCollection _clipboard;
         internal string _selectedInput;
@@ -163,43 +164,45 @@ namespace WiinUPro
         {
             if (_assignments != null)
             {
-                foreach(var update in updates)
+                foreach (var update in updates)
                 {
-                    string key = update.Offset.ToString();
-                    
-                    // Split PointOfView Controllers into 4
-                    if (key[0] == 'P')
+                    _state.Update(update);
+                }
+
+                for (int b = 0; b < _joystick.Capabilities.ButtonCount; b++)
+                {
+                    var key = "Buttons" + b.ToString();
+                    if (_assignments[ShiftIndex].ContainsKey(key))
                     {
-                        string subKey = key.Replace("PointOfViewControllers", "pov");
-                        bool north = false, south = false, east = false, west = false;
-                        if (update.Value != -1)
-                        {
-                            north = update.Value > 27000 || update.Value < 9000;
-                            south = !north && update.Value < 27000 && update.Value > 9000;
-                            east = update.Value > 0 && update.Value < 18000;
-                            west = !east && update.Value > 18000;
-                        }
-                        if (_assignments[ShiftIndex].ContainsKey(subKey + "N")) _assignments[ShiftIndex][subKey + "N"].ApplyAll(north ? 1 : 0);
-                        if (_assignments[ShiftIndex].ContainsKey(subKey + "S")) _assignments[ShiftIndex][subKey + "S"].ApplyAll(south ? 1 : 0);
-                        if (_assignments[ShiftIndex].ContainsKey(subKey + "E")) _assignments[ShiftIndex][subKey + "E"].ApplyAll(east ? 1 : 0);
-                        if (_assignments[ShiftIndex].ContainsKey(subKey + "W")) _assignments[ShiftIndex][subKey + "W"].ApplyAll(west ? 1 : 0);
-                    }
-                    else if (update.Offset < JoystickOffset.PointOfViewControllers0)
-                    {
-                        // Split Axes into positive & negative
-                        if (_assignments[ShiftIndex].ContainsKey(key + "+"))
-                            _assignments[ShiftIndex][key + "+"].ApplyAll(calibrations[update.Offset].Normal(update.Value, true));
-                        if (_assignments[ShiftIndex].ContainsKey(key + "-"))
-                            _assignments[ShiftIndex][key + "-"].ApplyAll(calibrations[update.Offset].Normal(update.Value, false));
-                    }
-                    else
-                    {
-                        if (_assignments[ShiftIndex].ContainsKey(update.Offset.ToString()))
-                        {
-                            _assignments[ShiftIndex][key].ApplyAll(update.Value / 128f);
-                        }
+                        _assignments[ShiftIndex][key].ApplyAll(_state.Buttons[b] ? 1 : 0);
                     }
                 }
+
+                for (int p = 0; p < _joystick.Capabilities.PovCount; p++)
+                {
+                    int value = _state.PointOfViewControllers[p];
+                    bool north = false, south = false, east = false, west = false;
+                    if (value != -1)
+                    {
+                        north = value > 27000 || value < 9000;
+                        south = !north && value < 27000 && value > 9000;
+                        east = value > 0 && value < 18000;
+                        west = !east && value > 18000;
+                    }
+                    if (_assignments[ShiftIndex].ContainsKey("pov" + p.ToString() + "N")) _assignments[ShiftIndex]["pov" + p.ToString() + "N"].ApplyAll(north ? 1 : 0);
+                    if (_assignments[ShiftIndex].ContainsKey("pov" + p.ToString() + "S")) _assignments[ShiftIndex]["pov" + p.ToString() + "S"].ApplyAll(south ? 1 : 0);
+                    if (_assignments[ShiftIndex].ContainsKey("pov" + p.ToString() + "E")) _assignments[ShiftIndex]["pov" + p.ToString() + "E"].ApplyAll(east ? 1 : 0);
+                    if (_assignments[ShiftIndex].ContainsKey("pov" + p.ToString() + "W")) _assignments[ShiftIndex]["pov" + p.ToString() + "W"].ApplyAll(west ? 1 : 0);
+                }
+
+                if (calibrations.ContainsKey(JoystickOffset.X)) UpdateAxis(JoystickOffset.X, _state.X);
+                if (calibrations.ContainsKey(JoystickOffset.Y)) UpdateAxis(JoystickOffset.Y, _state.Y);
+                if (calibrations.ContainsKey(JoystickOffset.Z)) UpdateAxis(JoystickOffset.Z, _state.Z);
+                if (calibrations.ContainsKey(JoystickOffset.RotationX)) UpdateAxis(JoystickOffset.RotationX, _state.RotationX);
+                if (calibrations.ContainsKey(JoystickOffset.RotationY)) UpdateAxis(JoystickOffset.RotationY, _state.RotationY);
+                if (calibrations.ContainsKey(JoystickOffset.RotationZ)) UpdateAxis(JoystickOffset.RotationZ, _state.RotationZ);
+                if (calibrations.ContainsKey(JoystickOffset.Sliders0)) UpdateAxis(JoystickOffset.Sliders0, _state.Sliders[0]);
+                if (calibrations.ContainsKey(JoystickOffset.Sliders1)) UpdateAxis(JoystickOffset.Sliders1, _state.Sliders[1]);
             }
 
             // TODO: Only apply what this controller emulates, if any
@@ -227,13 +230,13 @@ namespace WiinUPro
             _joystick.Properties.BufferSize = 128;
             _joystick.Acquire();
             
-            var state = _joystick.GetCurrentState();
-            if (state.X > 0) calibrations.Add(JoystickOffset.X, new AxisCalibration(0, 65535, 32767, 256));
-            if (state.Y > 0) calibrations.Add(JoystickOffset.Y, new AxisCalibration(0, 65535, 32767, 256));
-            if (state.Z > 0) calibrations.Add(JoystickOffset.Z, new AxisCalibration(0, 65535, 32767, 256));
-            if (state.RotationX > 0) calibrations.Add(JoystickOffset.RotationX, new AxisCalibration(0, 65535, 32767, 256));
-            if (state.RotationY > 0) calibrations.Add(JoystickOffset.RotationY, new AxisCalibration(0, 65535, 32767, 256));
-            if (state.RotationZ > 0) calibrations.Add(JoystickOffset.RotationZ, new AxisCalibration(0, 65535, 32767, 256));
+            _state = _joystick.GetCurrentState();
+            if (_state.X > 0) calibrations.Add(JoystickOffset.X, new AxisCalibration(0, 65535, 32767, 256));
+            if (_state.Y > 0) calibrations.Add(JoystickOffset.Y, new AxisCalibration(0, 65535, 32767, 256));
+            if (_state.Z > 0) calibrations.Add(JoystickOffset.Z, new AxisCalibration(0, 65535, 32767, 256));
+            if (_state.RotationX > 0) calibrations.Add(JoystickOffset.RotationX, new AxisCalibration(0, 65535, 32767, 256));
+            if (_state.RotationY > 0) calibrations.Add(JoystickOffset.RotationY, new AxisCalibration(0, 65535, 32767, 256));
+            if (_state.RotationZ > 0) calibrations.Add(JoystickOffset.RotationZ, new AxisCalibration(0, 65535, 32767, 256));
 
             _readCancel = new CancellationTokenSource();
             _readTask = Task.Factory.StartNew(PollData, _readCancel.Token);
@@ -279,6 +282,15 @@ namespace WiinUPro
                 }
                 catch { /* Failed to read */ }
             }
+        }
+
+        private void UpdateAxis(JoystickOffset offset, int value)
+        {
+            var key = offset.ToString();
+            if (_assignments[ShiftIndex].ContainsKey(key + "+"))
+                _assignments[ShiftIndex][key + "+"].ApplyAll(calibrations[offset].Normal(value, true));
+            if (_assignments[ShiftIndex].ContainsKey(key + "-"))
+                _assignments[ShiftIndex][key + "-"].ApplyAll(calibrations[offset].Normal(value, false));
         }
 
         #region Control Events
