@@ -457,6 +457,30 @@
     <Resource Include="Images\Icons\switch_pro_black.png" />
     <Resource Include="Images\Icons\switch_pro_white.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\SwitchPro\spcA.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcB.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcCenter.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcDown.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcHome.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcJoy.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcJoyStick.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcL.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcLeft.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcMinus.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcPlus.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcR.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcRight.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcShare.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcUp.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcX.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcY.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcZL.png" />
+    <Resource Include="Images\Controllers\SwitchPro\spcZR.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\SwitchPro\SwitchPro-base.png" />
+  </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
