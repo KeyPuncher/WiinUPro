@@ -74,10 +74,6 @@
                     <Label x:Name="label" Content="(Windows BT Stack Only)" HorizontalAlignment="Left" Margin="51,0,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-            <!-- TODO: Remove Add Tab -->
-            <TabItem Header="+" Width="26" IsEnabled="True" MouseUp="AddController" Visibility="Visible">
-                <Grid/>
-            </TabItem>
         </TabControl>
 
     </Grid>
