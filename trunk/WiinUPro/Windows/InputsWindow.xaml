@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="InputsWindow" Height="410.293" Width="935.8" Background="{StaticResource BackgroundMain}">
+        Title="InputsWindow" Height="420.237" Width="935.8" Background="{StaticResource BackgroundMain}">
     <Grid>
         <TabControl x:Name="tabControl" Margin="0,0,0.4,31.6" Background="{StaticResource BackgroundSub}">
             <TabControl.Resources>
