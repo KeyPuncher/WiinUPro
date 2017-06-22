@@ -180,12 +180,7 @@ namespace WiinUPro
                 stack.Children.Add(new TextBlock { Text = status.nickname.Content.ToString() });
                 tab.Header = stack;
                 tab.Content = status.Control;
-
-#if DEBUG
-                tabControl.Items.Insert(tabControl.Items.Count - 1, tab);
-#else
-            tabControl.Items.Add(tab);
-#endif
+                tabControl.Items.Add(tab);
             }
             else
             {

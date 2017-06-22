@@ -112,6 +112,9 @@
     <Compile Include="Controls\JoyConLControl.xaml.cs">
       <DependentUpon>JoyConLControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SwitchProControl.xaml.cs">
+      <DependentUpon>SwitchProControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RumbleWindow.xaml.cs">
       <DependentUpon>RumbleWindow.xaml</DependentUpon>
     </Compile>
@@ -147,6 +150,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\JoyConLControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SwitchProControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

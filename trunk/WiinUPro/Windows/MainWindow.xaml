@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="WiinUPro" Height="380" Width="480" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}">
+        Title="WiinUPro" Height="520" Width="480" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}">
     <Grid>
         <TabControl x:Name="tabControl" Margin="10" Background="{StaticResource BackgroundSub}" >
             <TabControl.Resources>
@@ -52,7 +52,7 @@
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,26,4,0" Height="108" VerticalAlignment="Top" Style="{StaticResource GroupBoxStyle}">
+                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,26,4,169.5" Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <CheckBox x:Name="settingAutoStart" Content="Auto Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsEnabled="False" Style="{StaticResource CheckBoxStyle}"/>
                             <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="False" Style="{StaticResource CheckBoxStyle}"/>
@@ -60,7 +60,7 @@
                             <CheckBox x:Name="settingToshibaMode" Content="Use Toshiba Mode" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Checked="settingToshibaMode_Checked" Style="{StaticResource CheckBoxStyle}"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,131,4,8" Style="{StaticResource GroupBoxStyle}">
+                    <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,0,4,7.5" Style="{StaticResource GroupBoxStyle}" Height="159" VerticalAlignment="Bottom">
                         <Grid>
                             <Button x:Name="btnAddXinput" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Margin="10,10,0,0" Click="btnAddXinput_Click" Style="{StaticResource BasicButton}"/>
                             <Button x:Name="btnRemoveXinput" Content="Remove" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Margin="80,10,0,0" Click="btnRemoveXinput_Click" Style="{StaticResource BasicButton}"/>
