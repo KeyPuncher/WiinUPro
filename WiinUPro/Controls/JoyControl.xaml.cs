@@ -35,6 +35,7 @@ namespace WiinUPro
         public event Action OnDisconnect;
         public JoyControl associatedJoyCon = null;
         public IJoyControl Control { get { return _controller; } }
+        public Dictionary<JoystickOffset, AxisCalibration> calibrations;
 
         internal Joystick _joystick;
         internal IJoyControl _controller;
@@ -97,6 +98,7 @@ namespace WiinUPro
             _info = deviceInfo;
             _scp = ScpDirector.Access;
             _joystick = new Joystick(MainWindow.DInput, _info.InstanceGUID);
+            calibrations = new Dictionary<JoystickOffset, AxisCalibration>();
 
             if ((JoystickType)_joystick.Properties.ProductId == JoystickType.LeftJoyCon)
             {
@@ -106,7 +108,15 @@ namespace WiinUPro
             {
                 _controller = new JoyConRControl();
             }
+            else if ((JoystickType)_joystick.Properties.ProductId == JoystickType.SwitchPro)
+            {
+                _controller = new SwitchProControl();
+            }
+            else
+            {
 
+            }
+            
             if (_controller != null)
             {
                 _controller.OnInputSelected += OnInputSelected;
@@ -155,7 +165,6 @@ namespace WiinUPro
             {
                 foreach(var update in updates)
                 {
-                    System.Diagnostics.Debug.WriteLine(update);
                     string key = update.Offset.ToString();
                     
                     // Split PointOfView Controllers into 4
@@ -174,6 +183,14 @@ namespace WiinUPro
                         if (_assignments[ShiftIndex].ContainsKey(subKey + "S")) _assignments[ShiftIndex][subKey + "S"].ApplyAll(south ? 1 : 0);
                         if (_assignments[ShiftIndex].ContainsKey(subKey + "E")) _assignments[ShiftIndex][subKey + "E"].ApplyAll(east ? 1 : 0);
                         if (_assignments[ShiftIndex].ContainsKey(subKey + "W")) _assignments[ShiftIndex][subKey + "W"].ApplyAll(west ? 1 : 0);
+                    }
+                    else if (update.Offset < JoystickOffset.PointOfViewControllers0)
+                    {
+                        // Split Axes into positive & negative
+                        if (_assignments[ShiftIndex].ContainsKey(key + "+"))
+                            _assignments[ShiftIndex][key + "+"].ApplyAll(calibrations[update.Offset].Normal(update.Value, true));
+                        if (_assignments[ShiftIndex].ContainsKey(key + "-"))
+                            _assignments[ShiftIndex][key + "-"].ApplyAll(calibrations[update.Offset].Normal(update.Value, false));
                     }
                     else
                     {
@@ -209,8 +226,14 @@ namespace WiinUPro
         {
             _joystick.Properties.BufferSize = 128;
             _joystick.Acquire();
-            _joystick.Poll();
-            var data = _joystick.GetBufferedData();
+            
+            var state = _joystick.GetCurrentState();
+            if (state.X > 0) calibrations.Add(JoystickOffset.X, new AxisCalibration(0, 65535, 32767, 256));
+            if (state.Y > 0) calibrations.Add(JoystickOffset.Y, new AxisCalibration(0, 65535, 32767, 256));
+            if (state.Z > 0) calibrations.Add(JoystickOffset.Z, new AxisCalibration(0, 65535, 32767, 256));
+            if (state.RotationX > 0) calibrations.Add(JoystickOffset.RotationX, new AxisCalibration(0, 65535, 32767, 256));
+            if (state.RotationY > 0) calibrations.Add(JoystickOffset.RotationY, new AxisCalibration(0, 65535, 32767, 256));
+            if (state.RotationZ > 0) calibrations.Add(JoystickOffset.RotationZ, new AxisCalibration(0, 65535, 32767, 256));
 
             _readCancel = new CancellationTokenSource();
             _readTask = Task.Factory.StartNew(PollData, _readCancel.Token);
@@ -225,11 +248,12 @@ namespace WiinUPro
                 associatedJoyCon.Disconnect();
             }
 
-            _readCancel.Cancel();
-            _readTask.Wait();
-            _joystick.Unacquire();
+            _readCancel?.Cancel();
+            _readTask?.Wait();
+            _joystick?.Unacquire();
             _readTask = null;
             _readCancel = null;
+            calibrations?.Clear();
             OnDisconnect?.Invoke();
         }
 
@@ -433,5 +457,35 @@ namespace WiinUPro
 
         void UpdateVisual(JoystickUpdate[] updates);
         Guid AssociatedInstanceID { get; }
+    }
+
+    public struct AxisCalibration
+    {
+        public int min;
+        public int max;
+        public int center;
+        public uint dead;
+
+        public AxisCalibration(int min, int max, int center, uint dead)
+        {
+            this.min = min;
+            this.max = max;
+            this.center = center;
+            this.dead = dead;
+        }
+
+        public float Normal(int value)
+        {
+            if (Math.Abs(value - center) <= dead) return 0;
+            return (value - center) / ((max - min) / 2f);
+        }
+
+        public float Normal(int value, bool positive)
+        {
+            int v = center - value;
+            v *= positive ? 1 : -1;
+            if (v <= dead) return 0;
+            return v / ((max - min) / 2f);
+        }
     }
 }
