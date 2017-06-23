@@ -19,12 +19,8 @@ namespace WiinUPro
     /// <summary>
     /// Interaction logic for JoyConRControl.xaml
     /// </summary>
-    public partial class JoyConRControl : UserControl, IJoyControl
+    public partial class JoyConRControl : BaseControl, IJoyControl
     {
-        public event Delegates.StringDel OnInputRightClick;
-        public event Delegates.StringDel OnInputSelected;
-        public event AssignmentCollection.AssignDelegate OnQuickAssign;
-
         public Guid AssociatedInstanceID { get; set; }
         
         public JoyConRControl()
@@ -97,53 +93,6 @@ namespace WiinUPro
                         break;
                 }
             }
-        }
-
-        private void OpenInput(object sender)
-        {
-            var element = sender as FrameworkElement;
-            var tag = element == null ? "" : element.Tag as string;
-
-            // Open input assignment window
-            if (OnInputSelected != null && tag != null)
-            {
-                OnInputSelected(tag);
-            }
-        }
-
-        private void Btn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                OpenInput(sender);
-            }
-        }
-
-        private void Btn_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-            var tag = element == null ? "" : element.Tag as string;
-
-            // Open Context menu
-            if (OnInputRightClick != null && tag != null)
-            {
-                OnInputRightClick(tag);
-            }
-        }
-
-        private void OpenContextMenu(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-
-            if (element != null && element.ContextMenu != null)
-            {
-                element.ContextMenu.IsOpen = true;
-            }
-        }
-
-        private void Axis_Click(object sender, RoutedEventArgs e)
-        {
-            OpenInput(sender);
         }
     }
 }

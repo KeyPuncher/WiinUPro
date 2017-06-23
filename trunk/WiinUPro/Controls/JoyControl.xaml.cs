@@ -227,6 +227,14 @@ namespace WiinUPro
 
         public bool Connect()
         {
+            // This isn't doing what I want it to :(  (at least on Windows 10)
+            //if (Shared.Windows.WinBtStream.OverrideSharingMode && Shared.Windows.WinBtStream.OverridenFileShare == System.IO.FileShare.None)
+            //{
+            //    //_joystick.SetCooperativeLevel(new System.Windows.Interop.WindowInteropHelper(Application.Current.MainWindow).Handle, CooperativeLevel.Background | CooperativeLevel.NonExclusive);
+            //    var Handle = System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle;
+            //    _joystick.SetCooperativeLevel(Handle, CooperativeLevel.Exclusive | CooperativeLevel.Background);
+            //}
+
             _joystick.Properties.BufferSize = 128;
             _joystick.Acquire();
             
@@ -461,12 +469,8 @@ namespace WiinUPro
         #endregion
     }
 
-    public interface IJoyControl
+    public interface IJoyControl : IBaseControol
     {
-        event Shared.Delegates.StringDel OnInputSelected;
-        event Shared.Delegates.StringDel OnInputRightClick;
-        event AssignmentCollection.AssignDelegate OnQuickAssign;
-
         void UpdateVisual(JoystickUpdate[] updates);
         Guid AssociatedInstanceID { get; }
     }
