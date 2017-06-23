@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using NintrollerLib;
 using Shared;
 
@@ -19,7 +8,7 @@ namespace WiinUPro
     /// <summary>
     /// Interaction logic for WiiControl.xaml
     /// </summary>
-    public partial class WiiControl : UserControl, INintyControl
+    public partial class WiiControl : BaseControl, INintyControl
     {
         public WiiControl()
         {
@@ -27,9 +16,6 @@ namespace WiinUPro
         }
 
         public event Delegates.BoolArrDel OnChangeLEDs;
-        public event Delegates.StringDel OnInputRightClick;
-        public event Delegates.StringDel OnInputSelected;
-        public event AssignmentCollection.AssignDelegate OnQuickAssign;
 
         public void ApplyInput(INintrollerState state)
         {
@@ -207,9 +193,8 @@ namespace WiinUPro
             defaults.Add(INPUT_NAMES.CLASSIC_CONTROLLER_PRO.SELECT, new AssignmentCollection(new List<IAssignment> { new XInputButtonAssignment(ScpControl.X360Button.Back, device) }));
             defaults.Add(INPUT_NAMES.CLASSIC_CONTROLLER_PRO.HOME, new AssignmentCollection(new List<IAssignment> { new XInputButtonAssignment(ScpControl.X360Button.Guide, device) }));
             #endregion
-
-            if (OnQuickAssign != null)
-                OnQuickAssign(defaults);
+            
+            CallEvent_OnQuickAssign(defaults);
         }
 
         private void UpdateWiimoteVisual(Wiimote wiimote)
@@ -227,47 +212,5 @@ namespace WiinUPro
             wBtnHome.Opacity  = wiimote.buttons.Home ? 1 : 0;
             wCenterPad.Opacity = wiimote.buttons.Up || wiimote.buttons.Down || wiimote.buttons.Left || wiimote.buttons.Right ? 1 : 0;
        }
-
-        private void OpenInput(object sender, RoutedEventArgs e = null)
-        {
-            var element = sender as FrameworkElement;
-            var tag = element == null ? "" : element.Tag as string;
-
-            // Open input assignment window
-            if (OnInputSelected != null && tag != null)
-            {
-                OnInputSelected(tag);
-            }
-        }
-
-        private void Btn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                OpenInput(sender);
-            }
-        }
-
-        private void Btn_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-            var tag = element == null ? "" : element.Tag as string;
-
-            // Open Context menu
-            if (OnInputRightClick != null && tag != null)
-            {
-                OnInputRightClick(tag);
-            }
-        }
-
-        private void OpenContextMenu(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-
-            if (element != null && element.ContextMenu != null)
-            {
-                element.ContextMenu.IsOpen = true;
-            }
-        }
     }
 }

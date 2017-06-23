@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Shared;
 using NintrollerLib;
 
@@ -20,13 +10,10 @@ namespace WiinUPro
     /// <summary>
     /// Interaction logic for ProControl.xaml
     /// </summary>
-    public partial class ProControl : UserControl, INintyControl
+    public partial class ProControl : BaseControl, INintyControl
     {
         public event Delegates.BoolArrDel OnChangeLEDs;
-        public event Delegates.StringDel OnInputSelected;
-        public event Delegates.StringDel OnInputRightClick;
         public event Delegates.JoystickeDel OnJoyCalibrated;
-        public event AssignmentCollection.AssignDelegate OnQuickAssign;
         public ProController CurrentCalibration;
 
         protected Windows.JoyCalibrationWindow _openJoyWindow = null;
@@ -129,8 +116,7 @@ namespace WiinUPro
             defaults.Add(INPUT_NAMES.PRO_CONTROLLER.SELECT, new AssignmentCollection(new List<IAssignment> { new XInputButtonAssignment(ScpControl.X360Button.Back) }));
             defaults.Add(INPUT_NAMES.PRO_CONTROLLER.HOME, new AssignmentCollection(new List<IAssignment> { new XInputButtonAssignment(ScpControl.X360Button.Guide) }));
 
-            if (OnQuickAssign != null)
-                OnQuickAssign(defaults);
+            CallEvent_OnQuickAssign(defaults);
         }
 
         private void led_MouseUp(object sender, MouseButtonEventArgs e)
@@ -179,57 +165,9 @@ namespace WiinUPro
                 args.Add(prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_RIGHT) }));
             }
 
-            if (OnQuickAssign != null)
-                OnQuickAssign(args);
+            CallEvent_OnQuickAssign(args);
         }
-
-        private void OpenInput(object sender)
-        {
-            var element = sender as FrameworkElement;
-            var tag = element == null ? "" : element.Tag as string;
-
-            // Open input assignment window
-            if (OnInputSelected != null && tag != null)
-            {
-                OnInputSelected(tag);
-            }
-        }
-
-        private void Btn_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                OpenInput(sender);
-            }
-        }
-
-        private void Btn_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-            var tag = element == null ? "" : element.Tag as string;
-
-            // Open Context menu
-            if (OnInputRightClick != null && tag != null)
-            {
-                OnInputRightClick(tag);
-            }
-        }
-
-        private void OpenContextMenu(object sender, MouseButtonEventArgs e)
-        {
-            var element = sender as FrameworkElement;
-
-            if (element != null && element.ContextMenu != null)
-            {
-                element.ContextMenu.IsOpen = true;
-            }
-        }
-
-        private void Axis_Click(object sender, RoutedEventArgs e)
-        {
-            OpenInput(sender);
-        }
-
+        
         private void QuickAssign_Click(object sender, RoutedEventArgs e)
         {
             var item = sender as MenuItem;

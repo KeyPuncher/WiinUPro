@@ -594,13 +594,9 @@ namespace WiinUPro
         #endregion
     }
 
-    public interface INintyControl
+    public interface INintyControl : IBaseControol
     {
         event Shared.Delegates.BoolArrDel OnChangeLEDs;
-        event Shared.Delegates.StringDel OnInputSelected;
-        event Shared.Delegates.StringDel OnInputRightClick;
-        event AssignmentCollection.AssignDelegate OnQuickAssign;
-
         void ApplyInput(INintrollerState state); // TOOD: I have forgotten what I want to use this for
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);
