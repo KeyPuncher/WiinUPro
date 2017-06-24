@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Xml.Serialization;
 using SharpDX.DirectInput;
 
 namespace WiinUPro
@@ -256,7 +250,10 @@ namespace WiinUPro
         {
             if (associatedJoyCon != null)
             {
+                _stack.Children.Remove((UserControl)associatedJoyCon.Control);
+                associatedJoyCon._stack.Children.Add((UserControl)associatedJoyCon.Control);
                 associatedJoyCon.Disconnect();
+                associatedJoyCon = null;
             }
 
             _readCancel?.Cancel();
@@ -416,12 +413,95 @@ namespace WiinUPro
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            
+            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.FileName = Type.ToString() + "_profile";
+            dialog.DefaultExt = ".wup";
+            dialog.Filter = App.PROFILE_FILTER;
+
+            if (associatedJoyCon != null)
+            {
+                dialog.FileName = "Joy-Cons_profile";
+            }
+
+            bool? doSave = dialog.ShowDialog();
+
+            if (doSave == true)
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
+
+                using (FileStream stream = File.Create(dialog.FileName))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    var profile = new AssignmentProfile(_assignments);
+
+                    if (associatedJoyCon != null)
+                    {
+                        profile.SubProfile = new AssignmentProfile(associatedJoyCon._assignments);
+                        profile.SubName = associatedJoyCon.Type.ToString();
+                    }
+
+                    serializer.Serialize(writer, profile);
+                    writer.Close();
+                    stream.Close();
+                }
+            }
         }
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.FileName = Type.ToString() + "_profile";
+            dialog.DefaultExt = ".wup";
+            dialog.Filter = App.PROFILE_FILTER;
+
+            if (associatedJoyCon != null)
+            {
+                dialog.FileName = "Joy-Cons_profile";
+            }
+
+            bool? doLoad = dialog.ShowDialog();
+            AssignmentProfile loadedProfile = null;
+
+            if (doLoad == true && dialog.CheckFileExists)
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
+
+                    using (FileStream stream = File.OpenRead(dialog.FileName))
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        loadedProfile = serializer.Deserialize(reader) as AssignmentProfile;
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
+                catch (Exception err)
+                {
+                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                if (loadedProfile != null)
+                {
+                    if (loadedProfile.SubName == Type.ToString())
+                    {
+                        _assignments = loadedProfile.SubProfile.ToAssignmentArray();
+                    }
+                    else
+                    {
+                        _assignments = loadedProfile.ToAssignmentArray();
+                    }
+
+                    if (associatedJoyCon != null && loadedProfile.SubName == associatedJoyCon.Type.ToString())
+                    {
+                        associatedJoyCon._assignments = loadedProfile.SubProfile.ToAssignmentArray();
+                    }
+                    else if (associatedJoyCon != null)
+                    {
+                        associatedJoyCon._assignments = loadedProfile.ToAssignmentArray();
+                    }
+                }
+            }
         }
 
         private void btnAddRumble_Click(object sender, RoutedEventArgs e)

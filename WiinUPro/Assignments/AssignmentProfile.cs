@@ -11,6 +11,8 @@ namespace WiinUPro
         public List<AssignmentPair> RedAssignments;
         public List<AssignmentPair> BlueAssignments;
         public List<AssignmentPair> GreenAssignments;
+        public AssignmentProfile SubProfile;
+        public string SubName;
 
         public AssignmentProfile()
         {
