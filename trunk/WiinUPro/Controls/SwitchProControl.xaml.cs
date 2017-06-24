@@ -21,10 +21,6 @@ namespace WiinUPro
     /// </summary>
     public partial class SwitchProControl : BaseControl, IJoyControl
     {
-        public event Delegates.StringDel OnInputRightClick;
-        public event Delegates.StringDel OnInputSelected;
-        public event AssignmentCollection.AssignDelegate OnQuickAssign;
-
         public Guid AssociatedInstanceID { get; set; }
 
         public SwitchProControl()
