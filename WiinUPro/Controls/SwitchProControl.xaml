@@ -41,14 +41,20 @@
                             <MenuItem Header="Right" Tag="X+" Click="Axis_Click"/>
                             <MenuItem Header="Down" Tag="Y-" Click="Axis_Click"/>
                             <MenuItem Header="Stick Click" Tag="Buttons10" Click="Axis_Click"/>
-                            <!--
                             <Separator/>
                             <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse" Tag="proR" Click="QuickAssign_Click"/>
-                                <MenuItem Header="WASD" Tag="proR" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="proR" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Mouse">
+                                    <MenuItem Header="50% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="100% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="150% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="200% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="250% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="300% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
+                                </MenuItem>
+                                <MenuItem Header="WASD" Tag="swpL" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Arrows" Tag="swpL" Click="QuickAssign_Click"/>
                             </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="Joy" Click="Calibrate_Click"/>-->
+                            <MenuItem Header="Calibrate" Tag="swpL" Click="CalibrateJoystick_Click"/>
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>
@@ -61,14 +67,20 @@
                             <MenuItem Header="Right" Tag="RotationX+" Click="Axis_Click"/>
                             <MenuItem Header="Down" Tag="RotationY-" Click="Axis_Click"/>
                             <MenuItem Header="Stick Click" Tag="Buttons11" Click="Axis_Click"/>
-                            <!--
                             <Separator/>
                             <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse" Tag="proR" Click="QuickAssign_Click"/>
-                                <MenuItem Header="WASD" Tag="proR" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="proR" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Mouse">
+                                    <MenuItem Header="50% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="100% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="150% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="200% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="250% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="300% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
+                                </MenuItem>
+                                <MenuItem Header="WASD" Tag="swpR" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Arrows" Tag="swpR" Click="QuickAssign_Click"/>
                             </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="Joy" Click="Calibrate_Click"/>-->
+                            <MenuItem Header="Calibrate" Tag="swpR" Click="CalibrateJoystick_Click"/>
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>
