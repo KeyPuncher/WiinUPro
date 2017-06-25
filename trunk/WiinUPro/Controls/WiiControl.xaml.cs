@@ -20,6 +20,11 @@ namespace WiinUPro
         public event Delegates.BoolArrDel OnChangeLEDs;
         public event Action<IRCamMode> OnChangeCameraMode;
         public event Action<IRCamSensitivity> OnChangeCameraSensitivty;
+        public event Delegates.JoystickDel OnJoystickCalibrated;
+
+        protected string _calibrationTarget;
+        protected Windows.JoyCalibrationWindow _openJoyWindow;
+        protected INintrollerState _lastState;
 
         public void ApplyInput(INintrollerState state)
         {
@@ -28,6 +33,7 @@ namespace WiinUPro
 
         public void UpdateVisual(INintrollerState state)
         {
+            _lastState = state;
             if (state is Wiimote)
             {
                 if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
@@ -44,6 +50,11 @@ namespace WiinUPro
 
                 var nun = (Nunchuk)state;
                 UpdateWiimoteVisual(nun.wiimote);
+
+                if (_openJoyWindow != null && _calibrationTarget == "nJoy")
+                {
+                    _openJoyWindow.Update(nun.joystick);
+                }
             }
             else if (state is ClassicController)
             {
@@ -73,6 +84,12 @@ namespace WiinUPro
                 ccR.Opacity         = cc.R.value > 0 ? 1 : 0;
                 ccLeftStick.Margin  = new Thickness(208 + 30 * cc.LJoy.X, 210 - 30 * cc.LJoy.Y, 0, 0);
                 ccRightStick.Margin = new Thickness(364 + 30 * cc.RJoy.X, 210 - 30 * cc.RJoy.Y, 0, 0);
+
+                if (_openJoyWindow != null && _calibrationTarget.StartsWith("cc"))
+                {
+                    if (_calibrationTarget == "ccJoyL") _openJoyWindow.Update(cc.LJoy);
+                    else if (_calibrationTarget == "ccJoyR") _openJoyWindow.Update(cc.RJoy);
+                }
             }
             else if (state is ClassicControllerPro)
             {
@@ -101,6 +118,12 @@ namespace WiinUPro
                 ccpBtnR.Opacity      = ccp.R ? 1 : 0;
                 ccpLeftStick.Margin  = new Thickness(255 + 30 * ccp.LJoy.X, 279 - 30 * ccp.LJoy.Y, 0, 0);
                 ccpRightStick.Margin = new Thickness(485 + 30 * ccp.RJoy.X, 279 - 30 * ccp.RJoy.Y, 0, 0);
+
+                if (_openJoyWindow != null && _calibrationTarget.StartsWith("ccp"))
+                {
+                    if (_calibrationTarget == "ccpJoyL") _openJoyWindow.Update(ccp.LJoy);
+                    else if (_calibrationTarget == "ccpJoyR") _openJoyWindow.Update(ccp.RJoy);
+                }
             }
         }
 
@@ -316,6 +339,48 @@ namespace WiinUPro
                     }
                 }
             }
+        }
+
+        private void CalibrateJoystick_Click(object sender, RoutedEventArgs e)
+        {
+            _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
+
+            Joystick nonCalibrated = new Joystick();
+            Joystick curCalibration = new Joystick();
+            switch (_calibrationTarget)
+            {
+                case "nJoy":
+                    nonCalibrated = Calibrations.None.NunchukRaw.joystick;
+                    if (_lastState is Nunchuk) curCalibration = ((Nunchuk)_lastState).joystick;
+                    break;
+                case "ccJoyL":
+                    nonCalibrated = Calibrations.None.ClassicControllerRaw.LJoy;
+                    if (_lastState is ClassicController) curCalibration = ((ClassicController)_lastState).LJoy;
+                    break;
+                case "ccJoyR":
+                    nonCalibrated = Calibrations.None.ClassicControllerRaw.RJoy;
+                    if (_lastState is ClassicController) curCalibration = ((ClassicController)_lastState).RJoy;
+                    break;
+                case "ccpJoyL": nonCalibrated = Calibrations.None.ClassicControllerProRaw.LJoy;
+                    if (_lastState is ClassicControllerPro) curCalibration = ((ClassicControllerPro)_lastState).LJoy;
+                    break;
+                case "ccpJoyR":
+                    nonCalibrated = Calibrations.None.ClassicControllerProRaw.RJoy;
+                    if (_lastState is ClassicControllerPro) curCalibration = ((ClassicControllerPro)_lastState).RJoy;
+                    break;
+                default: return;
+            }
+
+            Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(nonCalibrated, curCalibration);
+            _openJoyWindow = joyCal;
+            joyCal.ShowDialog();
+
+            if (joyCal.Apply)
+            {
+                OnJoystickCalibrated?.Invoke(joyCal.Calibration, _calibrationTarget);
+            }
+
+            _openJoyWindow = null;
         }
     }
 }

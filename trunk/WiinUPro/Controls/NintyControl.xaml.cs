@@ -181,6 +181,10 @@ namespace WiinUPro
                 _controller.OnInputRightClick -= InputOpenMenu;
                 _controller.OnQuickAssign -= QuickAssignment;
                 _controller.OnRemoveInputs -= RemoveAssignments;
+
+                if (_controller is WiiControl)
+                    ((WiiControl)_controller).OnJoystickCalibrated -= _nintroller_JoystickCalibrated;
+
                 _setup = false;
             }
 
@@ -203,7 +207,7 @@ namespace WiinUPro
             switch (type)
             {
                 case ControllerType.ProController:
-                    // TODO: Discover why this causes an access violation exceptions
+                    // TODO: Discover why this sometimes causes an access violation exceptions
                     // TODO: Load saved calibration
                     _controller = new ProControl(Calibrations.Defaults.ProControllerDefault);
                     ((ProControl)_controller).OnJoyCalibrated += (j, rJoy) =>
@@ -238,6 +242,7 @@ namespace WiinUPro
                     {
                         _nintroller.IRSensitivity = sen;
                     };
+                    ((WiiControl)_controller).OnJoystickCalibrated += _nintroller_JoystickCalibrated;
                     break;
             }
         }
@@ -331,6 +336,34 @@ namespace WiinUPro
                     _controller.UpdateVisual(e.state);
                 }
             }));
+        }
+
+        private void _nintroller_JoystickCalibrated(Joystick calibration, string target)
+        {
+            switch (target)
+            {
+                case "nJoy":
+                    var nCal = _nintroller.StoredCalibrations.NunchukCalibration;
+                    nCal.joystick = calibration;
+                    _nintroller.SetCalibration(nCal);
+                    break;
+
+                case "ccJoyL":
+                case "ccJoyR":
+                    var ccCal = _nintroller.StoredCalibrations.ClassicCalibration;
+                    if (target.EndsWith("L")) ccCal.LJoy = calibration;
+                    else ccCal.RJoy = calibration;
+                    _nintroller.SetCalibration(ccCal);
+                    break;
+
+                case "ccpJoyL":
+                case "ccpJoyR":
+                    var ccpCal = _nintroller.StoredCalibrations.ClassicProCalibration;
+                    if (target.EndsWith("L")) ccpCal.LJoy = calibration;
+                    else ccpCal.RJoy = calibration;
+                    _nintroller.SetCalibration(ccpCal);
+                    break;
+            }
         }
         #endregion
 

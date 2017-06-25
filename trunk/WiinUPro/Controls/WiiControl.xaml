@@ -125,9 +125,7 @@
                                     <MenuItem Header="WASD" Tag="ccL" Click="QuickAssign_Click"/>
                                     <MenuItem Header="Arrows" Tag="ccL" Click="QuickAssign_Click"/>
                                 </MenuItem>
-                                <!--
-                                <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
-                                -->
+                                <MenuItem Header="Calibrate" Tag="ccJoyL" Click="CalibrateJoystick_Click"/>
                             </ContextMenu>
                         </Image.ContextMenu>
                     </Image>
@@ -151,9 +149,7 @@
                                     <MenuItem Header="WASD" Tag="ccR" Click="QuickAssign_Click"/>
                                     <MenuItem Header="Arrows" Tag="ccR" Click="QuickAssign_Click"/>
                                 </MenuItem>
-                                <!--
-                                <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
-                                -->
+                                <MenuItem Header="Calibrate" Tag="ccJoyR" Click="CalibrateJoystick_Click"/>
                             </ContextMenu>
                         </Image.ContextMenu>
                     </Image>
@@ -203,9 +199,7 @@
                                     <MenuItem Header="WASD" Tag="ccpL" Click="QuickAssign_Click"/>
                                     <MenuItem Header="Arrows" Tag="ccpL" Click="QuickAssign_Click"/>
                                 </MenuItem>
-                                <!-- 
-                                <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
-                                -->
+                                <MenuItem Header="Calibrate" Tag="ccpJoyL" Click="CalibrateJoystick_Click"/>
                             </ContextMenu>
                         </Image.ContextMenu>
                     </Image>
@@ -229,9 +223,7 @@
                                     <MenuItem Header="WASD" Tag="ccpR" Click="QuickAssign_Click"/>
                                     <MenuItem Header="Arrows" Tag="ccpR" Click="QuickAssign_Click"/>
                                 </MenuItem>
-                                <!--
-                                <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
-                                -->
+                                <MenuItem Header="Calibrate" Tag="ccpJoyR" Click="CalibrateJoystick_Click"/>
                             </ContextMenu>
                         </Image.ContextMenu>
                     </Image>
