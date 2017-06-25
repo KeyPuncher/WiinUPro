@@ -489,6 +489,9 @@
   <ItemGroup>
     <Resource Include="Images\Controllers\SwitchPro\SwitchPro-base.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\joystick_icon.png" />
+  </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
