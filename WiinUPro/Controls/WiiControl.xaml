@@ -27,7 +27,7 @@
                     <Image x:Name="wBtnTwo" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmTwo.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="66,555,0,0" Width="36" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wTWO" />
                     <Image x:Name="wBtnB" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmB.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="251,108,0,0" Width="66" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wB" />
                     <!-- IR Sensor -->
-                    <Canvas HorizontalAlignment="Left"  Margin="433,11,0,0" VerticalAlignment="Top" Width="100" Height="100" MouseLeftButtonUp="OpenContextMenu">
+                    <Canvas x:Name="irCanvas" Background="Transparent" HorizontalAlignment="Left"  Margin="433,11,0,0" VerticalAlignment="Top" Width="100" Height="100" MouseLeftButtonUp="OpenContextMenu">
                         <Ellipse x:Name="irPoint1" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
                         <Ellipse x:Name="irPoint2" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
                         <Ellipse x:Name="irPoint3" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
@@ -41,12 +41,32 @@
                                 <Separator/>
                                 <MenuItem Header="Quick Assign">
                                     <MenuItem Header="Mouse">
-                                        <MenuItem Header="Absolute Position" Tag="wIR" Click="QuickAssign_Click"/>
+                                        <MenuItem Header="Absolute Position" Tag="wIR" Click="QuickAssignMouseAbsolute_Click"/>
+                                        <MenuItem Header="50% Speed" Tag="wIR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="100% Speed" Tag="wIR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="150% Speed" Tag="wIR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="200% Speed" Tag="wIR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="250% Speed" Tag="wIR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="300% Speed" Tag="wIR" Click="QuickAssignMouse_Click" />
                                     </MenuItem>
                                     <MenuItem Header="WASD" Tag="wIR" Click="QuickAssign_Click"/>
                                     <MenuItem Header="Arrows" Tag="wIR" Click="QuickAssign_Click"/>
                                 </MenuItem>
                                 <!--<MenuItem Header="Calibrate" Tag="IR" Click="Calibrate_Click"/>-->
+                                <Separator/>
+                                <MenuItem Header="Set IR Mode">
+                                    <MenuItem Header="Basic" Click="SetIRMode"/>
+                                    <MenuItem Header="Wide" Click="SetIRMode"/>
+                                    <MenuItem Header="Full" Click="SetIRMode"/>
+                                    <MenuItem Header="Off" Click="SetIRMode"/>
+                                </MenuItem>
+                                <MenuItem Header="Set IR Sensitivity">
+                                    <MenuItem Header="Level 1" Click="SetIRSensitivity"/>
+                                    <MenuItem Header="Level 2" Click="SetIRSensitivity"/>
+                                    <MenuItem Header="Level 3" Click="SetIRSensitivity"/>
+                                    <MenuItem Header="Level 4" Click="SetIRSensitivity"/>
+                                    <MenuItem Header="Level 5" Click="SetIRSensitivity"/>
+                                </MenuItem>
                             </ContextMenu>
                         </Canvas.ContextMenu>
                     </Canvas>

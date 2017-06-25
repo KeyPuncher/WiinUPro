@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using NintrollerLib;
@@ -17,6 +18,8 @@ namespace WiinUPro
         }
 
         public event Delegates.BoolArrDel OnChangeLEDs;
+        public event Action<IRCamMode> OnChangeCameraMode;
+        public event Action<IRCamSensitivity> OnChangeCameraSensitivty;
 
         public void ApplyInput(INintrollerState state)
         {
@@ -212,6 +215,107 @@ namespace WiinUPro
             wBtnPlus.Opacity  = wiimote.buttons.Plus ? 1 : 0;
             wBtnHome.Opacity  = wiimote.buttons.Home ? 1 : 0;
             wCenterPad.Opacity = wiimote.buttons.Up || wiimote.buttons.Down || wiimote.buttons.Left || wiimote.buttons.Right ? 1 : 0;
-       }
+
+            irPoint1.Visibility = wiimote.irSensor.point1.visible ? Visibility.Visible : Visibility.Collapsed;
+            irPoint2.Visibility = wiimote.irSensor.point2.visible ? Visibility.Visible : Visibility.Collapsed;
+            irPoint3.Visibility = wiimote.irSensor.point3.visible ? Visibility.Visible : Visibility.Collapsed;
+            irPoint4.Visibility = wiimote.irSensor.point4.visible ? Visibility.Visible : Visibility.Collapsed;
+
+            if (wiimote.irSensor.point1.visible)
+            {
+                Canvas.SetLeft(irPoint1, wiimote.irSensor.point1.rawX / 1023f * irCanvas.Width);
+                Canvas.SetTop(irPoint1, wiimote.irSensor.point1.rawY / 1023f * irCanvas.Height);
+            }
+            if (wiimote.irSensor.point2.visible)
+            {
+                Canvas.SetLeft(irPoint2, wiimote.irSensor.point2.rawX / 1023f * irCanvas.Width);
+                Canvas.SetTop(irPoint2, wiimote.irSensor.point2.rawY / 1023f * irCanvas.Height);
+            }
+            if (wiimote.irSensor.point3.visible)
+            {
+                Canvas.SetLeft(irPoint3, wiimote.irSensor.point3.rawX / 1023f * irCanvas.Width);
+                Canvas.SetTop(irPoint3, wiimote.irSensor.point3.rawY / 1023f * irCanvas.Height);
+            }
+            if (wiimote.irSensor.point4.visible)
+            {
+                Canvas.SetLeft(irPoint4, wiimote.irSensor.point4.rawX / 1023f * irCanvas.Width);
+                Canvas.SetTop(irPoint4, wiimote.irSensor.point4.rawY / 1023f * irCanvas.Height);
+            }
+        }
+
+        protected override void CallEvent_OnQuickAssign(Dictionary<string, AssignmentCollection> collection)
+        {
+            // If we are quick assigning IR input, remove any conflixing assignment first
+            bool doRemove = false;
+            foreach (var key in collection.Keys)
+            {
+                if (key.StartsWith("wIR"))
+                {
+                    doRemove = true;
+                    break;
+                }
+            }
+
+            if (doRemove)
+            {
+                CallEvent_OnRemoveInputs(new string[] 
+                {
+                    INPUT_NAMES.WIIMOTE.IR_X,
+                    INPUT_NAMES.WIIMOTE.IR_Y,
+                    INPUT_NAMES.WIIMOTE.IR_UP,
+                    INPUT_NAMES.WIIMOTE.IR_DOWN,
+                    INPUT_NAMES.WIIMOTE.IR_LEFT,
+                    INPUT_NAMES.WIIMOTE.IR_RIGHT
+                });
+            }
+
+            base.CallEvent_OnQuickAssign(collection);
+        }
+
+        private void QuickAssignMouseAbsolute_Click(object sender, RoutedEventArgs e)
+        {
+            Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
+            args.Add(INPUT_NAMES.WIIMOTE.IR_X, new AssignmentCollection(new List<IAssignment> { new MouseAbsoluteAssignment(MousePosition.X) }));
+            args.Add(INPUT_NAMES.WIIMOTE.IR_Y, new AssignmentCollection(new List<IAssignment> { new MouseAbsoluteAssignment(MousePosition.Y) }));
+            CallEvent_OnQuickAssign(args);
+        }
+
+        private void SetIRMode(object sender, RoutedEventArgs e)
+        {
+            var item = sender as MenuItem;
+
+            if (item != null)
+            {
+                var header = item.Header as string;
+
+                if (header != null)
+                {
+                    IRCamMode camMode = IRCamMode.Off;
+                    if (Enum.TryParse(header, out camMode))
+                    {
+                        OnChangeCameraMode?.Invoke(camMode);
+                    }
+                }
+            }
+        }
+
+        private void SetIRSensitivity(object sender, RoutedEventArgs e)
+        {
+            var item = sender as MenuItem;
+
+            if (item != null)
+            {
+                var header = item.Header as string;
+
+                if (header != null)
+                {
+                    IRCamSensitivity camSen = IRCamSensitivity.Level3;
+                    if (Enum.TryParse(header.Replace(" ", ""), out camSen))
+                    {
+                        OnChangeCameraSensitivty?.Invoke(camSen);
+                    }
+                }
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@ namespace WiinUPro
         internal Dictionary<string, AssignmentCollection>[] _assignments;
 
         private bool[] _rumbleSubscriptions = new bool[4];
+        private bool _setup;
 
         // For Testing
         internal Shared.DummyDevice _dummy;
@@ -173,6 +174,16 @@ namespace WiinUPro
             if (_dummy != null)
                 _dummy.Close();
 
+            if (_controller != null && _setup)
+            {
+                _controller.OnChangeLEDs -= SetLeds;
+                _controller.OnInputSelected -= InputSelected;
+                _controller.OnInputRightClick -= InputOpenMenu;
+                _controller.OnQuickAssign -= QuickAssignment;
+                _controller.OnRemoveInputs -= RemoveAssignments;
+                _setup = false;
+            }
+
             _view.Child = null;
             _controller = null;
 
@@ -219,19 +230,29 @@ namespace WiinUPro
                 case ControllerType.ClassicController:
                 case ControllerType.ClassicControllerPro:
                     _controller = new WiiControl();
+                    ((WiiControl)_controller).OnChangeCameraMode += (mode) =>
+                    {
+                        _nintroller.IRMode = mode;
+                    };
+                    ((WiiControl)_controller).OnChangeCameraSensitivty += (sen) =>
+                    {
+                        _nintroller.IRSensitivity = sen;
+                    };
                     break;
             }
         }
 
         private void SetupController()
         {
-            if (_controller != null)
+            if (_controller != null && !_setup)
             {
                 _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
                 _controller.OnChangeLEDs += SetLeds;
                 _controller.OnInputSelected += InputSelected;
                 _controller.OnInputRightClick += InputOpenMenu;
                 _controller.OnQuickAssign += QuickAssignment;
+                _controller.OnRemoveInputs += RemoveAssignments;
+                _setup = true;
 
                 _view.Child = _controller as UserControl;
                 ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
@@ -576,6 +597,15 @@ namespace WiinUPro
                 {
                     _assignments[ShiftIndex].Add(item.Key, item.Value);
                 }
+            }
+        }
+
+        private void RemoveAssignments(string[] list)
+        {
+            foreach (var item in list)
+            {
+                if (_assignments[ShiftIndex].ContainsKey(item))
+                    _assignments[ShiftIndex].Remove(item);
             }
         }
         
