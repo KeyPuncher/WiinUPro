@@ -81,19 +81,12 @@ namespace WiinUPro
                 string pid = j.ProductGuid.ToString().Substring(0, 4);
                 string vid = j.ProductGuid.ToString().Substring(4, 4);
 
-                // Nintendo Device
-                if (vid == "057e")
+                devices.Add(new Shared.DeviceInfo()
                 {
-                    // Left  Joy-Con 2006
-                    // Right Joy-Con 2007
-                    // Switch Pro Controller 2009
-                    
-                    devices.Add(new Shared.DeviceInfo()
-                    {
-                        InstanceGUID = j.InstanceGuid,
-                        PID = pid
-                    });
-                }
+                    InstanceGUID = j.InstanceGuid,
+                    PID = pid,
+                    VID = vid
+                });
             }
 
             foreach (var info in devices)

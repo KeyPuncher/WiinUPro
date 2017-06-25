@@ -62,20 +62,25 @@ namespace WiinUPro
             {
                 Joy = new JoyControl(Info);
                 Joy.OnDisconnect += Ninty_OnDisconnect;
-                if (info.PID == "2006")
+                if (info.VID == "057e" && info.PID == "2006")
                 {
                     nickname.Content = "Joy-Con (L)";
                     icon.Source = new BitmapImage(new Uri("../Images/Icons/switch_jcl_black.png", UriKind.Relative));
                 }
-                else if (info.PID == "2007")
+                else if (info.VID == "057e" && info.PID == "2007")
                 {
                     nickname.Content = "Joy-Con (R)";
                     icon.Source = new BitmapImage(new Uri("../Images/Icons/switch_jcr_black.png", UriKind.Relative));
                 }
-                else if (info.PID == "2009")
+                else if (info.VID == "057e" && info.PID == "2009")
                 {
                     nickname.Content = "Switch Pro";
                     icon.Source = new BitmapImage(new Uri("../Images/Icons/switch_pro_black.png", UriKind.Relative));
+                }
+                else
+                {
+                    nickname.Content = "Generic Joystick";
+                    // TODO: Set generic icon
                 }
             }
         }
