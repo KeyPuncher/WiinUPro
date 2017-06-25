@@ -81,6 +81,16 @@ namespace WiinUPro
                 string pid = j.ProductGuid.ToString().Substring(0, 4);
                 string vid = j.ProductGuid.ToString().Substring(4, 4);
 
+                // devices to ignore
+                if (vid == "057e" && (pid == "0330" || pid == "0306"))
+                {
+                    continue;
+                }
+                else if (vid == "1234" && pid == "bead")
+                {
+                    continue;
+                }
+
                 devices.Add(new Shared.DeviceInfo()
                 {
                     InstanceGUID = j.InstanceGuid,
