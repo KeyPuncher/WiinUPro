@@ -126,5 +126,103 @@ namespace WiinUPro
                 }
             }
         }
+
+        protected override void QuickAssign(string prefix, string type)
+        {
+            string[] dir = new string[4];
+
+            if (prefix == "swpR")
+            {
+                dir[0] = "Y+";
+                dir[1] = "Y-";
+                dir[2] = "X-";
+                dir[4] = "X+";
+            }
+            else
+            {
+                dir[0] = "RotationY+";
+                dir[1] = "RotationY-";
+                dir[2] = "RotationX-";
+                dir[4] = "RotationX+";
+            }
+
+            Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
+
+            if (type == "Mouse")
+            {
+                args.Add(dir[0], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp) }));
+                args.Add(dir[1], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown) }));
+                args.Add(dir[2], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft) }));
+                args.Add(dir[4], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight) }));
+            }
+            else if (type == "WASD")
+            {
+                args.Add(dir[0], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_W) }));
+                args.Add(dir[1], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_S) }));
+                args.Add(dir[2], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_A) }));
+                args.Add(dir[4], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_D) }));
+            }
+            else if (type == "Arrows")
+            {
+                args.Add(dir[0], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_UP) }));
+                args.Add(dir[1], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_DOWN) }));
+                args.Add(dir[2], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_LEFT) }));
+                args.Add(dir[4], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_RIGHT) }));
+            }
+
+            CallEvent_OnQuickAssign(args);
+        }
+
+        protected override void QuickAssignMouse_Click(object sender, RoutedEventArgs e)
+        {
+            var item = sender as MenuItem;
+
+            if (item != null)
+            {
+                var header = item.Header as string;
+                var prefix = item.Tag as string;
+
+                if (header != null && prefix != null)
+                {
+                    float speed = 1f;
+                    switch (header)
+                    {
+                        case "50% Speed": speed = 0.5f; break;
+                        case "150% Speed": speed = 1.5f; break;
+                        case "200% Speed": speed = 2.0f; break;
+                        case "250% Speed": speed = 2.5f; break;
+                        case "300% Speed": speed = 3.0f; break;
+                        case "100% Speed":
+                        default:
+                            speed = 1f;
+                            break;
+                    }
+
+                    string[] dir = new string[4];
+
+                    if (prefix == "swpR")
+                    {
+                        dir[0] = "Y+";
+                        dir[1] = "Y-";
+                        dir[2] = "X-";
+                        dir[4] = "X+";
+                    }
+                    else
+                    {
+                        dir[0] = "RotationY+";
+                        dir[1] = "RotationY-";
+                        dir[2] = "RotationX-";
+                        dir[4] = "RotationX+";
+                    }
+
+                    Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
+                    args.Add(dir[0], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp, speed) }));
+                    args.Add(dir[1], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown, speed) }));
+                    args.Add(dir[2], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft, speed) }));
+                    args.Add(dir[3], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight, speed) }));
+                    CallEvent_OnQuickAssign(args);
+                }
+            }
+        }
     }
 }
