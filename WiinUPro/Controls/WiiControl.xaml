@@ -26,6 +26,30 @@
                     <Image x:Name="wBtnOne" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmOne.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="66,494,0,0" Width="36" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wONE" />
                     <Image x:Name="wBtnTwo" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmTwo.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="66,555,0,0" Width="36" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wTWO" />
                     <Image x:Name="wBtnB" Source="/WiinUPro;component/Images/Controllers/Wiimote/wmB.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="251,108,0,0" Width="66" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="wB" />
+                    <!-- IR Sensor -->
+                    <Canvas HorizontalAlignment="Left"  Margin="433,11,0,0" VerticalAlignment="Top" Width="100" Height="100" MouseLeftButtonUp="OpenContextMenu">
+                        <Ellipse x:Name="irPoint1" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
+                        <Ellipse x:Name="irPoint2" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
+                        <Ellipse x:Name="irPoint3" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
+                        <Ellipse x:Name="irPoint4" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
+                        <Canvas.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Up" Tag="wIRUP" Click="OpenInput"/>
+                                <MenuItem Header="Left" Tag="wIRLEFT" Click="OpenInput"/>
+                                <MenuItem Header="Right" Tag="wIRRIGHT" Click="OpenInput"/>
+                                <MenuItem Header="Down" Tag="wIRDOWN" Click="OpenInput"/>
+                                <Separator/>
+                                <MenuItem Header="Quick Assign">
+                                    <MenuItem Header="Mouse">
+                                        <MenuItem Header="Absolute Position" Tag="wIR" Click="QuickAssign_Click"/>
+                                    </MenuItem>
+                                    <MenuItem Header="WASD" Tag="wIR" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="wIR" Click="QuickAssign_Click"/>
+                                </MenuItem>
+                                <!--<MenuItem Header="Calibrate" Tag="IR" Click="Calibrate_Click"/>-->
+                            </ContextMenu>
+                        </Canvas.ContextMenu>
+                    </Canvas>
                 </Grid>
             </Canvas>
         </Viewbox>
@@ -69,12 +93,19 @@
                                 <MenuItem Header="Right" Tag="ccLRIGHT" Click="OpenInput"/>
                                 <MenuItem Header="Down" Tag="ccLDOWN" Click="OpenInput"/>
                                 <Separator/>
-                                <!-- TODO: LJoy Context Menu
                                 <MenuItem Header="Quick Assign">
-                                    <MenuItem Header="Mouse" Tag="proL" Click="QuickAssign_Click"/>
-                                    <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
-                                    <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Mouse">
+                                        <MenuItem Header="50% Speed" Tag="ccL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="100% Speed" Tag="ccL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="150% Speed" Tag="ccL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="200% Speed" Tag="ccL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="250% Speed" Tag="ccL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="300% Speed" Tag="ccL" Click="QuickAssignMouse_Click" />
+                                    </MenuItem>
+                                    <MenuItem Header="WASD" Tag="ccL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="ccL" Click="QuickAssign_Click"/>
                                 </MenuItem>
+                                <!--
                                 <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
                                 -->
                             </ContextMenu>
@@ -88,12 +119,19 @@
                                 <MenuItem Header="Right" Tag="ccRRIGHT" Click="OpenInput"/>
                                 <MenuItem Header="Down" Tag="ccRDOWN" Click="OpenInput"/>
                                 <Separator/>
-                                <!-- TODO: LJoy Context Menu
                                 <MenuItem Header="Quick Assign">
-                                    <MenuItem Header="Mouse" Tag="proL" Click="QuickAssign_Click"/>
-                                    <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
-                                    <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Mouse">
+                                        <MenuItem Header="50% Speed" Tag="ccR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="100% Speed" Tag="ccR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="150% Speed" Tag="ccR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="200% Speed" Tag="ccR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="250% Speed" Tag="ccR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="300% Speed" Tag="ccR" Click="QuickAssignMouse_Click" />
+                                    </MenuItem>
+                                    <MenuItem Header="WASD" Tag="ccR" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="ccR" Click="QuickAssign_Click"/>
                                 </MenuItem>
+                                <!--
                                 <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
                                 -->
                             </ContextMenu>
@@ -133,12 +171,19 @@
                                 <MenuItem Header="Right" Tag="ccpLRIGHT" Click="OpenInput"/>
                                 <MenuItem Header="Down" Tag="ccpLDOWN" Click="OpenInput"/>
                                 <Separator/>
-                                <!-- TODO: LJoy Context Menu
                                 <MenuItem Header="Quick Assign">
-                                    <MenuItem Header="Mouse" Tag="proL" Click="QuickAssign_Click"/>
-                                    <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
-                                    <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Mouse">
+                                        <MenuItem Header="50% Speed" Tag="ccpL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="100% Speed" Tag="ccpL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="150% Speed" Tag="ccpL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="200% Speed" Tag="ccpL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="250% Speed" Tag="ccpL" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="300% Speed" Tag="ccpL" Click="QuickAssignMouse_Click" />
+                                    </MenuItem>
+                                    <MenuItem Header="WASD" Tag="ccpL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="ccpL" Click="QuickAssign_Click"/>
                                 </MenuItem>
+                                <!-- 
                                 <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
                                 -->
                             </ContextMenu>
@@ -152,12 +197,19 @@
                                 <MenuItem Header="Right" Tag="ccpRRIGHT" Click="OpenInput"/>
                                 <MenuItem Header="Down" Tag="ccpRDOWN" Click="OpenInput"/>
                                 <Separator/>
-                                <!-- TODO: LJoy Context Menu
                                 <MenuItem Header="Quick Assign">
-                                    <MenuItem Header="Mouse" Tag="proL" Click="QuickAssign_Click"/>
-                                    <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
-                                    <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Mouse">
+                                        <MenuItem Header="50% Speed" Tag="ccpR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="100% Speed" Tag="ccpR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="150% Speed" Tag="ccpR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="200% Speed" Tag="ccpR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="250% Speed" Tag="ccpR" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="300% Speed" Tag="ccpR" Click="QuickAssignMouse_Click" />
+                                    </MenuItem>
+                                    <MenuItem Header="WASD" Tag="ccpR" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="ccpR" Click="QuickAssign_Click"/>
                                 </MenuItem>
+                                <!--
                                 <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
                                 -->
                             </ContextMenu>

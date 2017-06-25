@@ -305,7 +305,7 @@ namespace WiinUPro
             // Visaul should only be updated if tab is in view
             Dispatcher.Invoke(new Action(() =>
             {
-                if (_controller != null)
+                if (_controller != null && MainWindow.CurrentTab == this)
                 {
                     _controller.UpdateVisual(e.state);
                 }
