@@ -21,10 +21,10 @@ namespace WiinUPro
     /// </summary>
     public partial class InputsWindow : Window
     {
+        static int lastSelectedTab = 0;
+
         public AssignmentCollection Result { get; protected set; }
         public bool Apply { get; protected set; }
-        public SolidColorBrush keySelectedBrush;
-        public SolidColorBrush keyDeselectedBrush;
         public Style keyStyle;
         public Style keySelectedStyle;
 
@@ -45,8 +45,6 @@ namespace WiinUPro
         {
             InitializeComponent();
             Result = new AssignmentCollection();
-            keySelectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xBF, 0x5F, 0x0F));
-            keyDeselectedBrush = new SolidColorBrush(Color.FromArgb(0xFF, 0xCD, 0xCD, 0xCD));
 
             keyStyle = (Style)Application.Current.Resources["KeyButton"];
             keySelectedStyle = (Style)Application.Current.Resources["KeyButtonActive"];
@@ -76,6 +74,7 @@ namespace WiinUPro
         public InputsWindow(IDeviceControl control) : this()
         {
             _control = control;
+            tabControl.SelectedIndex = lastSelectedTab;
         }
 
         public InputsWindow(IDeviceControl control, AssignmentCollection collection) : this(control)
@@ -98,7 +97,6 @@ namespace WiinUPro
                     var btn = keyboardGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == key.ToString());
                     if (btn != null)
                     {
-                        //btn.Background = keySelectedBrush;
                         btn.Style = keySelectedStyle;
                         _selectedKeys.Add(key);
                     }
@@ -113,7 +111,7 @@ namespace WiinUPro
                     var btn = mouseMovGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mMov.ToString());
                     if (btn != null)
                     {
-                        btn.Background = keySelectedBrush;
+                        btn.Style = keySelectedStyle;
                         _selectedMouseDirections.Add(mMov);
                     }
 
@@ -125,7 +123,7 @@ namespace WiinUPro
                     var btn = mouseBtnGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mBtn.ToString());
                     if (btn != null)
                     {
-                        btn.Background = keySelectedBrush;
+                        btn.Style = keySelectedStyle;
                         _selectedMouseButtons.Add(mBtn);
                     }
 
@@ -139,7 +137,7 @@ namespace WiinUPro
                     var btn = mouseScrollGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mScroll.ToString());
                     if (btn != null)
                     {
-                        btn.Background = keySelectedBrush;
+                        btn.Style = keySelectedStyle;
                         _selectedMouseScroll.Add(mScroll);
                     }
 
@@ -191,7 +189,7 @@ namespace WiinUPro
                         var btn = buttonsWrap.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == vb.Button.ToString());
                         if (btn != null)
                         {
-                            btn.Background = keySelectedBrush;
+                            btn.Style = keySelectedStyle;
                             _selectedVJoyButtons.Add(vb.Button);
                         }
                     }
@@ -223,7 +221,7 @@ namespace WiinUPro
 
                                     if (Enum.TryParse((stack.Children[index] as Button).Tag.ToString(), out e))
                                 {
-                                    (stack.Children[index] as Button).Background = keySelectedBrush;
+                                    (stack.Children[index] as Button).Style = keySelectedStyle;
                                     _selectedVJoyAxes.Add(e);
                                     break;
                                 }
@@ -242,7 +240,7 @@ namespace WiinUPro
                         {
                             StackPanel stack = povStack.Children[index] as StackPanel;
                             var btn = stack.Children[(int)vp.Direction % 4 + 1] as Button;
-                            btn.Background = keySelectedBrush;
+                            btn.Style = keySelectedStyle;
                             _selectedVJoyPOVs.Add(vp.Direction);
                         }
                     }
@@ -741,6 +739,8 @@ namespace WiinUPro
             {
                 Result.Add(new RumbleAssignment(_control.AddRumble));
             }
+
+            lastSelectedTab = tabControl.SelectedIndex;
 
             // If on the Shift Tab, that is the only assignments that can be had
             if (tabControl.SelectedIndex == 4)
