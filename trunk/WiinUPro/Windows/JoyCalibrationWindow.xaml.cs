@@ -151,10 +151,10 @@ namespace WiinUPro.Windows
         {
             centerX.Value = prevCalibration.centerX - _default.centerX;
             centerY.Value = prevCalibration.centerY - _default.centerY;
-            limitXPos.Value = (int)Math.Round(prevCalibration.maxX / (double)_default.maxX * 100d);
-            limitXNeg.Value = (int)Math.Round(prevCalibration.minX / (double)_default.minX * 100d);
-            limitYPos.Value = (int)Math.Round(prevCalibration.maxY / (double)_default.maxY * 100d);
-            limitYNeg.Value = (int)Math.Round(prevCalibration.minY / (double)_default.minY * 100d);
+            limitXPos.Value = (int)Math.Round((prevCalibration.maxX - _default.centerX) / (double)(_default.maxX - _default.centerX) * 100d);
+            limitXNeg.Value = (int)Math.Round((_default.centerX - prevCalibration.minX) / (double)(_default.centerX - _default.minX) * 100d);
+            limitYPos.Value = (int)Math.Round((prevCalibration.maxY - _default.centerY) / (double)(_default.maxY - _default.centerY) * 100d);
+            limitYNeg.Value = (int)Math.Round((_default.centerY - prevCalibration.minY) / (double)(_default.centerY - _default.minY) * 100d);
             deadXPos.Value = (int)Math.Round(prevCalibration.deadXp / (double)(_default.maxX - _default.centerX) * 100d);
             deadXNeg.Value = -(int)Math.Round(prevCalibration.deadXn / (double)(_default.maxX - _default.centerX) * 100d);
             deadYPos.Value = (int)Math.Round(prevCalibration.deadYp / (double)(_default.maxY - _default.centerY) * 100d);
@@ -167,10 +167,10 @@ namespace WiinUPro.Windows
             _joystick = new Joystick();
             _joystick.centerX = _default.centerX + rawXCenter;
             _joystick.centerY = _default.centerY + rawYCenter;
-            _joystick.maxX = (int)Math.Round(_default.maxX * (limitXPos.Value / 100d));
-            _joystick.minX = (int)Math.Round(_default.minX * (limitXNeg.Value / 100d));
-            _joystick.maxY = (int)Math.Round(_default.maxY * (limitYPos.Value / 100d));
-            _joystick.minY = (int)Math.Round(_default.minY * (limitYNeg.Value / 100d));
+            _joystick.maxX = (int)Math.Round((_default.maxX - _default.centerX) * (limitXPos.Value / 100d) + _default.centerX);
+            _joystick.minX = (int)Math.Round(_default.centerX - (_default.centerX - _default.minX) * (limitXNeg.Value / 100d));
+            _joystick.maxY = (int)Math.Round((_default.maxY - _default.centerY) * (limitYPos.Value / 100d) + _default.centerY);
+            _joystick.minY = (int)Math.Round(_default.centerY - (_default.centerY - _default.minY) * (limitYNeg.Value / 100d));
             _joystick.deadXp = (int)Math.Round((_default.maxX - _default.centerX) * (deadXPos.Value / 100d));
             _joystick.deadXn = -(int)Math.Round((_default.maxX - _default.centerX) * (deadXNeg.Value / 100d));
             _joystick.deadYp = (int)Math.Round((_default.maxY - _default.centerY) * (deadYPos.Value / 100d));
