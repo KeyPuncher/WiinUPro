@@ -249,15 +249,18 @@ namespace WiinUPro
 
         private void SetupController()
         {
-            if (_controller != null && !_setup)
+            if (_controller != null)
             {
-                _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
-                _controller.OnChangeLEDs += SetLeds;
-                _controller.OnInputSelected += InputSelected;
-                _controller.OnInputRightClick += InputOpenMenu;
-                _controller.OnQuickAssign += QuickAssignment;
-                _controller.OnRemoveInputs += RemoveAssignments;
-                _setup = true;
+                if (!_setup)
+                {
+                    _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
+                    _controller.OnChangeLEDs += SetLeds;
+                    _controller.OnInputSelected += InputSelected;
+                    _controller.OnInputRightClick += InputOpenMenu;
+                    _controller.OnQuickAssign += QuickAssignment;
+                    _controller.OnRemoveInputs += RemoveAssignments;
+                    _setup = true;
+                }
 
                 _view.Child = _controller as UserControl;
                 ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
