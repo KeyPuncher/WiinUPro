@@ -109,6 +109,7 @@ namespace WiinUPro
             else if ((JoystickType)_joystick.Properties.ProductId == JoystickType.SwitchPro)
             {
                 _controller = new SwitchProControl();
+                ((SwitchProControl)_controller).OnJoystickCalibrated += SwitchProJoystickCalibrated;
             }
             else
             {
@@ -192,11 +193,45 @@ namespace WiinUPro
                     if (_assignments[ShiftIndex].ContainsKey("pov" + p.ToString() + "W")) _assignments[ShiftIndex]["pov" + p.ToString() + "W"].ApplyAll(west ? 1 : 0);
                 }
 
-                if (calibrations.ContainsKey(JoystickOffset.X)) UpdateAxis(JoystickOffset.X, _state.X);
-                if (calibrations.ContainsKey(JoystickOffset.Y)) UpdateAxis(JoystickOffset.Y, _state.Y);
+                // Link the X Axis & Y Axis together (Y is inverted)
+                if (calibrations.ContainsKey(JoystickOffset.X) && calibrations.ContainsKey(JoystickOffset.Y))
+                {
+                    var joyL = ConvertToNintyJoy(calibrations[JoystickOffset.X], calibrations[JoystickOffset.Y]);
+                    joyL.rawX = _state.X;
+                    joyL.rawY = 65535 - _state.Y;
+                    joyL.Normalize();
+
+                    if (_assignments[ShiftIndex].ContainsKey("X+")) _assignments[ShiftIndex]["X+"].ApplyAll(joyL.X > 0 ? joyL.X : 0);
+                    if (_assignments[ShiftIndex].ContainsKey("X-")) _assignments[ShiftIndex]["X-"].ApplyAll(joyL.X > 0 ? 0 : -joyL.X);
+                    if (_assignments[ShiftIndex].ContainsKey("Y+")) _assignments[ShiftIndex]["Y+"].ApplyAll(joyL.Y > 0 ? joyL.Y : 0);
+                    if (_assignments[ShiftIndex].ContainsKey("Y-")) _assignments[ShiftIndex]["Y-"].ApplyAll(joyL.Y > 0 ? 0 : -joyL.Y);
+                }
+                else
+                {
+                    if (calibrations.ContainsKey(JoystickOffset.X)) UpdateAxis(JoystickOffset.X, _state.X);
+                    if (calibrations.ContainsKey(JoystickOffset.Y)) UpdateAxis(JoystickOffset.Y, _state.Y);
+                }
+
+                // Link Rotation X & Rotation Y Axes together (Rotation Y is inverted)
+                if (calibrations.ContainsKey(JoystickOffset.RotationX) && calibrations.ContainsKey(JoystickOffset.RotationY))
+                {
+                    var joyR = ConvertToNintyJoy(calibrations[JoystickOffset.RotationX], calibrations[JoystickOffset.RotationY]);
+                    joyR.rawX = _state.RotationX;
+                    joyR.rawY = 65535 - _state.RotationY;
+                    joyR.Normalize();
+
+                    if (_assignments[ShiftIndex].ContainsKey("RotationX+")) _assignments[ShiftIndex]["RotationX+"].ApplyAll(joyR.X > 0 ? joyR.X : 0);
+                    if (_assignments[ShiftIndex].ContainsKey("RotationX-")) _assignments[ShiftIndex]["RotationX-"].ApplyAll(joyR.X > 0 ? 0 : -joyR.X);
+                    if (_assignments[ShiftIndex].ContainsKey("RotationY+")) _assignments[ShiftIndex]["RotationY+"].ApplyAll(joyR.Y > 0 ? joyR.Y : 0);
+                    if (_assignments[ShiftIndex].ContainsKey("RotationY-")) _assignments[ShiftIndex]["RotationY-"].ApplyAll(joyR.Y > 0 ? 0 : -joyR.Y);
+                }
+                else
+                {
+                    if (calibrations.ContainsKey(JoystickOffset.RotationX)) UpdateAxis(JoystickOffset.RotationX, _state.RotationX);
+                    if (calibrations.ContainsKey(JoystickOffset.RotationY)) UpdateAxis(JoystickOffset.RotationY, _state.RotationY);
+                }
+
                 if (calibrations.ContainsKey(JoystickOffset.Z)) UpdateAxis(JoystickOffset.Z, _state.Z);
-                if (calibrations.ContainsKey(JoystickOffset.RotationX)) UpdateAxis(JoystickOffset.RotationX, _state.RotationX);
-                if (calibrations.ContainsKey(JoystickOffset.RotationY)) UpdateAxis(JoystickOffset.RotationY, _state.RotationY);
                 if (calibrations.ContainsKey(JoystickOffset.RotationZ)) UpdateAxis(JoystickOffset.RotationZ, _state.RotationZ);
                 if (calibrations.ContainsKey(JoystickOffset.Sliders0)) UpdateAxis(JoystickOffset.Sliders0, _state.Sliders[0]);
                 if (calibrations.ContainsKey(JoystickOffset.Sliders1)) UpdateAxis(JoystickOffset.Sliders1, _state.Sliders[1]);
@@ -245,12 +280,12 @@ namespace WiinUPro
             _joystick.Acquire();
             
             _state = _joystick.GetCurrentState();
-            if (_state.X > 0) calibrations.Add(JoystickOffset.X, new AxisCalibration(0, 65535, 32767, 256));
-            if (_state.Y > 0) calibrations.Add(JoystickOffset.Y, new AxisCalibration(0, 65535, 32767, 256));
-            if (_state.Z > 0) calibrations.Add(JoystickOffset.Z, new AxisCalibration(0, 65535, 32767, 256));
-            if (_state.RotationX > 0) calibrations.Add(JoystickOffset.RotationX, new AxisCalibration(0, 65535, 32767, 256));
-            if (_state.RotationY > 0) calibrations.Add(JoystickOffset.RotationY, new AxisCalibration(0, 65535, 32767, 256));
-            if (_state.RotationZ > 0) calibrations.Add(JoystickOffset.RotationZ, new AxisCalibration(0, 65535, 32767, 256));
+            if (_state.X > 0) calibrations.Add(JoystickOffset.X, new AxisCalibration(0, 65535, 32767, 2048));
+            if (_state.Y > 0) calibrations.Add(JoystickOffset.Y, new AxisCalibration(0, 65535, 32767, 2048));
+            if (_state.Z > 0) calibrations.Add(JoystickOffset.Z, new AxisCalibration(0, 65535, 32767, 2048));
+            if (_state.RotationX > 0) calibrations.Add(JoystickOffset.RotationX, new AxisCalibration(0, 65535, 32767, 2048));
+            if (_state.RotationY > 0) calibrations.Add(JoystickOffset.RotationY, new AxisCalibration(0, 65535, 32767, 2048));
+            if (_state.RotationZ > 0) calibrations.Add(JoystickOffset.RotationZ, new AxisCalibration(0, 65535, 32767, 2048));
 
             _readCancel = new CancellationTokenSource();
             _readTask = Task.Factory.StartNew(PollData, _readCancel.Token);
@@ -266,6 +301,18 @@ namespace WiinUPro
                 associatedJoyCon._stack.Children.Add((UserControl)associatedJoyCon.Control);
                 associatedJoyCon.Disconnect();
                 associatedJoyCon = null;
+            }
+
+            if (_controller != null)
+            {
+                _controller.OnInputSelected -= OnInputSelected;
+                _controller.OnInputRightClick -= OnInputRightClick;
+                _controller.OnQuickAssign -= OnQuickAssign;
+
+                if (_controller is SwitchProControl)
+                {
+                    ((SwitchProControl)_controller).OnJoystickCalibrated -= SwitchProJoystickCalibrated;
+                }
             }
 
             _readCancel?.Cancel();
@@ -304,6 +351,23 @@ namespace WiinUPro
                 _assignments[ShiftIndex][key + "+"].ApplyAll(calibrations[offset].Normal(value, true));
             if (_assignments[ShiftIndex].ContainsKey(key + "-"))
                 _assignments[ShiftIndex][key + "-"].ApplyAll(calibrations[offset].Normal(value, false));
+        }
+
+        public static NintrollerLib.Joystick ConvertToNintyJoy(AxisCalibration xAxis, AxisCalibration yAxis)
+        {
+            return new NintrollerLib.Joystick
+            {
+                minX = xAxis.min,
+                minY = yAxis.min,
+                centerX = xAxis.center,
+                centerY = yAxis.center,
+                maxX = xAxis.max,
+                maxY = yAxis.max,
+                deadXn = xAxis.deadNeg,
+                deadYn = yAxis.deadNeg,
+                deadXp = xAxis.deadPos,
+                deadYp = yAxis.deadPos
+            };
         }
 
         #region Control Events
@@ -404,6 +468,27 @@ namespace WiinUPro
             else
             {
                 _assignments[(int)shift].Add(key, assignments);
+            }
+        }
+
+        private void SwitchProJoystickCalibrated(NintrollerLib.Joystick joy, bool right)
+        {
+            AxisCalibration xCalibration = new AxisCalibration(joy.minX, joy.maxX, joy.centerX, joy.deadXn, joy.deadXp);
+            AxisCalibration yCalibration = new AxisCalibration(joy.minY, joy.maxY, joy.centerY, joy.deadYn, joy.deadYp);
+
+            if (right)
+            {
+                calibrations[JoystickOffset.RotationX] = xCalibration;
+                calibrations[JoystickOffset.RotationY] = yCalibration;
+                ((SwitchProControl)_controller).rightXCalibration = xCalibration;
+                ((SwitchProControl)_controller).rightYCalibration = yCalibration;
+            }
+            else
+            {
+                calibrations[JoystickOffset.X] = xCalibration;
+                calibrations[JoystickOffset.Y] = yCalibration;
+                ((SwitchProControl)_controller).leftXCalibration = xCalibration;
+                ((SwitchProControl)_controller).leftYCalibration = yCalibration;
             }
         }
         #endregion
@@ -949,27 +1034,39 @@ namespace WiinUPro
         public int min;
         public int max;
         public int center;
-        public uint dead;
+        public int deadNeg;
+        public int deadPos;
 
-        public AxisCalibration(int min, int max, int center, uint dead)
+        public AxisCalibration(int min, int max, int center, int dead)
         {
             this.min = min;
             this.max = max;
             this.center = center;
-            this.dead = dead;
+            this.deadPos = dead;
+            this.deadNeg = -dead;
+        }
+
+        public AxisCalibration(int min, int max, int center, int deadNeg, int deadPos)
+        {
+            this.min = min;
+            this.max = max;
+            this.center = center;
+            this.deadNeg = deadNeg;
+            this.deadPos = deadPos;
         }
 
         public float Normal(int value)
         {
-            if (Math.Abs(center - value) <= dead) return 0;
-            return (center - value) / ((max - min) / 2f);
+            int v = value - center;
+            if (v >= deadNeg && v <= deadPos) return 0;
+            return v / ((max - min) / 2f);
         }
 
         public float Normal(int value, bool positive)
         {
-            int v = center - value;
+            int v = value - center;
             v *= positive ? 1 : -1;
-            if (v <= dead) return 0;
+            if (v >= deadNeg && v <= deadPos) return 0;
             return v / ((max - min) / 2f);
         }
     }

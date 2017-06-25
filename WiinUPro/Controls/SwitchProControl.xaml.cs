@@ -23,9 +23,34 @@ namespace WiinUPro
     {
         public Guid AssociatedInstanceID { get; set; }
 
+        public event Delegates.JoystickeDel OnJoystickCalibrated;
+        public AxisCalibration leftXCalibration;
+        public AxisCalibration leftYCalibration;
+        public AxisCalibration rightXCalibration;
+        public AxisCalibration rightYCalibration;
+
+        protected bool _leftCalibration;
+        protected Windows.JoyCalibrationWindow _openJoyWindow;
+        protected NintrollerLib.Joystick _calLeftJoystick;
+        protected NintrollerLib.Joystick _calRightJoystick;
+
         public SwitchProControl()
         {
             InitializeComponent();
+            _calLeftJoystick = new NintrollerLib.Joystick();
+            _calRightJoystick = new NintrollerLib.Joystick();
+            leftXCalibration = new AxisCalibration(0, 65535, 32767, 2048);
+            leftYCalibration = new AxisCalibration(0, 65535, 32767, 2048);
+            rightXCalibration = new AxisCalibration(0, 65535, 32767, 2048);
+            rightYCalibration = new AxisCalibration(0, 65535, 32767, 2048);
+        }
+
+        public SwitchProControl(AxisCalibration _leftXCal, AxisCalibration _leftYCal, AxisCalibration _rightXCal, AxisCalibration _rightYCal) : this()
+        {
+            leftXCalibration = _leftXCal;
+            leftYCalibration = _leftYCal;
+            rightXCalibration = _rightXCal;
+            rightYCalibration = _rightYCal;
         }
 
         public void UpdateVisual(JoystickUpdate[] updates)
@@ -104,26 +129,39 @@ namespace WiinUPro
                         }
                         break;
                     case JoystickOffset.X:
-                        var tmpXL = new AxisCalibration(0, 65535, 32767, 256);
-                        leftStick.Margin = new Thickness(146 + 30 * tmpXL.Normal(update.Value), leftStick.Margin.Top, 0, 0);
-                        leftStickButton.Margin = leftStick.Margin;
+                        _calLeftJoystick.rawX = update.Value;
                         break;
                     case JoystickOffset.Y:
-                        var tmpYL = new AxisCalibration(0, 65535, 32767, 256);
-                        leftStick.Margin = new Thickness(leftStick.Margin.Left, 291 + 30 * tmpYL.Normal(update.Value), 0, 0);
-                        leftStickButton.Margin = leftStick.Margin;
+                        _calLeftJoystick.rawY = 65535 - update.Value;
                         break;
                     case JoystickOffset.RotationX:
-                        var tmpXR = new AxisCalibration(0, 65535, 32767, 256);
-                        rightStick.Margin = new Thickness(507 + 30 * tmpXR.Normal(update.Value), rightStick.Margin.Top, 0, 0);
-                        rightStickButton.Margin = rightStick.Margin;
+                        _calRightJoystick.rawX = update.Value;
                         break;
                     case JoystickOffset.RotationY:
-                        var tmpYR = new AxisCalibration(0, 65535, 32767, 256);
-                        rightStick.Margin = new Thickness(rightStick.Margin.Left, 412 + 30 * tmpYR.Normal(update.Value), 0, 0);
-                        rightStickButton.Margin = rightStick.Margin;
+                        _calRightJoystick.rawY = 65535 - update.Value;
                         break;
                 }
+            }
+
+            var joyL = JoyControl.ConvertToNintyJoy(leftXCalibration, leftYCalibration);
+            var joyR = JoyControl.ConvertToNintyJoy(rightXCalibration, rightYCalibration);
+
+            joyL.rawX = _calLeftJoystick.rawX;
+            joyL.rawY = _calLeftJoystick.rawY;
+            joyR.rawX = _calRightJoystick.rawX;
+            joyR.rawY = _calRightJoystick.rawY;
+
+            joyL.Normalize();
+            joyR.Normalize();
+            
+            leftStick.Margin = new Thickness(146 + 30 * joyL.X, 291 - 30 * joyL.Y, 0, 0);
+            rightStick.Margin = new Thickness(507 + 30 * joyR.X, 412 - 30 * joyR.Y, 0, 0);
+            leftStickButton.Margin = leftStick.Margin;
+            rightStickButton.Margin = rightStick.Margin;
+
+            if (_openJoyWindow != null)
+            {
+                _openJoyWindow.Update(_leftCalibration ? _calLeftJoystick : _calRightJoystick);
             }
         }
 
@@ -133,17 +171,17 @@ namespace WiinUPro
 
             if (prefix == "swpR")
             {
-                dir[0] = "Y+";
-                dir[1] = "Y-";
-                dir[2] = "X-";
-                dir[4] = "X+";
-            }
-            else
-            {
                 dir[0] = "RotationY+";
                 dir[1] = "RotationY-";
                 dir[2] = "RotationX-";
-                dir[4] = "RotationX+";
+                dir[3] = "RotationX+";
+            }
+            else
+            {
+                dir[0] = "Y+";
+                dir[1] = "Y-";
+                dir[2] = "X-";
+                dir[3] = "X+";
             }
 
             Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
@@ -153,21 +191,21 @@ namespace WiinUPro
                 args.Add(dir[0], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp) }));
                 args.Add(dir[1], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown) }));
                 args.Add(dir[2], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft) }));
-                args.Add(dir[4], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight) }));
+                args.Add(dir[3], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight) }));
             }
             else if (type == "WASD")
             {
                 args.Add(dir[0], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_W) }));
                 args.Add(dir[1], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_S) }));
                 args.Add(dir[2], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_A) }));
-                args.Add(dir[4], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_D) }));
+                args.Add(dir[3], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_D) }));
             }
             else if (type == "Arrows")
             {
                 args.Add(dir[0], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_UP) }));
                 args.Add(dir[1], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_DOWN) }));
                 args.Add(dir[2], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_LEFT) }));
-                args.Add(dir[4], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_RIGHT) }));
+                args.Add(dir[3], new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_RIGHT) }));
             }
 
             CallEvent_OnQuickAssign(args);
@@ -202,17 +240,17 @@ namespace WiinUPro
 
                     if (prefix == "swpR")
                     {
-                        dir[0] = "Y+";
-                        dir[1] = "Y-";
-                        dir[2] = "X-";
-                        dir[4] = "X+";
-                    }
-                    else
-                    {
                         dir[0] = "RotationY+";
                         dir[1] = "RotationY-";
                         dir[2] = "RotationX-";
-                        dir[4] = "RotationX+";
+                        dir[3] = "RotationX+";
+                    }
+                    else
+                    {
+                        dir[0] = "Y+";
+                        dir[1] = "Y-";
+                        dir[2] = "X-";
+                        dir[3] = "X+";
                     }
 
                     Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
@@ -223,6 +261,46 @@ namespace WiinUPro
                     CallEvent_OnQuickAssign(args);
                 }
             }
+        }
+
+        protected void CalibrateJoystick_Click(object sender, RoutedEventArgs e)
+        {
+            _leftCalibration = (sender as FrameworkElement).Tag.ToString() == "swpL";
+
+            NintrollerLib.Joystick nonCalibrated = new NintrollerLib.Joystick
+            {
+                minX = 0,
+                minY = 0,
+                maxX = 65535,
+                maxY = 65535,
+                centerX = 32767,
+                centerY = 32767
+            };
+
+            NintrollerLib.Joystick curCalibration = new NintrollerLib.Joystick
+            {
+                minX = _leftCalibration ? leftXCalibration.min : rightXCalibration.min,
+                minY = _leftCalibration ? leftYCalibration.min : rightYCalibration.min,
+                maxX = _leftCalibration ? leftXCalibration.max : rightXCalibration.max,
+                maxY = _leftCalibration ? leftYCalibration.max : rightYCalibration.max,
+                centerX = _leftCalibration ? leftXCalibration.center : rightXCalibration.center,
+                centerY = _leftCalibration ? leftYCalibration.center : rightYCalibration.center,
+                deadXn = _leftCalibration ? leftXCalibration.deadNeg : rightXCalibration.deadNeg,
+                deadXp = _leftCalibration ? leftXCalibration.deadPos : rightXCalibration.deadPos,
+                deadYn = _leftCalibration ? leftYCalibration.deadNeg : rightYCalibration.deadNeg,
+                deadYp = _leftCalibration ? leftYCalibration.deadPos : rightYCalibration.deadPos
+            };
+            
+            Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(nonCalibrated, curCalibration);
+            _openJoyWindow = joyCal;
+            joyCal.ShowDialog();
+
+            if (joyCal.Apply)
+            {
+                OnJoystickCalibrated?.Invoke(joyCal.Calibration, !_leftCalibration);
+            }
+
+            _openJoyWindow = null;
         }
     }
 }

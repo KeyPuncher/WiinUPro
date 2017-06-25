@@ -156,9 +156,9 @@ namespace WiinUPro.Windows
             limitYPos.Value = (int)Math.Round((prevCalibration.maxY - _default.centerY) / (double)(_default.maxY - _default.centerY) * 100d);
             limitYNeg.Value = (int)Math.Round((_default.centerY - prevCalibration.minY) / (double)(_default.centerY - _default.minY) * 100d);
             deadXPos.Value = (int)Math.Round(prevCalibration.deadXp / (double)(_default.maxX - _default.centerX) * 100d);
-            deadXNeg.Value = -(int)Math.Round(prevCalibration.deadXn / (double)(_default.maxX - _default.centerX) * 100d);
+            deadXNeg.Value = -(int)Math.Round(prevCalibration.deadXn / (double)(_default.centerX - _default.minX) * 100d);
             deadYPos.Value = (int)Math.Round(prevCalibration.deadYp / (double)(_default.maxY - _default.centerY) * 100d);
-            deadYNeg.Value = -(int)Math.Round(prevCalibration.deadYn / (double)(_default.maxY - _default.centerY) * 100d);
+            deadYNeg.Value = -(int)Math.Round(prevCalibration.deadYn / (double)(_default.centerY - _default.minX) * 100d);
             antiDeadzoneSlider.Value = Math.Round(prevCalibration.antiDeadzone * 10);
         }
 
