@@ -263,6 +263,7 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.RIGHT, buttons.Right ? 1.0f : 0.0f);
 
             // IR Sensor
+            irSensor.Normalize();
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.IR_X, irSensor.X);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.IR_Y, irSensor.Y);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.IR_UP, irSensor.Y > 0 ? irSensor.Y : 0);
@@ -271,6 +272,7 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.IR_RIGHT, irSensor.X > 0 ? irSensor.X : 0);
 
             // Accelerometer
+            accelerometer.Normalize();
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.ACC_X, accelerometer.X);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.ACC_Y, accelerometer.Y);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.WIIMOTE.ACC_Z, accelerometer.Z);
@@ -544,6 +546,7 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.Z, Z ? 1.0f : 0.0f);
 
             // Joystick
+            joystick.Normalize();
             yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.JOY_X, joystick.X);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.JOY_Y, joystick.Y);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.UP, joystick.Y > 0 ? joystick.Y : 0);
@@ -552,6 +555,7 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.RIGHT, joystick.X > 0 ? joystick.X : 0);
 
             // Accelerometer
+            accelerometer.Normalize();
             yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.ACC_X, accelerometer.X);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.ACC_Y, accelerometer.Y);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.NUNCHUK.ACC_Z, accelerometer.Z);
@@ -896,11 +900,15 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER.SELECT, Select ? 1.0f : 0.0f);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER.HOME, Home ? 1.0f : 0.0f);
 
+            L.Normalize();
+            R.Normalize();
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER.LFULL, L.full ? 1.0f : 0.0f);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER.RFULL, R.full ? 1.0f : 0.0f);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER.LT, L.value);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER.RT, R.value);
 
+            LJoy.Normalize();
+            RJoy.Normalize();
             yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LX, LJoy.X);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LY, LJoy.Y);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RX, RJoy.X);
@@ -1193,7 +1201,9 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER_PRO.START, Start ? 1.0f : 0.0f);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER_PRO.SELECT, Select ? 1.0f : 0.0f);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER_PRO.HOME, Home ? 1.0f : 0.0f);
-            
+
+            LJoy.Normalize();
+            RJoy.Normalize();
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LX, LJoy.X);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LY, LJoy.Y);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RX, RJoy.X);
@@ -1487,6 +1497,8 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LS, LStick ? 1.0f : 0.0f);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RS, RStick ? 1.0f : 0.0f);
 
+            LJoy.Normalize();
+            RJoy.Normalize();
             yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LX, LJoy.X);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.LY, LJoy.Y);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.PRO_CONTROLLER.RX, RJoy.X);
