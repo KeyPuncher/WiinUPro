@@ -8,6 +8,9 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using SharpDX.DirectInput;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Input;
 
 namespace WiinUPro
 {
@@ -109,7 +112,7 @@ namespace WiinUPro
             }
             else
             {
-
+                SetupJoystick();
             }
             
             if (_controller != null)
@@ -204,7 +207,14 @@ namespace WiinUPro
             VJoyDirector.Access.ApplyAll();
             Dispatcher.Invoke(new Action(() =>
             {
-                _controller?.UpdateVisual(updates);
+                if (_controller != null)
+                {
+                    _controller.UpdateVisual(updates);
+                }
+                else
+                {
+                    UpdateGenericVisual(updates);
+                }
             }));
         }
 
@@ -257,7 +267,7 @@ namespace WiinUPro
             }
 
             _readCancel?.Cancel();
-            _readTask?.Wait();
+            _readTask?.Wait(1000);
             _joystick?.Unacquire();
             _readTask = null;
             _readCancel = null;
@@ -273,17 +283,13 @@ namespace WiinUPro
 
         private void PollData()
         {
-            while (!_readCancel.Token.IsCancellationRequested)
+            while (_readCancel != null && !_readCancel.Token.IsCancellationRequested)
             {
                 try
                 {
                     _joystick.Poll();
                     var data = _joystick.GetBufferedData();
-
-                    if (data.Length > 0)
-                    {
-                        OnUpdate(_joystick, data);
-                    }
+                    OnUpdate(_joystick, data);
                 }
                 catch { /* Failed to read */ }
             }
@@ -300,7 +306,7 @@ namespace WiinUPro
 
         #region Control Events
         // Duplicate Code in these parts, Blech! But I (literally) don't have time for perfection
-        // How about making IDeviceControl an abstract class instead of an interface
+        // How about making IDeviceControl an abstract class instead of an interface, l ike I've now done with BaseControl
 
         private void OnQuickAssign(Dictionary<string, AssignmentCollection> assignments)
         {
@@ -506,7 +512,7 @@ namespace WiinUPro
 
         private void btnAddRumble_Click(object sender, RoutedEventArgs e)
         {
-            
+            // TODO: Link up rumble
         }
 
         private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -547,6 +553,387 @@ namespace WiinUPro
             }
         }
         #endregion
+
+        #region Generic Joystick Fields & Methods
+        SolidColorBrush fillBrushOff = new SolidColorBrush(Color.FromArgb(0xFF, 0xC1, 0x39, 0x2B));
+        SolidColorBrush fillBrushOn = new SolidColorBrush(Color.FromArgb(0xFF, 0x28, 0xAC, 0x60));
+        GroupBox _buttonGroup;
+        GroupBox _axisGroup;
+        GroupBox _povGroup;
+
+        private void SetupJoystick()
+        {
+            var hStack = new StackPanel { Orientation = Orientation.Horizontal };
+            var vStack = new StackPanel { Orientation = Orientation.Vertical };
+
+            #region Buttons
+            if (_joystick.Capabilities.ButtonCount > 0)
+            {
+                _buttonGroup = new GroupBox()
+                {
+                    Header = "Buttons",
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 174,
+                    Height = 220,
+                    Style = (Style)Application.Current.Resources["GroupBoxStyle"]
+                };
+
+                ScrollViewer buttonScroll = new ScrollViewer();
+
+                WrapPanel buttonWrap = new WrapPanel()
+                {
+                    Margin = new Thickness(0, 5, 0, 5),
+                    ItemHeight = 34,
+                    ItemWidth = 34
+                };
+
+                for (int b = 0; b < _joystick.Capabilities.ButtonCount; b++)
+                {
+                    Grid btn = new Grid
+                    {
+                        Tag = "Buttons" + b.ToString()
+                    };
+
+                    Ellipse btnCircle = new Ellipse()
+                    {
+                        Fill = fillBrushOff,
+                        Stroke = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)),
+                        StrokeThickness = 2,
+                        Tag = "Buttons" + b.ToString()
+                    };
+
+                    Label btnText = new Label()
+                    {
+                        Content = (b+1).ToString(),
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        VerticalContentAlignment = VerticalAlignment.Center
+                    };
+
+                    btn.MouseLeftButtonDown += Generic_MouseDown;
+                    btn.MouseRightButtonDown += Generic_MouseRightClick;
+
+                    btn.Children.Add(btnCircle);
+                    btn.Children.Add(btnText);
+
+                    buttonWrap.Children.Add(btn);
+                }
+
+                buttonScroll.Content = buttonWrap;
+                _buttonGroup.Content = buttonScroll;
+                hStack.Children.Add(_buttonGroup);
+            }
+            #endregion
+
+            #region Axes
+            WrapPanel axisWrap = new WrapPanel();
+            _joystick.Acquire();
+            var state = _joystick.GetCurrentState();
+            _joystick.Unacquire();
+
+            if (state.X > 0) AddAxis(axisWrap.Children, JoystickOffset.X);
+            if (state.Y > 0) AddAxis(axisWrap.Children, JoystickOffset.Y);
+            if (state.Z > 0) AddAxis(axisWrap.Children, JoystickOffset.Z);
+            if (state.RotationX > 0) AddAxis(axisWrap.Children, JoystickOffset.RotationX);
+            if (state.RotationY > 0) AddAxis(axisWrap.Children, JoystickOffset.RotationY);
+            if (state.RotationZ > 0) AddAxis(axisWrap.Children, JoystickOffset.RotationZ);
+            if (state.Sliders.Length > 0 && state.Sliders[0] > 0) AddAxis(axisWrap.Children, JoystickOffset.Sliders0);
+            if (state.Sliders.Length > 1 && state.Sliders[1] > 0) AddAxis(axisWrap.Children, JoystickOffset.Sliders1);
+
+            if (axisWrap.Children.Count > 0)
+            {
+                _axisGroup = new GroupBox()
+                {
+                    Header = "Axes",
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 244,
+                    Height = 220,
+                    Style = (Style)Application.Current.Resources["GroupBoxStyle"]
+                };
+
+                ScrollViewer axisScroll = new ScrollViewer();
+
+                axisScroll.Content = axisWrap;
+                _axisGroup.Content = axisScroll;
+                hStack.Children.Add(_axisGroup);
+            }
+            #endregion
+
+            if (_joystick.Capabilities.PovCount > 0)
+            {
+                #region D-Pads
+                _povGroup = new GroupBox()
+                {
+                    Header = "Directional Pads",
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Width = 244,
+                    Height = hStack.Children.Count == 2 ? 80 : 220,
+                    Style = (Style)Application.Current.Resources["GroupBoxStyle"]
+                };
+
+                ScrollViewer povScroll = new ScrollViewer();
+
+                WrapPanel povWrap = new WrapPanel()
+                {
+                    Margin = new Thickness(0, 5, 0, 5)
+                };
+
+                for (int p = 0; p < _joystick.Capabilities.PovCount; p++)
+                {
+                    StackPanel povStack = new StackPanel
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Tag = "PointOfViewControllers" + p.ToString()
+                    };
+
+                    povStack.Children.Add(new Label()
+                    {
+                        Content = "POV " + p.ToString()
+                    });
+
+                    Polygon up = new Polygon
+                    {
+                        Stroke = new SolidColorBrush(Colors.Black),
+                        Fill = fillBrushOff,
+                        Width = 40,
+                        Height = 40,
+                        Stretch = Stretch.Fill,
+                        Margin = new Thickness(2),
+                        Points = new PointCollection
+                        {
+                            new Point(0.5, 0.0),
+                            new Point(0.0, 1.0),
+                            new Point(1.0, 1.0)
+                        },
+                        Tag = "pov0N"
+                    };
+                    up.MouseLeftButtonDown += Generic_MouseDown;
+                    up.MouseRightButtonDown += Generic_MouseRightClick;
+                    povStack.Children.Add(up);
+
+                    Polygon right = new Polygon
+                    {
+                        Stroke = new SolidColorBrush(Colors.Black),
+                        Fill = fillBrushOff,
+                        Width = 40,
+                        Height = 40,
+                        Stretch = Stretch.Fill,
+                        Margin = new Thickness(2),
+                        Points = new PointCollection
+                        {
+                            new Point(0.0, 1.0),
+                            new Point(1.0, 0.5),
+                            new Point(0.0, 0.0)
+                        },
+                        Tag = "pov0E"
+                    };
+                    right.MouseLeftButtonDown += Generic_MouseDown;
+                    right.MouseRightButtonDown += Generic_MouseRightClick;
+                    povStack.Children.Add(right);
+
+                    Polygon down = new Polygon
+                    {
+                        Stroke = new SolidColorBrush(Colors.Black),
+                        Fill = fillBrushOff,
+                        Width = 40,
+                        Height = 40,
+                        Stretch = Stretch.Fill,
+                        Margin = new Thickness(2),
+                        Points = new PointCollection
+                        {
+                            new Point(0.5, 1.0),
+                            new Point(0.0, 0.0),
+                            new Point(1.0, 0.0)
+                        },
+                        Tag = "pov0S"
+                    };
+                    down.MouseLeftButtonDown += Generic_MouseDown;
+                    down.MouseRightButtonDown += Generic_MouseRightClick;
+                    povStack.Children.Add(down);
+
+                    Polygon left = new Polygon
+                    {
+                        Stroke = new SolidColorBrush(Colors.Black),
+                        Fill = fillBrushOff,
+                        Width = 40,
+                        Height = 40,
+                        Stretch = Stretch.Fill,
+                        Margin = new Thickness(2),
+                        Points = new PointCollection
+                        {
+                            new Point(0.0, 0.5),
+                            new Point(1.0, 1.0),
+                            new Point(1.0, 0.0)
+                        },
+                        Tag = "pov0W"
+                    };
+                    left.MouseLeftButtonDown += Generic_MouseDown;
+                    left.MouseRightButtonDown += Generic_MouseRightClick;
+                    povStack.Children.Add(left);
+
+                    povWrap.Children.Add(povStack);
+                }
+
+                povScroll.Content = povWrap;
+                _povGroup.Content = povScroll;
+
+                if (hStack.Children.Count == 2)
+                {
+                    vStack.Children.Add(hStack);
+                    vStack.Children.Add(_povGroup);
+                    _stack.Children.Add(vStack);
+                }
+                else
+                {
+                    hStack.Children.Add(_povGroup);
+                    _stack.Children.Add(hStack);
+                }
+                #endregion
+            }
+            else
+            {
+                _stack.Children.Add(hStack);
+            }
+        }
+
+        private void AddAxis(UIElementCollection children, JoystickOffset offset)
+        {
+            StackPanel axisStack = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(2),
+                Tag = offset.ToString()
+            };
+
+            Grid negBtn = new Grid() { Tag = offset.ToString() + "-" };
+            Rectangle neg = new Rectangle
+            {
+                Width = 40,
+                Height = 40,
+                Fill = fillBrushOff,
+                Stroke = new SolidColorBrush(Colors.Black)
+            };
+            Label negLabel = new Label
+            {
+                Content = "-",
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
+            negBtn.MouseLeftButtonDown += Generic_MouseDown;
+            negBtn.MouseRightButtonDown += Generic_MouseRightClick;
+            negBtn.Children.Add(neg);
+            negBtn.Children.Add(negLabel);
+
+            axisStack.Children.Add(negBtn);
+            axisStack.Children.Add(new Label { Content = offset.ToString(), Width = 70 });
+            axisStack.Children.Add(new Label { Content = "0", Width = 50 });
+
+            Grid posBtn = new Grid() { Tag = offset.ToString() + "+" };
+            Rectangle pos = new Rectangle
+            {
+                Width = 40,
+                Height = 40,
+                Fill = fillBrushOff,
+                Stroke = new SolidColorBrush(Colors.Black)
+            };
+            Label posLabel = new Label
+            {
+                Content = "+",
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
+            pos.MouseLeftButtonDown += Generic_MouseDown;
+            pos.MouseRightButtonDown += Generic_MouseRightClick;
+            posBtn.Children.Add(pos);
+            posBtn.Children.Add(posLabel);
+
+            axisStack.Children.Add(posBtn);
+            children.Add(axisStack);
+        }
+
+        private void UpdateGenericVisual(JoystickUpdate[] updates)
+        {
+            if (updates.Length == 0) return;
+
+            foreach (var update in updates)
+            {
+                if (update.Offset >= JoystickOffset.Buttons0 && update.Offset <= JoystickOffset.Buttons127)
+                {
+                    if (_buttonGroup != null)
+                    {
+                        var buttonContainer = (_buttonGroup.Content as ScrollViewer).Content as WrapPanel;
+                        foreach (var btnChild in buttonContainer.Children)
+                        {
+                            Grid btn = btnChild as Grid;
+                            if (btn != null && btn.Tag.ToString() == update.Offset.ToString())
+                            {
+                                (btn.Children[0] as Ellipse).Fill = update.Value > 0 ? fillBrushOn : fillBrushOff;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (update.Offset >= JoystickOffset.PointOfViewControllers0 && update.Offset <= JoystickOffset.PointOfViewControllers3)
+                {
+                    if (_povGroup != null)
+                    {
+                        var povContainer = (_povGroup.Content as ScrollViewer).Content as WrapPanel;
+                        foreach (var povStack in povContainer.Children)
+                        {
+                            StackPanel pov = povStack as StackPanel;
+                            if (pov != null && pov.Tag.ToString() == update.Offset.ToString())
+                            {
+                                bool north = false, south = false, east = false, west = false;
+                                north = update.Value > -1 && (update.Value > 27000 || update.Value < 9000);
+                                south = update.Value == 18000 || (update.Value < 27000 && update.Value > 9000);
+                                east = update.Value == 9000 || (update.Value > 0 && update.Value < 18000);
+                                west = update.Value == 27000 || (update.Value > 18000);
+
+                                (pov.Children[1] as Polygon).Fill = north ? fillBrushOn : fillBrushOff;
+                                (pov.Children[2] as Polygon).Fill = east ? fillBrushOn : fillBrushOff;
+                                (pov.Children[3] as Polygon).Fill = south ? fillBrushOn : fillBrushOff;
+                                (pov.Children[4] as Polygon).Fill = west ? fillBrushOn : fillBrushOff;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (update.Offset < JoystickOffset.PointOfViewControllers0 && calibrations.ContainsKey(update.Offset))
+                {
+                    if (_axisGroup != null)
+                    {
+                        var axisContainer = (_axisGroup.Content as ScrollViewer).Content as WrapPanel;
+                        foreach (var axisStack in axisContainer.Children)
+                        {
+                            StackPanel axis = axisStack as StackPanel;
+                            if (axis != null && axis.Tag.ToString() == update.Offset.ToString())
+                            {
+                                var axisLabel = axis.Children[2] as Label;
+                                if (axisLabel != null)
+                                {
+                                    axisLabel.Content = calibrations[update.Offset].Normal(update.Value).ToString("0.00");
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Generic_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+                OnInputSelected((sender as FrameworkElement).Tag.ToString());
+        }
+
+        private void Generic_MouseRightClick(object sender, MouseButtonEventArgs e)
+        {
+            OnInputRightClick((sender as FrameworkElement).Tag.ToString());
+        }
+        #endregion
     }
 
     public interface IJoyControl : IBaseControol
@@ -572,8 +959,8 @@ namespace WiinUPro
 
         public float Normal(int value)
         {
-            if (Math.Abs(value - center) <= dead) return 0;
-            return (value - center) / ((max - min) / 2f);
+            if (Math.Abs(center - value) <= dead) return 0;
+            return (center - value) / ((max - min) / 2f);
         }
 
         public float Normal(int value, bool positive)

@@ -11,6 +11,7 @@ namespace Shared
 
         // For Joysticks
         public Guid InstanceGUID { get; set; } = Guid.Empty;
+        public string VID { get; set; }
         public string PID { get; set; }
 
         public bool SameDevice(string path)
