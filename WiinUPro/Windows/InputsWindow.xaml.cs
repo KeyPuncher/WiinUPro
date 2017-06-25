@@ -88,11 +88,15 @@ namespace WiinUPro
                 }
             }
 
+            // Show a tab where the user has assignments chosen
+            bool hasKey = false, hasMouse = false, hasJoy = false, hasX = false, hasShift = false;
+
             // fill the window with current assignments
             foreach (var item in collection)
             {
                 if (item is KeyboardAssignment)
                 {
+                    hasKey = true;
                     var key = (item as KeyboardAssignment).KeyCode;
                     var btn = keyboardGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == key.ToString());
                     if (btn != null)
@@ -103,10 +107,11 @@ namespace WiinUPro
 
                     keyTurboCheck.IsChecked = (item as KeyboardAssignment).TurboEnabled;
                     keyTurboRate.Value = (item as KeyboardAssignment).TurboRate / 50;
-                    keyInverseCheck.IsChecked = (item as KeyboardAssignment).InverseInput;
+                    keyInverseCheck.IsChecked = (item as KeyboardAssignment).InverseInput;                    
                 }
                 else if (item is MouseAssignment)
                 {
+                    hasMouse = true;
                     var mMov = (item as MouseAssignment).Input;
                     var btn = mouseMovGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mMov.ToString());
                     if (btn != null)
@@ -119,6 +124,7 @@ namespace WiinUPro
                 }
                 else if (item is MouseButtonAssignment)
                 {
+                    hasMouse = true;
                     var mBtn = (item as MouseButtonAssignment).MouseButton;
                     var btn = mouseBtnGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mBtn.ToString());
                     if (btn != null)
@@ -133,6 +139,7 @@ namespace WiinUPro
                 }
                 else if (item is MouseScrollAssignment)
                 {
+                    hasMouse = true;
                     var mScroll = (item as MouseScrollAssignment).ScrollDirection;
                     var btn = mouseScrollGrid.Children.OfType<Button>().ToList().Find((b) => b.Tag.ToString() == mScroll.ToString());
                     if (btn != null)
@@ -146,6 +153,7 @@ namespace WiinUPro
                 }
                 else if (item is XInputButtonAssignment)
                 {
+                    hasX = true;
                     // TODO: for specific Device (later)
                     var xb = (item as XInputButtonAssignment).Button;
                     var img = xImages.Find((i) => i.Tag.ToString() == xb.ToString());
@@ -169,6 +177,7 @@ namespace WiinUPro
                 }
                 else if (item is XInputAxisAssignment)
                 {
+                    hasX = true;
                     var xa = (item as XInputAxisAssignment).Axis;
                     var img = xboxGrid.Children.OfType<Image>().ToList().Find((i) => i.Tag.ToString() == xa.ToString());
                     if (img != null)
@@ -182,6 +191,7 @@ namespace WiinUPro
                 }
                 else if (item is VJoyButtonAssignment)
                 {
+                    hasJoy = true;
                     var vb = (item as VJoyButtonAssignment);
                     if (joystickSelection.HasItems && joystickSelection.Items.Contains("Joystick " + vb.DeviceId))
                     {
@@ -196,6 +206,7 @@ namespace WiinUPro
                 }
                 else if (item is VJoyAxisAssignment)
                 {
+                    hasJoy = true;
                     var va = (item as VJoyAxisAssignment);
                     if (joystickSelection.HasItems && joystickSelection.Items.Contains("Joystick " + va.DeviceId))
                     {
@@ -231,6 +242,7 @@ namespace WiinUPro
                 }
                 else if (item is VJoyPOVAssignment)
                 {
+                    hasJoy = true;
                     var vp = (item as VJoyPOVAssignment);
                     if (joystickSelection.HasItems && joystickSelection.Items.Contains("Joystick " + vp.DeviceId))
                     {
@@ -249,6 +261,29 @@ namespace WiinUPro
                 {
                     rumbleOnPress.IsChecked = true;
                 }
+                else if (item is ShiftAssignment)
+                {
+                    hasShift = true;
+                }
+            }
+
+            bool changeTab = false;
+            switch (lastSelectedTab)
+            {
+                case 0: changeTab = !hasKey; break;
+                case 1: changeTab = !hasMouse; break;
+                case 2: changeTab = !hasX; break;
+                case 3: changeTab = !hasJoy; break;
+                case 4: changeTab = !hasShift; break;
+            }
+
+            if (changeTab && (hasKey || hasMouse || hasX || hasJoy || hasShift))
+            {
+                if (hasKey) tabControl.SelectedIndex = 0;
+                else if (hasMouse) tabControl.SelectedIndex = 1;
+                else if (hasX) tabControl.SelectedIndex = 2;
+                else if (hasJoy) tabControl.SelectedIndex = 3;
+                else if (hasShift) tabControl.SelectedIndex = 4;
             }
         }
 
@@ -662,6 +697,8 @@ namespace WiinUPro
             }
         }
 
+        #region Toggle Assignment Events
+
         private void ToggleKey(object sender, RoutedEventArgs e)
         {
             AddToList<VirtualKeyCode>(sender, _selectedKeys);
@@ -732,6 +769,10 @@ namespace WiinUPro
             AddToList(sender, _selectedVJoyPOVs);
         }
 
+        #endregion
+
+        #region Button Click Events
+
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
         {
             // Check if Rumble should occur when pressed
@@ -739,9 +780,7 @@ namespace WiinUPro
             {
                 Result.Add(new RumbleAssignment(_control.AddRumble));
             }
-
-            lastSelectedTab = tabControl.SelectedIndex;
-
+            
             // If on the Shift Tab, that is the only assignments that can be had
             if (tabControl.SelectedIndex == 4)
             {
@@ -892,6 +931,10 @@ namespace WiinUPro
             ScpDirector.Access.DisconnectDevice(_selectedDevice);
         }
 
+        #endregion
+
+        #region Other UI Events
+
         private void deviceSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
                  if (deviceSelection.SelectedIndex == 0) _selectedDevice = ScpDirector.XInput_Device.Device_A;
@@ -938,6 +981,29 @@ namespace WiinUPro
         {
             SetupJoystick(VJoyDirector.Access.Devices[joystickSelection.SelectedIndex].ID);
         }
+
+        private void Border_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is Border)
+            {
+                (sender as Border).BorderThickness = new Thickness(1);
+            }
+        }
+
+        private void Border_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is Border)
+            {
+                (sender as Border).BorderThickness = new Thickness(0);
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            lastSelectedTab = tabControl.SelectedIndex;
+        }
+
+        #endregion
 
         static VirtualKeyCode? ToVK(Key key)
         {
@@ -1132,22 +1198,6 @@ namespace WiinUPro
             var split = axis.ToString().Split('_');
             positive = split[1] == "Pos";
             return (HID_USAGES)Enum.Parse(typeof(HID_USAGES), "HID_USAGE_" + split[0]);
-        }
-
-        private void Border_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (sender is Border)
-            {
-                (sender as Border).BorderThickness = new Thickness(1);
-            }
-        }
-
-        private void Border_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (sender is Border)
-            {
-                (sender as Border).BorderThickness = new Thickness(0);
-            }
         }
     }
 }
