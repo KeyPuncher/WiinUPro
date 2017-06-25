@@ -80,7 +80,7 @@ namespace WiinUPro
                 else
                 {
                     nickname.Content = "Generic Joystick";
-                    // TODO: Set generic icon
+                    icon.Source = new BitmapImage(new Uri("../Images/Icons/joystick_icon.png", UriKind.Relative));
                 }
             }
         }
