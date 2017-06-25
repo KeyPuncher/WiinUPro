@@ -23,10 +23,21 @@ namespace WiinUPro
     {
         public static SharpDX.DirectInput.DirectInput DInput;
 
+        public static object CurrentTab
+        {
+            get
+            {
+                return _instance.tabControl.SelectedContent;
+            }
+        }
+
+        private static MainWindow _instance;
+        
         List<DeviceStatus> availableDevices;
 
         public MainWindow()
         {
+            _instance = this;
             availableDevices = new List<DeviceStatus>();
             InitializeComponent();
 

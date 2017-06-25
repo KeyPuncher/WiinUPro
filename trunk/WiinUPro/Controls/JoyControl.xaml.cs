@@ -207,6 +207,8 @@ namespace WiinUPro
             VJoyDirector.Access.ApplyAll();
             Dispatcher.Invoke(new Action(() =>
             {
+                if (MainWindow.CurrentTab != this) return;
+
                 if (_controller != null)
                 {
                     _controller.UpdateVisual(updates);

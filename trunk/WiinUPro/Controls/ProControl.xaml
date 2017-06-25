@@ -27,7 +27,14 @@
                             <MenuItem Header="Stick Click" Tag="proLS" Click="Axis_Click"/>
                             <Separator/>
                             <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse" Tag="proL" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Mouse">
+                                    <MenuItem Header="50% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="100% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="150% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="200% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="250% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="300% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
+                                </MenuItem>
                                 <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
                                 <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
                             </MenuItem>
@@ -46,7 +53,14 @@
                             <MenuItem Header="Stick Click" Tag="proRS" Click="Axis_Click"/>
                             <Separator/>
                             <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse" Tag="proR" Click="QuickAssign_Click"/>
+                                <MenuItem Header="Mouse">
+                                    <MenuItem Header="50% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="100% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="150% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="200% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="250% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
+                                    <MenuItem Header="300% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
+                                </MenuItem>
                                 <MenuItem Header="WASD" Tag="proR" Click="QuickAssign_Click"/>
                                 <MenuItem Header="Arrows" Tag="proR" Click="QuickAssign_Click"/>
                             </MenuItem>

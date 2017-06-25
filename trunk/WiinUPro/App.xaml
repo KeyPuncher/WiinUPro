@@ -129,6 +129,7 @@
         <SolidColorBrush x:Key="ScrollArrowDown" Color ="{StaticResource BlueDark}" />
         <SolidColorBrush x:Key="ScrollThumbBrush" Color="{StaticResource B400}" />
         <SolidColorBrush x:Key="ScrollButtonOverBrush" Color="{StaticResource B200}" />
+        <SolidColorBrush x:Key="IRSensorPoint" Color="{StaticResource Blue}" />
         <!--#endregion-->
         
         <!-- Constants -->

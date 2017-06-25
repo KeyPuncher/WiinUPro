@@ -138,52 +138,7 @@ namespace WiinUPro
                 OnChangeLEDs(leds);
             }
         }
-
-        private void QuickAssign(string prefix, string type)
-        {
-            Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
-            
-            if (type == "Mouse")
-            {
-                args.Add(prefix + "UP", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp) }));
-                args.Add(prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown) }));
-                args.Add(prefix + "LEFT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft) }));
-                args.Add(prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight) }));
-            }
-            else if (type == "WASD")
-            {
-                args.Add(prefix + "UP", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_W) }));
-                args.Add(prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_S) }));
-                args.Add(prefix + "LEFT", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_A) }));
-                args.Add(prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_D) }));
-            }
-            else if (type == "Arrows")
-            {
-                args.Add(prefix + "UP", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_UP) }));
-                args.Add(prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_DOWN) }));
-                args.Add(prefix + "LEFT", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_LEFT) }));
-                args.Add(prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_RIGHT) }));
-            }
-
-            CallEvent_OnQuickAssign(args);
-        }
         
-        private void QuickAssign_Click(object sender, RoutedEventArgs e)
-        {
-            var item = sender as MenuItem;
-
-            if (item != null)
-            {
-                var header = item.Header as string;
-                var tag = item.Tag as string;
-
-                if (header != null && tag != null)
-                {
-                    QuickAssign(tag, header);
-                }
-            }
-        }
-
         private void quickXboxbtn_Click(object sender, RoutedEventArgs e)
         {
             XboxAssign();
