@@ -417,7 +417,7 @@ namespace NintrollerLib
         /// <summary>
         /// Raw value
         /// </summary>
-        public short rawX, rawY;
+        public int rawX, rawY;
         /// <summary>
         /// Normalized value
         /// </summary>
