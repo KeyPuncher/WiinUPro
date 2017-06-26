@@ -74,10 +74,37 @@
             </Canvas>
         </Viewbox>
         <!-- Nunchuck -->
-        <Viewbox x:Name="viewNunchuk" Width="545" Visibility="Collapsed">
-            <Canvas Width="1179" Height="1500" Background="Transparent">
+        <Viewbox x:Name="viewNunchuk" Width="200" Visibility="Collapsed">
+            <Canvas Width="277" Height="1104" Background="Transparent">
                 <Grid Margin="0,0,0,0">
-                    <Image Source="/WiinUPro;component/Images/Controllers/Nunchuk/Nun_temp.jpg" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1179" Height="1500"/>
+                    <Image Source="/WiinUPro;component/Images/Controllers/Nunchuk/nunchuk-base.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,240,0,0" Width="270"/>
+                    <Image Source="/WiinUPro;component/Images/Controllers/Nunchuk/nunchuck-back.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="270"/>
+                    <Image x:Name="nBtnC" Source="/WiinUPro;component/Images/Controllers/Nunchuk/nunC.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="95,25,0,0" Width="86" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="nC" />
+                    <Image x:Name="nBtnZ" Source="/WiinUPro;component/Images/Controllers/Nunchuk/nunZ.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,100,0,0" Width="136" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="nZ" />
+                    <Image x:Name="nJoy" Source="/WiinUPro;component/Images/Controllers/Nunchuk/nunJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="70,360,0,0" Width="121" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
+                        <Image.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Up" Tag="nUP" Click="OpenInput"/>
+                                <MenuItem Header="Left" Tag="nLEFT" Click="OpenInput"/>
+                                <MenuItem Header="Right" Tag="nRIGHT" Click="OpenInput"/>
+                                <MenuItem Header="Down" Tag="nDOWN" Click="OpenInput"/>
+                                <Separator/>
+                                <MenuItem Header="Quick Assign">
+                                    <MenuItem Header="Mouse">
+                                        <MenuItem Header="50% Speed" Tag="n" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="100% Speed" Tag="n" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="150% Speed" Tag="n" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="200% Speed" Tag="n" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="250% Speed" Tag="n" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="300% Speed" Tag="n" Click="QuickAssignMouse_Click" />
+                                    </MenuItem>
+                                    <MenuItem Header="WASD" Tag="nL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="n" Click="QuickAssign_Click"/>
+                                </MenuItem>
+                                <MenuItem Header="Calibrate" Tag="nJoy" Click="CalibrateJoystick_Click"/>
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image>
                 </Grid>
             </Canvas>
         </Viewbox>
