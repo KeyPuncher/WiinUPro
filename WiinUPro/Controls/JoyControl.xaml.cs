@@ -647,6 +647,8 @@ namespace WiinUPro
         GroupBox _buttonGroup;
         GroupBox _axisGroup;
         GroupBox _povGroup;
+        Windows.AxisCalibrationWindow _openAxisCal;
+        string _calibrationTarget;
 
         private void SetupJoystick()
         {
@@ -913,8 +915,24 @@ namespace WiinUPro
             negBtn.Children.Add(neg);
             negBtn.Children.Add(negLabel);
 
+            Label calibrateLabel = new Label
+            {
+                Tag = offset.ToString(),
+                Content = new TextBlock
+                {
+                    Text = "Calibrate",
+                    TextDecorations = TextDecorations.Underline,
+                    Foreground = new SolidColorBrush(Colors.DarkBlue)
+                }
+            };
+            calibrateLabel.MouseLeftButtonDown += CalibrateAxis;
+
             axisStack.Children.Add(negBtn);
-            axisStack.Children.Add(new Label { Content = offset.ToString(), Width = 70 });
+            axisStack.Children.Add(new StackPanel
+            {
+                Orientation = Orientation.Vertical,
+                Children = { new Label { Content = offset.ToString(), Width = 70 }, calibrateLabel }
+            });
             axisStack.Children.Add(new Label { Content = "0", Width = 50 });
 
             Grid posBtn = new Grid() { Tag = offset.ToString() + "+" };
@@ -931,13 +949,32 @@ namespace WiinUPro
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center
             };
-            pos.MouseLeftButtonDown += Generic_MouseDown;
-            pos.MouseRightButtonDown += Generic_MouseRightClick;
+            posBtn.MouseLeftButtonDown += Generic_MouseDown;
+            posBtn.MouseRightButtonDown += Generic_MouseRightClick;
             posBtn.Children.Add(pos);
             posBtn.Children.Add(posLabel);
 
             axisStack.Children.Add(posBtn);
             children.Add(axisStack);
+        }
+
+        private void CalibrateAxis(object sender, MouseButtonEventArgs e)
+        {
+            _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
+            JoystickOffset offset = JoystickOffset.X;
+
+            if (!Enum.TryParse(_calibrationTarget, out offset)) return;
+
+            Windows.AxisCalibrationWindow axisCal = new Windows.AxisCalibrationWindow(calibrations[offset]);
+            _openAxisCal = axisCal;
+            axisCal.ShowDialog();
+
+            if (axisCal.Apply)
+            {
+                calibrations[offset] = axisCal.Calibration;
+            }
+
+            axisCal = null;
         }
 
         private void UpdateGenericVisual(JoystickUpdate[] updates)
@@ -946,6 +983,11 @@ namespace WiinUPro
 
             foreach (var update in updates)
             {
+                if (_openAxisCal != null && _calibrationTarget == update.Offset.ToString())
+                {
+                    _openAxisCal.Update(update.Value);
+                }
+
                 if (update.Offset >= JoystickOffset.Buttons0 && update.Offset <= JoystickOffset.Buttons127)
                 {
                     if (_buttonGroup != null)
@@ -1055,15 +1097,18 @@ namespace WiinUPro
             this.deadPos = deadPos;
         }
 
-        public float Normal(int value)
-        {
-            int v = value - center;
-            if (v >= deadNeg && v <= deadPos) return 0;
-            return v / ((max - min) / 2f);
-        }
+        //public float Normal(int value)
+        //{
+        //    if (value == center) return 0;
+        //    int v = value - center;
+        //    if (v >= deadNeg && v <= deadPos) return 0;
+        //    return v / ((max - min) / 2f);
+        //}
 
-        public float Normal(int value, bool positive)
+        public float Normal(int value, bool positive = true)
         {
+            if (value == center) return 0;
+
             int v = value - center;
             v *= positive ? 1 : -1;
             if (v >= deadNeg && v <= deadPos) return 0;

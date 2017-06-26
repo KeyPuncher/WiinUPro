@@ -43,40 +43,8 @@ namespace WiinUPro
 
             WinBtStream.OverrideSharingMode = true;
             WinBtStream.OverridenFileShare = System.IO.FileShare.ReadWrite;
-
-            #region Test
-            /*
-            var devices =  WinBtStream.GetPaths();
-            foreach (var info in devices)
-            {
-                TabItem t = new TabItem();
-                var stack = new StackPanel { Orientation = Orientation.Horizontal };
-                stack.Children.Add(new Image
-                {
-                    Source = new BitmapImage(new Uri("../Images/Icons/ProController_black_24.png", UriKind.Relative)),
-                    Height = 12,
-                    Margin = new Thickness(0, 0, 4, 0),
-                    VerticalAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Left
-                });
-                stack.Children.Add(new TextBlock { Text = "Real" + tabControl.Items.Count });
-                t.Header = stack;
-                NintyControl n = new NintyControl(info);
-                n.OnTypeChange += (type) => { ChangeIcon(t, type); };
-                t.Content = n;
-                tabControl.Items.Insert(tabControl.Items.Count - 1, t);
-            }
-            Windows.JoyCalibrationWindow j = new Windows.JoyCalibrationWindow();
-            j.Show();
-            */
-            #endregion
-
+            
             Refresh();
-
-            // Speech test
-            //System.Speech.Synthesis.SpeechSynthesizer s = new System.Speech.Synthesis.SpeechSynthesizer();
-            //s.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Female);
-            //s.SpeakAsync("Welcome");
         }
 
         public void Refresh()
@@ -99,7 +67,7 @@ namespace WiinUPro
                 }
                 else if (vid == "1234" && pid == "bead")
                 {
-                    continue;
+                    //continue;
                 }
 
                 devices.Add(new Shared.DeviceInfo()
