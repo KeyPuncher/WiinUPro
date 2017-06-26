@@ -247,6 +247,7 @@ namespace WiinUPro
                     };
                     ((WiiControl)_controller).OnJoystickCalibrated += _nintroller_JoystickCalibrated;
                     ((WiiControl)_controller).OnTriggerCalibrated += _nintroller_TriggerCalibrated;
+                    ((WiiControl)_controller).OnIRCalibrated += _nintroller_IRCalibrated;
                     break;
             }
         }
@@ -389,6 +390,13 @@ namespace WiinUPro
                     _nintroller.SetCalibration(rCal);
                     break;
             }
+        }
+
+        private void _nintroller_IRCalibrated(Windows.IRCalibration calibration)
+        {
+            var wmCal = _nintroller.StoredCalibrations.WiimoteCalibration;
+            wmCal.irSensor.boundingArea = calibration.boundry;
+            _nintroller.SetCalibration(wmCal);
         }
         #endregion
 

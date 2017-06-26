@@ -22,10 +22,12 @@ namespace WiinUPro
         public event Action<IRCamSensitivity> OnChangeCameraSensitivty;
         public event Delegates.JoystickDel OnJoystickCalibrated;
         public event Delegates.TriggerDel OnTriggerCalibrated;
+        public event Windows.IRCalibrationWindow.IRCalibrationDel OnIRCalibrated;
 
         protected string _calibrationTarget;
         protected Windows.JoyCalibrationWindow _openJoyWindow;
         protected Windows.TriggerCalibrationWindow _openTrigWindow;
+        protected Windows.IRCalibrationWindow _openIRWindow;
         protected INintrollerState _lastState;
 
         public void ApplyInput(INintrollerState state)
@@ -233,6 +235,11 @@ namespace WiinUPro
 
         private void UpdateWiimoteVisual(Wiimote wiimote)
         {
+            if (_openIRWindow != null)
+            {
+                _openIRWindow.Update(wiimote.irSensor);
+            }
+
             wBtnA.Opacity     = wiimote.buttons.A ? 1 : 0;
             wBtnB.Opacity     = wiimote.buttons.B ? 1 : 0;
             wBtnOne.Opacity   = wiimote.buttons.One ? 1 : 0;
@@ -420,6 +427,29 @@ namespace WiinUPro
             }
 
             _openTrigWindow = null;
+        }
+
+        private void CalibrateIR_Click(object sender, RoutedEventArgs e)
+        {
+            _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
+            if (_calibrationTarget != "IR") return;
+
+            IR lastIR = new IR();
+            if (_lastState is Wiimote) lastIR = ((Wiimote)_lastState).irSensor;
+            if (_lastState is Nunchuk) lastIR = ((Nunchuk)_lastState).wiimote.irSensor;
+            if (_lastState is ClassicController) lastIR = ((ClassicController)_lastState).wiimote.irSensor;
+            if (_lastState is ClassicControllerPro) lastIR = ((ClassicControllerPro)_lastState).wiimote.irSensor;
+
+            Windows.IRCalibrationWindow irCal = new Windows.IRCalibrationWindow(lastIR);
+            _openIRWindow = irCal;
+            irCal.ShowDialog();
+
+            if (irCal.Apply)
+            {
+                OnIRCalibrated?.Invoke(irCal.Calibration);
+            }
+
+            _openIRWindow = null;
         }
     }
 }

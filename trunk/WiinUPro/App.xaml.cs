@@ -17,5 +17,6 @@ namespace WiinUPro
         internal const string JOY_CAL_FILTER = "Joystick Calibration|*.joy";
         internal const string TRIG_CAL_FILTER = "Trigger Calibration|*.trg";
         internal const string AXIS_CAL_FILTER = "Axis Calibration|*.axs";
+        internal const string IR_CAL_FILTER = "IR Calibration|*.irc";
     }
 }

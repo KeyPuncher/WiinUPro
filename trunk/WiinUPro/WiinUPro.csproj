@@ -121,6 +121,9 @@
     <Compile Include="Windows\AxisCalibrationWindow.xaml.cs">
       <DependentUpon>AxisCalibrationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\IRCalibrationWindow.xaml.cs">
+      <DependentUpon>IRCalibrationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RumbleWindow.xaml.cs">
       <DependentUpon>RumbleWindow.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\InputsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\IRCalibrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
