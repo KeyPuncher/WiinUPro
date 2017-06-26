@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Text;
 using System.ComponentModel;
-using System.Threading;
 
-namespace ScpControl 
+namespace ScpControl
 {
     public partial class UsbDevice : ScpDevice, IDsDevice 
     {

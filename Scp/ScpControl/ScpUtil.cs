@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 
 using System.IO;
@@ -13,7 +12,7 @@ using Microsoft.Win32;
 using System.Collections;
 using System.Collections.Specialized;
 
-namespace ScpControl 
+namespace ScpControl
 {
     public enum DsOffset   : int  { Pad = 0, State = 1, Battery = 2, Connection = 3, Model = 89, Address = 90 };
     public enum DsState           { Disconnected = 0x00, Reserved = 0x01, Connected = 0x02 };

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows;
-using RestSharp;
-using RestSharp.Authenticators;
 
 namespace WiinUSoft
 {

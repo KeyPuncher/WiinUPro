@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows.Forms;
 using System.Xml;
-using System.Collections.Generic;
 using System.Reflection;
 
-namespace ScpControl 
+namespace ScpControl
 {
     public partial class XmlMapper : Component 
     {        

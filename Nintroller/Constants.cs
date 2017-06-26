@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NintrollerLib
+﻿namespace NintrollerLib
 {
     internal static class Constants
     {
