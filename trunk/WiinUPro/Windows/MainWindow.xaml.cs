@@ -67,7 +67,7 @@ namespace WiinUPro
                 }
                 else if (vid == "1234" && pid == "bead")
                 {
-                    //continue;
+                    continue;
                 }
 
                 devices.Add(new Shared.DeviceInfo()
