@@ -77,7 +77,8 @@ namespace Shared.Windows
             UseToshiba = ForceToshibaMode;// || !BluetoothEnableDiscovery(IntPtr.Zero, true);
 
             // Default Windows 8/10 to ReadWrite (non exclusive)
-            if (Environment.OSVersion.Version.Major > 6)
+            if (Environment.OSVersion.Version.Major > 6 
+                || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 2)) // temp
             {
                 SharingMode = FileShare.ReadWrite;
                 UseWriteFile = true;

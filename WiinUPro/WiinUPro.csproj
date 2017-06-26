@@ -59,6 +59,9 @@
   <PropertyGroup>
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
@@ -437,7 +440,6 @@
     <Resource Include="Images\Controllers\Wiimote\wmRight.png" />
     <Resource Include="Images\Controllers\Wiimote\wmTwo.png" />
     <Resource Include="Images\Controllers\Wiimote\wmUp.png" />
-    <Resource Include="Images\Controllers\Nunchuk\Nun_temp.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Controllers\ClassicPro\ccpRight.png" />
@@ -514,6 +516,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Icons\joystick_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\Nunchuk\nunC.png" />
+    <Resource Include="Images\Controllers\Nunchuk\nunchuck-back.png" />
+    <Resource Include="Images\Controllers\Nunchuk\nunchuk-base.png" />
+    <Resource Include="Images\Controllers\Nunchuk\nunJoy.png" />
+    <Resource Include="Images\Controllers\Nunchuk\nunZ.png" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

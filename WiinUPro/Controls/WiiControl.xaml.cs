@@ -55,6 +55,10 @@ namespace WiinUPro
                 var nun = (Nunchuk)state;
                 UpdateWiimoteVisual(nun.wiimote);
 
+                nBtnC.Opacity = nun.C ? 1 : 0;
+                nBtnZ.Opacity = nun.Z ? 1 : 0;
+                nJoy.Margin = new Thickness(70 + 30 * nun.joystick.X, 360 - 30 * nun.joystick.Y, 0, 0);
+
                 if (_openJoyWindow != null && _calibrationTarget == "nJoy")
                 {
                     _openJoyWindow.Update(nun.joystick);
@@ -69,7 +73,6 @@ namespace WiinUPro
                 var cc = (ClassicController)state;
                 UpdateWiimoteVisual(cc.wiimote);
 
-                // TODO: Make L & R Triggers work
                 ccBtnA.Opacity      = cc.A ? 1 : 0;
                 ccBtnB.Opacity      = cc.B ? 1 : 0;
                 ccBtnX.Opacity      = cc.X ? 1 : 0;
