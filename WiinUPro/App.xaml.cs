@@ -15,5 +15,6 @@ namespace WiinUPro
     {
         internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";
         internal const string JOY_CAL_FILTER = "Joystick Calibration|*.joy";
+        internal const string TRIG_CAL_FILTER = "Trigger Calibration|*.trg";
     }
 }

@@ -21,9 +21,11 @@ namespace WiinUPro
         public event Action<IRCamMode> OnChangeCameraMode;
         public event Action<IRCamSensitivity> OnChangeCameraSensitivty;
         public event Delegates.JoystickDel OnJoystickCalibrated;
+        public event Delegates.TriggerDel OnTriggerCalibrated;
 
         protected string _calibrationTarget;
         protected Windows.JoyCalibrationWindow _openJoyWindow;
+        protected Windows.TriggerCalibrationWindow _openTrigWindow;
         protected INintrollerState _lastState;
 
         public void ApplyInput(INintrollerState state)
@@ -89,6 +91,11 @@ namespace WiinUPro
                 {
                     if (_calibrationTarget == "ccJoyL") _openJoyWindow.Update(cc.LJoy);
                     else if (_calibrationTarget == "ccJoyR") _openJoyWindow.Update(cc.RJoy);
+                }
+                else if (_openTrigWindow != null && _calibrationTarget.StartsWith("cc"))
+                {
+                    if (_calibrationTarget == "ccLT") _openTrigWindow.Update(cc.L);
+                    else if (_calibrationTarget == "ccRT") _openTrigWindow.Update(cc.R);
                 }
             }
             else if (state is ClassicControllerPro)
@@ -381,6 +388,38 @@ namespace WiinUPro
             }
 
             _openJoyWindow = null;
+        }
+
+        private void CalibrateTrigger_Click(object sender, RoutedEventArgs e)
+        {
+            _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
+
+            var nonCalibrated = new NintrollerLib.Trigger();
+            var curCalibrated = new NintrollerLib.Trigger();
+
+            if (!(_lastState is ClassicController)) return;
+
+            if (_calibrationTarget == "ccRT")
+            {
+                nonCalibrated = Calibrations.None.ClassicControllerRaw.R;
+                curCalibrated = ((ClassicController)_lastState).R;
+            }
+            else if (_calibrationTarget == "ccLT")
+            {
+                nonCalibrated = Calibrations.None.ClassicControllerRaw.L;
+                curCalibrated = ((ClassicController)_lastState).L;
+            }
+
+            Windows.TriggerCalibrationWindow trigCal = new Windows.TriggerCalibrationWindow(nonCalibrated, curCalibrated);
+            _openTrigWindow = trigCal;
+            trigCal.ShowDialog();
+
+            if (trigCal.Apply)
+            {
+                OnTriggerCalibrated?.Invoke(trigCal.Calibration, _calibrationTarget);
+            }
+
+            _openTrigWindow = null;
         }
     }
 }

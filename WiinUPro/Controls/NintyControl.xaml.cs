@@ -183,7 +183,10 @@ namespace WiinUPro
                 _controller.OnRemoveInputs -= RemoveAssignments;
 
                 if (_controller is WiiControl)
+                {
                     ((WiiControl)_controller).OnJoystickCalibrated -= _nintroller_JoystickCalibrated;
+                    ((WiiControl)_controller).OnTriggerCalibrated -= _nintroller_TriggerCalibrated;
+                }
 
                 _setup = false;
             }
@@ -243,6 +246,7 @@ namespace WiinUPro
                         _nintroller.IRSensitivity = sen;
                     };
                     ((WiiControl)_controller).OnJoystickCalibrated += _nintroller_JoystickCalibrated;
+                    ((WiiControl)_controller).OnTriggerCalibrated += _nintroller_TriggerCalibrated;
                     break;
             }
         }
@@ -365,6 +369,24 @@ namespace WiinUPro
                     if (target.EndsWith("L")) ccpCal.LJoy = calibration;
                     else ccpCal.RJoy = calibration;
                     _nintroller.SetCalibration(ccpCal);
+                    break;
+            }
+        }
+
+        private void _nintroller_TriggerCalibrated(NintrollerLib.Trigger calibration, string target)
+        {
+            switch (target)
+            {
+                case "ccLT":
+                    var lCal = _nintroller.StoredCalibrations.ClassicCalibration;
+                    lCal.L = calibration;
+                    _nintroller.SetCalibration(lCal);
+                    break;
+
+                case "ccRT":
+                    var rCal = _nintroller.StoredCalibrations.ClassicCalibration;
+                    rCal.R = calibration;
+                    _nintroller.SetCalibration(rCal);
                     break;
             }
         }

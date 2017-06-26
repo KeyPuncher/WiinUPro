@@ -124,6 +124,9 @@
     <Compile Include="Windows\SyncWindow.xaml.cs">
       <DependentUpon>SyncWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\TriggerCalibrationWindow.xaml.cs">
+      <DependentUpon>TriggerCalibrationWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\DeviceStatus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -223,6 +226,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SyncWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TriggerCalibrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

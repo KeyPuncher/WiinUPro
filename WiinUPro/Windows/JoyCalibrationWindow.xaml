@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WiinUPro.Windows"
         xmlns:WiinUPro="clr-namespace:WiinUPro" x:Class="WiinUPro.Windows.JoyCalibrationWindow"
         mc:Ignorable="d"
-        Title="JoyCalibrationWindow" Height="578" Width="890" Background="{StaticResource BackgroundMain}">
+        Title="Joystick Calibration" Height="578" Width="890" Background="{StaticResource BackgroundMain}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115*"/>
