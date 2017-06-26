@@ -52,7 +52,7 @@
                                     <MenuItem Header="WASD" Tag="wIR" Click="QuickAssign_Click"/>
                                     <MenuItem Header="Arrows" Tag="wIR" Click="QuickAssign_Click"/>
                                 </MenuItem>
-                                <!--<MenuItem Header="Calibrate" Tag="IR" Click="Calibrate_Click"/>-->
+                                <MenuItem Header="Calibrate" Tag="IR" Click="CalibrateIR_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Set IR Mode">
                                     <MenuItem Header="Basic" Click="SetIRMode"/>
