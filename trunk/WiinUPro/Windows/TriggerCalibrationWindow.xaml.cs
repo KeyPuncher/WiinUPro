@@ -21,6 +21,7 @@ namespace WiinUPro.Windows
         {
             InitializeComponent();
         }
+
         public TriggerCalibrationWindow(Trigger nonCalibrated, Trigger prevCalibration) : this()
         {
             _default = nonCalibrated;

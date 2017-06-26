@@ -118,6 +118,9 @@
       <DependentUpon>SwitchProControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Assignments\MouseAbsoluteAssignment.cs" />
+    <Compile Include="Windows\AxisCalibrationWindow.xaml.cs">
+      <DependentUpon>AxisCalibrationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\RumbleWindow.xaml.cs">
       <DependentUpon>RumbleWindow.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SwitchProControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AxisCalibrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
