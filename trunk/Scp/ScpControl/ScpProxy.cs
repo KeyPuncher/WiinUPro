@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Xml;
 using System.Text;
 
 using System.Net;
 using System.Net.Sockets;
 
-namespace ScpControl 
+namespace ScpControl
 {
     public partial class ScpProxy : Component 
     {

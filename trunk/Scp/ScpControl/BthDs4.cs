@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Threading;
-using System.Text;
 
-namespace ScpControl 
+namespace ScpControl
 {
     public partial class BthDs4 : BthDevice 
     {
