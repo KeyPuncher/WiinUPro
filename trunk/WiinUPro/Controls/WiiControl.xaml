@@ -100,10 +100,28 @@
                     <Image x:Name="ccBtnRight" Source="/WiinUPro;component/Images/Controllers/Classic/ccRight.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="158,140,0,0" Width="35" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccRIGHT" />
                     <Image x:Name="ccBtnDown" Source="/WiinUPro;component/Images/Controllers/Classic/ccDown.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="124,171,0,0" Width="34" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccDOWN" />
                     <Image x:Name="ccBtnLeft" Source="/WiinUPro;component/Images/Controllers/Classic/ccLeft.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="90,140,0,0" Width="34" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccLEFT" />
-                    <Image x:Name="ccPadCenter" Source="/WiinUPro;component/Images/Controllers/Classic/ccCenterPad.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="124,144,0,0" Width="35" Opacity="0" />
+                    <Image x:Name="ccPadCenter" Source="/WiinUPro;component/Images/Controllers/Classic/ccCenterPad.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="124,144,0,0" Width="35" MouseLeftButtonUp="OpenContextMenu"/>
                     <!-- Triggers -->
-                    <Image x:Name="ccL" Source="/WiinUPro;component/Images/Controllers/Classic/ccL.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,20,0,0" Width="102" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccLT" />
-                    <Image x:Name="ccR" Source="/WiinUPro;component/Images/Controllers/Classic/ccR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="452,21,0,0" Width="100" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccRT" />
+                    <Image x:Name="ccL" Source="/WiinUPro;component/Images/Controllers/Classic/ccL.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,20,0,0" Width="102" Opacity="0" MouseLeftButtonUp="OpenContextMenu">
+                        <Image.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Press" Tag="ccLT" Click="OpenInput" />
+                                <MenuItem Header="Full Press" Tag="ccLFULL" Click="OpenInput" />
+                                <Separator/>
+                                <MenuItem Header="Calibrate" Tag="ccLT" Click="CalibrateTrigger_Click"/>
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image>
+                    <Image x:Name="ccR" Source="/WiinUPro;component/Images/Controllers/Classic/ccR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="452,21,0,0" Width="100" Opacity="0" MouseLeftButtonUp="OpenContextMenu">
+                        <Image.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Press" Tag="ccRT" Click="OpenInput" />
+                                <MenuItem Header="Full Press" Tag="ccRFULL" Click="OpenInput" />
+                                <Separator/>
+                                <MenuItem Header="Calibrate" Tag="ccRT" Click="CalibrateTrigger_Click"/>
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image>
                     <!-- Joysticks -->
                     <Image x:Name="ccLeftStick" Source="/WiinUPro;component/Images/Controllers/Classic/ccJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="208,210,0,0" Width="66" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
                         <Image.ContextMenu>

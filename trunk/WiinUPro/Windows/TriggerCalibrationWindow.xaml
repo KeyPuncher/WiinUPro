@@ -1,0 +1,50 @@
+﻿<Window x:Class="WiinUPro.Windows.TriggerCalibrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WiinUPro.Windows"
+        xmlns:WiinUPro="clr-namespace:WiinUPro"
+        mc:Ignorable="d"
+        Title="Trigger Calibration" Height="290" Width="262" Background="{StaticResource BackgroundMain}" MinWidth="262" MinHeight="290" MaxWidth="300" MaxHeight="320">
+    <Grid Background="{StaticResource BackgroundSub}" Margin="8">
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9.6,10.4" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click" Style="{StaticResource AcceptButton}"/>
+        <Button x:Name="cancelBtn" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,90.6,10.4" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click" Style="{StaticResource WarningButton}"/>
+        <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="114,151,0,0" VerticalAlignment="Top" Width="76" Click="loadBtn_Click" Style="{StaticResource BasicButton}"/>
+        <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="30,151,0,0" VerticalAlignment="Top" Width="76" Click="saveBtn_Click" Style="{StaticResource BasicButton}"/>
+        <Rectangle HorizontalAlignment="Left" Height="24" Margin="10,13,0,0" StrokeThickness="0" VerticalAlignment="Top" Width="200">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{DynamicResource B250}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle x:Name="raw" HorizontalAlignment="Left" Height="24" Margin="10,13,0,0" StrokeThickness="0" VerticalAlignment="Top" Width="0">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{DynamicResource RedDark}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle x:Name="rawMin" HorizontalAlignment="Left" Height="24" Margin="10,13,0,0" StrokeThickness="0" VerticalAlignment="Top" Width="2">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{DynamicResource Orange}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle x:Name="rawMax" HorizontalAlignment="Left" Height="24" Margin="210,13,0,0" StrokeThickness="0" VerticalAlignment="Top" Width="2">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{DynamicResource B800}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Left" Height="24" Margin="10,48,0,0" StrokeThickness="0" VerticalAlignment="Top" Width="200">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{DynamicResource B250}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle x:Name="output" HorizontalAlignment="Left" Height="24" Margin="10,48,0,0" StrokeThickness="0" VerticalAlignment="Top" Width="0">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{DynamicResource Green}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Label Content="Minimum" HorizontalAlignment="Left" Margin="7,74,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Width="99" HorizontalContentAlignment="Center"/>
+        <WiinUPro:NumPicker x:Name="min" HorizontalAlignment="Left" Margin="6,97,0,0" VerticalAlignment="Top" Max="100" Min="-10" Value="0" OnValueUpdate="MinUpdated" Width="100"/>
+        <Label Content="Maximum" HorizontalAlignment="Left" Margin="114,74,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Width="96" HorizontalContentAlignment="Center"/>
+        <WiinUPro:NumPicker x:Name="max" HorizontalAlignment="Left" Margin="112,97,0,0" VerticalAlignment="Top" Max="100" Min="0" Value="31" OnValueUpdate="MaxUpdated" Width="100"/>
+    </Grid>
+</Window>
