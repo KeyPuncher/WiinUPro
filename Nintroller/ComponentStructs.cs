@@ -494,8 +494,8 @@ namespace NintrollerLib
                 return;
             }
 
-            X = Nintroller.Normalize(rawX, minX, centerX, maxX);//, deadXp, deadXn);
-            Y = Nintroller.Normalize(rawY, minY, centerY, maxY);//, deadYp, deadYn);
+            X = Nintroller.Normalize(rawX, minX, centerX, maxX, deadXp, deadXn);
+            Y = Nintroller.Normalize(rawY, minY, centerY, maxY, deadYp, deadYn);
 
             if (antiDeadzone != 0)
             {
