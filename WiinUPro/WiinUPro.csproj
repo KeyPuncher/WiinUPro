@@ -524,6 +524,16 @@
     <Resource Include="Images\Controllers\Nunchuk\nunJoy.png" />
     <Resource Include="Images\Controllers\Nunchuk\nunZ.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\vJoy\x64\vJoyInterface.dll">
+      <Link>vJoyInterface.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\vJoy\x64\vJoyInterfaceWrap.dll">
+      <Link>vJoyInterfaceWrap.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
