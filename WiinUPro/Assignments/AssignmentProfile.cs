@@ -24,7 +24,7 @@ namespace WiinUPro
             FromAssignmentArray(assignments);
         }
 
-        public Dictionary<string, AssignmentCollection>[] ToAssignmentArray()
+        public Dictionary<string, AssignmentCollection>[] ToAssignmentArray(IDeviceControl device = null)
         {
             Dictionary<string, AssignmentCollection>[] result = new[] {
                 new Dictionary<string, AssignmentCollection>(),
@@ -33,10 +33,10 @@ namespace WiinUPro
                 new Dictionary<string, AssignmentCollection>()
             };
 
-            foreach (var ma in MainAssignments) result[0].Add(ma.input, ma.GetCollection());
-            foreach (var ra in RedAssignments) result[1].Add(ra.input, ra.GetCollection());
-            foreach (var ba in BlueAssignments) result[2].Add(ba.input, ba.GetCollection());
-            foreach (var ga in GreenAssignments) result[3].Add(ga.input, ga.GetCollection());
+            AddAssignments(result[0], MainAssignments, device);
+            AddAssignments(result[1], RedAssignments, device);
+            AddAssignments(result[2], BlueAssignments, device);
+            AddAssignments(result[3], GreenAssignments, device);
 
             return result;
         }
@@ -65,6 +65,24 @@ namespace WiinUPro
             {
                 foreach (var a in assignments[3])
                     GreenAssignments.Add(new AssignmentPair(a.Key, a.Value));
+            }
+        }
+
+        private void AddAssignments(Dictionary<string, AssignmentCollection> mapping, List<AssignmentPair> assignmentPairs, IDeviceControl device = null)
+        {
+            foreach (var pair in assignmentPairs)
+            {
+                var collection = pair.GetCollection();
+
+                foreach (var assignment in collection)
+                {
+                    if (assignment is ShiftAssignment)
+                    {
+                        (assignment as ShiftAssignment).SetControl(device);
+                    }
+                }
+
+                mapping.Add(pair.input, pair.GetCollection());
             }
         }
     }

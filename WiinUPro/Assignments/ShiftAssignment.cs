@@ -109,6 +109,11 @@ namespace WiinUPro
             return result;
         }
 
+        public void SetControl(IDeviceControl control)
+        {
+            _control = control;
+        }
+
         public override bool Equals(object obj)
         {
             var other = obj as ShiftAssignment;

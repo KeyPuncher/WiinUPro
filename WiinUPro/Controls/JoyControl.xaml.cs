@@ -581,20 +581,20 @@ namespace WiinUPro
                 {
                     if (loadedProfile.SubName == Type.ToString())
                     {
-                        _assignments = loadedProfile.SubProfile.ToAssignmentArray();
+                        _assignments = loadedProfile.SubProfile.ToAssignmentArray(this);
                     }
                     else
                     {
-                        _assignments = loadedProfile.ToAssignmentArray();
+                        _assignments = loadedProfile.ToAssignmentArray(this);
                     }
 
                     if (associatedJoyCon != null && loadedProfile.SubName == associatedJoyCon.Type.ToString())
                     {
-                        associatedJoyCon._assignments = loadedProfile.SubProfile.ToAssignmentArray();
+                        associatedJoyCon._assignments = loadedProfile.SubProfile.ToAssignmentArray(this);
                     }
                     else if (associatedJoyCon != null)
                     {
-                        associatedJoyCon._assignments = loadedProfile.ToAssignmentArray();
+                        associatedJoyCon._assignments = loadedProfile.ToAssignmentArray(this);
                     }
                 }
             }

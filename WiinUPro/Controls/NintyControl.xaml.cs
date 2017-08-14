@@ -493,7 +493,7 @@ namespace WiinUPro
 
                 if (loadedProfile != null)
                 {
-                    _assignments = loadedProfile.ToAssignmentArray();
+                    _assignments = loadedProfile.ToAssignmentArray(this);
                 }
             }
         }

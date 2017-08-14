@@ -83,6 +83,37 @@ namespace WiinUPro
                 }
             }
 
+            // If this collection is only a shift assignment, populate the shift tab
+            if (collection.ShiftAssignment)
+            {
+                ShiftAssignment shifty = collection.Assignments[0] as ShiftAssignment;
+                radioToggle.IsChecked = shifty.Toggles;
+
+                if (shifty.Toggles)
+                {
+                    checkNone.IsChecked  = shifty.ToggleStates.Contains(ShiftState.None);
+                    checkRed.IsChecked   = shifty.ToggleStates.Contains(ShiftState.Red);
+                    checkBlue.IsChecked  = shifty.ToggleStates.Contains(ShiftState.Blue);
+                    checkGreen.IsChecked = shifty.ToggleStates.Contains(ShiftState.Green);
+
+                    shiftToggleGroup.IsEnabled = true;
+                    shiftHoldGroup.IsEnabled = false;
+                }
+                else
+                {
+                    switch (shifty.TargetState)
+                    {
+                        case ShiftState.None:  radioNone.IsChecked = true; break;
+                        case ShiftState.Red:   radioRed.IsChecked = true; break;
+                        case ShiftState.Blue:  radioBlue.IsChecked = true; break;
+                        case ShiftState.Green: radioGreen.IsChecked = true; break;
+                    }
+                }
+
+                tabControl.SelectedIndex = 4;
+                return;
+            }
+
             // Show a tab where the user has assignments chosen
             bool hasKey = false, hasMouse = false, hasJoy = false, hasX = false, hasShift = false;
 
