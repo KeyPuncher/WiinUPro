@@ -31,6 +31,7 @@ namespace WiinUPro
         event JoyUpdate OnUpdate;
         public event Action OnDisconnect;
         public JoyControl associatedJoyCon = null;
+        public bool isChild = false;
         public IJoyControl Control { get { return _controller; } }
         public Dictionary<JoystickOffset, AxisCalibration> calibrations;
 
@@ -130,6 +131,8 @@ namespace WiinUPro
         public void AssociateJoyCon(JoyControl joy)
         {
             associatedJoyCon = joy;
+            isChild = false;
+            joy.isChild = true;
 
             var parent = (Panel)((UserControl)joy.Control).Parent;
             if (parent != null)
@@ -242,7 +245,8 @@ namespace WiinUPro
             VJoyDirector.Access.ApplyAll();
             Dispatcher.Invoke(new Action(() =>
             {
-                if (MainWindow.CurrentTab != this) return;
+                if (MainWindow.CurrentTab != this && !isChild)
+                    return;
 
                 if (_controller != null)
                 {
