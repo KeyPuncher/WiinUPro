@@ -75,11 +75,16 @@ namespace WiinUPro
         public InputsWindow(IDeviceControl control, AssignmentCollection collection) : this(control)
         {
             var xImages = new List<Image>();
+            var xShapes = new List<Shape>();
             foreach (var border in xboxGrid.Children.OfType<Border>().ToList())
             {
                 if (border.Child is Image)
                 {
                     xImages.Add(border.Child as Image);
+                }
+                else if (border.Child is Shape)
+                {
+                    xShapes.Add(border.Child as Shape);
                 }
             }
 
@@ -190,7 +195,7 @@ namespace WiinUPro
                     }
                     else
                     {
-                        var shape = xboxGrid.Children.OfType<Shape>().ToList().Find((s) => s.Tag.ToString() == xb.ToString());
+                        var shape = xShapes.Find((s) => s.Tag.ToString() == xb.ToString());
                         if (shape != null)
                         {
                             shape.Opacity = 100;
@@ -205,7 +210,7 @@ namespace WiinUPro
                 {
                     hasX = true;
                     var xa = (item as XInputAxisAssignment).Axis;
-                    var img = xboxGrid.Children.OfType<Image>().ToList().Find((i) => i.Tag.ToString() == xa.ToString());
+                    var img = xImages.Find((i) => i.Tag.ToString() == xa.ToString());
                     if (img != null)
                     {
                         img.Opacity = 100;
