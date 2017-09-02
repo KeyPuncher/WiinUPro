@@ -114,6 +114,7 @@ namespace WiinUSoft
                     {
                         deviceList.Add(new DeviceControl(n, hid.DevicePath));
                         deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
+                        deviceList[deviceList.Count - 1].OnConnectionLost += DeviceControl_OnConnectionLost;
                         deviceList[deviceList.Count - 1].RefreshState();
                         if (deviceList[deviceList.Count - 1].properties.autoConnect)
                         {
@@ -234,6 +235,7 @@ namespace WiinUSoft
             }
 
             Refresh();
+            AutoRefresh(menu_AutoRefresh.IsChecked && deviceList.Count == 0);
         }
 
         private void DeviceControl_OnConnectStateChange(DeviceControl sender, DeviceState oldState, DeviceState newState)
@@ -275,6 +277,22 @@ namespace WiinUSoft
             {
                 AutoRefresh(groupAvailable.Children.Count + groupXinput.Children.Count == 0);
             }
+        }
+
+        private void DeviceControl_OnConnectionLost(DeviceControl sender)
+        {
+            if (groupAvailable.Children.Contains(sender))
+            {
+                groupAvailable.Children.Remove(sender);
+            }
+            else if (groupXinput.Children.Contains(sender))
+            {
+                groupXinput.Children.Remove(sender);
+            }
+
+            deviceList.Remove(sender);
+
+            AutoRefresh(menu_AutoRefresh.IsChecked && deviceList.Count == 0);
         }
         
         private void btnDetatchAllXInput_Click(object sender, RoutedEventArgs e)

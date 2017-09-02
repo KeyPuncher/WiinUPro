@@ -19,6 +19,7 @@ namespace WiinUSoft
     }
 
     public delegate void ConnectStateChange(DeviceControl sender, DeviceState oldState, DeviceState newState);
+    public delegate void ConnectionLost(DeviceControl sender);
 
     public partial class DeviceControl : UserControl
     {
@@ -49,6 +50,7 @@ namespace WiinUSoft
 
         // events
         public event ConnectStateChange OnConnectStateChange;
+        public event ConnectionLost OnConnectionLost;
 
         #endregion
 
@@ -441,7 +443,7 @@ namespace WiinUSoft
                 new Action(() =>
                 {
                     Detatch();
-                    ConnectionState = device.Connected ? DeviceState.Discovered : DeviceState.None;
+                    OnConnectionLost?.Invoke(this);
 
                     // Show balloon if minimized, otherwise a popup dialog
                     if (MainWindow.Instance.trayIcon.Visibility == Visibility.Visible)
