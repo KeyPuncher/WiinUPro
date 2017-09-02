@@ -444,16 +444,7 @@ namespace WiinUSoft
                 {
                     Detatch();
                     OnConnectionLost?.Invoke(this);
-
-                    // Show balloon if minimized, otherwise a popup dialog
-                    if (MainWindow.Instance.trayIcon.Visibility == Visibility.Visible)
-                    {
-                        MainWindow.Instance.ShowBalloon("Connection Lost", "Failed to communicate with controller. It may no longer be connected.", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Failed to communicate with controller." + Environment.NewLine + "It may no longer be connected.", "Connection Lost", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    MainWindow.Instance.ShowBalloon("Connection Lost", "Failed to communicate with controller. It may no longer be connected.", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Error);
                 }
             ));
         }

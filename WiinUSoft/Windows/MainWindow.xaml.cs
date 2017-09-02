@@ -63,14 +63,20 @@ namespace WiinUSoft
 
         public void ShowBalloon(string title, string message, BalloonIcon icon, SystemSound sound)
         {
-            //if (trayIcon.Visibility == System.Windows.Visibility.Hidden)
-            //    trayIcon.Visibility = System.Windows.Visibility.Visible;
+            trayIcon.Visibility = Visibility.Visible;
             trayIcon.ShowBalloonTip(title, message, icon);
 
             if (sound != null)
             {
                 sound.Play();
             }
+
+            Task restoreTray = new Task(new Action(() =>
+            {
+                Thread.Sleep(7000);
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => trayIcon.Visibility = WindowState == WindowState.Minimized ? Visibility.Visible : Visibility.Hidden));
+            }));
+            restoreTray.Start();
         }
 
         private void Refresh()
