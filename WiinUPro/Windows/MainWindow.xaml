@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="WiinUPro" Height="520" Width="480" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}">
+        Title="WiinUPro" Height="520" Width="480" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}" Loaded="Window_Loaded">
     <Grid>
         <TabControl x:Name="tabControl" Margin="10" Background="{StaticResource BackgroundSub}" >
             <TabControl.Resources>
@@ -72,6 +72,7 @@
                     </GroupBox>
                     <Button x:Name="btnSync" Content="Sync" HorizontalAlignment="Left" Margin="10,3,0,0" VerticalAlignment="Top" Width="36" Click="btnSync_Click" Style="{StaticResource BasicButton}"/>
                     <Label x:Name="label" Content="(Windows BT Stack Only)" HorizontalAlignment="Left" Margin="51,0,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="versionLabel" Content="" HorizontalAlignment="Right" Margin="0,0,4,0" VerticalAlignment="Top" FontSize="10" Padding="0"/>
                 </Grid>
             </TabItem>
         </TabControl>
