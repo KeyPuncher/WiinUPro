@@ -13,7 +13,7 @@
         -->
         <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click" Style="{StaticResource WarningButton}"/>
         <Viewbox x:Name="_view" Margin="0,62,-0.5,0" />
-        <ComboBox x:Name="dropShift" HorizontalAlignment="Left" Margin="294,29,0,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="76" SelectionChanged="dropShift_SelectionChanged">
+        <ComboBox x:Name="dropShift" HorizontalAlignment="Right" Margin="0,29,10,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="76" SelectionChanged="dropShift_SelectionChanged">
             <MenuItem Header="None" Padding="-24,0,0,0" IsHitTestVisible="False"/>
             <MenuItem Foreground="Red" Header="Red" Padding="-24,0,0,0" IsHitTestVisible="False"/>
             <MenuItem Foreground="Blue" Header="Blue" Padding="-24,0,0,0" IsHitTestVisible="False"/>
@@ -21,7 +21,7 @@
         </ComboBox>
         <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click" Style="{StaticResource BasicButton}" />
         <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnLoad_Click" Style="{StaticResource BasicButton}" />
-        <Label Content="Shift State" HorizontalAlignment="Left" Margin="210,30,0,0" VerticalAlignment="Top" Width="74" HorizontalContentAlignment="Right" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+        <Label Content="Shift State" HorizontalAlignment="Right" Margin="0,30,96,0" VerticalAlignment="Top" Width="74" HorizontalContentAlignment="Right" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
         <Button x:Name="btnAddRumble" Content="+/- Rumble" Margin="10,33,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" Click="btnAddRumble_Click" Style="{StaticResource BasicButton}" />
         <Grid.ContextMenu>
             <ContextMenu x:Name="subMenu">
