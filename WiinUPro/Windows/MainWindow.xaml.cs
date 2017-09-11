@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Shared.Windows;
+using Microsoft.Win32;
 
 namespace WiinUPro
 {
@@ -106,6 +108,12 @@ namespace WiinUPro
                     };
                     availableDevices.Add(status);
                     statusStack.Children.Add(status);
+
+                    DevicePrefs devicePrefs = AppPrefs.Instance.GetDevicePreferences(info.DevicePath);
+                    if (devicePrefs.autoConnect)
+                    {
+                        status.AutoConnect();
+                    }
                 }
             }
             
@@ -348,12 +356,46 @@ namespace WiinUPro
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Get the application version
             try
             {
                 Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
                 versionLabel.Content = string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Revision);
             }
             catch { }
+
+            // Check if auto start is enabled via registry
+            try
+            {
+                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+                settingAutoStart.IsChecked |= key.GetValue("WiinUPro") != null;
+            }
+            catch { }
+
+            // Check if auto start is enabled via shortcut
+            string startupDir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            settingAutoStart.IsChecked |= File.Exists(Path.Combine(startupDir, "WiinUPro.lnk"));
+
+            // Check for Start Minimized
+            if (AppPrefs.Instance.startMinimized)
+            {
+                settingStartMinimized.IsChecked = true;
+                // TOOD: Minimize
+            }
+
+            // Check Exclusive Mode
+            if (AppPrefs.Instance.useExclusiveMode)
+            {
+                settingExclusiveMode.IsChecked = true;
+                settingExclusiveMode_Checked(this, new RoutedEventArgs());
+            }
+
+            // Check Toshiba Mode
+            if (AppPrefs.Instance.useToshibaMode)
+            {
+                settingToshibaMode.IsChecked = true;
+                settingToshibaMode_Checked(this, new RoutedEventArgs());
+            }
         }
     }
 }

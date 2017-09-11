@@ -129,6 +129,14 @@ namespace WiinUPro
             icon.Source = new BitmapImage(new Uri("../Images/Icons/" + img, UriKind.Relative));
         }
 
+        public void AutoConnect()
+        {
+            if (connectBtn.IsEnabled)
+            {
+                connectBtn_Click(this, new RoutedEventArgs());
+            }
+        }
+
         private void connectBtn_Click(object sender, RoutedEventArgs e)
         {
             bool result = false;
