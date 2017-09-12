@@ -251,6 +251,16 @@ namespace WiinUPro
             }
         }
 
+        private void settingAutoStart_Checked(object sender, RoutedEventArgs e)
+        {
+            AppPrefs.Instance.SetAutoStart(settingAutoStart.IsChecked ?? false);
+        }
+
+        private void settingStartMinimized_Checked(object sender, RoutedEventArgs e)
+        {
+            AppPrefs.Instance.startMinimized = settingStartMinimized.IsChecked ?? false;
+        }
+
         private void settingExclusiveMode_Checked(object sender, RoutedEventArgs e)
         {
             //WinBtStream.OverrideSharingMode = settingExclusiveMode.IsChecked ?? false;
@@ -264,11 +274,14 @@ namespace WiinUPro
             {
                 WinBtStream.OverridenFileShare = System.IO.FileShare.ReadWrite;
             }
+
+            AppPrefs.Instance.useExclusiveMode = settingExclusiveMode.IsChecked ?? false;
         }
 
         private void settingToshibaMode_Checked(object sender, RoutedEventArgs e)
         {
             WinBtStream.ForceToshibaMode = settingToshibaMode.IsChecked ?? false;
+            AppPrefs.Instance.useToshibaMode = WinBtStream.ForceToshibaMode;
         }
 
         private void btnAddXinput_Click(object sender, RoutedEventArgs e)
@@ -372,9 +385,8 @@ namespace WiinUPro
             }
             catch { }
 
-            // Check if auto start is enabled via shortcut
-            string startupDir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            settingAutoStart.IsChecked |= File.Exists(Path.Combine(startupDir, "WiinUPro.lnk"));
+            // Check if auto start is enabled
+            settingAutoStart.IsChecked = AppPrefs.Instance.GetAutoStartSet();
 
             // Check for Start Minimized
             if (AppPrefs.Instance.startMinimized)
@@ -396,6 +408,12 @@ namespace WiinUPro
                 settingToshibaMode.IsChecked = true;
                 settingToshibaMode_Checked(this, new RoutedEventArgs());
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Save preferences
+            AppPrefs.Save();
         }
     }
 }
