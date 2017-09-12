@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Serialization;
 using NintrollerLib;
+using Newtonsoft.Json;
 
 namespace WiinUPro.Windows
 {
@@ -211,15 +212,7 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Joystick));
-
-                using (FileStream stream = File.Create(dialog.FileName))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    serializer.Serialize(writer, _joystick);
-                    writer.Close();
-                    stream.Close();
-                }
+                File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(_joystick, Formatting.Indented));
             }
         }
 
@@ -237,13 +230,10 @@ namespace WiinUPro.Windows
             {
                 try
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(Joystick));
-
-                    using (FileStream stream = File.OpenRead(dialog.FileName))
-                    using (StreamReader reader = new StreamReader(stream))
+                    using (StreamReader stream = File.OpenText(dialog.FileName))
                     {
-                        loadedConfig = serializer.Deserialize(reader) as Joystick?;
-                        reader.Close();
+                        JsonSerializer jsonSerializer = new JsonSerializer();
+                        loadedConfig = (Joystick)jsonSerializer.Deserialize(stream, typeof(Joystick));
                         stream.Close();
                     }
                 }
