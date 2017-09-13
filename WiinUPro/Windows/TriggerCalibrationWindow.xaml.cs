@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Xml.Serialization;
 using NintrollerLib;
 
 namespace WiinUPro.Windows
@@ -75,15 +73,7 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Trigger));
-
-                using (FileStream stream = File.Create(dialog.FileName))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    serializer.Serialize(writer, _trigger);
-                    writer.Close();
-                    stream.Close();
-                }
+                App.SaveToFile<Trigger>(dialog.FileName, _trigger);
             }
         }
 
@@ -95,31 +85,18 @@ namespace WiinUPro.Windows
             dialog.Filter = App.TRIG_CAL_FILTER;
 
             bool? doLoad = dialog.ShowDialog();
-            Trigger? loadedConfig = null;
+            Trigger loadedConfig;
 
             if (doLoad == true && dialog.CheckFileExists)
             {
-                try
+                if (App.LoadFromFile<Trigger>(dialog.FileName, out loadedConfig))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(Trigger));
-
-                    using (FileStream stream = File.OpenRead(dialog.FileName))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        loadedConfig = serializer.Deserialize(reader) as Trigger?;
-                        reader.Close();
-                        stream.Close();
-                    }
+                    min.Value = loadedConfig.min;
+                    max.Value = loadedConfig.max;
                 }
-                catch (Exception err)
+                else
                 {
-                    var c = System.Windows.MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                }
-
-                if (loadedConfig != null && loadedConfig.HasValue)
-                {
-                    min.Value = loadedConfig.Value.min;
-                    max.Value = loadedConfig.Value.max;
+                    var c = System.Windows.MessageBox.Show("Could not open the file \"" + dialog.FileName + "\".", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 }
             }
         }

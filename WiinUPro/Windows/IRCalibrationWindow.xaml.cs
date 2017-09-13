@@ -2,8 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using NintrollerLib;
-using System.Xml.Serialization;
-using System.IO;
 
 namespace WiinUPro.Windows
 {
@@ -100,34 +98,21 @@ namespace WiinUPro.Windows
             dialog.Filter = App.IR_CAL_FILTER;
 
             bool? doLoad = dialog.ShowDialog();
-            IRCalibration? loadedConfig = null;
+            IRCalibration loadedConfig;
 
             if (doLoad == true && dialog.CheckFileExists)
             {
-                try
+                if (App.LoadFromFile<IRCalibration>(dialog.FileName, out loadedConfig))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(IRCalibration));
-
-                    using (FileStream stream = File.OpenRead(dialog.FileName))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        loadedConfig = serializer.Deserialize(reader) as IRCalibration?;
-                        reader.Close();
-                        stream.Close();
-                    }
-                }
-                catch (Exception err)
-                {
-                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                if (loadedConfig != null && loadedConfig.HasValue)
-                {
-                    _irCalibration = loadedConfig.Value;
+                    _irCalibration = loadedConfig;
                     boxWidth.Value = _irCalibration.boundry.width;
                     boxHeight.Value = _irCalibration.boundry.height;
                     boxX.Value = _irCalibration.boundry.center_x - _irCalibration.boundry.width / 2;
                     boxY.Value = _irCalibration.boundry.center_y - _irCalibration.boundry.height / 2;
+                }
+                else
+                {
+                    var c = MessageBox.Show("Could not open the file \"" + dialog.FileName + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -143,15 +128,7 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(IRCalibration));
-
-                using (FileStream stream = File.Create(dialog.FileName))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    serializer.Serialize(writer, _irCalibration);
-                    writer.Close();
-                    stream.Close();
-                }
+                App.SaveToFile<IRCalibration>(dialog.FileName, _irCalibration);
             }
         }
     }

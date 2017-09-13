@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Windows;
-using System.Xml.Serialization;
 
 namespace WiinUPro.Windows
 {
@@ -77,34 +75,21 @@ namespace WiinUPro.Windows
             dialog.Filter = App.AXIS_CAL_FILTER;
 
             bool? doLoad = dialog.ShowDialog();
-            AxisCalibration? loadedConfig = null;
+            AxisCalibration loadedConfig;
 
             if (doLoad == true && dialog.CheckFileExists)
             {
-                try
+                if (App.LoadFromFile<AxisCalibration>(dialog.FileName, out loadedConfig))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(AxisCalibration));
-
-                    using (FileStream stream = File.OpenRead(dialog.FileName))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        loadedConfig = serializer.Deserialize(reader) as AxisCalibration?;
-                        reader.Close();
-                        stream.Close();
-                    }
+                    center.Value = loadedConfig.center;
+                    min.Value = (int)Math.Round(100 - 100 * loadedConfig.min / 65535d);
+                    max.Value = (int)Math.Round(100 * loadedConfig.max / 65535d);
+                    deadMax.Value = (int)Math.Round(100 * loadedConfig.deadPos / 65535d);
+                    deadMin.Value = (int)Math.Round(-100 * loadedConfig.deadNeg / 65535d);
                 }
-                catch (Exception err)
+                else
                 {
-                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                if (loadedConfig != null && loadedConfig.HasValue)
-                {
-                    center.Value = loadedConfig.Value.center;
-                    min.Value = (int)Math.Round(100 - 100 * loadedConfig.Value.min / 65535d);
-                    max.Value = (int)Math.Round(100 * loadedConfig.Value.max / 65535d);
-                    deadMax.Value = (int)Math.Round(100 * loadedConfig.Value.deadPos / 65535d);
-                    deadMin.Value = (int)Math.Round(-100 * loadedConfig.Value.deadNeg / 65535d);
+                    var c = MessageBox.Show("Could not open the file \"" + dialog.FileName + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -120,15 +105,7 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(AxisCalibration));
-
-                using (FileStream stream = File.Create(dialog.FileName))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    serializer.Serialize(writer, _axis);
-                    writer.Close();
-                    stream.Close();
-                }
+                App.SaveToFile<AxisCalibration>(dialog.FileName, _axis);
             }
         }
 
