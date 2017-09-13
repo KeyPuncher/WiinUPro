@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Serialization;
 using NintrollerLib;
-using Newtonsoft.Json;
 
 namespace WiinUPro.Windows
 {
@@ -212,7 +209,7 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(_joystick, Formatting.Indented));
+                App.SaveToFile<Joystick>(dialog.FileName, _joystick);
             }
         }
 
@@ -224,27 +221,17 @@ namespace WiinUPro.Windows
             dialog.Filter = App.JOY_CAL_FILTER;
 
             bool? doLoad = dialog.ShowDialog();
-            Joystick? loadedConfig = null;
+            Joystick loadedConfig;
 
             if (doLoad == true && dialog.CheckFileExists)
             {
-                try
+                if (App.LoadFromFile<Joystick>(dialog.FileName, out loadedConfig))
                 {
-                    using (StreamReader stream = File.OpenText(dialog.FileName))
-                    {
-                        JsonSerializer jsonSerializer = new JsonSerializer();
-                        loadedConfig = (Joystick)jsonSerializer.Deserialize(stream, typeof(Joystick));
-                        stream.Close();
-                    }
+                    Set(loadedConfig);
                 }
-                catch (Exception err)
+                else
                 {
-                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                if (loadedConfig != null && loadedConfig.HasValue)
-                {
-                    Set(loadedConfig.Value);
+                    var c = MessageBox.Show("Could not open the file \"" + dialog.FileName + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

@@ -76,24 +76,10 @@ namespace WiinUPro
         private static bool Load()
         {
             bool success = false;
-
-            try
+            
+            if (File.Exists(DataPath + PREFS_FILE_NAME))
             {
-                if (File.Exists(DataPath + PREFS_FILE_NAME))
-                {
-                    using (StreamReader stream = File.OpenText(DataPath + PREFS_FILE_NAME))
-                    {
-                        JsonSerializer jsonSerializer = new JsonSerializer();
-                        _instance = (AppPrefs)jsonSerializer.Deserialize(stream, typeof(AppPrefs));
-                        stream.Close();
-                    }
-
-                    success = true;
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                success = App.LoadFromFile<AppPrefs>(DataPath + PREFS_FILE_NAME, out _instance);
             }
 
             return success;
@@ -102,21 +88,13 @@ namespace WiinUPro
         public static bool Save()
         {
             bool success = false;
-
-            try
+            
+            if (!Directory.Exists(DataPath))
             {
-                if (!Directory.Exists(DataPath))
-                {
-                    Directory.CreateDirectory(DataPath);
-                }
-
-                File.WriteAllText(DataPath + PREFS_FILE_NAME, JsonConvert.SerializeObject(_instance, Formatting.Indented));
-                success = true;
+                Directory.CreateDirectory(DataPath);
             }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
+                
+            success = App.SaveToFile<AppPrefs>(DataPath + PREFS_FILE_NAME, _instance);
 
             return success;
         }
