@@ -570,11 +570,7 @@ namespace NintrollerLib
                 Log("Can't Send data, we are not connected!");
                 return;
             }
-
-            // TODO: New: Remove when done testing
-            Log("Sending " + Enum.Parse(typeof(OutputReport), report[0].ToString()) + " report");
-            Log(BitConverter.ToString(report));
-
+            
             try
             {
                 _stream.Write(report, 0, report.Length);
