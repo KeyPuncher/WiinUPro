@@ -12,6 +12,7 @@ namespace WiinUPro.Windows
     {
         public bool Apply { get; protected set; }
         public Joystick Calibration { get { return _joystick; } }
+        public string FileName { get; protected set; }
 
         protected int rawXCenter, rawYCenter;
         protected short rawXLimitMax, rawXLimitMin, rawYLimitMax, rawYLimitMin;
@@ -22,9 +23,11 @@ namespace WiinUPro.Windows
 
         public string[] Assignments { get; protected set; }
         
-        public JoyCalibrationWindow(Joystick noneCalibration, Joystick prevCalibration)
+        public JoyCalibrationWindow(Joystick noneCalibration, Joystick prevCalibration, string filename = "")
         {
             _default = noneCalibration;
+            FileName = filename;
+
             InitializeComponent();
             Set(prevCalibration);
         }
@@ -201,7 +204,7 @@ namespace WiinUPro.Windows
             Convert();
 
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "joystick_calibration";
+            dialog.FileName = string.IsNullOrEmpty(FileName) ? "joystick_calibration" : FileName;
             dialog.DefaultExt = ".joy";
             dialog.Filter = App.JOY_CAL_FILTER;
 
@@ -209,14 +212,17 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                App.SaveToFile<Joystick>(dialog.FileName, _joystick);
+                if (App.SaveToFile<Joystick>(dialog.FileName, _joystick))
+                {
+                    FileName = dialog.FileName;
+                }
             }
         }
 
         private void loadBtn_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.FileName ="joystick_Calibration";
+            dialog.FileName = string.IsNullOrEmpty(FileName) ? "joystick_calibration" : FileName;
             dialog.DefaultExt = ".joy";
             dialog.Filter = App.JOY_CAL_FILTER;
 
@@ -227,6 +233,7 @@ namespace WiinUPro.Windows
             {
                 if (App.LoadFromFile<Joystick>(dialog.FileName, out loadedConfig))
                 {
+                    FileName = dialog.FileName;
                     Set(loadedConfig);
                 }
                 else

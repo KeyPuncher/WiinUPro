@@ -11,6 +11,6 @@ namespace WiinUPro
         public string deviceId;
         public string defaultProfile;
         public bool autoConnect;
-        public Dictionary<string, object> calibrations = new Dictionary<string, object>();
+        public Dictionary<string, string> calibrationFiles = new Dictionary<string, string>();
     }
 }

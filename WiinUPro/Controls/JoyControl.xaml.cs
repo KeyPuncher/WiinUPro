@@ -478,12 +478,12 @@ namespace WiinUPro
             }
         }
 
-        private void SwitchProJoystickCalibrated(NintrollerLib.Joystick joy, bool right)
+        private void SwitchProJoystickCalibrated(NintrollerLib.Joystick joy, string target, string file = "")
         {
             AxisCalibration xCalibration = new AxisCalibration(joy.minX, joy.maxX, joy.centerX, joy.deadXn, joy.deadXp);
             AxisCalibration yCalibration = new AxisCalibration(joy.minY, joy.maxY, joy.centerY, joy.deadYn, joy.deadYp);
 
-            if (right)
+            if (target == App.CAL_SWP_RJOYSTICK)
             {
                 calibrations[JoystickOffset.RotationX] = xCalibration;
                 calibrations[JoystickOffset.RotationY] = yCalibration;
@@ -1072,7 +1072,7 @@ namespace WiinUPro
         #endregion
     }
 
-    public interface IJoyControl : IBaseControol
+    public interface IJoyControl : IBaseControl
     {
         void UpdateVisual(JoystickUpdate[] updates);
         Guid AssociatedInstanceID { get; }

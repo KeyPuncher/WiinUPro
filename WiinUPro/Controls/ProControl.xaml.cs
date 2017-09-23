@@ -13,7 +13,7 @@ namespace WiinUPro
     public partial class ProControl : BaseControl, INintyControl
     {
         public event Delegates.BoolArrDel OnChangeLEDs;
-        public event Delegates.JoystickeDel OnJoyCalibrated;
+        public event Delegates.JoystickDel OnJoyCalibrated;
         public ProController CurrentCalibration;
 
         protected Windows.JoyCalibrationWindow _openJoyWindow = null;
@@ -147,22 +147,30 @@ namespace WiinUPro
         private void Calibrate_Click(object sender, RoutedEventArgs e)
         {
             _rightJoyOpen = (sender as FrameworkElement).Tag.Equals("JoyR");
+            string joyTarget = _rightJoyOpen ? App.CAL_PRO_RJOYSTICK : App.CAL_PRO_LJOYSTICK;
+
+            var info = ObtainDeviceInfoDel();
+            var prefs = AppPrefs.Instance.GetDevicePreferences(info.DevicePath);
+            string filename = "";
+            prefs?.calibrationFiles.TryGetValue(joyTarget, out filename);
 
             Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(
                 _rightJoyOpen ? Calibrations.None.ProControllerRaw.RJoy : Calibrations.None.ProControllerRaw.LJoy,
-                _rightJoyOpen ? CurrentCalibration.RJoy : CurrentCalibration.LJoy);
+                _rightJoyOpen ? CurrentCalibration.RJoy : CurrentCalibration.LJoy,
+                filename ?? "");
             _openJoyWindow = joyCal;
             joyCal.ShowDialog();
 
             if (joyCal.Apply)
             {
-                OnJoyCalibrated?.Invoke(joyCal.Calibration, _rightJoyOpen);
+                OnJoyCalibrated?.Invoke(joyCal.Calibration, joyTarget, joyCal.FileName);
 
                 if (_rightJoyOpen) CurrentCalibration.RJoy = joyCal.Calibration;
                 else CurrentCalibration.LJoy = joyCal.Calibration;
             }
 
             _openJoyWindow = null;
+            joyCal = null;
         }
     }
 }

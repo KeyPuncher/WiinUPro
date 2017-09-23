@@ -75,6 +75,11 @@ namespace WiinUPro
             _scp = ScpDirector.Access;
         }
 
+        public Shared.DeviceInfo GetDeviceInfo()
+        {
+            return _info;
+        }
+
         public void ChangeState(ShiftState newState)
         {
             if (_currentState != newState)
@@ -207,27 +212,37 @@ namespace WiinUPro
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         private void CreateController(ControllerType type)
         {
+            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+
             switch (type)
             {
                 case ControllerType.ProController:
                     // TODO: Discover why this sometimes causes an access violation exceptions
-                    // TODO: Load saved calibration
-                    _controller = new ProControl(Calibrations.Defaults.ProControllerDefault);
-                    ((ProControl)_controller).OnJoyCalibrated += (j, rJoy) =>
+                    ProController proCalibration = Calibrations.Defaults.ProControllerDefault;
+
+                    if (prefs != null)
                     {
-                        var currentProCal = _nintroller.StoredCalibrations.ProCalibration;
-
-                        if (rJoy)
+                        if (prefs.calibrationFiles.ContainsKey(App.CAL_PRO_LJOYSTICK))
                         {
-                            currentProCal.RJoy = j;
-                        }
-                        else
-                        {
-                            currentProCal.LJoy = j;
+                            Joystick joystickCal;
+                            if (App.LoadFromFile<Joystick>(prefs.calibrationFiles[App.CAL_PRO_LJOYSTICK], out joystickCal))
+                            {
+                                proCalibration.LJoy = joystickCal;
+                            }
                         }
 
-                        _nintroller.SetCalibration(currentProCal);
-                    };
+                        if (prefs.calibrationFiles.ContainsKey(App.CAL_PRO_RJOYSTICK))
+                        {
+                            Joystick joystickCal;
+                            if (App.LoadFromFile<Joystick>(prefs.calibrationFiles[App.CAL_PRO_RJOYSTICK], out joystickCal))
+                            {
+                                proCalibration.RJoy = joystickCal;
+                            }
+                        }
+                    }
+
+                    _controller = new ProControl(proCalibration);
+                    ((ProControl)_controller).OnJoyCalibrated += _nintroller_JoystickCalibrated;
                     break;
 
                 case ControllerType.Wiimote:
@@ -236,6 +251,7 @@ namespace WiinUPro
                 case ControllerType.NunchukB:
                 case ControllerType.ClassicController:
                 case ControllerType.ClassicControllerPro:
+                    // TODO: Load saved calibration
                     _controller = new WiiControl();
                     ((WiiControl)_controller).OnChangeCameraMode += (mode) =>
                     {
@@ -258,6 +274,7 @@ namespace WiinUPro
             {
                 if (!_setup)
                 {
+                    _controller.ObtainDeviceInfoDel = GetDeviceInfo;
                     _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
                     _controller.OnChangeLEDs += SetLeds;
                     _controller.OnInputSelected += InputSelected;
@@ -346,31 +363,57 @@ namespace WiinUPro
             }));
         }
 
-        private void _nintroller_JoystickCalibrated(Joystick calibration, string target)
+        private void _nintroller_JoystickCalibrated(Joystick calibration, string target, string file = "")
         {
             switch (target)
             {
-                case "nJoy":
+                case App.CAL_NUN_JOYSTICK:
                     var nCal = _nintroller.StoredCalibrations.NunchukCalibration;
                     nCal.joystick = calibration;
                     _nintroller.SetCalibration(nCal);
                     break;
 
-                case "ccJoyL":
-                case "ccJoyR":
+                case App.CAL_CC_LJOYSTICK:
+                case App.CAL_CC_RJOYSTICK:
                     var ccCal = _nintroller.StoredCalibrations.ClassicCalibration;
                     if (target.EndsWith("L")) ccCal.LJoy = calibration;
                     else ccCal.RJoy = calibration;
                     _nintroller.SetCalibration(ccCal);
                     break;
 
-                case "ccpJoyL":
-                case "ccpJoyR":
+                case App.CAL_CCP_LJOYSTICK:
+                case App.CAL_CCP_RJOYSTICK:
                     var ccpCal = _nintroller.StoredCalibrations.ClassicProCalibration;
                     if (target.EndsWith("L")) ccpCal.LJoy = calibration;
                     else ccpCal.RJoy = calibration;
                     _nintroller.SetCalibration(ccpCal);
                     break;
+
+                case App.CAL_PRO_LJOYSTICK:
+                case App.CAL_PRO_RJOYSTICK:
+                    var proCal = _nintroller.StoredCalibrations.ProCalibration;
+                    if (target.EndsWith("L")) proCal.LJoy = calibration;
+                    else proCal.RJoy = calibration;
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(file))
+            {
+                var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
+                if (prompt == MessageBoxResult.Yes)
+                {
+                    var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+                    if (prefs.calibrationFiles.ContainsKey(target))
+                    {
+                        prefs.calibrationFiles[target] = file;
+                    }
+                    else
+                    {
+                        prefs.calibrationFiles.Add(target, file);
+                    }
+
+                    AppPrefs.Instance.SaveDevicePrefs(prefs);
+                }
             }
         }
 
@@ -690,7 +733,7 @@ namespace WiinUPro
         #endregion
     }
 
-    public interface INintyControl : IBaseControol
+    public interface INintyControl : IBaseControl
     {
         event Shared.Delegates.BoolArrDel OnChangeLEDs;
         void ApplyInput(INintrollerState state); // TOOD: I have forgotten what I want to use this for

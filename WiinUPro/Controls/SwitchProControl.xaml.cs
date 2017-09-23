@@ -14,7 +14,7 @@ namespace WiinUPro
     {
         public Guid AssociatedInstanceID { get; set; }
 
-        public event Delegates.JoystickeDel OnJoystickCalibrated;
+        public event Delegates.JoystickDel OnJoystickCalibrated;
         public AxisCalibration leftXCalibration;
         public AxisCalibration leftYCalibration;
         public AxisCalibration rightXCalibration;
@@ -257,6 +257,7 @@ namespace WiinUPro
         protected void CalibrateJoystick_Click(object sender, RoutedEventArgs e)
         {
             _leftCalibration = (sender as FrameworkElement).Tag.ToString() == "swpL";
+            string targetCalibration = _leftCalibration ? App.CAL_SWP_LJOYSTICK : App.CAL_SWP_RJOYSTICK;
 
             NintrollerLib.Joystick nonCalibrated = new NintrollerLib.Joystick
             {
@@ -288,7 +289,7 @@ namespace WiinUPro
 
             if (joyCal.Apply)
             {
-                OnJoystickCalibrated?.Invoke(joyCal.Calibration, !_leftCalibration);
+                OnJoystickCalibrated?.Invoke(joyCal.Calibration, targetCalibration);
             }
 
             _openJoyWindow = null;

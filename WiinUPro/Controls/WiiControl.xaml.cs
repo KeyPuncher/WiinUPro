@@ -59,7 +59,7 @@ namespace WiinUPro
                 nBtnZ.Opacity = nun.Z ? 1 : 0;
                 nJoy.Margin = new Thickness(70 + 30 * nun.joystick.X, 360 - 30 * nun.joystick.Y, 0, 0);
 
-                if (_openJoyWindow != null && _calibrationTarget == "nJoy")
+                if (_openJoyWindow != null && _calibrationTarget == App.CAL_NUN_JOYSTICK)
                 {
                     _openJoyWindow.Update(nun.joystick);
                 }
@@ -94,8 +94,8 @@ namespace WiinUPro
 
                 if (_openJoyWindow != null && _calibrationTarget.StartsWith("cc"))
                 {
-                    if (_calibrationTarget == "ccJoyL") _openJoyWindow.Update(cc.LJoy);
-                    else if (_calibrationTarget == "ccJoyR") _openJoyWindow.Update(cc.RJoy);
+                    if (_calibrationTarget == App.CAL_CC_LJOYSTICK) _openJoyWindow.Update(cc.LJoy);
+                    else if (_calibrationTarget == App.CAL_CC_RJOYSTICK) _openJoyWindow.Update(cc.RJoy);
                 }
                 else if (_openTrigWindow != null && _calibrationTarget.StartsWith("cc"))
                 {
@@ -133,8 +133,8 @@ namespace WiinUPro
 
                 if (_openJoyWindow != null && _calibrationTarget.StartsWith("ccp"))
                 {
-                    if (_calibrationTarget == "ccpJoyL") _openJoyWindow.Update(ccp.LJoy);
-                    else if (_calibrationTarget == "ccpJoyR") _openJoyWindow.Update(ccp.RJoy);
+                    if (_calibrationTarget == App.CAL_CCP_LJOYSTICK) _openJoyWindow.Update(ccp.LJoy);
+                    else if (_calibrationTarget == App.CAL_CCP_RJOYSTICK) _openJoyWindow.Update(ccp.RJoy);
                 }
             }
         }
@@ -366,22 +366,22 @@ namespace WiinUPro
             Joystick curCalibration = new Joystick();
             switch (_calibrationTarget)
             {
-                case "nJoy":
+                case App.CAL_NUN_JOYSTICK:
                     nonCalibrated = Calibrations.None.NunchukRaw.joystick;
                     if (_lastState is Nunchuk) curCalibration = ((Nunchuk)_lastState).joystick;
                     break;
-                case "ccJoyL":
+                case App.CAL_CC_LJOYSTICK:
                     nonCalibrated = Calibrations.None.ClassicControllerRaw.LJoy;
                     if (_lastState is ClassicController) curCalibration = ((ClassicController)_lastState).LJoy;
                     break;
-                case "ccJoyR":
+                case App.CAL_CC_RJOYSTICK:
                     nonCalibrated = Calibrations.None.ClassicControllerRaw.RJoy;
                     if (_lastState is ClassicController) curCalibration = ((ClassicController)_lastState).RJoy;
                     break;
-                case "ccpJoyL": nonCalibrated = Calibrations.None.ClassicControllerProRaw.LJoy;
+                case App.CAL_CCP_LJOYSTICK: nonCalibrated = Calibrations.None.ClassicControllerProRaw.LJoy;
                     if (_lastState is ClassicControllerPro) curCalibration = ((ClassicControllerPro)_lastState).LJoy;
                     break;
-                case "ccpJoyR":
+                case App.CAL_CCP_RJOYSTICK:
                     nonCalibrated = Calibrations.None.ClassicControllerProRaw.RJoy;
                     if (_lastState is ClassicControllerPro) curCalibration = ((ClassicControllerPro)_lastState).RJoy;
                     break;

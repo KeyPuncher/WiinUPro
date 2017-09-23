@@ -6,12 +6,13 @@ using Shared;
 
 namespace WiinUPro
 {
-    public abstract class BaseControl : UserControl, IBaseControol
+    public abstract class BaseControl : UserControl, IBaseControl
     {
         public event Delegates.StringDel OnInputRightClick;
         public event Delegates.StringDel OnInputSelected;
         public event AssignmentCollection.AssignDelegate OnQuickAssign;
         public event Delegates.StringArrDel OnRemoveInputs;
+        public Delegates.ObtainDeviceInfo ObtainDeviceInfoDel { get; set; }
 
         protected virtual void CallEvent_OnInputRightClick(string value)
         {
@@ -161,11 +162,12 @@ namespace WiinUPro
         }
     }
 
-    public interface IBaseControol
+    public interface IBaseControl
     {
         event Delegates.StringDel OnInputRightClick;
         event Delegates.StringDel OnInputSelected;
         event AssignmentCollection.AssignDelegate OnQuickAssign;
         event Delegates.StringArrDel OnRemoveInputs;
+        Delegates.ObtainDeviceInfo ObtainDeviceInfoDel { get; set; }
     }
 }

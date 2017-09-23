@@ -16,6 +16,16 @@ namespace WiinUPro
         internal const string AXIS_CAL_FILTER = "Axis Calibration|*.axs";
         internal const string IR_CAL_FILTER = "IR Calibration|*.irc";
 
+        internal const string CAL_NUN_JOYSTICK = "nJoy";
+        internal const string CAL_CC_LJOYSTICK = "ccJoyL";
+        internal const string CAL_CC_RJOYSTICK = "ccJoyR";
+        internal const string CAL_CCP_LJOYSTICK = "ccpJoyL";
+        internal const string CAL_CCP_RJOYSTICK = "ccpJoyR";
+        internal const string CAL_PRO_LJOYSTICK = "proJoyL";
+        internal const string CAL_PRO_RJOYSTICK = "proJoyR";
+        internal const string CAL_SWP_LJOYSTICK = "swpJoyL";
+        internal const string CAL_SWP_RJOYSTICK = "swpJoyR";
+
         public static bool SaveToFile<T>(string file, T data)
         {
             try
