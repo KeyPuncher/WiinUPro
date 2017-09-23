@@ -65,11 +65,17 @@ namespace WiinUPro
         public static string ToFileName(string text)
         {
             StringBuilder fileName = new StringBuilder(text);
+
+            // Strip out unnecessary bits
+            fileName.Replace("\\\\?\\hid#{00001124-0000-1000-8000-00805f9b34fb}_", "");
+            fileName.Replace("#{4d1e55b2-f16f-11cf-88cb-001111000030}", "");
+
+            // Replace invalid characters
             foreach (char c in Path.GetInvalidFileNameChars())
             {
                 fileName = fileName.Replace(c, '_');
             }
-
+            
             return fileName.ToString();
         }
         
