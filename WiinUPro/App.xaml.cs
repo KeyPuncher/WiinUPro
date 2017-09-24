@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace WiinUPro
 {
@@ -51,7 +52,28 @@ namespace WiinUPro
                     stream.Close();
                 }
             }
-            catch
+            catch (JsonReaderException)
+            {
+                try
+                {
+                    // Might be the old XML format
+                    XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
+
+                    using (FileStream stream = File.OpenRead(file))
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        output = (T)serializer.Deserialize(reader);
+                        reader.Close();
+                        stream.Close();
+                    }
+                }
+                catch
+                {
+                    output = default(T);
+                    return false;
+                }
+            }
+            catch (Exception ex)
             {
                 output = default(T);
                 return false;
