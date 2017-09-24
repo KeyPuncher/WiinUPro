@@ -508,15 +508,7 @@ namespace WiinUPro
 
             if (doSave == true)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
-
-                using (FileStream stream = File.Create(dialog.FileName))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    serializer.Serialize(writer, new AssignmentProfile(_assignments));
-                    writer.Close();
-                    stream.Close();
-                }
+                App.SaveToFile<AssignmentProfile>(dialog.FileName, new AssignmentProfile(_assignments));
             }
         }
 
