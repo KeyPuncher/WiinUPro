@@ -84,12 +84,24 @@ namespace WiinUPro
                     status.ConnectClick = DoConnect;
                     status.TypeUpdated = (s, t) =>
                     {
+                        var p = AppPrefs.Instance.GetDevicePreferences(s.Info.DevicePath);
+                        string title = "";
+
+                        if (p != null && !string.IsNullOrWhiteSpace(p.nickname))
+                        {
+                            title = p.nickname;
+                        }
+                        else
+                        {
+                            title = t.ToString();
+                        }
+
                         foreach (var tab in tabControl.Items)
                         {
                             if (tab is TabItem && (tab as TabItem).Content == s.Control)
                             {
                                 ChangeIcon(tab as TabItem, t);
-                                ChangeTitle(tab as TabItem, t.ToString());
+                                ChangeTitle(tab as TabItem, title);
                             }
                         }
                     };
@@ -106,6 +118,20 @@ namespace WiinUPro
                             }
                         }
                     };
+                    status.OnPrefsChange = (s, p) =>
+                    {
+                        if (!string.IsNullOrWhiteSpace(p.nickname))
+                        {
+                            foreach (var tab in tabControl.Items)
+                            {
+                                if (tab is TabItem && (tab as TabItem).Content == s.Control)
+                                {
+                                    ChangeTitle(tab as TabItem, p.nickname);
+                                }
+                            }
+                        }
+                    };
+
                     availableDevices.Add(status);
                     statusStack.Children.Add(status);
 
@@ -148,6 +174,8 @@ namespace WiinUPro
                     }
                 }
 
+                var prefs = AppPrefs.Instance.GetDevicePreferences(status.Info.DevicePath);
+
                 // If connection to device succeeds add a tab
                 TabItem tab = new TabItem();
                 StackPanel stack = new StackPanel { Orientation = Orientation.Horizontal };
@@ -159,7 +187,17 @@ namespace WiinUPro
                     VerticalAlignment = VerticalAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Left
                 });
-                stack.Children.Add(new TextBlock { Text = status.nickname.Content.ToString() });
+
+                // Use the nickname if there is one
+                if (prefs != null && !string.IsNullOrWhiteSpace(prefs.nickname))
+                {
+                    stack.Children.Add(new TextBlock { Text = prefs.nickname });
+                }
+                else
+                {
+                    stack.Children.Add(new TextBlock { Text = status.nickname.Content.ToString() });
+                }
+
                 tab.Header = stack;
                 tab.Content = status.Control;
                 tabControl.Items.Add(tab);

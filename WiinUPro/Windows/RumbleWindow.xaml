@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro.Windows"
         mc:Ignorable="d"
-        Title="RumbleWindow" Height="200" Width="270" MinHeight="200" MinWidth="270" Background="{StaticResource BackgroundMain}">
+        Title="Add or Remove Rumble" Height="200" Width="270" MinHeight="200" MinWidth="270" Background="{StaticResource BackgroundMain}">
     <Grid Background="{StaticResource BackgroundSub}" Margin="10">
         <Label Content="Select Virtual Devices for rumble input." FontWeight="Bold" Foreground="{StaticResource TextBody}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <ScrollViewer Height="95" Margin="20,26,20,0" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Height="95" Margin="20,26,0,0" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="136">
             <WrapPanel ItemHeight="20">
                 <CheckBox x:Name="xDeviceA" Content="Xbox Controller 1" Style="{StaticResource CheckBoxStyle}"/>
                 <CheckBox x:Name="xDeviceB" Content="Xbox Controller 2" Style="{StaticResource CheckBoxStyle}"/>

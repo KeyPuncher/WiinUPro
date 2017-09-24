@@ -18,6 +18,7 @@ namespace WiinUPro
         public delegate void TypeUpdate(ControllerType type);
         public event TypeUpdate OnTypeChange;       // Called on extension changes
         public event Action OnDisconnect;           // Called when disconnected
+        public event Action<DevicePrefs> OnPrefsChange;
 
         internal WinBtStream _stream;               // Controller stream to the device
         internal Nintroller _nintroller;            // Physical Controller Device
@@ -547,6 +548,30 @@ namespace WiinUPro
             }
 
             _rumbleSubscriptions = win.Result;
+        }
+
+        private void btnPrefs_Click(object sender, RoutedEventArgs e)
+        {
+            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+            if (prefs == null)
+            {
+                prefs = new DevicePrefs()
+                {
+                    deviceId = _info.DevicePath,
+                    nickname = _nintroller.Type.ToString()
+                };
+            }
+
+            var win = new Windows.DevicePrefsWindow(prefs);
+            win.ShowDialog();
+
+            if (win.DoSave)
+            {
+                AppPrefs.Instance.SaveDevicePrefs(win.Preferences);
+                OnPrefsChange?.Invoke(win.Preferences);
+            }
+
+            win = null;
         }
 
         private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -34,6 +34,7 @@ namespace WiinUPro
         public Action<DeviceStatus, bool> ConnectClick;
         public Action<DeviceStatus, ControllerType> TypeUpdated;
         public Action<DeviceStatus> CloseTab;
+        public Action<DeviceStatus, DevicePrefs> OnPrefsChange;
 
         public ImageSource Icon { get { return icon.Source; } }
 
@@ -48,6 +49,15 @@ namespace WiinUPro
                 Ninty = new NintyControl(Info);
                 Ninty.OnTypeChange += Ninty_OnTypeChange;
                 Ninty.OnDisconnect += Ninty_OnDisconnect;
+                Ninty.OnPrefsChange += (p) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(p.nickname))
+                    {
+                        nickname.Content = p.nickname;
+                    }
+
+                    OnPrefsChange?.Invoke(this, p);
+                };
                 UpdateType(info.Type);
             }
             else
@@ -96,37 +106,45 @@ namespace WiinUPro
         {
             // TODO: Default to unknown icon
             string img = "ProController_black_24.png";
+            string deviceName = "";
 
             switch (type)
             {
                 case ControllerType.ProController:
                     img = "ProController_black_24.png";
-                    nickname.Content = "Pro Controller";
+                    deviceName = "Pro Controller";
                     break;
 
                 case ControllerType.Wiimote:
                     img = "wiimote_black_24.png";
-                    nickname.Content = "Wiimote";
+                    deviceName = "Wiimote";
                     break;
 
                 case ControllerType.Nunchuk:
                 case ControllerType.NunchukB:
                     img = "Wiimote+Nunchuck_black_24.png";
-                    nickname.Content = "Nunchuk";
+                    deviceName = "Nunchuk";
                     break;
 
                 case ControllerType.ClassicController:
                     img = "Classic_black_24.png";
-                    nickname.Content = "Classic Controller";
+                    deviceName = "Classic Controller";
                     break;
 
                 case ControllerType.ClassicControllerPro:
                     img = "ClassicPro_black_24.png";
-                    nickname.Content = "Classic Controller Pro";
+                    deviceName = "Classic Controller Pro";
                     break;
             }
 
+            var prefs = AppPrefs.Instance.GetDevicePreferences(Info.DevicePath);
+            if (prefs != null && !string.IsNullOrWhiteSpace(prefs.nickname))
+            {
+                deviceName = prefs.nickname;
+            }
+
             icon.Source = new BitmapImage(new Uri("../Images/Icons/" + img, UriKind.Relative));
+            nickname.Content = deviceName;
         }
 
         public void AutoConnect()

@@ -129,6 +129,9 @@
     <Compile Include="Windows\AxisCalibrationWindow.xaml.cs">
       <DependentUpon>AxisCalibrationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\DevicePrefsWindow.xaml.cs">
+      <DependentUpon>DevicePrefsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\IRCalibrationWindow.xaml.cs">
       <DependentUpon>IRCalibrationWindow.xaml</DependentUpon>
     </Compile>
@@ -178,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AxisCalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DevicePrefsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
