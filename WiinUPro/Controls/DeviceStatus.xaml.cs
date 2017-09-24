@@ -143,6 +143,12 @@ namespace WiinUPro
             if (Ninty != null)
             {
                 result = Ninty.Connect();
+
+                var prefs = AppPrefs.Instance.GetDevicePreferences(Info.DevicePath);
+                if (prefs != null && !string.IsNullOrEmpty(prefs.defaultProfile))
+                {
+                    Ninty.LoadProfile(prefs.defaultProfile);
+                }
             }
             else if (Joy != null)
             {

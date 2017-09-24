@@ -290,6 +290,21 @@ namespace WiinUPro
             }
         }
 
+        public void LoadProfile(string fileName)
+        {
+            AssignmentProfile loadedProfile = null;
+            
+            if (!App.LoadFromFile<AssignmentProfile>(fileName, out loadedProfile))
+            {
+                var c = MessageBox.Show("Could not open or read the profile file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            if (loadedProfile != null)
+            {
+                _assignments = loadedProfile.ToAssignmentArray(this);
+            }
+        }
+
         #region Nintroller Events
         private void _nintroller_LowBattery(object sender, LowBatteryEventArgs e)
         {
@@ -513,31 +528,10 @@ namespace WiinUPro
             dialog.Filter = App.PROFILE_FILTER;
 
             bool? doLoad = dialog.ShowDialog();
-            AssignmentProfile loadedProfile = null;
 
             if (doLoad == true && dialog.CheckFileExists)
             {
-                try
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
-
-                    using (FileStream stream = File.OpenRead(dialog.FileName))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        loadedProfile = serializer.Deserialize(reader) as AssignmentProfile;
-                        reader.Close();
-                        stream.Close();
-                    }
-                }
-                catch (Exception err)
-                {
-                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                if (loadedProfile != null)
-                {
-                    _assignments = loadedProfile.ToAssignmentArray(this);
-                }
+                LoadProfile(dialog.FileName);
             }
         }
 
