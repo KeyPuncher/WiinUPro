@@ -412,12 +412,12 @@ namespace WiinUPro
                     break;
             }
 
-            if (!string.IsNullOrEmpty(file))
+            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+            if (!string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
             {
                 var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
                 if (prompt == MessageBoxResult.Yes)
                 {
-                    var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
                     if (prefs.calibrationFiles.ContainsKey(target))
                     {
                         prefs.calibrationFiles[target] = file;
