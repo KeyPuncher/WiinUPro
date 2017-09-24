@@ -319,7 +319,9 @@ namespace WiinUPro
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 Disconnect();
-                MessageBox.Show("Lost Controller Connection");
+
+                if (!AppPrefs.Instance.suppressConnectionLost)
+                    MessageBox.Show("Lost Controller Connection");
             }));
         }
 

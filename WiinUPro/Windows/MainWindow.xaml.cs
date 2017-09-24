@@ -164,7 +164,7 @@ namespace WiinUPro
                 tab.Content = status.Control;
                 tabControl.Items.Add(tab);
             }
-            else
+            else if (!AppPrefs.Instance.suppressConnectionLost)
             {
                 // Display message
                 MessageBox.Show("Unable to Connect Device", "Failed", MessageBoxButton.OK, MessageBoxImage.Exclamation);
@@ -251,6 +251,8 @@ namespace WiinUPro
             }
         }
 
+        #region Settings Options
+
         private void settingAutoStart_Checked(object sender, RoutedEventArgs e)
         {
             AppPrefs.Instance.SetAutoStart(settingAutoStart.IsChecked ?? false);
@@ -283,6 +285,13 @@ namespace WiinUPro
             WinBtStream.ForceToshibaMode = settingToshibaMode.IsChecked ?? false;
             AppPrefs.Instance.useToshibaMode = WinBtStream.ForceToshibaMode;
         }
+
+        private void settingSuppressLostConn_Checked(object sender, RoutedEventArgs e)
+        {
+            AppPrefs.Instance.suppressConnectionLost = settingSuppressLostConn.IsChecked ?? false;
+        }
+
+        #endregion
 
         private void btnAddXinput_Click(object sender, RoutedEventArgs e)
         {
