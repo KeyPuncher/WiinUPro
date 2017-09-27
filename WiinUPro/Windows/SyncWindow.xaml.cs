@@ -157,10 +157,8 @@ namespace WiinUPro.Windows
             else
             {
                 // No Bluetooth Radios found
-                Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    status.Text = "No Bluetooth Radios Found.";
-                }));
+                Prompt("No Bluetooth Radios Found.");
+                System.Threading.Thread.Sleep(3000);
             }
 
             Dispatcher.BeginInvoke((Action)(() => Close()));
