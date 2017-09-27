@@ -58,7 +58,18 @@ namespace WiinUPro
 
                     OnPrefsChange?.Invoke(this, p);
                 };
-                UpdateType(info.Type);
+
+                // Use saved icon if there is one
+                var prefs = AppPrefs.Instance.GetDevicePreferences(Info.DevicePath);
+                if (prefs != null && !string.IsNullOrWhiteSpace(prefs.icon))
+                {
+                    icon.Source = new BitmapImage(new Uri("../Images/Icons/" + prefs.icon, UriKind.Relative));
+                    nickname.Content = string.IsNullOrWhiteSpace(prefs.nickname) ? info.Type.ToName() : prefs.nickname;
+                }
+                else
+                {
+                    UpdateType(info.Type);
+                }
             }
             else
             {
@@ -138,9 +149,15 @@ namespace WiinUPro
             }
 
             var prefs = AppPrefs.Instance.GetDevicePreferences(Info.DevicePath);
-            if (prefs != null && !string.IsNullOrWhiteSpace(prefs.nickname))
+            if (prefs != null)
             {
-                deviceName = prefs.nickname;
+                if (!string.IsNullOrWhiteSpace(prefs.nickname))
+                {
+                    deviceName = prefs.nickname;
+                }
+
+                prefs.icon = img;
+                AppPrefs.Instance.SaveDevicePrefs(prefs);
             }
 
             icon.Source = new BitmapImage(new Uri("../Images/Icons/" + img, UriKind.Relative));
@@ -171,6 +188,8 @@ namespace WiinUPro
             else if (Joy != null)
             {
                 result = Joy.Connect();
+
+                // TODO: Load default profile
             }
 
             if (result)
