@@ -57,10 +57,6 @@ namespace WiinUPro
         {
             _currentState = ShiftState.None;
             InitializeComponent();
-
-            // Speech test
-            //System.Speech.Synthesis.SpeechSynthesizer s = new System.Speech.Synthesis.SpeechSynthesizer();
-            //s.SpeakAsync("Controller Found");
         }
 
         public NintyControl(Shared.DeviceInfo deviceInfo) : this()
@@ -209,40 +205,79 @@ namespace WiinUPro
             _nintroller.RumbleEnabled = state;
         }
 
+        private void LoadCalibrations(DevicePrefs prefs)
+        {
+            ProController proCalibration = Calibrations.Defaults.ProControllerDefault;
+            Wiimote wmCalibration = Calibrations.Defaults.WiimoteDefault;
+            Nunchuk nunCalibration = Calibrations.Defaults.NunchukDefault;
+            ClassicController ccCalibration = Calibrations.Defaults.ClassicControllerDefault;
+            ClassicControllerPro ccpCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+
+            if (prefs != null)
+            {
+                foreach (var calibrationFile in prefs.calibrationFiles)
+                {
+                    switch (calibrationFile.Key)
+                    {
+                        case App.CAL_NUN_JOYSTICK:
+                        case App.CAL_CC_LJOYSTICK:
+                        case App.CAL_CC_RJOYSTICK:
+                        case App.CAL_CCP_LJOYSTICK:
+                        case App.CAL_CCP_RJOYSTICK:
+                        case App.CAL_PRO_LJOYSTICK:
+                        case App.CAL_PRO_RJOYSTICK:
+                            Joystick joystick;
+                            if (App.LoadFromFile<Joystick>(calibrationFile.Value, out joystick))
+                            {
+                                if (calibrationFile.Key == App.CAL_NUN_JOYSTICK) nunCalibration.joystick = joystick;
+                                else if (calibrationFile.Key == App.CAL_CC_LJOYSTICK) ccCalibration.LJoy = joystick;
+                                else if (calibrationFile.Key == App.CAL_CC_RJOYSTICK) ccCalibration.RJoy = joystick;
+                                else if (calibrationFile.Key == App.CAL_CCP_LJOYSTICK) ccpCalibration.LJoy = joystick;
+                                else if (calibrationFile.Key == App.CAL_CCP_RJOYSTICK) ccpCalibration.RJoy = joystick;
+                                else if (calibrationFile.Key == App.CAL_PRO_LJOYSTICK) proCalibration.LJoy = joystick;
+                                else if (calibrationFile.Key == App.CAL_PRO_RJOYSTICK) proCalibration.RJoy = joystick;
+                            }
+                            break;
+
+                        case App.CAL_CC_LTRIGGER:
+                        case App.CAL_CC_RTRIGGER:
+                            NintrollerLib.Trigger trigger;
+                            if (App.LoadFromFile<NintrollerLib.Trigger>(calibrationFile.Value, out trigger))
+                            {
+                                if (calibrationFile.Key == App.CAL_CC_LTRIGGER) ccCalibration.L = trigger;
+                                else if (calibrationFile.Key == App.CAL_CC_RTRIGGER) ccCalibration.R = trigger;
+                            }
+                            break;
+
+                        case App.CAL_WII_IR:
+                            IR ir;
+                            if (App.LoadFromFile<IR>(calibrationFile.Value, out ir))
+                            {
+                                wmCalibration.irSensor.boundingArea = ir.boundingArea;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            _nintroller.SetCalibration(proCalibration);
+            _nintroller.SetCalibration(wmCalibration);
+            _nintroller.SetCalibration(nunCalibration);
+            _nintroller.SetCalibration(ccCalibration);
+            _nintroller.SetCalibration(ccpCalibration);
+        }
+
         // This attribute will allow Access Violation exceptions to be caught in try/catch
         [System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
         private void CreateController(ControllerType type)
         {
             var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+            LoadCalibrations(prefs);
 
             switch (type)
             {
                 case ControllerType.ProController:
-                    // TODO: Discover why this sometimes causes an access violation exceptions
-                    ProController proCalibration = Calibrations.Defaults.ProControllerDefault;
-
-                    if (prefs != null)
-                    {
-                        if (prefs.calibrationFiles.ContainsKey(App.CAL_PRO_LJOYSTICK))
-                        {
-                            Joystick joystickCal;
-                            if (App.LoadFromFile<Joystick>(prefs.calibrationFiles[App.CAL_PRO_LJOYSTICK], out joystickCal))
-                            {
-                                proCalibration.LJoy = joystickCal;
-                            }
-                        }
-
-                        if (prefs.calibrationFiles.ContainsKey(App.CAL_PRO_RJOYSTICK))
-                        {
-                            Joystick joystickCal;
-                            if (App.LoadFromFile<Joystick>(prefs.calibrationFiles[App.CAL_PRO_RJOYSTICK], out joystickCal))
-                            {
-                                proCalibration.RJoy = joystickCal;
-                            }
-                        }
-                    }
-
-                    _controller = new ProControl(proCalibration);
+                    _controller = new ProControl();
                     ((ProControl)_controller).OnJoyCalibrated += _nintroller_JoystickCalibrated;
                     break;
 
@@ -252,7 +287,6 @@ namespace WiinUPro
                 case ControllerType.NunchukB:
                 case ControllerType.ClassicController:
                 case ControllerType.ClassicControllerPro:
-                    // TODO: Load saved calibration
                     _controller = new WiiControl();
                     ((WiiControl)_controller).OnChangeCameraMode += (mode) =>
                     {
@@ -412,6 +446,7 @@ namespace WiinUPro
                     var proCal = _nintroller.StoredCalibrations.ProCalibration;
                     if (target.EndsWith("L")) proCal.LJoy = calibration;
                     else proCal.RJoy = calibration;
+                    _nintroller.SetCalibration(proCal);
                     break;
             }
 
@@ -435,7 +470,7 @@ namespace WiinUPro
             }
         }
 
-        private void _nintroller_TriggerCalibrated(NintrollerLib.Trigger calibration, string target)
+        private void _nintroller_TriggerCalibrated(NintrollerLib.Trigger calibration, string target, string file = "")
         {
             switch (target)
             {
@@ -451,13 +486,51 @@ namespace WiinUPro
                     _nintroller.SetCalibration(rCal);
                     break;
             }
+
+            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+            if (!string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
+            {
+                var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
+                if (prompt == MessageBoxResult.Yes)
+                {
+                    if (prefs.calibrationFiles.ContainsKey(target))
+                    {
+                        prefs.calibrationFiles[target] = file;
+                    }
+                    else
+                    {
+                        prefs.calibrationFiles.Add(target, file);
+                    }
+
+                    AppPrefs.Instance.SaveDevicePrefs(prefs);
+                }
+            }
         }
 
-        private void _nintroller_IRCalibrated(Windows.IRCalibration calibration)
+        private void _nintroller_IRCalibrated(Windows.IRCalibration calibration, string file = "")
         {
             var wmCal = _nintroller.StoredCalibrations.WiimoteCalibration;
             wmCal.irSensor.boundingArea = calibration.boundry;
             _nintroller.SetCalibration(wmCal);
+
+            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+            if (!string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
+            {
+                var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
+                if (prompt == MessageBoxResult.Yes)
+                {
+                    if (prefs.calibrationFiles.ContainsKey(App.CAL_WII_IR))
+                    {
+                        prefs.calibrationFiles[App.CAL_WII_IR] = file;
+                    }
+                    else
+                    {
+                        prefs.calibrationFiles.Add(App.CAL_WII_IR, file);
+                    }
+
+                    AppPrefs.Instance.SaveDevicePrefs(prefs);
+                }
+            }
         }
         #endregion
 

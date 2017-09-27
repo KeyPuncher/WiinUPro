@@ -10,6 +10,7 @@ namespace WiinUPro.Windows
     {
         public bool Apply { get; protected set; }
         public Trigger Calibration { get { return _trigger; } }
+        public string FileName { get; protected set; }
 
         protected Trigger _trigger;
         protected Trigger _default;
@@ -20,9 +21,10 @@ namespace WiinUPro.Windows
             InitializeComponent();
         }
 
-        public TriggerCalibrationWindow(Trigger nonCalibrated, Trigger prevCalibration) : this()
+        public TriggerCalibrationWindow(Trigger nonCalibrated, Trigger prevCalibration, string filename = "") : this()
         {
             _default = nonCalibrated;
+            FileName = filename;
             set = true;
             Set(prevCalibration);
         }
@@ -65,7 +67,7 @@ namespace WiinUPro.Windows
         private void saveBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "trigger_calibration";
+            dialog.FileName = string.IsNullOrEmpty(FileName) ? "trigger_Calibration" : FileName;
             dialog.DefaultExt = ".trg";
             dialog.Filter = App.TRIG_CAL_FILTER;
 
@@ -73,14 +75,17 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                App.SaveToFile<Trigger>(dialog.FileName, _trigger);
+                if (App.SaveToFile<Trigger>(dialog.FileName, _trigger))
+                {
+                    FileName = dialog.FileName;
+                }
             }
         }
 
         private void loadBtn_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.FileName = "trigger_Calibration";
+            dialog.FileName = string.IsNullOrEmpty(FileName) ? "trigger_Calibration" : FileName;
             dialog.DefaultExt = ".trg";
             dialog.Filter = App.TRIG_CAL_FILTER;
 
@@ -91,6 +96,7 @@ namespace WiinUPro.Windows
             {
                 if (App.LoadFromFile<Trigger>(dialog.FileName, out loadedConfig))
                 {
+                    FileName = dialog.FileName;
                     min.Value = loadedConfig.min;
                     max.Value = loadedConfig.max;
                 }

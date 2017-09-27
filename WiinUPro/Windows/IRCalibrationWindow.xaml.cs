@@ -10,22 +10,25 @@ namespace WiinUPro.Windows
     /// </summary>
     public partial class IRCalibrationWindow : Window
     {
-        public delegate void IRCalibrationDel(IRCalibration irCal);
+        public delegate void IRCalibrationDel(IRCalibration irCal, string file = "");
         public bool Apply { get; set; }
         public IRCalibration Calibration { get { return _irCalibration; } }
+        public string FileName { get; protected set; }
 
         protected IRCalibration _irCalibration;
         protected bool set;
 
-        public IRCalibrationWindow()
+        protected IRCalibrationWindow()
         {
             _irCalibration = new IRCalibration();
             InitializeComponent();
             set = true;
         }
 
-        public IRCalibrationWindow(IR current) : this()
+        public IRCalibrationWindow(IR current, string filename = "") : this()
         {
+            FileName = filename;
+            
             if (current.boundingArea is SquareBoundry)
             {
                 SquareBoundry sqr = (SquareBoundry)current.boundingArea;
@@ -93,7 +96,7 @@ namespace WiinUPro.Windows
         private void loadBtn_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.FileName = "ir_Calibration";
+            dialog.FileName = string.IsNullOrEmpty(FileName) ? "ir_Calibration" : FileName;
             dialog.DefaultExt = ".irc";
             dialog.Filter = App.IR_CAL_FILTER;
 
@@ -104,6 +107,7 @@ namespace WiinUPro.Windows
             {
                 if (App.LoadFromFile<IRCalibration>(dialog.FileName, out loadedConfig))
                 {
+                    FileName = dialog.FileName;
                     _irCalibration = loadedConfig;
                     boxWidth.Value = _irCalibration.boundry.width;
                     boxHeight.Value = _irCalibration.boundry.height;
@@ -120,7 +124,7 @@ namespace WiinUPro.Windows
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "ir_calibration";
+            dialog.FileName = string.IsNullOrEmpty(FileName) ? "ir_Calibration" : FileName;
             dialog.DefaultExt = ".irc";
             dialog.Filter = App.IR_CAL_FILTER;
 
@@ -128,7 +132,10 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                App.SaveToFile<IRCalibration>(dialog.FileName, _irCalibration);
+                if (App.SaveToFile<IRCalibration>(dialog.FileName, _irCalibration))
+                {
+                    FileName = dialog.FileName;
+                }
             }
         }
     }

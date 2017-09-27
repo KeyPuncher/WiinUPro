@@ -16,7 +16,6 @@ namespace WiinUPro
         {
             InitializeComponent();
         }
-
         public event Delegates.BoolArrDel OnChangeLEDs;
         public event Action<IRCamMode> OnChangeCameraMode;
         public event Action<IRCamSensitivity> OnChangeCameraSensitivty;
@@ -394,7 +393,7 @@ namespace WiinUPro
 
             if (joyCal.Apply)
             {
-                OnJoystickCalibrated?.Invoke(joyCal.Calibration, _calibrationTarget);
+                OnJoystickCalibrated?.Invoke(joyCal.Calibration, _calibrationTarget, joyCal.FileName);
             }
 
             _openJoyWindow = null;
@@ -409,12 +408,12 @@ namespace WiinUPro
 
             if (!(_lastState is ClassicController)) return;
 
-            if (_calibrationTarget == "ccRT")
+            if (_calibrationTarget == App.CAL_CC_RTRIGGER)
             {
                 nonCalibrated = Calibrations.None.ClassicControllerRaw.R;
                 curCalibrated = ((ClassicController)_lastState).R;
             }
-            else if (_calibrationTarget == "ccLT")
+            else if (_calibrationTarget == App.CAL_CC_LTRIGGER)
             {
                 nonCalibrated = Calibrations.None.ClassicControllerRaw.L;
                 curCalibrated = ((ClassicController)_lastState).L;
@@ -426,7 +425,7 @@ namespace WiinUPro
 
             if (trigCal.Apply)
             {
-                OnTriggerCalibrated?.Invoke(trigCal.Calibration, _calibrationTarget);
+                OnTriggerCalibrated?.Invoke(trigCal.Calibration, _calibrationTarget, trigCal.FileName);
             }
 
             _openTrigWindow = null;
@@ -435,7 +434,7 @@ namespace WiinUPro
         private void CalibrateIR_Click(object sender, RoutedEventArgs e)
         {
             _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
-            if (_calibrationTarget != "IR") return;
+            if (_calibrationTarget != App.CAL_WII_IR) return;
 
             IR lastIR = new IR();
             if (_lastState is Wiimote) lastIR = ((Wiimote)_lastState).irSensor;
@@ -449,7 +448,7 @@ namespace WiinUPro
 
             if (irCal.Apply)
             {
-                OnIRCalibrated?.Invoke(irCal.Calibration);
+                OnIRCalibrated?.Invoke(irCal.Calibration, irCal.FileName);
             }
 
             _openIRWindow = null;

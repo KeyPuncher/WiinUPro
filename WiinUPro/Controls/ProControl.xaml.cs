@@ -14,20 +14,14 @@ namespace WiinUPro
     {
         public event Delegates.BoolArrDel OnChangeLEDs;
         public event Delegates.JoystickDel OnJoyCalibrated;
-        public ProController CurrentCalibration;
 
         protected Windows.JoyCalibrationWindow _openJoyWindow = null;
         protected bool _rightJoyOpen = false;
+        protected ProController _lastState;
 
         public ProControl()
         {
             InitializeComponent();
-            CurrentCalibration = Calibrations.None.ProControllerRaw;
-        }
-
-        public ProControl(ProController currentCalibration) : this()
-        {
-            CurrentCalibration = currentCalibration;
         }
 
         public void ApplyInput(INintrollerState state)
@@ -45,6 +39,7 @@ namespace WiinUPro
             if (state is ProController)
             {
                 var pro = (ProController)state;
+                _lastState = pro;
 
                 aBtn.Opacity = pro.A ? 1 : 0;
                 bBtn.Opacity = pro.B ? 1 : 0;
@@ -156,7 +151,7 @@ namespace WiinUPro
 
             Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(
                 _rightJoyOpen ? Calibrations.None.ProControllerRaw.RJoy : Calibrations.None.ProControllerRaw.LJoy,
-                _rightJoyOpen ? CurrentCalibration.RJoy : CurrentCalibration.LJoy,
+                _rightJoyOpen ? _lastState.RJoy : _lastState.LJoy,
                 filename ?? "");
             _openJoyWindow = joyCal;
             joyCal.ShowDialog();
@@ -164,9 +159,6 @@ namespace WiinUPro
             if (joyCal.Apply)
             {
                 OnJoyCalibrated?.Invoke(joyCal.Calibration, joyTarget, joyCal.FileName);
-
-                if (_rightJoyOpen) CurrentCalibration.RJoy = joyCal.Calibration;
-                else CurrentCalibration.LJoy = joyCal.Calibration;
             }
 
             _openJoyWindow = null;
