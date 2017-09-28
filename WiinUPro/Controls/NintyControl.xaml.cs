@@ -212,51 +212,48 @@ namespace WiinUPro
             Nunchuk nunCalibration = Calibrations.Defaults.NunchukDefault;
             ClassicController ccCalibration = Calibrations.Defaults.ClassicControllerDefault;
             ClassicControllerPro ccpCalibration = Calibrations.Defaults.ClassicControllerProDefault;
-
-            if (prefs != null)
+            
+            foreach (var calibrationFile in prefs.calibrationFiles)
             {
-                foreach (var calibrationFile in prefs.calibrationFiles)
+                switch (calibrationFile.Key)
                 {
-                    switch (calibrationFile.Key)
-                    {
-                        case App.CAL_NUN_JOYSTICK:
-                        case App.CAL_CC_LJOYSTICK:
-                        case App.CAL_CC_RJOYSTICK:
-                        case App.CAL_CCP_LJOYSTICK:
-                        case App.CAL_CCP_RJOYSTICK:
-                        case App.CAL_PRO_LJOYSTICK:
-                        case App.CAL_PRO_RJOYSTICK:
-                            Joystick joystick;
-                            if (App.LoadFromFile<Joystick>(calibrationFile.Value, out joystick))
-                            {
-                                if (calibrationFile.Key == App.CAL_NUN_JOYSTICK) nunCalibration.joystick = joystick;
-                                else if (calibrationFile.Key == App.CAL_CC_LJOYSTICK) ccCalibration.LJoy = joystick;
-                                else if (calibrationFile.Key == App.CAL_CC_RJOYSTICK) ccCalibration.RJoy = joystick;
-                                else if (calibrationFile.Key == App.CAL_CCP_LJOYSTICK) ccpCalibration.LJoy = joystick;
-                                else if (calibrationFile.Key == App.CAL_CCP_RJOYSTICK) ccpCalibration.RJoy = joystick;
-                                else if (calibrationFile.Key == App.CAL_PRO_LJOYSTICK) proCalibration.LJoy = joystick;
-                                else if (calibrationFile.Key == App.CAL_PRO_RJOYSTICK) proCalibration.RJoy = joystick;
-                            }
-                            break;
+                    case App.CAL_NUN_JOYSTICK:
+                    case App.CAL_CC_LJOYSTICK:
+                    case App.CAL_CC_RJOYSTICK:
+                    case App.CAL_CCP_LJOYSTICK:
+                    case App.CAL_CCP_RJOYSTICK:
+                    case App.CAL_PRO_LJOYSTICK:
+                    case App.CAL_PRO_RJOYSTICK:
+                        Joystick joystick;
+                        if (App.LoadFromFile<Joystick>(calibrationFile.Value, out joystick))
+                        {
+                            if (calibrationFile.Key == App.CAL_NUN_JOYSTICK) nunCalibration.joystick = joystick;
+                            else if (calibrationFile.Key == App.CAL_CC_LJOYSTICK) ccCalibration.LJoy = joystick;
+                            else if (calibrationFile.Key == App.CAL_CC_RJOYSTICK) ccCalibration.RJoy = joystick;
+                            else if (calibrationFile.Key == App.CAL_CCP_LJOYSTICK) ccpCalibration.LJoy = joystick;
+                            else if (calibrationFile.Key == App.CAL_CCP_RJOYSTICK) ccpCalibration.RJoy = joystick;
+                            else if (calibrationFile.Key == App.CAL_PRO_LJOYSTICK) proCalibration.LJoy = joystick;
+                            else if (calibrationFile.Key == App.CAL_PRO_RJOYSTICK) proCalibration.RJoy = joystick;
+                        }
+                        break;
 
-                        case App.CAL_CC_LTRIGGER:
-                        case App.CAL_CC_RTRIGGER:
-                            NintrollerLib.Trigger trigger;
-                            if (App.LoadFromFile<NintrollerLib.Trigger>(calibrationFile.Value, out trigger))
-                            {
-                                if (calibrationFile.Key == App.CAL_CC_LTRIGGER) ccCalibration.L = trigger;
-                                else if (calibrationFile.Key == App.CAL_CC_RTRIGGER) ccCalibration.R = trigger;
-                            }
-                            break;
+                    case App.CAL_CC_LTRIGGER:
+                    case App.CAL_CC_RTRIGGER:
+                        NintrollerLib.Trigger trigger;
+                        if (App.LoadFromFile<NintrollerLib.Trigger>(calibrationFile.Value, out trigger))
+                        {
+                            if (calibrationFile.Key == App.CAL_CC_LTRIGGER) ccCalibration.L = trigger;
+                            else if (calibrationFile.Key == App.CAL_CC_RTRIGGER) ccCalibration.R = trigger;
+                        }
+                        break;
 
-                        case App.CAL_WII_IR:
-                            IR ir;
-                            if (App.LoadFromFile<IR>(calibrationFile.Value, out ir))
-                            {
-                                wmCalibration.irSensor.boundingArea = ir.boundingArea;
-                            }
-                            break;
-                    }
+                    case App.CAL_WII_IR:
+                        IR ir;
+                        if (App.LoadFromFile<IR>(calibrationFile.Value, out ir))
+                        {
+                            wmCalibration.irSensor.boundingArea = ir.boundingArea;
+                        }
+                        break;
                 }
             }
 
@@ -272,7 +269,7 @@ namespace WiinUPro
         private void CreateController(ControllerType type)
         {
             var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-            LoadCalibrations(prefs);
+            if (prefs != null) LoadCalibrations(prefs);
 
             switch (type)
             {

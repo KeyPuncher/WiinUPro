@@ -126,8 +126,56 @@ namespace WiinUPro
             }
 
             OnUpdate += JoyControl_OnUpdate;
+
+            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+            if (prefs != null) LoadCalibrations(prefs);
         }
-        
+
+        private void LoadCalibrations(DevicePrefs prefs)
+        {
+            foreach (var calibrationFile in prefs.calibrationFiles)
+            {
+                switch (calibrationFile.Key)
+                {
+                    case App.CAL_SWP_LJOYSTICK:
+                        NintrollerLib.Joystick lJoy;
+                        if (_controller is SwitchProControl && App.LoadFromFile(calibrationFile.Value, out lJoy))
+                        {
+                            AxisCalibration xCalibration = new AxisCalibration(lJoy.minX, lJoy.maxX, lJoy.centerX, lJoy.deadXn, lJoy.deadXp);
+                            AxisCalibration yCalibration = new AxisCalibration(lJoy.minY, lJoy.maxY, lJoy.centerY, lJoy.deadYn, lJoy.deadYp);
+                            calibrations[JoystickOffset.X] = xCalibration;
+                            calibrations[JoystickOffset.Y] = yCalibration;
+                            ((SwitchProControl)_controller).leftXCalibration = xCalibration;
+                            ((SwitchProControl)_controller).leftYCalibration = yCalibration;
+                        }
+                        break;
+
+                    case App.CAL_SWP_RJOYSTICK:
+                        NintrollerLib.Joystick rJoy;
+                        if (_controller is SwitchProControl && App.LoadFromFile(calibrationFile.Value, out rJoy))
+                        {
+                            AxisCalibration xCalibration = new AxisCalibration(rJoy.minX, rJoy.maxX, rJoy.centerX, rJoy.deadXn, rJoy.deadXp);
+                            AxisCalibration yCalibration = new AxisCalibration(rJoy.minY, rJoy.maxY, rJoy.centerY, rJoy.deadYn, rJoy.deadYp);
+                            calibrations[JoystickOffset.RotationX] = xCalibration;
+                            calibrations[JoystickOffset.RotationY] = yCalibration;
+                            ((SwitchProControl)_controller).rightXCalibration = xCalibration;
+                            ((SwitchProControl)_controller).rightYCalibration = yCalibration;
+                        }
+                        break;
+
+                    default:
+                        AxisCalibration axisCalibration;
+                        if (App.LoadFromFile<AxisCalibration>(calibrationFile.Value, out axisCalibration))
+                        {
+                            JoystickOffset offset = JoystickOffset.X;
+                            if (!Enum.TryParse(calibrationFile.Key, out offset)) continue;
+                            calibrations[offset] = axisCalibration;
+                        }
+                        break;
+                }
+            }
+        }
+
         public void AssociateJoyCon(JoyControl joy)
         {
             associatedJoyCon = joy;
