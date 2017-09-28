@@ -627,7 +627,15 @@ namespace WiinUPro
 
             if (doSave == true)
             {
-                App.SaveToFile<AssignmentProfile>(dialog.FileName, new AssignmentProfile(_assignments));
+                var profile = new AssignmentProfile(_assignments);
+
+                if (associatedJoyCon != null)
+                {
+                    profile.SubProfile = new AssignmentProfile(associatedJoyCon._assignments);
+                    profile.SubName = associatedJoyCon.Type.ToString();
+                }
+
+                App.SaveToFile<AssignmentProfile>(dialog.FileName, profile);
             }
         }
 
