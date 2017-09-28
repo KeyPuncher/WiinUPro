@@ -27,6 +27,22 @@ namespace WiinUPro
             Generic = 0
         }
 
+        public static string ToName(JoystickType type)
+        {
+            switch (type)
+            {
+                case JoystickType.LeftJoyCon:
+                    return "Joy-Con (L)";
+                case JoystickType.RightJoyCon:
+                    return "Joy-Con (R)";
+                case JoystickType.SwitchPro:
+                    return "Switch Pro";
+                case JoystickType.Generic:
+                default:
+                    return "Generic Joystick";
+            }
+        }
+
         public delegate void JoyUpdate(Joystick joystick, JoystickUpdate[] updates);
         event JoyUpdate OnUpdate;
         public event Action OnDisconnect;
@@ -34,6 +50,7 @@ namespace WiinUPro
         public bool isChild = false;
         public IJoyControl Control { get { return _controller; } }
         public Dictionary<JoystickOffset, AxisCalibration> calibrations;
+        public event Action<DevicePrefs> OnPrefsChange;
 
         internal Joystick _joystick;
         internal JoystickState _state;
@@ -127,7 +144,7 @@ namespace WiinUPro
 
             OnUpdate += JoyControl_OnUpdate;
 
-            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
+            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DeviceID);
             if (prefs != null) LoadCalibrations(prefs);
         }
 
@@ -172,6 +189,37 @@ namespace WiinUPro
                             calibrations[offset] = axisCalibration;
                         }
                         break;
+                }
+            }
+        }
+
+        public void LoadProfile(string fileName)
+        {
+            AssignmentProfile loadedProfile = null;
+
+            if (!App.LoadFromFile<AssignmentProfile>(fileName, out loadedProfile))
+            {
+                var c = MessageBox.Show("Could not open or read the profile file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            if (loadedProfile != null)
+            {
+                if (loadedProfile.SubName == Type.ToString())
+                {
+                    _assignments = loadedProfile.SubProfile.ToAssignmentArray(this);
+                }
+                else
+                {
+                    _assignments = loadedProfile.ToAssignmentArray(this);
+                }
+
+                if (associatedJoyCon != null && loadedProfile.SubName == associatedJoyCon.Type.ToString())
+                {
+                    associatedJoyCon._assignments = loadedProfile.SubProfile.ToAssignmentArray(this);
+                }
+                else if (associatedJoyCon != null)
+                {
+                    associatedJoyCon._assignments = loadedProfile.ToAssignmentArray(this);
                 }
             }
         }
@@ -332,12 +380,14 @@ namespace WiinUPro
             _joystick.Acquire();
             
             _state = _joystick.GetCurrentState();
-            if (_state.X > 0) calibrations.Add(JoystickOffset.X, new AxisCalibration(0, 65535, 32767, 2048));
-            if (_state.Y > 0) calibrations.Add(JoystickOffset.Y, new AxisCalibration(0, 65535, 32767, 2048));
-            if (_state.Z > 0) calibrations.Add(JoystickOffset.Z, new AxisCalibration(0, 65535, 32767, 2048));
-            if (_state.RotationX > 0) calibrations.Add(JoystickOffset.RotationX, new AxisCalibration(0, 65535, 32767, 2048));
-            if (_state.RotationY > 0) calibrations.Add(JoystickOffset.RotationY, new AxisCalibration(0, 65535, 32767, 2048));
-            if (_state.RotationZ > 0) calibrations.Add(JoystickOffset.RotationZ, new AxisCalibration(0, 65535, 32767, 2048));
+
+            // Setup Calibrations if they don't exist already
+            if (!calibrations.ContainsKey(JoystickOffset.X) && _state.X > 0) calibrations.Add(JoystickOffset.X, new AxisCalibration(0, 65535, 32767, 2048));
+            if (!calibrations.ContainsKey(JoystickOffset.Y) && _state.Y > 0) calibrations.Add(JoystickOffset.Y, new AxisCalibration(0, 65535, 32767, 2048));
+            if (!calibrations.ContainsKey(JoystickOffset.Z) && _state.Z > 0) calibrations.Add(JoystickOffset.Z, new AxisCalibration(0, 65535, 32767, 2048));
+            if (!calibrations.ContainsKey(JoystickOffset.RotationX) && _state.RotationX > 0) calibrations.Add(JoystickOffset.RotationX, new AxisCalibration(0, 65535, 32767, 2048));
+            if (!calibrations.ContainsKey(JoystickOffset.RotationY) && _state.RotationY > 0) calibrations.Add(JoystickOffset.RotationY, new AxisCalibration(0, 65535, 32767, 2048));
+            if (!calibrations.ContainsKey(JoystickOffset.RotationZ) && _state.RotationZ > 0) calibrations.Add(JoystickOffset.RotationZ, new AxisCalibration(0, 65535, 32767, 2048));
 
             _readCancel = new CancellationTokenSource();
             _readTask = Task.Factory.StartNew(PollData, _readCancel.Token);
@@ -546,7 +596,7 @@ namespace WiinUPro
                 ((SwitchProControl)_controller).leftYCalibration = yCalibration;
             }
 
-            AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, target, file);
+            AppPrefs.Instance.PromptToSaveCalibration(_info.DeviceID, target, file);
         }
         #endregion
 
@@ -577,23 +627,7 @@ namespace WiinUPro
 
             if (doSave == true)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
-
-                using (FileStream stream = File.Create(dialog.FileName))
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    var profile = new AssignmentProfile(_assignments);
-
-                    if (associatedJoyCon != null)
-                    {
-                        profile.SubProfile = new AssignmentProfile(associatedJoyCon._assignments);
-                        profile.SubName = associatedJoyCon.Type.ToString();
-                    }
-
-                    serializer.Serialize(writer, profile);
-                    writer.Close();
-                    stream.Close();
-                }
+                App.SaveToFile<AssignmentProfile>(dialog.FileName, new AssignmentProfile(_assignments));
             }
         }
 
@@ -610,48 +644,35 @@ namespace WiinUPro
             }
 
             bool? doLoad = dialog.ShowDialog();
-            AssignmentProfile loadedProfile = null;
 
             if (doLoad == true && dialog.CheckFileExists)
             {
-                try
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(AssignmentProfile));
-
-                    using (FileStream stream = File.OpenRead(dialog.FileName))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        loadedProfile = serializer.Deserialize(reader) as AssignmentProfile;
-                        reader.Close();
-                        stream.Close();
-                    }
-                }
-                catch (Exception err)
-                {
-                    var c = MessageBox.Show("Could not open the file \"" + err.Message + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                if (loadedProfile != null)
-                {
-                    if (loadedProfile.SubName == Type.ToString())
-                    {
-                        _assignments = loadedProfile.SubProfile.ToAssignmentArray(this);
-                    }
-                    else
-                    {
-                        _assignments = loadedProfile.ToAssignmentArray(this);
-                    }
-
-                    if (associatedJoyCon != null && loadedProfile.SubName == associatedJoyCon.Type.ToString())
-                    {
-                        associatedJoyCon._assignments = loadedProfile.SubProfile.ToAssignmentArray(this);
-                    }
-                    else if (associatedJoyCon != null)
-                    {
-                        associatedJoyCon._assignments = loadedProfile.ToAssignmentArray(this);
-                    }
-                }
+                LoadProfile(dialog.FileName);
             }
+        }
+
+        private void btnPrefs_Click(object sender, RoutedEventArgs e)
+        {
+            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DeviceID);
+            if (prefs == null)
+            {
+                prefs = new DevicePrefs()
+                {
+                    deviceId = _info.DeviceID,
+                    nickname = ToName(Type)
+                };
+            }
+
+            var win = new Windows.DevicePrefsWindow(prefs);
+            win.ShowDialog();
+
+            if (win.DoSave)
+            {
+                AppPrefs.Instance.SaveDevicePrefs(win.Preferences);
+                OnPrefsChange?.Invoke(win.Preferences);
+            }
+
+            win = null;
         }
 
         private void btnAddRumble_Click(object sender, RoutedEventArgs e)
@@ -1029,7 +1050,7 @@ namespace WiinUPro
             if (axisCal.Apply)
             {
                 calibrations[offset] = axisCal.Calibration;
-                AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, _calibrationTarget, axisCal.FileName);
+                AppPrefs.Instance.PromptToSaveCalibration(_info.DeviceID, _calibrationTarget, axisCal.FileName);
             }
 
             axisCal = null;

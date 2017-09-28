@@ -75,7 +75,7 @@ namespace WiinUPro
             foreach (var info in devices)
             {
                 // Check if we are already showing this one
-                DeviceStatus existing = availableDevices.Find((d) => d.Info.SameDevice(info.DevicePath));
+                DeviceStatus existing = availableDevices.Find((d) => d.Info.SameDevice(info.DeviceID));
 
                 // If not add it
                 if (existing == null)
@@ -135,7 +135,7 @@ namespace WiinUPro
                     availableDevices.Add(status);
                     statusStack.Children.Add(status);
 
-                    DevicePrefs devicePrefs = AppPrefs.Instance.GetDevicePreferences(info.DevicePath);
+                    DevicePrefs devicePrefs = AppPrefs.Instance.GetDevicePreferences(info.DeviceID);
                     if (devicePrefs.autoConnect)
                     {
                         status.AutoConnect();
@@ -149,7 +149,6 @@ namespace WiinUPro
         {
             if (result && status.Control != null)
             {
-                
                 // Associate L & R Joy-Cons
                 if (status.Joy != null)
                 {
@@ -174,7 +173,7 @@ namespace WiinUPro
                     }
                 }
 
-                var prefs = AppPrefs.Instance.GetDevicePreferences(status.Info.DevicePath);
+                var prefs = AppPrefs.Instance.GetDevicePreferences(status.Info.DeviceID);
 
                 // If connection to device succeeds add a tab
                 TabItem tab = new TabItem();

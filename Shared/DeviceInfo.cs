@@ -5,6 +5,14 @@ namespace Shared
 {
     public class DeviceInfo
     {
+        public string DeviceID
+        {
+            get
+            {
+                return string.IsNullOrEmpty(DevicePath) ? InstanceGUID.ToString() : DevicePath;
+            }
+        }
+
         // For Wii/U Controllers
         public string DevicePath { get; set; }
         public ControllerType Type { get; set; }
@@ -14,11 +22,15 @@ namespace Shared
         public string VID { get; set; }
         public string PID { get; set; }
 
-        public bool SameDevice(string path)
+        public bool SameDevice(string identifier)
         {
             if (!string.IsNullOrEmpty(DevicePath))
             {
-                return path == DevicePath;
+                return identifier == DevicePath;
+            }
+            else
+            {
+                return identifier == InstanceGUID.ToString();
             }
 
             return false;

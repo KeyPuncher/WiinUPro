@@ -14,5 +14,20 @@ namespace WiinUPro
         public string icon;
         public bool autoConnect;
         public Dictionary<string, string> calibrationFiles = new Dictionary<string, string>();
+
+        public void Copy(DevicePrefs other)
+        {
+            if (deviceId != other.deviceId) return;
+
+            defaultProfile = other.defaultProfile;
+            nickname = other.nickname;
+            icon = other.icon;
+            autoConnect = other.autoConnect;
+            calibrationFiles.Clear();
+            foreach (var calibration in other.calibrationFiles)
+            {
+                calibrationFiles.Add(calibration.Key, calibration.Value);
+            }
+        }
     }
 }

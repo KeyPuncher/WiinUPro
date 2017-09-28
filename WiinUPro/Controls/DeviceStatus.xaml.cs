@@ -75,24 +75,30 @@ namespace WiinUPro
             {
                 Joy = new JoyControl(Info);
                 Joy.OnDisconnect += Ninty_OnDisconnect;
+                Joy.OnPrefsChange += (p) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(p.nickname))
+                    {
+                        nickname.Content = p.nickname;
+                    }
+
+                    OnPrefsChange?.Invoke(this, p);
+                };
+                nickname.Content = JoyControl.ToName(Joy.Type);
                 if (info.VID == "057e" && info.PID == "2006")
                 {
-                    nickname.Content = "Joy-Con (L)";
                     icon.Source = new BitmapImage(new Uri("../Images/Icons/switch_jcl_black.png", UriKind.Relative));
                 }
                 else if (info.VID == "057e" && info.PID == "2007")
                 {
-                    nickname.Content = "Joy-Con (R)";
                     icon.Source = new BitmapImage(new Uri("../Images/Icons/switch_jcr_black.png", UriKind.Relative));
                 }
                 else if (info.VID == "057e" && info.PID == "2009")
                 {
-                    nickname.Content = "Switch Pro";
                     icon.Source = new BitmapImage(new Uri("../Images/Icons/switch_pro_black.png", UriKind.Relative));
                 }
                 else
                 {
-                    nickname.Content = "Generic Joystick";
                     icon.Source = new BitmapImage(new Uri("../Images/Icons/joystick_icon.png", UriKind.Relative));
                 }
             }
@@ -189,7 +195,11 @@ namespace WiinUPro
             {
                 result = Joy.Connect();
 
-                // TODO: Load default profile
+                var prefs = AppPrefs.Instance.GetDevicePreferences(Info.DeviceID);
+                if (prefs != null && !string.IsNullOrEmpty(prefs.defaultProfile))
+                {
+                    Joy.LoadProfile(prefs.defaultProfile);
+                }
             }
 
             if (result)
@@ -204,6 +214,7 @@ namespace WiinUPro
     public interface IDeviceControl
     {
         event Action OnDisconnect;
+        event Action<DevicePrefs> OnPrefsChange;
         int ShiftIndex { get; }
         ShiftState CurrentShiftState { get; }
         void ChangeState(ShiftState newState);

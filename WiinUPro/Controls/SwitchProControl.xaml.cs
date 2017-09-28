@@ -289,7 +289,7 @@ namespace WiinUPro
 
             if (joyCal.Apply)
             {
-                OnJoystickCalibrated?.Invoke(joyCal.Calibration, targetCalibration);
+                OnJoystickCalibrated?.Invoke(joyCal.Calibration, targetCalibration, joyCal.FileName);
             }
 
             _openJoyWindow = null;

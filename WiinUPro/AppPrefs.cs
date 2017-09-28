@@ -109,6 +109,8 @@ namespace WiinUPro
 
         public DevicePrefs GetDevicePreferences(string deviceId)
         {
+            if (string.IsNullOrEmpty(deviceId)) return null;
+
             DevicePrefs prefs = devicePreferences.Find((d) => d.deviceId == deviceId);
 
             if (prefs != null)

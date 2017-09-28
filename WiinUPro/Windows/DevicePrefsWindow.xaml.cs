@@ -20,8 +20,8 @@ namespace WiinUPro.Windows
     {
         public bool DoSave { get; protected set; }
         public DevicePrefs Preferences { get; protected set; }
-
-        private DevicePrefs _orgPrefs;
+        
+        private DevicePrefs _modifiedPrefs;
 
         protected DevicePrefsWindow()
         {
@@ -30,20 +30,20 @@ namespace WiinUPro.Windows
 
         public DevicePrefsWindow(DevicePrefs devicePrefs) : this()
         {
-            _orgPrefs = devicePrefs;
+            Preferences = devicePrefs;
             deviceID.Content = devicePrefs.deviceId;
             nickname.Text = devicePrefs.nickname;
             defaultProfile.Text = devicePrefs.defaultProfile;
             autoConnect.IsChecked = devicePrefs.autoConnect;
 
-            Preferences = new DevicePrefs()
+            _modifiedPrefs = new DevicePrefs()
             {
-                deviceId = _orgPrefs.deviceId
+                deviceId = devicePrefs.deviceId
             };
 
-            foreach (var calibrationPath in _orgPrefs.calibrationFiles)
+            foreach (var calibrationPath in devicePrefs.calibrationFiles)
             {
-                Preferences.calibrationFiles.Add(calibrationPath.Key, calibrationPath.Value);
+                _modifiedPrefs.calibrationFiles.Add(calibrationPath.Key, calibrationPath.Value);
 
                 StackPanel stack = new StackPanel()
                 {
@@ -88,9 +88,9 @@ namespace WiinUPro.Windows
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
             FrameworkElement elm = sender as FrameworkElement;
-            if (Preferences.calibrationFiles.ContainsKey(elm.Tag.ToString()))
+            if (_modifiedPrefs.calibrationFiles.ContainsKey(elm.Tag.ToString()))
             {
-                Preferences.calibrationFiles.Remove(elm.Tag.ToString());
+                _modifiedPrefs.calibrationFiles.Remove(elm.Tag.ToString());
             }
 
             calibrationWrap.Children.Remove(elm.Parent as UIElement);
@@ -98,9 +98,11 @@ namespace WiinUPro.Windows
 
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
         {
-            Preferences.autoConnect = autoConnect.IsChecked ?? false;
-            Preferences.nickname = nickname.Text;
-            Preferences.defaultProfile = defaultProfile.Text;
+            _modifiedPrefs.autoConnect = autoConnect.IsChecked ?? false;
+            _modifiedPrefs.nickname = nickname.Text;
+            _modifiedPrefs.defaultProfile = defaultProfile.Text;
+
+            Preferences.Copy(_modifiedPrefs);
 
             DoSave = true;
             Close();
