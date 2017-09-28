@@ -451,7 +451,7 @@ namespace WiinUPro
             }
 
             var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-            if (!string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
+            if (prefs != null && !string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
             {
                 var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
                 if (prompt == MessageBoxResult.Yes)
@@ -488,7 +488,7 @@ namespace WiinUPro
             }
 
             var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-            if (!string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
+            if (prefs != null && !string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
             {
                 var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
                 if (prompt == MessageBoxResult.Yes)
@@ -514,7 +514,7 @@ namespace WiinUPro
             _nintroller.SetCalibration(wmCal);
 
             var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-            if (!string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
+            if (prefs != null && !string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
             {
                 var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
                 if (prompt == MessageBoxResult.Yes)

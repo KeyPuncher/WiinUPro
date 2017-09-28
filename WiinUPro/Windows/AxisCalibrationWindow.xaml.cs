@@ -10,6 +10,7 @@ namespace WiinUPro.Windows
     {
         public bool Apply { get; protected set; }
         public AxisCalibration Calibration { get { return _axis; } }
+        public string FileName { get; protected set; }
 
         protected AxisCalibration _axis;
         protected bool set;
@@ -20,9 +21,10 @@ namespace WiinUPro.Windows
             InitializeComponent();
         }
 
-        public AxisCalibrationWindow(AxisCalibration prevCalibration) : this()
+        public AxisCalibrationWindow(AxisCalibration prevCalibration, string filename = "") : this()
         {
             _axis = prevCalibration;
+            FileName = filename;
             set = true;
             center.Value = prevCalibration.center;
             min.Value = (int)Math.Round(100 - 100 * prevCalibration.min / 65535d);
@@ -70,7 +72,7 @@ namespace WiinUPro.Windows
         private void loadBtn_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.FileName = "axis_Calibration";
+            dialog.FileName = string.IsNullOrEmpty(FileName) ? "axis_Calibration" : FileName;
             dialog.DefaultExt = ".axs";
             dialog.Filter = App.AXIS_CAL_FILTER;
 
@@ -81,6 +83,7 @@ namespace WiinUPro.Windows
             {
                 if (App.LoadFromFile<AxisCalibration>(dialog.FileName, out loadedConfig))
                 {
+                    FileName = dialog.FileName;
                     center.Value = loadedConfig.center;
                     min.Value = (int)Math.Round(100 - 100 * loadedConfig.min / 65535d);
                     max.Value = (int)Math.Round(100 * loadedConfig.max / 65535d);
@@ -97,7 +100,7 @@ namespace WiinUPro.Windows
         private void saveBtn_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "axis_Calibration";
+            dialog.FileName = string.IsNullOrEmpty(FileName) ? "axis_Calibration" : FileName;
             dialog.DefaultExt = ".axs";
             dialog.Filter = App.AXIS_CAL_FILTER;
 
@@ -105,7 +108,10 @@ namespace WiinUPro.Windows
 
             if (doSave == true)
             {
-                App.SaveToFile<AxisCalibration>(dialog.FileName, _axis);
+                if (App.SaveToFile<AxisCalibration>(dialog.FileName, _axis))
+                {
+                    FileName = dialog.FileName;
+                }
             }
         }
 
