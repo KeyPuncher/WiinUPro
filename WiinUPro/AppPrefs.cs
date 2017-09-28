@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Microsoft.Win32;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace WiinUPro
 {
@@ -216,6 +217,29 @@ namespace WiinUPro
             if (!value && File.Exists(Path.Combine(startupDir, "WiinUPro.lnk")))
             {
                 File.Delete(Path.Combine(startupDir, "WiinUPro.lnk"));
+            }
+        }
+
+        public void PromptToSaveCalibration(string deviceId, string targetCalibration, string fileName)
+        {
+            var prefs = GetDevicePreferences(deviceId);
+            if (prefs != null && !string.IsNullOrEmpty(fileName) && 
+               (!prefs.calibrationFiles.ContainsKey(targetCalibration) || prefs.calibrationFiles[targetCalibration] != fileName))
+            {
+                var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
+                if (prompt == MessageBoxResult.Yes)
+                {
+                    if (prefs.calibrationFiles.ContainsKey(targetCalibration))
+                    {
+                        prefs.calibrationFiles[targetCalibration] = fileName;
+                    }
+                    else
+                    {
+                        prefs.calibrationFiles.Add(targetCalibration, fileName);
+                    }
+
+                    SaveDevicePrefs(prefs);
+                }
             }
         }
 

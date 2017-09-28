@@ -450,24 +450,7 @@ namespace WiinUPro
                     break;
             }
 
-            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-            if (prefs != null && !string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
-            {
-                var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
-                if (prompt == MessageBoxResult.Yes)
-                {
-                    if (prefs.calibrationFiles.ContainsKey(target))
-                    {
-                        prefs.calibrationFiles[target] = file;
-                    }
-                    else
-                    {
-                        prefs.calibrationFiles.Add(target, file);
-                    }
-
-                    AppPrefs.Instance.SaveDevicePrefs(prefs);
-                }
-            }
+            AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, target, file);
         }
 
         private void _nintroller_TriggerCalibrated(NintrollerLib.Trigger calibration, string target, string file = "")
@@ -487,24 +470,7 @@ namespace WiinUPro
                     break;
             }
 
-            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-            if (prefs != null && !string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
-            {
-                var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
-                if (prompt == MessageBoxResult.Yes)
-                {
-                    if (prefs.calibrationFiles.ContainsKey(target))
-                    {
-                        prefs.calibrationFiles[target] = file;
-                    }
-                    else
-                    {
-                        prefs.calibrationFiles.Add(target, file);
-                    }
-
-                    AppPrefs.Instance.SaveDevicePrefs(prefs);
-                }
-            }
+            AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, target, file);
         }
 
         private void _nintroller_IRCalibrated(Windows.IRCalibration calibration, string file = "")
@@ -513,24 +479,7 @@ namespace WiinUPro
             wmCal.irSensor.boundingArea = calibration.boundry;
             _nintroller.SetCalibration(wmCal);
 
-            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-            if (prefs != null && !string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
-            {
-                var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
-                if (prompt == MessageBoxResult.Yes)
-                {
-                    if (prefs.calibrationFiles.ContainsKey(App.CAL_WII_IR))
-                    {
-                        prefs.calibrationFiles[App.CAL_WII_IR] = file;
-                    }
-                    else
-                    {
-                        prefs.calibrationFiles.Add(App.CAL_WII_IR, file);
-                    }
-
-                    AppPrefs.Instance.SaveDevicePrefs(prefs);
-                }
-            }
+            AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, App.CAL_WII_IR, file);
         }
         #endregion
 

@@ -498,24 +498,7 @@ namespace WiinUPro
                 ((SwitchProControl)_controller).leftYCalibration = yCalibration;
             }
 
-            var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-            if (prefs != null && !string.IsNullOrEmpty(file) && !prefs.calibrationFiles.ContainsValue(file))
-            {
-                var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
-                if (prompt == MessageBoxResult.Yes)
-                {
-                    if (prefs.calibrationFiles.ContainsKey(target))
-                    {
-                        prefs.calibrationFiles[target] = file;
-                    }
-                    else
-                    {
-                        prefs.calibrationFiles.Add(target, file);
-                    }
-
-                    AppPrefs.Instance.SaveDevicePrefs(prefs);
-                }
-            }
+            AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, target, file);
         }
         #endregion
 
@@ -998,25 +981,7 @@ namespace WiinUPro
             if (axisCal.Apply)
             {
                 calibrations[offset] = axisCal.Calibration;
-
-                var prefs = AppPrefs.Instance.GetDevicePreferences(_info.DevicePath);
-                if (prefs != null && !string.IsNullOrEmpty(axisCal.FileName) && !prefs.calibrationFiles.ContainsKey(axisCal.FileName))
-                {
-                    var prompt = MessageBox.Show("Set calibration as default?", "Set as Default", MessageBoxButton.YesNo);
-                    if (prompt == MessageBoxResult.Yes)
-                    {
-                        if (prefs.calibrationFiles.ContainsKey(_calibrationTarget))
-                        {
-                            prefs.calibrationFiles[_calibrationTarget] = axisCal.FileName;
-                        }
-                        else
-                        {
-                            prefs.calibrationFiles.Add(_calibrationTarget, axisCal.FileName);
-                        }
-
-                        AppPrefs.Instance.SaveDevicePrefs(prefs);
-                    }
-                }
+                AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, _calibrationTarget, axisCal.FileName);
             }
 
             axisCal = null;
