@@ -38,6 +38,24 @@ namespace WiinUPro
 
         public ImageSource Icon { get { return icon.Source; } }
 
+        public bool Connected
+        {
+            get
+            {
+                if (Ninty != null)
+                {
+                    return Ninty.Connected;
+                }
+
+                if (Joy != null)
+                {
+                    return Joy.Connected;
+                }
+
+                return false;
+            }
+        }
+
         public DeviceStatus(DeviceInfo info)
         {
             InitializeComponent();
@@ -217,6 +235,7 @@ namespace WiinUPro
         event Action<DevicePrefs> OnPrefsChange;
         int ShiftIndex { get; }
         ShiftState CurrentShiftState { get; }
+        bool Connected { get; }
         void ChangeState(ShiftState newState);
         bool Connect();
         void Disconnect();

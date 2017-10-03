@@ -143,6 +143,14 @@ namespace WiinUPro
                         status.AutoConnect();
                     }
                 }
+                else if (!existing.Connected)
+                {
+                    DevicePrefs existingPrefs = AppPrefs.Instance.GetDevicePreferences(info.DeviceID);
+                    if (existingPrefs.autoConnect)
+                    {
+                        existing.AutoConnect();
+                    }
+                }
             }
             
         }

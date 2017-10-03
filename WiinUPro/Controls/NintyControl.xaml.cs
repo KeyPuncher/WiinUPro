@@ -53,6 +53,8 @@ namespace WiinUPro
             }
         }
 
+        public bool Connected { get { return _nintroller.Connected; } }
+
         public NintyControl()
         {
             _currentState = ShiftState.None;

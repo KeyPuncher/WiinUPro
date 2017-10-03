@@ -43,6 +43,8 @@ namespace WiinUPro
             }
         }
 
+        public bool Connected { get { return _readTask != null; } }
+
         public delegate void JoyUpdate(Joystick joystick, JoystickUpdate[] updates);
         event JoyUpdate OnUpdate;
         public event Action OnDisconnect;
