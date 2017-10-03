@@ -372,7 +372,7 @@ namespace WiinUPro
                 {
                     SetupController();
                 }
-                else
+                else if (e.controllerType != ControllerType.FalseState)
                 {
                     MessageBox.Show("Device or Extension not supported.");
                 }
