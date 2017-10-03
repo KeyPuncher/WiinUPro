@@ -42,7 +42,7 @@ namespace WiinUPro
         public void Refresh()
         {
             // Prevent this method from being spammed
-            if (DateTime.Now.Subtract(_lastRefreshTime).TotalSeconds < 3) return;
+            if (DateTime.Now.Subtract(_lastRefreshTime).TotalSeconds < 1) return;
             _lastRefreshTime = DateTime.Now;
 
             var devices = WinBtStream.GetPaths();
