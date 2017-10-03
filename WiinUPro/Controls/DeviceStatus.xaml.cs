@@ -125,6 +125,7 @@ namespace WiinUPro
         private void Ninty_OnDisconnect()
         {
             connectBtn.IsEnabled = true;
+            status.Content = "Not Connected";
             CloseTab?.Invoke(this);
         }
 
@@ -223,6 +224,7 @@ namespace WiinUPro
             if (result)
             {
                 connectBtn.IsEnabled = false;
+                status.Content = "Connected";
             }
 
             ConnectClick?.Invoke(this, result);
