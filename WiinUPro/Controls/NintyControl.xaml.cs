@@ -171,6 +171,7 @@ namespace WiinUPro
         public void Disconnect()
         {
             _nintroller.RumbleEnabled = false;
+            _nintroller.StopReading();
 
             if (_stream != null)
                 _stream.Close();

@@ -423,6 +423,11 @@ namespace WiinUPro
             Refresh();
         }
 
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Get the application version
