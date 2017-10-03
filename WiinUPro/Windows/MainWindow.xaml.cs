@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,12 +26,13 @@ namespace WiinUPro
 
         private static MainWindow _instance;
         
-        List<DeviceStatus> availableDevices;
+        List<DeviceStatus> _availableDevices;
+        DateTime _lastRefreshTime;
 
         public MainWindow()
         {
             _instance = this;
-            availableDevices = new List<DeviceStatus>();
+            _availableDevices = new List<DeviceStatus>();
             InitializeComponent();
 
             WinBtStream.OverrideSharingMode = true;
@@ -40,9 +40,13 @@ namespace WiinUPro
             
             Refresh();
         }
-
+        
         public void Refresh()
         {
+            // Prevent this method from being spammed
+            if (DateTime.Now.Subtract(_lastRefreshTime).TotalSeconds < 3) return;
+            _lastRefreshTime = DateTime.Now;
+
             var devices = WinBtStream.GetPaths();
 
             // Direct input Devices
@@ -75,7 +79,7 @@ namespace WiinUPro
             foreach (var info in devices)
             {
                 // Check if we are already showing this one
-                DeviceStatus existing = availableDevices.Find((d) => d.Info.SameDevice(info.DeviceID));
+                DeviceStatus existing = _availableDevices.Find((d) => d.Info.SameDevice(info.DeviceID));
 
                 // If not add it
                 if (existing == null)
@@ -132,7 +136,7 @@ namespace WiinUPro
                         }
                     };
 
-                    availableDevices.Add(status);
+                    _availableDevices.Add(status);
                     statusStack.Children.Add(status);
 
                     DevicePrefs devicePrefs = AppPrefs.Instance.GetDevicePreferences(info.DeviceID);
@@ -458,8 +462,27 @@ namespace WiinUPro
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            // Stop listening for devices
+            DeviceListener.Instance.UnregisterDeviceNotification();
+            DeviceListener.Instance.OnDevicesUpdated -= WindowsDevicesChanged;
+
             // Save preferences
             AppPrefs.Save();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+            // Listen for devices coming and going
+            DeviceListener.Instance.OnDevicesUpdated += WindowsDevicesChanged;
+            DeviceListener.Instance.RegisterDeviceNotification(this, DeviceListener.GuidInterfaceHID, true);
+        }
+
+        private void WindowsDevicesChanged()
+        {
+            System.Diagnostics.Debug.WriteLine(DateTime.Now + "Chnaged");
+            Refresh();
         }
     }
 }
