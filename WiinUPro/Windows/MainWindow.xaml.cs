@@ -37,8 +37,6 @@ namespace WiinUPro
 
             WinBtStream.OverrideSharingMode = true;
             WinBtStream.OverridenFileShare = System.IO.FileShare.ReadWrite;
-            
-            Refresh();
         }
         
         public void Refresh()
@@ -438,6 +436,9 @@ namespace WiinUPro
             // Check if auto start is enabled
             settingAutoStart.IsChecked = AppPrefs.Instance.GetAutoStartSet();
 
+            // Check Suppress Connection Lost
+            settingSuppressLostConn.IsChecked = AppPrefs.Instance.suppressConnectionLost;
+
             // Check for Start Minimized
             if (AppPrefs.Instance.startMinimized)
             {
@@ -458,6 +459,8 @@ namespace WiinUPro
                 settingToshibaMode.IsChecked = true;
                 settingToshibaMode_Checked(this, new RoutedEventArgs());
             }
+
+            Refresh();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
