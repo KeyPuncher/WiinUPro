@@ -240,8 +240,8 @@ namespace Shared.Windows
             IntPtr hwndParentIn, 
             IntPtr hRadioIn, 
             ref BLUETOOTH_DEVICE_INFO pbtdiInout, 
-            /*BLUETOOTH_OOB_DATA*/ object pbtOobData, 
-            uint authenticationRequirement);
+            /*BLUETOOTH_OOB_DATA*/ object pbtOobData,
+            AUTHENTICATION_REQUIREMENTS authenticationRequirement);
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern uint BluetoothEnumerateInstalledServices(
@@ -263,7 +263,7 @@ namespace Shared.Windows
             IntPtr hRadio,
             [MarshalAs(UnmanagedType.Bool)] bool fEnabled);
 
-        public enum AUTHENTICATION_REQUIREMENTS
+        public enum AUTHENTICATION_REQUIREMENTS : uint
         {
             MITMProtectionNotRequired = 0x00,
             MITMProtectionRequired = 0x01,

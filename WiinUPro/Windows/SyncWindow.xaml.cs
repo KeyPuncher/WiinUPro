@@ -81,7 +81,10 @@ namespace WiinUPro.Windows
                             {
                                 do
                                 {
-                                    if (deviceInfo.szName.StartsWith("Nintendo RVL"))
+                                    bool controller = SupportedDevice(deviceInfo.szName);
+                                    bool wiiDevice = deviceInfo.szName.StartsWith("Nintendo RVL");
+                                    
+                                    if (controller || wiiDevice)
                                     {
                                         Prompt("Found " + deviceInfo.szName);
 
@@ -98,42 +101,60 @@ namespace WiinUPro.Windows
                                             success = errForget == 0;
                                         }
 
-                                        // use MAC address of BT radio as pin
-                                        var bytes = BitConverter.GetBytes(radioInfo.address);
-                                        for (int i = 0; i < 6; i++)
+                                        if (wiiDevice)
                                         {
-                                            password.Append((char)bytes[i]);
-                                        }
+                                            // use MAC address of BT radio as pin
+                                            var bytes = BitConverter.GetBytes(radioInfo.address);
+                                            for (int i = 0; i < 6; i++)
+                                            {
+                                                password.Append((char)bytes[i]);
+                                            }
 
-                                        if (success)
-                                        {
-                                            Prompt("Sending Paring Code...");
-                                            var errPair = NativeImports.BluetoothAuthenticateDevice(IntPtr.Zero, btRadios[r], ref deviceInfo, password.ToString(), 6);
-                                            success = errPair == 0;
-                                        }
+                                            if (success)
+                                            {
+                                                Prompt("Sending Paring Code...");
+                                                var errPair = NativeImports.BluetoothAuthenticateDevice(IntPtr.Zero, btRadios[r], ref deviceInfo, password.ToString(), 6);
+                                                success = errPair == 0;
+                                            }
 
-                                        if (success)
-                                        {
-                                            Prompt("Installing Service...");
-                                            var errService = NativeImports.BluetoothEnumerateInstalledServices(btRadios[r], ref deviceInfo, ref pcService, guids);
-                                            success = errService == 0;
-                                        }
+                                            if (success)
+                                            {
+                                                Prompt("Installing Service...");
+                                                var errService = NativeImports.BluetoothEnumerateInstalledServices(btRadios[r], ref deviceInfo, ref pcService, guids);
+                                                success = errService == 0;
+                                            }
 
-                                        if (success)
-                                        {
-                                            Prompt("Setting HID Service...");
-                                            var errActivate = NativeImports.BluetoothSetServiceState(btRadios[r], ref deviceInfo, ref HIDServiceClass, 0x01);
-                                            success = errActivate == 0;
-                                        }
+                                            if (success)
+                                            {
+                                                Prompt("Setting HID Service...");
+                                                var errActivate = NativeImports.BluetoothSetServiceState(btRadios[r], ref deviceInfo, ref HIDServiceClass, 0x01);
+                                                success = errActivate == 0;
+                                            }
 
-                                        if (success)
-                                        {
-                                            Prompt("Successfully Paired!");
-                                            pairedCount += 1;
+                                            if (success)
+                                            {
+                                                Prompt("Successfully Paired!");
+                                                pairedCount += 1;
+                                            }
+                                            else
+                                            {
+                                                Prompt("Failed to Pair.");
+                                            }
                                         }
                                         else
                                         {
-                                            Prompt("Failed to Pair.");
+                                            Prompt("Finish Pairing with Windows");
+                                            var err = NativeImports.BluetoothAuthenticateDeviceEx(IntPtr.Zero, btRadios[r], ref deviceInfo, null, NativeImports.AUTHENTICATION_REQUIREMENTS.MITMProtectionNotRequired);
+
+                                            if (err == 0)
+                                            {
+                                                Prompt("Successfully Paired!");
+                                                pairedCount += 1;
+                                            }
+                                            else
+                                            {
+                                                Prompt("Paring Not Completed");
+                                            }
                                         }
                                     }
                                 }
@@ -162,6 +183,18 @@ namespace WiinUPro.Windows
             }
 
             Dispatcher.BeginInvoke((Action)(() => Close()));
+        }
+
+        public bool SupportedDevice(string deviceName)
+        {
+            switch (deviceName)
+            {
+                case "Pro Controller": return true;
+                case "Joy-Con (L)": return true;
+                case "Joy-Con (R)": return true;
+            }
+
+            return false;
         }
 
         private void Prompt(string text)
