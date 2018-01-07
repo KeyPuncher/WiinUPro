@@ -52,7 +52,7 @@
                             </StackPanel>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="settingsGroup" Header="Setings" Margin="267,26,4,169.5" Style="{StaticResource GroupBoxStyle}">
+                    <GroupBox x:Name="settingsGroup" Header="Settings" Margin="267,26,4,169.5" Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <CheckBox x:Name="settingAutoStart" Content="Auto Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingAutoStart_Checked"/>
                             <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="False" Style="{StaticResource CheckBoxStyle}" Click="settingStartMinimized_Checked"/>
