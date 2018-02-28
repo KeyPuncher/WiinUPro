@@ -1,5 +1,5 @@
 ======================
-WiinUSoft 3.1
+WiinUSoft 3.2
 ======================
 
  WiinUSoft is a program that allows you to use your Nintendo
@@ -40,6 +40,12 @@ Supported Controllers
 ======================
 Change Log
 ======================
+
+ = version 3.2 =
+ - Fixed Selection of Microsoft BT Stack option
+ - Fixed Windows 10 detection
+ - Fixed auto connect and auto refresh issues
+ - Displaying lost connection message as a tray balloon instead of a popup
 
  = version 3.1 =
  - Added option for changing the Wiimote's IR pointer off screen behavior
