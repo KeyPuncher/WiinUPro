@@ -28,6 +28,8 @@ namespace WiinUPro
         internal const string CAL_SWP_RJOYSTICK = "swpJoyR";
         internal const string CAL_CC_LTRIGGER = "ccLT";
         internal const string CAL_CC_RTRIGGER = "ccRT";
+        internal const string CAL_GCN_LTRIGGER = "gcnLT";
+        internal const string CAL_GCN_RTRIGGER = "gcnRT";
         internal const string CAL_WII_IR = "IR";
 
         public static bool SaveToFile<T>(string file, T data)

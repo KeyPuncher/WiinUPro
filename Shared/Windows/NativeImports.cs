@@ -35,6 +35,9 @@ namespace Shared.Windows
             uint dwNumberOfBytesTransfered, 
             NativeOverlapped lpOverlapped);
 
+        // TODO: The above delegate method signature matches the one of the unhandled Native exception that keeps occuring
+        // however, it is only used by WriteFileEx, which is not being used, perhaps that is the problem
+
         /// <summary>
         /// Like WriteFile but provides an asynchronous callback
         /// </summary>

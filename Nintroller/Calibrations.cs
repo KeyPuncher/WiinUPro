@@ -234,6 +234,47 @@
                     deadY   = 0
                 }
             };
+
+            /// <summary>
+            /// Raw calibration for the GameCube Controller
+            /// </summary>
+            public GameCubeController GameCubeControllerRaw = new GameCubeController()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 0,
+                    maxX = 255,
+                    deadX = 0,
+
+                    centerY = 128,
+                    minY = 0,
+                    maxY = 255,
+                    deadY = 0
+                },
+                cStick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 0,
+                    maxX = 255,
+                    deadX = 0,
+
+                    centerY = 128,
+                    minY = 0,
+                    maxY = 255,
+                    deadY = 0
+                },
+                L = new Trigger()
+                {
+                    min = 0,
+                    max = 255
+                },
+                R = new Trigger()
+                {
+                    min = 0,
+                    max = 255
+                }
+            };
         }
 
         /// <summary>
@@ -412,6 +453,47 @@
                     minY    = 0,
                     maxY    = 31,
                     deadY   = 1
+                }
+            };
+
+            /// <summary>
+            /// Minimum calibration for the GameCube Controller
+            /// </summary>
+            public GameCubeController GameCubeControllerMinimal = new GameCubeController()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 12,
+                    maxX = 244,
+                    deadX = 8,
+
+                    centerY = 128,
+                    minY = 12,
+                    maxY = 244,
+                    deadY = 8
+                },
+                cStick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 12,
+                    maxX = 244,
+                    deadX = 8,
+
+                    centerY = 128,
+                    minY = 12,
+                    maxY = 244,
+                    deadY = 8
+                },
+                L = new Trigger()
+                {
+                    min = 32,
+                    max = 220
+                },
+                R = new Trigger()
+                {
+                    min = 32,
+                    max = 220
                 }
             };
         }
@@ -603,6 +685,47 @@
                     deadY   = 2
                 }
             };
+
+            /// <summary>
+            /// Default calibration for the GameCube Controller
+            /// </summary>
+            public GameCubeController GameCubeControllerDefault = new GameCubeController()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 30,
+                    maxX = 232,
+                    deadX = 16,
+
+                    centerY = 128,
+                    minY = 30,
+                    maxY = 220,
+                    deadY = 16
+                },
+                cStick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 42,
+                    maxX = 220,
+                    deadX = 12,
+
+                    centerY = 128,
+                    minY = 42,
+                    maxY = 220,
+                    deadY = 12
+                },
+                L = new Trigger()
+                {
+                    min = 40,
+                    max = 200
+                },
+                R = new Trigger()
+                {
+                    min = 40,
+                    max = 200
+                }
+            };
         }
 
         /// <summary>
@@ -781,6 +904,47 @@
                     minY    = 4,
                     maxY    = 27,
                     deadY   = 4
+                }
+            };
+
+            /// <summary>
+            /// Modest calibration for the GameCube Controller
+            /// </summary>
+            public GameCubeController GameCubeControllerModest = new GameCubeController()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 48,
+                    maxX = 210,
+                    deadX = 20,
+
+                    centerY = 128,
+                    minY = 48,
+                    maxY = 210,
+                    deadY = 20
+                },
+                cStick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 56,
+                    maxX = 200,
+                    deadX = 20,
+
+                    centerY = 128,
+                    minY = 56,
+                    maxY = 200,
+                    deadY = 20
+                },
+                L = new Trigger()
+                {
+                    min = 48,
+                    max = 180
+                },
+                R = new Trigger()
+                {
+                    min = 48,
+                    max = 180
                 }
             };
         }
@@ -963,6 +1127,47 @@
                     deadY   = 5
                 }
             };
+            /// <summary>
+            /// Extra calibration for the GameCube Controller
+            /// </summary>
+            public GameCubeController GameCubeControllerExtra = new GameCubeController()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 56,
+                    maxX = 200,
+                    deadX = 32,
+
+                    centerY = 128,
+                    minY = 56,
+                    maxY = 200,
+                    deadY = 32
+                },
+                cStick = new Joystick()
+                {
+                    centerX = 128,
+                    minX = 64,
+                    maxX = 192,
+                    deadX = 32,
+
+                    centerY = 128,
+                    minY = 64,
+                    maxY = 192,
+                    deadY = 32
+                },
+                L = new Trigger()
+                {
+                    min = 56,
+                    max = 170
+                },
+                R = new Trigger()
+                {
+                    min = 56,
+                    max = 170
+                }
+            };
+
         }
         #endregion
     }
@@ -993,6 +1198,8 @@
         /// </summary>
         public ClassicControllerPro ClassicProCalibration;
 
+        public GameCubeAdapter GameCubeAdapterCalibration;
+
         /// <summary>
         /// Default constructor setting all calibrations to their defaults.
         /// </summary>
@@ -1003,6 +1210,14 @@
             NunchukCalibration    = Calibrations.Defaults.NunchukDefault;
             ClassicCalibration    = Calibrations.Defaults.ClassicControllerDefault;
             ClassicProCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+
+            GameCubeAdapterCalibration = new GameCubeAdapter(true)
+            {
+                port1 = Calibrations.Defaults.GameCubeControllerDefault,
+                port2 = Calibrations.Defaults.GameCubeControllerDefault,
+                port3 = Calibrations.Defaults.GameCubeControllerDefault,
+                port4 = Calibrations.Defaults.GameCubeControllerDefault,
+            };
         }
 
         /// <summary>
@@ -1046,6 +1261,10 @@
                 {
                     ProCalibration.SetCalibration(calStr);
                 }
+                else if (calStr.StartsWith("gcn"))
+                {
+                    GameCubeAdapterCalibration.SetCalibration(calStr);
+                }
             }
         }
 
@@ -1063,6 +1282,13 @@
                     NunchukCalibration    = Calibrations.Defaults.NunchukDefault;
                     ClassicCalibration    = Calibrations.Defaults.ClassicControllerDefault;
                     ClassicProCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+                    GameCubeAdapterCalibration = new GameCubeAdapter(true)
+                    {
+                        port1 = Calibrations.Defaults.GameCubeControllerDefault,
+                        port2 = Calibrations.Defaults.GameCubeControllerDefault,
+                        port3 = Calibrations.Defaults.GameCubeControllerDefault,
+                        port4 = Calibrations.Defaults.GameCubeControllerDefault,
+                    };
                     break;
 
                 case Calibrations.CalibrationPreset.Modest:
@@ -1071,6 +1297,13 @@
                     NunchukCalibration    = Calibrations.Moderate.NunchukModest;
                     ClassicCalibration    = Calibrations.Moderate.ClassicControllerModest;
                     ClassicProCalibration = Calibrations.Moderate.ClassicControllerProModest;
+                    GameCubeAdapterCalibration = new GameCubeAdapter(true)
+                    {
+                        port1 = Calibrations.Moderate.GameCubeControllerModest,
+                        port2 = Calibrations.Moderate.GameCubeControllerModest,
+                        port3 = Calibrations.Moderate.GameCubeControllerModest,
+                        port4 = Calibrations.Moderate.GameCubeControllerModest,
+                    };
                     break;
 
                 case Calibrations.CalibrationPreset.Extra:
@@ -1079,6 +1312,13 @@
                     NunchukCalibration    = Calibrations.Extras.NunchukExtra;
                     ClassicCalibration    = Calibrations.Extras.ClassicControllerExtra;
                     ClassicProCalibration = Calibrations.Extras.ClassicControllerProExtra;
+                    GameCubeAdapterCalibration = new GameCubeAdapter(true)
+                    {
+                        port1 = Calibrations.Extras.GameCubeControllerExtra,
+                        port2 = Calibrations.Extras.GameCubeControllerExtra,
+                        port3 = Calibrations.Extras.GameCubeControllerExtra,
+                        port4 = Calibrations.Extras.GameCubeControllerExtra,
+                    };
                     break;
 
                 case Calibrations.CalibrationPreset.Minimum:
@@ -1087,6 +1327,13 @@
                     NunchukCalibration    = Calibrations.Minimum.NunchukMinimal;
                     ClassicCalibration    = Calibrations.Minimum.ClassicControllerMinimal;
                     ClassicProCalibration = Calibrations.Minimum.ClassicControllerProMinimal;
+                    GameCubeAdapterCalibration = new GameCubeAdapter(true)
+                    {
+                        port1 = Calibrations.Minimum.GameCubeControllerMinimal,
+                        port2 = Calibrations.Minimum.GameCubeControllerMinimal,
+                        port3 = Calibrations.Minimum.GameCubeControllerMinimal,
+                        port4 = Calibrations.Minimum.GameCubeControllerMinimal,
+                    };
                     break;
 
                 case Calibrations.CalibrationPreset.None:
@@ -1095,6 +1342,13 @@
                     NunchukCalibration    = Calibrations.None.NunchukRaw;
                     ClassicCalibration    = Calibrations.None.ClassicControllerRaw;
                     ClassicProCalibration = Calibrations.None.ClassicControllerProRaw;
+                    GameCubeAdapterCalibration = new GameCubeAdapter(true)
+                    {
+                        port1 = Calibrations.None.GameCubeControllerRaw,
+                        port2 = Calibrations.None.GameCubeControllerRaw,
+                        port3 = Calibrations.None.GameCubeControllerRaw,
+                        port4 = Calibrations.None.GameCubeControllerRaw,
+                    };
                     break;
             }
         }
@@ -1112,6 +1366,7 @@
             text += ClassicCalibration.GetCalibrationString();
             text += ClassicProCalibration.GetCalibrationString();
             text += ProCalibration.GetCalibrationString();
+            text += GameCubeAdapterCalibration.GetCalibrationString();
 
             return text;
         }

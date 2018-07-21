@@ -193,5 +193,56 @@
             public const string GYROFORWARD  = "mpGYROFORWARD";
             public const string GYROBACKWARD = "mpGYROBACKWARD";
         }
+
+        public static class GCN_ADAPTER
+        {
+            public const string PORT_1_CONNECTED = "1_gcnENABLED";
+            public const string PORT_2_CONNECTED = "2_gcnENABLED";
+            public const string PORT_3_CONNECTED = "3_gcnENABLED";
+            public const string PORT_4_CONNECTED = "4_gcnENABLED";
+
+            public const string PORT_1_PREFIX = "1_";
+            public const string PORT_2_PREFIX = "2_";
+            public const string PORT_3_PREFIX = "3_";
+            public const string PORT_4_PREFIX = "4_";
+        }
+
+        public static class GCN_CONTROLLER
+        {
+            public const string A         = "gcnA";
+            public const string B         = "gcnB";
+            public const string X         = "gcnX";
+            public const string Y         = "gcnY";
+
+            public const string UP        = "gcnUP";
+            public const string DOWN      = "gcnDOWN";
+            public const string LEFT      = "gcnLEFT";
+            public const string RIGHT     = "gcnRIGHT";
+
+            public const string L         = "gcnL";
+            public const string R         = "gcnR";
+            public const string Z         = "gcnZ";
+            public const string START     = "gcnSTART";
+
+            public const string LT        = "gcnLT";
+            public const string RT        = "gcnRT";
+            public const string LFULL     = "gcnLFULL";
+            public const string RFULL     = "gcnRFULL";
+
+            public const string JOY_X     = "gcnJoyX";
+            public const string JOY_Y     = "gcnJoyY";
+            public const string C_X       = "gcnCX";
+            public const string C_Y       = "gcnCY";
+
+            public const string JOY_UP    = "gcnJOY_UP";
+            public const string JOY_DOWN  = "gcnJOY_DOWN";
+            public const string JOY_LEFT  = "gcnJOY_LEFT";
+            public const string JOY_RIGHT = "gcnJOY_RIGHT";
+
+            public const string C_UP      = "gcnC_UP";
+            public const string C_DOWN    = "gcnC_DOWN";
+            public const string C_LEFT    = "gcnC_LEFT";
+            public const string C_RIGHT   = "gcnC_RIGHT";
+        }
     }
 }

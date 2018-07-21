@@ -14,6 +14,8 @@ namespace WiinUPro
         public event Delegates.StringArrDel OnRemoveInputs;
         public Delegates.ObtainDeviceInfo ObtainDeviceInfoDel { get; set; }
 
+        protected string _inputPrefix = "";
+
         protected virtual void CallEvent_OnInputRightClick(string value)
         {
             OnInputRightClick?.Invoke(value);
@@ -37,7 +39,7 @@ namespace WiinUPro
         protected virtual void OpenInput(object sender, RoutedEventArgs e = null)
         {
             var element = sender as FrameworkElement;
-            var tag = element == null ? "" : element.Tag as string;
+            var tag = element == null ? "" : _inputPrefix + element.Tag as string;
 
             // Open input assignment window
             if (OnInputSelected != null && tag != null)
@@ -117,7 +119,7 @@ namespace WiinUPro
             if (item != null)
             {
                 var header = item.Header as string;
-                var tag = item.Tag as string;
+                var tag = _inputPrefix + item.Tag as string;
 
                 if (header != null && tag != null)
                 {
@@ -152,10 +154,10 @@ namespace WiinUPro
                     }
 
                     Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
-                    args.Add(prefix + "UP", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp, speed) }));
-                    args.Add(prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown, speed) }));
-                    args.Add(prefix + "LEFT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft, speed) }));
-                    args.Add(prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight, speed) }));
+                    args.Add(_inputPrefix + prefix + "UP", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp, speed) }));
+                    args.Add(_inputPrefix + prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown, speed) }));
+                    args.Add(_inputPrefix + prefix + "LEFT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft, speed) }));
+                    args.Add(_inputPrefix + prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight, speed) }));
                     CallEvent_OnQuickAssign(args);
                 }
             }

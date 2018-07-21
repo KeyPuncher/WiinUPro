@@ -2,6 +2,7 @@
 {
     public enum ControllerType : long
     {
+        Other                = -2,              // Some other Nintendo, non-Wii device
         Unknown              = -1,              // not yet determined
         Wiimote              = 0x000000000000,  // Wiimote, no extension
         ProController        = 0x0000A4200120,  // Wii U Pro Controller
@@ -11,10 +12,11 @@
         ClassicController    = 0x0000A4200101,  // Wiimote + Classic Controller
         ClassicControllerPro = 0x0100A4200101,  // Wiimote + Classic Controller Pro
         MotionPlus           = 0x0000A4200405,  // Wiimote + Motion Plus
-        // Musicals
         Guitar               = 0x0000A4200103,
         Drums                = 0x0100A4200103,
         TaikoDrum            = 0x0000A4200111,
+        TurnTable            = 0x0300A4200103,
+        DrawTablet           = 0xFF00A4200013,
 
         FalseState           = 0x010000000000,  // Seen when reconnecting to a Pro Controller
         PartiallyInserted    = 0xFFFFFFFFFFFF
