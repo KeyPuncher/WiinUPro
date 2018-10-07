@@ -12,6 +12,7 @@ namespace WiinUSoft
     {
         internal const string PROFILE_FILTER = "WiinUSoft Profile|*.wsp";
         private const string Unique = "wiinupro-or-wiinusoft-instance";
+        private const string NATIVE_OVERLAPPED = "NaitiveOverlapped";
 
         [STAThread]
         public static void Main()
@@ -32,6 +33,11 @@ namespace WiinUSoft
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
+
+            // Ignore this native code exception.
+            // Can't handle it, and it doesn't seem to have any negative effects.
+            if (e.StackTrace.Contains(NATIVE_OVERLAPPED))
+                return;
             
             SingleInstance<App>.Cleanup();
             Current.Dispatcher.Invoke(new Action(() => 
