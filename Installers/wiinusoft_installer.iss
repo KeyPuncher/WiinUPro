@@ -1,5 +1,5 @@
 #define MyAppName "WiinUSoft"
-#define MyAppVersion "3.0"
+#define MyAppVersion "3.3"
 #define MyAppPublisher "Justin Keys"
 #define MyAppURL "http://www.wiinupro.com/"
 #define MyAppExeName "WiinUSoft.exe"

@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WiinUSoft")]
-[assembly: AssemblyCopyright("Copyright © 2014 - 2017")]
+[assembly: AssemblyCopyright("Copyright © 2014 - 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,5 +49,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.3.1.560")]
-[assembly: AssemblyFileVersion("3.3.1.560")]
+[assembly: AssemblyVersion("3.3.1.390")]
+[assembly: AssemblyFileVersion("3.3.1.390")]

@@ -1,5 +1,5 @@
 ======================
-WiinUSoft 3.2
+WiinUSoft 3.3
 ======================
 
  WiinUSoft is a program that allows you to use your Nintendo
@@ -40,6 +40,9 @@ Supported Controllers
 ======================
 Change Log
 ======================
+
+ = version 3.3 =
+ - Surpressing native exception
 
  = version 3.2 =
  - Fixed Selection of Microsoft BT Stack option
