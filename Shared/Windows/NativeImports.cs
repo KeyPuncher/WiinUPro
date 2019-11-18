@@ -213,11 +213,11 @@ namespace Shared.Windows
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern bool BluetoothFindNextRadio(
-            ref BLUETOOTH_FIND_RADIO_PARAMS hFind, 
+            ref IntPtr hFind, 
             out IntPtr phRadio);
 
         [DllImport("irprops.cpl", SetLastError = true)]
-        public static extern bool BluetoothFindRadioClose(ref IntPtr hFind);
+        public static extern bool BluetoothFindRadioClose(IntPtr hFind);
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern IntPtr BluetoothFindFirstDevice(

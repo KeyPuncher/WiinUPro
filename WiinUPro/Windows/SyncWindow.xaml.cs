@@ -40,7 +40,7 @@ namespace WiinUPro.Windows
                     btRadios.Add(foundRadio);
                 }
 
-                next = NativeImports.BluetoothFindNextRadio(ref radioParams, out foundRadio);
+                next = NativeImports.BluetoothFindNextRadio(ref handle, out foundRadio);
             }
             while (next);
             
@@ -52,7 +52,6 @@ namespace WiinUPro.Windows
                 {
                     for (int r = 0; r < btRadios.Count; r++)
                     {
-                        //Prompt("Radio: " + r.ToString());
                         IntPtr found;
                         NativeImports.BLUETOOTH_RADIO_INFO radioInfo = new NativeImports.BLUETOOTH_RADIO_INFO();
                         NativeImports.BLUETOOTH_DEVICE_INFO deviceInfo = new NativeImports.BLUETOOTH_DEVICE_INFO();
@@ -181,6 +180,8 @@ namespace WiinUPro.Windows
                 Prompt("No Bluetooth Radios Found.");
                 System.Threading.Thread.Sleep(3000);
             }
+
+            NativeImports.BluetoothFindRadioClose(handle);
 
             Dispatcher.BeginInvoke((Action)(() => Close()));
         }
