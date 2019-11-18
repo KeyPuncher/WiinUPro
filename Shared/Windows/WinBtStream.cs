@@ -387,10 +387,13 @@ namespace Shared.Windows
                     {
                         success = WriteFile(dh, buffer, (uint)buffer.Length, out written, ref nativeOverlap);
                     }
-                    catch
+                    catch (System.ComponentModel.Win32Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine("caught!");
+#if DEBUG
+                        System.Diagnostics.Debug.WriteLine("caught native exception! " + ex.Message);
+#endif
                     }
+                    
                     uint error = GetLastError();
 
                     // Wait for the async operation to complete
