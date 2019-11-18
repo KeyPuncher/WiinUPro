@@ -54,7 +54,7 @@ namespace WiinUPro
             }
         }
 
-        public bool Connected { get { return _nintroller.Connected; } }
+        public bool Connected { get { return _nintroller != null && _nintroller.Connected; } }
 
         public NintyControl()
         {
