@@ -12,6 +12,8 @@
         ClassicController    = 0x0000A4200101,  // Wiimote + Classic Controller
         ClassicControllerPro = 0x0100A4200101,  // Wiimote + Classic Controller Pro
         MotionPlus           = 0x0000A4200405,  // Wiimote + Motion Plus
+        MotionPlusNunchuk    = 0x0000A4200505,  // Wiimote + Motion Plus + Nunchuk passthrough
+        MotionPlusCC         = 0x0000A4200705,  // Wiimote + Motion Plus + Classic Controller passthrough
         Guitar               = 0x0000A4200103,
         Drums                = 0x0100A4200103,
         TaikoDrum            = 0x0000A4200111,

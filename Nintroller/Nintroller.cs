@@ -582,7 +582,7 @@ namespace NintrollerLib
         // Read calibration from the controller
         private void GetCalibration()
         {
-            // TODO: New: Test (possibly move)
+            // TODO: Test (possibly move)
             // don't attempt on Pro Controllers
             ReadMemory(0x0016, 7);
         }
@@ -809,7 +809,7 @@ namespace NintrollerLib
                             if (typeChange)
                             {
                                 Log("Controller type: " + newType.ToString());
-                                // TODO: New: Check parsing after applying a report type (Pro is working, CC is not)
+                                // TODO: Check parsing after applying a report type (Pro is working, CC is not)
                                 InputReport applyReport = InputReport.BtnsOnly;
                                 bool continuiousReporting = true;
 
@@ -928,11 +928,11 @@ namespace NintrollerLib
                                         }
                                         break;
 
-                                    case ControllerType.PartiallyInserted:
-                                        // try again
-                                        // TODO: New: Make sure this works
-                                        GetStatus();
-                                        return;
+                                    case ControllerType.MotionPlusNunchuk:
+                                    case ControllerType.MotionPlusCC:
+                                        // TODO: Add Motion Plus support
+                                        Log("Unsupported controller type");
+                                        break;
 
                                     case ControllerType.Guitar:
                                         _state = new Guitar();
@@ -941,8 +941,15 @@ namespace NintrollerLib
 
                                     case ControllerType.Drums:
                                     case ControllerType.TaikoDrum:
-                                        // TODO: New: More control types
+                                    case ControllerType.TurnTable:
+                                        // TODO: More control types
+                                        Log("Unsupported controller type");
                                         break;
+
+                                    case ControllerType.PartiallyInserted:
+                                        // try again
+                                        GetStatus();
+                                        return;
 
                                     default:
                                         Log("Unhandled controller type");
@@ -1356,12 +1363,12 @@ namespace NintrollerLib
             buffer[1] = (byte)(0x00);
             SendData(buffer);
 
-            // TODO: New: Check if we need to monitor the acknowledgment report
+            // TODO: Check if we need to monitor the acknowledgment report
         }
 
         private void StartMotionPlus()
         {
-            // TODO: New: Motion Plus
+            // TODO: Motion Plus
             // determine if we need to pass through Nunchuck or Classic Controller
             //WriteByte(Constants.REGISTER_MOTIONPLUS_INIT, 0x04);
             //WriteToMemory(Constants.REGISTER_MOTIONPLUS_INIT, new byte[] { 0x04 });

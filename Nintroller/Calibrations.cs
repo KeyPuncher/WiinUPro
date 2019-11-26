@@ -498,7 +498,6 @@
             };
         }
 
-        // TODO: Calibration - Optimize Defaults
         /// <summary>
         /// Class containing all the Default calibrations
         /// </summary>
