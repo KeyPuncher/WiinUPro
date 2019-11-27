@@ -110,12 +110,24 @@ namespace WiinUPro
         {
             bool success = false;
 
-            if (_info.DevicePath == "Dummy")
+            if (_info.DevicePath.StartsWith("Dummy"))
             {
-                _dummy = new DummyDevice(Calibrations.Defaults.ProControllerDefault);
+                if (_info.DevicePath.Contains("GCN"))
+                {
+                    var dummyGameCubeAdapter = new GameCubeAdapter();
+                    dummyGameCubeAdapter.SetCalibration(Calibrations.CalibrationPreset.Default);
+                    _dummy = new DummyDevice(dummyGameCubeAdapter);
+                    _nintroller = new Nintroller(_dummy, 0x0337);
+                }
+                else
+                {
+                    _dummy = new DummyDevice(Calibrations.Defaults.ProControllerDefault);
+                    _nintroller = new Nintroller(_dummy, _dummy.DeviceType);
+                }
+
                 var dumWin = new Windows.DummyWindow(_dummy);
                 dumWin.Show();
-                _nintroller = new Nintroller(_dummy);
+
                 OnDisconnect += () =>
                 {
                     dumWin.Close();

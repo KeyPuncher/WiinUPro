@@ -36,6 +36,7 @@ namespace Shared
             _nextQueue = new Queue<InputReport>();
             _reportQueue = new Queue<byte[]>();
             State = state;
+
             Type t = State.GetType();
             if (t == typeof(ProController))
             {
@@ -46,6 +47,28 @@ namespace Shared
                 pState.RJoy.rawX = (short)pState.RJoy.centerX;
                 pState.RJoy.rawY = (short)pState.RJoy.centerY;
                 State = pState;
+            }
+            else if (t == typeof(GameCubeAdapter))
+            {
+                DeviceType = ControllerType.Other;
+                var gState = (GameCubeAdapter)state;
+                gState.port1.joystick.rawX = gState.port1.joystick.centerX;
+                gState.port1.joystick.rawY = gState.port1.joystick.centerY;
+                gState.port1.cStick.rawX = gState.port1.cStick.centerX;
+                gState.port1.cStick.rawY = gState.port1.cStick.centerY;
+                gState.port2.joystick.rawX = gState.port2.joystick.centerX;
+                gState.port2.joystick.rawY = gState.port2.joystick.centerY;
+                gState.port2.cStick.rawX = gState.port2.cStick.centerX;
+                gState.port2.cStick.rawY = gState.port2.cStick.centerY;
+                gState.port3.joystick.rawX = gState.port3.joystick.centerX;
+                gState.port3.joystick.rawY = gState.port3.joystick.centerY;
+                gState.port3.cStick.rawX = gState.port3.cStick.centerX;
+                gState.port3.cStick.rawY = gState.port3.cStick.centerY;
+                gState.port4.joystick.rawX = gState.port4.joystick.centerX;
+                gState.port4.joystick.rawY = gState.port4.joystick.centerY;
+                gState.port4.cStick.rawX = gState.port4.cStick.centerX;
+                gState.port4.cStick.rawY = gState.port4.cStick.centerY;
+                State = gState;
             }
         }
 
@@ -84,6 +107,23 @@ namespace Shared
 
         public override int Read(byte[] buffer, int offset, int count)
         {
+            if (DeviceType == ControllerType.Other)
+            {
+                GameCubeAdapter gcn = (GameCubeAdapter)State;
+
+                Array.Copy(GetGCNController(gcn.port1), 0, buffer, 1, 9);
+                Array.Copy(GetGCNController(gcn.port2), 0, buffer, 10, 9);
+                Array.Copy(GetGCNController(gcn.port3), 0, buffer, 19, 9);
+                Array.Copy(GetGCNController(gcn.port4), 0, buffer, 28, 9);
+
+                buffer[1] |= (byte)(gcn.port1Connected ? 0x10 : 0x00);
+                buffer[10] |= (byte)(gcn.port2Connected ? 0x10 : 0x00);
+                buffer[19] |= (byte)(gcn.port3Connected ? 0x10 : 0x00);
+                buffer[28] |= (byte)(gcn.port4Connected ? 0x10 : 0x00);
+
+                return buffer.Length;
+            }
+
             int value = -1;
 
             // This won't block since Read is call asynchronously
@@ -424,6 +464,34 @@ namespace Shared
             {
 
             }
+
+            return buf;
+        }
+
+        protected byte[] GetGCNController(GameCubeController controller)
+        {
+            byte[] buf = new byte[9];
+
+            buf[1] |= (byte)(controller.A ? 0x01 : 0x00);
+            buf[1] |= (byte)(controller.B ? 0x02 : 0x00);
+            buf[1] |= (byte)(controller.X ? 0x04 : 0x00);
+            buf[1] |= (byte)(controller.Y ? 0x08 : 0x00);
+            buf[1] |= (byte)(controller.Left ? 0x10 : 0x00);
+            buf[1] |= (byte)(controller.Right ? 0x20 : 0x00);
+            buf[1] |= (byte)(controller.Down ? 0x40 : 0x00);
+            buf[1] |= (byte)(controller.Up ? 0x80 : 0x00);
+
+            buf[2] |= (byte)(controller.Start ? 0x01 : 0x00);
+            buf[2] |= (byte)(controller.Z ? 0x02 : 0x00);
+            buf[2] |= (byte)(controller.R.full ? 0x04 : 0x00);
+            buf[2] |= (byte)(controller.L.full ? 0x08 : 0x00);
+
+            buf[3] = (byte)controller.joystick.rawX;
+            buf[4] = (byte)controller.joystick.rawY;
+            buf[5] = (byte)controller.cStick.rawX;
+            buf[6] = (byte)controller.cStick.rawY;
+            buf[7] = (byte)controller.L.rawValue;
+            buf[8] = (byte)controller.R.rawValue;
 
             return buf;
         }
