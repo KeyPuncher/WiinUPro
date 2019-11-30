@@ -62,10 +62,10 @@
                     <RowDefinition Height="74*"/>
                     <RowDefinition Height="13*"/>
                 </Grid.RowDefinitions>
-                <CheckBox x:Name="checkGPort1" Content="Port 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0" Checked="PortChanged"/>
-                <CheckBox x:Name="checkGPort2" Content="Port 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,16,0,0" Checked="PortChanged"/>
-                <CheckBox x:Name="checkGPort3" Content="Port 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,32,0,0" Checked="PortChanged"/>
-                <CheckBox x:Name="checkGPort4" Content="Port 4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,48,0,0" Checked="PortChanged"/>
+                <CheckBox x:Name="checkGPort1" Content="Port 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0"  Click="PortChanged"/>
+                <CheckBox x:Name="checkGPort2" Content="Port 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,16,0,0" Click="PortChanged"/>
+                <CheckBox x:Name="checkGPort3" Content="Port 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,32,0,0" Click="PortChanged"/>
+                <CheckBox x:Name="checkGPort4" Content="Port 4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,48,0,0" Click="PortChanged"/>
                 <ComboBox x:Name="comboGPortSelect" Margin="2,63,3,0" VerticalAlignment="Top" Grid.RowSpan="2" SelectedIndex="0">
                     <ComboBoxItem Content="Port 1"/>
                     <ComboBoxItem Content="Port 2"/>
