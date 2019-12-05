@@ -81,6 +81,7 @@ namespace WiinUSoft
 
         private void Refresh()
         {
+            System.Diagnostics.Debug.WriteLine("Refreshing");
             hidList = WinBtStream.GetPaths();
             List<KeyValuePair<int, DeviceControl>> connectSeq = new List<KeyValuePair<int, DeviceControl>>();
             
@@ -189,6 +190,11 @@ namespace WiinUSoft
             }
         }
 
+        private void AutoRefresh(bool enable, int currentDeviceCount)
+        {
+            AutoRefresh(enable && (menu_AutoRefreshCount.Value == 0 || currentDeviceCount < menu_AutoRefreshCount.Value));
+        }
+
         private void AutoRefresh(bool set)
         {
             if (set && !_refreshing)
@@ -232,6 +238,7 @@ namespace WiinUSoft
             menu_AutoStart.IsChecked = UserPrefs.Instance.autoStartup;
             menu_NoSharing.IsChecked = UserPrefs.Instance.greedyMode;
             menu_AutoRefresh.IsChecked = UserPrefs.Instance.autoRefresh;
+            menu_AutoRefreshCount.Value = UserPrefs.Instance.autoRefreshCount;
             menu_MsBluetooth.IsChecked = !UserPrefs.Instance.toshibaMode;
 
             if (UserPrefs.Instance.greedyMode)
@@ -241,7 +248,7 @@ namespace WiinUSoft
             }
 
             Refresh();
-            AutoRefresh(menu_AutoRefresh.IsChecked && deviceList.Count == 0);
+            AutoRefresh(menu_AutoRefresh.IsChecked, deviceList.Count);
         }
 
         private void DeviceControl_OnConnectStateChange(DeviceControl sender, DeviceState oldState, DeviceState newState)
@@ -281,7 +288,7 @@ namespace WiinUSoft
             
             if (menu_AutoRefresh.IsChecked)
             {
-                AutoRefresh(groupAvailable.Children.Count + groupXinput.Children.Count == 0);
+                AutoRefresh(true, groupAvailable.Children.Count + groupXinput.Children.Count);
             }
         }
 
@@ -298,7 +305,7 @@ namespace WiinUSoft
 
             deviceList.Remove(sender);
 
-            AutoRefresh(menu_AutoRefresh.IsChecked && deviceList.Count == 0);
+            AutoRefresh(menu_AutoRefresh.IsChecked, deviceList.Count);
         }
         
         private void btnDetatchAllXInput_Click(object sender, RoutedEventArgs e)
@@ -366,22 +373,16 @@ namespace WiinUSoft
         private void menu_AutoStart_Click(object sender, RoutedEventArgs e)
         {
             menu_AutoStart.IsChecked = !menu_AutoStart.IsChecked;
-            UserPrefs.AutoStart = menu_AutoStart.IsChecked;
-            UserPrefs.SavePrefs();
         }
 
         private void menu_StartMinimized_Click(object sender, RoutedEventArgs e)
         {
             menu_StartMinimized.IsChecked = !menu_StartMinimized.IsChecked;
-            UserPrefs.Instance.startMinimized = menu_StartMinimized.IsChecked;
-            UserPrefs.SavePrefs();
         }
 
         private void menu_NoSharing_Click(object sender, RoutedEventArgs e)
         {
             menu_NoSharing.IsChecked = !menu_NoSharing.IsChecked;
-            UserPrefs.Instance.greedyMode = menu_NoSharing.IsChecked;
-            UserPrefs.SavePrefs();
             WinBtStream.OverrideSharingMode = UserPrefs.Instance.greedyMode;
             if (UserPrefs.Instance.greedyMode)
             {
@@ -392,9 +393,7 @@ namespace WiinUSoft
         private void menu_AutoRefresh_Click(object sender, RoutedEventArgs e)
         {
             menu_AutoRefresh.IsChecked = !menu_AutoRefresh.IsChecked;
-            UserPrefs.Instance.autoRefresh = menu_AutoRefresh.IsChecked;
-            UserPrefs.SavePrefs();
-            AutoRefresh(menu_AutoRefresh.IsChecked && groupAvailable.Children.Count + groupXinput.Children.Count == 0);
+            AutoRefresh(menu_AutoRefresh.IsChecked, groupAvailable.Children.Count + groupXinput.Children.Count);
         }
 
         private void menu_SetDefaultCalibration_Click(object sender, RoutedEventArgs e)
@@ -407,6 +406,15 @@ namespace WiinUSoft
         {
             menu_MsBluetooth.IsChecked = !menu_MsBluetooth.IsChecked;
             WinBtStream.ForceToshibaMode = !menu_MsBluetooth.IsChecked;
+        }
+
+        private void SettingsMenu_Closing(object sender, RoutedEventArgs e)
+        {
+            UserPrefs.AutoStart = menu_AutoStart.IsChecked;
+            UserPrefs.Instance.startMinimized = menu_StartMinimized.IsChecked;
+            UserPrefs.Instance.autoRefresh = menu_AutoRefresh.IsChecked;
+            UserPrefs.Instance.autoRefreshCount = menu_AutoRefreshCount.Value;
+            UserPrefs.Instance.greedyMode = menu_NoSharing.IsChecked;
             UserPrefs.Instance.toshibaMode = !menu_MsBluetooth.IsChecked;
             UserPrefs.SavePrefs();
         }
