@@ -101,6 +101,7 @@ namespace WiinUSoft
         public bool greedyMode;
         public bool toshibaMode;
         public bool autoRefresh = true;
+        public int autoRefreshCount = 1;
 
         public UserPrefs()
         { }

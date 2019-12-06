@@ -1,7 +1,8 @@
+;Inno Setup 6
 #define MyAppName "WiinUSoft"
-#define MyAppVersion "3.3"
+#define MyAppVersion "3.4"
 #define MyAppPublisher "Justin Keys"
-#define MyAppURL "http://www.wiinupro.com/"
+#define MyAppURL "https://github.com/KeyPuncher/WiinUPro/releases"
 #define MyAppExeName "WiinUSoft.exe"
 
 [Setup]
@@ -16,14 +17,17 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
+DisableDirPage=auto
 AllowNoIcons=yes
 OutputDir=.\
 OutputBaseFilename=wiinusoft_setup
 Compression=lzma
 SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64
+WizardStyle=modern
+WizardSmallImageFile=WiinUSoft.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -128,7 +132,7 @@ begin
           end
         else
           DeleteFile(FileName);
-      end
+      end;
   end;
 end;
 
@@ -144,7 +148,7 @@ begin
   begin
     Result := True;
     Exit;
-  end
+  end;
 
   Result := False;
 end;
@@ -162,7 +166,7 @@ begin
   begin
     Result := True;
     Exit;
-  end
+  end;
 
   Result := False;
 end;
@@ -179,7 +183,7 @@ begin
   begin
     Result := True;
     Exit;
-  end
+  end;
 
   Result := False;
 end;
@@ -197,7 +201,7 @@ begin
   begin
     Result := True;
     Exit;
-  end
+  end;
 
   // Windows 8
   if Version.NTPlatform and
@@ -206,7 +210,7 @@ begin
   begin
     Result := True;
     Exit;
-  end
+  end;
 
   // Windows 8.1
   if Version.NTPlatform and
@@ -215,7 +219,7 @@ begin
   begin
     Result := True;
     Exit;
-  end
+  end;
 
   // Windows 10
   if Version.NTPlatform and
@@ -223,7 +227,7 @@ begin
   begin
     Result := True;
     Exit;
-  end
+  end;
 
   Result := False;
 end;
@@ -242,7 +246,7 @@ begin
       mbConfirmation, MB_YESNO) = IDYES
     then
       Result := True;
-  end
+  end;
 end;
 
 

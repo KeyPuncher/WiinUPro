@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NintrollerLib;
+﻿using NintrollerLib;
 
 namespace Shared
 {
@@ -29,12 +26,20 @@ namespace Shared
                     return "Classic Controller Pro";
                 case ControllerType.MotionPlus:
                     return "Wiimote Plus";
+                case ControllerType.MotionPlusNunchuk:
+                    return "Wiimote Plus & Nunchuk";
+                case ControllerType.MotionPlusCC:
+                    return "Wiimote Plus & Classic Controller";
                 case ControllerType.Guitar:
                     return "Guitar";
                 case ControllerType.Drums:
                     return "Drums";
                 case ControllerType.TaikoDrum:
                     return "Taiko Drum";
+                case ControllerType.TurnTable:
+                    return "DJ Turn Table";
+                case ControllerType.DrawTablet:
+                    return "Drawsome Tablet";
                 case ControllerType.PartiallyInserted:
                     return "Unknown";
             }

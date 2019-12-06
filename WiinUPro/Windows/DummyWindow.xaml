@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro.Windows"
         mc:Ignorable="d"
-        Title="Dummy" Height="306.463" Width="256.351">
+        Title="Dummy" Height="374.18" Width="256.351">
     <Grid>
         <!-- TODO: 
             Battery Level
@@ -14,7 +14,7 @@
             Accelerometer
             Pointer
         -->
-        <GroupBox x:Name="groupCore" Header="Core Buttons" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="104" Width="140">
+        <GroupBox x:Name="groupCore" Header="Core Buttons" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="104" Width="140" Visibility="Hidden">
             <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Height="87" Margin="-4,0,-5,-6" Width="137">
                 <Button x:Name="buttonA" Content="A" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="A"/>
                 <Button x:Name="buttonB" Content="B" HorizontalAlignment="Left" Margin="30,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="B"/>
@@ -29,7 +29,7 @@
                 <Button x:Name="buttonTwo" Content="2" HorizontalAlignment="Left" Margin="30,34,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="TWO"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupPad" Header="Pad Buttons" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="89">
+        <GroupBox x:Name="groupPad" Header="Pad Buttons" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="89" Visibility="Hidden">
             <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Height="87" Margin="-4,0,-2,-6" Width="83">
                 <Button x:Name="buttonX" Content="X" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="X"/>
                 <Button x:Name="buttonY" Content="Y" HorizontalAlignment="Left" Margin="30,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="Y"/>
@@ -39,20 +39,71 @@
                 <Button x:Name="buttonZR" Content="ZR" HorizontalAlignment="Left" Margin="30,55,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="ZR"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupPro" Header="Pro Controller" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Height="150" Width="232">
+        <GroupBox x:Name="groupPro" Header="Pro Controller" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Height="150" Width="232" Visibility="Hidden">
             <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Height="132" Margin="-4,0,-2,-46" Width="222">
                 <Button x:Name="buttonLS" Content="LS" HorizontalAlignment="Left" Margin="24,35,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="LS"/>
                 <Button x:Name="buttonRS" Content="RS" HorizontalAlignment="Left" Margin="24,99,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="RS" RenderTransformOrigin="0.373,1.201"/>
-                <Slider x:Name="sliderProLX" HorizontalAlignment="Left" Margin="75,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeProAnalog" Tag="LX"/>
-                <Slider x:Name="sliderProLY" HorizontalAlignment="Left" Margin="75,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeProAnalog" Tag="LY"/>
+                <Slider x:Name="sliderProLX" HorizontalAlignment="Left" Margin="75,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="LX"/>
+                <Slider x:Name="sliderProLY" HorizontalAlignment="Left" Margin="75,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="LY"/>
                 <Label Content="Left Stick" HorizontalAlignment="Left" Margin="5,4,0,0" VerticalAlignment="Top"/>
                 <Label Content="Right Stick" HorizontalAlignment="Left" Margin="5,68,0,0" VerticalAlignment="Top"/>
-                <Slider x:Name="sliderProRX" HorizontalAlignment="Left" Margin="75,70,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeProAnalog" Tag="RX"/>
-                <Slider x:Name="sliderProRY" HorizontalAlignment="Left" Margin="75,98,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeProAnalog" Tag="RY"/>
+                <Slider x:Name="sliderProRX" HorizontalAlignment="Left" Margin="75,70,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="RX"/>
+                <Slider x:Name="sliderProRY" HorizontalAlignment="Left" Margin="75,98,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="RY"/>
                 <Label Content="X" HorizontalAlignment="Left" Margin="192,4,0,0" VerticalAlignment="Top"/>
                 <Label Content="X" HorizontalAlignment="Left" Margin="192,63,0,0" VerticalAlignment="Top"/>
                 <Label Content="Y" HorizontalAlignment="Left" Margin="192,35,0,0" VerticalAlignment="Top"/>
                 <Label Content="Y" HorizontalAlignment="Left" Margin="192,93,0,0" VerticalAlignment="Top"/>
+            </Grid>
+        </GroupBox>
+        <!-- GCN Adapter -->
+        <GroupBox x:Name="groupGPorts" Header="GCN Ports" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="104" Width="83">
+            <Grid VerticalAlignment="Top" Height="87" Margin="-4,0,-5,-5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="74*"/>
+                    <RowDefinition Height="13*"/>
+                </Grid.RowDefinitions>
+                <CheckBox x:Name="checkGPort1" Content="Port 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0"  Click="PortChanged"/>
+                <CheckBox x:Name="checkGPort2" Content="Port 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,16,0,0" Click="PortChanged"/>
+                <CheckBox x:Name="checkGPort3" Content="Port 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,32,0,0" Click="PortChanged"/>
+                <CheckBox x:Name="checkGPort4" Content="Port 4" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,48,0,0" Click="PortChanged"/>
+                <ComboBox x:Name="comboGPortSelect" Margin="2,63,3,0" VerticalAlignment="Top" Grid.RowSpan="2" SelectedIndex="0">
+                    <ComboBoxItem Content="Port 1"/>
+                    <ComboBoxItem Content="Port 2"/>
+                    <ComboBoxItem Content="Port 3"/>
+                    <ComboBoxItem Content="Port 4"/>
+                </ComboBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupGButtons" Header="GCN Buttons" HorizontalAlignment="Left" Margin="98,10,0,0" VerticalAlignment="Top" Height="104" Width="140">
+            <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Height="87" Margin="-4,0,-5,-6" Width="137">
+                <Button x:Name="buttonGA" Content="A" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="A"/>
+                <Button x:Name="buttonGB" Content="B" HorizontalAlignment="Left" Margin="30,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="B"/>
+                <Button x:Name="buttonGX" Content="X" HorizontalAlignment="Left" Margin="5,30,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="X"/>
+                <Button x:Name="buttonGY" Content="Y" HorizontalAlignment="Left" Margin="30,30,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="Y"/>
+                <Button x:Name="buttonGZ" Content="Z" HorizontalAlignment="Left" Margin="5,57,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="Z"/>
+                <Button x:Name="buttonGUp" Content="^" HorizontalAlignment="Left" Margin="87,34,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="UP"/>
+                <Button x:Name="buttonGDown" Content="v" HorizontalAlignment="Left" Margin="87,59,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="DOWN"/>
+                <Button x:Name="buttonGLeft" Content="&lt;" HorizontalAlignment="Left" Margin="62,46,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="LEFT"/>
+                <Button x:Name="buttonGRight" Content=">" HorizontalAlignment="Left" Margin="112,46,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="RIGHT"/>
+                <Button x:Name="buttonGStart" Content="Start" HorizontalAlignment="Left" Margin="74,5,0,0" VerticalAlignment="Top" Width="45" Height="20" Click="button_Click" Tag="START"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupGSticks" Header="GCN Analogue" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Height="214" Width="232" Visibility="Visible">
+            <Grid Margin="-4,0,2,-4">
+                <Slider x:Name="sliderGLX" HorizontalAlignment="Left" Margin="75,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="LX"/>
+                <Slider x:Name="sliderGLY" HorizontalAlignment="Left" Margin="75,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="LY"/>
+                <Label Content="Left Stick" HorizontalAlignment="Left" Margin="5,4,0,0" VerticalAlignment="Top"/>
+                <Label Content="C Stick" HorizontalAlignment="Left" Margin="5,68,0,0" VerticalAlignment="Top"/>
+                <Slider x:Name="sliderGCX" HorizontalAlignment="Left" Margin="75,70,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="RX"/>
+                <Slider x:Name="sliderGCY" HorizontalAlignment="Left" Margin="75,98,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="RY"/>
+                <Label Content="X" HorizontalAlignment="Left" Margin="192,4,0,0" VerticalAlignment="Top"/>
+                <Label Content="X" HorizontalAlignment="Left" Margin="192,63,0,0" VerticalAlignment="Top"/>
+                <Label Content="Y" HorizontalAlignment="Left" Margin="192,35,0,0" VerticalAlignment="Top"/>
+                <Label Content="Y" HorizontalAlignment="Left" Margin="192,93,0,0" VerticalAlignment="Top"/>
+                <Slider x:Name="sliderGL" HorizontalAlignment="Left" Margin="75,133,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="0" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="L"/>
+                <Slider x:Name="sliderGR" HorizontalAlignment="Left" Margin="75,161,0,-15" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="0" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="R"/>
+                <Label Content="L" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top"/>
+                <Label Content="R" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>
     </Grid>

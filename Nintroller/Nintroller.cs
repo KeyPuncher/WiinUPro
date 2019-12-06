@@ -43,6 +43,7 @@ namespace NintrollerLib
 
         // Read/Writing Variables
         private Stream           _stream;                    // Read and Write Stream
+        private int              _streamSize = Constants.REPORT_LENGTH;
         private bool             _reading    = false;        // true if actively reading
         private readonly object  _readingObj = new object(); // for locking/blocking
         
@@ -311,6 +312,37 @@ namespace NintrollerLib
         {
             _currentType = hintType;
         }
+
+        /// <summary>
+        /// Creates an instance using the provided data stream and uses the PID to help identify the controller.
+        /// </summary>
+        /// <param name="dataStream">Stream to the controller.</param>
+        /// <param name="pid">The Product ID of the device.</param>
+        public Nintroller(Stream dataStream, string pid) : this(dataStream)
+        {
+            if (pid == Constants.PID3.ToString("X4"))
+            {
+                _streamSize = Constants.REPORT_LENGTH_GCN;
+                _currentType = ControllerType.Other;
+                _state = new GameCubeAdapter(true);
+
+                if (_calibrations.GameCubeAdapterCalibration.CalibrationEmpty)
+                {
+                    _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                }
+                else
+                {
+                    _state.SetCalibration(_calibrations.GameCubeAdapterCalibration);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates an instance using the provided data stream and uses the PID to help identify the controller.
+        /// </summary>
+        /// <param name="dataStream">Stream to the controller.</param>
+        /// <param name="pid">The Product ID of the device.</param>
+        public Nintroller(Stream dataStream, short pid) : this(dataStream, pid.ToString("X4")) { }
         
         /// <summary>
         /// Disposes
@@ -432,7 +464,7 @@ namespace NintrollerLib
 
                 lock (_readingObj)
                 {
-                    byte[] readResult = new byte[Constants.REPORT_LENGTH];
+                    byte[] readResult = new byte[_streamSize];
                     
                     try
                     {
@@ -482,7 +514,14 @@ namespace NintrollerLib
                 // Must be called for each BeginRead()
                 _stream.EndRead(data);
 
-                ParseReport(result);
+                if (_currentType == ControllerType.Other)
+                {
+                    ParseOtherReport(result);
+                }
+                else
+                {
+                    ParseReport(result);
+                }
 
                 // start another read if we are still to be reading
                 if (_reading)
@@ -543,7 +582,7 @@ namespace NintrollerLib
         // Read calibration from the controller
         private void GetCalibration()
         {
-            // TODO: New: Test (possibly move)
+            // TODO: Test (possibly move)
             // don't attempt on Pro Controllers
             ReadMemory(0x0016, 7);
         }
@@ -565,6 +604,11 @@ namespace NintrollerLib
         // sends bytes to the device
         private void SendData(byte[] report)
         {
+            if (_currentType == ControllerType.Other)
+            {
+                Log("Not going to use this method to send Wii data to other devices!");
+            }
+
             if (!_connected)
             {
                 Log("Can't Send data, we are not connected!");
@@ -765,7 +809,7 @@ namespace NintrollerLib
                             if (typeChange)
                             {
                                 Log("Controller type: " + newType.ToString());
-                                // TODO: New: Check parsing after applying a report type (Pro is working, CC is not)
+                                // TODO: Check parsing after applying a report type (Pro is working, CC is not)
                                 InputReport applyReport = InputReport.BtnsOnly;
                                 bool continuiousReporting = true;
 
@@ -884,18 +928,28 @@ namespace NintrollerLib
                                         }
                                         break;
 
-                                    case ControllerType.PartiallyInserted:
-                                        // try again
-                                        // TODO: New: Make sure this works
-                                        GetStatus();
-                                        return;
-                                        //break;
+                                    case ControllerType.MotionPlusNunchuk:
+                                    case ControllerType.MotionPlusCC:
+                                        // TODO: Add Motion Plus support
+                                        Log("Unsupported controller type");
+                                        break;
+
+                                    case ControllerType.Guitar:
+                                        _state = new Guitar();
+                                        applyReport = InputReport.BtnsAccExt;
+                                        break;
 
                                     case ControllerType.Drums:
-                                    case ControllerType.Guitar:
                                     case ControllerType.TaikoDrum:
-                                        // TODO: New: Musicals
+                                    case ControllerType.TurnTable:
+                                        // TODO: More control types
+                                        Log("Unsupported controller type");
                                         break;
+
+                                    case ControllerType.PartiallyInserted:
+                                        // try again
+                                        GetStatus();
+                                        return;
 
                                     default:
                                         Log("Unhandled controller type");
@@ -1165,6 +1219,13 @@ namespace NintrollerLib
             }
         }
 
+        private void ParseOtherReport(byte[] report)
+        {
+            _state.Update(report);
+            var arg = new NintrollerStateEventArgs(_currentType, _state, BatteryLevel);
+            StateUpdate?.Invoke(null, arg);
+         }
+
         #endregion
 
         #region General
@@ -1302,12 +1363,12 @@ namespace NintrollerLib
             buffer[1] = (byte)(0x00);
             SendData(buffer);
 
-            // TODO: New: Check if we need to monitor the acknowledgment report
+            // TODO: Check if we need to monitor the acknowledgment report
         }
 
         private void StartMotionPlus()
         {
-            // TODO: New: Motion Plus
+            // TODO: Motion Plus
             // determine if we need to pass through Nunchuck or Classic Controller
             //WriteByte(Constants.REGISTER_MOTIONPLUS_INIT, 0x04);
             //WriteToMemory(Constants.REGISTER_MOTIONPLUS_INIT, new byte[] { 0x04 });
@@ -1480,6 +1541,20 @@ namespace NintrollerLib
                 _state.SetCalibration(proCalibration);
             }
         }
+        /// <summary>
+        /// Sets the calibrations for the GameCube Adapter
+        /// </summary>
+        /// <param name="gcnCalibration">The GameCubeAdapter Struct with the calibration values to use</param>
+        public void SetCalibration(GameCubeAdapter gcnCalibration)
+        {
+            _calibrations.GameCubeAdapterCalibration = gcnCalibration;
+
+            if (_state != null && _currentType == ControllerType.Other)
+            {
+                _state.SetCalibration(gcnCalibration);
+            }
+        }
+
 
         #endregion
     }

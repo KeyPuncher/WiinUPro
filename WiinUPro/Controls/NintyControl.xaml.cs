@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Serialization;
 using NintrollerLib;
+using Shared;
 using Shared.Windows;
 
 namespace WiinUPro
@@ -20,7 +21,7 @@ namespace WiinUPro
         public event Action OnDisconnect;           // Called when disconnected
         public event Action<DevicePrefs> OnPrefsChange;
 
-        internal WinBtStream _stream;               // Controller stream to the device
+        internal CommonStream _stream;               // Controller stream to the device
         internal Nintroller _nintroller;            // Physical Controller Device
         internal INintyControl _controller;         // Visual Controller Representation
         internal AssignmentCollection _clipboard;   // Assignments to be pasted
@@ -53,7 +54,7 @@ namespace WiinUPro
             }
         }
 
-        public bool Connected { get { return _nintroller.Connected; } }
+        public bool Connected { get { return _nintroller != null && _nintroller.Connected; } }
 
         public NintyControl()
         {
@@ -61,7 +62,7 @@ namespace WiinUPro
             InitializeComponent();
         }
 
-        public NintyControl(Shared.DeviceInfo deviceInfo) : this()
+        public NintyControl(DeviceInfo deviceInfo) : this()
         {
             _assignments = new[] {
                 new Dictionary<string, AssignmentCollection>(),
@@ -74,7 +75,12 @@ namespace WiinUPro
             _scp = ScpDirector.Access;
         }
 
-        public Shared.DeviceInfo GetDeviceInfo()
+        public NintyControl(DeviceInfo deviceInfo, CommonStream stream) : this(deviceInfo)
+        {
+            _stream = stream;
+        }
+
+        public DeviceInfo GetDeviceInfo()
         {
             return _info;
         }
@@ -104,12 +110,24 @@ namespace WiinUPro
         {
             bool success = false;
 
-            if (_info.DevicePath == "Dummy")
+            if (_info.DevicePath.StartsWith("Dummy"))
             {
-                _dummy = new Shared.DummyDevice(Calibrations.Defaults.ProControllerDefault);
+                if (_info.DevicePath.Contains("GCN"))
+                {
+                    var dummyGameCubeAdapter = new GameCubeAdapter();
+                    dummyGameCubeAdapter.SetCalibration(Calibrations.CalibrationPreset.Default);
+                    _dummy = new DummyDevice(dummyGameCubeAdapter);
+                    _nintroller = new Nintroller(_dummy, 0x0337);
+                }
+                else
+                {
+                    _dummy = new DummyDevice(Calibrations.Defaults.ProControllerDefault);
+                    _nintroller = new Nintroller(_dummy, _dummy.DeviceType);
+                }
+
                 var dumWin = new Windows.DummyWindow(_dummy);
                 dumWin.Show();
-                _nintroller = new Nintroller(_dummy);
+
                 OnDisconnect += () =>
                 {
                     dumWin.Close();
@@ -117,9 +135,14 @@ namespace WiinUPro
             }
             else
             {
-                _stream = new WinBtStream(_info.DevicePath);
-                _nintroller = new Nintroller(_stream);//, deviceInfo.Type);
+                if (_stream == null)
+                {
+                    _stream = new WinBtStream(_info.DevicePath);
+                }
+
+                _nintroller = new Nintroller(_stream, _info.PID);
             }
+
             _nintroller.StateUpdate += _nintroller_StateUpdate;
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
             _nintroller.LowBattery += _nintroller_LowBattery;
@@ -128,8 +151,12 @@ namespace WiinUPro
             if (_dummy != null || _stream.OpenConnection())
             {
                 _nintroller.BeginReading();
-                _nintroller.GetStatus();
-                _nintroller.SetPlayerLED(1);
+
+                if (_nintroller.Type != ControllerType.Other)
+                {
+                    _nintroller.GetStatus();
+                    _nintroller.SetPlayerLED(1);
+                }
 
                 // We need a function we can await for the type to come back
                 // But the hint type may be present
@@ -173,6 +200,11 @@ namespace WiinUPro
             _nintroller.RumbleEnabled = false;
             _nintroller.StopReading();
 
+            _nintroller.StateUpdate -= _nintroller_StateUpdate;
+            _nintroller.ExtensionChange -= _nintroller_ExtensionChange;
+            _nintroller.LowBattery -= _nintroller_LowBattery;
+            _nintroller.Disconnected -= _nintroller_Disconnected;
+
             if (_stream != null)
                 _stream.Close();
 
@@ -215,6 +247,13 @@ namespace WiinUPro
             Nunchuk nunCalibration = Calibrations.Defaults.NunchukDefault;
             ClassicController ccCalibration = Calibrations.Defaults.ClassicControllerDefault;
             ClassicControllerPro ccpCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+            GameCubeAdapter gcnCalibration = new GameCubeAdapter(true)
+            {
+                port1 = Calibrations.Defaults.GameCubeControllerDefault,
+                port2 = Calibrations.Defaults.GameCubeControllerDefault,
+                port3 = Calibrations.Defaults.GameCubeControllerDefault,
+                port4 = Calibrations.Defaults.GameCubeControllerDefault,
+            };
             
             foreach (var calibrationFile in prefs.calibrationFiles)
             {
@@ -265,6 +304,7 @@ namespace WiinUPro
             _nintroller.SetCalibration(nunCalibration);
             _nintroller.SetCalibration(ccCalibration);
             _nintroller.SetCalibration(ccpCalibration);
+            _nintroller.SetCalibration(gcnCalibration);
         }
 
         // This attribute will allow Access Violation exceptions to be caught in try/catch
@@ -299,6 +339,14 @@ namespace WiinUPro
                     ((WiiControl)_controller).OnJoystickCalibrated += _nintroller_JoystickCalibrated;
                     ((WiiControl)_controller).OnTriggerCalibrated += _nintroller_TriggerCalibrated;
                     ((WiiControl)_controller).OnIRCalibrated += _nintroller_IRCalibrated;
+                    break;
+
+                case ControllerType.Other:
+                    if (_info.PID == "0337")
+                    {
+                        _controller = new GameCubeControl();
+                        ((GameCubeControl)_controller).OnJoyCalibrated += _nintroller_JoystickCalibrated;
+                    }
                     break;
             }
         }
@@ -770,7 +818,7 @@ namespace WiinUPro
 
     public interface INintyControl : IBaseControl
     {
-        event Shared.Delegates.BoolArrDel OnChangeLEDs;
+        event Delegates.BoolArrDel OnChangeLEDs;
         void ApplyInput(INintrollerState state); // TOOD: I have forgotten what I want to use this for
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);

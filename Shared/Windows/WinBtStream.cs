@@ -23,7 +23,7 @@ using NintrollerLib;
 
 namespace Shared.Windows
 {
-    public class WinBtStream : Stream
+    public class WinBtStream : CommonStream
     {
         #region Members
         public static bool OverrideSharingMode = false;
@@ -123,7 +123,7 @@ namespace Shared.Windows
             SharingMode = sharingMode;
         }
 
-        public bool OpenConnection()
+        public override bool OpenConnection()
         {
             if (string.IsNullOrWhiteSpace(_hidPath))
             {
@@ -292,7 +292,9 @@ namespace Shared.Windows
                             result.Add(new DeviceInfo
                             {
                                 DevicePath = diDetail.devicePath,
-                                Type = attrib.ProductID == 0x0330 ? ControllerType.ProController : ControllerType.Wiimote
+                                Type = attrib.ProductID == 0x0330 ? ControllerType.ProController : ControllerType.Wiimote,
+                                VID = attrib.VendorID.ToString("X4"),
+                                PID = attrib.ProductID.ToString("X4")
                             });
                         }
                     }
@@ -385,10 +387,13 @@ namespace Shared.Windows
                     {
                         success = WriteFile(dh, buffer, (uint)buffer.Length, out written, ref nativeOverlap);
                     }
-                    catch
+                    catch (System.ComponentModel.Win32Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine("caught!");
+#if DEBUG
+                        System.Diagnostics.Debug.WriteLine("caught native exception! " + ex.Message);
+#endif
                     }
+                    
                     uint error = GetLastError();
 
                     // Wait for the async operation to complete

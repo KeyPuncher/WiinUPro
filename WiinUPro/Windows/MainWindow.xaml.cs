@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Shared.Windows;
 using Microsoft.Win32;
+using LibUsbDotNet.Main;
 
 namespace WiinUPro
 {
@@ -45,6 +46,7 @@ namespace WiinUPro
             if (DateTime.Now.Subtract(_lastRefreshTime).TotalSeconds < 1) return;
             _lastRefreshTime = DateTime.Now;
 
+            // Bluetooth Devices
             var devices = WinBtStream.GetPaths();
 
             // Direct input Devices
@@ -57,7 +59,7 @@ namespace WiinUPro
                 string vid = j.ProductGuid.ToString().Substring(4, 4);
 
                 // devices to ignore
-                if (vid == "057e" && (pid == "0330" || pid == "0306"))
+                if (vid == "057e" && (pid == "0330" || pid == "0306" || pid == "0337"))
                 {
                     continue;
                 }
@@ -74,6 +76,31 @@ namespace WiinUPro
                 });
             }
 
+            // GCN Adapter
+            WinUsbStream gcnStream = new WinUsbStream(new UsbDeviceFinder(0x057E, 0x0337));
+            Shared.DeviceInfo gcnDevice = null;
+            if (gcnStream.DeviceFound())
+            {
+                gcnDevice = new Shared.DeviceInfo()
+                {
+                    VID = "057E",
+                    PID = "0337",
+                    Type = NintrollerLib.ControllerType.Other
+                };
+
+                devices.Add(gcnDevice);
+            }
+#if DEBUG
+            // Test GCN Device
+            else
+            {
+                devices.Add(new Shared.DeviceInfo() { DevicePath = "Dummy GCN", PID = "0337", Type = NintrollerLib.ControllerType.Other });
+            }
+
+            // Test Device
+            devices.Add(new Shared.DeviceInfo() { DevicePath = "Dummy", Type = NintrollerLib.ControllerType.ProController });
+#endif
+
             foreach (var info in devices)
             {
                 // Check if we are already showing this one
@@ -82,7 +109,7 @@ namespace WiinUPro
                 // If not add it
                 if (existing == null)
                 {
-                    var status = new DeviceStatus(info);
+                    var status = new DeviceStatus(info, info == gcnDevice ? gcnStream : null);
                     status.ConnectClick = DoConnect;
                     status.TypeUpdated = (s, t) =>
                     {
@@ -153,6 +180,11 @@ namespace WiinUPro
                 }
             }
             
+        }
+
+        private void Device_RawInput(object sender, SharpDX.RawInput.RawInputEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine(e is SharpDX.RawInput.HidInputEventArgs);
         }
 
         private void DoConnect(DeviceStatus status, bool result)
@@ -497,7 +529,6 @@ namespace WiinUPro
 
         private void WindowsDevicesChanged()
         {
-            System.Diagnostics.Debug.WriteLine(DateTime.Now + "Chnaged");
             Refresh();
         }
     }

@@ -1,5 +1,5 @@
 ======================
-WiinUSoft 3.3
+WiinUSoft 3.4
 ======================
 
  WiinUSoft is a program that allows you to use your Nintendo
@@ -40,6 +40,10 @@ Supported Controllers
 ======================
 Change Log
 ======================
+
+ = version 3.4 =
+ - Fixed iterating through different Bluetooth radios
+ - Extended auto refresh to look for a given number of devices (0 means continously auto refresh)
 
  = version 3.3 =
  - Surpressing native exception

@@ -28,13 +28,13 @@ namespace WiinUSoft.Windows
             Guid HidServiceClass = Guid.Parse(NativeImports.HID_GUID);
             List<IntPtr> btRadios = new List<IntPtr>();
             IntPtr foundRadio;
-            IntPtr foundResult;
+            IntPtr handle;
 
             radioParams.Initialize();
 
             // Get first BT Radio
-            foundResult = NativeImports.BluetoothFindFirstRadio(ref radioParams, out foundRadio);
-            bool more = foundResult != IntPtr.Zero;
+            handle = NativeImports.BluetoothFindFirstRadio(ref radioParams, out foundRadio);
+            bool more = handle != IntPtr.Zero;
 
             do
             {
@@ -44,7 +44,7 @@ namespace WiinUSoft.Windows
                 }
 
                 // Find more
-                more = NativeImports.BluetoothFindNextRadio(ref radioParams, out foundRadio);
+                more = NativeImports.BluetoothFindNextRadio(ref handle, out foundRadio);
             } while (more);
 
             if (btRadios.Count > 0)

@@ -50,10 +50,20 @@
         </Button>
         <Button x:Name="btnSettings" HorizontalAlignment="Left" Margin="576,10,0,0" VerticalAlignment="Top" Width="24" Height="24" BorderBrush="{DynamicResource BrushAntemBlue}" BorderThickness="2" FontSize="11" ToolTip="Settings" Background="{DynamicResource ButonFillBrush1}" Click="btnSettings_Click">
             <Button.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Closed="SettingsMenu_Closing">
                     <MenuItem x:Name="menu_AutoStart" Header="Auto Startup" Click="menu_AutoStart_Click"/>
                     <MenuItem x:Name="menu_StartMinimized" Header="Start Minimized" Click="menu_StartMinimized_Click"/>
                     <MenuItem x:Name="menu_AutoRefresh" Header="Use Auto Refresh" Click="menu_AutoRefresh_Click"/>
+                    <local:NumPicker x:Name="menu_AutoRefreshCount" Max="8" Value="1" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left">
+                        <local:NumPicker.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </local:NumPicker.RenderTransform>
+                    </local:NumPicker>
                     <MenuItem x:Name="menu_NoSharing" Header="Greedy Mode" Click="menu_NoSharing_Click"/>
                     <MenuItem x:Name="menu_MsBluetooth" Header="Microsoft Bluetooth" Click="menu_MsBluetooth_Click"/>
                     <MenuItem x:Name="menu_SetDefaultCalibration" Header="Set Default Calibration" Click="menu_SetDefaultCalibration_Click"/>

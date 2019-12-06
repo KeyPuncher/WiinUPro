@@ -385,7 +385,7 @@ namespace NintrollerLib
             Parse(input, offset, false);
         }
 
-        // TODO: New: Check if we shoud be using rawValue here, & set full
+        // TODO: Check if we shoud be using rawValue here, & set full
         public void Parse(byte[] input, int offset, bool isLeft)
         {
             if (isLeft)

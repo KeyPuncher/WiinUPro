@@ -35,6 +35,8 @@ namespace TestApp
 
         private void _btnFind_Click(object sender, RoutedEventArgs e)
         {
+            /* This code is all obsolete
+             * The Nintroller library is no longer responsible for finding controllers
             //var controllers = Nintroller.FindControllers();
             var controllers = Nintroller.GetControllerPaths();
 
@@ -46,10 +48,12 @@ namespace TestApp
             }
 
             _comboBoxDeviceList.ItemsSource = DeviceList;
+            */
         }
 
         private void _btnConnect_Click(object sender, RoutedEventArgs e)
         {
+            /* This Code is obsolete
             if (_nintroller != null)
             {
                 _nintroller.ExtensionChange -= ExtensionChange;
@@ -83,6 +87,7 @@ namespace TestApp
                     _nintroller.SetPlayerLED(1);
                 }
             }
+            */
         }
 
         private void ExtensionChange(object sender, NintrollerExtensionEventArgs e)

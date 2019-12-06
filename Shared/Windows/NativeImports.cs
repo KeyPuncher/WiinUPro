@@ -35,6 +35,11 @@ namespace Shared.Windows
             uint dwNumberOfBytesTransfered, 
             NativeOverlapped lpOverlapped);
 
+        // TODO: The above delegate method signature matches the one of the unhandled Native exception that keeps occuring
+        // however, it is only used by WriteFileEx, which is not being used. When attempting to use it, the callback never
+        // fires. Perhaps it is because WriteFileEx does not hanlde I/O Completion Ports.
+        // https://docs.microsoft.com/en-us/windows/desktop/api/fileapi/nf-fileapi-writefileex
+
         /// <summary>
         /// Like WriteFile but provides an asynchronous callback
         /// </summary>
@@ -208,11 +213,11 @@ namespace Shared.Windows
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern bool BluetoothFindNextRadio(
-            ref BLUETOOTH_FIND_RADIO_PARAMS hFind, 
+            ref IntPtr hFind, 
             out IntPtr phRadio);
 
         [DllImport("irprops.cpl", SetLastError = true)]
-        public static extern bool BluetoothFindRadioClose(ref IntPtr hFind);
+        public static extern bool BluetoothFindRadioClose(IntPtr hFind);
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern IntPtr BluetoothFindFirstDevice(

@@ -7,9 +7,11 @@
         public const int VID    = 0x057e;
         public const int PID1   = 0x0306;       // Legacy Wiimotes
         public const int PID2   = 0x0330;       // Newer Wiimotes (And Pro Controllers)
+        public const int PID3   = 0x0337;       // GCN Adapter
 
         // Report Size, There are several reports to choose from
         public const int REPORT_LENGTH = 22;   // Buttons, Accelerometer, IR, and Extension
+        public const int REPORT_LENGTH_GCN = 37;
 
         // Wiimote Registers
         public const int REGISTER_IR = 0x04b00030;

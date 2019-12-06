@@ -56,7 +56,7 @@ namespace WiinUPro
             }
         }
 
-        public DeviceStatus(DeviceInfo info)
+        public DeviceStatus(DeviceInfo info, CommonStream stream = null)
         {
             InitializeComponent();
 
@@ -64,18 +64,18 @@ namespace WiinUPro
 
             if (info.InstanceGUID.Equals(Guid.Empty))
             {
-                Ninty = new NintyControl(Info);
+                if (stream == null)
+                {
+                    Ninty = new NintyControl(Info);
+                }
+                else
+                {
+                    Ninty = new NintyControl(Info, stream);
+                }
+
                 Ninty.OnTypeChange += Ninty_OnTypeChange;
                 Ninty.OnDisconnect += Ninty_OnDisconnect;
-                Ninty.OnPrefsChange += (p) =>
-                {
-                    if (!string.IsNullOrWhiteSpace(p.nickname))
-                    {
-                        nickname.Content = p.nickname;
-                    }
-
-                    OnPrefsChange?.Invoke(this, p);
-                };
+                Ninty.OnPrefsChange += Ninty_OnPrefsChange;
 
                 // Use saved icon if there is one
                 var prefs = AppPrefs.Instance.GetDevicePreferences(Info.DevicePath);
@@ -93,15 +93,7 @@ namespace WiinUPro
             {
                 Joy = new JoyControl(Info);
                 Joy.OnDisconnect += Ninty_OnDisconnect;
-                Joy.OnPrefsChange += (p) =>
-                {
-                    if (!string.IsNullOrWhiteSpace(p.nickname))
-                    {
-                        nickname.Content = p.nickname;
-                    }
-
-                    OnPrefsChange?.Invoke(this, p);
-                };
+                Joy.OnPrefsChange += Ninty_OnPrefsChange;
                 nickname.Content = JoyControl.ToName(Joy.Type);
                 if (info.VID == "057e" && info.PID == "2006")
                 {
@@ -138,6 +130,16 @@ namespace WiinUPro
             }));
         }
 
+        private void Ninty_OnPrefsChange(DevicePrefs prefs)
+        {
+            if (!string.IsNullOrWhiteSpace(prefs.nickname))
+            {
+                nickname.Content = prefs.nickname;
+            }
+
+            OnPrefsChange?.Invoke(this, prefs);
+        }
+
         public void UpdateType(ControllerType type)
         {
             // TODO: Default to unknown icon
@@ -170,6 +172,11 @@ namespace WiinUPro
                 case ControllerType.ClassicControllerPro:
                     img = "ClassicPro_black_24.png";
                     deviceName = "Classic Controller Pro";
+                    break;
+
+                case ControllerType.Other:
+                    // TODO
+                    deviceName = "GCN Adapter";
                     break;
             }
 
