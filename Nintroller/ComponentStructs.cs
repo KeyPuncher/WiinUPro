@@ -163,6 +163,21 @@ namespace NintrollerLib
     }
 
     /// <summary>
+    /// Class to hold Gyroscopic data.
+    /// </summary>
+    public struct Gyroscope : INintrollerParsable
+    {
+        public int rawX, rawY, rawZ;
+
+        private Joystick joyConversion;
+
+        public void Parse(byte[] input, int offset = 0)
+        {
+            InputReport type = (InputReport)input[0];
+        }
+    }
+
+    /// <summary>
     /// Individual IR sensor point.
     /// </summary>
     public struct IRPoint
