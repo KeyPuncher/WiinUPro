@@ -348,37 +348,55 @@ namespace Shared
         {
             byte[] buf = new byte[2];
 
-            bool a, b, one, two, plus, minus, home, up, down, left, right;
-            a = b = one = two = plus = minus = home = up = down = left = right = false;
+            var buttons = new CoreButtons();
 
             switch (DeviceType)
             {
                 case ControllerType.ProController:
                     var p = (ProController)State;
-                    a = p.A;
-                    b = p.B;
-                    plus = p.Plus;
-                    minus = p.Minus;
-                    home = p.Home;
-                    up = p.Up;
-                    down = p.Down;
-                    left = p.Left;
-                    right = p.Right;
+                    buttons.A = p.A;
+                    buttons.B = p.B;
+                    buttons.Plus = p.Plus;
+                    buttons.Minus = p.Minus;
+                    buttons.Home = p.Home;
+                    buttons.Up = p.Up;
+                    buttons.Down = p.Down;
+                    buttons.Left = p.Left;
+                    buttons.Right = p.Right;
+                    break;
+
+                case ControllerType.Wiimote:
+                    buttons = ((Wiimote)State).buttons;
+                    break;
+
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                case ControllerType.ClassicController:
+                case ControllerType.ClassicControllerPro:
+                case ControllerType.MotionPlus:
+                case ControllerType.MotionPlusCC:
+                case ControllerType.MotionPlusNunchuk:
+                //case ControllerType.Drums:
+                //case ControllerType.Guitar:
+                //case ControllerType.TaikoDrum:
+                //case ControllerType.TurnTable:
+                //case ControllerType.DrawTablet:
+                    buttons = ((IWiimoteExtension)State).wiimote.buttons;
                     break;
             }
 
-            buf[0] |= (byte)(left  ? 0x01 : 0x00);
-            buf[0] |= (byte)(right ? 0x02 : 0x00);
-            buf[0] |= (byte)(down  ? 0x04 : 0x00);
-            buf[0] |= (byte)(up    ? 0x08 : 0x00);
-            buf[0] |= (byte)(plus  ? 0x10 : 0x00);
+            buf[0] |= (byte)(buttons.Left  ? 0x01 : 0x00);
+            buf[0] |= (byte)(buttons.Right ? 0x02 : 0x00);
+            buf[0] |= (byte)(buttons.Down  ? 0x04 : 0x00);
+            buf[0] |= (byte)(buttons.Up    ? 0x08 : 0x00);
+            buf[0] |= (byte)(buttons.Plus  ? 0x10 : 0x00);
 
-            buf[1] |= (byte)(two   ? 0x01 : 0x00);
-            buf[1] |= (byte)(one   ? 0x02 : 0x00);
-            buf[1] |= (byte)(b     ? 0x04 : 0x00);
-            buf[1] |= (byte)(a     ? 0x08 : 0x00);
-            buf[1] |= (byte)(minus ? 0x10 : 0x00);
-            buf[1] |= (byte)(home  ? 0x80 : 0x00);
+            buf[1] |= (byte)(buttons.Two   ? 0x01 : 0x00);
+            buf[1] |= (byte)(buttons.One   ? 0x02 : 0x00);
+            buf[1] |= (byte)(buttons.B     ? 0x04 : 0x00);
+            buf[1] |= (byte)(buttons.A     ? 0x08 : 0x00);
+            buf[1] |= (byte)(buttons.Minus ? 0x10 : 0x00);
+            buf[1] |= (byte)(buttons.Home  ? 0x80 : 0x00);
 
             return buf;
         }
@@ -407,9 +425,8 @@ namespace Shared
         protected byte[] GetExtension()
         {
             byte[] buf = new byte[21];
-
-            Type t = State.GetType();
-            if (t == typeof(ProController))
+            
+            if (DeviceType == ControllerType.ProController)
             {
                 var pro = (ProController)State;
 
@@ -452,15 +469,15 @@ namespace Shared
                 buf[10] += (byte)(!pro.charging     ? 0x04 : 0x00);
                 buf[10] += (byte)(!pro.usbConnected ? 0x08 : 0x00);
             }
-            else if (t == typeof(Nunchuk))
+            else if (DeviceType == ControllerType.Nunchuk || DeviceType == ControllerType.NunchukB)
             {
                 
             }
-            else if (t == typeof(ClassicController))
+            else if (DeviceType == ControllerType.ClassicController)
             {
 
             }
-            else if (t == typeof(ClassicController))
+            else if (DeviceType == ControllerType.ClassicControllerPro)
             {
 
             }

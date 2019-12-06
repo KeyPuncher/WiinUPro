@@ -6,6 +6,8 @@ using System.Text;
 
 namespace NintrollerLib
 {
+    // TODO: Break these up into their own files
+
     public struct Wiimote : INintrollerState
     {
         public CoreButtons buttons;
@@ -290,9 +292,14 @@ namespace NintrollerLib
         }
     }
 
-    public struct Nunchuk : INintrollerState
+    public interface IWiimoteExtension
     {
-        public Wiimote wiimote;
+        Wiimote wiimote { get; }
+    }
+
+    public struct Nunchuk : INintrollerState, IWiimoteExtension
+    {
+        public Wiimote wiimote { get; set; }
         public Accelerometer accelerometer;
         public Joystick joystick;
         public bool C, Z;
@@ -573,9 +580,9 @@ namespace NintrollerLib
         }
     }
 
-    public struct ClassicController : INintrollerState
+    public struct ClassicController : INintrollerState, IWiimoteExtension
     {
-        public Wiimote wiimote;
+        public Wiimote wiimote  { get; set; }
         public Joystick LJoy, RJoy;
         public Trigger L, R;
         public bool A, B, X, Y;
@@ -931,9 +938,9 @@ namespace NintrollerLib
         }
     }
 
-    public struct ClassicControllerPro : INintrollerState
+    public struct ClassicControllerPro : INintrollerState, IWiimoteExtension
     {
-        public Wiimote wiimote;
+        public Wiimote wiimote  { get; set; }
         public Joystick LJoy, RJoy;
         public bool A, B, X, Y;
         public bool Up, Down, Left, Right;
@@ -1591,9 +1598,9 @@ namespace NintrollerLib
         }
     }
 
-    public struct WiimotePlus : INintrollerState
+    public struct WiimotePlus : INintrollerState, IWiimoteExtension
     {
-        Wiimote wiimote;
+        public Wiimote wiimote { get; set; }
         //gyro
 
         public void Update(byte[] data)
@@ -2120,8 +2127,9 @@ namespace NintrollerLib
         }
     }
 
-    public struct Guitar : INintrollerState
+    public struct Guitar : INintrollerState, IWiimoteExtension
     {
+        public Wiimote wiimote { get; set; }
         public bool Green, Red, Yellow, Blue, Orange;
         public bool StrumUp, StrumDown;
         public bool Minuse, Plus;
