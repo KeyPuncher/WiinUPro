@@ -1,5 +1,6 @@
 ﻿namespace NintrollerLib
 {
+    // TODO: Place any magic numbers in this class
     internal static class Constants
     {
         // Vendor ID (Nintendo) & Product IDs
@@ -20,7 +21,13 @@
         public const int REGISTER_EXTENSION_TYPE = 0x04a400fa;
         public const int REGISTER_EXTENSION_TYPE_2 = 0x04a400fe;
         public const int REGISTER_EXTENSION_CALIBRATION = 0x04a40020;
+        
+        // Write 0x04 to this register to init motion plus
         public const int REGISTER_MOTIONPLUS_INIT = 0x04a600fe;
+        // Read 2 bytes from here to identify if motion plus connected
+        public const int REGISTER_MOTIONPLUS = 0x04A600FE;
+        // Write 0x55 to initialze motion plus's extiontion
+        public const int REGISTER_MOTIONPLUS_EXT = 0x04A600F0;
 
         // Length and Width between Balance Board Sensors
         public const int BB_LENGTH = 43;
