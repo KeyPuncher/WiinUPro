@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WiinUSoft")]
-[assembly: AssemblyCopyright("Copyright © 2014 - 2017")]
+[assembly: AssemblyCopyright("Copyright © 2014 - 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
