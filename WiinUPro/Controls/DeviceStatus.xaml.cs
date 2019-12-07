@@ -193,6 +193,11 @@ namespace WiinUPro
             }
 
             icon.Source = new BitmapImage(new Uri("../Images/Icons/" + img, UriKind.Relative));
+#if DEBUG
+            if (Info.DevicePath != null && Info.DevicePath.StartsWith("Dummy"))
+                nickname.Content = Info.DevicePath;
+            else
+#endif
             nickname.Content = deviceName;
         }
 

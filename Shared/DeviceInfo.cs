@@ -9,7 +9,12 @@ namespace Shared
         {
             get
             {
-                return string.IsNullOrEmpty(DevicePath) ? InstanceGUID.ToString() : DevicePath;
+                if (!string.IsNullOrEmpty(DevicePath))
+                    return DevicePath;
+                else if (!InstanceGUID.Equals(Guid.Empty))
+                    return InstanceGUID.ToString();
+                else
+                    return string.Format("{0}_{1}", VID, PID);
             }
         }
 

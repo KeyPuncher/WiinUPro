@@ -110,7 +110,7 @@ namespace WiinUPro
         {
             bool success = false;
 
-            if (_info.DevicePath.StartsWith("Dummy"))
+            if (_info.DevicePath != null && _info.DevicePath.StartsWith("Dummy"))
             {
                 if (_info.DevicePath.Contains("GCN"))
                 {
@@ -627,7 +627,7 @@ namespace WiinUPro
             {
                 prefs = new DevicePrefs()
                 {
-                    deviceId = _info.DevicePath,
+                    deviceId = _info.DeviceID,
                     nickname = _nintroller.Type.ToString()
                 };
             }
