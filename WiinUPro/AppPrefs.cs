@@ -99,7 +99,14 @@ namespace WiinUPro
             
             if (!Directory.Exists(DataPath))
             {
-                Directory.CreateDirectory(DataPath);
+                try
+                {
+                    Directory.CreateDirectory(DataPath);
+                }
+                catch
+                {
+                    return false;
+                }
             }
                 
             success = App.SaveToFile<AppPrefs>(DataPath + PREFS_FILE_NAME, _instance);
