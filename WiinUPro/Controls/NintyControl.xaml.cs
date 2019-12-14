@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Serialization;
 using NintrollerLib;
 using Shared;
 using Shared.Windows;
@@ -33,7 +31,6 @@ namespace WiinUPro
         internal Dictionary<string, AssignmentCollection>[] _assignments;
 
         private bool[] _rumbleSubscriptions = new bool[4];
-        private bool _setup;
 
         // For Testing
         internal Shared.DummyDevice _dummy;
@@ -164,7 +161,7 @@ namespace WiinUPro
                 
                 if (_controller != null)
                 {
-                    SetupController();
+                    UpdateAlignment();
 
                     success = true;
                     _nintroller.SetReportType(InputReport.ExtOnly, true);
@@ -211,7 +208,7 @@ namespace WiinUPro
             if (_dummy != null)
                 _dummy.Close();
 
-            if (_controller != null && _setup)
+            if (_controller != null)
             {
                 _controller.OnChangeLEDs -= SetLeds;
                 _controller.OnInputSelected -= InputSelected;
@@ -224,8 +221,6 @@ namespace WiinUPro
                     ((WiiControl)_controller).OnJoystickCalibrated -= _nintroller_JoystickCalibrated;
                     ((WiiControl)_controller).OnTriggerCalibrated -= _nintroller_TriggerCalibrated;
                 }
-
-                _setup = false;
             }
 
             _view.Child = null;
@@ -317,7 +312,7 @@ namespace WiinUPro
             switch (type)
             {
                 case ControllerType.ProController:
-                    _controller = new ProControl();
+                    _controller = new ProControl(_info.DeviceID);
                     ((ProControl)_controller).OnJoyCalibrated += _nintroller_JoystickCalibrated;
                     break;
 
@@ -327,7 +322,7 @@ namespace WiinUPro
                 case ControllerType.NunchukB:
                 case ControllerType.ClassicController:
                 case ControllerType.ClassicControllerPro:
-                    _controller = new WiiControl();
+                    _controller = new WiiControl(_info.DeviceID);
                     ((WiiControl)_controller).OnChangeCameraMode += (mode) =>
                     {
                         _nintroller.IRMode = mode;
@@ -349,24 +344,22 @@ namespace WiinUPro
                     }
                     break;
             }
+
+            if (_controller != null)
+            {
+                _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
+                _controller.OnChangeLEDs += SetLeds;
+                _controller.OnInputSelected += InputSelected;
+                _controller.OnInputRightClick += InputOpenMenu;
+                _controller.OnQuickAssign += QuickAssignment;
+                _controller.OnRemoveInputs += RemoveAssignments;
+            }
         }
 
-        private void SetupController()
+        private void UpdateAlignment()
         {
             if (_controller != null)
             {
-                if (!_setup)
-                {
-                    _controller.ObtainDeviceInfoDel = GetDeviceInfo;
-                    _controller.ChangeLEDs(_nintroller.Led1, _nintroller.Led2, _nintroller.Led3, _nintroller.Led4);
-                    _controller.OnChangeLEDs += SetLeds;
-                    _controller.OnInputSelected += InputSelected;
-                    _controller.OnInputRightClick += InputOpenMenu;
-                    _controller.OnQuickAssign += QuickAssignment;
-                    _controller.OnRemoveInputs += RemoveAssignments;
-                    _setup = true;
-                }
-
                 _view.Child = _controller as UserControl;
                 ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
                 ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
@@ -419,7 +412,7 @@ namespace WiinUPro
 
                 if (_controller != null)
                 {
-                    SetupController();
+                    UpdateAlignment();
                 }
                 else if (e.controllerType != ControllerType.FalseState)
                 {

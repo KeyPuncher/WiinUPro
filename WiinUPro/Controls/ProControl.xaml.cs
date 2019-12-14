@@ -19,9 +19,14 @@ namespace WiinUPro
         protected bool _rightJoyOpen = false;
         protected ProController _lastState;
 
-        public ProControl()
+        private ProControl()
         {
             InitializeComponent();
+        }
+
+        public ProControl(string deviceID) : this()
+        {
+            DeviceID = deviceID;
         }
 
         public void ApplyInput(INintrollerState state)
@@ -143,9 +148,8 @@ namespace WiinUPro
         {
             _rightJoyOpen = (sender as FrameworkElement).Tag.Equals("JoyR");
             string joyTarget = _rightJoyOpen ? App.CAL_PRO_RJOYSTICK : App.CAL_PRO_LJOYSTICK;
-
-            var info = ObtainDeviceInfoDel();
-            var prefs = AppPrefs.Instance.GetDevicePreferences(info.DevicePath);
+            
+            var prefs = AppPrefs.Instance.GetDevicePreferences(DeviceID);
             string filename = "";
             prefs?.calibrationFiles.TryGetValue(joyTarget, out filename);
 

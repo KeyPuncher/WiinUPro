@@ -12,10 +12,6 @@ namespace WiinUPro
     /// </summary>
     public partial class WiiControl : BaseControl, INintyControl
     {
-        public WiiControl()
-        {
-            InitializeComponent();
-        }
         public event Delegates.BoolArrDel OnChangeLEDs;
         public event Action<IRCamMode> OnChangeCameraMode;
         public event Action<IRCamSensitivity> OnChangeCameraSensitivty;
@@ -28,6 +24,16 @@ namespace WiinUPro
         protected Windows.TriggerCalibrationWindow _openTrigWindow;
         protected Windows.IRCalibrationWindow _openIRWindow;
         protected INintrollerState _lastState;
+
+        private WiiControl()
+        {
+            InitializeComponent();
+        }
+
+        public WiiControl(string deviceID) : this()
+        {
+            DeviceID = deviceID;
+        }
 
         public void ApplyInput(INintrollerState state)
         {
