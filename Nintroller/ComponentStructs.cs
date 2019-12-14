@@ -92,22 +92,9 @@ namespace NintrollerLib
         /// <param name="offset"></param>
         public void Parse(byte[] input, int offset = 0)
         {
-            InputReport type = (InputReport)input[0];
-
-            InputReport[] accepted = new InputReport[]
-            {
-                InputReport.BtnsAcc,
-                InputReport.BtnsAccExt,
-                InputReport.BtnsAccIR,
-                InputReport.BtnsAccIRExt
-            };
-
-            if (accepted.Contains(type))
-            {
-                rawX = input[offset + 0];
-                rawY = input[offset + 1];
-                rawZ = input[offset + 2];
-            }
+            rawX = input[offset + 0];
+            rawY = input[offset + 1];
+            rawZ = input[offset + 2];
         }
 
         /// <summary>
@@ -224,21 +211,10 @@ namespace NintrollerLib
         /// <param name="offset"></param>
         public void Parse(byte[] input, int offset = 0)
         {
-            InputReport type = (InputReport)input[0];
-
-            if (type == InputReport.BtnsAccIR || type == InputReport.BtnsAccIRExt)
-            {
-                offset += 3;
-            }
-            else if (type != InputReport.BtnsIRExt)
-            {
-                return;
-            }
-
             point1.rawX = input[offset    ] | ((input[offset + 2] >> 4) & 0x03) << 8;
             point1.rawY = input[offset + 1] | ((input[offset + 2] >> 6) & 0x03) << 8;
 
-            if (type == InputReport.BtnsAccIR)
+            if (input.Length - offset == 12) // InputReport.BtnsAccIR
             {
                 // Extended Mode
                 point2.rawX = input[offset +  3] | ((input[offset +  5] >> 4) & 0x03) << 8;

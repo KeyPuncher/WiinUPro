@@ -13,6 +13,11 @@ namespace NintrollerLib
         bool CalibrationEmpty { get; }
     }
 
+    public interface IWiimoteExtension
+    {
+        Wiimote wiimote { get; }
+    }
+
     public interface INintrollerParsable
     {
         void Parse(byte[] input, int offset = 0);

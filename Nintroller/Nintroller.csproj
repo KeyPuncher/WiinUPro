@@ -39,17 +39,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BalanceBoard.cs" />
+    <Compile Include="Controllers\ClassicController.cs" />
+    <Compile Include="Controllers\ClassicControllerPro.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DeviceManagement.cs" />
     <Compile Include="Calibrations.cs" />
     <Compile Include="ComponentStructs.cs" />
-    <Compile Include="ControllerStructs.cs" />
     <Compile Include="Enumerators.cs" />
+    <Compile Include="Controllers\GameCubeAdapter.cs" />
+    <Compile Include="Controllers\Guitar.cs" />
     <Compile Include="INPUT_NAMES.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Nintroller.cs" />
+    <Compile Include="Controllers\Nunchuk.cs" />
+    <Compile Include="Controllers\ProController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controllers\Wiimote.cs" />
+    <Compile Include="Controllers\WiimotePlus.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

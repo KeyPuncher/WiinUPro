@@ -184,6 +184,34 @@
             public const string HOME   = "proHOME";
         }
 
+        public static class GUITAR
+        {
+            public const string GREEN = "gutG";
+            public const string RED = "gutR";
+            public const string YELLOW = "gutY";
+            public const string BLUE = "gutB";
+            public const string ORANGE = "gutO";
+
+            public const string STRUM_UP = "gutSUp";
+            public const string STRUM_DOWN = "gutSDown";
+            public const string PLUS = "gutPLUS";
+            public const string MINUS = "gutMINUS";
+
+            public const string JOY_X = "gutJoyX";
+            public const string JOY_Y = "gutJoyY";
+
+            public const string UP = "gutUP";
+            public const string DOWN = "gutDOWN";
+            public const string LEFT = "gutLEFT";
+            public const string RIGHT = "gutRIGHT";
+
+            public const string TOUCH_1 = "gutT1";
+            public const string TOUCH_2 = "gutT2";
+            public const string TOUCH_3 = "gutT3";
+            public const string TOUCH_4 = "gutT4";
+            public const string TOUCH_5 = "gutT5";
+        }
+
         public static class MOTION_PLUS
         {
             public const string GYROUP       = "mpGYROUP";

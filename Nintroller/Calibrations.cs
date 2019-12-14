@@ -235,6 +235,22 @@
                 }
             };
 
+            public Guitar GuitarRaw = new Guitar()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 15,
+                    minX = 0,
+                    maxX = 31,
+                    deadX = 0,
+
+                    centerY = 15,
+                    minY = 0,
+                    maxY = 31,
+                    deadY = 0
+                }
+            };
+
             /// <summary>
             /// Raw calibration for the GameCube Controller
             /// </summary>
@@ -453,6 +469,22 @@
                     minY    = 0,
                     maxY    = 31,
                     deadY   = 1
+                }
+            };
+
+            public Guitar GuitarMinimal = new Guitar()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 15,
+                    minX = 0,
+                    maxX = 31,
+                    deadX = 1,
+
+                    centerY = 15,
+                    minY = 0,
+                    maxY = 31,
+                    deadY = 1
                 }
             };
 
@@ -685,6 +717,22 @@
                 }
             };
 
+            public Guitar GuitarDefault = new Guitar()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 15,
+                    minX = 0,
+                    maxX = 31,
+                    deadX = 2,
+
+                    centerY = 15,
+                    minY = 0,
+                    maxY = 31,
+                    deadY = 2
+                }
+            };
+
             /// <summary>
             /// Default calibration for the GameCube Controller
             /// </summary>
@@ -903,6 +951,22 @@
                     minY    = 4,
                     maxY    = 27,
                     deadY   = 4
+                }
+            };
+
+            public Guitar GuitarModest = new Guitar()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 15,
+                    minX = 4,
+                    maxX = 27,
+                    deadX = 4,
+
+                    centerY = 15,
+                    minY = 4,
+                    maxY = 27,
+                    deadY = 4
                 }
             };
 
@@ -1126,6 +1190,22 @@
                     deadY   = 5
                 }
             };
+
+            public Guitar GuitarExtra = new Guitar()
+            {
+                joystick = new Joystick()
+                {
+                    centerX = 15,
+                    minX = 6,
+                    maxX = 25,
+                    deadX = 5,
+
+                    centerY = 15,
+                    minY = 6,
+                    maxY = 25,
+                    deadY = 5
+                }
+            };
             /// <summary>
             /// Extra calibration for the GameCube Controller
             /// </summary>
@@ -1199,6 +1279,8 @@
 
         public GameCubeAdapter GameCubeAdapterCalibration;
 
+        public Guitar GuitarCalibration;
+
         /// <summary>
         /// Default constructor setting all calibrations to their defaults.
         /// </summary>
@@ -1209,6 +1291,7 @@
             NunchukCalibration    = Calibrations.Defaults.NunchukDefault;
             ClassicCalibration    = Calibrations.Defaults.ClassicControllerDefault;
             ClassicProCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+            GuitarCalibration     = Calibrations.Defaults.GuitarDefault;
 
             GameCubeAdapterCalibration = new GameCubeAdapter(true)
             {
@@ -1264,6 +1347,10 @@
                 {
                     GameCubeAdapterCalibration.SetCalibration(calStr);
                 }
+                else if (calStr.StartsWith("gut"))
+                {
+                    GuitarCalibration.SetCalibration(calStr);
+                }
             }
         }
 
@@ -1281,6 +1368,7 @@
                     NunchukCalibration    = Calibrations.Defaults.NunchukDefault;
                     ClassicCalibration    = Calibrations.Defaults.ClassicControllerDefault;
                     ClassicProCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+                    GuitarCalibration     = Calibrations.Defaults.GuitarDefault;
                     GameCubeAdapterCalibration = new GameCubeAdapter(true)
                     {
                         port1 = Calibrations.Defaults.GameCubeControllerDefault,
@@ -1296,6 +1384,7 @@
                     NunchukCalibration    = Calibrations.Moderate.NunchukModest;
                     ClassicCalibration    = Calibrations.Moderate.ClassicControllerModest;
                     ClassicProCalibration = Calibrations.Moderate.ClassicControllerProModest;
+                    GuitarCalibration     = Calibrations.Moderate.GuitarModest;
                     GameCubeAdapterCalibration = new GameCubeAdapter(true)
                     {
                         port1 = Calibrations.Moderate.GameCubeControllerModest,
@@ -1311,6 +1400,7 @@
                     NunchukCalibration    = Calibrations.Extras.NunchukExtra;
                     ClassicCalibration    = Calibrations.Extras.ClassicControllerExtra;
                     ClassicProCalibration = Calibrations.Extras.ClassicControllerProExtra;
+                    GuitarCalibration     = Calibrations.Extras.GuitarExtra;
                     GameCubeAdapterCalibration = new GameCubeAdapter(true)
                     {
                         port1 = Calibrations.Extras.GameCubeControllerExtra,
@@ -1326,6 +1416,7 @@
                     NunchukCalibration    = Calibrations.Minimum.NunchukMinimal;
                     ClassicCalibration    = Calibrations.Minimum.ClassicControllerMinimal;
                     ClassicProCalibration = Calibrations.Minimum.ClassicControllerProMinimal;
+                    GuitarCalibration     = Calibrations.Minimum.GuitarMinimal;
                     GameCubeAdapterCalibration = new GameCubeAdapter(true)
                     {
                         port1 = Calibrations.Minimum.GameCubeControllerMinimal,
@@ -1341,6 +1432,7 @@
                     NunchukCalibration    = Calibrations.None.NunchukRaw;
                     ClassicCalibration    = Calibrations.None.ClassicControllerRaw;
                     ClassicProCalibration = Calibrations.None.ClassicControllerProRaw;
+                    GuitarCalibration     = Calibrations.None.GuitarRaw;
                     GameCubeAdapterCalibration = new GameCubeAdapter(true)
                     {
                         port1 = Calibrations.None.GameCubeControllerRaw,
