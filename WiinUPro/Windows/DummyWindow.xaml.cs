@@ -74,6 +74,10 @@ namespace WiinUPro.Windows
 
                 Device.State = ChangeProBoolean("pro" + baseBtn);
             }
+            else if (isWiimote)
+            {
+                Device.State = ChangeWiiBoolean("w" + baseBtn);
+            }
             else if (isGCN)
             {
                 Device.State = ChangeGCNBoolean("gcn" + baseBtn);
@@ -189,6 +193,28 @@ namespace WiinUPro.Windows
             }
 
             return pro;
+        }
+
+        private Wiimote ChangeWiiBoolean(string property)
+        {
+            Wiimote wii = (Wiimote)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.WIIMOTE.A: wii.buttons.A = !wii.buttons.A; break;
+                case INPUT_NAMES.WIIMOTE.B: wii.buttons.B = !wii.buttons.B; break;
+                case INPUT_NAMES.WIIMOTE.UP: wii.buttons.Up = !wii.buttons.Up; break;
+                case INPUT_NAMES.WIIMOTE.DOWN: wii.buttons.Down = !wii.buttons.Down; break;
+                case INPUT_NAMES.WIIMOTE.LEFT: wii.buttons.Left = !wii.buttons.Left; break;
+                case INPUT_NAMES.WIIMOTE.RIGHT: wii.buttons.Right = !wii.buttons.Right; break;
+                case INPUT_NAMES.WIIMOTE.MINUS: wii.buttons.Minus = !wii.buttons.Minus; break;
+                case INPUT_NAMES.WIIMOTE.PLUS: wii.buttons.Plus = !wii.buttons.Plus; break;
+                case INPUT_NAMES.WIIMOTE.HOME: wii.buttons.Home = !wii.buttons.Home; break;
+                case INPUT_NAMES.WIIMOTE.ONE: wii.buttons.One = !wii.buttons.One; break;
+                case INPUT_NAMES.WIIMOTE.TWO: wii.buttons.Two = !wii.buttons.Two; break;
+            }
+
+            return wii;
         }
 
         private void PortChanged(object sender, RoutedEventArgs e)

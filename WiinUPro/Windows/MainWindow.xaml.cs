@@ -99,6 +99,7 @@ namespace WiinUPro
 
             // Test Device
             devices.Add(new Shared.DeviceInfo() { DevicePath = "Dummy", Type = NintrollerLib.ControllerType.ProController });
+            devices.Add(new Shared.DeviceInfo() { DevicePath = "Dummy Wiimote", Type = NintrollerLib.ControllerType.Wiimote });
 #endif
 
             foreach (var info in devices)

@@ -35,10 +35,8 @@ namespace Shared
         {
             _nextQueue = new Queue<InputReport>();
             _reportQueue = new Queue<byte[]>();
-            State = state;
-
-            Type t = State.GetType();
-            if (t == typeof(ProController))
+            
+            if (state is ProController)
             {
                 DeviceType = ControllerType.ProController;
                 var pState = (ProController)state;
@@ -48,7 +46,13 @@ namespace Shared
                 pState.RJoy.rawY = (short)pState.RJoy.centerY;
                 State = pState;
             }
-            else if (t == typeof(GameCubeAdapter))
+            else if (state is Wiimote)
+            {
+                DeviceType = ControllerType.Wiimote;
+                var wState = (Wiimote)state;
+                State = wState;
+            }
+            else if (state is GameCubeAdapter)
             {
                 DeviceType = ControllerType.Other;
                 var gState = (GameCubeAdapter)state;
@@ -69,6 +73,10 @@ namespace Shared
                 gState.port4.cStick.rawX = gState.port4.cStick.centerX;
                 gState.port4.cStick.rawY = gState.port4.cStick.centerY;
                 State = gState;
+            }
+            else
+            {
+                State = state;
             }
         }
 
@@ -193,14 +201,14 @@ namespace Shared
 
                     // DD - Data bytes padded to 16
 
-                    // Pro Controller
-                    buffer[6] = 0x00;
-                    buffer[7] = 0x00;
-                    buffer[8] = 0xA4;
-                    buffer[9] = 0x20;
-                    buffer[10] = 0x01;
-                    buffer[11] = 0x20;
-
+                    var typeBytes = BitConverter.GetBytes((long)DeviceType);
+                    buffer[6] = typeBytes[5];
+                    buffer[7] = typeBytes[4];
+                    buffer[8] = typeBytes[3];
+                    buffer[9] = typeBytes[2];
+                    buffer[10] = typeBytes[1];
+                    buffer[11] = typeBytes[0];
+                    
                     if (_lastReport.Length >= 4 && _lastReport[4] == 250)
                     {
                         //NextReport = DataReportMode;

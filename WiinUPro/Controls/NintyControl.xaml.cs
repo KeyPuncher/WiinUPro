@@ -118,7 +118,15 @@ namespace WiinUPro
                 }
                 else
                 {
-                    _dummy = new DummyDevice(Calibrations.Defaults.ProControllerDefault);
+                    if (_info.DevicePath.Contains("Wiimote"))
+                    {
+                        _dummy = new DummyDevice(Calibrations.Defaults.WiimoteDefault);
+                    }
+                    else
+                    {
+                        _dummy = new DummyDevice(Calibrations.Defaults.ProControllerDefault);
+                    }
+
                     _nintroller = new Nintroller(_dummy, _dummy.DeviceType);
                 }
 
