@@ -30,6 +30,7 @@ namespace NintrollerLib
         
         // General
         private bool               _connected                   = false;
+        private bool               _proControllerUSupport       = true;
         private INintrollerState   _state                       = new Wiimote();
         private CalibrationStorage _calibrations                = new CalibrationStorage();
         private ControllerType     _currentType                 = ControllerType.Unknown;
@@ -709,7 +710,7 @@ namespace NintrollerLib
                             // Extension/Type
                             // Not relyable for Pro Controller U
                             bool ext = (report[3] & 0x02) != 0;
-                            if (ext || true)
+                            if (ext || _proControllerUSupport)
                             {
                                 //lock (_readingObj)
                                 //{
