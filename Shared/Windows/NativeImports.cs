@@ -31,8 +31,8 @@ namespace Shared.Windows
         /// Async Callback for WriteFileEx
         /// </summary>
         public delegate void WriteFileCompletionDelegate(
-            uint dwErrorCode, 
-            uint dwNumberOfBytesTransfered, 
+            uint dwErrorCode,
+            uint dwNumberOfBytesTransfered,
             NativeOverlapped lpOverlapped);
 
         // TODO: The above delegate method signature matches the one of the unhandled Native exception that keeps occuring
@@ -45,9 +45,9 @@ namespace Shared.Windows
         /// </summary>
         [DllImport("kernel32.dll", SetLastError = true)]
         public extern static bool WriteFileEx(
-            IntPtr hFile, 
+            IntPtr hFile,
             byte[] lpBuffer,
-            uint nNumberOfBytesToWrite, 
+            uint nNumberOfBytesToWrite,
             [In] ref NativeOverlapped lpOverlapped,
             WriteFileCompletionDelegate lpCompletionRoutine);
 
@@ -85,9 +85,9 @@ namespace Shared.Windows
 
         [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool SetupDiSetClassInstallParams(
-            IntPtr DeviceInfoSet, 
-            ref SP_DEVINFO_DATA DeviceInfoData, 
-            IntPtr ClassInstallParams, 
+            IntPtr DeviceInfoSet,
+            ref SP_DEVINFO_DATA DeviceInfoData,
+            IntPtr ClassInstallParams,
             int ClassInstallParamsSize);
 
         [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
@@ -125,9 +125,9 @@ namespace Shared.Windows
 
         [DllImport("setupapi.dll", SetLastError = true)]
         public static extern int CM_Get_DevNode_Status(
-            ref int pulStatus, 
-            ref int pulProblemNumber, 
-            int dnDevInst, 
+            ref int pulStatus,
+            ref int pulProblemNumber,
+            int dnDevInst,
             int ulFlags);
 
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -160,7 +160,7 @@ namespace Shared.Windows
           ref Guid classId,
           IntPtr hwndParent
         );
-        
+
         [DllImport(@"setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr SetupDiGetClassDevs(
             ref Guid ClassGuid,
@@ -178,7 +178,7 @@ namespace Shared.Windows
             int memberIndex,
             ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData
         );
-        
+
         #endregion
 
         #region hid.dll
@@ -187,9 +187,15 @@ namespace Shared.Windows
         public static extern void HidD_GetHidGuid(
             out Guid gHid);
 
+        [DllImport(@"hid.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool HidD_GetProductString(
+            IntPtr HidDeviceObject,
+            byte[] Buffer,
+            uint BufferLength);
+
         [DllImport("hid.dll")]
         public static extern bool HidD_GetAttributes(
-            IntPtr HidDeviceObject, 
+            IntPtr HidDeviceObject,
             ref HIDD_ATTRIBUTES Attributes);
 
         [DllImport("hid.dll")]
@@ -203,17 +209,17 @@ namespace Shared.Windows
         #region bthprops.cpl & irprops.cpl
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern uint BluetoothGetRadioInfo(
-            IntPtr hRadio, 
+            IntPtr hRadio,
             ref BLUETOOTH_RADIO_INFO pRadioInfo);
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern IntPtr BluetoothFindFirstRadio(
-            ref BLUETOOTH_FIND_RADIO_PARAMS pbtfrp, 
+            ref BLUETOOTH_FIND_RADIO_PARAMS pbtfrp,
             out IntPtr phRadio);
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern bool BluetoothFindNextRadio(
-            ref IntPtr hFind, 
+            ref IntPtr hFind,
             out IntPtr phRadio);
 
         [DllImport("irprops.cpl", SetLastError = true)]
@@ -221,12 +227,12 @@ namespace Shared.Windows
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern IntPtr BluetoothFindFirstDevice(
-            ref BLUETOOTH_DEVICE_SEARCH_PARAMS searchParams, 
+            ref BLUETOOTH_DEVICE_SEARCH_PARAMS searchParams,
             ref BLUETOOTH_DEVICE_INFO deviceInfo);
 
         [DllImport("Irprops.cpl", SetLastError = true)]
         public static extern bool BluetoothFindNextDevice(
-            IntPtr hFind, 
+            IntPtr hFind,
             ref BLUETOOTH_DEVICE_INFO pbtdi);
 
         [DllImport("irprops.cpl", SetLastError = true)]
@@ -234,32 +240,32 @@ namespace Shared.Windows
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern uint BluetoothAuthenticateDevice(
-            IntPtr hwndParent, 
-            IntPtr hRadio, 
-            ref BLUETOOTH_DEVICE_INFO pbtdi, 
-            [MarshalAs(UnmanagedType.LPWStr)]string pszPasskey, 
+            IntPtr hwndParent,
+            IntPtr hRadio,
+            ref BLUETOOTH_DEVICE_INFO pbtdi,
+            [MarshalAs(UnmanagedType.LPWStr)]string pszPasskey,
             ulong ulPasskeyLength);
 
         [DllImport("bthprops.cpl", SetLastError = true)]
         public static extern uint BluetoothAuthenticateDeviceEx(
-            IntPtr hwndParentIn, 
-            IntPtr hRadioIn, 
-            ref BLUETOOTH_DEVICE_INFO pbtdiInout, 
+            IntPtr hwndParentIn,
+            IntPtr hRadioIn,
+            ref BLUETOOTH_DEVICE_INFO pbtdiInout,
             /*BLUETOOTH_OOB_DATA*/ object pbtOobData,
             AUTHENTICATION_REQUIREMENTS authenticationRequirement);
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern uint BluetoothEnumerateInstalledServices(
-            IntPtr hRadio, 
-            ref BLUETOOTH_DEVICE_INFO pbtdi, 
-            ref uint pcServices, 
+            IntPtr hRadio,
+            ref BLUETOOTH_DEVICE_INFO pbtdi,
+            ref uint pcServices,
             Guid[] pGuidServices);
 
         [DllImport("irprops.cpl", SetLastError = true)]
         public static extern uint BluetoothSetServiceState(
-            IntPtr hRadio, 
-            ref BLUETOOTH_DEVICE_INFO pbtdi, 
-            ref Guid pGuidService, 
+            IntPtr hRadio,
+            ref BLUETOOTH_DEVICE_INFO pbtdi,
+            ref Guid pGuidService,
             byte dwServiceFlags);
 
         [DllImport("irprops.cpl", EntryPoint = "BluetoothEnableDiscovery", SetLastError = true)]
@@ -395,7 +401,7 @@ namespace Shared.Windows
             public short ProductID;
             public short VersionNumber;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct BLUETOOTH_FIND_RADIO_PARAMS
         {
@@ -449,22 +455,22 @@ namespace Shared.Windows
             /// The device that is associated with the system default device interface
             /// (only valid with DIGCF_DEVICEINTERFACE)
             /// </summary>
-            Default         = 0x00000001,
+            Default = 0x00000001,
 
             /// <summary>
             /// Devices that are currently present
             /// </summary>
-            Present         = 0x00000002,
+            Present = 0x00000002,
 
             /// <summary>
             /// Devices that are installed for the specified device setup or interface classes
             /// </summary>
-            AllClasses      = 0x00000004,
+            AllClasses = 0x00000004,
 
             /// <summary>
             /// Devices that are part of the current hardware profile
             /// </summary>
-            Profile         = 0x00000008,
+            Profile = 0x00000008,
 
             /// <summary>
             /// Devices that support device interfaces for the specified device classes.
@@ -476,30 +482,30 @@ namespace Shared.Windows
         [Flags]
         public enum EFileAttributes : uint
         {
-            Readonly          = 0x00000001,
-            Hidden            = 0x00000002,
-            System            = 0x00000004,
-            Directory         = 0x00000010,
-            Archive           = 0x00000020,
-            Device            = 0x00000040,
-            Normal            = 0x00000080,
-            Temporary         = 0x00000100,
-            SparseFile        = 0x00000200,
-            ReparsePoint      = 0x00000400,
-            Compressed        = 0x00000800,
-            Offline           = 0x00001000,
+            Readonly = 0x00000001,
+            Hidden = 0x00000002,
+            System = 0x00000004,
+            Directory = 0x00000010,
+            Archive = 0x00000020,
+            Device = 0x00000040,
+            Normal = 0x00000080,
+            Temporary = 0x00000100,
+            SparseFile = 0x00000200,
+            ReparsePoint = 0x00000400,
+            Compressed = 0x00000800,
+            Offline = 0x00001000,
             NotContentIndexed = 0x00002000,
-            Encrypted         = 0x00004000,
-            Write_Through     = 0x80000000,
-            Overlapped        = 0x40000000,
-            NoBuffering       = 0x20000000,
-            RandomAccess      = 0x10000000,
-            SequentialScan    = 0x08000000,
-            DeleteOnClose     = 0x04000000,
-            BackupSemantics   = 0x02000000,
-            PosixSemantics    = 0x01000000,
-            OpenReparsePoint  = 0x00200000,
-            OpenNoRecall      = 0x00100000,
+            Encrypted = 0x00004000,
+            Write_Through = 0x80000000,
+            Overlapped = 0x40000000,
+            NoBuffering = 0x20000000,
+            RandomAccess = 0x10000000,
+            SequentialScan = 0x08000000,
+            DeleteOnClose = 0x04000000,
+            BackupSemantics = 0x02000000,
+            PosixSemantics = 0x01000000,
+            OpenReparsePoint = 0x00200000,
+            OpenNoRecall = 0x00100000,
             FirstPipeInstance = 0x00080000
         }
 
