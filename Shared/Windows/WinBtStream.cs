@@ -26,7 +26,6 @@ namespace Shared.Windows
     public class WinBtStream : CommonStream
     {
         #region Members
-        private const string wiimoteNameSuffix = "-TR";
         public static bool OverrideSharingMode = false;
         public static FileShare OverridenFileShare = FileShare.None;
         public static bool ForceToshibaMode = false;
@@ -78,7 +77,7 @@ namespace Shared.Windows
             UseToshiba = ForceToshibaMode;// || !BluetoothEnableDiscovery(IntPtr.Zero, true);
 
             // Default Windows 8/10 to ReadWrite (non exclusive)
-            if (Environment.OSVersion.Version.Major > 6
+            if (Environment.OSVersion.Version.Major > 6 
                 || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 2)) // temp
             {
                 SharingMode = FileShare.ReadWrite;
@@ -105,7 +104,7 @@ namespace Shared.Windows
                 UseFullReportSize = true;
                 UseWriteFile = true;
             }
-
+            
             _hidPath = path;
             _writerBlock = new object();
         }
@@ -274,8 +273,7 @@ namespace Shared.Windows
                     attrib.Size = Marshal.SizeOf(attrib);
 
                     // Populate Attributes
-                    var hidHandle = handle.DangerousGetHandle();
-                    if (HidD_GetAttributes(hidHandle, ref attrib))
+                    if (HidD_GetAttributes(handle.DangerousGetHandle(), ref attrib))
                     {
                         // Check if this is a compatable device
                         if (attrib.VendorID == 0x057e && (attrib.ProductID == 0x0306 || attrib.ProductID == 0x0330))
@@ -291,26 +289,10 @@ namespace Shared.Windows
                             //    AssociatedStack.Add(diDetail.devicePath, associatedStack);
                             //}
 
-                            // note: newer Wiimotes may identify as ProControllers via their ProductID.
-                            // they reveal to be Wiimote only in their report. So deduct from name suffix
-                            var nintrollerType = attrib.ProductID == 0x0330 ? ControllerType.ProController : ControllerType.Wiimote;
-                            if (nintrollerType == ControllerType.ProController)
-                            {
-                                var buffer = new byte[128 * sizeof(char)];
-                                if (HidD_GetProductString(hidHandle, buffer, (uint)buffer.Length))
-                                {
-                                    var deviceName = System.Text.UnicodeEncoding.Unicode.GetString(buffer).TrimEnd('\0');
-                                    if (deviceName.EndsWith(WinBtStream.wiimoteNameSuffix))
-                                    {
-                                        nintrollerType = ControllerType.Wiimote;
-                                    }
-                                }
-                            }
-
                             result.Add(new DeviceInfo
                             {
                                 DevicePath = diDetail.devicePath,
-                                Type = nintrollerType,
+                                Type = attrib.ProductID == 0x0330 ? ControllerType.ProController : ControllerType.Wiimote,
                                 VID = attrib.VendorID.ToString("X4"),
                                 PID = attrib.ProductID.ToString("X4")
                             });
@@ -332,7 +314,7 @@ namespace Shared.Windows
 
             return result;
         }
-
+        
 
         #region System.IO.Stream Properties
         public override bool CanRead { get { return _fileStream?.CanRead ?? false; } }
@@ -411,7 +393,7 @@ namespace Shared.Windows
                         System.Diagnostics.Debug.WriteLine("caught native exception! " + ex.Message);
 #endif
                     }
-
+                    
                     uint error = GetLastError();
 
                     // Wait for the async operation to complete

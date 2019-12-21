@@ -12,8 +12,6 @@ namespace WiinUSoft.Windows
     /// </summary>
     public partial class SyncWindow : Window
     {
-        private const string deviceNameMatch = "Nintendo";
-
         public bool Cancelled { get; protected set; }
         public int Count { get; protected set; }
 
@@ -91,14 +89,9 @@ namespace WiinUSoft.Windows
                                 do
                                 {
                                     // Note: Switch Pro Controller is simply called "Pro Controller"
-                                    // Note: The Wiimote MotionPlus reveals its name only after BT authentication
-                                    var probeUnnamed = String.IsNullOrEmpty(deviceInfo.szName);
-                                    if (probeUnnamed || deviceInfo.szName.StartsWith(SyncWindow.deviceNameMatch))
+                                    if (deviceInfo.szName.StartsWith("Nintendo"))
                                     {
-                                        if (!probeUnnamed)
-                                        {
-                                            Prompt("Found " + deviceInfo.szName);
-                                        }
+                                        Prompt("Found " + deviceInfo.szName);
 
                                         StringBuilder password = new StringBuilder();
                                         uint pcService = 16;
@@ -117,18 +110,6 @@ namespace WiinUSoft.Windows
                                         {
                                             var errAuth = NativeImports.BluetoothAuthenticateDevice(IntPtr.Zero, radio, ref deviceInfo, password.ToString(), 6);
                                             success = errAuth == 0;
-                                            if (probeUnnamed)
-                                            {
-                                                if (String.IsNullOrEmpty(deviceInfo.szName) || !deviceInfo.szName.StartsWith(SyncWindow.deviceNameMatch))
-                                                {
-                                                    continue;
-                                                }
-                                                else if (success)
-                                                {
-                                                    probeUnnamed = false;
-                                                    Prompt("Found " + deviceInfo.szName);
-                                                }
-                                            }
                                         }
 
                                         // Install PC Service
@@ -150,7 +131,7 @@ namespace WiinUSoft.Windows
                                             Prompt("Successfully Paired!");
                                             Count += 1;
                                         }
-                                        else if (!probeUnnamed)
+                                        else
                                         {
                                             Prompt("Failed to Pair.");
                                         }
@@ -175,8 +156,8 @@ namespace WiinUSoft.Windows
             {
                 // No (compatable) Bluetooth
                 SetPrompt(
-                    "No compatable Bluetooth Radios found." +
-                    Environment.NewLine +
+                    "No compatable Bluetooth Radios found." + 
+                    Environment.NewLine + 
                     "This only works for the Microsoft Bluetooth Stack.");
                 _notCompatable = true;
                 return;
