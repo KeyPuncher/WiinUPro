@@ -860,7 +860,7 @@ namespace WiinUSoft
 
         private void btnProperties_Click(object sender, RoutedEventArgs e)
         {
-            PropWindow win = new PropWindow(properties, device.Type.ToString());
+            PropWindow win = new PropWindow(properties, device.Type.ToString(), device.HIDDeviceName, device.HIDSerialNumber);
             win.ShowDialog();
 
             if (win.customCalibrate)

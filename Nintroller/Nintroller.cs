@@ -68,6 +68,14 @@ namespace NintrollerLib
         /// </summary>
         public ControllerType Type { get { return _currentType; } }
         /// <summary>
+        /// The HID device name
+        /// </summary>
+        public string HIDDeviceName { get; set; }
+        /// <summary>
+        /// The HID serial number
+        /// </summary>
+        public string HIDSerialNumber { get; set; }
+        /// <summary>
         /// The calibration settings applied to the respective controller types.
         /// </summary>
         public CalibrationStorage StoredCalibrations { get { return _calibrations; } }

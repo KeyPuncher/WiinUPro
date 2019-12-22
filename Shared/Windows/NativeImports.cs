@@ -187,6 +187,18 @@ namespace Shared.Windows
         public static extern void HidD_GetHidGuid(
             out Guid gHid);
 
+        [DllImport(@"hid.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool HidD_GetProductString(
+            IntPtr HidDeviceObject,
+            byte[] Buffer,
+            uint BufferLength);
+
+        [DllImport(@"hid.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool HidD_GetSerialNumberString(
+            IntPtr HidDeviceObject,
+            byte[] Buffer,
+            uint BufferLength);
+
         [DllImport("hid.dll")]
         public static extern bool HidD_GetAttributes(
             IntPtr HidDeviceObject, 

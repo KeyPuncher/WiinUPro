@@ -119,6 +119,8 @@ namespace WiinUSoft
 
                     if (stream.OpenConnection() && stream.CanRead)
                     {
+                        n.HIDDeviceName = hid.DeviceName;
+                        n.HIDSerialNumber = hid.SerialNumber;
                         deviceList.Add(new DeviceControl(n, hid.DevicePath));
                         deviceList[deviceList.Count - 1].OnConnectStateChange += DeviceControl_OnConnectStateChange;
                         deviceList[deviceList.Count - 1].OnConnectionLost += DeviceControl_OnConnectionLost;
