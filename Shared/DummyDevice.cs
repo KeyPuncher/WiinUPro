@@ -82,6 +82,12 @@ namespace Shared
                     ConfigureNunchuk(nState);
                     break;
 
+                case ControllerType.ClassicController:
+                    var cState = new ClassicController();
+                    cState.SetCalibration(Calibrations.CalibrationPreset.Default);
+                    ConfigureClassicController(cState);
+                    break;
+
                 case ControllerType.ClassicControllerPro:
                     var ccpState = new ClassicControllerPro();
                     ccpState.SetCalibration(Calibrations.CalibrationPreset.Default);
@@ -123,6 +129,15 @@ namespace Shared
             nState.accelerometer.rawY = (short)nState.accelerometer.centerY;
             nState.accelerometer.rawZ = (short)nState.accelerometer.centerZ;
             State = nState;
+        }
+
+        public void ConfigureClassicController(ClassicController cState)
+        {
+            cState.LJoy.rawX = (short)cState.LJoy.centerX;
+            cState.LJoy.rawY = (short)cState.LJoy.centerY;
+            cState.RJoy.rawX = (short)cState.RJoy.centerX;
+            cState.RJoy.rawY = (short)cState.RJoy.centerY;
+            State = cState;
         }
 
         public void ConfigureClassicControllerPro(ClassicControllerPro ccpState)
@@ -576,7 +591,39 @@ namespace Shared
             }
             else if (DeviceType == ControllerType.ClassicController)
             {
+                var cc = (ClassicController)State;
 
+                var lx = BitConverter.GetBytes(cc.LJoy.rawX);
+                var ly = BitConverter.GetBytes(cc.LJoy.rawY);
+                var rx = BitConverter.GetBytes(cc.RJoy.rawX);
+                var ry = BitConverter.GetBytes(cc.RJoy.rawY);
+                var l = BitConverter.GetBytes(cc.L.rawValue);
+                var r = BitConverter.GetBytes(cc.R.rawValue);
+
+                buf[0] = (byte)(lx[0] + (rx[0] << 3 & 0xC0));
+                buf[1] = (byte)(ly[0] + (rx[0] << 5 & 0xC0));
+                buf[2] = (byte)(ry[0] + (rx[0] << 7 & 0x80) + (l[0] << 2 & 0x60));
+                buf[3] = (byte)(r[0] + (l[0] << 5 & 0xE0));
+
+                buf[4] = 0x01;
+                buf[4] += (byte)(!cc.RFull ? 0x02 : 0x00);
+                buf[4] += (byte)(!cc.Plus ? 0x04 : 0x00);
+                buf[4] += (byte)(!cc.Home ? 0x08 : 0x00);
+
+                buf[4] += (byte)(!cc.Minus ? 0x10 : 0x00);
+                buf[4] += (byte)(!cc.LFull ? 0x20 : 0x00);
+                buf[4] += (byte)(!cc.Down ? 0x40 : 0x00);
+                buf[4] += (byte)(!cc.Right ? 0x80 : 0x00);
+
+                buf[5] = 0x00;
+                buf[5] += (byte)(!cc.Up ? 0x01 : 0x00);
+                buf[5] += (byte)(!cc.Left ? 0x02 : 0x00);
+                buf[5] += (byte)(!cc.ZR ? 0x04 : 0x00);
+                buf[5] += (byte)(!cc.X ? 0x08 : 0x00);
+                buf[5] += (byte)(!cc.A ? 0x10 : 0x00);
+                buf[5] += (byte)(!cc.Y ? 0x20 : 0x00);
+                buf[5] += (byte)(!cc.B ? 0x40 : 0x00);
+                buf[5] += (byte)(!cc.ZL ? 0x80 : 0x00);
             }
             else if (DeviceType == ControllerType.ClassicControllerPro)
             {

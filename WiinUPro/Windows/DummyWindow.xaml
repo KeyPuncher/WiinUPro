@@ -95,8 +95,8 @@
         </GroupBox>
         <GroupBox x:Name="groupTriggers" Header="Triggers" HorizontalAlignment="Left" Margin="252,166,0,0" VerticalAlignment="Top" Height="78" Width="144">
             <Grid Margin="-4,0,-4,-4">
-                <Slider x:Name="sliderL" HorizontalAlignment="Left" Margin="3,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="RT"/>
-                <Slider x:Name="sliderR" HorizontalAlignment="Left" Margin="3,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="LT"/>
+                <Slider x:Name="sliderL" HorizontalAlignment="Left" Margin="3,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="LT"/>
+                <Slider x:Name="sliderR" HorizontalAlignment="Left" Margin="3,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="RT"/>
                 <Label Content="L" HorizontalAlignment="Left" Margin="120,4,0,0" VerticalAlignment="Top"/>
                 <Label Content="R" HorizontalAlignment="Left" Margin="120,35,0,0" VerticalAlignment="Top"/>
             </Grid>

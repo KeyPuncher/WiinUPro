@@ -60,7 +60,7 @@ namespace NintrollerLib
 
                 // Joysticks
                 LJoy.rawX = (byte)(data[offset] & 0x3F);
-                LJoy.rawY = (byte)(data[offset + 1] & 0x03F);
+                LJoy.rawY = (byte)(data[offset + 1] & 0x3F);
                 RJoy.rawX = (byte)(data[offset + 2] >> 7 | (data[offset + 1] & 0xC0) >> 5 | (data[offset] & 0xC0) >> 3);
                 RJoy.rawY = (byte)(data[offset + 2] & 0x1F);
 

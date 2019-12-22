@@ -14,6 +14,9 @@ namespace WiinUPro.Windows
         public ControllerType Type { get; set; }
 
         bool isWiimote { get { return Device.State is Wiimote; } }
+        bool isNunchuk { get { return Device.State is Nunchuk; } }
+        bool isClassic { get { return Device.State is ClassicController; } }
+        bool isClassicPro { get { return Device.State is ClassicControllerPro; } }
         bool isPro { get { return Device.State is ProController; } }
         bool isGCN { get { return Device.State is GameCubeAdapter; } }
 
@@ -43,7 +46,7 @@ namespace WiinUPro.Windows
                     break;
 
                 case ControllerType.Nunchuk:
-                    if (Device.State == null || !(Device.State is Nunchuk))
+                    if (Device.State == null || !isNunchuk)
                         Device.State = new Nunchuk();
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
@@ -54,8 +57,20 @@ namespace WiinUPro.Windows
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
+                case ControllerType.ClassicController:
+                    if (Device.State == null || !isClassic)
+                        Device.State = new ClassicController();
+                    groupCore.Visibility = Visibility.Visible;
+                    wiimoteGrid.Visibility = Visibility.Visible;
+                    groupNun.Visibility = Visibility.Hidden;
+                    groupPad.Visibility = Visibility.Visible;
+                    groupSticks.Visibility = Visibility.Visible;
+                    groupTriggers.Visibility = Visibility.Visible;
+                    gcnGrid.Visibility = Visibility.Hidden;
+                    break;
+
                 case ControllerType.ClassicControllerPro:
-                    if (Device.State == null || !(Device.State is ClassicControllerPro))
+                    if (Device.State == null || !isClassicPro)
                         Device.State = new ClassicControllerPro();
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
@@ -107,11 +122,15 @@ namespace WiinUPro.Windows
             {
                 Device.State = ChangeWiiBoolean("w" + baseBtn, (Wiimote)Device.State);
             }
-            else if (Device.State is Nunchuk)
+            else if (isNunchuk)
             {
-                Device.State = ChangeNunBoolean("n" + baseBtn, (Nunchuk)Device.State);
+                Device.State = ChangeNunBoolean("n" + baseBtn);
             }
-            else if (Device.State is ClassicControllerPro)
+            else if (isClassic)
+            {
+                Device.State = ChangeCcBoolean("cc" + baseBtn);
+            }
+            else if (isClassicPro)
             {
                 if (baseBtn == "MINUS") baseBtn = "SELECT";
                 if (baseBtn == "PLUS") baseBtn = "START";
@@ -154,11 +173,15 @@ namespace WiinUPro.Windows
             {
                 Device.State = ChangeProAnalog("pro" + analogInput, value);
             }
-            else if (Device.State is Nunchuk)
+            else if (isNunchuk)
             {
                 Device.State = ChangeNunAnalog("n" + analogInput, value);
             }
-            else if (Device.State is ClassicControllerPro)
+            else if (isClassic)
+            {
+                Device.State = ChangeCcAnalog("cc" + analogInput, value);
+            }
+            else if (isClassicPro)
             {
                 Device.State = ChangeCcpAnalog("ccp" + analogInput, value);
             }
@@ -247,6 +270,46 @@ namespace WiinUPro.Windows
             }
 
             return nun;
+        }
+
+        private ClassicController ChangeCcAnalog(string property, float value)
+        {
+            ClassicController cc = (ClassicController)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LX:
+                    cc.LJoy.X = value;
+                    cc.LJoy.rawX = CalculateRaw(cc.LJoy.minX, cc.LJoy.maxX, value);
+                    break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LY:
+                    cc.LJoy.Y = value;
+                    cc.LJoy.rawY = CalculateRaw(cc.LJoy.minY, cc.LJoy.maxY, value);
+                    break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RX:
+                    cc.RJoy.X = value;
+                    cc.RJoy.rawX = CalculateRaw(cc.RJoy.minX, cc.RJoy.maxX, value);
+                    break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RY:
+                    cc.RJoy.Y = value;
+                    cc.RJoy.rawY = CalculateRaw(cc.RJoy.minY, cc.RJoy.maxY, value);
+                    break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LT:
+                    cc.L.value = value;
+                    cc.L.rawValue = (short)((cc.L.max - cc.L.min) * value);
+                    break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RT:
+                    cc.R.value = value;
+                    cc.R.rawValue = (short)((cc.R.max - cc.R.min) * value);
+                    break;
+            }
+
+            return cc;
         }
 
         private ClassicControllerPro ChangeCcpAnalog(string property, float value)
@@ -354,8 +417,10 @@ namespace WiinUPro.Windows
             return wiimote;
         }
 
-        private Nunchuk ChangeNunBoolean(string property, Nunchuk nun)
+        private Nunchuk ChangeNunBoolean(string property)
         {
+            Nunchuk nun = (Nunchuk)Device.State;
+
             switch (property)
             {
                 case INPUT_NAMES.NUNCHUK.C: nun.C = !nun.C; break;
@@ -363,6 +428,30 @@ namespace WiinUPro.Windows
             }
 
             return nun;
+        }
+
+        private ClassicController ChangeCcBoolean(string property)
+        {
+            ClassicController cc = (ClassicController)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.CLASSIC_CONTROLLER.A: cc.A = !cc.A; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.B: cc.B = !cc.B; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.X: cc.X = !cc.X; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.Y: cc.Y = !cc.Y; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.ZL: cc.ZL = !cc.ZL; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.ZR: cc.ZR = !cc.ZR; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.UP: cc.Up = !cc.Up; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.DOWN: cc.Down = !cc.Down; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LEFT: cc.Left = !cc.Left; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RIGHT: cc.Right = !cc.Right; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.START: cc.Start = !cc.Start; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.SELECT: cc.Minus = !cc.Minus; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.HOME: cc.Home = !cc.Home; break;
+            }
+
+            return cc;
         }
 
         private ClassicControllerPro ChangeCcpBoolean(string property)
