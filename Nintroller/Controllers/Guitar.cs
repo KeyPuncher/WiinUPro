@@ -104,7 +104,7 @@ namespace NintrollerLib
                 }
             }
 
-            wiimote.Update(data);
+            wiimote = new Wiimote(data, wiimote);
         }
 
         public float GetValue(string input) { return 0; }

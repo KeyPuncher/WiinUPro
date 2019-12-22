@@ -78,7 +78,7 @@ namespace NintrollerLib
                 R.Normalize();
             }
 
-            wiimote.Update(data);
+            wiimote = new Wiimote(data, wiimote);
         }
 
         public float GetValue(string input)

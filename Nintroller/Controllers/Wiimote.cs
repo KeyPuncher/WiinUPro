@@ -23,6 +23,18 @@ namespace NintrollerLib
             Update(rawData);
         }
 
+        // TODO: Address the issue that made this change necessary.
+        // Most likely will be in a performance & memory optimization refactor.
+        public Wiimote(byte[] rawData, Wiimote calibration)
+        {
+            buttons = new CoreButtons();
+            accelerometer = new Accelerometer();
+            irSensor = new IR();
+
+            SetCalibration(calibration);
+            Update(rawData);
+        }
+
         public void Update(byte[] data)
         {
             InputReport reportType = (InputReport)data[0];

@@ -50,7 +50,7 @@ namespace NintrollerLib
                 accelerometer.Normalize();
             }
 
-            wiimote.Update(data);
+            wiimote = new Wiimote(data, wiimote);
         }
 
         public float GetValue(string input)

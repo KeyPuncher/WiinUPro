@@ -69,7 +69,10 @@ namespace NintrollerLib
                 RJoy.Normalize();
             }
 
-            wiimote.Update(data);
+            // Simply calling the Update(data) method doesn't seem to be working.
+            // the button data will get updated correctly but when stepping over this
+            // statement in debug mode the button data is all set to its default values.
+            wiimote = new Wiimote(data, wiimote);
         }
 
         public float GetValue(string input)
