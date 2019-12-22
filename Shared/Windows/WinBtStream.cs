@@ -27,6 +27,7 @@ namespace Shared.Windows
     public class WinBtStream : CommonStream
     {
         #region Members
+        private const string wiimoteNameSuffix = "-TR";
         public static bool OverrideSharingMode = false;
         public static FileShare OverridenFileShare = FileShare.None;
         public static bool ForceToshibaMode = false;
