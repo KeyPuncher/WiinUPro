@@ -48,7 +48,17 @@
                 <ComboBoxItem Content="Classic Controller Pro"/>
             </ComboBox>
         </Grid>
-        <GroupBox x:Name="groupPad" Header="Pad Buttons" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="147" Width="89">
+        <GroupBox x:Name="groupNun" Header="Nunchuk" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="226" Visibility="Visible">
+            <Grid Margin="-4,0,2,-2">
+                <Button x:Name="buttonC" Content="C" HorizontalAlignment="Left" Margin="4,4,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="C"/>
+                <Button x:Name="buttonZ" Content="Z" HorizontalAlignment="Left" Margin="4,29,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="Z"/>
+                <Slider x:Name="sliderNunLX" HorizontalAlignment="Left" Margin="75,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="JoyX"/>
+                <Slider x:Name="sliderNunLY" HorizontalAlignment="Left" Margin="75,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="JoyY"/>
+                <Label Content="X" HorizontalAlignment="Left" Margin="192,4,0,0" VerticalAlignment="Top"/>
+                <Label Content="Y" HorizontalAlignment="Left" Margin="192,35,0,0" VerticalAlignment="Top"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupPad" Header="Pad Buttons" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="147" Width="89" Visibility="Hidden">
             <Grid Margin="-4,0,-2,-5">
                 <Button x:Name="buttonA" Content="A" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="A"/>
                 <Button x:Name="buttonB" Content="B" HorizontalAlignment="Left" Margin="30,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="B"/>
@@ -67,7 +77,7 @@
                 <Button x:Name="buttonStart" Content="+" HorizontalAlignment="Left" Margin="55,105,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="START"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupSticks" Header="Joysticks" HorizontalAlignment="Left" Margin="249,10,0,0" VerticalAlignment="Top" Height="150" Width="226" Visibility="Visible">
+        <GroupBox x:Name="groupSticks" Header="Joysticks" HorizontalAlignment="Left" Margin="249,10,0,0" VerticalAlignment="Top" Height="150" Width="226" Visibility="Hidden">
             <Grid VerticalAlignment="Top" Height="132" Margin="-4,0,2,-4">
                 <Button x:Name="buttonLS" Content="LS" HorizontalAlignment="Left" Margin="24,35,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="LS"/>
                 <Button x:Name="buttonRS" Content="RS" HorizontalAlignment="Left" Margin="24,99,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="RS" RenderTransformOrigin="0.373,1.201"/>

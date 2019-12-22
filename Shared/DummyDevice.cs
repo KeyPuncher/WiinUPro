@@ -75,10 +75,17 @@ namespace Shared
                     }
                     break;
 
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                    var nState = new Nunchuk();
+                    nState.SetCalibration(Calibrations.CalibrationPreset.Default);
+                    ConfigureNunchuk(nState);
+                    break;
+
                 case ControllerType.ClassicControllerPro:
                     var ccpState = new ClassicControllerPro();
                     ccpState.SetCalibration(Calibrations.CalibrationPreset.Default);
-                    ConfigureClassicControllerProController(ccpState);
+                    ConfigureClassicControllerPro(ccpState);
                     break;
 
                 default:
@@ -108,7 +115,17 @@ namespace Shared
             State = wState;
         }
 
-        public void ConfigureClassicControllerProController(ClassicControllerPro ccpState)
+        public void ConfigureNunchuk(Nunchuk nState)
+        {
+            nState.joystick.rawX = (short)nState.joystick.centerX;
+            nState.joystick.rawY = (short)nState.joystick.centerY;
+            nState.accelerometer.rawX = (short)nState.accelerometer.centerX;
+            nState.accelerometer.rawY = (short)nState.accelerometer.centerY;
+            nState.accelerometer.rawZ = (short)nState.accelerometer.centerZ;
+            State = nState;
+        }
+
+        public void ConfigureClassicControllerPro(ClassicControllerPro ccpState)
         {
             ccpState.LJoy.rawX = (short)ccpState.LJoy.centerX;
             ccpState.LJoy.rawY = (short)ccpState.LJoy.centerY;
@@ -543,7 +560,19 @@ namespace Shared
             }
             else if (DeviceType == ControllerType.Nunchuk || DeviceType == ControllerType.NunchukB)
             {
-                
+                var nun = (Nunchuk)State;
+
+                var x = BitConverter.GetBytes(nun.joystick.rawX);
+                var y = BitConverter.GetBytes(nun.joystick.rawY);
+
+                buf[0] = x[0];
+                buf[1] = y[0];
+
+                // Generate Accelerometer bytes
+
+                buf[5] = 0x00;
+                buf[5] += (byte)(!nun.Z ? 0x01 : 0x00);
+                buf[5] += (byte)(!nun.C ? 0x02 : 0x00);
             }
             else if (DeviceType == ControllerType.ClassicController)
             {

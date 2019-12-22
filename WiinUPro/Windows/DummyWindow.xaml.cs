@@ -35,6 +35,19 @@ namespace WiinUPro.Windows
                         Device.State = new Wiimote();
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
+                    groupNun.Visibility = Visibility.Hidden;
+                    groupPad.Visibility = Visibility.Hidden;
+                    groupSticks.Visibility = Visibility.Hidden;
+                    groupTriggers.Visibility = Visibility.Hidden;
+                    gcnGrid.Visibility = Visibility.Hidden;
+                    break;
+
+                case ControllerType.Nunchuk:
+                    if (Device.State == null || !(Device.State is Nunchuk))
+                        Device.State = new Nunchuk();
+                    groupCore.Visibility = Visibility.Visible;
+                    wiimoteGrid.Visibility = Visibility.Visible;
+                    groupNun.Visibility = Visibility.Visible;
                     groupPad.Visibility = Visibility.Hidden;
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
@@ -46,6 +59,7 @@ namespace WiinUPro.Windows
                         Device.State = new ClassicControllerPro();
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
+                    groupNun.Visibility = Visibility.Hidden;
                     groupPad.Visibility = Visibility.Visible;
                     groupSticks.Visibility = Visibility.Visible;
                     groupTriggers.Visibility = Visibility.Hidden;
@@ -57,6 +71,7 @@ namespace WiinUPro.Windows
                         Device.State = new ProController();
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Hidden;
+                    groupNun.Visibility = Visibility.Hidden;
                     groupPad.Visibility = Visibility.Visible;
                     groupSticks.Visibility = Visibility.Visible;
                     groupTriggers.Visibility = Visibility.Hidden;
@@ -68,6 +83,7 @@ namespace WiinUPro.Windows
                         Device.State = new GameCubeAdapter();
                     groupCore.Visibility = Visibility.Hidden;
                     wiimoteGrid.Visibility = Visibility.Hidden;
+                    groupNun.Visibility = Visibility.Hidden;
                     groupPad.Visibility = Visibility.Hidden;
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
@@ -90,6 +106,10 @@ namespace WiinUPro.Windows
             else if (isWiimote)
             {
                 Device.State = ChangeWiiBoolean("w" + baseBtn, (Wiimote)Device.State);
+            }
+            else if (Device.State is Nunchuk)
+            {
+                Device.State = ChangeNunBoolean("n" + baseBtn, (Nunchuk)Device.State);
             }
             else if (Device.State is ClassicControllerPro)
             {
@@ -133,6 +153,10 @@ namespace WiinUPro.Windows
             if (isPro)
             {
                 Device.State = ChangeProAnalog("pro" + analogInput, value);
+            }
+            else if (Device.State is Nunchuk)
+            {
+                Device.State = ChangeNunAnalog("n" + analogInput, value);
             }
             else if (Device.State is ClassicControllerPro)
             {
@@ -203,6 +227,26 @@ namespace WiinUPro.Windows
             }
 
             return pro;
+        }
+
+        private Nunchuk ChangeNunAnalog(string property, float value)
+        {
+            Nunchuk nun = (Nunchuk)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.NUNCHUK.JOY_X:
+                    nun.joystick.X = value;
+                    nun.joystick.rawX = CalculateRaw(nun.joystick.minX, nun.joystick.maxX, value);
+                    break;
+
+                case INPUT_NAMES.NUNCHUK.JOY_Y:
+                    nun.joystick.Y = value;
+                    nun.joystick.rawY = CalculateRaw(nun.joystick.minY, nun.joystick.maxY, value);
+                    break;
+            }
+
+            return nun;
         }
 
         private ClassicControllerPro ChangeCcpAnalog(string property, float value)
@@ -308,6 +352,17 @@ namespace WiinUPro.Windows
             }
 
             return wiimote;
+        }
+
+        private Nunchuk ChangeNunBoolean(string property, Nunchuk nun)
+        {
+            switch (property)
+            {
+                case INPUT_NAMES.NUNCHUK.C: nun.C = !nun.C; break;
+                case INPUT_NAMES.NUNCHUK.Z: nun.Z = !nun.Z; break;
+            }
+
+            return nun;
         }
 
         private ClassicControllerPro ChangeCcpBoolean(string property)
