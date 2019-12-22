@@ -26,39 +26,52 @@ namespace WiinUPro.Windows
 
         public void SwitchType(ControllerType newType)
         {
+            Title = newType.ToString();
+
             switch (newType)
             {
                 case ControllerType.Wiimote:
                     if (Device.State == null || !(Device.State is Wiimote))
                         Device.State = new Wiimote();
                     groupCore.Visibility = Visibility.Visible;
+                    wiimoteGrid.Visibility = Visibility.Visible;
                     groupPad.Visibility = Visibility.Hidden;
-                    groupPro.Visibility = Visibility.Hidden;
-                    groupGPorts.Visibility = Visibility.Hidden;
-                    groupGButtons.Visibility = Visibility.Hidden;
-                    groupGSticks.Visibility = Visibility.Hidden;
+                    groupSticks.Visibility = Visibility.Hidden;
+                    groupTriggers.Visibility = Visibility.Hidden;
+                    gcnGrid.Visibility = Visibility.Hidden;
+                    break;
+
+                case ControllerType.ClassicControllerPro:
+                    if (Device.State == null || !(Device.State is ClassicControllerPro))
+                        Device.State = new ClassicControllerPro();
+                    groupCore.Visibility = Visibility.Visible;
+                    wiimoteGrid.Visibility = Visibility.Visible;
+                    groupPad.Visibility = Visibility.Visible;
+                    groupSticks.Visibility = Visibility.Visible;
+                    groupTriggers.Visibility = Visibility.Hidden;
+                    gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
                 case ControllerType.ProController:
                     if (Device.State == null || !(Device.State is ProController))
                         Device.State = new ProController();
                     groupCore.Visibility = Visibility.Visible;
+                    wiimoteGrid.Visibility = Visibility.Hidden;
                     groupPad.Visibility = Visibility.Visible;
-                    groupPro.Visibility = Visibility.Visible;
-                    groupGPorts.Visibility = Visibility.Hidden;
-                    groupGButtons.Visibility = Visibility.Hidden;
-                    groupGSticks.Visibility = Visibility.Hidden;
+                    groupSticks.Visibility = Visibility.Visible;
+                    groupTriggers.Visibility = Visibility.Hidden;
+                    gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
                 case ControllerType.Other:
                     if (Device.State == null || !(Device.State is GameCubeAdapter))
                         Device.State = new GameCubeAdapter();
                     groupCore.Visibility = Visibility.Hidden;
+                    wiimoteGrid.Visibility = Visibility.Hidden;
                     groupPad.Visibility = Visibility.Hidden;
-                    groupPro.Visibility = Visibility.Hidden;
-                    groupGPorts.Visibility = Visibility.Visible;
-                    groupGButtons.Visibility = Visibility.Visible;
-                    groupGSticks.Visibility = Visibility.Visible;
+                    groupSticks.Visibility = Visibility.Hidden;
+                    groupTriggers.Visibility = Visibility.Hidden;
+                    gcnGrid.Visibility = Visibility.Visible;
                     break;
             }
         }
@@ -76,96 +89,178 @@ namespace WiinUPro.Windows
             }
             else if (isWiimote)
             {
-                Device.State = ChangeWiiBoolean("w" + baseBtn);
+                Device.State = ChangeWiiBoolean("w" + baseBtn, (Wiimote)Device.State);
+            }
+            else if (Device.State is ClassicControllerPro)
+            {
+                if (baseBtn == "MINUS") baseBtn = "SELECT";
+                if (baseBtn == "PLUS") baseBtn = "START";
+
+                Device.State = ChangeCcpBoolean("ccp" + baseBtn);
             }
             else if (isGCN)
             {
                 Device.State = ChangeGCNBoolean("gcn" + baseBtn);
             }
         }
+
+        private void button_wii_Click(object sender, RoutedEventArgs e)
+        {
+            string baseBtn = (sender as FrameworkElement).Tag.ToString();
+
+            if (isPro)
+            {
+                if (baseBtn == "MINUS") baseBtn = "SELECT";
+                if (baseBtn == "PLUS") baseBtn = "START";
+
+                Device.State = ChangeProBoolean("pro" + baseBtn);
+            }
+            else if (isWiimote)
+            {
+                Device.State = ChangeWiiBoolean("w" + baseBtn, (Wiimote)Device.State);
+            }
+            else if (Device.State is IWiimoteExtension)
+            {
+                ((IWiimoteExtension)Device.State).wiimote = ChangeWiiBoolean("w" + baseBtn, ((IWiimoteExtension)Device.State).wiimote);
+            }
+        }
         
         private void ChangeAnalog(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             float value = (float)Math.Round(e.NewValue, 2);
+            string analogInput = (sender as FrameworkElement).Tag.ToString();
 
             if (isPro)
             {
-                ProController pro = (ProController)Device.State;
-
-                switch((sender as FrameworkElement).Tag.ToString())
-                {
-                    case "LX":
-                        pro.LJoy.X = value;
-                        pro.LJoy.rawX = CalculateRaw(pro.LJoy.minX, pro.LJoy.maxX, value);
-                        break;
-
-                    case "LY":
-                        pro.LJoy.Y = value;
-                        pro.LJoy.rawY = CalculateRaw(pro.LJoy.minY, pro.LJoy.maxY, value);
-                        break;
-
-                    case "RX":
-                        pro.RJoy.X = value;
-                        pro.RJoy.rawX = CalculateRaw(pro.RJoy.minX, pro.RJoy.maxX, value);
-                        break;
-
-                    case "RY":
-                        pro.RJoy.Y = value;
-                        pro.RJoy.rawY = CalculateRaw(pro.RJoy.minY, pro.RJoy.maxY, value);
-                        break;
-                }
-
-                Device.State = pro;
+                Device.State = ChangeProAnalog("pro" + analogInput, value);
+            }
+            else if (Device.State is ClassicControllerPro)
+            {
+                Device.State = ChangeCcpAnalog("ccp" + analogInput, value);
             }
             else if (isGCN)
             {
                 GameCubeAdapter gcn = (GameCubeAdapter)Device.State;
                 GameCubeController controller = GetFromSelectedPort(gcn);
 
-                switch ((sender as FrameworkElement).Tag.ToString())
-                {
-                    case "LX":
-                        controller.joystick.X = value;
-                        controller.joystick.rawX = CalculateRaw(controller.joystick.minX, controller.joystick.maxX, value);
-                        break;
+                if (analogInput == "LX") analogInput = "JoyX";
+                if (analogInput == "LY") analogInput = "JoyY";
+                if (analogInput == "RX") analogInput = "CX";
+                if (analogInput == "RY") analogInput = "CY";
 
-                    case "LY":
-                        controller.joystick.Y = value;
-                        controller.joystick.rawY = CalculateRaw(controller.joystick.minY, controller.joystick.maxY, value);
-                        break;
-
-                    case "RX":
-                        controller.cStick.X = value;
-                        controller.cStick.rawX = CalculateRaw(controller.cStick.minX, controller.joystick.maxX, value);
-                        break;
-
-                    case "RY":
-                        controller.cStick.Y = value;
-                        controller.cStick.rawY = CalculateRaw(controller.cStick.minX, controller.cStick.maxX, value);
-                        break;
-
-                    case "L":
-                        controller.L.full = value >= 0.9f;
-                        controller.L.value = value;
-                        controller.L.rawValue = (short)(value * 255);
-                        break;
-
-                    case "R":
-                        controller.R.full = value >= 0.9f;
-                        controller.R.value = value;
-                        controller.R.rawValue = (short)(value * 255);
-                        break;
-                }
-
-                Device.State = ApplyToSelectedPort(gcn, controller);
+                Device.State = ChangeGCNAnalog("gcn" + analogInput, value);
             }
         }
+
+        private void ChangeWiiAnalog(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            float value = (float)Math.Round(e.NewValue, 2);
+            string analogInput = (sender as FrameworkElement).Tag.ToString();
+
+            if (isWiimote)
+            {
+                Device.State = ChangeWiiAnalog("w" + analogInput, value, (Wiimote)Device.State);
+            }
+            else if (Device.State is IWiimoteExtension)
+            {
+                ((IWiimoteExtension)Device.State).wiimote = ChangeWiiAnalog("w" + analogInput, value, ((IWiimoteExtension)Device.State).wiimote);
+            }
+        }
+
+        #region Analog Modification
 
         private short CalculateRaw(int min, int max, float value)
         {
             var raw = (max - min) * ((value + 1)/2f) + min;
             return Convert.ToInt16(Math.Round(raw));
         }
+
+        private ProController ChangeProAnalog(string property, float value)
+        {
+            ProController pro = (ProController)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.PRO_CONTROLLER.LX:
+                    pro.LJoy.X = value;
+                    pro.LJoy.rawX = CalculateRaw(pro.LJoy.minX, pro.LJoy.maxX, value);
+                    break;
+
+                case INPUT_NAMES.PRO_CONTROLLER.LY:
+                    pro.LJoy.Y = value;
+                    pro.LJoy.rawY = CalculateRaw(pro.LJoy.minY, pro.LJoy.maxY, value);
+                    break;
+
+                case INPUT_NAMES.PRO_CONTROLLER.RX:
+                    pro.RJoy.X = value;
+                    pro.RJoy.rawX = CalculateRaw(pro.RJoy.minX, pro.RJoy.maxX, value);
+                    break;
+
+                case INPUT_NAMES.PRO_CONTROLLER.RY:
+                    pro.RJoy.Y = value;
+                    pro.RJoy.rawY = CalculateRaw(pro.RJoy.minY, pro.RJoy.maxY, value);
+                    break;
+            }
+
+            return pro;
+        }
+
+        private ClassicControllerPro ChangeCcpAnalog(string property, float value)
+        {
+            ClassicControllerPro ccp = (ClassicControllerPro)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LX:
+                    ccp.LJoy.X = value;
+                    ccp.LJoy.rawX = CalculateRaw(ccp.LJoy.minX, ccp.LJoy.maxX, value);
+                    break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LY:
+                    ccp.LJoy.Y = value;
+                    ccp.LJoy.rawY = CalculateRaw(ccp.LJoy.minY, ccp.LJoy.maxY, value);
+                    break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RX:
+                    ccp.RJoy.X = value;
+                    ccp.RJoy.rawX = CalculateRaw(ccp.RJoy.minX, ccp.RJoy.maxX, value);
+                    break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RY:
+                    ccp.RJoy.Y = value;
+                    ccp.RJoy.rawY = CalculateRaw(ccp.RJoy.minY, ccp.RJoy.maxY, value);
+                    break;
+            }
+
+            return ccp;
+        }
+
+        private Wiimote ChangeWiiAnalog(string property, float value, Wiimote wiimote)
+        {
+            switch(property)
+            {
+                case INPUT_NAMES.WIIMOTE.ACC_X:
+                    wiimote.accelerometer.X = value;
+                    wiimote.accelerometer.rawX = CalculateRaw(wiimote.accelerometer.minX, wiimote.accelerometer.maxX, value);
+                    break;
+
+                case INPUT_NAMES.WIIMOTE.ACC_Y:
+                    wiimote.accelerometer.Y = value;
+                    wiimote.accelerometer.rawY = CalculateRaw(wiimote.accelerometer.minY, wiimote.accelerometer.maxY, value);
+                    break;
+
+                case INPUT_NAMES.WIIMOTE.ACC_Z:
+                    wiimote.accelerometer.Z = value;
+                    wiimote.accelerometer.rawZ = CalculateRaw(wiimote.accelerometer.minZ, wiimote.accelerometer.maxZ, value);
+                    break;
+            }
+
+            return wiimote;
+        }
+
+        #endregion
+
+        #region Button Modification
 
         private ProController ChangeProBoolean(string property)
         {
@@ -195,27 +290,55 @@ namespace WiinUPro.Windows
             return pro;
         }
 
-        private Wiimote ChangeWiiBoolean(string property)
+        private Wiimote ChangeWiiBoolean(string property, Wiimote wiimote)
         {
-            Wiimote wii = (Wiimote)Device.State;
+            switch (property)
+            {
+                case INPUT_NAMES.WIIMOTE.A: wiimote.buttons.A = !wiimote.buttons.A; break;
+                case INPUT_NAMES.WIIMOTE.B: wiimote.buttons.B = !wiimote.buttons.B; break;
+                case INPUT_NAMES.WIIMOTE.UP: wiimote.buttons.Up = !wiimote.buttons.Up; break;
+                case INPUT_NAMES.WIIMOTE.DOWN: wiimote.buttons.Down = !wiimote.buttons.Down; break;
+                case INPUT_NAMES.WIIMOTE.LEFT: wiimote.buttons.Left = !wiimote.buttons.Left; break;
+                case INPUT_NAMES.WIIMOTE.RIGHT: wiimote.buttons.Right = !wiimote.buttons.Right; break;
+                case INPUT_NAMES.WIIMOTE.MINUS: wiimote.buttons.Minus = !wiimote.buttons.Minus; break;
+                case INPUT_NAMES.WIIMOTE.PLUS: wiimote.buttons.Plus = !wiimote.buttons.Plus; break;
+                case INPUT_NAMES.WIIMOTE.HOME: wiimote.buttons.Home = !wiimote.buttons.Home; break;
+                case INPUT_NAMES.WIIMOTE.ONE: wiimote.buttons.One = !wiimote.buttons.One; break;
+                case INPUT_NAMES.WIIMOTE.TWO: wiimote.buttons.Two = !wiimote.buttons.Two; break;
+            }
+
+            return wiimote;
+        }
+
+        private ClassicControllerPro ChangeCcpBoolean(string property)
+        {
+            ClassicControllerPro ccp = (ClassicControllerPro)Device.State;
 
             switch (property)
             {
-                case INPUT_NAMES.WIIMOTE.A: wii.buttons.A = !wii.buttons.A; break;
-                case INPUT_NAMES.WIIMOTE.B: wii.buttons.B = !wii.buttons.B; break;
-                case INPUT_NAMES.WIIMOTE.UP: wii.buttons.Up = !wii.buttons.Up; break;
-                case INPUT_NAMES.WIIMOTE.DOWN: wii.buttons.Down = !wii.buttons.Down; break;
-                case INPUT_NAMES.WIIMOTE.LEFT: wii.buttons.Left = !wii.buttons.Left; break;
-                case INPUT_NAMES.WIIMOTE.RIGHT: wii.buttons.Right = !wii.buttons.Right; break;
-                case INPUT_NAMES.WIIMOTE.MINUS: wii.buttons.Minus = !wii.buttons.Minus; break;
-                case INPUT_NAMES.WIIMOTE.PLUS: wii.buttons.Plus = !wii.buttons.Plus; break;
-                case INPUT_NAMES.WIIMOTE.HOME: wii.buttons.Home = !wii.buttons.Home; break;
-                case INPUT_NAMES.WIIMOTE.ONE: wii.buttons.One = !wii.buttons.One; break;
-                case INPUT_NAMES.WIIMOTE.TWO: wii.buttons.Two = !wii.buttons.Two; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.A: ccp.A = !ccp.A; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.B: ccp.B = !ccp.B; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.X: ccp.X = !ccp.X; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.Y: ccp.Y = !ccp.Y; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.L: ccp.L = !ccp.L; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.R: ccp.R = !ccp.R; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.ZL: ccp.ZL = !ccp.ZL; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.ZR: ccp.ZR = !ccp.ZR; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.UP: ccp.Up = !ccp.Up; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.DOWN: ccp.Down = !ccp.Down; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LEFT: ccp.Left = !ccp.Left; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RIGHT: ccp.Right = !ccp.Right; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.START: ccp.Start = !ccp.Start; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.SELECT: ccp.Minus = !ccp.Minus; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.HOME: ccp.Home = !ccp.Home; break;
             }
 
-            return wii;
+            return ccp;
         }
+
+        #endregion
+
+        #region GCN Modification
 
         private void PortChanged(object sender, RoutedEventArgs e)
         {
@@ -284,6 +407,81 @@ namespace WiinUPro.Windows
             }
 
             return ApplyToSelectedPort(gcn, controller);
+        }
+
+        private GameCubeAdapter ChangeGCNAnalog(string property, float value)
+        {
+            GameCubeAdapter gcn = (GameCubeAdapter)Device.State;
+            GameCubeController controller = GetFromSelectedPort(gcn);
+
+            switch (property)
+            {
+                case INPUT_NAMES.GCN_CONTROLLER.JOY_X:
+                    controller.joystick.X = value;
+                    controller.joystick.rawX = CalculateRaw(controller.joystick.minX, controller.joystick.maxX, value);
+                    break;
+
+                case INPUT_NAMES.GCN_CONTROLLER.JOY_Y:
+                    controller.joystick.Y = value;
+                    controller.joystick.rawY = CalculateRaw(controller.joystick.minY, controller.joystick.maxY, value);
+                    break;
+
+                case INPUT_NAMES.GCN_CONTROLLER.C_X:
+                    controller.cStick.X = value;
+                    controller.cStick.rawX = CalculateRaw(controller.cStick.minX, controller.joystick.maxX, value);
+                    break;
+
+                case INPUT_NAMES.GCN_CONTROLLER.C_Y:
+                    controller.cStick.Y = value;
+                    controller.cStick.rawY = CalculateRaw(controller.cStick.minX, controller.cStick.maxX, value);
+                    break;
+
+                case INPUT_NAMES.GCN_CONTROLLER.L:
+                case INPUT_NAMES.GCN_CONTROLLER.LT:
+                    controller.L.full = value >= 0.9f;
+                    controller.L.value = value;
+                    controller.L.rawValue = (short)(value * 255);
+                    break;
+
+                case INPUT_NAMES.GCN_CONTROLLER.R:
+                case INPUT_NAMES.GCN_CONTROLLER.RT:
+                    controller.R.full = value >= 0.9f;
+                    controller.R.value = value;
+                    controller.R.rawValue = (short)(value * 255);
+                    break;
+            }
+
+            switch (comboGPortSelect.SelectedIndex)
+            {
+                case 1: gcn.port2 = controller; break;
+                case 2: gcn.port3 = controller; break;
+                case 3: gcn.port4 = controller; break;
+                default: gcn.port1 = controller; break;
+            }
+
+            return ApplyToSelectedPort(gcn, controller);
+        }
+
+        #endregion
+
+        private void WiimoteExtensionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            string typeName = (comboExtSelect.SelectedValue as System.Windows.Controls.ComboBoxItem)?.Content as string;
+            if (Device != null && !string.IsNullOrEmpty(typeName))
+            {
+                typeName = typeName.Replace(" ", "");
+                ControllerType type = ControllerType.Unknown;
+                if (Enum.TryParse<ControllerType>(typeName, out type))
+                {
+                    Device.ChangeExtension(type);
+                    SwitchType(type);
+                }
+                else if (typeName == "None")
+                {
+                    Device.ChangeExtension(ControllerType.Wiimote);
+                    SwitchType(ControllerType.Wiimote);
+                }
+            }
         }
     }
 }

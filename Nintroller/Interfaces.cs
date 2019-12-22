@@ -15,7 +15,7 @@ namespace NintrollerLib
 
     public interface IWiimoteExtension
     {
-        Wiimote wiimote { get; }
+        Wiimote wiimote { get; set;  }
     }
 
     public interface INintrollerParsable
