@@ -158,6 +158,26 @@ namespace WiinUPro
                 _rightJoyOpen ? _lastState.RJoy : _lastState.LJoy,
                 filename ?? "");
             _openJoyWindow = joyCal;
+
+#if DEBUG
+            // This will allow for the dummy device window to retain focus
+            if (DeviceID.StartsWith("Dummy"))
+            {
+                joyCal.Closed += (obj, args) =>
+                {
+                    if (joyCal.Apply)
+                    {
+                        OnJoyCalibrated?.Invoke(joyCal.Calibration, joyTarget, joyCal.FileName);
+                    }
+
+                    _openJoyWindow = null;
+                };
+
+                joyCal.Show();
+                return;
+            }
+#endif
+
             joyCal.ShowDialog();
 
             if (joyCal.Apply)

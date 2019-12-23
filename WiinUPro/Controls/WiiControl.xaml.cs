@@ -395,6 +395,26 @@ namespace WiinUPro
 
             Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(nonCalibrated, curCalibration);
             _openJoyWindow = joyCal;
+
+#if DEBUG
+            // This will allow for the dummy device window to retain focus
+            if (DeviceID.StartsWith("Dummy"))
+            {
+                joyCal.Closed += (obj, args) =>
+                {
+                    if (joyCal.Apply)
+                    {
+                        OnJoystickCalibrated?.Invoke(joyCal.Calibration, _calibrationTarget, joyCal.FileName);
+                    }
+
+                    _openJoyWindow = null;
+                };
+
+                joyCal.Show();
+                return;
+            }
+#endif
+
             joyCal.ShowDialog();
 
             if (joyCal.Apply)
@@ -427,6 +447,25 @@ namespace WiinUPro
 
             Windows.TriggerCalibrationWindow trigCal = new Windows.TriggerCalibrationWindow(nonCalibrated, curCalibrated);
             _openTrigWindow = trigCal;
+
+#if DEBUG
+            if (DeviceID.StartsWith("Dummy"))
+            {
+                trigCal.Closed += (obj, args) =>
+                {
+                    if (trigCal.Apply)
+                    {
+                        OnTriggerCalibrated?.Invoke(trigCal.Calibration, _calibrationTarget, trigCal.FileName);
+                    }
+
+                    _openTrigWindow = null;
+                };
+                trigCal.Show();
+
+                return;
+            }
+#endif
+
             trigCal.ShowDialog();
 
             if (trigCal.Apply)
