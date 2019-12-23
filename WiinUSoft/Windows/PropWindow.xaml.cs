@@ -13,16 +13,14 @@ namespace WiinUSoft
         public bool customCalibrate = false;
         public Property props;
 
-        PropWindow(Property org) : this(org, "Controller", null, null) { }
+        PropWindow(Property org) : this(org, "Controller") { }
 
-        public PropWindow(Property org, string deviceName, string internalName, string serialNumber)
+        public PropWindow(Property org, string deviceName)
         {
             InitializeComponent();
 
             props = new Property(org);
             nameInput.Text = string.IsNullOrWhiteSpace(props.name) ? deviceName : props.name;
-            this.internalName.Text = internalName;
-            this.serialNumber.Text = serialNumber;
             defaultInput.Text = props.profile;
             autoCheckbox.IsChecked = props.autoConnect;
             if (props.autoNum >= 0 && props.autoNum <= autoConnectNumber.Items.Count)

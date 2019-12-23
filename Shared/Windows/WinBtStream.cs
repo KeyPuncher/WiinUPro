@@ -27,7 +27,6 @@ namespace Shared.Windows
     public class WinBtStream : CommonStream
     {
         #region Members
-        private const string wiimoteNameSuffix = "-TR";
         public static bool OverrideSharingMode = false;
         public static FileShare OverridenFileShare = FileShare.None;
         public static bool ForceToshibaMode = false;
@@ -293,68 +292,13 @@ namespace Shared.Windows
                             //}
 
                             var nintrollerType = attrib.ProductID == 0x0330 ? ControllerType.ProController : ControllerType.Wiimote;
-                            var deviceName = String.Empty;
-                            var serialNumber = String.Empty;
-                            var buffer = new byte[128 * sizeof(char)];                                
-                            if (HidD_GetProductString(hidHandle, buffer, (uint)buffer.Length))
-                            {
-                                deviceName = System.Text.UnicodeEncoding.Unicode.GetString(buffer).TrimEnd('\0');
-                            }
-
-                            buffer = new byte[128 * sizeof(char)];
-                            if (HidD_GetSerialNumberString(hidHandle, buffer, (uint)buffer.Length))
-                            {
-                                serialNumber = System.Text.UnicodeEncoding.Unicode.GetString(buffer).TrimEnd('\0');
-                            }
-
                             var newDeviceInfo = new DeviceInfo
                             {
                                 DevicePath = diDetail.devicePath,
-                                DeviceName = deviceName,
-                                SerialNumber = serialNumber,
-                                Type = nintrollerType,
+                                Type = nintrollerType,                                
                                 VID = attrib.VendorID.ToString("X4"),
                                 PID = attrib.ProductID.ToString("X4")
                             };
-
-                            // note: newer Wiimotes may identify as ProControllers via their ProductID
-                            // they reveal to be Wiimote only in their extension/status report
-                            // so make one roundtrip to ask the controller for its actual type
-                            using (var _stream = new WinBtStream(newDeviceInfo.DevicePath))
-                            {
-                                var _nintroller = new Nintroller(_stream, newDeviceInfo.PID);
-                                var extensionUpdated = false;
-                                _nintroller.ExtensionChange += (sender, e) =>
-                                {
-                                    if (e.controllerType != ControllerType.FalseState)
-                                    {
-                                        newDeviceInfo.Type = e.controllerType;
-                                    }
-
-                                    extensionUpdated = true;
-                                };
-
-                                if (_stream.OpenConnection())
-                                {
-                                    if (_nintroller.Type != ControllerType.Other)
-                                    {
-                                        _nintroller.BeginReading();
-                                        _nintroller.SetReportType(InputReport.ExtOnly, true);
-                                        _nintroller.GetStatus();
-                                        long elapsed = 10;
-                                        var await = new Task(() =>
-                                        {
-                                            while (elapsed-- > 0 && !extensionUpdated)
-                                            {
-                                                Thread.Sleep(250);
-                                            }
-                                        });
-
-                                        await.Start();
-                                        await.Wait();
-                                    }
-                                }
-                            }
 
                             result.Add(newDeviceInfo);
                         }

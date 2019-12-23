@@ -20,8 +20,6 @@ namespace Shared
 
         // For Wii/U Controllers
         public string DevicePath { get; set; }
-        public string DeviceName { get; set; }
-        public string SerialNumber { get; set; }
         public ControllerType Type { get; set; }
 
         // For Joysticks

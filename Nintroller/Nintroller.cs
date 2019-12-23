@@ -68,13 +68,10 @@ namespace NintrollerLib
         /// </summary>
         public ControllerType Type { get { return _currentType; } }
         /// <summary>
-        /// The HID device name
+        /// True if no connection has yet been established, and the vendor product code
+        /// does not uniquely identify the type of controller (WiiPro vs. Wiimote 0x330)
         /// </summary>
-        public string HIDDeviceName { get; set; }
-        /// <summary>
-        /// The HID serial number
-        /// </summary>
-        public string HIDSerialNumber { get; set; }
+        public bool IsControllerTypeAmbiguous { get; set; }
         /// <summary>
         /// The calibration settings applied to the respective controller types.
         /// </summary>
@@ -319,6 +316,10 @@ namespace NintrollerLib
         public Nintroller(Stream dataStream, ControllerType hintType) : this(dataStream)
         {
             _currentType = hintType;
+            if(hintType==ControllerType.ProController)
+            {
+                this.IsControllerTypeAmbiguous = true;
+            }
         }
 
         /// <summary>
