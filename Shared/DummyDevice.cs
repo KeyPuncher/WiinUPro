@@ -94,6 +94,12 @@ namespace Shared
                     ConfigureClassicControllerPro(ccpState);
                     break;
 
+                case ControllerType.Guitar:
+                    var guitar = new Guitar();
+                    guitar.SetCalibration(Calibrations.CalibrationPreset.Default);
+                    ConfigureGuitar(guitar);
+                    break;
+
                 default:
                     // Invalid
                     return;
@@ -147,6 +153,13 @@ namespace Shared
             ccpState.RJoy.rawX = (short)ccpState.RJoy.centerX;
             ccpState.RJoy.rawY = (short)ccpState.RJoy.centerY;
             State = ccpState;
+        }
+
+        public void ConfigureGuitar(Guitar guitar)
+        {
+            guitar.joystick.rawX = (short)guitar.joystick.centerX;
+            guitar.joystick.rawY = (short)guitar.joystick.centerY;
+            State = guitar;
         }
 
         public void ConfigureGameCubeAdapter(GameCubeAdapter gState)
@@ -480,8 +493,8 @@ namespace Shared
                 case ControllerType.MotionPlus:
                 case ControllerType.MotionPlusCC:
                 case ControllerType.MotionPlusNunchuk:
+                case ControllerType.Guitar:
                 //case ControllerType.Drums:
-                //case ControllerType.Guitar:
                 //case ControllerType.TaikoDrum:
                 //case ControllerType.TurnTable:
                 //case ControllerType.DrawTablet:
@@ -656,6 +669,32 @@ namespace Shared
                 buf[5] += (byte)(!ccp.Y ? 0x20 : 0x00);
                 buf[5] += (byte)(!ccp.B ? 0x40 : 0x00);
                 buf[5] += (byte)(!ccp.ZL ? 0x80 : 0x00);
+            }
+            else if (DeviceType == ControllerType.Guitar)
+            {
+                var g = (Guitar)State;
+
+                var x = BitConverter.GetBytes(g.joystick.rawX);
+                var y = BitConverter.GetBytes(g.joystick.rawY);
+
+                buf[0] = (byte)(x[0] + 0xC0);
+                buf[1] = (byte)(y[0] + 0xC0);
+
+                // Toucbar
+                // Whammy bar
+
+                buf[4] = 0xAB;
+                buf[4] += (byte)(!g.Plus ? 0x04 : 0x00);
+                buf[4] += (byte)(!g.Minus ? 0x10 : 0x00);
+                buf[4] += (byte)(!g.StrumDown ? 0x40 : 0x00);
+
+                buf[5] = 0x06;
+                buf[5] += (byte)(!g.StrumUp ? 0x01 : 0x00);
+                buf[5] += (byte)(!g.Yellow ? 0x08 : 0x00);
+                buf[5] += (byte)(!g.Green ? 0x10 : 0x00);
+                buf[5] += (byte)(!g.Blue ? 0x20 : 0x00);
+                buf[5] += (byte)(!g.Red ? 0x40 : 0x00);
+                buf[5] += (byte)(!g.Orange ? 0x80 : 0x00);
             }
 
             return buf;

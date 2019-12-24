@@ -98,7 +98,7 @@
                                         <MenuItem Header="250% Speed" Tag="n" Click="QuickAssignMouse_Click" />
                                         <MenuItem Header="300% Speed" Tag="n" Click="QuickAssignMouse_Click" />
                                     </MenuItem>
-                                    <MenuItem Header="WASD" Tag="nL" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="WASD" Tag="n" Click="QuickAssign_Click"/>
                                     <MenuItem Header="Arrows" Tag="n" Click="QuickAssign_Click"/>
                                 </MenuItem>
                                 <MenuItem Header="Calibrate" Tag="nJoy" Click="CalibrateJoystick_Click"/>
@@ -269,6 +269,57 @@
                                     <MenuItem Header="Arrows" Tag="ccpR" Click="QuickAssign_Click"/>
                                 </MenuItem>
                                 <MenuItem Header="Calibrate" Tag="ccpJoyR" Click="CalibrateJoystick_Click"/>
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image>
+                </Grid>
+            </Canvas>
+        </Viewbox>
+        <!-- Guitar -->
+        <Viewbox x:Name="viewGuitar" Width="1100" Visibility="Collapsed">
+            <Canvas Width="1772" Height="1110" Margin="-120,0,0,0" Background="Transparent">
+                <Grid Margin="0,0,0,0">
+                    <Image Source="/WiinUPro;component/Images/Controllers/Guitar/guitarBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1772" Height="1110"/>
+                    <Image x:Name="gBtnGreen" Source="/WiinUPro;component/Images/Controllers/Guitar/gFret.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1685,498,0,0" Width="64" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutG" />
+                    <Image x:Name="gBtnRed" Source="/WiinUPro;component/Images/Controllers/Guitar/gFret.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1575,498,0,0" Width="64" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutR" />
+                    <Image x:Name="gBtnYellow" Source="/WiinUPro;component/Images/Controllers/Guitar/gFret.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1466,498,0,0" Width="64" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutY" />
+                    <Image x:Name="gBtnBlue" Source="/WiinUPro;component/Images/Controllers/Guitar/gFret.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1356,498,0,0" Width="64" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutB" />
+                    <Image x:Name="gBtnOrange" Source="/WiinUPro;component/Images/Controllers/Guitar/gFret.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1246,498,0,0" Width="64" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutO" />
+                    <Image x:Name="gBtnStrumUp" Source="/WiinUPro;component/Images/Controllers/Guitar/gStrum.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="630,527,0,0" Width="283" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutSUp" />
+                    <Image x:Name="gBtnStrumDown" Source="/WiinUPro;component/Images/Controllers/Guitar/gStrum.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="630,566,0,0" Width="283" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutSDown" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="180"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Image x:Name="gBtnPlus" Source="/WiinUPro;component/Images/Controllers/Guitar/gButton.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="266,596,0,0" Width="59" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutMINUS" />
+                    <Image x:Name="gBtnMinus" Source="/WiinUPro;component/Images/Controllers/Guitar/gButton.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="167,664,0,0" Width="59" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutPLUS" />
+                    <!-- Joystick -->
+                    <Image x:Name="gStick" Source="/WiinUPro;component/Images/Controllers/Guitar/gJoystick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1236,283,0,0" Width="77" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
+                        <Image.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Up" Tag="gutUP" Click="OpenInput"/>
+                                <MenuItem Header="Left" Tag="gutLEFT" Click="OpenInput"/>
+                                <MenuItem Header="Right" Tag="gutRIGHT" Click="OpenInput"/>
+                                <MenuItem Header="Down" Tag="gutDOWN" Click="OpenInput"/>
+                                <Separator/>
+                                <MenuItem Header="Quick Assign">
+                                    <MenuItem Header="Mouse">
+                                        <MenuItem Header="50% Speed" Tag="gut" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="100% Speed" Tag="gut" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="150% Speed" Tag="gut" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="200% Speed" Tag="gut" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="250% Speed" Tag="gut" Click="QuickAssignMouse_Click" />
+                                        <MenuItem Header="300% Speed" Tag="gut" Click="QuickAssignMouse_Click" />
+                                    </MenuItem>
+                                    <MenuItem Header="WASD" Tag="gut" Click="QuickAssign_Click"/>
+                                    <MenuItem Header="Arrows" Tag="gut" Click="QuickAssign_Click"/>
+                                </MenuItem>
+                                <MenuItem Header="Calibrate" Tag="gutJoy" Click="CalibrateJoystick_Click"/>
                             </ContextMenu>
                         </Image.ContextMenu>
                     </Image>

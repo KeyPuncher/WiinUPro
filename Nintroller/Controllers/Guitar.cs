@@ -102,6 +102,8 @@ namespace NintrollerLib
                         T1 = T2 = T3 = T4 = false;
                         break;
                 }
+
+                joystick.Normalize();
             }
 
             wiimote = new Wiimote(data, wiimote);

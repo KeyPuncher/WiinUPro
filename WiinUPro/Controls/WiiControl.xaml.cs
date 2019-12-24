@@ -48,6 +48,7 @@ namespace WiinUPro
                 if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
                 if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
                 if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
+                if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
 
                 UpdateWiimoteVisual((Wiimote)state);
             }
@@ -56,6 +57,7 @@ namespace WiinUPro
                 if (viewNunchuk.Visibility != Visibility.Visible) viewNunchuk.Visibility = Visibility.Visible;
                 if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
                 if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
+                if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
 
                 var nun = (Nunchuk)state;
                 UpdateWiimoteVisual(nun.wiimote);
@@ -74,6 +76,7 @@ namespace WiinUPro
                 if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
                 if (viewClassicController.Visibility != Visibility.Visible) viewClassicController.Visibility = Visibility.Visible;
                 if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
+                if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
 
                 var cc = (ClassicController)state;
                 UpdateWiimoteVisual(cc.wiimote);
@@ -113,6 +116,7 @@ namespace WiinUPro
                 if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
                 if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
                 if (viewClassicControllerPro.Visibility != Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Visible;
+                if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
 
                 var ccp = (ClassicControllerPro)state;
                 UpdateWiimoteVisual(ccp.wiimote);
@@ -140,6 +144,33 @@ namespace WiinUPro
                 {
                     if (_calibrationTarget == App.CAL_CCP_LJOYSTICK) _openJoyWindow.Update(ccp.LJoy);
                     else if (_calibrationTarget == App.CAL_CCP_RJOYSTICK) _openJoyWindow.Update(ccp.RJoy);
+                }
+            }
+            else if (state is Guitar)
+            {
+                if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
+                if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
+                if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
+                if (viewGuitar.Visibility != Visibility.Visible) viewGuitar.Visibility = Visibility.Visible;
+
+                var gut = (Guitar)state;
+                UpdateWiimoteVisual(gut.wiimote);
+
+                gBtnGreen.Opacity = gut.Green ? 1 : 0;
+                gBtnRed.Opacity = gut.Red ? 1 : 0;
+                gBtnYellow.Opacity = gut.Yellow ? 1 : 0;
+                gBtnBlue.Opacity = gut.Blue ? 1 : 0;
+                gBtnOrange.Opacity = gut.Orange ? 1 : 0;
+                gBtnStrumUp.Opacity = gut.StrumUp ? 1 : 0;
+                gBtnStrumDown.Opacity = gut.StrumDown ? 1 : 0;
+                gBtnPlus.Opacity = gut.Plus ? 1 : 0;
+                gBtnMinus.Opacity = gut.Minus ? 1 : 0;
+                gStick.Margin = new Thickness(1236 + 30 * gut.joystick.X, 283 - 30 * gut.joystick.Y, 0, 0);
+                gStick.Margin = new Thickness(1236 + 30 * gut.joystick.X, 283 - 30 * gut.joystick.Y, 0, 0);
+
+                if (_openJoyWindow != null && _calibrationTarget == App.CAL_GUT_JOYSTICK)
+                {
+                    _openJoyWindow.Update(gut.joystick);
                 }
             }
         }
@@ -389,6 +420,10 @@ namespace WiinUPro
                 case App.CAL_CCP_RJOYSTICK:
                     nonCalibrated = Calibrations.None.ClassicControllerProRaw.RJoy;
                     if (_lastState is ClassicControllerPro) curCalibration = ((ClassicControllerPro)_lastState).RJoy;
+                    break;
+                case App.CAL_GUT_JOYSTICK:
+                    nonCalibrated = Calibrations.None.GuitarRaw.joystick;
+                    if (_lastState is Guitar) curCalibration = ((Guitar)_lastState).joystick;
                     break;
                 default: return;
             }

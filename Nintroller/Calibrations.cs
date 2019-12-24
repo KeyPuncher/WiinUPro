@@ -239,14 +239,14 @@
             {
                 joystick = new Joystick()
                 {
-                    centerX = 15,
+                    centerX = 31,
                     minX = 0,
-                    maxX = 31,
+                    maxX = 63,
                     deadX = 0,
 
-                    centerY = 15,
+                    centerY = 31,
                     minY = 0,
-                    maxY = 31,
+                    maxY = 63,
                     deadY = 0
                 }
             };
@@ -476,15 +476,15 @@
             {
                 joystick = new Joystick()
                 {
-                    centerX = 15,
+                    centerX = 31,
                     minX = 0,
-                    maxX = 31,
-                    deadX = 1,
+                    maxX = 63,
+                    deadX = 2,
 
-                    centerY = 15,
+                    centerY = 31,
                     minY = 0,
-                    maxY = 31,
-                    deadY = 1
+                    maxY = 63,
+                    deadY = 2
                 }
             };
 
@@ -721,15 +721,15 @@
             {
                 joystick = new Joystick()
                 {
-                    centerX = 15,
+                    centerX = 31,
                     minX = 0,
-                    maxX = 31,
-                    deadX = 2,
+                    maxX = 63,
+                    deadX = 4,
 
-                    centerY = 15,
+                    centerY = 31,
                     minY = 0,
-                    maxY = 31,
-                    deadY = 2
+                    maxY = 63,
+                    deadY = 4
                 }
             };
 
@@ -958,15 +958,15 @@
             {
                 joystick = new Joystick()
                 {
-                    centerX = 15,
-                    minX = 4,
-                    maxX = 27,
-                    deadX = 4,
+                    centerX = 31,
+                    minX = 8,
+                    maxX = 55,
+                    deadX = 8,
 
-                    centerY = 15,
-                    minY = 4,
-                    maxY = 27,
-                    deadY = 4
+                    centerY = 31,
+                    minY = 8,
+                    maxY = 55,
+                    deadY = 8
                 }
             };
 
@@ -1195,15 +1195,15 @@
             {
                 joystick = new Joystick()
                 {
-                    centerX = 15,
-                    minX = 6,
-                    maxX = 25,
-                    deadX = 5,
+                    centerX = 31,
+                    minX = 12,
+                    maxX = 51,
+                    deadX = 10,
 
-                    centerY = 15,
-                    minY = 6,
-                    maxY = 25,
-                    deadY = 5
+                    centerY = 31,
+                    minY = 12,
+                    maxY = 51,
+                    deadY = 10
                 }
             };
             /// <summary>

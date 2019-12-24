@@ -41,6 +41,7 @@ namespace WiinUPro
             var element = sender as FrameworkElement;
             var tag = element == null ? "" : _inputPrefix + element.Tag as string;
 
+            // TOOD: Solve issue where this is being triggered twice for the guitar
             // Open input assignment window
             if (OnInputSelected != null && tag != null)
             {

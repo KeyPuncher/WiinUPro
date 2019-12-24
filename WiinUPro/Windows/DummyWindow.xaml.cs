@@ -18,6 +18,7 @@ namespace WiinUPro.Windows
         bool isClassic { get { return Device.State is ClassicController; } }
         bool isClassicPro { get { return Device.State is ClassicControllerPro; } }
         bool isPro { get { return Device.State is ProController; } }
+        bool isGuitar { get { return Device.State is Guitar; } }
         bool isGCN { get { return Device.State is GameCubeAdapter; } }
 
         public DummyWindow(DummyDevice device)
@@ -42,6 +43,7 @@ namespace WiinUPro.Windows
                     groupPad.Visibility = Visibility.Hidden;
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
+                    groupGuitar.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
@@ -54,6 +56,7 @@ namespace WiinUPro.Windows
                     groupPad.Visibility = Visibility.Hidden;
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
+                    groupGuitar.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
@@ -66,6 +69,7 @@ namespace WiinUPro.Windows
                     groupPad.Visibility = Visibility.Visible;
                     groupSticks.Visibility = Visibility.Visible;
                     groupTriggers.Visibility = Visibility.Visible;
+                    groupGuitar.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
@@ -78,11 +82,12 @@ namespace WiinUPro.Windows
                     groupPad.Visibility = Visibility.Visible;
                     groupSticks.Visibility = Visibility.Visible;
                     groupTriggers.Visibility = Visibility.Hidden;
+                    groupGuitar.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
                 case ControllerType.ProController:
-                    if (Device.State == null || !(Device.State is ProController))
+                    if (Device.State == null || !isPro)
                         Device.State = new ProController();
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Hidden;
@@ -90,11 +95,25 @@ namespace WiinUPro.Windows
                     groupPad.Visibility = Visibility.Visible;
                     groupSticks.Visibility = Visibility.Visible;
                     groupTriggers.Visibility = Visibility.Hidden;
+                    groupGuitar.Visibility = Visibility.Hidden;
+                    gcnGrid.Visibility = Visibility.Hidden;
+                    break;
+
+                case ControllerType.Guitar:
+                    if (Device.State == null || !isGuitar)
+                        Device.State = new Guitar();
+                    groupCore.Visibility = Visibility.Visible;
+                    wiimoteGrid.Visibility = Visibility.Visible;
+                    groupNun.Visibility = Visibility.Hidden;
+                    groupPad.Visibility = Visibility.Hidden;
+                    groupSticks.Visibility = Visibility.Hidden;
+                    groupTriggers.Visibility = Visibility.Hidden;
+                    groupGuitar.Visibility = Visibility.Visible;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
                 case ControllerType.Other:
-                    if (Device.State == null || !(Device.State is GameCubeAdapter))
+                    if (Device.State == null || !isGCN)
                         Device.State = new GameCubeAdapter();
                     groupCore.Visibility = Visibility.Hidden;
                     wiimoteGrid.Visibility = Visibility.Hidden;
@@ -102,6 +121,7 @@ namespace WiinUPro.Windows
                     groupPad.Visibility = Visibility.Hidden;
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
+                    groupGuitar.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Visible;
                     break;
             }
@@ -136,6 +156,10 @@ namespace WiinUPro.Windows
                 if (baseBtn == "PLUS") baseBtn = "START";
 
                 Device.State = ChangeCcpBoolean("ccp" + baseBtn);
+            }
+            else if (isGuitar)
+            {
+                Device.State = ChangeGuitarBoolean("gut" + baseBtn);
             }
             else if (isGCN)
             {
@@ -184,6 +208,10 @@ namespace WiinUPro.Windows
             else if (isClassicPro)
             {
                 Device.State = ChangeCcpAnalog("ccp" + analogInput, value);
+            }
+            else if (isGuitar)
+            {
+                Device.State = ChangeGuitarAnalog("gut" + analogInput, value);
             }
             else if (isGCN)
             {
@@ -342,6 +370,26 @@ namespace WiinUPro.Windows
             return ccp;
         }
 
+        private Guitar ChangeGuitarAnalog(string property, float value)
+        {
+            Guitar gut = (Guitar)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.GUITAR.JOY_X:
+                    gut.joystick.X = value;
+                    gut.joystick.rawX = CalculateRaw(gut.joystick.minX, gut.joystick.maxX, value);
+                    break;
+
+                case INPUT_NAMES.GUITAR.JOY_Y:
+                    gut.joystick.Y = value;
+                    gut.joystick.rawY = CalculateRaw(gut.joystick.minY, gut.joystick.maxY, value);
+                    break;
+            }
+
+            return gut;
+        }
+
         private Wiimote ChangeWiiAnalog(string property, float value, Wiimote wiimote)
         {
             switch(property)
@@ -478,6 +526,26 @@ namespace WiinUPro.Windows
             }
 
             return ccp;
+        }
+
+        private Guitar ChangeGuitarBoolean(string property)
+        {
+            Guitar gut = (Guitar)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.GUITAR.GREEN: gut.Green = !gut.Green; break;
+                case INPUT_NAMES.GUITAR.RED: gut.Red = !gut.Red; break;
+                case INPUT_NAMES.GUITAR.YELLOW: gut.Yellow = !gut.Yellow; break;
+                case INPUT_NAMES.GUITAR.BLUE: gut.Blue = !gut.Blue; break;
+                case INPUT_NAMES.GUITAR.ORANGE: gut.Orange = !gut.Orange; break;
+                case INPUT_NAMES.GUITAR.STRUM_UP: gut.StrumUp = !gut.StrumUp; break;
+                case INPUT_NAMES.GUITAR.STRUM_DOWN: gut.StrumDown = !gut.StrumDown; break;
+                case INPUT_NAMES.GUITAR.PLUS: gut.Plus = !gut.Plus; break;
+                case INPUT_NAMES.GUITAR.MINUS: gut.Minus = !gut.Minus; break;
+            }
+
+            return gut;
         }
 
         #endregion

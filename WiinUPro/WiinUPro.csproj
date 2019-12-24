@@ -559,11 +559,19 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Controllers\Guitar\gButton.png" />
+    <Resource Include="Images\Controllers\Guitar\gFret.png" />
+    <Resource Include="Images\Controllers\Guitar\gJoystick.png" />
+    <Resource Include="Images\Controllers\Guitar\gStrum.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Controllers\GameCube\gcnBase.png" />
     <Resource Include="Images\Controllers\GameCube\gcnCStick.png" />
     <Resource Include="Images\Controllers\GameCube\gcnJoy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\Guitar\guitarBase.png" />
   </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
