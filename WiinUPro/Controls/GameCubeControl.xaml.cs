@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using NintrollerLib;
 using Shared;
 
@@ -62,6 +63,22 @@ namespace WiinUPro
 
                 L.Opacity = activePort.L.value > 0 ? 1 : 0;
                 R.Opacity = activePort.R.value > 0 ? 1 : 0;
+
+                var lOpacityMask = L.OpacityMask as LinearGradientBrush;
+                if (lOpacityMask != null && lOpacityMask.GradientStops.Count == 2)
+                {
+                    double offset = 1 - System.Math.Min(1, activePort.L.value);
+                    lOpacityMask.GradientStops[0].Offset = offset;
+                    lOpacityMask.GradientStops[1].Offset = offset;
+                }
+
+                var rOpacityMask = R.OpacityMask as LinearGradientBrush;
+                if (rOpacityMask != null && rOpacityMask.GradientStops.Count == 2)
+                {
+                    double offset = 1 - System.Math.Min(1, activePort.R.value);
+                    rOpacityMask.GradientStops[0].Offset = offset;
+                    rOpacityMask.GradientStops[1].Offset = offset;
+                }
 
                 joystick.Margin = new Thickness(190 + 100 * activePort.joystick.X, 272 - 100 * activePort.joystick.Y, 0, 0);
                 cStick.Margin = new Thickness(887 + 100 * activePort.cStick.X, 618 - 100 * activePort.cStick.Y, 0, 0);
