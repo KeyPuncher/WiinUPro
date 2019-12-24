@@ -20,6 +20,7 @@ using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using static Shared.Windows.NativeImports;
 using NintrollerLib;
+using System.Threading.Tasks;
 
 namespace Shared.Windows
 {
@@ -273,7 +274,8 @@ namespace Shared.Windows
                     attrib.Size = Marshal.SizeOf(attrib);
 
                     // Populate Attributes
-                    if (HidD_GetAttributes(handle.DangerousGetHandle(), ref attrib))
+                    var hidHandle = handle.DangerousGetHandle();
+                    if (HidD_GetAttributes(hidHandle, ref attrib))
                     {
                         // Check if this is a compatable device
                         if (attrib.VendorID == 0x057e && (attrib.ProductID == 0x0306 || attrib.ProductID == 0x0330))
@@ -289,13 +291,16 @@ namespace Shared.Windows
                             //    AssociatedStack.Add(diDetail.devicePath, associatedStack);
                             //}
 
-                            result.Add(new DeviceInfo
+                            var nintrollerType = attrib.ProductID == 0x0330 ? ControllerType.ProController : ControllerType.Wiimote;
+                            var newDeviceInfo = new DeviceInfo
                             {
                                 DevicePath = diDetail.devicePath,
-                                Type = attrib.ProductID == 0x0330 ? ControllerType.ProController : ControllerType.Wiimote,
+                                Type = nintrollerType,                                
                                 VID = attrib.VendorID.ToString("X4"),
                                 PID = attrib.ProductID.ToString("X4")
-                            });
+                            };
+
+                            result.Add(newDeviceInfo);
                         }
                     }
 
@@ -314,7 +319,6 @@ namespace Shared.Windows
 
             return result;
         }
-        
 
         #region System.IO.Stream Properties
         public override bool CanRead { get { return _fileStream?.CanRead ?? false; } }

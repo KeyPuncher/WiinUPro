@@ -7,6 +7,7 @@ using NintrollerLib;
 using System.Xml.Serialization;
 using System.IO;
 using Shared.Windows;
+using System.Windows.Threading;
 
 namespace WiinUSoft
 {
@@ -138,7 +139,7 @@ namespace WiinUSoft
             properties = UserPrefs.Instance.GetDevicePref(devicePath);
             if (properties != null)
             {
-                SetName(string.IsNullOrWhiteSpace(properties.name) ? device.Type.ToString() : properties.name);
+                this.SetNameIfNotConfigured(device.Type.ToString());
                 ApplyCalibration(properties.calPref, properties.calString ?? "");
                 snapIRpointer = properties.pointerMode != Property.PointerOffScreenMode.Center;
                 if (!string.IsNullOrEmpty(properties.lastIcon))
@@ -152,6 +153,11 @@ namespace WiinUSoft
                 UpdateIcon(device.Type);
                 SetName(device.Type.ToString());
             }
+        }
+
+        internal void SetNameIfNotConfigured(string newName)
+        {
+            this.SetName(String.IsNullOrWhiteSpace(properties.name) ? newName : properties.name);
         }
 
         public void SetName(string newName)
@@ -241,16 +247,20 @@ namespace WiinUSoft
 
         void device_ExtensionChange(object sender, NintrollerExtensionEventArgs e)
         {
-            DeviceType = e.controllerType;
-
+            this.device.IsControllerTypeAmbiguous = false;
             if (holder != null)
             {
-                holder.AddMapping(DeviceType);
+                holder.AddMapping(e.controllerType);
             }
 
-            Application.Current.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, 
-                new Action(() => UpdateIcon(DeviceType)
-            ));
+            this.DeviceType = e.controllerType;
+            Application.Current.Dispatcher.BeginInvoke(
+                DispatcherPriority.Background,
+                new Action(() => {
+                    UpdateIcon(DeviceType);
+                    this.SetNameIfNotConfigured(this.DeviceType.ToString());
+                })
+            );
         }
 
         void device_LowBattery(object sender, LowBatteryEventArgs e)
@@ -804,7 +814,14 @@ namespace WiinUSoft
             if (wasConnected || ((device.DataStream as WinBtStream).OpenConnection() && device.DataStream.CanRead))
             {
                 if (!wasConnected)
+                {
                     device.BeginReading();
+                    if (device.IsControllerTypeAmbiguous)
+                    {
+                        //device.SetReportType(InputReport.ExtOnly, continuous: false);
+                        device.GetStatus();
+                    }
+                }
 
                 identifying = true;
                 device.RumbleEnabled = true;

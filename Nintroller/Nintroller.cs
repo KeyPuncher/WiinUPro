@@ -69,6 +69,11 @@ namespace NintrollerLib
         /// </summary>
         public ControllerType Type { get { return _currentType; } }
         /// <summary>
+        /// True if no connection has yet been established, and the vendor product code
+        /// does not uniquely identify the type of controller (WiiPro vs. Wiimote 0x330)
+        /// </summary>
+        public bool IsControllerTypeAmbiguous { get; set; }
+        /// <summary>
         /// The calibration settings applied to the respective controller types.
         /// </summary>
         public CalibrationStorage StoredCalibrations { get { return _calibrations; } }
@@ -312,6 +317,10 @@ namespace NintrollerLib
         public Nintroller(Stream dataStream, ControllerType hintType) : this(dataStream)
         {
             _currentType = hintType;
+            if(hintType==ControllerType.ProController)
+            {
+                this.IsControllerTypeAmbiguous = true;
+            }
         }
 
         /// <summary>
