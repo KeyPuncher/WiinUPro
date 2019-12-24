@@ -15,12 +15,12 @@ namespace WiinUSoft
 
         PropWindow(Property org) : this(org, "Controller") { }
 
-        public PropWindow(Property org, string defalutName)
+        public PropWindow(Property org, string deviceName)
         {
             InitializeComponent();
 
             props = new Property(org);
-            nameInput.Text = string.IsNullOrWhiteSpace(props.name) ? defalutName : props.name;
+            nameInput.Text = string.IsNullOrWhiteSpace(props.name) ? deviceName : props.name;
             defaultInput.Text = props.profile;
             autoCheckbox.IsChecked = props.autoConnect;
             if (props.autoNum >= 0 && props.autoNum <= autoConnectNumber.Items.Count)
