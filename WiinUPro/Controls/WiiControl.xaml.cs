@@ -476,9 +476,7 @@ namespace WiinUPro
 
             var nonCalibrated = new NintrollerLib.Trigger();
             var curCalibrated = new NintrollerLib.Trigger();
-
-            if (!(_lastState is ClassicController)) return;
-
+            
             if (_calibrationTarget == App.CAL_CC_RTRIGGER)
             {
                 nonCalibrated = Calibrations.None.ClassicControllerRaw.R;
@@ -493,6 +491,10 @@ namespace WiinUPro
             {
                 nonCalibrated = Calibrations.None.GuitarRaw.whammyBar;
                 curCalibrated = ((Guitar)_lastState).whammyBar;
+            }
+            else
+            {
+                return;
             }
 
             Windows.TriggerCalibrationWindow trigCal = new Windows.TriggerCalibrationWindow(nonCalibrated, curCalibrated);
