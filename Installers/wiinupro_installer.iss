@@ -1,6 +1,6 @@
 ;Inno Setup 6
 #define MyAppName "WiinUPro"
-#define MyAppVersion "0.9.3"
+#define MyAppVersion "0.9.4"
 #define MyAppPublisher "Justin Keys"
 #define MyAppURL "https://github.com/KeyPuncher/WiinUPro/releases"
 #define MyAppExeName "WiinUPro.exe"
@@ -128,22 +128,22 @@ end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
-  FileName: String;
+  DirName: String;
 begin
   if CurUninstallStep = usPostUninstall then
   begin
-    FileName := ExpandConstant('{userappdata}') + '\WiinUSoft_prefs.config';
-    if FileExists(FileName) then
+    DirName := ExpandConstant('{userappdata}') + '\WiinUPro';
+    if DirExists(DirName) then
       begin
         if (GetUninstallString() = '') then
           begin
-            if MsgBox('Do you want to delete your saved WiinUSoft preferences ?',
+            if MsgBox('Do you want to delete your saved WiinUPro preferences ?',
               mbConfirmation, MB_YESNO) = IDYES
             then
-              DeleteFile(FileName);
+              DelTree(DirName, True, True, True);
           end
         else
-          DeleteFile(FileName);
+          DelTree(DirName, True, True, True);
       end;
   end;
 end;
@@ -254,7 +254,7 @@ begin
   Result := False;
   if (GetUninstallString() <> '') then
   begin
-    if MsgBox('There is another version of WiinUSoft installed. Uninstall it?',
+    if MsgBox('There is another version of WiinUPro installed. Uninstall it?',
       mbConfirmation, MB_YESNO) = IDYES
     then
       Result := True;
