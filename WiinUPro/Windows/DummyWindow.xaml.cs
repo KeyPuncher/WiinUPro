@@ -385,6 +385,11 @@ namespace WiinUPro.Windows
                     gut.joystick.Y = value;
                     gut.joystick.rawY = CalculateRaw(gut.joystick.minY, gut.joystick.maxY, value);
                     break;
+
+                case INPUT_NAMES.GUITAR.WHAMMY_BAR:
+                    gut.whammyBar.value = value;
+                    gut.whammyBar.rawValue = (short)((gut.whammyBar.max - gut.whammyBar.min) * value);
+                    break;
             }
 
             return gut;
@@ -543,6 +548,11 @@ namespace WiinUPro.Windows
                 case INPUT_NAMES.GUITAR.STRUM_DOWN: gut.StrumDown = !gut.StrumDown; break;
                 case INPUT_NAMES.GUITAR.PLUS: gut.Plus = !gut.Plus; break;
                 case INPUT_NAMES.GUITAR.MINUS: gut.Minus = !gut.Minus; break;
+                case INPUT_NAMES.GUITAR.TOUCH_1: gut.T1 = !gut.T1; break;
+                case INPUT_NAMES.GUITAR.TOUCH_2: gut.T2 = !gut.T2; break;
+                case INPUT_NAMES.GUITAR.TOUCH_3: gut.T3 = !gut.T3; break;
+                case INPUT_NAMES.GUITAR.TOUCH_4: gut.T4 = !gut.T4; break;
+                case INPUT_NAMES.GUITAR.TOUCH_5: gut.T5 = !gut.T5; break;
             }
 
             return gut;

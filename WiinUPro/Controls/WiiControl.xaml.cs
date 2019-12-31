@@ -165,12 +165,22 @@ namespace WiinUPro
                 gBtnStrumDown.Opacity = gut.StrumDown ? 1 : 0;
                 gBtnPlus.Opacity = gut.Plus ? 1 : 0;
                 gBtnMinus.Opacity = gut.Minus ? 1 : 0;
+                gTouch1.Opacity = gut.T1 ? 1 : 0;
+                gTouch2.Opacity = gut.T2 ? 1 : 0;
+                gTouch3.Opacity = gut.T3 ? 1 : 0;
+                gTouch4.Opacity = gut.T4 ? 1 : 0;
+                gTouch5.Opacity = gut.T5 ? 1 : 0;
                 gStick.Margin = new Thickness(1236 + 30 * gut.joystick.X, 283 - 30 * gut.joystick.Y, 0, 0);
                 gStick.Margin = new Thickness(1236 + 30 * gut.joystick.X, 283 - 30 * gut.joystick.Y, 0, 0);
+                gWhammy.Margin = new Thickness(345 + 60 * gut.whammyBar.value, 815 - 20 * gut.whammyBar.value, 0, 0);
 
                 if (_openJoyWindow != null && _calibrationTarget == App.CAL_GUT_JOYSTICK)
                 {
                     _openJoyWindow.Update(gut.joystick);
+                }
+                else if (_openTrigWindow != null && _calibrationTarget == App.CAL_GUT_WHAMMY)
+                {
+                    _openTrigWindow.Update(gut.whammyBar);
                 }
             }
         }
@@ -478,6 +488,11 @@ namespace WiinUPro
             {
                 nonCalibrated = Calibrations.None.ClassicControllerRaw.L;
                 curCalibrated = ((ClassicController)_lastState).L;
+            }
+            else if (_calibrationTarget == App.CAL_GUT_WHAMMY)
+            {
+                nonCalibrated = Calibrations.None.GuitarRaw.whammyBar;
+                curCalibrated = ((Guitar)_lastState).whammyBar;
             }
 
             Windows.TriggerCalibrationWindow trigCal = new Windows.TriggerCalibrationWindow(nonCalibrated, curCalibrated);

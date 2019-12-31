@@ -197,6 +197,10 @@
             public const string PLUS = "gutPLUS";
             public const string MINUS = "gutMINUS";
 
+            public const string WHAMMY = "gutW";
+            public const string WHAMMY_BAR = "gutWT";
+            public const string WHAMMY_FULL = "gutWFULL";
+
             public const string JOY_X = "gutJoyX";
             public const string JOY_Y = "gutJoyY";
 

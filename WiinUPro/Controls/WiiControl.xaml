@@ -276,7 +276,7 @@
             </Canvas>
         </Viewbox>
         <!-- Guitar -->
-        <Viewbox x:Name="viewGuitar" Width="1100" Visibility="Collapsed">
+        <Viewbox x:Name="viewGuitar" Width="1100" Visibility="Visible">
             <Canvas Width="1772" Height="1110" Margin="-120,0,0,0" Background="Transparent">
                 <Grid Margin="0,0,0,0">
                     <Image Source="/WiinUPro;component/Images/Controllers/Guitar/guitarBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1772" Height="1110"/>
@@ -298,6 +298,21 @@
                     </Image>
                     <Image x:Name="gBtnPlus" Source="/WiinUPro;component/Images/Controllers/Guitar/gButton.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="266,596,0,0" Width="59" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutMINUS" />
                     <Image x:Name="gBtnMinus" Source="/WiinUPro;component/Images/Controllers/Guitar/gButton.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="167,664,0,0" Width="59" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutPLUS" />
+                    <Image x:Name="gTouch1" Source="/WiinUPro;component/Images/Controllers/Guitar/gTouch.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="613,322,0,0" Width="90" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutT1" />
+                    <Image x:Name="gTouch2" Source="/WiinUPro;component/Images/Controllers/Guitar/gTouch.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="516,322,0,0" Width="90" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutT2" />
+                    <Image x:Name="gTouch3" Source="/WiinUPro;component/Images/Controllers/Guitar/gTouch.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="420,322,0,0" Width="90" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutT3" />
+                    <Image x:Name="gTouch4" Source="/WiinUPro;component/Images/Controllers/Guitar/gTouch.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="321,322,0,0" Width="90" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutT4" />
+                    <Image x:Name="gTouch5" Source="/WiinUPro;component/Images/Controllers/Guitar/gTouch.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="223,322,0,0" Width="90" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="gutT5" />
+                    <Image x:Name="gWhammy" Source="/WiinUPro;component/Images/Controllers/Guitar/gWhammy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="345,815,0,0" Width="428"  MouseLeftButtonUp="OpenContextMenu">
+                        <Image.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Press" Tag="gutWT" Click="OpenInput" />
+                                <MenuItem Header="Full Press" Tag="gutWFULL" Click="OpenInput" />
+                                <Separator/>
+                                <MenuItem Header="Calibrate" Tag="gutWT" Click="CalibrateTrigger_Click"/>
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image>
                     <!-- Joystick -->
                     <Image x:Name="gStick" Source="/WiinUPro;component/Images/Controllers/Guitar/gJoystick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1236,283,0,0" Width="77" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
                         <Image.ContextMenu>

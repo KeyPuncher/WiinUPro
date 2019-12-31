@@ -248,6 +248,11 @@
                     minY = 0,
                     maxY = 63,
                     deadY = 0
+                },
+                whammyBar = new Trigger()
+                {
+                    min = 0,
+                    max = 31
                 }
             };
 
@@ -485,6 +490,11 @@
                     minY = 0,
                     maxY = 63,
                     deadY = 2
+                },
+                whammyBar = new Trigger()
+                {
+                    min = 0,
+                    max = 31
                 }
             };
 
@@ -730,6 +740,11 @@
                     minY = 0,
                     maxY = 63,
                     deadY = 4
+                },
+                whammyBar = new Trigger()
+                {
+                    min = 1,
+                    max = 30
                 }
             };
 
@@ -967,6 +982,11 @@
                     minY = 8,
                     maxY = 55,
                     deadY = 8
+                },
+                whammyBar = new Trigger()
+                {
+                    min = 2,
+                    max = 29
                 }
             };
 
@@ -1204,6 +1224,11 @@
                     minY = 12,
                     maxY = 51,
                     deadY = 10
+                },
+                whammyBar = new Trigger()
+                {
+                    min = 4,
+                    max = 28
                 }
             };
             /// <summary>

@@ -27,6 +27,7 @@ namespace WiinUPro
         internal const string CAL_SWP_LJOYSTICK = "swpJoyL";
         internal const string CAL_SWP_RJOYSTICK = "swpJoyR";
         internal const string CAL_GUT_JOYSTICK = "gutJoy";
+        internal const string CAL_GUT_WHAMMY = "gutWT";
         internal const string CAL_CC_LTRIGGER = "ccLT";
         internal const string CAL_CC_RTRIGGER = "ccRT";
         internal const string CAL_GCN_LTRIGGER = "gcnLT";

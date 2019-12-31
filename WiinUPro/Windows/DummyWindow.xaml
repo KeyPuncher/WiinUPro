@@ -110,14 +110,21 @@
                 <Button x:Name="gYellow" Content="Y" HorizontalAlignment="Left" Margin="54,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="Y"/>
                 <Button x:Name="gBlue" Content="B" HorizontalAlignment="Left" Margin="29,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="B"/>
                 <Button x:Name="gOrange" Content="O" HorizontalAlignment="Left" Margin="4,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="O"/>
-                <Button x:Name="gUp" Content="^" HorizontalAlignment="Left" Margin="104,30,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="SUp"/>
-                <Button x:Name="gDown" Content="v" HorizontalAlignment="Left" Margin="104,55,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="SDown"/>
+                <Button x:Name="gUp" Content="^" HorizontalAlignment="Left" Margin="79,30,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="SUp"/>
+                <Button x:Name="gDown" Content="v" HorizontalAlignment="Left" Margin="104,30,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="SDown"/>
                 <Button x:Name="gPlus" Content="+" HorizontalAlignment="Left" Margin="4,30,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="PLUS"/>
                 <Button x:Name="gMinus" Content="-" HorizontalAlignment="Left" Margin="29,30,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="MINUS"/>
                 <Slider x:Name="sliderGutX" HorizontalAlignment="Left" Margin="141,5,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="JoyX"/>
                 <Slider x:Name="sliderGutY" HorizontalAlignment="Left" Margin="141,36,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="JoyY"/>
                 <Label Content="X" HorizontalAlignment="Left" Margin="258,3,0,0" VerticalAlignment="Top"/>
                 <Label Content="Y" HorizontalAlignment="Left" Margin="258,34,0,0" VerticalAlignment="Top"/>
+                <Slider x:Name="sliderGutW" HorizontalAlignment="Left" Margin="141,64,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="0" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="WT"/>
+                <Label Content="W" HorizontalAlignment="Left" Margin="256,59,0,0" VerticalAlignment="Top"/>
+                <Button x:Name="gTouch1" Content="T1" HorizontalAlignment="Left" Margin="104,55,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="T1"/>
+                <Button x:Name="gTouch2" Content="T2" HorizontalAlignment="Left" Margin="79,55,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="T2"/>
+                <Button x:Name="gTouch3" Content="T3" HorizontalAlignment="Left" Margin="54,55,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="T3"/>
+                <Button x:Name="gTouch4" Content="T4" HorizontalAlignment="Left" Margin="29,55,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="T4"/>
+                <Button x:Name="gTouch5" Content="T5" HorizontalAlignment="Left" Margin="4,55,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="T5"/>
             </Grid>
         </GroupBox>
         <!-- GCN Adapter -->

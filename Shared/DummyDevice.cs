@@ -681,7 +681,42 @@ namespace Shared
                 buf[1] = (byte)(y[0] + 0xC0);
 
                 // Toucbar
+                buf[2] = 0x00;
+                if (g.T5)
+                {
+                    if (g.T4)
+                        buf[2] = 0x1A;
+                    else
+                        buf[2] = 0x1F;
+                }
+                else if (g.T4)
+                {
+                    if (g.T3)
+                        buf[2] = 0x14;
+                    else
+                        buf[2] = 0x17;
+                }
+                else if (g.T3)
+                {
+                    if (g.T2)
+                        buf[2] = 0x0C;
+                    else
+                        buf[2] = 0x12;
+                }
+                else if (g.T2)
+                {
+                    if (g.T1)
+                        buf[2] = 0x07;
+                    else
+                        buf[2] = 0x0A;
+                }
+                else if (g.T1)
+                {
+                    buf[2] = 0x04;
+                }
+
                 // Whammy bar
+                buf[3] = BitConverter.GetBytes(g.whammyBar.rawValue)[0];
 
                 buf[4] = 0xAB;
                 buf[4] += (byte)(!g.Plus ? 0x04 : 0x00);

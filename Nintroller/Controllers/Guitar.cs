@@ -11,7 +11,7 @@ namespace NintrollerLib
         public bool StrumUp, StrumDown;
         public bool Minus, Plus;
         public Joystick joystick;
-        public byte whammyBar;
+        public Trigger whammyBar;
         public byte touchBar;
         public bool T1, T2, T3, T4, T5; // Touch Frets
 
@@ -34,7 +34,7 @@ namespace NintrollerLib
                 joystick.rawX =    data[offset    ] & 0x3F;
                 joystick.rawY =    data[offset + 1] & 0x3F;
                 touchBar  = (byte)(data[offset + 2] & 0x1F);
-                whammyBar = (byte)(data[offset + 3] & 0x1F);
+                whammyBar.rawValue = (byte)(data[offset + 3] & 0x1F);
 
                 Plus      = (data[offset + 4] & 0x04) == 0;
                 Minus     = (data[offset + 4] & 0x10) == 0;
@@ -104,6 +104,8 @@ namespace NintrollerLib
                 }
 
                 joystick.Normalize();
+                whammyBar.Normalize();
+                whammyBar.full = whammyBar.rawValue >= whammyBar.max;
             }
 
             wiimote = new Wiimote(data, wiimote);
@@ -149,6 +151,7 @@ namespace NintrollerLib
             if (from.GetType() == typeof(Guitar))
             {
                 joystick.Calibrate(((Guitar)from).joystick);
+                whammyBar.Calibrate(((Guitar)from).whammyBar);
                 wiimote.SetCalibration(((Guitar)from).wiimote);
             }
             else if (from.GetType() == typeof(Wiimote))
@@ -187,8 +190,25 @@ namespace NintrollerLib
                         }
                     }
                 }
+                else if (component.StartsWith("t"))
+                {
+                    string[] triggerConfig = component.Split(new char[] { '|' });
+
+                    for (int t = 1; t < triggerConfig.Length; t++)
+                    {
+                        int value = 0;
+                        if (int.TryParse(triggerConfig[t], out value))
+                        {
+                            switch (t)
+                            {
+                                case 1: whammyBar.min = value; break;
+                                case 2: whammyBar.max = value; break;
+                            }
+                        }
+                    }
+                }
             }
-            }
+        }
 
         public string GetCalibrationString()
         {
@@ -204,6 +224,10 @@ namespace NintrollerLib
                     sb.Append("|"); sb.Append(joystick.minY);
                     sb.Append("|"); sb.Append(joystick.maxY);
                     sb.Append("|"); sb.Append(joystick.deadY);
+
+                sb.Append(":t");
+                    sb.Append("|"); sb.Append(whammyBar.min);
+                    sb.Append("|"); sb.Append(whammyBar.max);
 
             return sb.ToString();
         }
@@ -247,6 +271,12 @@ namespace NintrollerLib
             yield return new KeyValuePair<string, float>(INPUT_NAMES.GUITAR.DOWN, joystick.Y > 0 ? 0 : -joystick.Y);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.GUITAR.LEFT, joystick.X > 0 ? 0 : -joystick.X);
             yield return new KeyValuePair<string, float>(INPUT_NAMES.GUITAR.RIGHT, joystick.X > 0 ? joystick.X : 0);
+
+            // Whammy
+            whammyBar.Normalize();
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.GUITAR.WHAMMY, whammyBar.value > 0 ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.GUITAR.WHAMMY_FULL, whammyBar.rawValue >= whammyBar.max ? 1.0f : 0.0f);
+            yield return new KeyValuePair<string, float>(INPUT_NAMES.GUITAR.WHAMMY_BAR, whammyBar.value);
 
             // Touch Frets
             yield return new KeyValuePair<string, float>(INPUT_NAMES.GUITAR.TOUCH_1, T1 ? 1.0f : 0.0f);

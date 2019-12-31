@@ -573,6 +573,12 @@
   <ItemGroup>
     <Resource Include="Images\Controllers\Guitar\guitarBase.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\Guitar\gTouch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Controllers\Guitar\gWhammy.png" />
+  </ItemGroup>
   <Import Project="..\Shared\Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
