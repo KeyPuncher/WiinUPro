@@ -9,7 +9,7 @@
     <Grid ContextMenuService.IsEnabled="False">
         <!-- TODO: Add calibrate button -->
         <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click" Style="{StaticResource WarningButton}"/>
-        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,95,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click" Style="{StaticResource AcceptButton}" />
+        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click" Style="{StaticResource AcceptButton}" />
         <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnLoad_Click" Style="{StaticResource CautionButton}" />
         <Button Visibility="Collapsed" x:Name="btnAddRumble" Content="+/- Rumble" Margin="0,30,90,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" Click="btnAddRumble_Click" Style="{StaticResource BasicButton}" />
         <Button x:Name="btnPrefs" Content="Options" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnPrefs_Click" Style="{StaticResource BasicButton}" />
