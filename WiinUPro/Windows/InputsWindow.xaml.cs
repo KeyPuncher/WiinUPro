@@ -203,6 +203,10 @@ namespace WiinUPro
                         }
                     }
 
+                    xTurboCheck.IsChecked = (item as XInputButtonAssignment).TurboEnabled;
+                    xTurboRate.Value = (item as XInputButtonAssignment).TurboRate / 50;
+                    xInverseCheck.IsChecked = (item as XInputButtonAssignment).InverseInput;
+
                     // Remove once multiple xinput devices can be selected
                     deviceSelection.SelectedIndex = (int)(item as XInputButtonAssignment).Device - 1;
                 }
