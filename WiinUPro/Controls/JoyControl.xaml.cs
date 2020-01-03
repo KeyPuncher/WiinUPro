@@ -485,13 +485,13 @@ namespace WiinUPro
         {
             foreach (var item in assignments)
             {
-                if (_assignments[ShiftIndex].ContainsKey(item.Key))
+                if (_assignments[dropShift.SelectedIndex].ContainsKey(item.Key))
                 {
-                    _assignments[ShiftIndex][item.Key] = item.Value;
+                    _assignments[dropShift.SelectedIndex][item.Key] = item.Value;
                 }
                 else
                 {
-                    _assignments[ShiftIndex].Add(item.Key, item.Value);
+                    _assignments[dropShift.SelectedIndex].Add(item.Key, item.Value);
                 }
             }
         }
@@ -505,9 +505,10 @@ namespace WiinUPro
         private void OnInputSelected(string key)
         {
             InputsWindow win;
-            if (_assignments[ShiftIndex].ContainsKey(key))
+            int targetShiftIndex = dropShift.SelectedIndex;
+            if (_assignments[targetShiftIndex].ContainsKey(key))
             {
-                win = new InputsWindow(this, _assignments[ShiftIndex][key]);
+                win = new InputsWindow(this, _assignments[targetShiftIndex][key]);
             }
             else
             {
@@ -518,33 +519,33 @@ namespace WiinUPro
 
             if (!win.Apply) return;
 
-            if (_assignments[ShiftIndex].ContainsKey(key))
+            if (_assignments[targetShiftIndex].ContainsKey(key))
             {
                 // If replacing a Shift Assignment, clear others that were set from the code below
-                if (_assignments[ShiftIndex][key].Assignments.Count == 1 && _assignments[ShiftIndex][key].Assignments[0] is ShiftAssignment)
+                if (_assignments[targetShiftIndex][key].Assignments.Count == 1 && _assignments[targetShiftIndex][key].Assignments[0] is ShiftAssignment)
                 {
-                    var shift = _assignments[ShiftIndex][key].Assignments[0] as ShiftAssignment;
+                    var shift = _assignments[targetShiftIndex][key].Assignments[0] as ShiftAssignment;
                     if (shift.Toggles)
                     {
                         foreach (var state in shift.ToggleStates)
                         {
-                            if ((int)state != ShiftIndex)
+                            if ((int)state != targetShiftIndex)
                             {
                                 _assignments[(int)state].Remove(key);
                             }
                         }
                     }
-                    else if ((int)shift.TargetState != ShiftIndex)
+                    else if ((int)shift.TargetState != targetShiftIndex)
                     {
                         _assignments[(int)shift.TargetState].Remove(key);
                     }
                 }
 
-                _assignments[ShiftIndex][key] = win.Result;
+                _assignments[targetShiftIndex][key] = win.Result;
             }
             else
             {
-                _assignments[ShiftIndex].Add(key, win.Result);
+                _assignments[targetShiftIndex].Add(key, win.Result);
             }
 
             // Shift assignments need to be the same on each ShiftIndex
@@ -690,11 +691,6 @@ namespace WiinUPro
             // TODO: Link up rumble
         }
 
-        private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _currentState = (ShiftState)dropShift.SelectedIndex;
-        }
-
         private void AssignMenu_Click(object sender, RoutedEventArgs e)
         {
             OnInputSelected(_selectedInput);
@@ -702,29 +698,29 @@ namespace WiinUPro
 
         private void CopyMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_assignments[ShiftIndex].ContainsKey(_selectedInput))
+            if (_assignments[dropShift.SelectedIndex].ContainsKey(_selectedInput))
             {
-                _clipboard = _assignments[ShiftIndex][_selectedInput];
+                _clipboard = _assignments[dropShift.SelectedIndex][_selectedInput];
             }
         }
 
         private void PasteMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_assignments[ShiftIndex].ContainsKey(_selectedInput))
+            if (_assignments[dropShift.SelectedIndex].ContainsKey(_selectedInput))
             {
-                _assignments[ShiftIndex][_selectedInput] = _clipboard;
+                _assignments[dropShift.SelectedIndex][_selectedInput] = _clipboard;
             }
             else
             {
-                _assignments[ShiftIndex].Add(_selectedInput, _clipboard);
+                _assignments[dropShift.SelectedIndex].Add(_selectedInput, _clipboard);
             }
         }
 
         private void ClearMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_assignments[ShiftIndex].ContainsKey(_selectedInput))
+            if (_assignments[dropShift.SelectedIndex].ContainsKey(_selectedInput))
             {
-                _assignments[ShiftIndex].Remove(_selectedInput);
+                _assignments[dropShift.SelectedIndex].Remove(_selectedInput);
             }
         }
         #endregion

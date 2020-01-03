@@ -18,7 +18,7 @@
         <Button x:Name="btnPrefs" Content="Options" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnPrefs_Click" Style="{StaticResource BasicButton}" />
         <Viewbox x:Name="_view" Margin="0,62,-0.5,0" />
         <Label Content="Shift State" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" Width="74" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
-        <ComboBox x:Name="dropShift" HorizontalAlignment="Left" Margin="89,0,0,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="76" SelectionChanged="dropShift_SelectionChanged">
+        <ComboBox x:Name="dropShift" HorizontalAlignment="Left" Margin="89,0,0,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="76">
             <MenuItem Header="None" Padding="-24,0,0,0" IsHitTestVisible="False"/>
             <MenuItem Foreground="Red" Header="Red" Padding="-24,0,0,0" IsHitTestVisible="False"/>
             <MenuItem Foreground="Blue" Header="Blue" Padding="-24,0,0,0" IsHitTestVisible="False"/>
