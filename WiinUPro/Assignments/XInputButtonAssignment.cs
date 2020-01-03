@@ -18,7 +18,26 @@ namespace WiinUPro
         /// <summary>
         /// Set to use Turbo feature
         /// </summary>
-        public bool TurboEnabled { get; set; }
+        public bool TurboEnabled
+        {
+            get { return _turboEnabled; }
+            set
+            {
+                if (_turboEnabled == value) return;
+
+                if (value)
+                {
+                    _stopWatch = new System.Diagnostics.Stopwatch();
+                    _stopWatch.Start();
+                }
+                else
+                {
+                    _stopWatch = null;
+                }
+
+                _turboEnabled = value;
+            }
+        }
 
         /// <summary>
         /// Turbo rate in milliseconds (0ms to 1000ms)
@@ -43,10 +62,12 @@ namespace WiinUPro
         /// </summary>
         public bool InverseInput { get; set; }
 
+        private bool _turboEnabled = false;
         private int _turboRate = 200;
         private float _threashold = 0.1f;
         private bool _lastState = false;
-        private int _lastApplied = 0;
+        private double _lastApplied = 0;
+        private System.Diagnostics.Stopwatch _stopWatch;
 
         public XInputButtonAssignment() { }
 
@@ -69,23 +90,31 @@ namespace WiinUPro
             {
                 if (!isDown)
                 {
+                    if (_lastState)
+                    {
+                        ScpDirector.Access.SetButton(Button, false, Device);
+                        _lastState = false;
+                    }
+
                     return;
                 }
 
-                int now = DateTime.Now.Millisecond;
+                double tick = Math.Floor(_stopWatch.ElapsedMilliseconds / (double)TurboRate);
 
-                if (_lastApplied > now)
+                if (tick > _lastApplied)
                 {
-                    _lastApplied = _lastApplied + TurboRate - 1000;
-                }
+                    if (_lastState)
+                    {
+                        ScpDirector.Access.SetButton(Button, false, Device);
+                        _lastState = false;
+                    }
+                    else
+                    {
+                        ScpDirector.Access.SetButton(Button, true, Device);
+                        _lastState = true;
+                    }
 
-                if (now > _lastApplied + TurboRate)
-                {
-                    ScpDirector.Access.SetButton(Button, true, Device);
-                }
-                else
-                {
-                    ScpDirector.Access.SetButton(Button, false, Device);
+                    _lastApplied = tick;
                 }
             }
             else if (isDown != _lastState)
