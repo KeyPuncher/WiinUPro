@@ -79,7 +79,127 @@ namespace NintrollerLib
 
         public float GetValue(string input)
         {
-            throw new NotImplementedException();
+            switch (input)
+            {
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_CONNECTED: return port1Connected ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_CONNECTED: return port2Connected ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_CONNECTED: return port3Connected ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_CONNECTED: return port4Connected ? 1 : 0;
+
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.A:          return port1.A ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.B:          return port1.B ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.X:          return port1.X ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.Y:          return port1.Y ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.UP:         return port1.Up ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.DOWN:       return port1.Down ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LEFT:       return port1.Left ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RIGHT:      return port1.Right ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.L:          return port1.L.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.R:          return port1.R.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LT:         return port1.L.value;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RT:         return port1.R.value;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LFULL:      return port1.L.full ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RFULL:      return port1.R.full ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_X:      return port1.joystick.X;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_Y:      return port1.joystick.Y;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_X:        return port1.cStick.X;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_Y:        return port1.cStick.Y;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_UP:     return port1.joystick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_DOWN:   return port1.joystick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_LEFT:   return port1.joystick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_RIGHT:  return port1.joystick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_UP:       return port1.cStick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_DOWN:     return port1.cStick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_LEFT:     return port1.cStick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_RIGHT:    return port1.cStick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX + INPUT_NAMES.GCN_CONTROLLER.START:      return port1.Start ? 1 : 0;
+
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.A:          return port2.A ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.B:          return port2.B ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.X:          return port2.X ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.Y:          return port2.Y ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.UP:         return port2.Up ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.DOWN:       return port2.Down ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LEFT:       return port2.Left ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RIGHT:      return port2.Right ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.L:          return port2.L.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.R:          return port2.R.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LT:         return port2.L.value;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RT:         return port2.R.value;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LFULL:      return port2.L.full ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RFULL:      return port2.R.full ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_X:      return port2.joystick.X;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_Y:      return port2.joystick.Y;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_X:        return port2.cStick.X;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_Y:        return port2.cStick.Y;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_UP:     return port2.joystick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_DOWN:   return port2.joystick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_LEFT:   return port2.joystick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_RIGHT:  return port2.joystick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_UP:       return port2.cStick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_DOWN:     return port2.cStick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_LEFT:     return port2.cStick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_RIGHT:    return port2.cStick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX + INPUT_NAMES.GCN_CONTROLLER.START:      return port2.Start ? 1 : 0;
+
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.A:          return port3.A ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.B:          return port3.B ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.X:          return port3.X ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.Y:          return port3.Y ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.UP:         return port3.Up ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.DOWN:       return port3.Down ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LEFT:       return port3.Left ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RIGHT:      return port3.Right ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.L:          return port3.L.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.R:          return port3.R.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LT:         return port3.L.value;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RT:         return port3.R.value;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LFULL:      return port3.L.full ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RFULL:      return port3.R.full ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_X:      return port3.joystick.X;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_Y:      return port3.joystick.Y;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_X:        return port3.cStick.X;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_Y:        return port3.cStick.Y;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_UP:     return port3.joystick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_DOWN:   return port3.joystick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_LEFT:   return port3.joystick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_RIGHT:  return port3.joystick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_UP:       return port3.cStick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_DOWN:     return port3.cStick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_LEFT:     return port3.cStick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_RIGHT:    return port3.cStick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX + INPUT_NAMES.GCN_CONTROLLER.START:      return port3.Start ? 1 : 0;
+
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.A:          return port4.A ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.B:          return port4.B ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.X:          return port4.X ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.Y:          return port4.Y ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.UP:         return port4.Up ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.DOWN:       return port4.Down ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LEFT:       return port4.Left ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RIGHT:      return port4.Right ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.L:          return port4.L.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.R:          return port4.R.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LT:         return port4.L.value;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RT:         return port4.R.value;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.LFULL:      return port4.L.full ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.RFULL:      return port4.R.full ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_X:      return port4.joystick.X;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_Y:      return port4.joystick.Y;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_X:        return port4.cStick.X;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_Y:        return port4.cStick.Y;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_UP:     return port4.joystick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_DOWN:   return port4.joystick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_LEFT:   return port4.joystick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.JOY_RIGHT:  return port4.joystick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_UP:       return port4.cStick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_DOWN:     return port4.cStick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_LEFT:     return port4.cStick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.C_RIGHT:    return port4.cStick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX + INPUT_NAMES.GCN_CONTROLLER.START:      return port4.Start ? 1 : 0;
+            }
+
+            return 0;
         }
         
         public void SetCalibration(Calibrations.CalibrationPreset preset)

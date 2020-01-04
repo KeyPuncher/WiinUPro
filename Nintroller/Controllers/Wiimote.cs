@@ -55,7 +55,37 @@ namespace NintrollerLib
 
         public float GetValue(string input)
         {
-            throw new NotImplementedException();
+            switch (input)
+            {
+                case INPUT_NAMES.WIIMOTE.A: return buttons.A ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.B: return buttons.B ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.ONE: return buttons.One ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.TWO: return buttons.Two ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.UP: return buttons.Up ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.DOWN: return buttons.Down ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.LEFT: return buttons.Left ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.RIGHT: return buttons.Right ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.MINUS: return buttons.Minus ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.PLUS: return buttons.Plus ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.HOME: return buttons.Home ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.ACC_X: return accelerometer.X;
+                case INPUT_NAMES.WIIMOTE.ACC_Y: return accelerometer.Y;
+                case INPUT_NAMES.WIIMOTE.ACC_Z: return accelerometer.Z;
+                case INPUT_NAMES.WIIMOTE.TILT_RIGHT: return accelerometer.X > 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.TILT_LEFT: return accelerometer.X < 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.TILT_UP: return accelerometer.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.TILT_DOWN: return accelerometer.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.FACE_UP: return accelerometer.Z > 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.FACE_DOWN: return accelerometer.Z < 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.IR_X: return irSensor.X;
+                case INPUT_NAMES.WIIMOTE.IR_Y: return irSensor.Y;
+                case INPUT_NAMES.WIIMOTE.IR_UP: return irSensor.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.IR_DOWN: return irSensor.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.IR_LEFT: return irSensor.X < 0 ? 1 : 0;
+                case INPUT_NAMES.WIIMOTE.IR_RIGHT: return irSensor.X > 0 ? 1 : 0;
+            }
+
+            return 0;
         }
 
         public void SetCalibration(Calibrations.CalibrationPreset preset)

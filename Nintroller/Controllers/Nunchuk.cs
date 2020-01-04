@@ -76,7 +76,7 @@ namespace NintrollerLib
                 case INPUT_NAMES.NUNCHUK.TILT_LEFT: return accelerometer.X < 0 ? 1 : 0;
             }
 
-            return 0;
+            return wiimote.GetValue(input);
         }
 
         public void SetCalibration(Calibrations.CalibrationPreset preset)

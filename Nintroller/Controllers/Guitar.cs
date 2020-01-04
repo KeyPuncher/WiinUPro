@@ -111,7 +111,37 @@ namespace NintrollerLib
             wiimote = new Wiimote(data, wiimote);
         }
 
-        public float GetValue(string input) { return 0; }
+        public float GetValue(string input)
+        {
+            switch (input)
+            {
+                case INPUT_NAMES.GUITAR.GREEN: return Green ? 1 : 0;
+                case INPUT_NAMES.GUITAR.RED: return Red ? 1 : 0;
+                case INPUT_NAMES.GUITAR.YELLOW: return Yellow ? 1 : 0;
+                case INPUT_NAMES.GUITAR.BLUE: return Blue ? 1 : 0;
+                case INPUT_NAMES.GUITAR.ORANGE: return Orange ? 1 : 0;
+                case INPUT_NAMES.GUITAR.MINUS: return Minus ? 1 : 0;
+                case INPUT_NAMES.GUITAR.PLUS: return Plus ? 1 : 0;
+                case INPUT_NAMES.GUITAR.TOUCH_1: return T1 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.TOUCH_2: return T2 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.TOUCH_3: return T3 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.TOUCH_4: return T4 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.TOUCH_5: return T5 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.STRUM_UP: return StrumUp ? 1 : 0;
+                case INPUT_NAMES.GUITAR.STRUM_DOWN: return StrumDown ? 1 : 0;
+                case INPUT_NAMES.GUITAR.JOY_X: return joystick.X;
+                case INPUT_NAMES.GUITAR.JOY_Y: return joystick.Y;
+                case INPUT_NAMES.GUITAR.UP: return joystick.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.DOWN: return joystick.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.LEFT: return joystick.X < 0 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.RIGHT: return joystick.X > 0 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.WHAMMY: return whammyBar.value > 0 ? 1 : 0;
+                case INPUT_NAMES.GUITAR.WHAMMY_BAR: return whammyBar.value;
+                case INPUT_NAMES.GUITAR.WHAMMY_FULL: return whammyBar.value >= whammyBar.max ? 1 : 0;
+            }
+
+            return wiimote.GetValue(input);
+        }
 
         public void SetCalibration(Calibrations.CalibrationPreset preset)
         {

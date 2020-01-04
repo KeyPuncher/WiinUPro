@@ -83,7 +83,42 @@ namespace NintrollerLib
 
         public float GetValue(string input)
         {
-            throw new NotImplementedException();
+            switch (input)
+            {
+                case INPUT_NAMES.CLASSIC_CONTROLLER.A: return A ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.B: return B ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.X: return X ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.Y: return Y ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.UP: return Up ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.DOWN: return Down ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LEFT: return Left ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RIGHT: return Right ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.L: return L.value > 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.R: return R.value > 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.ZL: return ZL ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.ZR: return ZR ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LX: return LJoy.X;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LY: return LJoy.Y;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RX: return RJoy.X;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RY: return RJoy.Y;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LUP: return LJoy.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LDOWN: return LJoy.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LLEFT: return LJoy.X < 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LRIGHT: return LJoy.X > 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RUP: return RJoy.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RDOWN: return RJoy.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RLEFT: return RJoy.X < 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RRIGHT: return RJoy.X > 0 ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LT: return L.value;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RT: return R.value;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LFULL: return L.full ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RFULL: return R.full ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.SELECT: return Select ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.START: return Start ? 1 : 0;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.HOME: return Home ? 1 : 0;
+            }
+
+            return wiimote.GetValue(input);
         }
 
         public void SetCalibration(Calibrations.CalibrationPreset preset)

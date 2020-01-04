@@ -85,7 +85,40 @@ namespace NintrollerLib
 
         public float GetValue(string input)
         {
-            throw new NotImplementedException();
+            switch (input)
+            {
+                case INPUT_NAMES.PRO_CONTROLLER.A: return A ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.B: return B ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.X: return X ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.Y: return Y ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.UP: return Up ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.DOWN: return Down ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.LEFT: return Left ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.RIGHT: return Right ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.L: return L ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.R: return R ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.ZL: return ZL ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.ZR: return ZR ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.LX: return LJoy.X;
+                case INPUT_NAMES.PRO_CONTROLLER.LY: return LJoy.Y;
+                case INPUT_NAMES.PRO_CONTROLLER.RX: return RJoy.X;
+                case INPUT_NAMES.PRO_CONTROLLER.RY: return RJoy.Y;
+                case INPUT_NAMES.PRO_CONTROLLER.LUP: return LJoy.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.LDOWN: return LJoy.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.LLEFT: return LJoy.X < 0 ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.LRIGHT: return LJoy.X > 0 ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.RUP: return RJoy.Y > 0 ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.RDOWN: return RJoy.Y < 0 ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.RLEFT: return RJoy.X < 0 ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.RRIGHT: return RJoy.X > 0 ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.LS: return LStick ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.RS: return RStick ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.SELECT: return Select ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.START: return Start ? 1 : 0;
+                case INPUT_NAMES.PRO_CONTROLLER.HOME: return Home ? 1 : 0;
+            }
+
+            return 0;
         }
 
         public void SetCalibration(Calibrations.CalibrationPreset preset)
