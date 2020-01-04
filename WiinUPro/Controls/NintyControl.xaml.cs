@@ -250,6 +250,7 @@ namespace WiinUPro
             Nunchuk nunCalibration = Calibrations.Defaults.NunchukDefault;
             ClassicController ccCalibration = Calibrations.Defaults.ClassicControllerDefault;
             ClassicControllerPro ccpCalibration = Calibrations.Defaults.ClassicControllerProDefault;
+            Guitar gutCalibration = Calibrations.Defaults.GuitarDefault;
             GameCubeAdapter gcnCalibration = new GameCubeAdapter(true)
             {
                 port1 = Calibrations.Defaults.GameCubeControllerDefault,
@@ -269,6 +270,7 @@ namespace WiinUPro
                     case App.CAL_CCP_RJOYSTICK:
                     case App.CAL_PRO_LJOYSTICK:
                     case App.CAL_PRO_RJOYSTICK:
+                    case App.CAL_GUT_JOYSTICK:
                         Joystick joystick;
                         if (App.LoadFromFile<Joystick>(calibrationFile.Value, out joystick))
                         {
@@ -279,16 +281,19 @@ namespace WiinUPro
                             else if (calibrationFile.Key == App.CAL_CCP_RJOYSTICK) ccpCalibration.RJoy = joystick;
                             else if (calibrationFile.Key == App.CAL_PRO_LJOYSTICK) proCalibration.LJoy = joystick;
                             else if (calibrationFile.Key == App.CAL_PRO_RJOYSTICK) proCalibration.RJoy = joystick;
+                            else if (calibrationFile.Key == App.CAL_GUT_JOYSTICK) gutCalibration.joystick = joystick;
                         }
                         break;
 
                     case App.CAL_CC_LTRIGGER:
                     case App.CAL_CC_RTRIGGER:
+                    case App.CAL_GUT_WHAMMY:
                         NintrollerLib.Trigger trigger;
                         if (App.LoadFromFile<NintrollerLib.Trigger>(calibrationFile.Value, out trigger))
                         {
                             if (calibrationFile.Key == App.CAL_CC_LTRIGGER) ccCalibration.L = trigger;
                             else if (calibrationFile.Key == App.CAL_CC_RTRIGGER) ccCalibration.R = trigger;
+                            else if (calibrationFile.Key == App.CAL_GUT_WHAMMY) gutCalibration.whammyBar = trigger;
                         }
                         break;
 
@@ -307,6 +312,7 @@ namespace WiinUPro
             _nintroller.SetCalibration(nunCalibration);
             _nintroller.SetCalibration(ccCalibration);
             _nintroller.SetCalibration(ccpCalibration);
+            _nintroller.SetCalibration(gutCalibration);
             _nintroller.SetCalibration(gcnCalibration);
         }
 
@@ -330,6 +336,7 @@ namespace WiinUPro
                 case ControllerType.NunchukB:
                 case ControllerType.ClassicController:
                 case ControllerType.ClassicControllerPro:
+                case ControllerType.Guitar:
                     _controller = new WiiControl(_info.DeviceID);
                     ((WiiControl)_controller).OnChangeCameraMode += (mode) =>
                     {
