@@ -19,6 +19,7 @@ namespace WiinUPro.Windows
         bool isClassicPro { get { return Device.State is ClassicControllerPro; } }
         bool isPro { get { return Device.State is ProController; } }
         bool isGuitar { get { return Device.State is Guitar; } }
+        bool isTaiko { get { return Device.State is TaikoDrum; } }
         bool isGCN { get { return Device.State is GameCubeAdapter; } }
 
         public DummyWindow(DummyDevice device)
@@ -44,6 +45,7 @@ namespace WiinUPro.Windows
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
                     groupGuitar.Visibility = Visibility.Hidden;
+                    groupTaiko.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
@@ -57,6 +59,7 @@ namespace WiinUPro.Windows
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
                     groupGuitar.Visibility = Visibility.Hidden;
+                    groupTaiko.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
@@ -70,6 +73,7 @@ namespace WiinUPro.Windows
                     groupSticks.Visibility = Visibility.Visible;
                     groupTriggers.Visibility = Visibility.Visible;
                     groupGuitar.Visibility = Visibility.Hidden;
+                    groupTaiko.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
@@ -83,6 +87,7 @@ namespace WiinUPro.Windows
                     groupSticks.Visibility = Visibility.Visible;
                     groupTriggers.Visibility = Visibility.Hidden;
                     groupGuitar.Visibility = Visibility.Hidden;
+                    groupTaiko.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
@@ -96,6 +101,7 @@ namespace WiinUPro.Windows
                     groupSticks.Visibility = Visibility.Visible;
                     groupTriggers.Visibility = Visibility.Hidden;
                     groupGuitar.Visibility = Visibility.Hidden;
+                    groupTaiko.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
 
@@ -109,8 +115,24 @@ namespace WiinUPro.Windows
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
                     groupGuitar.Visibility = Visibility.Visible;
+                    groupTaiko.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Hidden;
                     break;
+
+                case ControllerType.TaikoDrum:
+                    if (Device.State == null || !isTaiko)
+                        Device.State = new TaikoDrum();
+                    groupCore.Visibility = Visibility.Visible;
+                    wiimoteGrid.Visibility = Visibility.Visible;
+                    groupNun.Visibility = Visibility.Hidden;
+                    groupPad.Visibility = Visibility.Hidden;
+                    groupSticks.Visibility = Visibility.Hidden;
+                    groupTriggers.Visibility = Visibility.Hidden;
+                    groupGuitar.Visibility = Visibility.Hidden;
+                    groupTaiko.Visibility = Visibility.Visible;
+                    gcnGrid.Visibility = Visibility.Hidden;
+                    break;
+
 
                 case ControllerType.Other:
                     if (Device.State == null || !isGCN)
@@ -122,6 +144,7 @@ namespace WiinUPro.Windows
                     groupSticks.Visibility = Visibility.Hidden;
                     groupTriggers.Visibility = Visibility.Hidden;
                     groupGuitar.Visibility = Visibility.Hidden;
+                    groupTaiko.Visibility = Visibility.Hidden;
                     gcnGrid.Visibility = Visibility.Visible;
                     break;
             }
@@ -160,6 +183,10 @@ namespace WiinUPro.Windows
             else if (isGuitar)
             {
                 Device.State = ChangeGuitarBoolean("gut" + baseBtn);
+            }
+            else if (isTaiko)
+            {
+                Device.State = ChangeTaikoBoolean("tak" + baseBtn);
             }
             else if (isGCN)
             {
@@ -556,6 +583,21 @@ namespace WiinUPro.Windows
             }
 
             return gut;
+        }
+
+        private TaikoDrum ChangeTaikoBoolean(string property)
+        {
+            TaikoDrum tak = (TaikoDrum)Device.State;
+
+            switch (property)
+            {
+                case INPUT_NAMES.TAIKO_DRUM.CENTER_LEFT: tak.centerLeft = !tak.centerLeft; break;
+                case INPUT_NAMES.TAIKO_DRUM.CENTER_RIGHT: tak.centerRight = !tak.centerRight; break;
+                case INPUT_NAMES.TAIKO_DRUM.RIM_LEFT: tak.rimLeft = !tak.rimLeft; break;
+                case INPUT_NAMES.TAIKO_DRUM.RIM_RIGHT: tak.rimRight = !tak.rimRight; break;
+            }
+
+            return tak;
         }
 
         #endregion

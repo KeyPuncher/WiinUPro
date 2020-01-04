@@ -337,6 +337,7 @@ namespace WiinUPro
                 case ControllerType.ClassicController:
                 case ControllerType.ClassicControllerPro:
                 case ControllerType.Guitar:
+                case ControllerType.TaikoDrum:
                     _controller = new WiiControl(_info.DeviceID);
                     ((WiiControl)_controller).OnChangeCameraMode += (mode) =>
                     {

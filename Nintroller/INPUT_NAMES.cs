@@ -216,6 +216,14 @@
             public const string TOUCH_5 = "gutT5";
         }
 
+        public static class TAIKO_DRUM
+        {
+            public const string CENTER_LEFT = "takL";
+            public const string CENTER_RIGHT = "takR";
+            public const string RIM_LEFT = "takRimL";
+            public const string RIM_RIGHT = "takRimR";
+        }
+
         public static class MOTION_PLUS
         {
             public const string GYROUP       = "mpGYROUP";

@@ -49,6 +49,7 @@ namespace WiinUPro
                 if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
                 if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
                 if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
+                if (viewTaikoDrum.Visibility == Visibility.Visible) viewTaikoDrum.Visibility = Visibility.Collapsed;
 
                 UpdateWiimoteVisual((Wiimote)state);
             }
@@ -58,6 +59,7 @@ namespace WiinUPro
                 if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
                 if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
                 if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
+                if (viewTaikoDrum.Visibility == Visibility.Visible) viewTaikoDrum.Visibility = Visibility.Collapsed;
 
                 var nun = (Nunchuk)state;
                 UpdateWiimoteVisual(nun.wiimote);
@@ -77,6 +79,7 @@ namespace WiinUPro
                 if (viewClassicController.Visibility != Visibility.Visible) viewClassicController.Visibility = Visibility.Visible;
                 if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
                 if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
+                if (viewTaikoDrum.Visibility == Visibility.Visible) viewTaikoDrum.Visibility = Visibility.Collapsed;
 
                 var cc = (ClassicController)state;
                 UpdateWiimoteVisual(cc.wiimote);
@@ -117,6 +120,7 @@ namespace WiinUPro
                 if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
                 if (viewClassicControllerPro.Visibility != Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Visible;
                 if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
+                if (viewTaikoDrum.Visibility == Visibility.Visible) viewTaikoDrum.Visibility = Visibility.Collapsed;
 
                 var ccp = (ClassicControllerPro)state;
                 UpdateWiimoteVisual(ccp.wiimote);
@@ -152,6 +156,7 @@ namespace WiinUPro
                 if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
                 if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
                 if (viewGuitar.Visibility != Visibility.Visible) viewGuitar.Visibility = Visibility.Visible;
+                if (viewTaikoDrum.Visibility == Visibility.Visible) viewTaikoDrum.Visibility = Visibility.Collapsed;
 
                 var gut = (Guitar)state;
                 UpdateWiimoteVisual(gut.wiimote);
@@ -182,6 +187,22 @@ namespace WiinUPro
                 {
                     _openTrigWindow.Update(gut.whammyBar);
                 }
+            }
+            else if (state is TaikoDrum)
+            {
+                if (viewNunchuk.Visibility == Visibility.Visible) viewNunchuk.Visibility = Visibility.Collapsed;
+                if (viewClassicController.Visibility == Visibility.Visible) viewClassicController.Visibility = Visibility.Collapsed;
+                if (viewClassicControllerPro.Visibility == Visibility.Visible) viewClassicControllerPro.Visibility = Visibility.Collapsed;
+                if (viewGuitar.Visibility == Visibility.Visible) viewGuitar.Visibility = Visibility.Collapsed;
+                if (viewTaikoDrum.Visibility != Visibility.Visible) viewTaikoDrum.Visibility = Visibility.Visible;
+
+                var tak = (TaikoDrum)state;
+                UpdateWiimoteVisual(tak.wiimote);
+
+                takL.Fill = tak.centerLeft ? System.Windows.Media.Brushes.Red : System.Windows.Media.Brushes.White;
+                takR.Fill = tak.centerRight ? System.Windows.Media.Brushes.Red : System.Windows.Media.Brushes.White;
+                takRimL.Stroke = tak.rimLeft ? System.Windows.Media.Brushes.Blue : System.Windows.Media.Brushes.White;
+                takRimR.Stroke = tak.rimRight ? System.Windows.Media.Brushes.Blue : System.Windows.Media.Brushes.White;
             }
         }
 

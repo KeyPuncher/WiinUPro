@@ -109,6 +109,7 @@ namespace NintrollerLib
                         case ControllerType.ClassicControllerPro:
                         case ControllerType.Nunchuk:
                         case ControllerType.NunchukB:
+                        case ControllerType.TaikoDrum:
                             // only certian modes can be set
                             if (value == IRCamMode.Off)
                             {
@@ -957,8 +958,19 @@ namespace NintrollerLib
                                         applyReport = InputReport.BtnsAccExt;
                                         break;
 
-                                    case ControllerType.Drums:
                                     case ControllerType.TaikoDrum:
+                                        _state = new TaikoDrum();
+                                        if (_irMode == IRCamMode.Off)
+                                        {
+                                            applyReport = InputReport.BtnsAccExt;
+                                        }
+                                        else
+                                        {
+                                            applyReport = InputReport.BtnsAccIRExt;
+                                        }
+                                        break;
+
+                                    case ControllerType.Drums:
                                     case ControllerType.TurnTable:
                                         // TODO: More control types
                                         Log("Unsupported controller type");

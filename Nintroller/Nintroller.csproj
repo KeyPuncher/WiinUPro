@@ -43,6 +43,7 @@
     <Compile Include="Controllers\ClassicController.cs" />
     <Compile Include="Controllers\ClassicControllerPro.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\TaikoDrum.cs" />
     <Compile Include="DeviceManagement.cs" />
     <Compile Include="Calibrations.cs" />
     <Compile Include="ComponentStructs.cs" />

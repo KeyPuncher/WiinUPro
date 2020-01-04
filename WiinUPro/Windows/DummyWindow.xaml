@@ -47,6 +47,7 @@
                 <ComboBoxItem Content="Classic Controller"/>
                 <ComboBoxItem Content="Classic Controller Pro"/>
                 <ComboBoxItem Content="Guitar"/>
+                <ComboBoxItem Content="Taiko Drum"/>
             </ComboBox>
         </Grid>
         <GroupBox x:Name="groupNun" Header="Nunchuk" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="226" Visibility="Hidden">
@@ -103,7 +104,7 @@
             </Grid>
         </GroupBox>
         <!-- Guitar -->
-        <GroupBox x:Name="groupGuitar" Header="Guitar" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="291">
+        <GroupBox x:Name="groupGuitar" Header="Guitar" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="291" Visibility="Hidden">
             <Grid VerticalAlignment="Top" Height="87" Margin="-4,0,-2,-5">
                 <Button x:Name="gGreen" Content="G" HorizontalAlignment="Left" Margin="104,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="G"/>
                 <Button x:Name="gRed" Content="R" HorizontalAlignment="Left" Margin="79,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="R"/>
@@ -180,5 +181,13 @@
                 </Grid>
             </GroupBox>
         </Grid>
+        <GroupBox x:Name="groupTaiko" Header="Taiko Drum" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="83">
+            <Grid Margin="-4,0,0,0">
+                <Button x:Name="takCL" Content="CL" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="L"/>
+                <Button x:Name="takCR" Content="CR" HorizontalAlignment="Left" Margin="30,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="R"/>
+                <Button x:Name="takRL" Content="RL" HorizontalAlignment="Left" Margin="5,34,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="RimL"/>
+                <Button x:Name="takRR" Content="RR" HorizontalAlignment="Left" Margin="30,34,0,0" VerticalAlignment="Top" Width="20" Height="20" Click="button_Click" Tag="RimR"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

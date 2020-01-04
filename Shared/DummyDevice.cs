@@ -80,24 +80,34 @@ namespace Shared
                     var nState = new Nunchuk();
                     nState.SetCalibration(Calibrations.CalibrationPreset.Default);
                     ConfigureNunchuk(nState);
+                    ConfigureWiimote(nState.wiimote);
                     break;
 
                 case ControllerType.ClassicController:
                     var cState = new ClassicController();
                     cState.SetCalibration(Calibrations.CalibrationPreset.Default);
                     ConfigureClassicController(cState);
+                    ConfigureWiimote(cState.wiimote);
                     break;
 
                 case ControllerType.ClassicControllerPro:
                     var ccpState = new ClassicControllerPro();
                     ccpState.SetCalibration(Calibrations.CalibrationPreset.Default);
                     ConfigureClassicControllerPro(ccpState);
+                    ConfigureWiimote(ccpState.wiimote);
                     break;
 
                 case ControllerType.Guitar:
                     var guitar = new Guitar();
                     guitar.SetCalibration(Calibrations.CalibrationPreset.Default);
                     ConfigureGuitar(guitar);
+                    ConfigureWiimote(guitar.wiimote);
+                    break;
+
+                case ControllerType.TaikoDrum:
+                    var takio = new TaikoDrum();
+                    takio.SetCalibration(Calibrations.CalibrationPreset.Default); // for wiimote
+                    ConfigureWiimote(takio.wiimote);
                     break;
 
                 default:
@@ -494,8 +504,8 @@ namespace Shared
                 case ControllerType.MotionPlusCC:
                 case ControllerType.MotionPlusNunchuk:
                 case ControllerType.Guitar:
+                case ControllerType.TaikoDrum:
                 //case ControllerType.Drums:
-                //case ControllerType.TaikoDrum:
                 //case ControllerType.TurnTable:
                 //case ControllerType.DrawTablet:
                     buttons = ((IWiimoteExtension)State).wiimote.buttons;
@@ -730,6 +740,16 @@ namespace Shared
                 buf[5] += (byte)(!g.Blue ? 0x20 : 0x00);
                 buf[5] += (byte)(!g.Red ? 0x40 : 0x00);
                 buf[5] += (byte)(!g.Orange ? 0x80 : 0x00);
+            }
+            else if (DeviceType == ControllerType.TaikoDrum)
+            {
+                var tak = (TaikoDrum)State;
+
+                buf[0] = 0x87;
+                buf[0] += (byte)(!tak.rimRight ? 0x08 : 0x00);
+                buf[0] += (byte)(!tak.centerRight ? 0x10 : 0x00);
+                buf[0] += (byte)(!tak.rimLeft ? 0x20 : 0x00);
+                buf[0] += (byte)(!tak.centerLeft ? 0x40 : 0x00);
             }
 
             return buf;

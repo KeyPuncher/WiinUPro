@@ -276,7 +276,7 @@
             </Canvas>
         </Viewbox>
         <!-- Guitar -->
-        <Viewbox x:Name="viewGuitar" Width="1100" Visibility="Visible">
+        <Viewbox x:Name="viewGuitar" Width="1100" Visibility="Collapsed">
             <Canvas Width="1772" Height="1110" Margin="-120,0,0,0" Background="Transparent">
                 <Grid Margin="0,0,0,0">
                     <Image Source="/WiinUPro;component/Images/Controllers/Guitar/guitarBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1772" Height="1110"/>
@@ -338,6 +338,34 @@
                             </ContextMenu>
                         </Image.ContextMenu>
                     </Image>
+                </Grid>
+            </Canvas>
+        </Viewbox>
+        <!-- Taiko Drum -->
+        <Viewbox x:Name="viewTaikoDrum" Width="600" Visibility="Collapsed">
+            <Canvas Width="400" Height="400" Background="Transparent">
+                <Grid Margin="0,0,0,0">
+                    <!--Image x:Name="ccpBtnA" Source="/WiinUPro;component/Images/Controllers/ClassicPro/ccpA.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="669,193,0,0" Width="53" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="ccpA" /-->
+                    <Ellipse x:Name="takRimL" Width="400" Height="400" Stroke="White" StrokeThickness="50" Fill="Transparent" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="takRimL">
+                        <Ellipse.Clip>
+                            <RectangleGeometry Rect="0,0,195,400"/>
+                        </Ellipse.Clip>
+                    </Ellipse>
+                    <Ellipse x:Name="takRimR" Width="400" Height="400" Stroke="White" StrokeThickness="50" Fill="Transparent" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="takRimR">
+                        <Ellipse.Clip>
+                            <RectangleGeometry Rect="205,0,195,400"/>
+                        </Ellipse.Clip>
+                    </Ellipse>
+                    <Ellipse x:Name="takL" Width="280" Height="280" StrokeThickness="0" Fill="White" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="takL">
+                        <Ellipse.Clip>
+                            <RectangleGeometry Rect="0,0,135,280"/>
+                        </Ellipse.Clip>
+                    </Ellipse>
+                    <Ellipse x:Name="takR" Width="280" Height="280" StrokeThickness="0" Fill="White" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="takR">
+                        <Ellipse.Clip>
+                            <RectangleGeometry Rect="145,0,135,280"/>
+                        </Ellipse.Clip>
+                    </Ellipse>
                 </Grid>
             </Canvas>
         </Viewbox>
