@@ -148,6 +148,7 @@ namespace NintrollerLib
                         case ControllerType.ClassicControllerPro:
                         case ControllerType.Nunchuk:
                         case ControllerType.NunchukB:
+                        case ControllerType.TaikoDrum:
                             _irSensitivity = value;
                             EnableIR();
                             break;
@@ -828,14 +829,6 @@ namespace NintrollerLib
                                 {
                                     case ControllerType.Wiimote:
                                         _state = new Wiimote();
-                                        if (_calibrations.WiimoteCalibration.CalibrationEmpty)
-                                        {
-                                            _state.SetCalibration(Calibrations.CalibrationPreset.Default);
-                                        }
-                                        else
-                                        {
-                                            _state.SetCalibration(_calibrations.WiimoteCalibration);
-                                        }
                                         applyReport = InputReport.BtnsAccIR;
                                         _irMode = IRCamMode.Basic;
                                         EnableIR();
@@ -986,11 +979,33 @@ namespace NintrollerLib
                                         break;
                                 }
 
+                                // Set calibration for Wiimote
+                                if (_state is Wiimote)
+                                {
+                                    if (_calibrations.WiimoteCalibration.CalibrationEmpty)
+                                    {
+                                        _state.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                    }
+                                    else
+                                    {
+                                        _state.SetCalibration(_calibrations.WiimoteCalibration);
+                                    }
+                                }
+                                else if (_state is IWiimoteExtension)
+                                {
+                                    if (_calibrations.WiimoteCalibration.CalibrationEmpty)
+                                    {
+                                        ((IWiimoteExtension)_state).wiimote.SetCalibration(Calibrations.CalibrationPreset.Default);
+                                    }
+                                    else
+                                    {
+                                        ((IWiimoteExtension)_state).wiimote.SetCalibration(_calibrations.WiimoteCalibration);
+                                    }
+                                }
+
                                 _currentType = newType;
 
                                 // TODO: Get calibration if PID != 330
-
-                                //_state.SetCalibration(Calibrations.CalibrationPreset.Default);
 
                                 // Fire ExtensionChange event
                                 //ExtensionChange(this, _currentType);
