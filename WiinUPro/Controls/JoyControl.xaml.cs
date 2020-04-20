@@ -446,8 +446,8 @@ namespace WiinUPro
                 }
                 catch { /* Failed to read */ }
 
-                // Reads 20 times a second
-                Thread.Sleep(50);
+                // Reads 200 times a second
+                Thread.Sleep(5);
             }
         }
 
