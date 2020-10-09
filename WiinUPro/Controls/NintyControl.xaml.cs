@@ -18,6 +18,7 @@ namespace WiinUPro
         public event TypeUpdate OnTypeChange;       // Called on extension changes
         public event Action OnDisconnect;           // Called when disconnected
         public event Action<DevicePrefs> OnPrefsChange;
+        public event Action<bool[]> OnRumbleSubscriptionChange;
 
         internal CommonStream _stream;               // Controller stream to the device
         internal Nintroller _nintroller;            // Physical Controller Device
@@ -407,10 +408,7 @@ namespace WiinUPro
                     }
                 }
                 _rumbleSubscriptions = loadedProfile.RumbleDevices;
-                if (AppPrefs.Instance.autoAddXInputDevices)
-                {
-                    MainWindow._instance.AddXInput(_rumbleSubscriptions);
-                }
+                OnRumbleSubscriptionChange?.Invoke(_rumbleSubscriptions);
             }
         }
 
@@ -646,10 +644,7 @@ namespace WiinUPro
             }
 
             _rumbleSubscriptions = win.Result;
-            if (AppPrefs.Instance.autoAddXInputDevices)
-            {
-                MainWindow._instance.AddXInput(_rumbleSubscriptions);
-            }
+            OnRumbleSubscriptionChange?.Invoke(_rumbleSubscriptions);
         }
 
         private void btnPrefs_Click(object sender, RoutedEventArgs e)
