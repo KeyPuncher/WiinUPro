@@ -25,7 +25,7 @@ namespace WiinUPro
             }
         }
 
-        public static MainWindow _instance;
+        private static MainWindow _instance;
         
         List<DeviceStatus> _availableDevices;
         DateTime _lastRefreshTime;
@@ -161,7 +161,7 @@ namespace WiinUPro
                             }
                         }
                     };
-
+                    status.OnRumbleSubscriptionChange = RumbleSettingsChanged;
                     _availableDevices.Add(status);
                     statusStack.Children.Add(status);
 
@@ -377,57 +377,58 @@ namespace WiinUPro
 
         #endregion
 
-        public void AddXInput(bool[] rumbleSub)
+        public void RumbleSettingsChanged(DeviceStatus s, bool[] rumbleSubscriptions)
         {
-            int n = 3;
-            for (; n > -1; n--)
+            if (AppPrefs.Instance.autoAddXInputDevices)
             {
-                if (rumbleSub[n])
+                int n = 3;
+                for (; n > -1; n--)
                 {
-                    Console.WriteLine(n.ToString());
-                    break;
-                }
-            }
-            
-            if (n > -1 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
-            {
-                bool connected = false;
-                for (int i = 0; i < 4; i++)
-                {
-                    ScpDirector.Access.SetModifier(i);
-                    connected = ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_A);
-                    if (connected) break;
+                    if (rumbleSubscriptions[n])
+                    {
+                        break;
+                    }
                 }
 
-                if (connected)
+                if (n > -1 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
                 {
-                    btnRemoveXinput.IsEnabled = true;
-                    xlabel1.Content = "Device 1: Auto Connected";
-                }
-            }
-            if (n > 0 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
-            {
-                if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_B))
-                {
-                    xlabel2.Content = "Device 2: Auto Connected";
-                }
-            }
-            if (n > 1 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
-            {
-                if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_C))
-                {
-                    xlabel3.Content = "Device 3: Auto Connected";
-                }
-            }
-            if (n > 2 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
-            {
-                if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_D))
-                {
-                    btnAddXinput.IsEnabled = false;
-                    xlabel4.Content = "Device 4: Auto Connected";
-                }
-            }
+                    bool connected = false;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        ScpDirector.Access.SetModifier(i);
+                        connected = ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_A);
+                        if (connected) break;
+                    }
 
+                    if (connected)
+                    {
+                        btnRemoveXinput.IsEnabled = true;
+                        xlabel1.Content = "Device 1: Auto Connected";
+                    }
+                }
+                if (n > 0 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
+                {
+                    if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_B))
+                    {
+                        xlabel2.Content = "Device 2: Auto Connected";
+                    }
+                }
+                if (n > 1 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
+                {
+                    if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_C))
+                    {
+                        xlabel3.Content = "Device 3: Auto Connected";
+                    }
+                }
+                if (n > 2 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
+                {
+                    if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_D))
+                    {
+                        btnAddXinput.IsEnabled = false;
+                        xlabel4.Content = "Device 4: Auto Connected";
+                    }
+                }
+            }
         }
 
         private void btnAddXinput_Click(object sender, RoutedEventArgs e)
