@@ -659,7 +659,7 @@ namespace WiinUPro
                 };
             }
 
-            var win = new Windows.DevicePrefsWindow(prefs);
+            var win = new Windows.DevicePrefsWindow(prefs, _nintroller.Type.ToString());
             win.ShowDialog();
 
             if (win.DoSave)
