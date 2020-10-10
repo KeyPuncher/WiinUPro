@@ -87,6 +87,7 @@ namespace WiinUPro.Windows
                 calibrationWrap.Children.Add(stack);
             }
             bool wiimoteType = false;
+            if (type == "NunchukB") type = "Nunchuk";
             string[] extTypes = new string[] { "Wiimote", "Nunchuk", "ClassicController", "ClassicControllerPro", "Guitar", "TaikoDrum" };
             for(int i = 0; i < comboExtProfile.Items.Count; i++)
             {
