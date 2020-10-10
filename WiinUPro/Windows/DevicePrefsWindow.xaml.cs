@@ -24,6 +24,7 @@ namespace WiinUPro.Windows
         private DevicePrefs _modifiedPrefs;
 
         private int lastIndex;
+        private bool selectionChanged = false;
 
         protected DevicePrefsWindow()
         {
@@ -116,6 +117,7 @@ namespace WiinUPro.Windows
                 margin.Top = 140;
                 calibrationViewer.Margin = margin;
             }
+            selectionChanged = true;
         }
 
         private void FindProfile(TextBox textBox)
@@ -175,7 +177,7 @@ namespace WiinUPro.Windows
 
         private void comboExtProfSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_modifiedPrefs != null)
+            if (selectionChanged)
             {
                 _modifiedPrefs.extensionProfiles[lastIndex] = extProfile.Text;
                 lastIndex = comboExtProfile.SelectedIndex;
