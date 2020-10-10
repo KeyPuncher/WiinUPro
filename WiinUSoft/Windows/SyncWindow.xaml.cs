@@ -38,6 +38,12 @@ namespace WiinUSoft.Windows
             handle = NativeImports.BluetoothFindFirstRadio(ref radioParams, out foundRadio);
             bool more = handle != IntPtr.Zero;
 
+            if (!more)
+            {
+                uint findBtError = NativeImports.GetLastError();
+                Prompt("Error Code " + findBtError.ToString());
+            }
+
             do
             {
                 if (foundRadio != IntPtr.Zero)
