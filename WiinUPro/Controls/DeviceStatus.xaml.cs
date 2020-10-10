@@ -35,6 +35,7 @@ namespace WiinUPro
         public Action<DeviceStatus, ControllerType> TypeUpdated;
         public Action<DeviceStatus> CloseTab;
         public Action<DeviceStatus, DevicePrefs> OnPrefsChange;
+        public Action<DeviceStatus, bool[]> OnRumbleSubscriptionChange;
 
         public ImageSource Icon { get { return icon.Source; } }
 
@@ -76,6 +77,7 @@ namespace WiinUPro
                 Ninty.OnTypeChange += Ninty_OnTypeChange;
                 Ninty.OnDisconnect += Ninty_OnDisconnect;
                 Ninty.OnPrefsChange += Ninty_OnPrefsChange;
+                Ninty.OnRumbleSubscriptionChange += Ninty_OnRumbleSubscriptionChange;
 
                 // Use saved icon if there is one
                 var prefs = AppPrefs.Instance.GetDevicePreferences(Info.DevicePath);
@@ -138,6 +140,11 @@ namespace WiinUPro
             }
 
             OnPrefsChange?.Invoke(this, prefs);
+        }
+
+        private void Ninty_OnRumbleSubscriptionChange(bool[] rumbleSubscriptions)
+        {
+            OnRumbleSubscriptionChange?.Invoke(this, rumbleSubscriptions);
         }
 
         public void UpdateType(ControllerType type)

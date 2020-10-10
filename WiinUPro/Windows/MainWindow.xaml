@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="WiinUPro" Height="520" Width="484" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="WiinUPro" Height="520" Width="500" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
         <TabControl x:Name="tabControl" Margin="10" Background="{StaticResource BackgroundSub}" >
             <TabControl.Resources>
@@ -55,10 +55,11 @@
                     <GroupBox x:Name="settingsGroup" Header="Settings" Margin="267,26,4,169.5" Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <CheckBox x:Name="settingAutoStart" Content="Auto Start" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingAutoStart_Checked"/>
-                            <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsEnabled="False" Style="{StaticResource CheckBoxStyle}" Click="settingStartMinimized_Checked"/>
+                            <CheckBox x:Name="settingStartMinimized" Content="Start Minimized" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingStartMinimized_Checked"/>
                             <CheckBox x:Name="settingExclusiveMode" Content="Use Exclusive Mode" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingExclusiveMode_Checked"/>
                             <CheckBox x:Name="settingToshibaMode" Content="Use Toshiba Mode" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingToshibaMode_Checked"/>
                             <CheckBox x:Name="settingSuppressLostConn" Content="Hide Connection Errors" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingSuppressLostConn_Checked"/>
+                            <CheckBox x:Name="settingAutoAddXInputDevices" Content="Auto Add XInput Devices" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingAutoAddXInputDevices_Checked"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,0,4,7.5" Style="{StaticResource GroupBoxStyle}" Height="159" VerticalAlignment="Bottom">

@@ -22,6 +22,7 @@ namespace WiinUPro.Windows
                 xDeviceB.IsChecked = subscriptions[1];
                 xDeviceC.IsChecked = subscriptions[2];
                 xDeviceD.IsChecked = subscriptions[3];
+                Result = subscriptions;
             }
         }
 

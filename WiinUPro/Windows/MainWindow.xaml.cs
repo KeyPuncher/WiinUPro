@@ -161,7 +161,7 @@ namespace WiinUPro
                             }
                         }
                     };
-
+                    status.OnRumbleSubscriptionChange = RumbleSettingsChanged;
                     _availableDevices.Add(status);
                     statusStack.Children.Add(status);
 
@@ -370,8 +370,66 @@ namespace WiinUPro
         {
             AppPrefs.Instance.suppressConnectionLost = settingSuppressLostConn.IsChecked ?? false;
         }
+        private void settingAutoAddXInputDevices_Checked(object sender, RoutedEventArgs e)
+        {
+            AppPrefs.Instance.autoAddXInputDevices = settingAutoAddXInputDevices.IsChecked ?? false;
+        }
 
         #endregion
+
+        public void RumbleSettingsChanged(DeviceStatus s, bool[] rumbleSubscriptions)
+        {
+            if (AppPrefs.Instance.autoAddXInputDevices)
+            {
+                int n = 3;
+                for (; n > -1; n--)
+                {
+                    if (rumbleSubscriptions[n])
+                    {
+                        break;
+                    }
+                }
+
+                if (n > -1 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
+                {
+                    bool connected = false;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        ScpDirector.Access.SetModifier(i);
+                        connected = ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_A);
+                        if (connected) break;
+                    }
+
+                    if (connected)
+                    {
+                        btnRemoveXinput.IsEnabled = true;
+                        xlabel1.Content = "Device 1: Auto Connected";
+                    }
+                }
+                if (n > 0 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
+                {
+                    if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_B))
+                    {
+                        xlabel2.Content = "Device 2: Auto Connected";
+                    }
+                }
+                if (n > 1 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
+                {
+                    if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_C))
+                    {
+                        xlabel3.Content = "Device 3: Auto Connected";
+                    }
+                }
+                if (n > 2 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
+                {
+                    if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_D))
+                    {
+                        btnAddXinput.IsEnabled = false;
+                        xlabel4.Content = "Device 4: Auto Connected";
+                    }
+                }
+            }
+        }
 
         private void btnAddXinput_Click(object sender, RoutedEventArgs e)
         {
@@ -485,11 +543,15 @@ namespace WiinUPro
             // Check Suppress Connection Lost
             settingSuppressLostConn.IsChecked = AppPrefs.Instance.suppressConnectionLost;
 
+            // Check Auto Add Xinput Devices
+            settingAutoAddXInputDevices.IsChecked = AppPrefs.Instance.autoAddXInputDevices;
+
             // Check for Start Minimized
             if (AppPrefs.Instance.startMinimized)
             {
                 settingStartMinimized.IsChecked = true;
-                // TOOD: Minimize
+                // TODO: Minimize to system tray instead.
+                WindowState = WindowState.Minimized;
             }
 
             // Check Exclusive Mode

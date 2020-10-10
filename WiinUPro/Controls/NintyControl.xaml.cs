@@ -18,6 +18,7 @@ namespace WiinUPro
         public event TypeUpdate OnTypeChange;       // Called on extension changes
         public event Action OnDisconnect;           // Called when disconnected
         public event Action<DevicePrefs> OnPrefsChange;
+        public event Action<bool[]> OnRumbleSubscriptionChange;
 
         internal CommonStream _stream;               // Controller stream to the device
         internal Nintroller _nintroller;            // Physical Controller Device
@@ -385,7 +386,7 @@ namespace WiinUPro
         public void LoadProfile(string fileName)
         {
             AssignmentProfile loadedProfile = null;
-            
+
             if (!App.LoadFromFile<AssignmentProfile>(fileName, out loadedProfile))
             {
                 var c = MessageBox.Show("Could not open or read the profile file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -394,6 +395,20 @@ namespace WiinUPro
             if (loadedProfile != null)
             {
                 _assignments = loadedProfile.ToAssignmentArray(this);
+                // Reads rumble device settings
+                for (byte i = 0; i < 4; i++)
+                {
+                    if (loadedProfile.RumbleDevices[i])
+                    {
+                        ScpDirector.Access.SubscribeToRumble((ScpDirector.XInput_Device)(i + 1), ApplyRumble);
+                    }
+                    else if (_rumbleSubscriptions[i])
+                    {
+                        ScpDirector.Access.UnSubscribeToRumble((ScpDirector.XInput_Device)(i + 1), ApplyRumble);
+                    }
+                }
+                _rumbleSubscriptions = loadedProfile.RumbleDevices;
+                OnRumbleSubscriptionChange?.Invoke(_rumbleSubscriptions);
             }
         }
 
@@ -590,7 +605,9 @@ namespace WiinUPro
 
             if (doSave == true)
             {
-                App.SaveToFile<AssignmentProfile>(dialog.FileName, new AssignmentProfile(_assignments));
+                AssignmentProfile profile = new AssignmentProfile(_assignments);
+                profile.RumbleDevices = _rumbleSubscriptions;
+                App.SaveToFile<AssignmentProfile>(dialog.FileName, profile);
             }
         }
 
@@ -627,6 +644,7 @@ namespace WiinUPro
             }
 
             _rumbleSubscriptions = win.Result;
+            OnRumbleSubscriptionChange?.Invoke(_rumbleSubscriptions);
         }
 
         private void btnPrefs_Click(object sender, RoutedEventArgs e)
@@ -825,7 +843,7 @@ namespace WiinUPro
     public interface INintyControl : IBaseControl
     {
         event Delegates.BoolArrDel OnChangeLEDs;
-        void ApplyInput(INintrollerState state); // TOOD: I have forgotten what I want to use this for
+        void ApplyInput(INintrollerState state); // TODO: I have forgotten what I want to use this for
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);
     }

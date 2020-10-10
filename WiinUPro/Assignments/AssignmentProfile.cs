@@ -10,6 +10,7 @@ namespace WiinUPro
         public List<AssignmentPair> GreenAssignments;
         public AssignmentProfile SubProfile;
         public string SubName;
+        public bool[] RumbleDevices = new bool[4];
 
         public AssignmentProfile()
         {
