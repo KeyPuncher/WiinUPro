@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NintrollerLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,14 +25,14 @@ namespace WiinUPro.Windows
         private DevicePrefs _modifiedPrefs;
 
         private int lastIndex;
-        private bool selectionChanged = false;
+        private bool extFunc = false;
 
         protected DevicePrefsWindow()
         {
             InitializeComponent();
         }
 
-        public DevicePrefsWindow(DevicePrefs devicePrefs, string type = null) : this()
+        public DevicePrefsWindow(DevicePrefs devicePrefs, ControllerType type = ControllerType.Other) : this()
         {
             Preferences = devicePrefs;
             deviceID.Content = devicePrefs.deviceId;
@@ -87,24 +88,20 @@ namespace WiinUPro.Windows
 
                 calibrationWrap.Children.Add(stack);
             }
-            bool wiimoteType = false;
-            if (type == "NunchukB") type = "Nunchuk";
-            string[] extTypes = new string[] { "Wiimote", "Nunchuk", "ClassicController", "ClassicControllerPro", "Guitar", "TaikoDrum" };
+            if (type == ControllerType.NunchukB) type = ControllerType.Nunchuk;
+            ControllerType[] extTypes = new ControllerType[] { ControllerType.Wiimote, ControllerType.Nunchuk, ControllerType.ClassicController, ControllerType.ClassicControllerPro, ControllerType.Guitar, ControllerType.TaikoDrum };
             for(int i = 0; i < comboExtProfile.Items.Count; i++)
             {
                 if (extTypes[i] == type)
                 {
                     comboExtProfile.SelectedIndex = i;
                     lastIndex = i;
-                    wiimoteType = true;
+                    extProfile.Text = _modifiedPrefs.extensionProfiles[lastIndex];
+                    extFunc = true;
                     break;
                 }
             }
-            if (wiimoteType)
-            {
-                extProfile.Text = _modifiedPrefs.extensionProfiles[lastIndex];
-            }
-            else
+            if (!extFunc)
             {
                 comboExtProfile.Visibility = Visibility.Hidden;
                 labelExtProfile.Visibility = Visibility.Hidden;
@@ -117,7 +114,6 @@ namespace WiinUPro.Windows
                 margin.Top = 140;
                 calibrationViewer.Margin = margin;
             }
-            selectionChanged = true;
         }
 
         private void FindProfile(TextBox textBox)
@@ -177,7 +173,7 @@ namespace WiinUPro.Windows
 
         private void comboExtProfSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (selectionChanged)
+            if (extFunc)
             {
                 _modifiedPrefs.extensionProfiles[lastIndex] = extProfile.Text;
                 lastIndex = comboExtProfile.SelectedIndex;
