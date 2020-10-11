@@ -27,7 +27,7 @@ namespace WiinUPro
             {
                 calibrationFiles.Add(calibration.Key, calibration.Value);
             }
-            extensionProfiles = other.extensionProfiles;
+            other.extensionProfiles.CopyTo(extensionProfiles, 0);
         }
     }
 }
