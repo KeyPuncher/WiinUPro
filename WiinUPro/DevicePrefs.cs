@@ -12,6 +12,7 @@ namespace WiinUPro
         public string icon;
         public bool autoConnect;
         public Dictionary<string, string> calibrationFiles = new Dictionary<string, string>();
+        public string[] extensionProfiles = new string[6];
 
         public void Copy(DevicePrefs other)
         {
@@ -26,6 +27,7 @@ namespace WiinUPro
             {
                 calibrationFiles.Add(calibration.Key, calibration.Value);
             }
+            other.extensionProfiles.CopyTo(extensionProfiles, 0);
         }
     }
 }

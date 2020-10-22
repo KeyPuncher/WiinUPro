@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NintrollerLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,23 +24,27 @@ namespace WiinUPro.Windows
         
         private DevicePrefs _modifiedPrefs;
 
+        private int lastIndex;
+        private bool extFunc = false;
+
         protected DevicePrefsWindow()
         {
             InitializeComponent();
         }
 
-        public DevicePrefsWindow(DevicePrefs devicePrefs) : this()
+        public DevicePrefsWindow(DevicePrefs devicePrefs, ControllerType type = ControllerType.Other) : this()
         {
             Preferences = devicePrefs;
             deviceID.Content = devicePrefs.deviceId;
             nickname.Text = devicePrefs.nickname;
             defaultProfile.Text = devicePrefs.defaultProfile;
             autoConnect.IsChecked = devicePrefs.autoConnect;
-
+            
             _modifiedPrefs = new DevicePrefs()
             {
                 deviceId = devicePrefs.deviceId
             };
+            devicePrefs.extensionProfiles.CopyTo(_modifiedPrefs.extensionProfiles, 0);
 
             foreach (var calibrationPath in devicePrefs.calibrationFiles)
             {
@@ -83,6 +88,46 @@ namespace WiinUPro.Windows
 
                 calibrationWrap.Children.Add(stack);
             }
+            if (type == ControllerType.NunchukB) type = ControllerType.Nunchuk;
+            ControllerType[] extTypes = new ControllerType[] { ControllerType.Wiimote, ControllerType.Nunchuk, ControllerType.ClassicController, ControllerType.ClassicControllerPro, ControllerType.Guitar, ControllerType.TaikoDrum };
+            for(int i = 0; i < comboExtProfile.Items.Count; i++)
+            {
+                if (extTypes[i] == type)
+                {
+                    comboExtProfile.SelectedIndex = i;
+                    lastIndex = i;
+                    extProfile.Text = _modifiedPrefs.extensionProfiles[lastIndex];
+                    extFunc = true;
+                    break;
+                }
+            }
+            if (!extFunc)
+            {
+                comboExtProfile.Visibility = Visibility.Hidden;
+                labelExtProfile.Visibility = Visibility.Hidden;
+                btnExtProfile.Visibility = Visibility.Hidden;
+                extProfile.Visibility = Visibility.Hidden;
+                Thickness margin = labelDefaultCalibrations.Margin;
+                margin.Top = 114;
+                labelDefaultCalibrations.Margin = margin;
+                margin = calibrationViewer.Margin;
+                margin.Top = 140;
+                calibrationViewer.Margin = margin;
+            }
+        }
+
+        private void FindProfile(TextBox textBox)
+        {
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.DefaultExt = ".wup";
+            dialog.Filter = App.PROFILE_FILTER;
+
+            bool? didFind = dialog.ShowDialog();
+
+            if (didFind == true && dialog.CheckFileExists)
+            {
+                textBox.Text = dialog.FileName;
+            }
         }
 
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
@@ -101,6 +146,7 @@ namespace WiinUPro.Windows
             _modifiedPrefs.autoConnect = autoConnect.IsChecked ?? false;
             _modifiedPrefs.nickname = nickname.Text;
             _modifiedPrefs.defaultProfile = defaultProfile.Text;
+            _modifiedPrefs.extensionProfiles[comboExtProfile.SelectedIndex] = extProfile.Text;
 
             Preferences.Copy(_modifiedPrefs);
 
@@ -116,15 +162,22 @@ namespace WiinUPro.Windows
 
         private void btnDefaultProfile_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.DefaultExt = ".wup";
-            dialog.Filter = App.PROFILE_FILTER;
+            FindProfile(defaultProfile);
+        }
 
-            bool? didFind = dialog.ShowDialog();
+        private void btnExtProfile_Click(object sender, RoutedEventArgs e)
+        {
+            FindProfile(extProfile);
+            _modifiedPrefs.extensionProfiles[comboExtProfile.SelectedIndex] = extProfile.Text;
+        }
 
-            if (didFind == true && dialog.CheckFileExists)
+        private void comboExtProfSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (extFunc)
             {
-                defaultProfile.Text = dialog.FileName;
+                _modifiedPrefs.extensionProfiles[lastIndex] = extProfile.Text;
+                lastIndex = comboExtProfile.SelectedIndex;
+                extProfile.Text = _modifiedPrefs.extensionProfiles[lastIndex];
             }
         }
     }
