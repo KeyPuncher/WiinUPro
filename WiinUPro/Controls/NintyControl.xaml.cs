@@ -394,6 +394,32 @@ namespace WiinUPro
 
             if (loadedProfile != null)
             {
+                if (fileName.Length > 6 & fileName[fileName.Length - 6] == '_')
+                {
+                    int n = (int)Char.GetNumericValue(fileName[fileName.Length - 5]);
+                    bool changeProfile = false;
+                    if (n == 1 && ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
+                    {
+                        changeProfile = true;
+                    }
+                    else if (n == 2 && ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
+                    {
+                        changeProfile = true;
+                    }
+                    else if (n == 3 && ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
+                    {
+                        changeProfile = true;
+                    }
+                    else if (n == 4 && ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
+                    {
+                        changeProfile = true;
+                    }
+                    if (changeProfile && !_rumbleSubscriptions[n - 1])
+                    {
+                        LoadProfile(fileName.Substring(0, fileName.Length - 5) + (char)(49 + n) + ".wup");
+                        return;
+                    }
+                }
                 _assignments = loadedProfile.ToAssignmentArray(this);
                 // Reads rumble device settings
                 for (byte i = 0; i < 4; i++)
