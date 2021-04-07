@@ -26,6 +26,10 @@ namespace WiinUPro.Windows
             _default = nonCalibrated;
             FileName = filename;
             set = true;
+            max.Max = nonCalibrated.max;
+            max.Value = prevCalibration.max;
+            min.Max = nonCalibrated.max;
+            min.Value = prevCalibration.min;
             Set(prevCalibration);
         }
 
@@ -46,11 +50,11 @@ namespace WiinUPro.Windows
         {
             _default.rawValue = value.rawValue;
             _default.Normalize();
-            raw.Width = 200 * _default.value;
+            raw.Width = Math.Max(200 * _default.value, 0);
 
             _trigger.rawValue = value.rawValue;
             _trigger.Normalize();
-            output.Width = 200 * _trigger.value;
+            output.Width = Math.Max(Math.Min(200 * _trigger.value, 200), 0);
         }
 
         private void acceptBtn_Click(object sender, System.Windows.RoutedEventArgs e)

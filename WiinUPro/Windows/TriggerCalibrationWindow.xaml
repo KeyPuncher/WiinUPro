@@ -43,7 +43,7 @@
             </Rectangle.Fill>
         </Rectangle>
         <Label Content="Minimum" HorizontalAlignment="Left" Margin="7,74,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Width="99" HorizontalContentAlignment="Center"/>
-        <WiinUPro:NumPicker x:Name="min" HorizontalAlignment="Left" Margin="6,97,0,0" VerticalAlignment="Top" Max="100" Min="-10" Value="0" OnValueUpdate="MinUpdated" Width="100"/>
+        <WiinUPro:NumPicker x:Name="min" HorizontalAlignment="Left" Margin="6,97,0,0" VerticalAlignment="Top" Max="100" Min="0" Value="0" OnValueUpdate="MinUpdated" Width="100"/>
         <Label Content="Maximum" HorizontalAlignment="Left" Margin="114,74,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Width="96" HorizontalContentAlignment="Center"/>
         <WiinUPro:NumPicker x:Name="max" HorizontalAlignment="Left" Margin="112,97,0,0" VerticalAlignment="Top" Max="100" Min="0" Value="31" OnValueUpdate="MaxUpdated" Width="100"/>
     </Grid>
