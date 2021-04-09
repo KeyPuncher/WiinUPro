@@ -37,7 +37,19 @@ namespace WiinUPro.Windows
             {
                 case ControllerType.Wiimote:
                     if (Device.State == null || !(Device.State is Wiimote))
-                        Device.State = new Wiimote();
+                    {
+                        var wiiIR = Calibrations.Defaults.WiimoteDefault.irSensor;
+                        var wiiAcc = Calibrations.Defaults.WiimoteDefault.accelerometer;
+                        wiiAcc.rawX = wiiAcc.centerX;
+                        wiiAcc.rawY = wiiAcc.centerY;
+                        wiiAcc.rawZ = wiiAcc.centerZ;
+
+                        Device.State = new Wiimote
+                        {
+                            irSensor = wiiIR,
+                            accelerometer = wiiAcc
+                        };
+                    }
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
                     groupNun.Visibility = Visibility.Hidden;
@@ -51,7 +63,21 @@ namespace WiinUPro.Windows
 
                 case ControllerType.Nunchuk:
                     if (Device.State == null || !isNunchuk)
-                        Device.State = new Nunchuk();
+                    {
+                        var nunJoystick = Calibrations.Defaults.NunchukDefault.joystick;
+                        nunJoystick.rawX = nunJoystick.centerX;
+                        nunJoystick.rawY = nunJoystick.centerY;
+                        var nunAcc = Calibrations.Defaults.NunchukDefault.accelerometer;
+                        nunAcc.rawX = nunAcc.centerX;
+                        nunAcc.rawY = nunAcc.centerY;
+                        nunAcc.rawZ = nunAcc.centerZ;
+
+                        Device.State = new Nunchuk
+                        {
+                            joystick = nunJoystick,
+                            accelerometer = nunAcc
+                        };
+                    }
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
                     groupNun.Visibility = Visibility.Visible;
@@ -65,7 +91,24 @@ namespace WiinUPro.Windows
 
                 case ControllerType.ClassicController:
                     if (Device.State == null || !isClassic)
-                        Device.State = new ClassicController();
+                    {
+                        var ccLJoy = Calibrations.Defaults.ClassicControllerDefault.LJoy;
+                        ccLJoy.rawX = ccLJoy.centerX;
+                        ccLJoy.rawY = ccLJoy.centerY;
+                        var ccRJoy = Calibrations.Defaults.ClassicControllerDefault.RJoy;
+                        ccRJoy.rawX = ccRJoy.centerX;
+                        ccRJoy.rawY = ccRJoy.centerY;
+                        var ccL = Calibrations.Defaults.ClassicControllerDefault.L;
+                        var ccR = Calibrations.Defaults.ClassicControllerDefault.R;
+
+                        Device.State = new ClassicController
+                        {
+                            LJoy = ccLJoy,
+                            RJoy = ccRJoy,
+                            L = ccL,
+                            R = ccR
+                        };
+                    }
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
                     groupNun.Visibility = Visibility.Hidden;
@@ -79,7 +122,20 @@ namespace WiinUPro.Windows
 
                 case ControllerType.ClassicControllerPro:
                     if (Device.State == null || !isClassicPro)
-                        Device.State = new ClassicControllerPro();
+                    {
+                        var ccpLJoy = Calibrations.Defaults.ClassicControllerProDefault.LJoy;
+                        ccpLJoy.rawX = ccpLJoy.centerX;
+                        ccpLJoy.rawY = ccpLJoy.centerY;
+                        var ccpRJoy = Calibrations.Defaults.ClassicControllerProDefault.RJoy;
+                        ccpRJoy.rawX = ccpRJoy.centerX;
+                        ccpRJoy.rawY = ccpRJoy.centerY;
+
+                        Device.State = new ClassicControllerPro
+                        {
+                            LJoy = ccpLJoy,
+                            RJoy = ccpRJoy
+                        };
+                    }
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
                     groupNun.Visibility = Visibility.Hidden;
@@ -93,7 +149,20 @@ namespace WiinUPro.Windows
 
                 case ControllerType.ProController:
                     if (Device.State == null || !isPro)
-                        Device.State = new ProController();
+                    {
+                        var proLJoy = Calibrations.Defaults.ProControllerDefault.LJoy;
+                        proLJoy.rawX = proLJoy.centerX;
+                        proLJoy.rawY = proLJoy.centerY;
+                        var proRJoy = Calibrations.Defaults.ProControllerDefault.RJoy;
+                        proRJoy.rawX = proRJoy.centerX;
+                        proRJoy.rawY = proRJoy.centerY;
+
+                        Device.State = new ProController
+                        {
+                            LJoy = proLJoy,
+                            RJoy = proRJoy
+                        };
+                    }
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Hidden;
                     groupNun.Visibility = Visibility.Hidden;
@@ -107,7 +176,18 @@ namespace WiinUPro.Windows
 
                 case ControllerType.Guitar:
                     if (Device.State == null || !isGuitar)
-                        Device.State = new Guitar();
+                    {
+                        var gJoy = Calibrations.Defaults.GuitarDefault.joystick;
+                        gJoy.rawX = gJoy.centerX;
+                        gJoy.rawY = gJoy.centerY;
+                        var gWham = Calibrations.Defaults.GuitarDefault.whammyBar;
+
+                        Device.State = new Guitar
+                        {
+                            joystick = gJoy,
+                            whammyBar = gWham
+                        };
+                    }
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
                     groupNun.Visibility = Visibility.Hidden;
@@ -136,7 +216,34 @@ namespace WiinUPro.Windows
 
                 case ControllerType.Other:
                     if (Device.State == null || !isGCN)
-                        Device.State = new GameCubeAdapter();
+                    {
+                        var gJoy = Calibrations.Defaults.GameCubeControllerDefault.joystick;
+                        var gCJoy = Calibrations.Defaults.GameCubeControllerDefault.cStick;
+
+                        Device.State = new GameCubeAdapter
+                        {
+                            port1 = new GameCubeController(INPUT_NAMES.GCN_ADAPTER.PORT_1_PREFIX)
+                            {
+                                joystick = gJoy,
+                                cStick = gCJoy
+                            },
+                            port2 = new GameCubeController(INPUT_NAMES.GCN_ADAPTER.PORT_2_PREFIX)
+                            {
+                                joystick = gJoy,
+                                cStick = gCJoy
+                            },
+                            port3 = new GameCubeController(INPUT_NAMES.GCN_ADAPTER.PORT_3_PREFIX)
+                            {
+                                joystick = gJoy,
+                                cStick = gCJoy
+                            },
+                            port4 = new GameCubeController(INPUT_NAMES.GCN_ADAPTER.PORT_4_PREFIX)
+                            {
+                                joystick = gJoy,
+                                cStick = gCJoy
+                            }
+                        };
+                    }
                     groupCore.Visibility = Visibility.Hidden;
                     wiimoteGrid.Visibility = Visibility.Hidden;
                     groupNun.Visibility = Visibility.Hidden;
