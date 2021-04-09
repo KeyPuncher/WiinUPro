@@ -156,11 +156,53 @@ namespace WiinUPro
             }
         }
 
+        protected override void OpenSelectedInput(object sender, RoutedEventArgs e)
+        {
+            string input = (sender as FrameworkElement)?.Tag?.ToString();
+
+            // Convert analog input names
+            switch(input)
+            {
+                case "UP":
+                    if (_menuOwnerTag == "swpR")
+                        input = "RotationY+";
+                    else
+                        input = "Y+";
+                    break;
+                case "LEFT":
+                    if (_menuOwnerTag == "swpR")
+                        input = "RotationX-";
+                    else
+                        input = "X-";
+                    break;
+                case "RIGHT":
+                    if (_menuOwnerTag == "swpR")
+                        input = "RotationX+";
+                    else
+                        input = "X+";
+                    break;
+                case "DOWN":
+                    if (_menuOwnerTag == "swpR")
+                        input = "RotationY-";
+                    else
+                        input = "Y-";
+                    break;
+                case "S":
+                    if (_menuOwnerTag == "swpR")
+                        input = "Buttons11";
+                    else
+                        input = "Buttons10";
+                    break;
+            }
+
+            CallEvent_OnInputSelected(input);
+        }
+
         protected override void QuickAssign(string prefix, string type)
         {
             string[] dir = new string[4];
 
-            if (prefix == "swpR")
+            if (_menuOwnerTag == "swpR")
             {
                 dir[0] = "RotationY+";
                 dir[1] = "RotationY-";
@@ -208,20 +250,19 @@ namespace WiinUPro
 
             if (item != null)
             {
-                var header = item.Header as string;
-                var prefix = item.Tag as string;
+                var mouseSpeed = item.Tag as string;
 
-                if (header != null && prefix != null)
+                if (mouseSpeed != null)
                 {
-                    float speed = 1f;
-                    switch (header)
+                    float speed;
+                    switch (mouseSpeed)
                     {
-                        case "50% Speed": speed = 0.5f; break;
-                        case "150% Speed": speed = 1.5f; break;
-                        case "200% Speed": speed = 2.0f; break;
-                        case "250% Speed": speed = 2.5f; break;
-                        case "300% Speed": speed = 3.0f; break;
-                        case "100% Speed":
+                        case "50": speed = 0.5f; break;
+                        case "150": speed = 1.5f; break;
+                        case "200": speed = 2.0f; break;
+                        case "250": speed = 2.5f; break;
+                        case "300": speed = 3.0f; break;
+                        case "100":
                         default:
                             speed = 1f;
                             break;
@@ -229,7 +270,7 @@ namespace WiinUPro
 
                     string[] dir = new string[4];
 
-                    if (prefix == "swpR")
+                    if (_menuOwnerTag == "swpR")
                     {
                         dir[0] = "RotationY+";
                         dir[1] = "RotationY-";
@@ -254,9 +295,10 @@ namespace WiinUPro
             }
         }
 
-        protected void CalibrateJoystick_Click(object sender, RoutedEventArgs e)
+        protected override void CalibrateInput(string inputName)
         {
-            _leftCalibration = (sender as FrameworkElement).Tag.ToString() == "swpL";
+            _leftCalibration = inputName == "swpL";
+
             string targetCalibration = _leftCalibration ? App.CAL_SWP_LJOYSTICK : App.CAL_SWP_RJOYSTICK;
 
             NintrollerLib.Joystick nonCalibrated = new NintrollerLib.Joystick

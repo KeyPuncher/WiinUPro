@@ -94,7 +94,7 @@ namespace WiinUPro
             // Test GCN Device
             else
             {
-                devices.Add(new Shared.DeviceInfo() { DevicePath = "Dummy GCN", PID = "0337", Type = NintrollerLib.ControllerType.Other });
+                devices.Add(new Shared.DeviceInfo() { DevicePath = "Dummy GCN", VID = "057E", PID = "0337", Type = NintrollerLib.ControllerType.Other });
             }
 
             // Test Device

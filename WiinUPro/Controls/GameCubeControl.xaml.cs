@@ -34,7 +34,12 @@ namespace WiinUPro
             _inputPrefix = "1_";
             InitializeComponent();
         }
-        
+
+        public GameCubeControl(string deviceId) : this()
+        {
+            DeviceID = deviceId;
+        }
+
         public void ApplyInput(INintrollerState state)
         {
             // Maybe one day I will remember what this was for or just remove it
@@ -123,35 +128,113 @@ namespace WiinUPro
             }
         }
 
-        private void Calibrate_Click(object sender, RoutedEventArgs e)
+        protected override void CalibrateInput(string inputName)
         {
-            // TODO
+            if (inputName == _inputPrefix + R.Tag.ToString())
+                CalibrateTrigger(true);
+            else if (inputName == _inputPrefix + L.Tag.ToString())
+                CalibrateTrigger(false);
+            else if (inputName == _inputPrefix + joystick.Tag.ToString())
+                CalibrateJoystick(false);
+            else if (inputName == _inputPrefix + cStick.Tag.ToString())
+                CalibrateJoystick(true);
         }
 
-        private void CalibrateTrigger_Click(object sender, RoutedEventArgs e)
+        private void CalibrateJoystick(bool cStick)
         {
-            // TODO: Apply Port target
-            _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
+            GameCubeController controller;
+            GetActivePort(out controller);
+
+            var nonCalibrated = new NintrollerLib.Joystick();
+            var curCalibrated = new NintrollerLib.Joystick();
+
+            if (cStick)
+            {
+                _calibrationTarget = "cStk";
+                nonCalibrated = Calibrations.None.GameCubeControllerRaw.cStick;
+                curCalibrated = controller.cStick;
+            }
+            else
+            {
+                _calibrationTarget = "joy";
+                nonCalibrated = Calibrations.None.GameCubeControllerRaw.joystick;
+                curCalibrated = controller.joystick;
+            }
+
+            Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(nonCalibrated, curCalibrated);
+            _openJoyWindow = joyCal;
+
+#if DEBUG
+            // Don't use show dialog so dummy values can be modified
+            if (DeviceID?.StartsWith("Dummy") ?? false)
+            {
+                joyCal.Closed += (obj, args) =>
+                {
+                    if (joyCal.Apply)
+                    {
+                        OnJoyCalibrated?.Invoke(joyCal.Calibration, _calibrationTarget, joyCal.FileName);
+                    }
+                    _openJoyWindow = null;
+                };
+
+                joyCal.Show();
+                return;
+            }
+#endif
+
+            joyCal.ShowDialog();
             
+            if (joyCal.Apply)
+            {
+                OnJoyCalibrated?.Invoke(joyCal.Calibration, _calibrationTarget, joyCal.FileName);
+            }
+            
+            _openJoyWindow = null;
+            joyCal = null;
+        }
+
+        private void CalibrateTrigger(bool rightTrigger)
+        {
             GameCubeController controller;
             GetActivePort(out controller);
 
             var nonCalibrated = new NintrollerLib.Trigger();
             var curCalibrated = new NintrollerLib.Trigger();
 
-            if (_calibrationTarget == App.CAL_GCN_RTRIGGER)
+            if (rightTrigger)
             {
+                _calibrationTarget = "R";
                 nonCalibrated = Calibrations.None.GameCubeControllerRaw.R;
                 curCalibrated = controller.R;
             }
-            else if (_calibrationTarget == App.CAL_GCN_LTRIGGER)
+            else
             {
+                _calibrationTarget = "L";
                 nonCalibrated = Calibrations.None.GameCubeControllerRaw.L;
                 curCalibrated = controller.L;
             }
 
             Windows.TriggerCalibrationWindow trigCal = new Windows.TriggerCalibrationWindow(nonCalibrated, curCalibrated);
             _openTrigWindow = trigCal;
+
+#if DEBUG
+            // Don't use show dialog so dummy values can be modified
+            if (DeviceID?.StartsWith("Dummy") ?? false)
+            {
+                trigCal.Closed += (obj, args) =>
+                {
+                    if (trigCal.Apply)
+                    {
+                        OnTriggerCalibrated?.Invoke(trigCal.Calibration, _calibrationTarget, trigCal.FileName);
+                    }
+                    _openTrigWindow = null;
+                };
+
+                trigCal.Show();
+                return;
+            }
+#endif
+
             trigCal.ShowDialog();
 
             if (trigCal.Apply)
@@ -159,7 +242,7 @@ namespace WiinUPro
                 OnTriggerCalibrated?.Invoke(trigCal.Calibration, _calibrationTarget, trigCal.FileName);
             }
 
-            _openJoyWindow = null;
+            _openTrigWindow = null;
             trigCal = null;
         }
 

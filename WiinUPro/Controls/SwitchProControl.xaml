@@ -33,57 +33,9 @@
                 <Image x:Name="center" Source="/WiinUPro;component/Images/Controllers/SwitchPro/spcCenter.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="286,443,0,0" Width="42" Height="42" Opacity="0"/>
                 <!-- Joystick -->
                 <Image x:Name="leftStick" Source="/WiinUPro;component/Images/Controllers/SwitchPro/spcJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="146,291,0,0" Opacity="1" Width="102" Height="102" />
-                <Image x:Name="leftStickButton" Source="/WiinUPro;component/Images/Controllers/SwitchPro/spcJoyStick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="146,291,0,0" Opacity="0" Width="102" Height="102" MouseLeftButtonUp="OpenContextMenu">
-                    <Image.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Up" Tag="Y+" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="X-" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="X+" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="Y-" Click="Axis_Click"/>
-                            <MenuItem Header="Stick Click" Tag="Buttons10" Click="Axis_Click"/>
-                            <Separator/>
-                            <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse">
-                                    <MenuItem Header="50% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="100% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="150% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="200% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="250% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="300% Speed" Tag="swpL" Click="QuickAssignMouse_Click" />
-                                </MenuItem>
-                                <MenuItem Header="WASD" Tag="swpL" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="swpL" Click="QuickAssign_Click"/>
-                            </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="swpL" Click="CalibrateJoystick_Click"/>
-                        </ContextMenu>
-                    </Image.ContextMenu>
-                </Image>
+                <Image x:Name="leftStickButton" Tag="swpL"  Source="/WiinUPro;component/Images/Controllers/SwitchPro/spcJoyStick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="146,291,0,0" Opacity="0" Width="102" Height="102" MouseLeftButtonUp="OpenJoystickClickMenu" MouseRightButtonUp="OpenJoystickClickMenu" />
                 <Image x:Name="rightStick" Source="/WiinUPro;component/Images/Controllers/SwitchPro/spcJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="507,412,0,0" Opacity="1" Width="102" Height="102" />
-                <Image x:Name="rightStickButton" Source="/WiinUPro;component/Images/Controllers/SwitchPro/spcJoyStick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="507,412,0,0"  Opacity="0" Width="102" Height="102" MouseLeftButtonUp="OpenContextMenu">
-                    <Image.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Up" Tag="RotationY+" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="RotationX-" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="RotationX+" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="RotationY-" Click="Axis_Click"/>
-                            <MenuItem Header="Stick Click" Tag="Buttons11" Click="Axis_Click"/>
-                            <Separator/>
-                            <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse">
-                                    <MenuItem Header="50% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="100% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="150% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="200% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="250% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="300% Speed" Tag="swpR" Click="QuickAssignMouse_Click" />
-                                </MenuItem>
-                                <MenuItem Header="WASD" Tag="swpR" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="swpR" Click="QuickAssign_Click"/>
-                            </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="swpR" Click="CalibrateJoystick_Click"/>
-                        </ContextMenu>
-                    </Image.ContextMenu>
-                </Image>
+                <Image x:Name="rightStickButton" Tag="swpR" Source="/WiinUPro;component/Images/Controllers/SwitchPro/spcJoyStick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="507,412,0,0"  Opacity="0" Width="102" Height="102" MouseLeftButtonUp="OpenJoystickClickMenu"  MouseRightButtonUp="OpenJoystickClickMenu" />
             </Grid>
         </Canvas>
     </Viewbox>

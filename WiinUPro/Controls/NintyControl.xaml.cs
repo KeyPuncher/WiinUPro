@@ -356,7 +356,7 @@ namespace WiinUPro
                 case ControllerType.Other:
                     if (_info.PID == "0337")
                     {
-                        _controller = new GameCubeControl();
+                        _controller = new GameCubeControl(_info.DeviceID);
                         ((GameCubeControl)_controller).OnJoyCalibrated += _nintroller_JoystickCalibrated;
                     }
                     break;

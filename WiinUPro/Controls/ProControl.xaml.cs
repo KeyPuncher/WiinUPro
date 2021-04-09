@@ -144,9 +144,10 @@ namespace WiinUPro
             XboxAssign();
         }
 
-        private void Calibrate_Click(object sender, RoutedEventArgs e)
+        protected override void CalibrateInput(string inputName)
         {
-            _rightJoyOpen = (sender as FrameworkElement).Tag.Equals("JoyR");
+            _rightJoyOpen = inputName == "proR";
+
             string joyTarget = _rightJoyOpen ? App.CAL_PRO_RJOYSTICK : App.CAL_PRO_LJOYSTICK;
             
             var prefs = AppPrefs.Instance.GetDevicePreferences(DeviceID);
