@@ -25,12 +25,12 @@ namespace WiinUPro
             }
         }
 
+        public static MainWindow Instance => _instance;
+
         private static MainWindow _instance;
         
         List<DeviceStatus> _availableDevices;
         DateTime _lastRefreshTime;
-        System.Windows.Forms.NotifyIcon trayIcon;
-        bool trayExit = false;
 
         public MainWindow()
         {
@@ -40,17 +40,6 @@ namespace WiinUPro
 
             WinBtStream.OverrideSharingMode = true;
             WinBtStream.OverridenFileShare = System.IO.FileShare.ReadWrite;
-            trayIcon = new System.Windows.Forms.NotifyIcon();
-            trayIcon.Icon = new System.Drawing.Icon(@"..\..\app.ico");
-            trayIcon.Visible = false;
-            trayIcon.DoubleClick +=
-                delegate (object sender, EventArgs args)
-                {
-                    this.Show();
-                    trayIcon.Visible = false;
-                };
-            this.trayIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.trayIcon.ContextMenuStrip.Items.Add("Exit", null, this.ContextMenu_TrayExit);
         }
         
         public void Refresh()
@@ -568,8 +557,7 @@ namespace WiinUPro
             if (AppPrefs.Instance.startMinimized)
             {
                 settingStartMinimized.IsChecked = true;
-                this.Hide();
-                trayIcon.Visible = true;
+                HideWindow();
             }
 
             // Check Exclusive Mode
@@ -597,28 +585,42 @@ namespace WiinUPro
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(!trayExit && (settingMinimizeOnClose.IsChecked ?? true))
-            {
-                this.Hide();
-                trayIcon.Visible = true;
-                e.Cancel = true;
-            }
-            else
-            {
-                // Stop listening for devices
-                DeviceListener.Instance.UnregisterDeviceNotification();
-                DeviceListener.Instance.OnDevicesUpdated -= WindowsDevicesChanged;
+            // Stop listening for devices
+            DeviceListener.Instance.UnregisterDeviceNotification();
+            DeviceListener.Instance.OnDevicesUpdated -= WindowsDevicesChanged;
 
-                // Save preferences
-                AppPrefs.Save();
+            // Save preferences
+            AppPrefs.Save();
+        }
+
+        private void TrayExit_Clicked(object sender, EventArgs e)
+        {
+            trayIcon.Visibility = Visibility.Hidden;
+            this.Close();
+        }
+
+        private void TrayShow_Clicked(object sender, EventArgs e)
+        {
+            ShowWindow();
+        }
+
+        public void HideWindow()
+        {
+            // Currently only minimizing if option is selected.
+            // Users may not want to have it minimize to tray all the time.
+            // Contemplating if minimize on close should be another option or not...
+            if (AppPrefs.Instance.minimizeOnClose)
+            {
+                trayIcon.Visibility = Visibility.Visible;
+                Hide();
             }
         }
 
-        private void ContextMenu_TrayExit(object sender, EventArgs e)
+        public void ShowWindow()
         {
-            trayIcon.Visible = false;
-            trayExit = true;
-            this.Close();
+            trayIcon.Visibility = Visibility.Hidden;
+            Show();
+            WindowState = WindowState.Normal;
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -634,5 +636,29 @@ namespace WiinUPro
         {
             Refresh();
         }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                HideWindow();
+            }
+        }
+    }
+
+    /// Used to invoke the double click action fo the tray icon
+    class ShowWindowCommand : ICommand
+    {
+        public void Execute(object parameter)
+        {
+            MainWindow.Instance?.ShowWindow();
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public event EventHandler CanExecuteChanged;
     }
 }

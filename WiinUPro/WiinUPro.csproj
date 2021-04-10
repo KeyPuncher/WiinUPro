@@ -66,6 +66,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Hardcodet.Wpf.TaskbarNotification">
+      <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.8\lib\net40\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
+    </Reference>
     <Reference Include="LibUsbDotNet, Version=2.2.8.104, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LibUsbDotNet.2.2.8\lib\LibUsbDotNet.dll</HintPath>
     </Reference>
