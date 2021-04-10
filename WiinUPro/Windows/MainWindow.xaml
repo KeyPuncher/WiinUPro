@@ -59,7 +59,8 @@
                             <CheckBox x:Name="settingExclusiveMode" Content="Use Exclusive Mode" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingExclusiveMode_Checked"/>
                             <CheckBox x:Name="settingToshibaMode" Content="Use Toshiba Mode" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingToshibaMode_Checked"/>
                             <CheckBox x:Name="settingSuppressLostConn" Content="Hide Connection Errors" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingSuppressLostConn_Checked"/>
-                            <CheckBox x:Name="settingAutoAddXInputDevices" Content="Auto Add XInput Devices" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingAutoAddXInputDevices_Checked"/>
+                            <CheckBox x:Name="settingAutoAddXInputDevices" Content="Auto Add XInput Devices" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingAutoAddXInputDevices_Checked" ToolTip="Automatically connect emulated XInput Devices based on device rumble configurations."/>
+                            <CheckBox x:Name="settingMinimizeOnClose" Content="Minimize To System Tray" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingMinimizeOnClose_Checked" ToolTip="Closing the application will instead minimize it to the system tray."/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,0,4,7.5" Style="{StaticResource GroupBoxStyle}" Height="159" VerticalAlignment="Bottom">

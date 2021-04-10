@@ -29,6 +29,8 @@ namespace WiinUPro
         
         List<DeviceStatus> _availableDevices;
         DateTime _lastRefreshTime;
+        System.Windows.Forms.NotifyIcon trayIcon;
+        bool trayExit = false;
 
         public MainWindow()
         {
@@ -38,6 +40,17 @@ namespace WiinUPro
 
             WinBtStream.OverrideSharingMode = true;
             WinBtStream.OverridenFileShare = System.IO.FileShare.ReadWrite;
+            trayIcon = new System.Windows.Forms.NotifyIcon();
+            trayIcon.Icon = new System.Drawing.Icon(@"..\..\app.ico");
+            trayIcon.Visible = false;
+            trayIcon.DoubleClick +=
+                delegate (object sender, EventArgs args)
+                {
+                    this.Show();
+                    trayIcon.Visible = false;
+                };
+            this.trayIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.trayIcon.ContextMenuStrip.Items.Add("Exit", null, this.ContextMenu_TrayExit);
         }
         
         public void Refresh()
@@ -375,6 +388,11 @@ namespace WiinUPro
             AppPrefs.Instance.autoAddXInputDevices = settingAutoAddXInputDevices.IsChecked ?? false;
         }
 
+        private void settingMinimizeOnClose_Checked(object sender, RoutedEventArgs e)
+        {
+            AppPrefs.Instance.minimizeOnClose = settingMinimizeOnClose.IsChecked ?? false;
+        }
+
         #endregion
 
         public void RumbleSettingsChanged(DeviceStatus s, bool[] rumbleSubscriptions)
@@ -550,8 +568,8 @@ namespace WiinUPro
             if (AppPrefs.Instance.startMinimized)
             {
                 settingStartMinimized.IsChecked = true;
-                // TODO: Minimize to system tray instead.
-                WindowState = WindowState.Minimized;
+                this.Hide();
+                trayIcon.Visible = true;
             }
 
             // Check Exclusive Mode
@@ -568,17 +586,39 @@ namespace WiinUPro
                 settingToshibaMode_Checked(this, new RoutedEventArgs());
             }
 
+            // Check Minimize To System Tray
+            if (AppPrefs.Instance.minimizeOnClose)
+            {
+                settingMinimizeOnClose.IsChecked = true;
+            }
+
             Refresh();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Stop listening for devices
-            DeviceListener.Instance.UnregisterDeviceNotification();
-            DeviceListener.Instance.OnDevicesUpdated -= WindowsDevicesChanged;
+            if(!trayExit && (settingMinimizeOnClose.IsChecked ?? true))
+            {
+                this.Hide();
+                trayIcon.Visible = true;
+                e.Cancel = true;
+            }
+            else
+            {
+                // Stop listening for devices
+                DeviceListener.Instance.UnregisterDeviceNotification();
+                DeviceListener.Instance.OnDevicesUpdated -= WindowsDevicesChanged;
 
-            // Save preferences
-            AppPrefs.Save();
+                // Save preferences
+                AppPrefs.Save();
+            }
+        }
+
+        private void ContextMenu_TrayExit(object sender, EventArgs e)
+        {
+            trayIcon.Visible = false;
+            trayExit = true;
+            this.Close();
         }
 
         protected override void OnSourceInitialized(EventArgs e)

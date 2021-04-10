@@ -69,6 +69,7 @@ namespace WiinUPro
         public bool useToshibaMode;
         public bool suppressConnectionLost;
         public bool autoAddXInputDevices;
+        public bool minimizeOnClose;
 
         public static string ToFileName(string text)
         {
