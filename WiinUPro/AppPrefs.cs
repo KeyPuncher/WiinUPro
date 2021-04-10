@@ -70,6 +70,7 @@ namespace WiinUPro
         public bool suppressConnectionLost;
         public bool autoAddXInputDevices;
         public bool minimizeOnClose;
+        public bool profileQueuing;
 
         public static string ToFileName(string text)
         {
