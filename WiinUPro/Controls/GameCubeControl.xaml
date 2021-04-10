@@ -11,55 +11,9 @@
                 <!-- Base Image -->
                 <Image Source="/WiinUPro;component/Images/Controllers/GameCube/gcnBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1443" Height="1087" />
                 <!-- Joystick -->
-                <Image x:Name="joystick" Source="/WiinUPro;component/Images/Controllers/GameCube/gcnJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="190,272,0,0" Width="178" Height="176" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
-                    <Image.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Up" Tag="gcnJOY_UP" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="gcnJOY_LEFT" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="gcnJOY_RIGHT" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="gcnJOY_DOWN" Click="Axis_Click"/>
-                            <Separator/>
-                            <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse">
-                                    <MenuItem Header="50% Speed" Tag="gcnJOY_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="100% Speed" Tag="gcnJOY_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="150% Speed" Tag="gcnJOY_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="200% Speed" Tag="gcnJOY_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="250% Speed" Tag="gcnJOY_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="300% Speed" Tag="gcnJOY_" Click="QuickAssignMouse_Click" />
-                                </MenuItem>
-                                <MenuItem Header="WASD" Tag="gcnJOY_" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="gcnJOY_" Click="QuickAssign_Click"/>
-                            </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="gcnJOY_" Click="Calibrate_Click"/>
-                        </ContextMenu>
-                    </Image.ContextMenu>
-                </Image>
+                <Image x:Name="joystick" Tag="gcnJOY_" Source="/WiinUPro;component/Images/Controllers/GameCube/gcnJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="190,272,0,0" Width="178" Height="176" Opacity="1" MouseLeftButtonUp="OpenJoystickMenu" MouseRightButtonUp="OpenJoystickMenu" />
                 <!-- C-Stick -->
-                <Image x:Name="cStick" Source="/WiinUPro;component/Images/Controllers/GameCube/gcnCStick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="887,618,0,0" Width="132" Height="132" Opacity="1" MouseLeftButtonUp="OpenContextMenu" >
-                    <Image.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Up" Tag="gcnC_UP" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="gcnC_LEFT" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="gcnC_RIGHT" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="gcnC_DOWN" Click="Axis_Click"/>
-                            <Separator/>
-                            <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse">
-                                    <MenuItem Header="50% Speed" Tag="gcnC_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="100% Speed" Tag="gcnC_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="150% Speed" Tag="gcnC_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="200% Speed" Tag="gcnC_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="250% Speed" Tag="gcnC_" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="300% Speed" Tag="gcnC_" Click="QuickAssignMouse_Click" />
-                                </MenuItem>
-                                <MenuItem Header="WASD" Tag="gcnC_" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="gcnC_" Click="QuickAssign_Click"/>
-                            </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="gcnC_" Click="Calibrate_Click"/>
-                        </ContextMenu>
-                    </Image.ContextMenu>
-                </Image>
+                <Image x:Name="cStick" Tag="gcnC_"  Source="/WiinUPro;component/Images/Controllers/GameCube/gcnCStick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="887,618,0,0" Width="132" Height="132" Opacity="1" MouseLeftButtonUp="OpenJoystickMenu" MouseRightButtonUp="OpenJoystickMenu" />
                 <!-- D-Pad -->
                 <Rectangle x:Name="dpadUp" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="442,570,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnUP" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
                 <Rectangle x:Name="dpadRight" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="522,641,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnRIGHT" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
@@ -71,7 +25,7 @@
                 <Rectangle x:Name="X" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="160" Margin="1261,246,0,0" Stroke="Black" VerticalAlignment="Top" Width="100" Opacity="0" Tag="gcnX" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
                 <Rectangle x:Name="Y" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="96" Margin="1031,159,0,0" Stroke="Black" VerticalAlignment="Top" Width="160" Opacity="0" Tag="gcnY" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
                 <!-- Shoulders and Start -->
-                <Rectangle x:Name="L" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="82" Margin="99,28,0,0" Stroke="Black" VerticalAlignment="Top" Width="257" Opacity="0" Tag="gcnL" MouseLeftButtonDown="OpenContextMenu" RenderTransformOrigin="0.5,0.5" >
+                <Rectangle x:Name="L" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="82" Margin="99,28,0,0" Stroke="Black" VerticalAlignment="Top" Width="257" Opacity="0" Tag="gcnL" RenderTransformOrigin="0.5,0.5" MouseLeftButtonUp="OpenTriggerMenu" MouseRightButtonUp="OpenTriggerMenu" >
                     <Rectangle.OpacityMask>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Offset="1" Color="Transparent"/>
@@ -86,16 +40,8 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Rectangle.RenderTransform>
-                    <Rectangle.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Press" Tag="gcnLT" Click="OpenInput" />
-                            <MenuItem Header="Full Press" Tag="gcnLFULL" Click="OpenInput" />
-                            <Separator/>
-                            <MenuItem Header="Calibrate" Tag="gcnLT" Click="CalibrateTrigger_Click"/>
-                        </ContextMenu>
-                    </Rectangle.ContextMenu>
                 </Rectangle>
-                <Rectangle x:Name="R" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="60" Margin="1097,18,0,0" Stroke="Black" VerticalAlignment="Top" Width="232" Opacity="0" Tag="gcnR" MouseLeftButtonDown="OpenContextMenu" RenderTransformOrigin="0.5,0.5" >
+                <Rectangle x:Name="R" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="60" Margin="1097,18,0,0" Stroke="Black" VerticalAlignment="Top" Width="232" Opacity="0" Tag="gcnR" RenderTransformOrigin="0.5,0.5" MouseLeftButtonUp="OpenTriggerMenu" MouseRightButtonUp="OpenTriggerMenu">
                     <Rectangle.OpacityMask>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="Transparent" Offset="0"/>
@@ -110,14 +56,6 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Rectangle.RenderTransform>
-                    <Rectangle.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Press" Tag="gcnRT" Click="OpenInput" />
-                            <MenuItem Header="Full Press" Tag="gcnRFULL" Click="OpenInput" />
-                            <Separator/>
-                            <MenuItem Header="Calibrate" Tag="gcnRT" Click="CalibrateTrigger_Click"/>
-                        </ContextMenu>
-                    </Rectangle.ContextMenu>
                 </Rectangle>
                 <Rectangle x:Name="Z" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="256" Margin="1181,-26,0,0" Stroke="Black" VerticalAlignment="Top" Width="42" Opacity="0" Tag="gcnZ" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" RenderTransformOrigin="0.5,0.5" >
                     <Rectangle.RenderTransform>

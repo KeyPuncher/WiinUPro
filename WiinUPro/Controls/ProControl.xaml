@@ -17,57 +17,9 @@
                 <Image x:Name="led4" Source="/WiinUPro;component/Images/Controllers/Pro/problackLED4.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="720,656,0,0" Width="47" Height="48" Opacity="0" MouseUp="led_MouseUp"/>
                 <!-- Analog Stick Images -->
                 <Image x:Name="leftStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,232,0,0" Opacity="1" Width="148" Height="148" />
-                <Image x:Name="leftStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,230,0,0" Width="151" Height="152" Opacity="0" MouseLeftButtonUp="OpenContextMenu" >
-                    <Image.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Up" Tag="proLUP" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="proLLEFT" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="proLRIGHT" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="proLDOWN" Click="Axis_Click"/>
-                            <MenuItem Header="Stick Click" Tag="proLS" Click="Axis_Click"/>
-                            <Separator/>
-                            <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse">
-                                    <MenuItem Header="50% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="100% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="150% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="200% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="250% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="300% Speed" Tag="proL" Click="QuickAssignMouse_Click" />
-                                </MenuItem>
-                                <MenuItem Header="WASD" Tag="proL" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="proL" Click="QuickAssign_Click"/>
-                            </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="JoyL" Click="Calibrate_Click"/>
-                        </ContextMenu>
-                    </Image.ContextMenu>
-                </Image>
+                <Image x:Name="leftStickBtn" Tag="proL" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="196,230,0,0" Width="151" Height="152" Opacity="0" MouseLeftButtonUp="OpenJoystickClickMenu" MouseRightButtonUp="OpenJoystickClickMenu" />
                 <Image x:Name="rightStick" Source="/WiinUPro;component/Images/Controllers/Pro/problackthumbstickR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,232,0,0" Opacity="1" Width="148" Height="148" />
-                <Image x:Name="rightStickBtn" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,230,0,0" Width="151" Height="152" Opacity="0" MouseLeftButtonUp="OpenContextMenu" >
-                    <Image.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Up" Tag="proRUP" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="proRLEFT" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="proRRIGHT" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="proRDOWN" Click="Axis_Click"/>
-                            <MenuItem Header="Stick Click" Tag="proRS" Click="Axis_Click"/>
-                            <Separator/>
-                            <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse">
-                                    <MenuItem Header="50% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="100% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="150% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="200% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="250% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
-                                    <MenuItem Header="300% Speed" Tag="proR" Click="QuickAssignMouse_Click" />
-                                </MenuItem>
-                                <MenuItem Header="WASD" Tag="proR" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="proR" Click="QuickAssign_Click"/>
-                            </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="JoyR" Click="Calibrate_Click"/>
-                        </ContextMenu>
-                    </Image.ContextMenu>
-                </Image>
+                <Image x:Name="rightStickBtn" Tag="proR" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitethumbstick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,230,0,0" Width="151" Height="152" Opacity="0" MouseLeftButtonUp="OpenJoystickClickMenu" MouseRightButtonUp="OpenJoystickClickMenu" />
                 <!-- Dpad Images-->
                 <Image x:Name="dpadUp" Source="/WiinUPro;component/Images/Controllers/Pro/proWhiteupCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="382,421,0,0" Opacity="0" Width="64" Height="66" MouseLeftButtonDown="Btn_MouseLeftButtonDown" Tag="proUP" MouseRightButtonUp="Btn_MouseRightButtonUp" />
                 <Image x:Name="dpadDown" Source="/WiinUPro;component/Images/Controllers/Pro/proWhitedownCropped.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="382,549,0,0" Opacity="0" Width="64" Height="66" MouseLeftButtonDown="Btn_MouseLeftButtonDown" Tag="proDOWN" MouseRightButtonUp="Btn_MouseRightButtonUp" />

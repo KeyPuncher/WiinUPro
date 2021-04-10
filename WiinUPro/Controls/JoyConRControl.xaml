@@ -25,25 +25,7 @@
                 <Image x:Name="srBtn" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrSR.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="198,664,0,0" Width="53" Height="120" Opacity="0" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" Tag="Buttons5"/>
                 <!-- Joystick -->
                 <Image x:Name="joyStick" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="476,990,0,0" Opacity="1" Width="209" Height="208" />
-                <Image x:Name="joyStickButton" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrJS.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="476,990,0,0" Opacity="0" Width="209" Height="208" MouseLeftButtonUp="OpenContextMenu">
-                    <Image.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Up" Tag="pov0E" Click="Axis_Click"/>
-                            <MenuItem Header="Left" Tag="pov0N" Click="Axis_Click"/>
-                            <MenuItem Header="Right" Tag="pov0S" Click="Axis_Click"/>
-                            <MenuItem Header="Down" Tag="pov0W" Click="Axis_Click"/>
-                            <MenuItem Header="Stick Click" Tag="Buttons11" Click="Axis_Click"/>
-                            <!--
-                            <Separator/>
-                            <MenuItem Header="Quick Assign">
-                                <MenuItem Header="Mouse" Tag="proR" Click="QuickAssign_Click"/>
-                                <MenuItem Header="WASD" Tag="proR" Click="QuickAssign_Click"/>
-                                <MenuItem Header="Arrows" Tag="proR" Click="QuickAssign_Click"/>
-                            </MenuItem>
-                            <MenuItem Header="Calibrate" Tag="Joy" Click="Calibrate_Click"/>-->
-                        </ContextMenu>
-                    </Image.ContextMenu>
-                </Image>
+                <Image x:Name="joyStickButton" Tag="Joy" Source="/WiinUPro;component/Images/Controllers/JoyConR/jcrJS.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="476,990,0,0" Opacity="0" Width="209" Height="208" MouseLeftButtonUp="OpenPadMenu" MouseRightButtonUp="OpenPadMenu"/>
             </Grid>
         </Canvas>
     </Viewbox>

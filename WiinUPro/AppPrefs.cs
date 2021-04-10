@@ -45,6 +45,12 @@ namespace WiinUPro
                             Save();
                         }
                     }
+
+                    if (_instance == null)
+                    {
+                        // Error reading the prefs.
+                        _instance = new AppPrefs();
+                    }
                 }
 
                 return _instance;

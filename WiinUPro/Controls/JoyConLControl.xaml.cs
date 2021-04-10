@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using SharpDX.DirectInput;
 
 namespace WiinUPro
@@ -81,6 +83,65 @@ namespace WiinUPro
                         break;
                 }
             }
+        }
+
+        protected void SetupMenuForPad()
+        {
+            int i = 0;
+            for (; i < 5; ++i)
+            {
+                (_analogMenu.Items[i] as Control).Visibility = Visibility.Visible;
+            }
+
+            for (; i < 13; ++i)
+            {
+                (_analogMenu.Items[i] as Control).Visibility = Visibility.Collapsed;
+            }
+        }
+
+        protected virtual void OpenPadMenu(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as FrameworkElement;
+
+            if (item != null)
+            {
+                _menuOwnerTag = item.Tag as string;
+                SetupMenuForPad();
+                _analogMenuInput = _inputPrefix + (item.Tag as string);
+                _analogMenu.IsOpen = true;
+            }
+        }
+
+        protected override void OpenSelectedInput(object sender, RoutedEventArgs e)
+        {
+            string input = (sender as FrameworkElement)?.Tag?.ToString();
+
+            // Convert analog input names
+            switch (input)
+            {
+                case "UP":
+                    input = "pov0W";
+                    break;
+                case "LEFT":
+                    input = "pov0S";
+                    break;
+                case "RIGHT":
+                    input = "pov0N";
+                    break;
+                case "DOWN":
+                    input = "pov0E";
+                    break;
+                case "S":
+                    input = "Buttons10";
+                    break;
+            }
+
+            CallEvent_OnInputSelected(input);
+        }
+
+        protected override void CalibrateInput(string inputName)
+        {
+            // TODO
         }
     }
 }

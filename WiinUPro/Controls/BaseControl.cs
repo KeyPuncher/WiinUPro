@@ -15,6 +15,139 @@ namespace WiinUPro
         public event Delegates.StringArrDel OnRemoveInputs;
 
         protected string _inputPrefix = "";
+        protected string _menuOwnerTag = "";
+        protected ContextMenu _analogMenu;
+        protected string _analogMenuInput = "";
+
+        protected BaseControl()
+        {
+            _analogMenu = new ContextMenu();
+
+            // Create menu items for assigning input directions.
+            _analogMenu.Items.Add(new MenuItem { Header = "Up", Tag="UP" });
+            _analogMenu.Items.Add(new MenuItem { Header = "Left", Tag="LEFT" });
+            _analogMenu.Items.Add(new MenuItem { Header = "Right", Tag="RIGHT" });
+            _analogMenu.Items.Add(new MenuItem { Header = "Down", Tag="DOWN" });
+            _analogMenu.Items.Add(new MenuItem { Header = "Stick Click", Tag="S" });
+
+            // Create menu items for analog triggers
+            _analogMenu.Items.Add(new MenuItem { Header = "Press", Tag="T" });
+            _analogMenu.Items.Add(new MenuItem { Header = "Full Press", Tag="FULL" });
+
+            foreach (var menuItem in _analogMenu.Items)
+                (menuItem as MenuItem).Click += OpenSelectedInput;
+
+            _analogMenu.Items.Add(new Separator());
+
+            // Create menu items for quick assignment
+            var quickAssign = new MenuItem { Header = "Quick Assign" };
+            var quickMouse = new MenuItem { Header = "Mouse" };
+            {
+                quickMouse.Items.Add(new MenuItem { Header = "50% Speed", Tag = "50" });
+                quickMouse.Items.Add(new MenuItem { Header = "100% Speed", Tag = "100" });
+                quickMouse.Items.Add(new MenuItem { Header = "150% Speed", Tag = "150" });
+                quickMouse.Items.Add(new MenuItem { Header = "200% Speed", Tag = "200" });
+                quickMouse.Items.Add(new MenuItem { Header = "250% Speed", Tag = "250" });
+                quickMouse.Items.Add(new MenuItem { Header = "300% Speed", Tag = "300" });
+            }
+            foreach (var menuItem in quickMouse.Items)
+                (menuItem as MenuItem).Click += QuickAssignMouse_Click;
+            quickAssign.Items.Add(quickMouse);
+            quickAssign.Items.Add(new MenuItem { Header = "WASD" });
+            quickAssign.Items.Add(new MenuItem { Header = "Arrows" });
+            (quickAssign.Items[1] as MenuItem).Click += QuickAssign_Click;
+            (quickAssign.Items[2] as MenuItem).Click += QuickAssign_Click;
+            _analogMenu.Items.Add(quickAssign);
+
+            _analogMenu.Items.Add(new Separator());
+
+            // Create menu items for IR camera
+            var irMode = new MenuItem { Header = "Set IR Mode" };
+            {
+                irMode.Items.Add(new MenuItem { Header = "Basic" });
+                irMode.Items.Add(new MenuItem { Header = "Wide" });
+                irMode.Items.Add(new MenuItem { Header = "Full" });
+                irMode.Items.Add(new MenuItem { Header = "Off" });
+            }
+            foreach (var irModeItem in irMode.Items)
+                (irModeItem as MenuItem).Click += SetIRCamMode_Click;
+            var irLevel = new MenuItem { Header = "Set IR Sensitivity" };
+            {
+                irLevel.Items.Add(new MenuItem { Header = "Level 1" });
+                irLevel.Items.Add(new MenuItem { Header = "Level 2" });
+                irLevel.Items.Add(new MenuItem { Header = "Level 3" });
+                irLevel.Items.Add(new MenuItem { Header = "Level 4" });
+                irLevel.Items.Add(new MenuItem { Header = "Level 5" });
+            }
+            foreach (var irLevelItem in irLevel.Items)
+                (irLevelItem as MenuItem).Click += SetIRCamSensitivity_Click;
+            _analogMenu.Items.Add(irMode);
+            _analogMenu.Items.Add(irLevel);
+
+            // Add Calibration menu item
+            var calibrationItem = new MenuItem { Header = "Calibration" };
+            calibrationItem.Click += CalibrateInput_Click;
+            _analogMenu.Items.Add(calibrationItem);
+            
+            ContextMenu = _analogMenu;
+            ContextMenuService.SetIsEnabled(this, false);
+        }
+
+        protected void SetupAnalogMenuForJoystick(bool withStickClick)
+        {
+            int i = 0;
+            for (; i < 4; ++i) 
+            {
+                (_analogMenu.Items[i] as MenuItem).Visibility = Visibility.Visible;
+            }
+
+            (_analogMenu.Items[i++] as MenuItem).Visibility = withStickClick ? Visibility.Visible : Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+        }
+
+        protected void SetupAnalogMenuForTrigger()
+        {
+            int i = 0;
+            for (; i < 5; ++i)
+            {
+                (_analogMenu.Items[i] as MenuItem).Visibility = Visibility.Collapsed;
+            }
+
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+        }
+
+        protected void SetupAnalogMenuForIRCam()
+        {
+            int i = 0;
+            for (; i < 4; ++i)
+            {
+                (_analogMenu.Items[i] as MenuItem).Visibility = Visibility.Visible;
+            }
+
+            for (; i < 7; ++i)
+            {
+                (_analogMenu.Items[i] as MenuItem).Visibility = Visibility.Collapsed;
+            }
+            
+            for (; i < 13; ++i)
+            {
+                ((Control)_analogMenu.Items[i]).Visibility = Visibility.Visible;
+            }
+        }
 
         protected virtual void CallEvent_OnInputRightClick(string value)
         {
@@ -84,6 +217,63 @@ namespace WiinUPro
             }
         }
 
+        protected virtual void OpenJoystickMenu(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as FrameworkElement;
+
+            if (item != null)
+            {
+                _menuOwnerTag = item.Tag as string;
+                SetupAnalogMenuForJoystick(false);
+                _analogMenuInput = _inputPrefix + (item.Tag as string);
+                _analogMenu.IsOpen = true;
+            }
+        }
+
+        protected virtual void OpenJoystickClickMenu(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as FrameworkElement;
+
+            if (item != null)
+            {
+                _menuOwnerTag = item.Tag as string;
+                SetupAnalogMenuForJoystick(true);
+                _analogMenuInput = _inputPrefix + (item.Tag as string);
+                _analogMenu.IsOpen = true;
+            }
+        }
+
+        protected virtual void OpenTriggerMenu(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as FrameworkElement;
+
+            if (item != null)
+            {
+                _menuOwnerTag = item.Tag as string;
+                SetupAnalogMenuForTrigger();
+                _analogMenuInput = _inputPrefix + (item.Tag as string);
+                _analogMenu.IsOpen = true;
+            }
+        }
+
+        protected virtual void OpenIRCamMenu(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as FrameworkElement;
+
+            if (item != null)
+            {
+                _menuOwnerTag = item.Tag as string;
+                SetupAnalogMenuForIRCam();
+                _analogMenuInput = _inputPrefix + (item.Tag as string);
+                _analogMenu.IsOpen = true;
+            }
+        }
+
+        protected virtual void OpenSelectedInput(object sender, RoutedEventArgs e)
+        {
+            OnInputSelected?.Invoke(_analogMenuInput + (sender as FrameworkElement)?.Tag?.ToString());
+        }
+
         protected virtual void QuickAssign(string prefix, string type)
         {
             Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
@@ -120,7 +310,7 @@ namespace WiinUPro
             if (item != null)
             {
                 var header = item.Header as string;
-                var tag = _inputPrefix + item.Tag as string;
+                var tag = _inputPrefix + _menuOwnerTag ?? "" + item.Tag as string;
 
                 if (header != null && tag != null)
                 {
@@ -135,34 +325,52 @@ namespace WiinUPro
 
             if (item != null)
             {
-                var header = item.Header as string;
-                var prefix = item.Tag as string;
+                var mouseSpeed = item.Tag as string;
 
-                if (header != null && prefix != null)
+                if (mouseSpeed != null)
                 {
-                    float speed = 1f;
-                    switch (header)
+                    float speed;
+                    switch (mouseSpeed)
                     {
-                        case "50% Speed": speed = 0.5f; break;
-                        case "150% Speed": speed = 1.5f; break;
-                        case "200% Speed": speed = 2.0f; break;
-                        case "250% Speed": speed = 2.5f; break;
-                        case "300% Speed": speed = 3.0f; break;
-                        case "100% Speed":
+                        case "50": speed = 0.5f; break;
+                        case "150": speed = 1.5f; break;
+                        case "200": speed = 2.0f; break;
+                        case "250": speed = 2.5f; break;
+                        case "300": speed = 3.0f; break;
+                        case "100":
                         default:
                             speed = 1f;
                             break;
                     }
 
+                    string prefix = (_inputPrefix ?? "") + (_menuOwnerTag ?? "") + (item.Tag ?? "");
+
                     Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
-                    args.Add(_inputPrefix + prefix + "UP", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp, speed) }));
-                    args.Add(_inputPrefix + prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown, speed) }));
-                    args.Add(_inputPrefix + prefix + "LEFT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft, speed) }));
-                    args.Add(_inputPrefix + prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight, speed) }));
+                    args.Add(prefix + "UP", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp, speed) }));
+                    args.Add(prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown, speed) }));
+                    args.Add(prefix + "LEFT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveLeft, speed) }));
+                    args.Add(prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveRight, speed) }));
                     CallEvent_OnQuickAssign(args);
                 }
             }
         }
+
+        protected virtual void SetIRCamMode_Click(object sender, RoutedEventArgs e)
+        {
+            // To be overriden in WiiControl.
+        }
+
+        protected virtual void SetIRCamSensitivity_Click(object sender, RoutedEventArgs e)
+        {
+            // To be overriden in WiiControl.
+        }
+
+        protected virtual void CalibrateInput_Click(object sender, RoutedEventArgs e)
+        {
+            CalibrateInput((_inputPrefix ?? "") + (_menuOwnerTag ?? ""));
+        }
+
+        protected abstract void CalibrateInput(string inputName);
     }
 
     public interface IBaseControl

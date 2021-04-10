@@ -500,6 +500,7 @@ namespace NintrollerLib
                 {
                     try
                     {
+                        // TODO: Might be a bug here. Use 'Rumble On Press' on A button then tap it repeatedly.
                         if (wh != null && !wh.SafeWaitHandle.IsClosed && !wh.WaitOne(3000))
                         {
                             // If read is not completed send a status report to check connection status

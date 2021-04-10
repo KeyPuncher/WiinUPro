@@ -387,7 +387,7 @@ namespace WiinUPro
             CallEvent_OnQuickAssign(args);
         }
 
-        private void SetIRMode(object sender, RoutedEventArgs e)
+        protected override void SetIRCamMode_Click(object sender, RoutedEventArgs e)
         {
             var item = sender as MenuItem;
 
@@ -406,7 +406,7 @@ namespace WiinUPro
             }
         }
 
-        private void SetIRSensitivity(object sender, RoutedEventArgs e)
+        protected override void SetIRCamSensitivity_Click(object sender, RoutedEventArgs e)
         {
             var item = sender as MenuItem;
 
@@ -425,41 +425,59 @@ namespace WiinUPro
             }
         }
 
-        private void CalibrateJoystick_Click(object sender, RoutedEventArgs e)
+        protected override void CalibrateInput(string inputName)
         {
-            _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
+            _calibrationTarget = inputName;
 
-            Joystick nonCalibrated = new Joystick();
-            Joystick curCalibration = new Joystick();
-            switch (_calibrationTarget)
+            switch (inputName)
             {
+                case App.CAL_WII_IR:
+                    CalibrateIR();
+                    break;
+
+                // Joysticks
                 case App.CAL_NUN_JOYSTICK:
-                    nonCalibrated = Calibrations.None.NunchukRaw.joystick;
-                    if (_lastState is Nunchuk) curCalibration = ((Nunchuk)_lastState).joystick;
+                    CalibrateJoystick(Calibrations.None.NunchukRaw.joystick, (_lastState as Nunchuk?)?.joystick);
                     break;
                 case App.CAL_CC_LJOYSTICK:
-                    nonCalibrated = Calibrations.None.ClassicControllerRaw.LJoy;
-                    if (_lastState is ClassicController) curCalibration = ((ClassicController)_lastState).LJoy;
+                    CalibrateJoystick(Calibrations.None.ClassicControllerRaw.LJoy, (_lastState as ClassicController?)?.LJoy);
                     break;
                 case App.CAL_CC_RJOYSTICK:
-                    nonCalibrated = Calibrations.None.ClassicControllerRaw.RJoy;
-                    if (_lastState is ClassicController) curCalibration = ((ClassicController)_lastState).RJoy;
+                    CalibrateJoystick(Calibrations.None.ClassicControllerRaw.RJoy, (_lastState as ClassicController?)?.RJoy);
                     break;
-                case App.CAL_CCP_LJOYSTICK: nonCalibrated = Calibrations.None.ClassicControllerProRaw.LJoy;
-                    if (_lastState is ClassicControllerPro) curCalibration = ((ClassicControllerPro)_lastState).LJoy;
+                case App.CAL_CCP_LJOYSTICK:
+                    CalibrateJoystick(Calibrations.None.ClassicControllerProRaw.LJoy, (_lastState as ClassicControllerPro?)?.LJoy);
                     break;
                 case App.CAL_CCP_RJOYSTICK:
-                    nonCalibrated = Calibrations.None.ClassicControllerProRaw.RJoy;
-                    if (_lastState is ClassicControllerPro) curCalibration = ((ClassicControllerPro)_lastState).RJoy;
+                    CalibrateJoystick(Calibrations.None.ClassicControllerProRaw.RJoy, (_lastState as ClassicControllerPro?)?.LJoy);
                     break;
                 case App.CAL_GUT_JOYSTICK:
-                    nonCalibrated = Calibrations.None.GuitarRaw.joystick;
-                    if (_lastState is Guitar) curCalibration = ((Guitar)_lastState).joystick;
+                    CalibrateJoystick(Calibrations.None.GuitarRaw.joystick, (_lastState as Guitar?)?.joystick);
                     break;
-                default: return;
-            }
 
-            Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(nonCalibrated, curCalibration);
+                // Triggers
+                case App.CAL_CC_RTRIGGER:
+                    CalibrateTrigger(Calibrations.None.ClassicControllerRaw.R, (_lastState as ClassicController?)?.R);
+                    break;
+
+                case App.CAL_CC_LTRIGGER:
+                    CalibrateTrigger(Calibrations.None.ClassicControllerRaw.L, (_lastState as ClassicController?)?.L);
+                    break;
+
+                case App.CAL_GUT_WHAMMY:
+                    CalibrateTrigger(Calibrations.None.GuitarRaw.whammyBar, (_lastState as Guitar?)?.whammyBar);
+                    break;
+
+                default:
+                    _calibrationTarget = string.Empty;
+                    break;
+            }
+        }
+
+        private void CalibrateJoystick(Joystick nonCalibrated, Joystick? currentCalibration)
+        {
+            // If we don't have a value for the current calibration, use the raw value.
+            Windows.JoyCalibrationWindow joyCal = new Windows.JoyCalibrationWindow(nonCalibrated, currentCalibration.HasValue ? currentCalibration.Value : nonCalibrated);
             _openJoyWindow = joyCal;
 
 #if DEBUG
@@ -491,34 +509,10 @@ namespace WiinUPro
             _openJoyWindow = null;
         }
 
-        private void CalibrateTrigger_Click(object sender, RoutedEventArgs e)
+        private void CalibrateTrigger(NintrollerLib.Trigger nonCalibrated, NintrollerLib.Trigger? currentCalibration)
         {
-            _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
-
-            var nonCalibrated = new NintrollerLib.Trigger();
-            var curCalibrated = new NintrollerLib.Trigger();
-            
-            if (_calibrationTarget == App.CAL_CC_RTRIGGER)
-            {
-                nonCalibrated = Calibrations.None.ClassicControllerRaw.R;
-                curCalibrated = ((ClassicController)_lastState).R;
-            }
-            else if (_calibrationTarget == App.CAL_CC_LTRIGGER)
-            {
-                nonCalibrated = Calibrations.None.ClassicControllerRaw.L;
-                curCalibrated = ((ClassicController)_lastState).L;
-            }
-            else if (_calibrationTarget == App.CAL_GUT_WHAMMY)
-            {
-                nonCalibrated = Calibrations.None.GuitarRaw.whammyBar;
-                curCalibrated = ((Guitar)_lastState).whammyBar;
-            }
-            else
-            {
-                return;
-            }
-
-            Windows.TriggerCalibrationWindow trigCal = new Windows.TriggerCalibrationWindow(nonCalibrated, curCalibrated);
+            // If no current trigger calibration, use the raw calibration
+            Windows.TriggerCalibrationWindow trigCal = new Windows.TriggerCalibrationWindow(nonCalibrated, currentCalibration.HasValue ? currentCalibration.Value : nonCalibrated);
             _openTrigWindow = trigCal;
 
 #if DEBUG
@@ -549,11 +543,8 @@ namespace WiinUPro
             _openTrigWindow = null;
         }
 
-        private void CalibrateIR_Click(object sender, RoutedEventArgs e)
+        private void CalibrateIR()
         {
-            _calibrationTarget = (sender as FrameworkElement).Tag.ToString();
-            if (_calibrationTarget != App.CAL_WII_IR) return;
-
             IR lastIR = new IR();
             if (_lastState is Wiimote) lastIR = ((Wiimote)_lastState).irSensor;
             if (_lastState is Nunchuk) lastIR = ((Nunchuk)_lastState).wiimote.irSensor;
