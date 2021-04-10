@@ -391,32 +391,21 @@ namespace WiinUPro
             {
                 var c = MessageBox.Show("Could not open or read the profile file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
+            
             if (loadedProfile != null)
             {
-                if (fileName.Length > 6 & fileName[fileName.Length - 6] == '_')
+                if (AppPrefs.Instance.autoAddXInputDevices && AppPrefs.Instance.profileQueuing)
                 {
-                    int n = (int)Char.GetNumericValue(fileName[fileName.Length - 5]);
-                    bool changeProfile = false;
-                    if (n == 1 && ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
+                    string[] fileNameParts = fileName.Split('_');
+                    string fileNameEnding = fileNameParts[fileNameParts.Length - 1].Replace(".wup", "");
+
+                    if (int.TryParse(fileNameEnding, out int profileNum)
+                        && profileNum >= (int)ScpDirector.XInput_Device.Device_A
+                        && profileNum <= (int)ScpDirector.XInput_Device.Device_D
+                        && ScpDirector.Access.IsConnected((ScpDirector.XInput_Device)profileNum)
+                        && !_rumbleSubscriptions[profileNum - 1])
                     {
-                        changeProfile = true;
-                    }
-                    else if (n == 2 && ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
-                    {
-                        changeProfile = true;
-                    }
-                    else if (n == 3 && ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
-                    {
-                        changeProfile = true;
-                    }
-                    else if (n == 4 && ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
-                    {
-                        changeProfile = true;
-                    }
-                    if (changeProfile && !_rumbleSubscriptions[n - 1])
-                    {
-                        LoadProfile(fileName.Substring(0, fileName.Length - 5) + (char)(49 + n) + ".wup");
+                        LoadProfile(fileName.Replace($"{profileNum}.wup", $"{profileNum+1}.wup"));
                         return;
                     }
                 }
