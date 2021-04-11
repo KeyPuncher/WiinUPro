@@ -86,17 +86,12 @@
                     </GroupBox>
                     <GroupBox x:Name="xinputGroup" Header="XInput Devices" Margin="267,0,4,7.5" Style="{StaticResource GroupBoxStyle}" Height="159" VerticalAlignment="Bottom" Uid="XInput_Group">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="4*"/>
-                                <ColumnDefinition Width="48*"/>
-                                <ColumnDefinition Width="133*"/>
-                            </Grid.ColumnDefinitions>
-                            <Button x:Name="btnAddXinput" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Margin="5.8,10,0,0" Click="btnAddXinput_Click" Style="{StaticResource BasicButton}" Uid="Add_Btn" Grid.ColumnSpan="2" Grid.Column="1"/>
-                            <Button x:Name="btnRemoveXinput" Content="Remove" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Margin="28,10,0,0" Click="btnRemoveXinput_Click" Style="{StaticResource BasicButton}" Uid="Remove_Btn" Grid.Column="2"/>
-                            <Label x:Name="xlabel1" Content="Device 1: Disconnected" HorizontalAlignment="Left" Margin="5.8,35,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" Grid.ColumnSpan="2" Grid.Column="1"/>
-                            <Label x:Name="xlabel2" Content="Device 2: Disconnected" HorizontalAlignment="Left" Margin="5.8,59,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" Grid.ColumnSpan="2" Grid.Column="1"/>
-                            <Label x:Name="xlabel3" Content="Device 3: Disconnected" HorizontalAlignment="Left" Margin="5.8,84,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" Grid.ColumnSpan="2" Grid.Column="1"/>
-                            <Label x:Name="xlabel4" Content="Device 4: Disconnected" HorizontalAlignment="Left" Margin="5.8,108,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" Grid.ColumnSpan="2" Grid.Column="1"/>
+                            <Button x:Name="btnAddXinput" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Margin="5.8,10,0,0" Click="btnAddXinput_Click" Style="{StaticResource BasicButton}" Uid="Add_Btn"/>
+                            <Button x:Name="btnRemoveXinput" Content="Remove" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Margin="71,10,0,0" Click="btnRemoveXinput_Click" Style="{StaticResource BasicButton}" Uid="Remove_Btn"/>
+                            <Label x:Name="xlabel1" Content="Device 1: Disconnected" HorizontalAlignment="Left" Margin="5.8,35,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" />
+                            <Label x:Name="xlabel2" Content="Device 2: Disconnected" HorizontalAlignment="Left" Margin="5.8,59,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" />
+                            <Label x:Name="xlabel3" Content="Device 3: Disconnected" HorizontalAlignment="Left" Margin="5.8,84,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" />
+                            <Label x:Name="xlabel4" Content="Device 4: Disconnected" HorizontalAlignment="Left" Margin="5.8,108,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" />
                         </Grid>
                     </GroupBox>
                     <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Width="58" Click="btnRefresh_Click" Style="{StaticResource BasicButton}" Uid="Refresh_Btn"/>
