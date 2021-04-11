@@ -592,7 +592,7 @@ namespace WiinUPro
             try
             {
                 Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
-                versionLabel.Content = string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Revision);
+                versionLabel.Content = $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
             }
             catch { }
 
