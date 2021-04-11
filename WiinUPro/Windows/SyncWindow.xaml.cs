@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Shared;
 using Shared.Windows;
 
 namespace WiinUPro.Windows
@@ -46,7 +47,7 @@ namespace WiinUPro.Windows
             
             if (btRadios.Count > 0)
             {
-                Prompt("Searching...");
+                Prompt(Globalization.Translate("Sync_Searching"));
 
                 while (pairedCount == 0 && !cancelled)
                 {
@@ -85,7 +86,7 @@ namespace WiinUPro.Windows
                                     
                                     if (controller || wiiDevice)
                                     {
-                                        Prompt("Found " + deviceInfo.szName);
+                                        Prompt(Globalization.TranslateFormat("Sync_Found", deviceInfo.szName));
 
                                         StringBuilder password = new StringBuilder();
                                         uint pcService = 16;
@@ -95,7 +96,7 @@ namespace WiinUPro.Windows
                                         if (deviceInfo.fRemembered)
                                         {
                                             // Remove current pairing
-                                            Prompt("Currently paired, removing...");
+                                            Prompt(Globalization.TranslateFormat("Sync_Unpairing"));
                                             uint errForget = NativeImports.BluetoothRemoveDevice(ref deviceInfo.Address);
                                             success = errForget == 0;
                                         }
@@ -111,48 +112,48 @@ namespace WiinUPro.Windows
 
                                             if (success)
                                             {
-                                                Prompt("Sending Paring Code...");
+                                                Prompt(Globalization.Translate("Sync_Pairing"));
                                                 var errPair = NativeImports.BluetoothAuthenticateDevice(IntPtr.Zero, btRadios[r], ref deviceInfo, password.ToString(), 6);
                                                 success = errPair == 0;
                                             }
 
                                             if (success)
                                             {
-                                                Prompt("Installing Service...");
+                                                Prompt(Globalization.Translate("Sync_Service"));
                                                 var errService = NativeImports.BluetoothEnumerateInstalledServices(btRadios[r], ref deviceInfo, ref pcService, guids);
                                                 success = errService == 0;
                                             }
 
                                             if (success)
                                             {
-                                                Prompt("Setting HID Service...");
+                                                Prompt(Globalization.Translate("Sync_HID"));
                                                 var errActivate = NativeImports.BluetoothSetServiceState(btRadios[r], ref deviceInfo, ref HIDServiceClass, 0x01);
                                                 success = errActivate == 0;
                                             }
 
                                             if (success)
                                             {
-                                                Prompt("Successfully Paired!");
+                                                Prompt(Globalization.Translate("Sync_Success"));
                                                 pairedCount += 1;
                                             }
                                             else
                                             {
-                                                Prompt("Failed to Pair.");
+                                                Prompt(Globalization.Translate("Sync_Failure"));
                                             }
                                         }
                                         else
                                         {
-                                            Prompt("Finish Pairing with Windows");
+                                            Prompt(Globalization.Translate("Sync_Finish"));
                                             var err = NativeImports.BluetoothAuthenticateDeviceEx(IntPtr.Zero, btRadios[r], ref deviceInfo, null, NativeImports.AUTHENTICATION_REQUIREMENTS.MITMProtectionNotRequired);
 
                                             if (err == 0)
                                             {
-                                                Prompt("Successfully Paired!");
+                                                Prompt(Globalization.Translate("Sync_Success"));
                                                 pairedCount += 1;
                                             }
                                             else
                                             {
-                                                Prompt("Paring Not Completed");
+                                                Prompt(Globalization.Translate("Sync_Incomplete"));
                                             }
                                         }
                                     }
@@ -163,7 +164,7 @@ namespace WiinUPro.Windows
                         else
                         {
                             // Failed to get Bluetooth Radio Info
-                            Prompt("Failed to get Bluetooth Radio Info");
+                            Prompt(Globalization.Translate("Sync_Bluetooth_Failed"));
                         }
                     }
                 }
@@ -177,7 +178,7 @@ namespace WiinUPro.Windows
             else
             {
                 // No Bluetooth Radios found
-                Prompt("No Bluetooth Radios Found.");
+                Prompt(Globalization.Translate("Sync_No_Bluetooth"));
                 System.Threading.Thread.Sleep(3000);
             }
 
@@ -219,7 +220,7 @@ namespace WiinUPro.Windows
 
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
-            Prompt("Cancelling");
+            Prompt(Globalization.Translate("Sync_Cancel"));
             cancelled = true;
         }
     }

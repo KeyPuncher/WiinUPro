@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WiinUPro.Windows"
         xmlns:WiinUPro="clr-namespace:WiinUPro" x:Class="WiinUPro.Windows.JoyCalibrationWindow"
         mc:Ignorable="d"
-        Title="Joystick Calibration" Height="578" Width="890" Background="{StaticResource BackgroundMain}">
+        Title="Joystick Calibration" Height="578" Width="890" Background="{StaticResource BackgroundMain}" Loaded="Window_Loaded"
+        Uid="File_Filter_JoyCal">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="115*"/>
@@ -75,7 +76,7 @@
             </Canvas>
         </Viewbox>
         <Grid Grid.Column="1"  Background="{StaticResource BackgroundSub}">
-            <GroupBox x:Name="groupLimits" Header="Limits" HorizontalAlignment="Left" Margin="10.5,76,0,0" VerticalAlignment="Top" Height="175" Width="298" Style="{StaticResource GroupBoxStyle}">
+            <GroupBox x:Name="groupLimits" Header="Limits" HorizontalAlignment="Left" Margin="10.5,76,0,0" VerticalAlignment="Top" Height="175" Width="298" Style="{StaticResource GroupBoxStyle}" Uid="Calibration_Limits">
                 <Grid>
                     <WiinUPro:NumPicker x:Name="limitYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="120" Min="10" Value="100" OnValueUpdate="LimitsUpdated"/>
                     <Label x:Name="label" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
@@ -87,7 +88,7 @@
                     <Label x:Name="label_Copy2" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
                 </Grid>
             </GroupBox>
-            <GroupBox x:Name="groupDeadzone" Header="Deadzone" HorizontalAlignment="Left" Margin="10.5,256,0,0" VerticalAlignment="Top" Height="175" Width="298" Style="{StaticResource GroupBoxStyle}">
+            <GroupBox x:Name="groupDeadzone" Header="Deadzone" HorizontalAlignment="Left" Margin="10.5,256,0,0" VerticalAlignment="Top" Height="175" Width="298" Style="{StaticResource GroupBoxStyle}" Uid="Calibration_Deadzone">
                 <Grid>
                     <WiinUPro:NumPicker x:Name="deadYPos" HorizontalAlignment="Left" Margin="101,10,0,0" VerticalAlignment="Top" Max="50" Min="0" Value="10" OnValueUpdate="DeadzoneUpdated"/>
                     <Label x:Name="label1" Content="+Y" HorizontalAlignment="Left" Margin="71,10,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
@@ -99,12 +100,12 @@
                     <Label x:Name="label_Copy5" Content="+X" HorizontalAlignment="Left" Margin="259,59,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
                 </Grid>
             </GroupBox>
-            <Label x:Name="label2" Content="Anti-Deadzone" HorizontalAlignment="Left" Margin="10.5,445,0,0" VerticalAlignment="Top" Height="26" Width="102" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+            <Label x:Name="label2" Content="Anti-Deadzone" HorizontalAlignment="Left" Margin="10.5,445,0,0" VerticalAlignment="Top" Height="26" Width="102" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Calibration_Anti_Deadzone"/>
             <Slider x:Name="antiDeadzoneSlider" HorizontalAlignment="Left" Margin="23,472,0,0" VerticalAlignment="Top" Width="285" Height="34" TickPlacement="BottomRight" Maximum="50" Interval="1" ValueChanged="antiDeadzoneSlider_ValueChanged" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
             <Label x:Name="antiDeadzoneLabel" Content="0 %" HorizontalAlignment="Left" Margin="247.5,445,0,0" VerticalAlignment="Top" Width="61" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
-            <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Left" Margin="232.5,0,0,13.5" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click" Style="{StaticResource AcceptButton}"/>
-            <Button x:Name="cancelBtn" Content="Cancel" HorizontalAlignment="Left" Margin="140.5,0,0,13.5" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click" Style="{StaticResource WarningButton}"/>
-            <GroupBox x:Name="groupCenter" Header="Center" HorizontalAlignment="Left" Margin="10.5,10,0,0" VerticalAlignment="Top" Height="69" Width="298" Style="{StaticResource GroupBoxStyle}">
+            <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Left" Margin="232.5,0,0,13.5" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click" Style="{StaticResource AcceptButton}" Uid="Button_Accept"/>
+            <Button x:Name="cancelBtn" Content="Cancel" HorizontalAlignment="Left" Margin="140.5,0,0,13.5" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click" Style="{StaticResource WarningButton}" Uid="Button_Cancel"/>
+            <GroupBox x:Name="groupCenter" Header="Center" HorizontalAlignment="Left" Margin="10.5,10,0,0" VerticalAlignment="Top" Height="69" Width="298" Style="{StaticResource GroupBoxStyle}" Uid="Calibration_Center">
                 <Grid>
                     <WiinUPro:NumPicker x:Name="centerX" HorizontalAlignment="Left" Margin="35,9,0,0" VerticalAlignment="Top" Max="4000" Min="-4000" Value="0" OnValueUpdate="CenterXUpdated" Width="100"/>
                     <Label x:Name="label_Copy7" Content="X" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
@@ -123,7 +124,7 @@
                 <SolidColorBrush Color="{StaticResource Green}"/>
             </Label.Foreground>
         </Label>
-        <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="432,0,0,10.667" VerticalAlignment="Bottom" Width="76" Click="loadBtn_Click" Style="{StaticResource BasicButton}"/>
-        <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="351,0,0,9.667" VerticalAlignment="Bottom" Width="76" Click="saveBtn_Click" Style="{StaticResource BasicButton}"/>
+        <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="432,0,0,10.667" VerticalAlignment="Bottom" Width="76" Click="loadBtn_Click" Style="{StaticResource BasicButton}" Uid="Button_Load"/>
+        <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="351,0,0,9.667" VerticalAlignment="Bottom" Width="76" Click="saveBtn_Click" Style="{StaticResource BasicButton}" Uid="Button_Save"/>
     </Grid>
 </Window>

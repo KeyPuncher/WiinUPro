@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using NintrollerLib;
 using Shared;
 using Shared.Windows;
@@ -58,6 +60,8 @@ namespace WiinUPro
         {
             _currentState = ShiftState.None;
             InitializeComponent();
+            Loaded += UserControl_Loaded;
+            subMenu.Loaded += ContextMenu_Loaded;
         }
 
         public NintyControl(DeviceInfo deviceInfo) : this()
@@ -224,6 +228,7 @@ namespace WiinUPro
                 _controller.OnInputRightClick -= InputOpenMenu;
                 _controller.OnQuickAssign -= QuickAssignment;
                 _controller.OnRemoveInputs -= RemoveAssignments;
+                (_controller as UserControl).Loaded -= NintyControl_Loaded;
 
                 if (_controller is WiiControl)
                 {
@@ -370,7 +375,17 @@ namespace WiinUPro
                 _controller.OnInputRightClick += InputOpenMenu;
                 _controller.OnQuickAssign += QuickAssignment;
                 _controller.OnRemoveInputs += RemoveAssignments;
+                if (!(_controller as UserControl).IsLoaded)
+                {
+                    (_controller as UserControl).Loaded += NintyControl_Loaded;
+                }
             }
+        }
+
+        private void NintyControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Ninty Loaded");
+            Globalization.ApplyTranslations(_controller as UserControl);
         }
 
         private void UpdateAlignment()
@@ -380,6 +395,7 @@ namespace WiinUPro
                 _view.Child = _controller as UserControl;
                 ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
                 ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+                Globalization.ApplyTranslations(_view);
             }
         }
 
@@ -389,7 +405,9 @@ namespace WiinUPro
 
             if (!App.LoadFromFile<AssignmentProfile>(fileName, out loadedProfile))
             {
-                var c = MessageBox.Show("Could not open or read the profile file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var c = MessageBox.Show(
+                    Globalization.TranslateFormat("Calibration_Load_Error_Msg", fileName),
+                    Globalization.Translate("Calibration_Load_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (loadedProfile != null)
@@ -477,6 +495,7 @@ namespace WiinUPro
             // Send VJoy Changes
             VJoyDirector.Access.ApplyAll();
 
+            // TODO: If the dispatcher call is avoidable that will save CPU usage
             // Visaul should only be updated if tab is in view
             Dispatcher.Invoke(new Action(() =>
             {
@@ -838,6 +857,23 @@ namespace WiinUPro
             }
         }
         #endregion
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Wait to translate this when the children are availble.
+            // (Loaded gets called when the control is created and again when the tab is clicked)
+            if (VisualTreeHelper.GetChildrenCount(this) > 0)
+            {
+                Loaded -= UserControl_Loaded;
+                Globalization.ApplyTranslations(this);
+            }
+        }
+
+        private void ContextMenu_Loaded(object sender, RoutedEventArgs e)
+        {
+            subMenu.Loaded -= ContextMenu_Loaded;
+            Globalization.ApplyTranslations(sender as ContextMenu);
+        }
     }
 
     public interface INintyControl : IBaseControl

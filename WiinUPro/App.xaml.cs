@@ -11,6 +11,8 @@ namespace WiinUPro
     /// </summary>
     public partial class App : Application
     {
+        const string GLOBALIZATION_DATA_PATH = "./translation.json";
+
         internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";
         internal const string JOY_CAL_FILTER = "Joystick Calibration|*.joy";
         internal const string TRIG_CAL_FILTER = "Trigger Calibration|*.trg";
@@ -87,6 +89,16 @@ namespace WiinUPro
             }
 
             return true;
+        }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            if (LoadFromFile(GLOBALIZATION_DATA_PATH, out Shared.Globalization.Data data))
+            {
+                Shared.Globalization.SetText(data);
+            }
+
+            Shared.Globalization.SetSelectedLanguage(AppPrefs.Instance.language);
         }
     }
 }

@@ -11,25 +11,25 @@
             when disconnect is pressed remove this tab 
             Add calibrate button
         -->
-        <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="9,30,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click" Style="{StaticResource WarningButton}"/>
-        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click" Style="{StaticResource AcceptButton}" />
-        <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnLoad_Click" Style="{StaticResource CautionButton}" />
-        <Button x:Name="btnAddRumble" Content="+/- Rumble" Margin="0,30,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnAddRumble_Click" Style="{StaticResource BasicButton}" />
-        <Button x:Name="btnPrefs" Content="Options" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnPrefs_Click" Style="{StaticResource BasicButton}" />
+        <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="9,30,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click" Style="{StaticResource WarningButton}" Uid="Controller_Disconnect"/>
+        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click" Style="{StaticResource AcceptButton}" Uid="Controller_Save_Profile"/>
+        <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnLoad_Click" Style="{StaticResource CautionButton}" Uid="Controller_Load_Profile"/>
+        <Button x:Name="btnAddRumble" Content="+/- Rumble" Margin="0,30,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnAddRumble_Click" Style="{StaticResource BasicButton}" Uid="Controller_Rumble"/>
+        <Button x:Name="btnPrefs" Content="Options" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnPrefs_Click" Style="{StaticResource BasicButton}" Uid="Controller_Options"/>
         <Viewbox x:Name="_view" Margin="0,62,-0.5,0" />
-        <Label Content="Shift State" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" Width="74" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+        <Label Content="Shift State" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" Width="74" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Uid="Controller_Shift_State"/>
         <ComboBox x:Name="dropShift" HorizontalAlignment="Left" Margin="89,0,0,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="76">
-            <MenuItem Header="None" Padding="-24,0,0,0" IsHitTestVisible="False"/>
-            <MenuItem Foreground="Red" Header="Red" Padding="-24,0,0,0" IsHitTestVisible="False"/>
-            <MenuItem Foreground="Blue" Header="Blue" Padding="-24,0,0,0" IsHitTestVisible="False"/>
-            <MenuItem Foreground="Green" Header="Green" Padding="-24,0,0,0" IsHitTestVisible="False"/>
+            <MenuItem Header="None" Padding="-24,0,0,0" IsHitTestVisible="False" Uid="Shift_None"/>
+            <MenuItem Foreground="Red" Header="Red" Padding="-24,0,0,0" IsHitTestVisible="False" Uid="Shift_1"/>
+            <MenuItem Foreground="Blue" Header="Blue" Padding="-24,0,0,0" IsHitTestVisible="False" Uid="Shift_2"/>
+            <MenuItem Foreground="Green" Header="Green" Padding="-24,0,0,0" IsHitTestVisible="False" Uid="Shift_3"/>
         </ComboBox>
         <Grid.ContextMenu>
             <ContextMenu x:Name="subMenu">
-                <MenuItem Header="Assign" Click="AssignMenu_Click"/>
-                <MenuItem Header="Copy" Click="CopyMenu_Click"/>
-                <MenuItem Header="Paste" Click="PasteMenu_Click"/>
-                <MenuItem Header="Clear" Click="ClearMenu_Click"/>
+                <MenuItem Header="Assign" Click="AssignMenu_Click" Uid="Context_Assign"/>
+                <MenuItem Header="Copy" Click="CopyMenu_Click" Uid="Context_Copy"/>
+                <MenuItem Header="Paste" Click="PasteMenu_Click" Uid="Context_Paste"/>
+                <MenuItem Header="Clear" Click="ClearMenu_Click" Uid="Context_Clear"/>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>

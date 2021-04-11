@@ -21,6 +21,9 @@ namespace WiinUPro
         protected GameCubeAdapter _lastState;
         protected GameCubePort _activePort = GameCubePort.PORT1;
 
+        private string _connectedStatus;
+        private string _disconnectedStatus;
+
         protected enum GameCubePort
         {
             PORT1 = 1,
@@ -32,7 +35,13 @@ namespace WiinUPro
         public GameCubeControl()
         {
             _inputPrefix = "1_";
+            _connectedStatus = Globalization.Translate("Controller_Connected");
+            _disconnectedStatus = Globalization.Translate("Controller_Disconnect");
+
             InitializeComponent();
+
+            for (int i = 0; i < 4; ++i)
+                (portSelection.Items[i] as MenuItem).Header = Globalization.TranslateFormat("GCN_Port", i);
         }
 
         public GameCubeControl(string deviceId) : this()
@@ -88,7 +97,7 @@ namespace WiinUPro
                 joystick.Margin = new Thickness(190 + 100 * activePort.joystick.X, 272 - 100 * activePort.joystick.Y, 0, 0);
                 cStick.Margin = new Thickness(887 + 100 * activePort.cStick.X, 618 - 100 * activePort.cStick.Y, 0, 0);
 
-                connectionStatus.Content = connecited ? "Connected" : "Disconnected";
+                connectionStatus.Content = connecited ? _connectedStatus : _disconnectedStatus;
 
                 if (_openJoyWindow != null)
                 {

@@ -11,6 +11,7 @@ using SharpDX.DirectInput;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Input;
+using Shared;
 
 namespace WiinUPro
 {
@@ -201,7 +202,9 @@ namespace WiinUPro
 
             if (!App.LoadFromFile<AssignmentProfile>(fileName, out loadedProfile))
             {
-                var c = MessageBox.Show("Could not open or read the profile file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var c = MessageBox.Show(
+                    Globalization.TranslateFormat("Calibration_Load_Error_Msg", fileName),
+                    Globalization.Translate("Calibration_Load_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (loadedProfile != null)
