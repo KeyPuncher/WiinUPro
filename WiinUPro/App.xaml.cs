@@ -11,6 +11,18 @@ namespace WiinUPro
     /// </summary>
     public partial class App : Application
     {
+        public static bool IsDesignMode
+        {
+            get
+            {
+#if DEBUG
+                return System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
+#else
+                return false;
+#endif
+            }
+        }
+
         const string GLOBALIZATION_DATA_PATH = "./translation.json";
 
         internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";
@@ -95,6 +107,7 @@ namespace WiinUPro
         {
             if (LoadFromFile(GLOBALIZATION_DATA_PATH, out Shared.Globalization.Data data))
             {
+                data.hasData = data.translations != null;
                 Shared.Globalization.SetText(data);
             }
 
