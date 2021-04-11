@@ -12,6 +12,7 @@ namespace Shared
 
         public struct Data
         {
+            public bool hasData;
             public string[] languages;
             public Dictionary<string, string[]> translations;
         }
@@ -104,7 +105,7 @@ namespace Shared
 
         public static string Translate(string key)
         {
-            if (_data.translations.TryGetValue(key, out string[] translations))
+            if (_data.hasData && _data.translations.TryGetValue(key, out string[] translations))
             {
                 string result = translations[_selectedLanguage];
 
