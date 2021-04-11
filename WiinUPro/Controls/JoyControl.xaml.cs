@@ -344,20 +344,24 @@ namespace WiinUPro
             // TODO: Only apply what this controller emulates, if any
             _scp.ApplyAll();
             VJoyDirector.Access.ApplyAll();
-            Dispatcher.Invoke(new Action(() =>
-            {
-                if (MainWindow.CurrentTab != this && !isChild)
-                    return;
 
-                if (_controller != null)
+            if (!MainWindow.Instance.WindowHidden)
+            {
+                Dispatcher.Invoke(new Action(() =>
                 {
-                    _controller.UpdateVisual(updates);
-                }
-                else
-                {
-                    UpdateGenericVisual(updates);
-                }
-            }));
+                    if (MainWindow.CurrentTab != this && !isChild)
+                        return;
+
+                    if (_controller != null)
+                    {
+                        _controller.UpdateVisual(updates);
+                    }
+                    else
+                    {
+                        UpdateGenericVisual(updates);
+                    }
+                }));
+            }
         }
 
         public void ChangeState(ShiftState newState)

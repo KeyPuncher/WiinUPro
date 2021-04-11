@@ -29,6 +29,8 @@ namespace WiinUPro
         public static MainWindow Instance => _instance;
 
         private static MainWindow _instance;
+
+        public bool WindowHidden { get; private set; } = false;
         
         List<DeviceStatus> _availableDevices;
         DateTime _lastRefreshTime;
@@ -708,7 +710,9 @@ namespace WiinUPro
 
         private void Window_StateChanged(object sender, EventArgs e)
         {
-            if (WindowState == WindowState.Minimized)
+            WindowHidden = WindowState == WindowState.Minimized;
+
+            if (WindowHidden)
             {
                 HideWindow();
             }

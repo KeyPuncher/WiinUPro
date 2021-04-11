@@ -510,15 +510,17 @@ namespace WiinUPro
             // Send VJoy Changes
             VJoyDirector.Access.ApplyAll();
 
-            // TODO: If the dispatcher call is avoidable that will save CPU usage
             // Visaul should only be updated if tab is in view
-            Dispatcher.Invoke(new Action(() =>
+            if (!MainWindow.Instance.WindowHidden)
             {
-                if (_controller != null && MainWindow.CurrentTab == this)
+                Dispatcher.Invoke(new Action(() =>
                 {
-                    _controller.UpdateVisual(e.state);
-                }
-            }));
+                    if (_controller != null && MainWindow.CurrentTab == this)
+                    {
+                        _controller.UpdateVisual(e.state);
+                    }
+                }));
+            }
         }
 
         private void _nintroller_JoystickCalibrated(Joystick calibration, string target, string file = "")
