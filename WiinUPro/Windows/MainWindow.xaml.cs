@@ -380,6 +380,7 @@ namespace WiinUPro
         private void settingAutoAddXInputDevices_Checked(object sender, RoutedEventArgs e)
         {
             AppPrefs.Instance.autoAddXInputDevices = settingAutoAddXInputDevices.IsChecked ?? false;
+            settingProfileQueuing.IsEnabled = settingAutoAddXInputDevices.IsChecked ?? false;
         }
 
         private void settingLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -394,6 +395,10 @@ namespace WiinUPro
         private void settingMinimizeOnClose_Checked(object sender, RoutedEventArgs e)
         {
             AppPrefs.Instance.minimizeOnClose = settingMinimizeOnClose.IsChecked ?? false;
+        }
+        private void settingProfileQueuing_Checked(object sender, RoutedEventArgs e)
+        {
+            AppPrefs.Instance.profileQueuing = settingProfileQueuing.IsChecked ?? false;
         }
 
         #endregion
@@ -606,14 +611,18 @@ namespace WiinUPro
             settingSuppressLostConn.IsChecked = AppPrefs.Instance.suppressConnectionLost;
 
             // Check Auto Add Xinput Devices
-            settingAutoAddXInputDevices.IsChecked = AppPrefs.Instance.autoAddXInputDevices;
+            if (AppPrefs.Instance.autoAddXInputDevices)
+            {
+                settingAutoAddXInputDevices.IsChecked = true;
+                settingProfileQueuing.IsEnabled = true;
+            }
 
             SetXInputDeviceStatus(ScpDirector.XInput_Device.Device_A);
             SetXInputDeviceStatus(ScpDirector.XInput_Device.Device_B);
             SetXInputDeviceStatus(ScpDirector.XInput_Device.Device_C);
             SetXInputDeviceStatus(ScpDirector.XInput_Device.Device_D);
 
-            // Check for Start Minimized
+            // Check Start Minimized
             if (AppPrefs.Instance.startMinimized)
             {
                 settingStartMinimized.IsChecked = true;
@@ -635,10 +644,10 @@ namespace WiinUPro
             }
 
             // Check Minimize To System Tray
-            if (AppPrefs.Instance.minimizeOnClose)
-            {
-                settingMinimizeOnClose.IsChecked = true;
-            }
+            settingMinimizeOnClose.IsChecked = AppPrefs.Instance.minimizeOnClose;
+
+            // Check Profile Queuing
+            settingProfileQueuing.IsChecked = AppPrefs.Instance.profileQueuing;
 
             Refresh();
         }
