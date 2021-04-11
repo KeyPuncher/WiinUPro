@@ -64,8 +64,8 @@ namespace WiinUPro
                 var nun = (Nunchuk)state;
                 UpdateWiimoteVisual(nun.wiimote);
 
-                nBtnC.Opacity = nun.C ? 1 : 0;
-                nBtnZ.Opacity = nun.Z ? 1 : 0;
+                Display(nBtnC, nun.C);
+                Display(nBtnZ, nun.Z);
                 nJoy.Margin = new Thickness(70 + 30 * nun.joystick.X, 360 - 30 * nun.joystick.Y, 0, 0);
 
                 if (_openJoyWindow != null && _calibrationTarget == App.CAL_NUN_JOYSTICK)
@@ -84,22 +84,22 @@ namespace WiinUPro
                 var cc = (ClassicController)state;
                 UpdateWiimoteVisual(cc.wiimote);
 
-                ccBtnA.Opacity      = cc.A ? 1 : 0;
-                ccBtnB.Opacity      = cc.B ? 1 : 0;
-                ccBtnX.Opacity      = cc.X ? 1 : 0;
-                ccBtnY.Opacity      = cc.Y ? 1 : 0;
-                ccBtnUp.Opacity     = cc.Up ? 1 : 0;
-                ccBtnDown.Opacity   = cc.Down ? 1 : 0;
-                ccBtnRight.Opacity  = cc.Right ? 1 : 0;
-                ccBtnLeft.Opacity   = cc.Left ? 1 : 0;
+                Display(ccBtnA, cc.A);
+                Display(ccBtnB, cc.B);
+                Display(ccBtnX, cc.X);
+                Display(ccBtnY, cc.Y);
+                Display(ccBtnUp, cc.Up);
+                Display(ccBtnDown, cc.Down);
+                Display(ccBtnRight, cc.Right);
+                Display(ccBtnLeft, cc.Left);
                 ccPadCenter.Opacity = cc.Up || cc.Down || cc.Left || cc.Right ? 1 : 0;
-                ccBtnHome.Opacity   = cc.Home ? 1 : 0;
-                ccBtnSelect.Opacity = cc.Select ? 1 : 0;
-                ccBtnStart.Opacity  = cc.Start ? 1 : 0;
-                ccBtnZL.Opacity     = cc.ZL ? 1 : 0;
-                ccBtnZR.Opacity     = cc.ZR ? 1 : 0;
-                ccL.Opacity         = cc.L.value > 0 ? 1 : 0;
-                ccR.Opacity         = cc.R.value > 0 ? 1 : 0;
+                Display(ccBtnHome, cc.Home);
+                Display(ccBtnSelect, cc.Select);
+                Display(ccBtnStart, cc.Start);
+                Display(ccBtnZL, cc.ZL);
+                Display(ccBtnZR, cc.ZR);
+                Display(ccL, cc.L.value > 0);
+                Display(ccR, cc.R.value > 0);
                 ccLeftStick.Margin  = new Thickness(208 + 30 * cc.LJoy.X, 210 - 30 * cc.LJoy.Y, 0, 0);
                 ccRightStick.Margin = new Thickness(364 + 30 * cc.RJoy.X, 210 - 30 * cc.RJoy.Y, 0, 0);
 
@@ -125,22 +125,22 @@ namespace WiinUPro
                 var ccp = (ClassicControllerPro)state;
                 UpdateWiimoteVisual(ccp.wiimote);
 
-                ccpBtnA.Opacity      = ccp.A ? 1 : 0;
-                ccpBtnB.Opacity      = ccp.B ? 1 : 0;
-                ccpBtnX.Opacity      = ccp.X ? 1 : 0;
-                ccpBtnY.Opacity      = ccp.Y ? 1 : 0;
-                ccpBtnUp.Opacity     = ccp.Up ? 1 : 0;
-                ccpBtnDown.Opacity   = ccp.Down ? 1 : 0;
-                ccpBtnRight.Opacity  = ccp.Right ? 1 : 0;
-                ccpBtnLeft.Opacity   = ccp.Left ? 1 : 0;
+                Display(ccpBtnA, ccp.A);
+                Display(ccpBtnB, ccp.B);
+                Display(ccpBtnX, ccp.X);
+                Display(ccpBtnY, ccp.Y);
+                Display(ccpBtnUp, ccp.Up);
+                Display(ccpBtnDown, ccp.Down);
+                Display(ccpBtnRight, ccp.Right);
+                Display(ccpBtnLeft, ccp.Left);
                 ccpPadCenter.Opacity = ccp.Up || ccp.Down || ccp.Left || ccp.Right ? 1 : 0;
-                ccpBtnHome.Opacity   = ccp.Home ? 1 : 0;
-                ccpBtnSelect.Opacity = ccp.Select ? 1 : 0;
-                ccpBtnStart.Opacity  = ccp.Start ? 1 : 0;
-                ccpBtnZL.Opacity     = ccp.ZL ? 1 : 0;
-                ccpBtnZR.Opacity     = ccp.ZR ? 1 : 0;
-                ccpBtnL.Opacity      = ccp.L ? 1 : 0;
-                ccpBtnR.Opacity      = ccp.R ? 1 : 0;
+                Display(ccpBtnHome, ccp.Home);
+                Display(ccpBtnSelect, ccp.Select);
+                Display(ccpBtnStart, ccp.Start);
+                Display(ccpBtnZL, ccp.ZL);
+                Display(ccpBtnZR, ccp.ZR);
+                Display(ccpBtnL, ccp.L);
+                Display(ccpBtnR, ccp.R);
                 ccpLeftStick.Margin  = new Thickness(255 + 30 * ccp.LJoy.X, 279 - 30 * ccp.LJoy.Y, 0, 0);
                 ccpRightStick.Margin = new Thickness(485 + 30 * ccp.RJoy.X, 279 - 30 * ccp.RJoy.Y, 0, 0);
 
@@ -161,20 +161,20 @@ namespace WiinUPro
                 var gut = (Guitar)state;
                 UpdateWiimoteVisual(gut.wiimote);
 
-                gBtnGreen.Opacity = gut.Green ? 1 : 0;
-                gBtnRed.Opacity = gut.Red ? 1 : 0;
-                gBtnYellow.Opacity = gut.Yellow ? 1 : 0;
-                gBtnBlue.Opacity = gut.Blue ? 1 : 0;
-                gBtnOrange.Opacity = gut.Orange ? 1 : 0;
-                gBtnStrumUp.Opacity = gut.StrumUp ? 1 : 0;
-                gBtnStrumDown.Opacity = gut.StrumDown ? 1 : 0;
-                gBtnPlus.Opacity = gut.Plus ? 1 : 0;
-                gBtnMinus.Opacity = gut.Minus ? 1 : 0;
-                gTouch1.Opacity = gut.T1 ? 1 : 0;
-                gTouch2.Opacity = gut.T2 ? 1 : 0;
-                gTouch3.Opacity = gut.T3 ? 1 : 0;
-                gTouch4.Opacity = gut.T4 ? 1 : 0;
-                gTouch5.Opacity = gut.T5 ? 1 : 0;
+                Display(gBtnGreen, gut.Green);
+                Display(gBtnRed, gut.Red);
+                Display(gBtnYellow, gut.Yellow);
+                Display(gBtnBlue, gut.Blue);
+                Display(gBtnOrange, gut.Orange);
+                Display(gBtnStrumUp, gut.StrumUp);
+                Display(gBtnStrumDown, gut.StrumDown);
+                Display(gBtnPlus, gut.Plus);
+                Display(gBtnMinus, gut.Minus);
+                Display(gTouch1, gut.T1);
+                Display(gTouch2, gut.T2);
+                Display(gTouch3, gut.T3);
+                Display(gTouch4, gut.T4);
+                Display(gTouch5, gut.T5);
                 gStick.Margin = new Thickness(1236 + 30 * gut.joystick.X, 283 - 30 * gut.joystick.Y, 0, 0);
                 gStick.Margin = new Thickness(1236 + 30 * gut.joystick.X, 283 - 30 * gut.joystick.Y, 0, 0);
                 gWhammy.Margin = new Thickness(345 + 60 * gut.whammyBar.value, 815 - 20 * gut.whammyBar.value, 0, 0);
@@ -310,17 +310,17 @@ namespace WiinUPro
                 _openIRWindow.Update(wiimote.irSensor);
             }
 
-            wBtnA.Opacity     = wiimote.buttons.A ? 1 : 0;
-            wBtnB.Opacity     = wiimote.buttons.B ? 1 : 0;
-            wBtnOne.Opacity   = wiimote.buttons.One ? 1 : 0;
-            wBtnTwo.Opacity   = wiimote.buttons.Two ? 1 : 0;
-            wBtnUp.Opacity    = wiimote.buttons.Up ? 1 : 0;
-            wBtnRight.Opacity = wiimote.buttons.Right ? 1 : 0;
-            wBtnDown.Opacity  = wiimote.buttons.Down ? 1 : 0;
-            wBtnLeft.Opacity  = wiimote.buttons.Left ? 1 : 0;
-            wBtnMinus.Opacity = wiimote.buttons.Minus ? 1 : 0;
-            wBtnPlus.Opacity  = wiimote.buttons.Plus ? 1 : 0;
-            wBtnHome.Opacity  = wiimote.buttons.Home ? 1 : 0;
+            Display(wBtnA, wiimote.buttons.A);
+            Display(wBtnB, wiimote.buttons.B);
+            Display(wBtnOne, wiimote.buttons.One);
+            Display(wBtnTwo, wiimote.buttons.Two);
+            Display(wBtnUp, wiimote.buttons.Up);
+            Display(wBtnRight, wiimote.buttons.Right);
+            Display(wBtnDown, wiimote.buttons.Down);
+            Display(wBtnLeft, wiimote.buttons.Left);
+            Display(wBtnMinus, wiimote.buttons.Minus);
+            Display(wBtnPlus, wiimote.buttons.Plus);
+            Display(wBtnHome, wiimote.buttons.Home);
             wCenterPad.Opacity = wiimote.buttons.Up || wiimote.buttons.Down || wiimote.buttons.Left || wiimote.buttons.Right ? 1 : 0;
 
             irPoint1.Visibility = wiimote.irSensor.point1.visible ? Visibility.Visible : Visibility.Collapsed;

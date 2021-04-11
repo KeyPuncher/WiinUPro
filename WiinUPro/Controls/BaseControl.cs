@@ -207,6 +207,7 @@ namespace WiinUPro
             }
         }
 
+        #region Context Menu Actions
         protected virtual void OpenContextMenu(object sender, MouseButtonEventArgs e)
         {
             var element = sender as FrameworkElement;
@@ -369,8 +370,44 @@ namespace WiinUPro
         {
             CalibrateInput((_inputPrefix ?? "") + (_menuOwnerTag ?? ""));
         }
+        #endregion
 
         protected abstract void CalibrateInput(string inputName);
+
+        #region Input Highlighting
+        public static readonly DependencyProperty HighlightProperty = App.IsDesignMode ? null : DependencyProperty.Register("HighlightInput", typeof(bool), typeof(UIElement));
+        public static readonly DependencyProperty DisplayProperty = App.IsDesignMode ? null : DependencyProperty.Register("DisplayInput", typeof(bool), typeof(UIElement));
+
+        /// For mousing over an input
+        protected void HighlightElement(UIElement element, bool doHighlight)
+        {
+            if (doHighlight != (bool)element.GetValue(HighlightProperty))
+            {
+                element.SetValue(HighlightProperty, doHighlight);
+                element.Opacity += doHighlight ? 0.2d : -0.2d;
+            }
+        }
+
+        /// For displaying when input is activated
+        protected void Display(UIElement element, bool doDisplay)
+        {
+            if (doDisplay != (bool)element.GetValue(DisplayProperty))
+            {
+                element.SetValue(DisplayProperty, doDisplay);
+                element.Opacity += doDisplay ? 0.8d : -0.8d;
+            }
+        }
+
+        protected void Highlight(object sender, MouseEventArgs e)
+        {
+            HighlightElement((UIElement)sender, true);
+        }
+
+        protected void Unhighlight(object sender, MouseEventArgs e)
+        {
+            HighlightElement((UIElement)sender, false);
+        }
+        #endregion
     }
 
     public interface IBaseControl
