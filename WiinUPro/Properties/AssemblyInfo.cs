@@ -50,5 +50,5 @@ using System.Windows;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 // When updating, the last number should be 190 + the number of commits in GitHub + 1 for this commit + # of unpushed local commits.
-[assembly: AssemblyVersion("0.9.7.690")]
-[assembly: AssemblyFileVersion("0.9.7.690")]
+[assembly: AssemblyVersion("0.9.7.694")]
+[assembly: AssemblyFileVersion("0.9.7.694")]
