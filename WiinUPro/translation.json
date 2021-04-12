@@ -59,7 +59,7 @@
     "Context_Quick_WASD": [ "WASD", "WASD", "WASD" ],
     "Context_Right": [ "Right", "Derecha", "Droite" ],
     "Context_Up": [ "Up", "Arriba", "Haut" ],
-    "Controller_Disconnect": [ "Disconnected", "Desconectar", "Déconnecter" ],
+    "Controller_Disconnect": [ "Disconnect", "Desconectar", "Déconnecter" ],
     "Controller_Generic": [ "Generic Joystick", "Control Génerico", "Joystick générique" ],
     "Controller_Load_Profile": [ "Load Profile", "Abrir Perfil", "Charger un profil" ],
     "Controller_Options": [ "Options", "Opciones", "Options" ],
