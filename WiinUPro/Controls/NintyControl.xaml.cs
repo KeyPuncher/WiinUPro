@@ -450,6 +450,7 @@ namespace WiinUPro
                 }
                 _rumbleSubscriptions = loadedProfile.RumbleDevices;
                 OnRumbleSubscriptionChange?.Invoke(_rumbleSubscriptions);
+                RefreshToolTips();
             }
         }
 

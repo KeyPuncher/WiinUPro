@@ -226,6 +226,8 @@ namespace WiinUPro
                 {
                     associatedJoyCon._assignments = loadedProfile.ToAssignmentArray(this);
                 }
+
+                RefreshToolTips();
             }
         }
 
