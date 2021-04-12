@@ -23,7 +23,7 @@ namespace WiinUPro
             }
         }
 
-        const string GLOBALIZATION_DATA_PATH = "./translation.json";
+        const string GLOBALIZATION_DATA_PATH = "./lang.json";
 
         internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";
         internal const string JOY_CAL_FILTER = "Joystick Calibration|*.joy";

@@ -88,7 +88,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "..\WiinUPro\bin\Release\WiinUPro.exe"; DestDir: "{app}"; Components: main; Flags: ignoreversion
-Source: "..\WiinUPro\bin\Release\translation.json"; DestDir: "{app}"; Components: main; Flags: ignoreversion
+Source: "..\WiinUPro\bin\Release\lang.json"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUPro\bin\Release\Nintroller.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUPro\bin\Release\Newtonsoft.Json.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUPro\bin\Release\InputManager.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
