@@ -1,6 +1,6 @@
 ;Inno Setup 6
 #define MyAppName "WiinUPro"
-#define MyAppVersion "0.9.4"
+#define MyAppVersion "0.9.7"
 #define MyAppPublisher "Justin Keys"
 #define MyAppURL "https://github.com/KeyPuncher/WiinUPro/releases"
 #define MyAppExeName "WiinUPro.exe"
@@ -28,6 +28,7 @@ SolidCompression=yes
 ArchitecturesInstallIn64BitMode=x64
 WizardStyle=modern
 WizardSmallImageFile=WiinUPro.bmp
+SetupIconFile=wup_install.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -38,7 +39,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ;Name: "danish"; MessagesFile: "compiler:Languages\Danish.isl"
 ;Name: "dutch"; MessagesFile: "compiler:Languages\Dutch.isl"
 ;Name: "finnish"; MessagesFile: "compiler:Languages\Finnish.isl"
-;Name: "french"; MessagesFile: "compiler:Languages\French.isl"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 ;Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 ;Name: "greek"; MessagesFile: "compiler:Languages\Greek.isl"
 ;Name: "hebrew"; MessagesFile: "compiler:Languages\Hebrew.isl"
@@ -53,19 +54,33 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ;Name: "serbiancyrillic"; MessagesFile: "compiler:Languages\SerbianCyrillic.isl"
 ;Name: "serbianlatin"; MessagesFile: "compiler:Languages\SerbianLatin.isl"
 ;Name: "slovenian"; MessagesFile: "compiler:Languages\Slovenian.isl"
-;Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 ;Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
 ;Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
+[CustomMessages]
+english.InstallAll=Install Everything
+english.InstallSome=Pick and Choose
+english.ComponentXbox=Xbox 360 Controller Driver (Required on Windows XP/Vista/7)
+english.ComponentGCN=Game Cube Adapter Driver (Must be Plugged in)
+french.InstallAll=Tout installer
+french.InstallSome=Choisir
+french.ComponentXbox=Xbox 360 Controller Driver (Requis sous Windows XP/Vista/and 7)
+french.ComponentGCN=Game Cube Adapter Driver (Doit être branché)
+spanish.InstallAll=Instalar todo
+spanish.InstallSome=Escoger
+spanish.ComponentXbox=Xbox 360 Controller Driver (Requerido para Windows XP/Vista/7)
+spanish.ComponentGCN=Game Cube Adapter Driver (Debe estar enchufado)
+
 [Types]
-Name: "full"; Description: "Install Everything";
-Name: "custom"; Description: "Pick and Choose"; Flags: iscustom
+Name: "full"; Description: "{cm:InstallAll}";
+Name: "custom"; Description: "{cm:InstallSome}"; Flags: iscustom
 
 [Components]
 Name: "main"; Description: "WiinUPro"; Types: full custom; Flags: fixed;
 Name: "scp"; Description: "Scarlet Crush Production Driver"; Types: full
-Name: "xbox"; Description: "Xbox 360 Controller Driver (Required on Windows XP, Vista, and 7)"; Types: full
-Name: "gcn"; Description: "Game Cube Adapter Driver (Must be Plugged in)"; Types: full
+Name: "xbox"; Description: "{cm:ComponentXbox}"; Types: full
+Name: "gcn"; Description: "{cm:ComponentGCN}"; Types: full
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -73,6 +88,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: "..\WiinUPro\bin\Release\WiinUPro.exe"; DestDir: "{app}"; Components: main; Flags: ignoreversion
+Source: "..\WiinUPro\bin\Release\translation.json"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUPro\bin\Release\Nintroller.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUPro\bin\Release\Newtonsoft.Json.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUPro\bin\Release\InputManager.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
@@ -81,6 +97,7 @@ Source: "..\WiinUPro\bin\Release\LibUsbDotNet.dll"; DestDir: "{app}"; Components
 Source: "..\WiinUPro\bin\Release\SharpDX.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUPro\bin\Release\SharpDX.DirectInput.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUPro\bin\Release\SharpDX.RawInput.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
+Source: "..\WiinUPro\bin\Release\Hardcodet.Wpf.TaskbarNotification.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\vJoy\x64\vJoyInterface.dll"; DestDir: "{app}"; Components: main; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: "..\vJoy\x64\vJoyInterfaceWrap.dll"; DestDir: "{app}"; Components: main; Check: Is64BitInstallMode; Flags: ignoreversion
 Source: "..\vJoy\x86\vJoyInterface.dll"; DestDir: "{app}"; Components: main; Check: not Is64BitInstallMode; Flags: ignoreversion
