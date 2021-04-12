@@ -76,7 +76,9 @@ namespace WiinUPro
                 }
                 else if (isDown)
                 {
-                    _previousState = _control.CurrentShiftState;
+                    if (TargetState != _control.CurrentShiftState)
+                        _previousState = _control.CurrentShiftState;
+
                     _control.ChangeState(TargetState);
                 }
                 else
