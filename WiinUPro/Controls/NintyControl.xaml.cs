@@ -351,6 +351,7 @@ namespace WiinUPro
                 case ControllerType.ClassicControllerPro:
                 case ControllerType.Guitar:
                 case ControllerType.TaikoDrum:
+                    ResetAssignments();
                     _controller = new WiiControl(_info.DeviceID);
                     ((WiiControl)_controller).OnChangeCameraMode += (mode) =>
                     {
@@ -450,6 +451,15 @@ namespace WiinUPro
                 _rumbleSubscriptions = loadedProfile.RumbleDevices;
                 OnRumbleSubscriptionChange?.Invoke(_rumbleSubscriptions);
             }
+        }
+
+        public void ResetAssignments()
+        {
+            // Reset any currently triggered assignments
+            _nintroller_StateUpdate(_nintroller, new NintrollerStateEventArgs(_nintroller.Type, Calibrations.Defaults.NunchukDefault, BatteryStatus.High));
+            _nintroller_StateUpdate(_nintroller, new NintrollerStateEventArgs(_nintroller.Type, Calibrations.Defaults.ClassicControllerDefault, BatteryStatus.High));
+            _nintroller_StateUpdate(_nintroller, new NintrollerStateEventArgs(_nintroller.Type, Calibrations.Defaults.ClassicControllerProDefault, BatteryStatus.High));
+            _nintroller_StateUpdate(_nintroller, new NintrollerStateEventArgs(_nintroller.Type, Calibrations.Defaults.GuitarDefault, BatteryStatus.High));
         }
 
         #region Nintroller Events
