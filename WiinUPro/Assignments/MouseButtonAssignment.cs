@@ -138,5 +138,10 @@ namespace WiinUPro
         {
             return MouseButton.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return $"M.{ToString()}";
+        }
     }
 }

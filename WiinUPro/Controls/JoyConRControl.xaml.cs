@@ -85,6 +85,54 @@ namespace WiinUPro
             }
         }
 
+        public void SetInputTooltip(string inputName, string tooltip)
+        {
+            if (Enum.TryParse(inputName, out JoystickOffset input))
+            {
+                switch (input)
+                {
+                    case JoystickOffset.Buttons0: aBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons1: xBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons2: bBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons3: yBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons4: slBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons5: srBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons9: plusBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons11: UpdateTooltipLine(joyStickButton, tooltip, 4); break;
+                    case JoystickOffset.Buttons12: homeBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons14: rBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons15: zrBtn.ToolTip = tooltip; break;
+                }
+            }
+            else
+            {
+                switch (inputName)
+                {
+                    case "pov0N": UpdateTooltipLine(joyStickButton, tooltip, 1); break;
+                    case "pov0W": UpdateTooltipLine(joyStickButton, tooltip, 3); break;
+                    case "pov0E": UpdateTooltipLine(joyStickButton, tooltip, 0); break;
+                    case "pov0S": UpdateTooltipLine(joyStickButton, tooltip, 2); break;
+                }
+            }
+        }
+
+        public void ClearTooltips()
+        {
+            aBtn.ToolTip = "UNSET";
+            xBtn.ToolTip = "UNSET";
+            bBtn.ToolTip = "UNSET";
+            yBtn.ToolTip = "UNSET";
+            slBtn.ToolTip = "UNSET";
+            srBtn.ToolTip = "UNSET";
+            plusBtn.ToolTip = "UNSET";
+            homeBtn.ToolTip = "UNSET";
+            UpdateTooltipLine(joyStickButton, "UNSET", 0);
+            UpdateTooltipLine(joyStickButton, "UNSET", 1);
+            UpdateTooltipLine(joyStickButton, "UNSET", 2);
+            UpdateTooltipLine(joyStickButton, "UNSET", 3);
+            UpdateTooltipLine(joyStickButton, "UNSET", 4);
+        }
+
         protected void SetupMenuForPad()
         {
             int i = 0;

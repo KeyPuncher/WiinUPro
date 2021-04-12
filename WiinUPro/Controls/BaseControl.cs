@@ -53,7 +53,7 @@ namespace WiinUPro
             foreach (var menuItem in quickMouse.Items)
                 (menuItem as MenuItem).Click += QuickAssignMouse_Click;
             quickAssign.Items.Add(quickMouse);
-            quickAssign.Items.Add(new MenuItem { Header = Globalization.Translate("Context_WASD") });
+            quickAssign.Items.Add(new MenuItem { Header = "WASD" });
             quickAssign.Items.Add(new MenuItem { Header = Globalization.Translate("Context_Quick_Arrows") });
             (quickAssign.Items[1] as MenuItem).Click += QuickAssign_Click;
             (quickAssign.Items[2] as MenuItem).Click += QuickAssign_Click;
@@ -149,6 +149,23 @@ namespace WiinUPro
             }
         }
 
+        protected void UpdateTooltipLine(FrameworkElement element, string update, int line)
+        {
+            if (!(element.ToolTip is string))
+                return;
+
+            string[] parts = ((string)element.ToolTip).Split('\n');
+            if (parts.Length > line)
+                parts[line] = update;
+
+            string result = parts[0];
+            for (int i = 1; i < parts.Length; ++i)
+                result += "\n" + parts[i];
+
+            element.ToolTip = result;
+        }
+
+        #region Event passthroughs
         protected virtual void CallEvent_OnInputRightClick(string value)
         {
             OnInputRightClick?.Invoke(value);
@@ -168,6 +185,7 @@ namespace WiinUPro
         {
             OnRemoveInputs?.Invoke(inputs);
         }
+        #endregion
 
         protected virtual void OpenInput(object sender, RoutedEventArgs e = null)
         {
@@ -344,7 +362,7 @@ namespace WiinUPro
                             break;
                     }
 
-                    string prefix = (_inputPrefix ?? "") + (_menuOwnerTag ?? "") + (item.Tag ?? "");
+                    string prefix = (_inputPrefix ?? "") + (_menuOwnerTag ?? "");
 
                     Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
                     args.Add(prefix + "UP", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp, speed) }));

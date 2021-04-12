@@ -156,6 +156,78 @@ namespace WiinUPro
             }
         }
 
+        public void SetInputTooltip(string inputName, string tooltip)
+        {
+            if (Enum.TryParse(inputName, out JoystickOffset input))
+            {
+                switch (input)
+                {
+                    case JoystickOffset.Buttons0: bBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons1: aBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons2: yBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons3: xBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons4: lBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons5: rBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons6: zlBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons7: zrBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons8: minusBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons9: plusBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons10: UpdateTooltipLine(leftStickButton, tooltip, 4); break;
+                    case JoystickOffset.Buttons11: UpdateTooltipLine(rightStickButton, tooltip, 4); break;
+                    case JoystickOffset.Buttons12: homeBtn.ToolTip = tooltip; break;
+                    case JoystickOffset.Buttons13: shareBtn.ToolTip = tooltip; break;
+                }
+            }
+            else
+            {
+                switch (inputName)
+                {
+                    case "pov0N": upBtn.ToolTip = tooltip; break;
+                    case "pov0L": leftBtn.ToolTip = tooltip; break;
+                    case "pov0R": rightBtn.ToolTip = tooltip; break;
+                    case "pov0S": downBtn.ToolTip = tooltip; break;
+                    case "Y+": UpdateTooltipLine(leftStickButton, tooltip, 0); break;
+                    case "X-": UpdateTooltipLine(leftStickButton, tooltip, 1); break;
+                    case "X+": UpdateTooltipLine(leftStickButton, tooltip, 2); break;
+                    case "Y-": UpdateTooltipLine(leftStickButton, tooltip, 3); break;
+                    case "RotationY+": UpdateTooltipLine(rightStickButton, tooltip, 0); break;
+                    case "RotationX-": UpdateTooltipLine(rightStickButton, tooltip, 1); break;
+                    case "RotationX+": UpdateTooltipLine(rightStickButton, tooltip, 2); break;
+                    case "RotationY-": UpdateTooltipLine(rightStickButton, tooltip, 3); break;
+                }
+            }
+        }
+
+        public void ClearTooltips()
+        {
+            bBtn.ToolTip = "UNSET";
+            aBtn.ToolTip = "UNSET";
+            yBtn.ToolTip = "UNSET";
+            xBtn.ToolTip = "UNSET";
+            lBtn.ToolTip = "UNSET";
+            rBtn.ToolTip = "UNSET";
+            zlBtn.ToolTip = "UNSET";
+            zrBtn.ToolTip = "UNSET";
+            minusBtn.ToolTip = "UNSET";
+            plusBtn.ToolTip = "UNSET";
+            homeBtn.ToolTip = "UNSET";
+            shareBtn.ToolTip = "UNSET";
+            upBtn.ToolTip = "UNSET";
+            leftBtn.ToolTip = "UNSET";
+            rightBtn.ToolTip = "UNSET";
+            downBtn.ToolTip = "UNSET";
+            UpdateTooltipLine(leftStickButton, "UNSET", 0);
+            UpdateTooltipLine(leftStickButton, "UNSET", 1);
+            UpdateTooltipLine(leftStickButton, "UNSET", 2);
+            UpdateTooltipLine(leftStickButton, "UNSET", 3);
+            UpdateTooltipLine(leftStickButton, "UNSET", 4);
+            UpdateTooltipLine(leftStickButton, "UNSET", 0);
+            UpdateTooltipLine(leftStickButton, "UNSET", 1);
+            UpdateTooltipLine(leftStickButton, "UNSET", 2);
+            UpdateTooltipLine(leftStickButton, "UNSET", 3);
+            UpdateTooltipLine(leftStickButton, "UNSET", 4);
+        }
+
         protected override void OpenSelectedInput(object sender, RoutedEventArgs e)
         {
             string input = (sender as FrameworkElement)?.Tag?.ToString();

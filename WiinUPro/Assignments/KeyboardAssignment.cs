@@ -140,5 +140,10 @@ namespace WiinUPro
         {
             return KeyCode.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return ToString().Replace("VK_", "").Replace("K_", "");
+        }
     }
 }

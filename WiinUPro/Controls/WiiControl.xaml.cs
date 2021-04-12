@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using NintrollerLib;
 using Shared;
 
@@ -204,6 +205,213 @@ namespace WiinUPro
                 takRimL.Stroke = tak.rimLeft ? System.Windows.Media.Brushes.Blue : System.Windows.Media.Brushes.White;
                 takRimR.Stroke = tak.rimRight ? System.Windows.Media.Brushes.Blue : System.Windows.Media.Brushes.White;
             }
+        }
+
+        public void SetInputTooltip(string inputName, string tooltip)
+        {
+            switch (inputName)
+            {
+                case INPUT_NAMES.WIIMOTE.A: wBtnA.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.B: wBtnB.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.ONE: wBtnOne.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.TWO: wBtnTwo.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.PLUS: wBtnPlus.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.MINUS: wBtnMinus.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.HOME: wBtnHome.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.UP: wBtnUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.LEFT: wBtnLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.RIGHT: wBtnRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.DOWN: wBtnDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.IR_UP: UpdateTooltipLine(irCanvas, tooltip, 0); break;
+                case INPUT_NAMES.WIIMOTE.IR_LEFT: UpdateTooltipLine(irCanvas, tooltip, 1); break;
+                case INPUT_NAMES.WIIMOTE.IR_RIGHT: UpdateTooltipLine(irCanvas, tooltip, 2); break;
+                case INPUT_NAMES.WIIMOTE.IR_DOWN: UpdateTooltipLine(irCanvas, tooltip, 3); break;
+
+                case INPUT_NAMES.NUNCHUK.C: nBtnC.ToolTip = tooltip; break;
+                case INPUT_NAMES.NUNCHUK.Z: nBtnZ.ToolTip = tooltip; break;
+                case INPUT_NAMES.NUNCHUK.UP: UpdateTooltipLine(nJoy, tooltip, 0); break;
+                case INPUT_NAMES.NUNCHUK.LEFT: UpdateTooltipLine(nJoy, tooltip, 1); break;
+                case INPUT_NAMES.NUNCHUK.RIGHT: UpdateTooltipLine(nJoy, tooltip, 2); break;
+                case INPUT_NAMES.NUNCHUK.DOWN: UpdateTooltipLine(nJoy, tooltip, 3); break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER.A: ccBtnA.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.B: ccBtnB.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.X: ccBtnX.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.Y: ccBtnY.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.ZL: ccBtnZL.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.ZR: ccBtnZR.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.HOME: ccBtnHome.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.START: ccBtnStart.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.SELECT: ccBtnSelect.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.UP: ccBtnUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LEFT: ccBtnLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RIGHT: ccBtnRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.DOWN: ccBtnDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LT: UpdateTooltipLine(ccL, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LFULL: UpdateTooltipLine(ccL, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RT: UpdateTooltipLine(ccR, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RFULL: UpdateTooltipLine(ccR, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LUP: UpdateTooltipLine(ccLeftStick, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LLEFT: UpdateTooltipLine(ccLeftStick, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LRIGHT: UpdateTooltipLine(ccLeftStick, tooltip, 2); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LDOWN: UpdateTooltipLine(ccLeftStick, tooltip, 3); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RUP: UpdateTooltipLine(ccRightStick, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RLEFT: UpdateTooltipLine(ccRightStick, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RRIGHT: UpdateTooltipLine(ccRightStick, tooltip, 2); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RDOWN: UpdateTooltipLine(ccRightStick, tooltip, 3); break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.A: ccpBtnA.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.B: ccpBtnB.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.X: ccpBtnX.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.Y: ccpBtnY.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.L: ccpBtnL.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.R: ccpBtnR.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.ZL: ccpBtnZL.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.ZR: ccpBtnZR.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.HOME: ccpBtnHome.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.START: ccpBtnStart.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.SELECT: ccpBtnSelect.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.UP: ccpBtnUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LEFT: ccpBtnLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RIGHT: ccpBtnRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.DOWN: ccpBtnDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LUP: UpdateTooltipLine(ccpLeftStick, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LLEFT: UpdateTooltipLine(ccpLeftStick, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LRIGHT: UpdateTooltipLine(ccpLeftStick, tooltip, 2); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LDOWN: UpdateTooltipLine(ccpLeftStick, tooltip, 3); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RUP: UpdateTooltipLine(ccpRightStick, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RLEFT: UpdateTooltipLine(ccpRightStick, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RRIGHT: UpdateTooltipLine(ccpRightStick, tooltip, 2); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RDOWN: UpdateTooltipLine(ccpRightStick, tooltip, 3); break;
+
+                case INPUT_NAMES.GUITAR.BLUE: gBtnBlue.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.ORANGE: gBtnOrange.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.YELLOW: gBtnYellow.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.GREEN: gBtnGreen.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.RED: gBtnRed.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_1: gTouch1.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_2: gTouch2.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_3: gTouch3.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_4: gTouch4.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_5: gTouch5.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.PLUS: gBtnPlus.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.MINUS: gBtnPlus.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.STRUM_UP: gBtnStrumUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.STRUM_DOWN: gBtnStrumDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.WHAMMY_BAR: UpdateTooltipLine(gWhammy, tooltip, 0); break;
+                case INPUT_NAMES.GUITAR.WHAMMY_FULL: UpdateTooltipLine(gWhammy, tooltip, 1); break;
+                case INPUT_NAMES.GUITAR.UP: UpdateTooltipLine(gStick, tooltip, 0); break;
+                case INPUT_NAMES.GUITAR.LEFT: UpdateTooltipLine(gStick, tooltip, 1); break;
+                case INPUT_NAMES.GUITAR.RIGHT: UpdateTooltipLine(gStick, tooltip, 2); break;
+                case INPUT_NAMES.GUITAR.DOWN: UpdateTooltipLine(gStick, tooltip, 3); break;
+
+                case INPUT_NAMES.TAIKO_DRUM.CENTER_LEFT: takL.ToolTip = tooltip; break;
+                case INPUT_NAMES.TAIKO_DRUM.CENTER_RIGHT: takR.ToolTip = tooltip; break;
+                case INPUT_NAMES.TAIKO_DRUM.RIM_LEFT: takRimL.ToolTip = tooltip; break;
+                case INPUT_NAMES.TAIKO_DRUM.RIM_RIGHT: takRimR.ToolTip = tooltip; break;
+            }
+        }
+
+        public void ClearTooltips()
+        {
+            wBtnA.ToolTip = "UNSET";
+            wBtnB.ToolTip = "UNSET";
+            wBtnOne.ToolTip = "UNSET";
+            wBtnTwo.ToolTip = "UNSET";
+            wBtnPlus.ToolTip = "UNSET";
+            wBtnMinus.ToolTip = "UNSET";
+            wBtnHome.ToolTip = "UNSET";
+            wBtnUp.ToolTip = "UNSET";
+            wBtnLeft.ToolTip = "UNSET";
+            wBtnRight.ToolTip = "UNSET";
+            wBtnDown.ToolTip = "UNSET";
+            UpdateTooltipLine(irCanvas, "UNSET", 0);
+            UpdateTooltipLine(irCanvas, "UNSET", 1);
+            UpdateTooltipLine(irCanvas, "UNSET", 2);
+            UpdateTooltipLine(irCanvas, "UNSET", 3);
+
+            nBtnC.ToolTip = "UNSET";
+            nBtnZ.ToolTip = "UNSET";
+            UpdateTooltipLine(nJoy, "UNSET", 0);
+            UpdateTooltipLine(nJoy, "UNSET", 1);
+            UpdateTooltipLine(nJoy, "UNSET", 2);
+            UpdateTooltipLine(nJoy, "UNSET", 3);
+
+            ccBtnA.ToolTip = "UNSET";
+            ccBtnB.ToolTip = "UNSET";
+            ccBtnX.ToolTip = "UNSET";
+            ccBtnY.ToolTip = "UNSET";
+            ccBtnZL.ToolTip = "UNSET";
+            ccBtnZR.ToolTip = "UNSET";
+            ccBtnHome.ToolTip = "UNSET";
+            ccBtnStart.ToolTip = "UNSET";
+            ccBtnSelect.ToolTip = "UNSET";
+            ccBtnUp.ToolTip = "UNSET";
+            ccBtnLeft.ToolTip = "UNSET";
+            ccBtnRight.ToolTip = "UNSET";
+            ccBtnDown.ToolTip = "UNSET";
+            UpdateTooltipLine(ccL, "UNSET", 0);
+            UpdateTooltipLine(ccL, "UNSET", 1);
+            UpdateTooltipLine(ccR, "UNSET", 0);
+            UpdateTooltipLine(ccR, "UNSET", 1);
+            UpdateTooltipLine(ccLeftStick, "UNSET", 0);
+            UpdateTooltipLine(ccLeftStick, "UNSET", 1);
+            UpdateTooltipLine(ccLeftStick, "UNSET", 2);
+            UpdateTooltipLine(ccLeftStick, "UNSET", 3);
+            UpdateTooltipLine(ccRightStick, "UNSET", 0);
+            UpdateTooltipLine(ccRightStick, "UNSET", 1);
+            UpdateTooltipLine(ccRightStick, "UNSET", 2);
+            UpdateTooltipLine(ccRightStick, "UNSET", 3);
+
+            ccpBtnA.ToolTip = "UNSET";
+            ccpBtnB.ToolTip = "UNSET";
+            ccpBtnX.ToolTip = "UNSET";
+            ccpBtnY.ToolTip = "UNSET";
+            ccpBtnL.ToolTip = "UNSET";
+            ccpBtnR.ToolTip = "UNSET";
+            ccpBtnZL.ToolTip = "UNSET";
+            ccpBtnZR.ToolTip = "UNSET";
+            ccpBtnHome.ToolTip = "UNSET";
+            ccpBtnStart.ToolTip = "UNSET";
+            ccpBtnSelect.ToolTip = "UNSET";
+            ccpBtnUp.ToolTip = "UNSET";
+            ccpBtnLeft.ToolTip = "UNSET";
+            ccpBtnRight.ToolTip = "UNSET";
+            ccpBtnDown.ToolTip = "UNSET";
+            UpdateTooltipLine(ccpLeftStick, "UNSET", 0);
+            UpdateTooltipLine(ccpLeftStick, "UNSET", 1);
+            UpdateTooltipLine(ccpLeftStick, "UNSET", 2);
+            UpdateTooltipLine(ccpLeftStick, "UNSET", 3);
+            UpdateTooltipLine(ccpRightStick, "UNSET", 0);
+            UpdateTooltipLine(ccpRightStick, "UNSET", 1);
+            UpdateTooltipLine(ccpRightStick, "UNSET", 2);
+            UpdateTooltipLine(ccpRightStick, "UNSET", 3);
+
+            gBtnBlue.ToolTip = "UNSET";
+            gBtnOrange.ToolTip = "UNSET";
+            gBtnYellow.ToolTip = "UNSET";
+            gBtnGreen.ToolTip = "UNSET";
+            gBtnRed.ToolTip = "UNSET";
+            gTouch1.ToolTip = "UNSET";
+            gTouch2.ToolTip = "UNSET";
+            gTouch3.ToolTip = "UNSET";
+            gTouch4.ToolTip = "UNSET";
+            gTouch5.ToolTip = "UNSET";
+            gBtnPlus.ToolTip = "UNSET";
+            gBtnPlus.ToolTip = "UNSET";
+            gBtnStrumUp.ToolTip = "UNSET";
+            gBtnStrumDown.ToolTip = "UNSET";
+            UpdateTooltipLine(gWhammy, "UNSET", 0);
+            UpdateTooltipLine(gWhammy, "UNSET", 1);
+            UpdateTooltipLine(gStick, "UNSET", 0);
+            UpdateTooltipLine(gStick, "UNSET", 1);
+            UpdateTooltipLine(gStick, "UNSET", 2);
+            UpdateTooltipLine(gStick, "UNSET", 3);
+
+            takL.ToolTip = "UNSET";
+            takR.ToolTip = "UNSET";
+            takRimL.ToolTip = "UNSET";
+            takRimR.ToolTip = "UNSET";
         }
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)
@@ -423,6 +631,37 @@ namespace WiinUPro
                     }
                 }
             }
+        }
+
+        protected override void OpenJoystickMenu(object sender, MouseButtonEventArgs e)
+        {
+            base.OpenJoystickMenu(sender, e);
+
+            // Preserving existing profile backwards compatability with dynamic context menu.
+            // Remove the "Joy" text between things like nJoyUp input names.
+            _analogMenuInput = _menuOwnerTag.Replace("Joy", "");
+        }
+
+        protected override void OpenTriggerMenu(object sender, MouseButtonEventArgs e)
+        {
+            base.OpenTriggerMenu(sender, e);
+
+            // Preserving existing profile backwards compatability with dynamic context menu.
+            // Remove the trailing "T" text between things like ccLT input names.
+            _analogMenuInput = _menuOwnerTag.Replace("LT", "L").Replace("RT", "R").Replace("WT", "W");
+        }
+
+        protected override void QuickAssign(string prefix, string type)
+        {
+            // Preserving existing profile backwards compatability with dynamic context menu.
+            // Remove the "Joy" text between things like nJoyUp input names.
+            base.QuickAssign(prefix.Replace("Joy", ""), type);
+        }
+
+        protected override void QuickAssignMouse_Click(object sender, RoutedEventArgs e)
+        {
+            _menuOwnerTag = _menuOwnerTag.Replace("Joy", "");
+            base.QuickAssignMouse_Click(sender, e);
         }
 
         protected override void CalibrateInput(string inputName)

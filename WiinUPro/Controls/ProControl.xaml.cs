@@ -77,6 +77,67 @@ namespace WiinUPro
             }
         }
 
+        public void SetInputTooltip(string inputName, string tooltip)
+        {
+            switch (inputName)
+            {
+                case INPUT_NAMES.PRO_CONTROLLER.A: aBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.B: bBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.X: xBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.Y: yBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.L: lBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.R: rBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.ZL: zlBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.ZR: zrBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.HOME: homeBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.START: plusBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.SELECT: minusBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.UP: dpadUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.LEFT: dpadLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.RIGHT: dpadRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.DOWN: dpadDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.LUP: UpdateTooltipLine(leftStickBtn, tooltip, 0); break;
+                case INPUT_NAMES.PRO_CONTROLLER.LLEFT: UpdateTooltipLine(leftStickBtn, tooltip, 1); break;
+                case INPUT_NAMES.PRO_CONTROLLER.LRIGHT: UpdateTooltipLine(leftStickBtn, tooltip, 2); break;
+                case INPUT_NAMES.PRO_CONTROLLER.LDOWN: UpdateTooltipLine(leftStickBtn, tooltip, 3); break;
+                case INPUT_NAMES.PRO_CONTROLLER.LS: UpdateTooltipLine(leftStickBtn, tooltip, 4); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RUP: UpdateTooltipLine(rightStickBtn, tooltip, 0); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RLEFT: UpdateTooltipLine(rightStickBtn, tooltip, 1); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RRIGHT: UpdateTooltipLine(rightStickBtn, tooltip, 2); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RDOWN: UpdateTooltipLine(rightStickBtn, tooltip, 3); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RS: UpdateTooltipLine(rightStickBtn, tooltip, 4); break;
+            }
+        }
+
+        public void ClearTooltips()
+        {
+            aBtn.ToolTip = "UNSET";
+            bBtn.ToolTip = "UNSET";
+            xBtn.ToolTip = "UNSET";
+            yBtn.ToolTip = "UNSET";
+            lBtn.ToolTip = "UNSET";
+            rBtn.ToolTip = "UNSET";
+            zlBtn.ToolTip = "UNSET";
+            zrBtn.ToolTip = "UNSET";
+            homeBtn.ToolTip = "UNSET";
+            plusBtn.ToolTip = "UNSET";
+            minusBtn.ToolTip = "UNSET";
+            dpadUp.ToolTip = "UNSET";
+            dpadLeft.ToolTip = "UNSET";
+            dpadRight.ToolTip = "UNSET";
+            dpadDown.ToolTip = "UNSET";
+            UpdateTooltipLine(leftStickBtn, "UNSET", 0);
+            UpdateTooltipLine(leftStickBtn, "UNSET", 1);
+            UpdateTooltipLine(leftStickBtn, "UNSET", 2);
+            UpdateTooltipLine(leftStickBtn, "UNSET", 3);
+            UpdateTooltipLine(leftStickBtn, "UNSET", 4);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 0);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 1);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 2);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 3);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 4);
+        }
+
         public void ChangeLEDs(bool one, bool two, bool three, bool four)
         {
             led1.Opacity = one ? 1 : 0;

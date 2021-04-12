@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -98,13 +97,16 @@ namespace WiinUPro
 
                 _nintroller.SetPlayerLED((int)newState + 1);
 
-                Dispatcher.Invoke(new Action(() =>
-                 {
-                    if (newState == ShiftState.None) _controller.ChangeLEDs(true, false, false, false);
-                    else if (newState == ShiftState.Red) _controller.ChangeLEDs(false, true, false, false);
-                    else if (newState == ShiftState.Blue) _controller.ChangeLEDs(false, false, true, false);
-                    else if (newState == ShiftState.Green) _controller.ChangeLEDs(false, false, false, true);
-                }));
+                if (!MainWindow.Instance.WindowHidden)
+                {
+                    Dispatcher.Invoke(new Action(() =>
+                     {
+                         if (newState == ShiftState.None) _controller.ChangeLEDs(true, false, false, false);
+                         else if (newState == ShiftState.Red) _controller.ChangeLEDs(false, true, false, false);
+                         else if (newState == ShiftState.Blue) _controller.ChangeLEDs(false, false, true, false);
+                         else if (newState == ShiftState.Green) _controller.ChangeLEDs(false, false, false, true);
+                     }));
+                }
             }
         }
 
@@ -235,6 +237,11 @@ namespace WiinUPro
                     ((WiiControl)_controller).OnJoystickCalibrated -= _nintroller_JoystickCalibrated;
                     ((WiiControl)_controller).OnTriggerCalibrated -= _nintroller_TriggerCalibrated;
                 }
+
+                if (_controller is GameCubeControl)
+                {
+                    ((GameCubeControl)_controller).OnSelectedPortChanged -= GameCubeSelectedPortChanged;
+                }
             }
 
             _view.Child = null;
@@ -363,6 +370,7 @@ namespace WiinUPro
                     {
                         _controller = new GameCubeControl(_info.DeviceID);
                         ((GameCubeControl)_controller).OnJoyCalibrated += _nintroller_JoystickCalibrated;
+                        ((GameCubeControl)_controller).OnSelectedPortChanged += GameCubeSelectedPortChanged;
                     }
                     break;
             }
@@ -384,7 +392,6 @@ namespace WiinUPro
 
         private void NintyControl_Loaded(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Ninty Loaded");
             Globalization.ApplyTranslations(_controller as UserControl);
         }
 
@@ -588,6 +595,11 @@ namespace WiinUPro
             _nintroller.SetCalibration(wmCal);
 
             AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, App.CAL_WII_IR, file);
+        }
+
+        private void GameCubeSelectedPortChanged(int obj)
+        {
+            RefreshToolTips();
         }
         #endregion
 
@@ -817,6 +829,8 @@ namespace WiinUPro
                     InputSet(shift.TargetState, key, win.Result);
                 }
             }
+
+            _controller?.SetInputTooltip(key, win.Result.ToString());
         }
 
         private void InputSet(ShiftState shift, string key, AssignmentCollection assignments)
@@ -828,6 +842,11 @@ namespace WiinUPro
             else
             {
                 _assignments[(int)shift].Add(key, assignments);
+            }
+
+            if (dropShift.SelectedIndex == (int)shift)
+            {
+                _controller?.SetInputTooltip(key, assignments.ToString());
             }
         }
 
@@ -849,6 +868,8 @@ namespace WiinUPro
                 {
                     _assignments[dropShift.SelectedIndex].Add(item.Key, item.Value);
                 }
+
+                _controller?.SetInputTooltip(item.Key, item.Value.ToString());
             }
         }
 
@@ -858,6 +879,8 @@ namespace WiinUPro
             {
                 if (_assignments[dropShift.SelectedIndex].ContainsKey(item))
                     _assignments[dropShift.SelectedIndex].Remove(item);
+
+                _controller?.SetInputTooltip(item, "UNSET");
             }
         }
         
@@ -891,6 +914,24 @@ namespace WiinUPro
             subMenu.Loaded -= ContextMenu_Loaded;
             Globalization.ApplyTranslations(sender as ContextMenu);
         }
+
+        private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_assignments != null)
+            {
+                RefreshToolTips();
+            }
+        }
+
+        private void RefreshToolTips()
+        {
+            _controller.ClearTooltips();
+
+            foreach (var assignment in _assignments[dropShift.SelectedIndex])
+            {
+                _controller.SetInputTooltip(assignment.Key, assignment.Value.ToString());
+            }
+        }
     }
 
     public interface INintyControl : IBaseControl
@@ -899,5 +940,7 @@ namespace WiinUPro
         void ApplyInput(INintrollerState state); // TODO: I have forgotten what I want to use this for
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);
+        void SetInputTooltip(string inputName, string tooltip);
+        void ClearTooltips();
     }
 }

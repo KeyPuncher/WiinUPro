@@ -172,6 +172,22 @@ namespace WiinUPro
 
             return result;
         }
+
+        public string GetDisplayName()
+        {
+            if (Toggles)
+            {
+                string s = "Toggle";
+                foreach (var shift in ToggleStates)
+                    s += $".{shift}";
+
+                return s;
+            }
+            else
+            {
+                return $"Shift.{TargetState}";
+            }
+        }
     }
 
     public enum ShiftState

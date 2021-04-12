@@ -386,7 +386,15 @@ namespace WiinUPro
             //}
 
             _joystick.Properties.BufferSize = 128;
-            _joystick.Acquire();
+
+            try
+            { 
+                _joystick.Acquire();
+            }
+            catch (SharpDX.SharpDXException ex)
+            {
+                return false;
+            }
             
             _state = _joystick.GetCurrentState();
 
@@ -500,6 +508,8 @@ namespace WiinUPro
                 {
                     _assignments[dropShift.SelectedIndex].Add(item.Key, item.Value);
                 }
+
+                _controller?.SetInputTooltip(item.Key, item.Value.ToString());
             }
         }
 
@@ -572,6 +582,8 @@ namespace WiinUPro
                     InputSet(shift.TargetState, key, win.Result);
                 }
             }
+
+            _controller?.SetInputTooltip(key, win.Result.ToString());
         }
 
         private void InputSet(ShiftState shift, string key, AssignmentCollection assignments)
@@ -583,6 +595,11 @@ namespace WiinUPro
             else
             {
                 _assignments[(int)shift].Add(key, assignments);
+            }
+
+            if (dropShift.SelectedIndex == (int)shift)
+            {
+                _controller?.SetInputTooltip(key, assignments.ToString());
             }
         }
 
@@ -721,6 +738,8 @@ namespace WiinUPro
             {
                 _assignments[dropShift.SelectedIndex].Add(_selectedInput, _clipboard);
             }
+
+            _controller?.SetInputTooltip(_selectedInput, "UNSET");
         }
 
         private void ClearMenu_Click(object sender, RoutedEventArgs e)
@@ -729,6 +748,8 @@ namespace WiinUPro
             {
                 _assignments[dropShift.SelectedIndex].Remove(_selectedInput);
             }
+
+            _controller?.SetInputTooltip(_selectedInput, "UNSET");
         }
         #endregion
 
@@ -1154,13 +1175,31 @@ namespace WiinUPro
         {
             OnInputRightClick((sender as FrameworkElement).Tag.ToString());
         }
+
+        private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_controller != null)
+                RefreshToolTips();
+        }
         #endregion
+
+        private void RefreshToolTips()
+        {
+            _controller.ClearTooltips();
+
+            foreach (var assignment in _assignments[dropShift.SelectedIndex])
+            {
+                _controller.SetInputTooltip(assignment.Key, assignment.Value.ToString());
+            }
+        }
     }
 
     public interface IJoyControl : IBaseControl
     {
         void UpdateVisual(JoystickUpdate[] updates);
         Guid AssociatedInstanceID { get; }
+        void SetInputTooltip(string inputName, string tooltip);
+        void ClearTooltips();
     }
 
     public struct AxisCalibration
