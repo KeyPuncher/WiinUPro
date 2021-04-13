@@ -29,6 +29,7 @@ ArchitecturesInstallIn64BitMode=x64
 WizardStyle=modern
 WizardSmallImageFile=WiinUPro.bmp
 SetupIconFile=wup_install.ico
+UninstallDisplayIcon=wup_uninstall.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
