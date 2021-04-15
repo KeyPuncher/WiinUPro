@@ -39,6 +39,8 @@ namespace WiinUPro
 
         public ImageSource Icon { get { return icon.Source; } }
 
+        private int extIndex = -1;
+
         public bool Connected
         {
             get
@@ -167,22 +169,34 @@ namespace WiinUPro
                 case ControllerType.Wiimote:
                     img = "wiimote_black_24.png";
                     deviceName = "Wiimote";
+                    extIndex = 0;
                     break;
 
                 case ControllerType.Nunchuk:
                 case ControllerType.NunchukB:
                     img = "Wiimote+Nunchuck_black_24.png";
                     deviceName = "Nunchuk";
+                    extIndex = 1;
                     break;
 
                 case ControllerType.ClassicController:
                     img = "Classic_black_24.png";
                     deviceName = "Classic Controller";
+                    extIndex = 2;
                     break;
 
                 case ControllerType.ClassicControllerPro:
                     img = "ClassicPro_black_24.png";
                     deviceName = "Classic Controller Pro";
+                    extIndex = 3;
+                    break;
+
+                case ControllerType.Guitar:
+                    extIndex = 4;
+                    break;
+
+                case ControllerType.TaikoDrum:
+                    extIndex = 5;
                     break;
 
                 case ControllerType.Other:
@@ -201,6 +215,15 @@ namespace WiinUPro
 
                 prefs.icon = img;
                 AppPrefs.Instance.SaveDevicePrefs(prefs);
+
+                if (extIndex != -1 && !string.IsNullOrEmpty(prefs.extensionProfiles[extIndex]))
+                {
+                    Ninty.LoadProfile(prefs.extensionProfiles[extIndex]);
+                }
+                else if (!string.IsNullOrEmpty(prefs.defaultProfile))
+                {
+                    Ninty.LoadProfile(prefs.defaultProfile);
+                }
             }
 
             icon.Source = new BitmapImage(new Uri("../Images/Icons/" + img, UriKind.Relative));
@@ -209,7 +232,7 @@ namespace WiinUPro
                 nickname.Content = Info.DevicePath;
             else
 #endif
-            nickname.Content = deviceName;
+                nickname.Content = deviceName;
         }
 
         public void AutoConnect()
@@ -226,12 +249,6 @@ namespace WiinUPro
             if (Ninty != null)
             {
                 result = Ninty.Connect();
-
-                var prefs = AppPrefs.Instance.GetDevicePreferences(Info.DevicePath);
-                if (prefs != null && !string.IsNullOrEmpty(prefs.defaultProfile))
-                {
-                    Ninty.LoadProfile(prefs.defaultProfile);
-                }
             }
             else if (Joy != null)
             {

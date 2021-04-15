@@ -389,6 +389,7 @@ namespace WiinUPro
                     (_controller as UserControl).Loaded += NintyControl_Loaded;
                 }
             }
+            RefreshToolTips();
         }
 
         private void NintyControl_Loaded(object sender, RoutedEventArgs e)
@@ -936,11 +937,14 @@ namespace WiinUPro
 
         private void RefreshToolTips()
         {
-            _controller.ClearTooltips();
-
-            foreach (var assignment in _assignments[dropShift.SelectedIndex])
+            if(_controller != null)
             {
-                _controller.SetInputTooltip(assignment.Key, assignment.Value.ToString());
+                _controller.ClearTooltips();
+
+                foreach (var assignment in _assignments[dropShift.SelectedIndex])
+                {
+                    _controller.SetInputTooltip(assignment.Key, assignment.Value.ToString());
+                }
             }
         }
     }
