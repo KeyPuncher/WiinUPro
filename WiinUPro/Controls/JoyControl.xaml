@@ -14,21 +14,21 @@
         <Button Visibility="Collapsed" x:Name="btnAddRumble" Content="+/- Rumble" Margin="0,30,90,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" Click="btnAddRumble_Click" Style="{StaticResource BasicButton}" />
         <Button x:Name="btnPrefs" Content="Options" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnPrefs_Click" Style="{StaticResource BasicButton}" />
         <Label Content="Shift State" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" Width="74" HorizontalContentAlignment="Left" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
-        <ComboBox x:Name="dropShift" HorizontalAlignment="Left" Margin="89,0,0,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="76">
+        <ComboBox x:Name="dropShift" HorizontalAlignment="Left" Margin="89,0,0,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="76" SelectionChanged="dropShift_SelectionChanged">
             <MenuItem Header="None" Padding="-24,0,0,0" IsHitTestVisible="False"/>
-            <MenuItem Foreground="Red" Header="Red" Padding="-24,0,0,0" IsHitTestVisible="False"/>
-            <MenuItem Foreground="Blue" Header="Blue" Padding="-24,0,0,0" IsHitTestVisible="False"/>
-            <MenuItem Foreground="Green" Header="Green" Padding="-24,0,0,0" IsHitTestVisible="False"/>
+            <MenuItem Foreground="#ab1b1b" Header="Red" Padding="-24,0,0,0" IsHitTestVisible="False"/>
+            <MenuItem Foreground="#441da1" Header="Blue" Padding="-24,0,0,0" IsHitTestVisible="False"/>
+            <MenuItem Foreground="#174d1a" Header="Green" Padding="-24,0,0,0" IsHitTestVisible="False"/>
         </ComboBox>
         <Viewbox x:Name="_view" Margin="0,62,-0.5,0">
             <StackPanel x:Name="_stack" Orientation="Horizontal"></StackPanel>
         </Viewbox>
         <Grid.ContextMenu>
             <ContextMenu x:Name="subMenu">
-                <MenuItem Header="Assign" Click="AssignMenu_Click"/>
-                <MenuItem Header="Copy" Click="CopyMenu_Click"/>
-                <MenuItem Header="Paste" Click="PasteMenu_Click"/>
-                <MenuItem Header="Clear" Click="ClearMenu_Click"/>
+                <MenuItem Header="Assign" Click="AssignMenu_Click" Uid="Context_Assign"/>
+                <MenuItem Header="Copy" Click="CopyMenu_Click" Uid="Context_Copy"/>
+                <MenuItem Header="Paste" Click="PasteMenu_Click" Uid="Context_Paste"/>
+                <MenuItem Header="Clear" Click="ClearMenu_Click" Uid="Context_Clear"/>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>

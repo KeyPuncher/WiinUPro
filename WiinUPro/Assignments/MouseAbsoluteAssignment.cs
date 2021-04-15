@@ -73,6 +73,11 @@
         {
             return "Mouse " + Input.ToString() + " Position";
         }
+
+        public string GetDisplayName()
+        {
+            return $"M.Abs_{Input}";
+        }
     }
 
     public enum MousePosition

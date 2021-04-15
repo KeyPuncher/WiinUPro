@@ -552,6 +552,7 @@
             {
                 LJoy = new Joystick()
                 {
+                    rawX    = 2047,
                     centerX = 2047,
                     minX    = 1023,
                     maxX    = 3071,
@@ -559,6 +560,7 @@
                     deadXp  = 128,
                     deadXn  = -128,
 
+                    rawY    = 2047,
                     centerY = 2047,
                     minY    = 1023,
                     maxY    = 3071,
@@ -568,6 +570,7 @@
                 },
                 RJoy = new Joystick()
                 {
+                    rawX    = 2047,
                     centerX = 2047,
                     minX    = 1023,
                     maxX    = 3071,
@@ -575,6 +578,7 @@
                     deadXp  = 128,
                     deadXn  = -128,
 
+                    rawY    = 2047,
                     centerY = 2047,
                     minY    = 1023,
                     maxY    = 3071,
@@ -591,16 +595,19 @@
             {
                 accelerometer = new Accelerometer()
                 {
+                    rawX    = 127,
                     centerX = 127,
                     minX    = 79 + 32,
                     maxX    = 175 - 32,
                     deadX   = 4,
 
+                    rawY    = 127,
                     centerY = 127,
                     minY    = 79 + 32,
                     maxY    = 175 - 32,
                     deadY   = 4,
 
+                    rawZ    = 127,
                     centerZ = 127,
                     minZ    = 79 + 32,
                     maxZ    = 175 - 32,
@@ -626,28 +633,33 @@
             {
                 joystick = new Joystick()
                 {
+                    rawX    = 127,
                     centerX = 127,
                     minX    = 31,
                     maxX    = 223,
                     deadX   = 8,
 
+                    rawY    = 127,
                     centerY = 127,
                     minY    = 31,
                     maxY    = 223,
-                    deadY   = 8
+                    deadY   = 8,
                 },
                 accelerometer = new Accelerometer()
                 {
+                    rawX    = 127,
                     centerX = 127,
                     minX    = 79 + 32,
                     maxX    = 175 - 32,
                     deadX   = 4,
 
+                    rawY    = 127,
                     centerY = 127,
                     minY    = 79 + 32,
                     maxY    = 175 - 32,
                     deadY   = 4,
 
+                    rawZ    = 127,
                     centerZ = 127,
                     minZ    = 79 + 32,
                     maxZ    = 175 - 32,
@@ -662,11 +674,13 @@
             {
                 LJoy = new Joystick()
                 {
+                    rawX    = 31,
                     centerX = 31,
                     minX    = 0,
                     maxX    = 63,
                     deadX   = 4,
 
+                    rawY    = 31,
                     centerY = 31,
                     minY    = 0,
                     maxY    = 63,
@@ -674,11 +688,13 @@
                 },
                 RJoy = new Joystick()
                 {
+                    rawX    = 15,
                     centerX = 15,
                     minX    = 0,
                     maxX    = 31,
                     deadX   = 2,
 
+                    rawY    = 15,
                     centerY = 15,
                     minY    = 0,
                     maxY    = 31,
@@ -703,11 +719,13 @@
             {
                 LJoy = new Joystick()
                 {
+                    rawX    = 31,
                     centerX = 31,
                     minX    = 0,
                     maxX    = 63,
                     deadX   = 4,
 
+                    rawY    = 31,
                     centerY = 31,
                     minY    = 0,
                     maxY    = 63,
@@ -715,11 +733,13 @@
                 },
                 RJoy = new Joystick()
                 {
+                    rawX    = 15,
                     centerX = 15,
                     minX    = 0,
                     maxX    = 31,
                     deadX   = 2,
 
+                    rawY    = 15,
                     centerY = 15,
                     minY    = 0,
                     maxY    = 31,
@@ -731,11 +751,13 @@
             {
                 joystick = new Joystick()
                 {
+                    rawX = 31,
                     centerX = 31,
                     minX = 0,
                     maxX = 63,
                     deadX = 4,
 
+                    rawY = 31,
                     centerY = 31,
                     minY = 0,
                     maxY = 63,
@@ -755,11 +777,13 @@
             {
                 joystick = new Joystick()
                 {
+                    rawX = 128,
                     centerX = 128,
                     minX = 30,
                     maxX = 232,
                     deadX = 16,
 
+                    rawY = 128,
                     centerY = 128,
                     minY = 30,
                     maxY = 220,
@@ -767,11 +791,13 @@
                 },
                 cStick = new Joystick()
                 {
+                    rawX = 128,
                     centerX = 128,
                     minX = 42,
                     maxX = 220,
                     deadX = 12,
 
+                    rawY = 128,
                     centerY = 128,
                     minY = 42,
                     maxY = 220,

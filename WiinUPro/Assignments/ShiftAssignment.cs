@@ -76,7 +76,9 @@ namespace WiinUPro
                 }
                 else if (isDown)
                 {
-                    _previousState = _control.CurrentShiftState;
+                    if (TargetState != _control.CurrentShiftState)
+                        _previousState = _control.CurrentShiftState;
+
                     _control.ChangeState(TargetState);
                 }
                 else
@@ -171,6 +173,22 @@ namespace WiinUPro
             }
 
             return result;
+        }
+
+        public string GetDisplayName()
+        {
+            if (Toggles)
+            {
+                string s = "Toggle";
+                foreach (var shift in ToggleStates)
+                    s += $".{shift}";
+
+                return s;
+            }
+            else
+            {
+                return $"Shift.{TargetState}";
+            }
         }
     }
 

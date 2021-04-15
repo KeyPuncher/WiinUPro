@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using NintrollerLib;
 using Shared;
 
@@ -64,8 +65,8 @@ namespace WiinUPro
                 var nun = (Nunchuk)state;
                 UpdateWiimoteVisual(nun.wiimote);
 
-                nBtnC.Opacity = nun.C ? 1 : 0;
-                nBtnZ.Opacity = nun.Z ? 1 : 0;
+                Display(nBtnC, nun.C);
+                Display(nBtnZ, nun.Z);
                 nJoy.Margin = new Thickness(70 + 30 * nun.joystick.X, 360 - 30 * nun.joystick.Y, 0, 0);
 
                 if (_openJoyWindow != null && _calibrationTarget == App.CAL_NUN_JOYSTICK)
@@ -84,22 +85,22 @@ namespace WiinUPro
                 var cc = (ClassicController)state;
                 UpdateWiimoteVisual(cc.wiimote);
 
-                ccBtnA.Opacity      = cc.A ? 1 : 0;
-                ccBtnB.Opacity      = cc.B ? 1 : 0;
-                ccBtnX.Opacity      = cc.X ? 1 : 0;
-                ccBtnY.Opacity      = cc.Y ? 1 : 0;
-                ccBtnUp.Opacity     = cc.Up ? 1 : 0;
-                ccBtnDown.Opacity   = cc.Down ? 1 : 0;
-                ccBtnRight.Opacity  = cc.Right ? 1 : 0;
-                ccBtnLeft.Opacity   = cc.Left ? 1 : 0;
+                Display(ccBtnA, cc.A);
+                Display(ccBtnB, cc.B);
+                Display(ccBtnX, cc.X);
+                Display(ccBtnY, cc.Y);
+                Display(ccBtnUp, cc.Up);
+                Display(ccBtnDown, cc.Down);
+                Display(ccBtnRight, cc.Right);
+                Display(ccBtnLeft, cc.Left);
                 ccPadCenter.Opacity = cc.Up || cc.Down || cc.Left || cc.Right ? 1 : 0;
-                ccBtnHome.Opacity   = cc.Home ? 1 : 0;
-                ccBtnSelect.Opacity = cc.Select ? 1 : 0;
-                ccBtnStart.Opacity  = cc.Start ? 1 : 0;
-                ccBtnZL.Opacity     = cc.ZL ? 1 : 0;
-                ccBtnZR.Opacity     = cc.ZR ? 1 : 0;
-                ccL.Opacity         = cc.L.value > 0 ? 1 : 0;
-                ccR.Opacity         = cc.R.value > 0 ? 1 : 0;
+                Display(ccBtnHome, cc.Home);
+                Display(ccBtnSelect, cc.Select);
+                Display(ccBtnStart, cc.Start);
+                Display(ccBtnZL, cc.ZL);
+                Display(ccBtnZR, cc.ZR);
+                Display(ccL, cc.L.value > 0);
+                Display(ccR, cc.R.value > 0);
                 ccLeftStick.Margin  = new Thickness(208 + 30 * cc.LJoy.X, 210 - 30 * cc.LJoy.Y, 0, 0);
                 ccRightStick.Margin = new Thickness(364 + 30 * cc.RJoy.X, 210 - 30 * cc.RJoy.Y, 0, 0);
 
@@ -125,22 +126,22 @@ namespace WiinUPro
                 var ccp = (ClassicControllerPro)state;
                 UpdateWiimoteVisual(ccp.wiimote);
 
-                ccpBtnA.Opacity      = ccp.A ? 1 : 0;
-                ccpBtnB.Opacity      = ccp.B ? 1 : 0;
-                ccpBtnX.Opacity      = ccp.X ? 1 : 0;
-                ccpBtnY.Opacity      = ccp.Y ? 1 : 0;
-                ccpBtnUp.Opacity     = ccp.Up ? 1 : 0;
-                ccpBtnDown.Opacity   = ccp.Down ? 1 : 0;
-                ccpBtnRight.Opacity  = ccp.Right ? 1 : 0;
-                ccpBtnLeft.Opacity   = ccp.Left ? 1 : 0;
+                Display(ccpBtnA, ccp.A);
+                Display(ccpBtnB, ccp.B);
+                Display(ccpBtnX, ccp.X);
+                Display(ccpBtnY, ccp.Y);
+                Display(ccpBtnUp, ccp.Up);
+                Display(ccpBtnDown, ccp.Down);
+                Display(ccpBtnRight, ccp.Right);
+                Display(ccpBtnLeft, ccp.Left);
                 ccpPadCenter.Opacity = ccp.Up || ccp.Down || ccp.Left || ccp.Right ? 1 : 0;
-                ccpBtnHome.Opacity   = ccp.Home ? 1 : 0;
-                ccpBtnSelect.Opacity = ccp.Select ? 1 : 0;
-                ccpBtnStart.Opacity  = ccp.Start ? 1 : 0;
-                ccpBtnZL.Opacity     = ccp.ZL ? 1 : 0;
-                ccpBtnZR.Opacity     = ccp.ZR ? 1 : 0;
-                ccpBtnL.Opacity      = ccp.L ? 1 : 0;
-                ccpBtnR.Opacity      = ccp.R ? 1 : 0;
+                Display(ccpBtnHome, ccp.Home);
+                Display(ccpBtnSelect, ccp.Select);
+                Display(ccpBtnStart, ccp.Start);
+                Display(ccpBtnZL, ccp.ZL);
+                Display(ccpBtnZR, ccp.ZR);
+                Display(ccpBtnL, ccp.L);
+                Display(ccpBtnR, ccp.R);
                 ccpLeftStick.Margin  = new Thickness(255 + 30 * ccp.LJoy.X, 279 - 30 * ccp.LJoy.Y, 0, 0);
                 ccpRightStick.Margin = new Thickness(485 + 30 * ccp.RJoy.X, 279 - 30 * ccp.RJoy.Y, 0, 0);
 
@@ -161,20 +162,20 @@ namespace WiinUPro
                 var gut = (Guitar)state;
                 UpdateWiimoteVisual(gut.wiimote);
 
-                gBtnGreen.Opacity = gut.Green ? 1 : 0;
-                gBtnRed.Opacity = gut.Red ? 1 : 0;
-                gBtnYellow.Opacity = gut.Yellow ? 1 : 0;
-                gBtnBlue.Opacity = gut.Blue ? 1 : 0;
-                gBtnOrange.Opacity = gut.Orange ? 1 : 0;
-                gBtnStrumUp.Opacity = gut.StrumUp ? 1 : 0;
-                gBtnStrumDown.Opacity = gut.StrumDown ? 1 : 0;
-                gBtnPlus.Opacity = gut.Plus ? 1 : 0;
-                gBtnMinus.Opacity = gut.Minus ? 1 : 0;
-                gTouch1.Opacity = gut.T1 ? 1 : 0;
-                gTouch2.Opacity = gut.T2 ? 1 : 0;
-                gTouch3.Opacity = gut.T3 ? 1 : 0;
-                gTouch4.Opacity = gut.T4 ? 1 : 0;
-                gTouch5.Opacity = gut.T5 ? 1 : 0;
+                Display(gBtnGreen, gut.Green);
+                Display(gBtnRed, gut.Red);
+                Display(gBtnYellow, gut.Yellow);
+                Display(gBtnBlue, gut.Blue);
+                Display(gBtnOrange, gut.Orange);
+                Display(gBtnStrumUp, gut.StrumUp);
+                Display(gBtnStrumDown, gut.StrumDown);
+                Display(gBtnPlus, gut.Plus);
+                Display(gBtnMinus, gut.Minus);
+                Display(gTouch1, gut.T1);
+                Display(gTouch2, gut.T2);
+                Display(gTouch3, gut.T3);
+                Display(gTouch4, gut.T4);
+                Display(gTouch5, gut.T5);
                 gStick.Margin = new Thickness(1236 + 30 * gut.joystick.X, 283 - 30 * gut.joystick.Y, 0, 0);
                 gStick.Margin = new Thickness(1236 + 30 * gut.joystick.X, 283 - 30 * gut.joystick.Y, 0, 0);
                 gWhammy.Margin = new Thickness(345 + 60 * gut.whammyBar.value, 815 - 20 * gut.whammyBar.value, 0, 0);
@@ -204,6 +205,213 @@ namespace WiinUPro
                 takRimL.Stroke = tak.rimLeft ? System.Windows.Media.Brushes.Blue : System.Windows.Media.Brushes.White;
                 takRimR.Stroke = tak.rimRight ? System.Windows.Media.Brushes.Blue : System.Windows.Media.Brushes.White;
             }
+        }
+
+        public void SetInputTooltip(string inputName, string tooltip)
+        {
+            switch (inputName)
+            {
+                case INPUT_NAMES.WIIMOTE.A: wBtnA.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.B: wBtnB.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.ONE: wBtnOne.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.TWO: wBtnTwo.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.PLUS: wBtnPlus.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.MINUS: wBtnMinus.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.HOME: wBtnHome.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.UP: wBtnUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.LEFT: wBtnLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.RIGHT: wBtnRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.DOWN: wBtnDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.WIIMOTE.IR_UP: UpdateTooltipLine(irCanvas, tooltip, 0); break;
+                case INPUT_NAMES.WIIMOTE.IR_LEFT: UpdateTooltipLine(irCanvas, tooltip, 1); break;
+                case INPUT_NAMES.WIIMOTE.IR_RIGHT: UpdateTooltipLine(irCanvas, tooltip, 2); break;
+                case INPUT_NAMES.WIIMOTE.IR_DOWN: UpdateTooltipLine(irCanvas, tooltip, 3); break;
+
+                case INPUT_NAMES.NUNCHUK.C: nBtnC.ToolTip = tooltip; break;
+                case INPUT_NAMES.NUNCHUK.Z: nBtnZ.ToolTip = tooltip; break;
+                case INPUT_NAMES.NUNCHUK.UP: UpdateTooltipLine(nJoy, tooltip, 0); break;
+                case INPUT_NAMES.NUNCHUK.LEFT: UpdateTooltipLine(nJoy, tooltip, 1); break;
+                case INPUT_NAMES.NUNCHUK.RIGHT: UpdateTooltipLine(nJoy, tooltip, 2); break;
+                case INPUT_NAMES.NUNCHUK.DOWN: UpdateTooltipLine(nJoy, tooltip, 3); break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER.A: ccBtnA.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.B: ccBtnB.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.X: ccBtnX.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.Y: ccBtnY.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.ZL: ccBtnZL.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.ZR: ccBtnZR.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.HOME: ccBtnHome.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.START: ccBtnStart.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.SELECT: ccBtnSelect.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.UP: ccBtnUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LEFT: ccBtnLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RIGHT: ccBtnRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.DOWN: ccBtnDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LT: UpdateTooltipLine(ccL, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LFULL: UpdateTooltipLine(ccL, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RT: UpdateTooltipLine(ccR, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RFULL: UpdateTooltipLine(ccR, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LUP: UpdateTooltipLine(ccLeftStick, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LLEFT: UpdateTooltipLine(ccLeftStick, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LRIGHT: UpdateTooltipLine(ccLeftStick, tooltip, 2); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LDOWN: UpdateTooltipLine(ccLeftStick, tooltip, 3); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RUP: UpdateTooltipLine(ccRightStick, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RLEFT: UpdateTooltipLine(ccRightStick, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RRIGHT: UpdateTooltipLine(ccRightStick, tooltip, 2); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RDOWN: UpdateTooltipLine(ccRightStick, tooltip, 3); break;
+
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.A: ccpBtnA.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.B: ccpBtnB.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.X: ccpBtnX.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.Y: ccpBtnY.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.L: ccpBtnL.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.R: ccpBtnR.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.ZL: ccpBtnZL.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.ZR: ccpBtnZR.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.HOME: ccpBtnHome.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.START: ccpBtnStart.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.SELECT: ccpBtnSelect.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.UP: ccpBtnUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LEFT: ccpBtnLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RIGHT: ccpBtnRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.DOWN: ccpBtnDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LUP: UpdateTooltipLine(ccpLeftStick, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LLEFT: UpdateTooltipLine(ccpLeftStick, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LRIGHT: UpdateTooltipLine(ccpLeftStick, tooltip, 2); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LDOWN: UpdateTooltipLine(ccpLeftStick, tooltip, 3); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RUP: UpdateTooltipLine(ccpRightStick, tooltip, 0); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RLEFT: UpdateTooltipLine(ccpRightStick, tooltip, 1); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RRIGHT: UpdateTooltipLine(ccpRightStick, tooltip, 2); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RDOWN: UpdateTooltipLine(ccpRightStick, tooltip, 3); break;
+
+                case INPUT_NAMES.GUITAR.BLUE: gBtnBlue.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.ORANGE: gBtnOrange.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.YELLOW: gBtnYellow.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.GREEN: gBtnGreen.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.RED: gBtnRed.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_1: gTouch1.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_2: gTouch2.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_3: gTouch3.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_4: gTouch4.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.TOUCH_5: gTouch5.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.PLUS: gBtnPlus.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.MINUS: gBtnPlus.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.STRUM_UP: gBtnStrumUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.STRUM_DOWN: gBtnStrumDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.GUITAR.WHAMMY_BAR: UpdateTooltipLine(gWhammy, tooltip, 0); break;
+                case INPUT_NAMES.GUITAR.WHAMMY_FULL: UpdateTooltipLine(gWhammy, tooltip, 1); break;
+                case INPUT_NAMES.GUITAR.UP: UpdateTooltipLine(gStick, tooltip, 0); break;
+                case INPUT_NAMES.GUITAR.LEFT: UpdateTooltipLine(gStick, tooltip, 1); break;
+                case INPUT_NAMES.GUITAR.RIGHT: UpdateTooltipLine(gStick, tooltip, 2); break;
+                case INPUT_NAMES.GUITAR.DOWN: UpdateTooltipLine(gStick, tooltip, 3); break;
+
+                case INPUT_NAMES.TAIKO_DRUM.CENTER_LEFT: takL.ToolTip = tooltip; break;
+                case INPUT_NAMES.TAIKO_DRUM.CENTER_RIGHT: takR.ToolTip = tooltip; break;
+                case INPUT_NAMES.TAIKO_DRUM.RIM_LEFT: takRimL.ToolTip = tooltip; break;
+                case INPUT_NAMES.TAIKO_DRUM.RIM_RIGHT: takRimR.ToolTip = tooltip; break;
+            }
+        }
+
+        public void ClearTooltips()
+        {
+            wBtnA.ToolTip = "UNSET";
+            wBtnB.ToolTip = "UNSET";
+            wBtnOne.ToolTip = "UNSET";
+            wBtnTwo.ToolTip = "UNSET";
+            wBtnPlus.ToolTip = "UNSET";
+            wBtnMinus.ToolTip = "UNSET";
+            wBtnHome.ToolTip = "UNSET";
+            wBtnUp.ToolTip = "UNSET";
+            wBtnLeft.ToolTip = "UNSET";
+            wBtnRight.ToolTip = "UNSET";
+            wBtnDown.ToolTip = "UNSET";
+            UpdateTooltipLine(irCanvas, "UNSET", 0);
+            UpdateTooltipLine(irCanvas, "UNSET", 1);
+            UpdateTooltipLine(irCanvas, "UNSET", 2);
+            UpdateTooltipLine(irCanvas, "UNSET", 3);
+
+            nBtnC.ToolTip = "UNSET";
+            nBtnZ.ToolTip = "UNSET";
+            UpdateTooltipLine(nJoy, "UNSET", 0);
+            UpdateTooltipLine(nJoy, "UNSET", 1);
+            UpdateTooltipLine(nJoy, "UNSET", 2);
+            UpdateTooltipLine(nJoy, "UNSET", 3);
+
+            ccBtnA.ToolTip = "UNSET";
+            ccBtnB.ToolTip = "UNSET";
+            ccBtnX.ToolTip = "UNSET";
+            ccBtnY.ToolTip = "UNSET";
+            ccBtnZL.ToolTip = "UNSET";
+            ccBtnZR.ToolTip = "UNSET";
+            ccBtnHome.ToolTip = "UNSET";
+            ccBtnStart.ToolTip = "UNSET";
+            ccBtnSelect.ToolTip = "UNSET";
+            ccBtnUp.ToolTip = "UNSET";
+            ccBtnLeft.ToolTip = "UNSET";
+            ccBtnRight.ToolTip = "UNSET";
+            ccBtnDown.ToolTip = "UNSET";
+            UpdateTooltipLine(ccL, "UNSET", 0);
+            UpdateTooltipLine(ccL, "UNSET", 1);
+            UpdateTooltipLine(ccR, "UNSET", 0);
+            UpdateTooltipLine(ccR, "UNSET", 1);
+            UpdateTooltipLine(ccLeftStick, "UNSET", 0);
+            UpdateTooltipLine(ccLeftStick, "UNSET", 1);
+            UpdateTooltipLine(ccLeftStick, "UNSET", 2);
+            UpdateTooltipLine(ccLeftStick, "UNSET", 3);
+            UpdateTooltipLine(ccRightStick, "UNSET", 0);
+            UpdateTooltipLine(ccRightStick, "UNSET", 1);
+            UpdateTooltipLine(ccRightStick, "UNSET", 2);
+            UpdateTooltipLine(ccRightStick, "UNSET", 3);
+
+            ccpBtnA.ToolTip = "UNSET";
+            ccpBtnB.ToolTip = "UNSET";
+            ccpBtnX.ToolTip = "UNSET";
+            ccpBtnY.ToolTip = "UNSET";
+            ccpBtnL.ToolTip = "UNSET";
+            ccpBtnR.ToolTip = "UNSET";
+            ccpBtnZL.ToolTip = "UNSET";
+            ccpBtnZR.ToolTip = "UNSET";
+            ccpBtnHome.ToolTip = "UNSET";
+            ccpBtnStart.ToolTip = "UNSET";
+            ccpBtnSelect.ToolTip = "UNSET";
+            ccpBtnUp.ToolTip = "UNSET";
+            ccpBtnLeft.ToolTip = "UNSET";
+            ccpBtnRight.ToolTip = "UNSET";
+            ccpBtnDown.ToolTip = "UNSET";
+            UpdateTooltipLine(ccpLeftStick, "UNSET", 0);
+            UpdateTooltipLine(ccpLeftStick, "UNSET", 1);
+            UpdateTooltipLine(ccpLeftStick, "UNSET", 2);
+            UpdateTooltipLine(ccpLeftStick, "UNSET", 3);
+            UpdateTooltipLine(ccpRightStick, "UNSET", 0);
+            UpdateTooltipLine(ccpRightStick, "UNSET", 1);
+            UpdateTooltipLine(ccpRightStick, "UNSET", 2);
+            UpdateTooltipLine(ccpRightStick, "UNSET", 3);
+
+            gBtnBlue.ToolTip = "UNSET";
+            gBtnOrange.ToolTip = "UNSET";
+            gBtnYellow.ToolTip = "UNSET";
+            gBtnGreen.ToolTip = "UNSET";
+            gBtnRed.ToolTip = "UNSET";
+            gTouch1.ToolTip = "UNSET";
+            gTouch2.ToolTip = "UNSET";
+            gTouch3.ToolTip = "UNSET";
+            gTouch4.ToolTip = "UNSET";
+            gTouch5.ToolTip = "UNSET";
+            gBtnPlus.ToolTip = "UNSET";
+            gBtnPlus.ToolTip = "UNSET";
+            gBtnStrumUp.ToolTip = "UNSET";
+            gBtnStrumDown.ToolTip = "UNSET";
+            UpdateTooltipLine(gWhammy, "UNSET", 0);
+            UpdateTooltipLine(gWhammy, "UNSET", 1);
+            UpdateTooltipLine(gStick, "UNSET", 0);
+            UpdateTooltipLine(gStick, "UNSET", 1);
+            UpdateTooltipLine(gStick, "UNSET", 2);
+            UpdateTooltipLine(gStick, "UNSET", 3);
+
+            takL.ToolTip = "UNSET";
+            takR.ToolTip = "UNSET";
+            takRimL.ToolTip = "UNSET";
+            takRimR.ToolTip = "UNSET";
         }
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)
@@ -310,17 +518,17 @@ namespace WiinUPro
                 _openIRWindow.Update(wiimote.irSensor);
             }
 
-            wBtnA.Opacity     = wiimote.buttons.A ? 1 : 0;
-            wBtnB.Opacity     = wiimote.buttons.B ? 1 : 0;
-            wBtnOne.Opacity   = wiimote.buttons.One ? 1 : 0;
-            wBtnTwo.Opacity   = wiimote.buttons.Two ? 1 : 0;
-            wBtnUp.Opacity    = wiimote.buttons.Up ? 1 : 0;
-            wBtnRight.Opacity = wiimote.buttons.Right ? 1 : 0;
-            wBtnDown.Opacity  = wiimote.buttons.Down ? 1 : 0;
-            wBtnLeft.Opacity  = wiimote.buttons.Left ? 1 : 0;
-            wBtnMinus.Opacity = wiimote.buttons.Minus ? 1 : 0;
-            wBtnPlus.Opacity  = wiimote.buttons.Plus ? 1 : 0;
-            wBtnHome.Opacity  = wiimote.buttons.Home ? 1 : 0;
+            Display(wBtnA, wiimote.buttons.A);
+            Display(wBtnB, wiimote.buttons.B);
+            Display(wBtnOne, wiimote.buttons.One);
+            Display(wBtnTwo, wiimote.buttons.Two);
+            Display(wBtnUp, wiimote.buttons.Up);
+            Display(wBtnRight, wiimote.buttons.Right);
+            Display(wBtnDown, wiimote.buttons.Down);
+            Display(wBtnLeft, wiimote.buttons.Left);
+            Display(wBtnMinus, wiimote.buttons.Minus);
+            Display(wBtnPlus, wiimote.buttons.Plus);
+            Display(wBtnHome, wiimote.buttons.Home);
             wCenterPad.Opacity = wiimote.buttons.Up || wiimote.buttons.Down || wiimote.buttons.Left || wiimote.buttons.Right ? 1 : 0;
 
             irPoint1.Visibility = wiimote.irSensor.point1.visible ? Visibility.Visible : Visibility.Collapsed;
@@ -423,6 +631,37 @@ namespace WiinUPro
                     }
                 }
             }
+        }
+
+        protected override void OpenJoystickMenu(object sender, MouseButtonEventArgs e)
+        {
+            base.OpenJoystickMenu(sender, e);
+
+            // Preserving existing profile backwards compatability with dynamic context menu.
+            // Remove the "Joy" text between things like nJoyUp input names.
+            _analogMenuInput = _menuOwnerTag.Replace("Joy", "");
+        }
+
+        protected override void OpenTriggerMenu(object sender, MouseButtonEventArgs e)
+        {
+            base.OpenTriggerMenu(sender, e);
+
+            // Preserving existing profile backwards compatability with dynamic context menu.
+            // Remove the trailing "T" text between things like ccLT input names.
+            _analogMenuInput = _menuOwnerTag.Replace("LT", "L").Replace("RT", "R").Replace("WT", "W");
+        }
+
+        protected override void QuickAssign(string prefix, string type)
+        {
+            // Preserving existing profile backwards compatability with dynamic context menu.
+            // Remove the "Joy" text between things like nJoyUp input names.
+            base.QuickAssign(prefix.Replace("Joy", ""), type);
+        }
+
+        protected override void QuickAssignMouse_Click(object sender, RoutedEventArgs e)
+        {
+            _menuOwnerTag = _menuOwnerTag.Replace("Joy", "");
+            base.QuickAssignMouse_Click(sender, e);
         }
 
         protected override void CalibrateInput(string inputName)

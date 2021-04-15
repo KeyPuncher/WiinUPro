@@ -123,5 +123,10 @@ namespace WiinUPro
         {
             return Direction.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return $"Joy{ToString()}";
+        }
     }
 }

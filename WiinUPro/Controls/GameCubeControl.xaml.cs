@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using NintrollerLib;
@@ -14,12 +15,16 @@ namespace WiinUPro
         public event Delegates.BoolArrDel OnChangeLEDs;
         public event Delegates.JoystickDel OnJoyCalibrated;
         public event Delegates.TriggerDel OnTriggerCalibrated;
+        public event Action<int> OnSelectedPortChanged;
 
         protected Windows.JoyCalibrationWindow _openJoyWindow = null;
         protected Windows.TriggerCalibrationWindow _openTrigWindow = null;
         protected string _calibrationTarget = "";
         protected GameCubeAdapter _lastState;
         protected GameCubePort _activePort = GameCubePort.PORT1;
+
+        private string _connectedStatus;
+        private string _disconnectedStatus;
 
         protected enum GameCubePort
         {
@@ -32,7 +37,13 @@ namespace WiinUPro
         public GameCubeControl()
         {
             _inputPrefix = "1_";
+            _connectedStatus = Globalization.Translate("Controller_Connected");
+            _disconnectedStatus = Globalization.Translate("Controller_Disconnect");
+
             InitializeComponent();
+
+            for (int i = 0; i < 4; ++i)
+                (portSelection.Items[i] as MenuItem).Header = Globalization.TranslateFormat("GCN_Port", i);
         }
 
         public GameCubeControl(string deviceId) : this()
@@ -88,7 +99,7 @@ namespace WiinUPro
                 joystick.Margin = new Thickness(190 + 100 * activePort.joystick.X, 272 - 100 * activePort.joystick.Y, 0, 0);
                 cStick.Margin = new Thickness(887 + 100 * activePort.cStick.X, 618 - 100 * activePort.cStick.Y, 0, 0);
 
-                connectionStatus.Content = connecited ? "Connected" : "Disconnected";
+                connectionStatus.Content = connecited ? _connectedStatus : _disconnectedStatus;
 
                 if (_openJoyWindow != null)
                 {
@@ -101,6 +112,64 @@ namespace WiinUPro
                     else if (_calibrationTarget == "R") _openTrigWindow.Update(activePort.R);
                 }
             }
+        }
+
+        public void SetInputTooltip(string inputName, string tooltip)
+        {
+            if (!inputName.StartsWith(_inputPrefix))
+                return;
+
+            switch (inputName.Substring(_inputPrefix.Length))
+            {
+                case INPUT_NAMES.GCN_CONTROLLER.A: A.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.B: B.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.X: X.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.Y: Y.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.Z: Z.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.START: START.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.UP: dpadUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.LEFT: dpadLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.RIGHT: dpadRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.DOWN: dpadDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.GCN_CONTROLLER.LT: UpdateTooltipLine(L, tooltip, 0); break;
+                case INPUT_NAMES.GCN_CONTROLLER.LFULL: UpdateTooltipLine(L, tooltip, 1); break;
+                case INPUT_NAMES.GCN_CONTROLLER.RT: UpdateTooltipLine(R, tooltip, 0); break;
+                case INPUT_NAMES.GCN_CONTROLLER.RFULL: UpdateTooltipLine(R, tooltip, 1); break;
+                case INPUT_NAMES.GCN_CONTROLLER.JOY_UP: UpdateTooltipLine(joystick, tooltip, 0); break;
+                case INPUT_NAMES.GCN_CONTROLLER.JOY_LEFT: UpdateTooltipLine(joystick, tooltip, 1); break;
+                case INPUT_NAMES.GCN_CONTROLLER.JOY_RIGHT: UpdateTooltipLine(joystick, tooltip, 2); break;
+                case INPUT_NAMES.GCN_CONTROLLER.JOY_DOWN: UpdateTooltipLine(joystick, tooltip, 3); break;
+                case INPUT_NAMES.GCN_CONTROLLER.C_UP: UpdateTooltipLine(cStick, tooltip, 0); break;
+                case INPUT_NAMES.GCN_CONTROLLER.C_LEFT: UpdateTooltipLine(cStick, tooltip, 1); break;
+                case INPUT_NAMES.GCN_CONTROLLER.C_RIGHT: UpdateTooltipLine(cStick, tooltip, 2); break;
+                case INPUT_NAMES.GCN_CONTROLLER.C_DOWN: UpdateTooltipLine(cStick, tooltip, 3); break;
+            }
+        }
+
+        public void ClearTooltips()
+        {
+            A.ToolTip = "UNSET";
+            B.ToolTip = "UNSET";
+            X.ToolTip = "UNSET";
+            Y.ToolTip = "UNSET";
+            Z.ToolTip = "UNSET";
+            START.ToolTip = "UNSET";
+            dpadUp.ToolTip = "UNSET";
+            dpadLeft.ToolTip = "UNSET";
+            dpadRight.ToolTip = "UNSET";
+            dpadDown.ToolTip = "UNSET";
+            UpdateTooltipLine(L, "UNSET", 0);
+            UpdateTooltipLine(L, "UNSET", 1);
+            UpdateTooltipLine(R, "UNSET", 0);
+            UpdateTooltipLine(R, "UNSET", 1);
+            UpdateTooltipLine(joystick, "UNSET", 0);
+            UpdateTooltipLine(joystick, "UNSET", 1);
+            UpdateTooltipLine(joystick, "UNSET", 2);
+            UpdateTooltipLine(joystick, "UNSET", 3);
+            UpdateTooltipLine(cStick, "UNSET", 0);
+            UpdateTooltipLine(cStick, "UNSET", 1);
+            UpdateTooltipLine(cStick, "UNSET", 2);
+            UpdateTooltipLine(cStick, "UNSET", 3);
         }
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)
@@ -266,6 +335,8 @@ namespace WiinUPro
             }
 
             _inputPrefix = ((int)_activePort).ToString() + "_";
+
+            OnSelectedPortChanged?.Invoke((int)_activePort);
         }
     }
 }

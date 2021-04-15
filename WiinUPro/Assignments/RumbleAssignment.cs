@@ -35,5 +35,10 @@ namespace WiinUPro
                 return false;
             }
         }
+
+        public string GetDisplayName()
+        {
+            return "~";
+        }
     }
 }

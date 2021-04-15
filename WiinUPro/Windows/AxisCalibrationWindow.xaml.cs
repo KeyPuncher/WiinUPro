@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared;
+using System;
 using System.Windows;
 
 namespace WiinUPro.Windows
@@ -92,7 +93,11 @@ namespace WiinUPro.Windows
                 }
                 else
                 {
-                    var c = MessageBox.Show("Could not open the file \"" + dialog.FileName + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        Globalization.TranslateFormat("Calibration_Load_Error_Msg", dialog.FileName),
+                        Globalization.Translate("Calibration_Load_Error"),
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Error);
                 }
             }
         }

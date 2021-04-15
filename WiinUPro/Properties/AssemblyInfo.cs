@@ -49,5 +49,6 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.9.4.616")]
-[assembly: AssemblyFileVersion("0.9.4.616")]
+// When updating, the last number should be 190 + the number of commits in GitHub + 1 for this commit + # of unpushed local commits.
+[assembly: AssemblyVersion("0.9.7.694")]
+[assembly: AssemblyFileVersion("0.9.7.694")]

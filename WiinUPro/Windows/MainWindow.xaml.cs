@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using Shared.Windows;
 using Microsoft.Win32;
 using LibUsbDotNet.Main;
+using Shared;
 
 namespace WiinUPro
 {
@@ -28,6 +29,8 @@ namespace WiinUPro
         public static MainWindow Instance => _instance;
 
         private static MainWindow _instance;
+
+        public bool WindowHidden { get; private set; } = false;
         
         List<DeviceStatus> _availableDevices;
         DateTime _lastRefreshTime;
@@ -249,7 +252,10 @@ namespace WiinUPro
             else if (!AppPrefs.Instance.suppressConnectionLost)
             {
                 // Display message
-                MessageBox.Show("Unable to Connect Device", "Failed", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show(
+                    Globalization.Translate("Error_Connection"), 
+                    Globalization.Translate("Error_Failed"), 
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
 
@@ -372,10 +378,20 @@ namespace WiinUPro
         {
             AppPrefs.Instance.suppressConnectionLost = settingSuppressLostConn.IsChecked ?? false;
         }
+
         private void settingAutoAddXInputDevices_Checked(object sender, RoutedEventArgs e)
         {
             AppPrefs.Instance.autoAddXInputDevices = settingAutoAddXInputDevices.IsChecked ?? false;
             settingProfileQueuing.IsEnabled = settingAutoAddXInputDevices.IsChecked ?? false;
+        }
+
+        private void settingLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (AppPrefs.Instance.language != settingLanguage.SelectedIndex)
+            {
+                AppPrefs.Instance.language = settingLanguage.SelectedIndex;
+                Globalization.SetSelectedLanguage(settingLanguage.SelectedIndex);
+            }
         }
 
         private void settingMinimizeOnClose_Checked(object sender, RoutedEventArgs e)
@@ -388,6 +404,34 @@ namespace WiinUPro
         }
 
         #endregion
+
+        private void SetXInputDeviceStatus(ScpDirector.XInput_Device device)
+        {
+            string status = Globalization.Translate("Status_Disconnected");
+
+            if (ScpDirector.Access.IsConnected(device))
+            {
+                status = Globalization.Translate("Status_Connected");
+            }
+
+            status = Globalization.TranslateFormat("XInput_Device_Num", (int)device, status);
+
+            switch (device)
+            {
+                case ScpDirector.XInput_Device.Device_A:
+                    xlabel1.Content = status;
+                    break;
+                case ScpDirector.XInput_Device.Device_B:
+                    xlabel2.Content = status;
+                    break;
+                case ScpDirector.XInput_Device.Device_C:
+                    xlabel3.Content = status;
+                    break;
+                case ScpDirector.XInput_Device.Device_D:
+                    xlabel4.Content = status;
+                    break;
+            }
+        }
 
         public void RumbleSettingsChanged(DeviceStatus s, bool[] rumbleSubscriptions)
         {
@@ -415,21 +459,21 @@ namespace WiinUPro
                     if (connected)
                     {
                         btnRemoveXinput.IsEnabled = true;
-                        xlabel1.Content = "Device 1: Auto Connected";
+                        xlabel1.Content = Globalization.TranslateFormat("XInput_Device_Num", "1", Globalization.Translate("Status_Auto"));
                     }
                 }
                 if (n > 0 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
                 {
                     if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_B))
                     {
-                        xlabel2.Content = "Device 2: Auto Connected";
+                        xlabel2.Content = Globalization.TranslateFormat("XInput_Device_Num", "2", Globalization.Translate("Status_Auto"));
                     }
                 }
                 if (n > 1 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
                 {
                     if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_C))
                     {
-                        xlabel3.Content = "Device 3: Auto Connected";
+                        xlabel3.Content = Globalization.TranslateFormat("XInput_Device_Num", "3", Globalization.Translate("Status_Auto"));
                     }
                 }
                 if (n > 2 && !ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
@@ -437,7 +481,7 @@ namespace WiinUPro
                     if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_D))
                     {
                         btnAddXinput.IsEnabled = false;
-                        xlabel4.Content = "Device 4: Auto Connected";
+                        xlabel4.Content = Globalization.TranslateFormat("XInput_Device_Num", "4", Globalization.Translate("Status_Auto"));
                     }
                 }
             }
@@ -458,21 +502,21 @@ namespace WiinUPro
                 if (connected)
                 {
                     btnRemoveXinput.IsEnabled = true;
-                    xlabel1.Content = "Device 1: Connected";
+                    xlabel1.Content = Globalization.TranslateFormat("XInput_Device_Num", "1", Globalization.Translate("Status_Connected"));
                 }
             }
             else if (!ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
             {
                 if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_B))
                 {
-                    xlabel2.Content = "Device 2: Connected";
+                    xlabel2.Content = Globalization.TranslateFormat("XInput_Device_Num", "2", Globalization.Translate("Status_Connected"));
                 }
             }
             else if (!ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
             {
                 if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_C))
                 {
-                    xlabel3.Content = "Device 3: Connected";
+                    xlabel3.Content = Globalization.TranslateFormat("XInput_Device_Num", "3", Globalization.Translate("Status_Connected"));
                 }
             }
             else if (!ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_D))
@@ -480,7 +524,7 @@ namespace WiinUPro
                 if (ScpDirector.Access.ConnectDevice(ScpDirector.XInput_Device.Device_D))
                 {
                     btnAddXinput.IsEnabled = false;
-                    xlabel4.Content = "Device 4: Connected";
+                    xlabel4.Content = Globalization.TranslateFormat("XInput_Device_Num", "4", Globalization.Translate("Status_Connected"));
                 }
             }
         }
@@ -492,21 +536,21 @@ namespace WiinUPro
                 if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_D))
                 {
                     btnAddXinput.IsEnabled = true;
-                    xlabel4.Content = "Device 4: Disconnected";
+                    xlabel4.Content = Globalization.TranslateFormat("XInput_Device_Num", "4", Globalization.Translate("Status_Disconnected"));
                 }
             }
             else if (ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_C))
             {
                 if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_C))
                 {
-                    xlabel3.Content = "Device 3: Disconnected";
+                    xlabel3.Content = Globalization.TranslateFormat("XInput_Device_Num", "3", Globalization.Translate("Status_Disconnected"));
                 }
             }
             else if (ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_B))
             {
                 if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_B))
                 {
-                    xlabel2.Content = "Device 2: Disconnected";
+                    xlabel2.Content = Globalization.TranslateFormat("XInput_Device_Num", "2", Globalization.Translate("Status_Disconnected"));
                 }
             }
             else if (ScpDirector.Access.IsConnected(ScpDirector.XInput_Device.Device_A))
@@ -514,7 +558,7 @@ namespace WiinUPro
                 if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_A))
                 {
                     btnRemoveXinput.IsEnabled = false;
-                    xlabel1.Content = "Device 1: Disconnected";
+                    xlabel4.Content = Globalization.TranslateFormat("XInput_Device_Num", "4", Globalization.Translate("Status_Disconnected"));
                 }
             }
         }
@@ -533,11 +577,24 @@ namespace WiinUPro
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Globalization.ApplyTranslations(this);
+
+            foreach (string language in Globalization.GetAvailableLanguages()) 
+            {
+                var languageBox = new ComboBoxItem
+                {
+                    Content = language
+                };
+                settingLanguage.Items.Add(languageBox);
+            }
+
+            settingLanguage.SelectedIndex = AppPrefs.Instance.language;
+
             // Get the application version
             try
             {
                 Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
-                versionLabel.Content = string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Revision);
+                versionLabel.Content = $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
             }
             catch { }
 
@@ -561,6 +618,11 @@ namespace WiinUPro
                 settingAutoAddXInputDevices.IsChecked = true;
                 settingProfileQueuing.IsEnabled = true;
             }
+
+            SetXInputDeviceStatus(ScpDirector.XInput_Device.Device_A);
+            SetXInputDeviceStatus(ScpDirector.XInput_Device.Device_B);
+            SetXInputDeviceStatus(ScpDirector.XInput_Device.Device_C);
+            SetXInputDeviceStatus(ScpDirector.XInput_Device.Device_D);
 
             // Check Start Minimized
             if (AppPrefs.Instance.startMinimized)
@@ -648,7 +710,9 @@ namespace WiinUPro
 
         private void Window_StateChanged(object sender, EventArgs e)
         {
-            if (WindowState == WindowState.Minimized)
+            WindowHidden = WindowState == WindowState.Minimized;
+
+            if (WindowHidden)
             {
                 HideWindow();
             }

@@ -11,6 +11,7 @@ using SharpDX.DirectInput;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Input;
+using Shared;
 
 namespace WiinUPro
 {
@@ -201,7 +202,9 @@ namespace WiinUPro
 
             if (!App.LoadFromFile<AssignmentProfile>(fileName, out loadedProfile))
             {
-                var c = MessageBox.Show("Could not open or read the profile file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var c = MessageBox.Show(
+                    Globalization.TranslateFormat("Calibration_Load_Error_Msg", fileName),
+                    Globalization.Translate("Calibration_Load_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (loadedProfile != null)
@@ -223,6 +226,8 @@ namespace WiinUPro
                 {
                     associatedJoyCon._assignments = loadedProfile.ToAssignmentArray(this);
                 }
+
+                RefreshToolTips();
             }
         }
 
@@ -341,20 +346,24 @@ namespace WiinUPro
             // TODO: Only apply what this controller emulates, if any
             _scp.ApplyAll();
             VJoyDirector.Access.ApplyAll();
-            Dispatcher.Invoke(new Action(() =>
-            {
-                if (MainWindow.CurrentTab != this && !isChild)
-                    return;
 
-                if (_controller != null)
+            if (!MainWindow.Instance.WindowHidden)
+            {
+                Dispatcher.Invoke(new Action(() =>
                 {
-                    _controller.UpdateVisual(updates);
-                }
-                else
-                {
-                    UpdateGenericVisual(updates);
-                }
-            }));
+                    if (MainWindow.CurrentTab != this && !isChild)
+                        return;
+
+                    if (_controller != null)
+                    {
+                        _controller.UpdateVisual(updates);
+                    }
+                    else
+                    {
+                        UpdateGenericVisual(updates);
+                    }
+                }));
+            }
         }
 
         public void ChangeState(ShiftState newState)
@@ -379,7 +388,15 @@ namespace WiinUPro
             //}
 
             _joystick.Properties.BufferSize = 128;
-            _joystick.Acquire();
+
+            try
+            { 
+                _joystick.Acquire();
+            }
+            catch (SharpDX.SharpDXException ex)
+            {
+                return false;
+            }
             
             _state = _joystick.GetCurrentState();
 
@@ -493,6 +510,8 @@ namespace WiinUPro
                 {
                     _assignments[dropShift.SelectedIndex].Add(item.Key, item.Value);
                 }
+
+                _controller?.SetInputTooltip(item.Key, item.Value.ToString());
             }
         }
 
@@ -565,6 +584,8 @@ namespace WiinUPro
                     InputSet(shift.TargetState, key, win.Result);
                 }
             }
+
+            _controller?.SetInputTooltip(key, win.Result.ToString());
         }
 
         private void InputSet(ShiftState shift, string key, AssignmentCollection assignments)
@@ -576,6 +597,11 @@ namespace WiinUPro
             else
             {
                 _assignments[(int)shift].Add(key, assignments);
+            }
+
+            if (dropShift.SelectedIndex == (int)shift)
+            {
+                _controller?.SetInputTooltip(key, assignments.ToString());
             }
         }
 
@@ -714,6 +740,8 @@ namespace WiinUPro
             {
                 _assignments[dropShift.SelectedIndex].Add(_selectedInput, _clipboard);
             }
+
+            _controller?.SetInputTooltip(_selectedInput, "UNSET");
         }
 
         private void ClearMenu_Click(object sender, RoutedEventArgs e)
@@ -722,6 +750,8 @@ namespace WiinUPro
             {
                 _assignments[dropShift.SelectedIndex].Remove(_selectedInput);
             }
+
+            _controller?.SetInputTooltip(_selectedInput, "UNSET");
         }
         #endregion
 
@@ -1147,13 +1177,31 @@ namespace WiinUPro
         {
             OnInputRightClick((sender as FrameworkElement).Tag.ToString());
         }
+
+        private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_controller != null)
+                RefreshToolTips();
+        }
         #endregion
+
+        private void RefreshToolTips()
+        {
+            _controller.ClearTooltips();
+
+            foreach (var assignment in _assignments[dropShift.SelectedIndex])
+            {
+                _controller.SetInputTooltip(assignment.Key, assignment.Value.ToString());
+            }
+        }
     }
 
     public interface IJoyControl : IBaseControl
     {
         void UpdateVisual(JoystickUpdate[] updates);
         Guid AssociatedInstanceID { get; }
+        void SetInputTooltip(string inputName, string tooltip);
+        void ClearTooltips();
     }
 
     public struct AxisCalibration

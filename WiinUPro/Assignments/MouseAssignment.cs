@@ -90,6 +90,11 @@ namespace WiinUPro
         {
             return Input.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return ToString().Replace("ove", ".");
+        }
     }
 
     public enum MouseInput

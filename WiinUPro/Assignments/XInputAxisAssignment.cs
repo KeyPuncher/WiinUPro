@@ -68,5 +68,10 @@ namespace WiinUPro
         {
             return Axis.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return $"X{ToString()}";
+        }
     }
 }

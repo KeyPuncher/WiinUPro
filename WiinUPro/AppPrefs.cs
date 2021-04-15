@@ -71,6 +71,7 @@ namespace WiinUPro
         public bool autoAddXInputDevices;
         public bool minimizeOnClose;
         public bool profileQueuing;
+        public int language;
 
         public static string ToFileName(string text)
         {

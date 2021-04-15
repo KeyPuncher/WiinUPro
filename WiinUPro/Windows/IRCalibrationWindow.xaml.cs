@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Shared;
 using System.Windows;
 using System.Windows.Controls;
 using NintrollerLib;
@@ -38,6 +38,11 @@ namespace WiinUPro.Windows
                 boxX.Value = sqr.center_x - sqr.width / 2;
                 boxY.Value = sqr.center_y - sqr.height / 2;
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Globalization.ApplyTranslations(this);
         }
 
         public void Update(IR update)
@@ -116,7 +121,11 @@ namespace WiinUPro.Windows
                 }
                 else
                 {
-                    var c = MessageBox.Show("Could not open the file \"" + dialog.FileName + "\".", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        Globalization.TranslateFormat("Calibration_Load_Error_Msg", dialog.FileName),
+                        Globalization.Translate("Calibration_Load_Error"),
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
                 }
             }
         }

@@ -61,6 +61,10 @@ namespace WiinUPro
         {
             InitializeComponent();
 
+            connectBtn.Content = Globalization.Translate(connectBtn.Uid);
+            status.Content = Globalization.Translate("Status_Not_Connected");
+            nickname.Content = Globalization.Translate("Status_Unidentified");
+
             Info = info;
 
             if (info.InstanceGUID.Equals(Guid.Empty))
@@ -119,7 +123,7 @@ namespace WiinUPro
         private void Ninty_OnDisconnect()
         {
             connectBtn.IsEnabled = true;
-            status.Content = "Not Connected";
+            status.Content = Globalization.Translate("Status_Not_Connected");
             CloseTab?.Invoke(this);
         }
 
@@ -243,7 +247,7 @@ namespace WiinUPro
             if (result)
             {
                 connectBtn.IsEnabled = false;
-                status.Content = "Connected";
+                status.Content = Globalization.Translate("Status_Connected");
             }
 
             ConnectClick?.Invoke(this, result);

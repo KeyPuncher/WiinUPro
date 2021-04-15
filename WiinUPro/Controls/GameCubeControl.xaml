@@ -11,21 +11,21 @@
                 <!-- Base Image -->
                 <Image Source="/WiinUPro;component/Images/Controllers/GameCube/gcnBase.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Width="1443" Height="1087" />
                 <!-- Joystick -->
-                <Image x:Name="joystick" Tag="gcnJOY_" Source="/WiinUPro;component/Images/Controllers/GameCube/gcnJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="190,272,0,0" Width="178" Height="176" Opacity="1" MouseLeftButtonUp="OpenJoystickMenu" MouseRightButtonUp="OpenJoystickMenu" />
+                <Image x:Name="joystick" Tag="gcnJOY_" Source="/WiinUPro;component/Images/Controllers/GameCube/gcnJoy.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="190,272,0,0" Width="178" Height="176" Opacity="1" MouseLeftButtonUp="OpenJoystickMenu" MouseRightButtonUp="OpenJoystickMenu" ToolTip="UNSET&#x0a;UNSET&#x0a;UNSET&#x0a;UNSET"/>
                 <!-- C-Stick -->
-                <Image x:Name="cStick" Tag="gcnC_"  Source="/WiinUPro;component/Images/Controllers/GameCube/gcnCStick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="887,618,0,0" Width="132" Height="132" Opacity="1" MouseLeftButtonUp="OpenJoystickMenu" MouseRightButtonUp="OpenJoystickMenu" />
+                <Image x:Name="cStick" Tag="gcnC_"  Source="/WiinUPro;component/Images/Controllers/GameCube/gcnCStick.png" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="887,618,0,0" Width="132" Height="132" Opacity="1" MouseLeftButtonUp="OpenJoystickMenu" MouseRightButtonUp="OpenJoystickMenu" ToolTip="UNSET&#x0a;UNSET&#x0a;UNSET&#x0a;UNSET"/>
                 <!-- D-Pad -->
-                <Rectangle x:Name="dpadUp" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="442,570,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnUP" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
-                <Rectangle x:Name="dpadRight" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="522,641,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnRIGHT" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
-                <Rectangle x:Name="dpadLeft" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="362,641,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnLEFT" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
-                <Rectangle x:Name="dpadDown" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="442,709,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnDOWN" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
+                <Rectangle x:Name="dpadUp" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="442,570,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnUP" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
+                <Rectangle x:Name="dpadRight" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="522,641,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnRIGHT" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
+                <Rectangle x:Name="dpadLeft" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="362,641,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnLEFT" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
+                <Rectangle x:Name="dpadDown" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="80" Margin="442,709,0,0" Stroke="Black" VerticalAlignment="Top" Width="80" Opacity="0" Tag="gcnDOWN" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
                 <!-- Face Buttons -->
-                <Rectangle x:Name="A" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="174" Margin="1069,274,0,0" Stroke="Black" VerticalAlignment="Top" Width="169" Opacity="0" Tag="gcnA" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
-                <Rectangle x:Name="B" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="104" Margin="941,390,0,0" Stroke="Black" VerticalAlignment="Top" Width="106" Opacity="0" Tag="gcnB" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
-                <Rectangle x:Name="X" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="160" Margin="1261,246,0,0" Stroke="Black" VerticalAlignment="Top" Width="100" Opacity="0" Tag="gcnX" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
-                <Rectangle x:Name="Y" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="96" Margin="1031,159,0,0" Stroke="Black" VerticalAlignment="Top" Width="160" Opacity="0" Tag="gcnY" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
+                <Rectangle x:Name="A" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="174" Margin="1069,274,0,0" Stroke="Black" VerticalAlignment="Top" Width="169" Opacity="0" Tag="gcnA" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
+                <Rectangle x:Name="B" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="104" Margin="941,390,0,0" Stroke="Black" VerticalAlignment="Top" Width="106" Opacity="0" Tag="gcnB" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
+                <Rectangle x:Name="X" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="160" Margin="1261,246,0,0" Stroke="Black" VerticalAlignment="Top" Width="100" Opacity="0" Tag="gcnX" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
+                <Rectangle x:Name="Y" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="96" Margin="1031,159,0,0" Stroke="Black" VerticalAlignment="Top" Width="160" Opacity="0" Tag="gcnY" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
                 <!-- Shoulders and Start -->
-                <Rectangle x:Name="L" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="82" Margin="99,28,0,0" Stroke="Black" VerticalAlignment="Top" Width="257" Opacity="0" Tag="gcnL" RenderTransformOrigin="0.5,0.5" MouseLeftButtonUp="OpenTriggerMenu" MouseRightButtonUp="OpenTriggerMenu" >
+                <Rectangle x:Name="L" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="82" Margin="99,28,0,0" Stroke="Black" VerticalAlignment="Top" Width="257" Opacity="0" Tag="gcnL" RenderTransformOrigin="0.5,0.5" MouseLeftButtonUp="OpenTriggerMenu" MouseRightButtonUp="OpenTriggerMenu" ToolTip="UNSET&#x0a;UNSET">
                     <Rectangle.OpacityMask>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Offset="1" Color="Transparent"/>
@@ -41,7 +41,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                 </Rectangle>
-                <Rectangle x:Name="R" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="60" Margin="1097,18,0,0" Stroke="Black" VerticalAlignment="Top" Width="232" Opacity="0" Tag="gcnR" RenderTransformOrigin="0.5,0.5" MouseLeftButtonUp="OpenTriggerMenu" MouseRightButtonUp="OpenTriggerMenu">
+                <Rectangle x:Name="R" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="60" Margin="1097,18,0,0" Stroke="Black" VerticalAlignment="Top" Width="232" Opacity="0" Tag="gcnR" RenderTransformOrigin="0.5,0.5" MouseLeftButtonUp="OpenTriggerMenu" MouseRightButtonUp="OpenTriggerMenu"  ToolTip="UNSET&#x0a;UNSET">
                     <Rectangle.OpacityMask>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="Transparent" Offset="0"/>
@@ -57,7 +57,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                 </Rectangle>
-                <Rectangle x:Name="Z" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="256" Margin="1181,-26,0,0" Stroke="Black" VerticalAlignment="Top" Width="42" Opacity="0" Tag="gcnZ" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" RenderTransformOrigin="0.5,0.5" >
+                <Rectangle x:Name="Z" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="256" Margin="1181,-26,0,0" Stroke="Black" VerticalAlignment="Top" Width="42" Opacity="0" Tag="gcnZ" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" RenderTransformOrigin="0.5,0.5" ToolTip="UNSET">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -67,7 +67,7 @@
                         </TransformGroup>
                     </Rectangle.RenderTransform>
                 </Rectangle>
-                <Rectangle x:Name="START" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="74" Margin="681,332,0,0" Stroke="Black" VerticalAlignment="Top" Width="76" Opacity="0" Tag="gcnSTART" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" />
+                <Rectangle x:Name="START" Fill="#7F00FF2E" HorizontalAlignment="Left" Height="74" Margin="681,332,0,0" Stroke="Black" VerticalAlignment="Top" Width="76" Opacity="0" Tag="gcnSTART" MouseLeftButtonDown="Btn_MouseLeftButtonDown" MouseRightButtonUp="Btn_MouseRightButtonUp" ToolTip="UNSET"/>
                 <ComboBox x:Name="portSelection" HorizontalAlignment="Left" Margin="633,875,0,0" VerticalAlignment="Top" Width="170" Height="104" FontSize="36" SelectedIndex="0" SelectionChanged="portSelection_SelectionChanged">
                     <MenuItem Header="PORT 1" Padding="-24,0,0,0" IsHitTestVisible="False"/>
                     <MenuItem Header="PORT 2" Padding="-24,0,0,0" IsHitTestVisible="False"/>

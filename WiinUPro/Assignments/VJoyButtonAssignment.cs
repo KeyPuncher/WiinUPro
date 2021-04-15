@@ -132,5 +132,10 @@ namespace WiinUPro
         {
             return Button.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return $"Joy.{ToString()}";
+        }
     }
 }

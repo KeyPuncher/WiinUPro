@@ -11,6 +11,20 @@ namespace WiinUPro
     /// </summary>
     public partial class App : Application
     {
+        public static bool IsDesignMode
+        {
+            get
+            {
+#if DEBUG
+                return System.ComponentModel.DesignerProperties.GetIsInDesignMode(new DependencyObject());
+#else
+                return false;
+#endif
+            }
+        }
+
+        const string GLOBALIZATION_DATA_PATH = "./lang.json";
+
         internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";
         internal const string JOY_CAL_FILTER = "Joystick Calibration|*.joy";
         internal const string TRIG_CAL_FILTER = "Trigger Calibration|*.trg";
@@ -87,6 +101,17 @@ namespace WiinUPro
             }
 
             return true;
+        }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            if (LoadFromFile(GLOBALIZATION_DATA_PATH, out Shared.Globalization.Data data))
+            {
+                data.hasData = data.translations != null;
+                Shared.Globalization.SetText(data);
+            }
+
+            Shared.Globalization.SetSelectedLanguage(AppPrefs.Instance.language);
         }
     }
 }

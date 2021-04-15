@@ -1,4 +1,5 @@
 ﻿using System;
+using Shared;
 using NintrollerLib;
 
 namespace WiinUPro.Windows
@@ -31,6 +32,11 @@ namespace WiinUPro.Windows
             min.Max = nonCalibrated.max;
             min.Value = prevCalibration.min;
             Set(prevCalibration);
+        }
+
+        private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Globalization.ApplyTranslations(this);
         }
 
         public void Set(Trigger cal)
@@ -106,7 +112,11 @@ namespace WiinUPro.Windows
                 }
                 else
                 {
-                    var c = System.Windows.MessageBox.Show("Could not open the file \"" + dialog.FileName + "\".", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show(
+                        Globalization.TranslateFormat("Calibration_Load_Error_Msg", dialog.FileName),
+                        Globalization.Translate("Calibration_Load_Error"),
+                        System.Windows.MessageBoxButton.OK,
+                        System.Windows.MessageBoxImage.Error);
                 }
             }
         }

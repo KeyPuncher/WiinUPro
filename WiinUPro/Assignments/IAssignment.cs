@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace WiinUPro
 {
@@ -7,6 +8,7 @@ namespace WiinUPro
     {
         void Apply(float value);
         bool SameAs(IAssignment assignment);
+        string GetDisplayName();
         // Don't forget to override Equals(object)
     }
 
@@ -63,6 +65,22 @@ namespace WiinUPro
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            if (Assignments.Count == 0)
+                return "UNSET";
+
+            StringBuilder sb = new StringBuilder(Assignments[0].GetDisplayName());
+
+            for (int i = 1; i < Assignments.Count; ++i)
+            {
+                sb.Append("|");
+                sb.Append(Assignments[i].GetDisplayName());
+            }
+
+            return sb.ToString();
         }
     }
 }

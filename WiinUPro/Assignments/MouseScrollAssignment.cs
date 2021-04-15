@@ -120,5 +120,10 @@ namespace WiinUPro
         {
             return ScrollDirection.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return $"Scroll.{ToString()}";
+        }
     }
 }

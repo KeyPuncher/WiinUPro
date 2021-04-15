@@ -46,24 +46,24 @@ namespace WiinUPro
                 var pro = (ProController)state;
                 _lastState = pro;
 
-                aBtn.Opacity = pro.A ? 1 : 0;
-                bBtn.Opacity = pro.B ? 1 : 0;
-                xBtn.Opacity = pro.X ? 1 : 0;
-                yBtn.Opacity = pro.Y ? 1 : 0;
-                lBtn.Opacity = pro.L ? 1 : 0;
-                rBtn.Opacity = pro.R ? 1 : 0;
-                zlBtn.Opacity = pro.ZL ? 1 : 0;
-                zrBtn.Opacity = pro.ZR ? 1 : 0;
-                dpadUp.Opacity = pro.Up ? 1 : 0;
-                dpadDown.Opacity = pro.Down ? 1 : 0;
-                dpadLeft.Opacity = pro.Left ? 1 : 0;
-                dpadRight.Opacity = pro.Right ? 1 : 0;
+                Display(aBtn, pro.A);
+                Display(bBtn, pro.B);
+                Display(xBtn, pro.X);
+                Display(yBtn, pro.Y);
+                Display(lBtn, pro.L);
+                Display(rBtn, pro.R);
+                Display(zlBtn, pro.ZL);
+                Display(zrBtn, pro.ZR);
+                Display(dpadUp, pro.Up);
+                Display(dpadDown, pro.Down);
+                Display(dpadLeft, pro.Left);
+                Display(dpadRight, pro.Right);
                 dpadCenter.Opacity = (pro.Up || pro.Down || pro.Left || pro.Right) ? 1 : 0;
-                homeBtn.Opacity = pro.Home ? 1 : 0;
-                plusBtn.Opacity = pro.Plus ? 1 : 0;
-                minusBtn.Opacity = pro.Minus ? 1 : 0;
-                leftStickBtn.Opacity = pro.LStick ? 1 : 0;
-                rightStickBtn.Opacity = pro.RStick ? 1 : 0;
+                Display(homeBtn, pro.Home);
+                Display(plusBtn, pro.Plus);
+                Display(minusBtn, pro.Minus);
+                Display(leftStickBtn, pro.LStick);
+                Display(rightStickBtn, pro.RStick);
 
                 leftStick.Margin = new Thickness(196 + 50 * pro.LJoy.X, 232 - 50 * pro.LJoy.Y, 0, 0);
                 leftStickBtn.Margin = new Thickness(196 + 50 * pro.LJoy.X, 230 - 50 * pro.LJoy.Y, 0, 0);
@@ -75,6 +75,67 @@ namespace WiinUPro
                     _openJoyWindow.Update(_rightJoyOpen ? pro.RJoy : pro.LJoy);
                 }
             }
+        }
+
+        public void SetInputTooltip(string inputName, string tooltip)
+        {
+            switch (inputName)
+            {
+                case INPUT_NAMES.PRO_CONTROLLER.A: aBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.B: bBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.X: xBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.Y: yBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.L: lBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.R: rBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.ZL: zlBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.ZR: zrBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.HOME: homeBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.START: plusBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.SELECT: minusBtn.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.UP: dpadUp.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.LEFT: dpadLeft.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.RIGHT: dpadRight.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.DOWN: dpadDown.ToolTip = tooltip; break;
+                case INPUT_NAMES.PRO_CONTROLLER.LUP: UpdateTooltipLine(leftStickBtn, tooltip, 0); break;
+                case INPUT_NAMES.PRO_CONTROLLER.LLEFT: UpdateTooltipLine(leftStickBtn, tooltip, 1); break;
+                case INPUT_NAMES.PRO_CONTROLLER.LRIGHT: UpdateTooltipLine(leftStickBtn, tooltip, 2); break;
+                case INPUT_NAMES.PRO_CONTROLLER.LDOWN: UpdateTooltipLine(leftStickBtn, tooltip, 3); break;
+                case INPUT_NAMES.PRO_CONTROLLER.LS: UpdateTooltipLine(leftStickBtn, tooltip, 4); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RUP: UpdateTooltipLine(rightStickBtn, tooltip, 0); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RLEFT: UpdateTooltipLine(rightStickBtn, tooltip, 1); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RRIGHT: UpdateTooltipLine(rightStickBtn, tooltip, 2); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RDOWN: UpdateTooltipLine(rightStickBtn, tooltip, 3); break;
+                case INPUT_NAMES.PRO_CONTROLLER.RS: UpdateTooltipLine(rightStickBtn, tooltip, 4); break;
+            }
+        }
+
+        public void ClearTooltips()
+        {
+            aBtn.ToolTip = "UNSET";
+            bBtn.ToolTip = "UNSET";
+            xBtn.ToolTip = "UNSET";
+            yBtn.ToolTip = "UNSET";
+            lBtn.ToolTip = "UNSET";
+            rBtn.ToolTip = "UNSET";
+            zlBtn.ToolTip = "UNSET";
+            zrBtn.ToolTip = "UNSET";
+            homeBtn.ToolTip = "UNSET";
+            plusBtn.ToolTip = "UNSET";
+            minusBtn.ToolTip = "UNSET";
+            dpadUp.ToolTip = "UNSET";
+            dpadLeft.ToolTip = "UNSET";
+            dpadRight.ToolTip = "UNSET";
+            dpadDown.ToolTip = "UNSET";
+            UpdateTooltipLine(leftStickBtn, "UNSET", 0);
+            UpdateTooltipLine(leftStickBtn, "UNSET", 1);
+            UpdateTooltipLine(leftStickBtn, "UNSET", 2);
+            UpdateTooltipLine(leftStickBtn, "UNSET", 3);
+            UpdateTooltipLine(leftStickBtn, "UNSET", 4);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 0);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 1);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 2);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 3);
+            UpdateTooltipLine(rightStickBtn, "UNSET", 4);
         }
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)

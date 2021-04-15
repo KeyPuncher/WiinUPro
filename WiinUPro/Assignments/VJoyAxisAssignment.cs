@@ -62,5 +62,10 @@
         {
             return Axis.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return ToString().Replace("HID_USAGE_", "Joy.");
+        }
     }
 }

@@ -169,5 +169,10 @@ namespace WiinUPro
         {
             return Button.ToString();
         }
+
+        public string GetDisplayName()
+        {
+            return $"X{Device.ToString().Replace("Device_","")}.{ToString()}";
+        }
     }
 }

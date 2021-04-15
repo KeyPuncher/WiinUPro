@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using NintrollerLib;
 using Shared;
 using Shared.Windows;
@@ -58,6 +59,8 @@ namespace WiinUPro
         {
             _currentState = ShiftState.None;
             InitializeComponent();
+            Loaded += UserControl_Loaded;
+            subMenu.Loaded += ContextMenu_Loaded;
         }
 
         public NintyControl(DeviceInfo deviceInfo) : this()
@@ -94,13 +97,16 @@ namespace WiinUPro
 
                 _nintroller.SetPlayerLED((int)newState + 1);
 
-                Dispatcher.Invoke(new Action(() =>
-                 {
-                    if (newState == ShiftState.None) _controller.ChangeLEDs(true, false, false, false);
-                    else if (newState == ShiftState.Red) _controller.ChangeLEDs(false, true, false, false);
-                    else if (newState == ShiftState.Blue) _controller.ChangeLEDs(false, false, true, false);
-                    else if (newState == ShiftState.Green) _controller.ChangeLEDs(false, false, false, true);
-                }));
+                if (!MainWindow.Instance.WindowHidden)
+                {
+                    Dispatcher.Invoke(new Action(() =>
+                     {
+                         if (newState == ShiftState.None) _controller.ChangeLEDs(true, false, false, false);
+                         else if (newState == ShiftState.Red) _controller.ChangeLEDs(false, true, false, false);
+                         else if (newState == ShiftState.Blue) _controller.ChangeLEDs(false, false, true, false);
+                         else if (newState == ShiftState.Green) _controller.ChangeLEDs(false, false, false, true);
+                     }));
+                }
             }
         }
 
@@ -224,11 +230,17 @@ namespace WiinUPro
                 _controller.OnInputRightClick -= InputOpenMenu;
                 _controller.OnQuickAssign -= QuickAssignment;
                 _controller.OnRemoveInputs -= RemoveAssignments;
+                (_controller as UserControl).Loaded -= NintyControl_Loaded;
 
                 if (_controller is WiiControl)
                 {
                     ((WiiControl)_controller).OnJoystickCalibrated -= _nintroller_JoystickCalibrated;
                     ((WiiControl)_controller).OnTriggerCalibrated -= _nintroller_TriggerCalibrated;
+                }
+
+                if (_controller is GameCubeControl)
+                {
+                    ((GameCubeControl)_controller).OnSelectedPortChanged -= GameCubeSelectedPortChanged;
                 }
             }
 
@@ -339,6 +351,7 @@ namespace WiinUPro
                 case ControllerType.ClassicControllerPro:
                 case ControllerType.Guitar:
                 case ControllerType.TaikoDrum:
+                    ResetAssignments();
                     _controller = new WiiControl(_info.DeviceID);
                     ((WiiControl)_controller).OnChangeCameraMode += (mode) =>
                     {
@@ -358,6 +371,7 @@ namespace WiinUPro
                     {
                         _controller = new GameCubeControl(_info.DeviceID);
                         ((GameCubeControl)_controller).OnJoyCalibrated += _nintroller_JoystickCalibrated;
+                        ((GameCubeControl)_controller).OnSelectedPortChanged += GameCubeSelectedPortChanged;
                     }
                     break;
             }
@@ -370,7 +384,16 @@ namespace WiinUPro
                 _controller.OnInputRightClick += InputOpenMenu;
                 _controller.OnQuickAssign += QuickAssignment;
                 _controller.OnRemoveInputs += RemoveAssignments;
+                if (!(_controller as UserControl).IsLoaded)
+                {
+                    (_controller as UserControl).Loaded += NintyControl_Loaded;
+                }
             }
+        }
+
+        private void NintyControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Globalization.ApplyTranslations(_controller as UserControl);
         }
 
         private void UpdateAlignment()
@@ -380,6 +403,7 @@ namespace WiinUPro
                 _view.Child = _controller as UserControl;
                 ((UserControl)_view.Child).HorizontalAlignment = HorizontalAlignment.Left;
                 ((UserControl)_view.Child).VerticalAlignment = VerticalAlignment.Top;
+                Globalization.ApplyTranslations(_view);
             }
         }
 
@@ -389,7 +413,9 @@ namespace WiinUPro
 
             if (!App.LoadFromFile<AssignmentProfile>(fileName, out loadedProfile))
             {
-                var c = MessageBox.Show("Could not open or read the profile file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var c = MessageBox.Show(
+                    Globalization.TranslateFormat("Calibration_Load_Error_Msg", fileName),
+                    Globalization.Translate("Calibration_Load_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             
             if (loadedProfile != null)
@@ -424,7 +450,17 @@ namespace WiinUPro
                 }
                 _rumbleSubscriptions = loadedProfile.RumbleDevices;
                 OnRumbleSubscriptionChange?.Invoke(_rumbleSubscriptions);
+                RefreshToolTips();
             }
+        }
+
+        public void ResetAssignments()
+        {
+            // Reset any currently triggered assignments
+            _nintroller_StateUpdate(_nintroller, new NintrollerStateEventArgs(_nintroller.Type, Calibrations.Defaults.NunchukDefault, BatteryStatus.High));
+            _nintroller_StateUpdate(_nintroller, new NintrollerStateEventArgs(_nintroller.Type, Calibrations.Defaults.ClassicControllerDefault, BatteryStatus.High));
+            _nintroller_StateUpdate(_nintroller, new NintrollerStateEventArgs(_nintroller.Type, Calibrations.Defaults.ClassicControllerProDefault, BatteryStatus.High));
+            _nintroller_StateUpdate(_nintroller, new NintrollerStateEventArgs(_nintroller.Type, Calibrations.Defaults.GuitarDefault, BatteryStatus.High));
         }
 
         #region Nintroller Events
@@ -493,13 +529,16 @@ namespace WiinUPro
             VJoyDirector.Access.ApplyAll();
 
             // Visaul should only be updated if tab is in view
-            Dispatcher.Invoke(new Action(() =>
+            if (!MainWindow.Instance.WindowHidden)
             {
-                if (_controller != null && MainWindow.CurrentTab == this)
+                Dispatcher.Invoke(new Action(() =>
                 {
-                    _controller.UpdateVisual(e.state);
-                }
-            }));
+                    if (_controller != null && MainWindow.CurrentTab == this)
+                    {
+                        _controller.UpdateVisual(e.state);
+                    }
+                }));
+            }
         }
 
         private void _nintroller_JoystickCalibrated(Joystick calibration, string target, string file = "")
@@ -567,6 +606,11 @@ namespace WiinUPro
             _nintroller.SetCalibration(wmCal);
 
             AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, App.CAL_WII_IR, file);
+        }
+
+        private void GameCubeSelectedPortChanged(int obj)
+        {
+            RefreshToolTips();
         }
         #endregion
 
@@ -796,6 +840,8 @@ namespace WiinUPro
                     InputSet(shift.TargetState, key, win.Result);
                 }
             }
+
+            _controller?.SetInputTooltip(key, win.Result.ToString());
         }
 
         private void InputSet(ShiftState shift, string key, AssignmentCollection assignments)
@@ -807,6 +853,11 @@ namespace WiinUPro
             else
             {
                 _assignments[(int)shift].Add(key, assignments);
+            }
+
+            if (dropShift.SelectedIndex == (int)shift)
+            {
+                _controller?.SetInputTooltip(key, assignments.ToString());
             }
         }
 
@@ -828,6 +879,8 @@ namespace WiinUPro
                 {
                     _assignments[dropShift.SelectedIndex].Add(item.Key, item.Value);
                 }
+
+                _controller?.SetInputTooltip(item.Key, item.Value.ToString());
             }
         }
 
@@ -837,6 +890,8 @@ namespace WiinUPro
             {
                 if (_assignments[dropShift.SelectedIndex].ContainsKey(item))
                     _assignments[dropShift.SelectedIndex].Remove(item);
+
+                _controller?.SetInputTooltip(item, "UNSET");
             }
         }
         
@@ -853,6 +908,41 @@ namespace WiinUPro
             }
         }
         #endregion
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Wait to translate this when the children are availble.
+            // (Loaded gets called when the control is created and again when the tab is clicked)
+            if (VisualTreeHelper.GetChildrenCount(this) > 0)
+            {
+                Loaded -= UserControl_Loaded;
+                Globalization.ApplyTranslations(this);
+            }
+        }
+
+        private void ContextMenu_Loaded(object sender, RoutedEventArgs e)
+        {
+            subMenu.Loaded -= ContextMenu_Loaded;
+            Globalization.ApplyTranslations(sender as ContextMenu);
+        }
+
+        private void dropShift_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_assignments != null)
+            {
+                RefreshToolTips();
+            }
+        }
+
+        private void RefreshToolTips()
+        {
+            _controller.ClearTooltips();
+
+            foreach (var assignment in _assignments[dropShift.SelectedIndex])
+            {
+                _controller.SetInputTooltip(assignment.Key, assignment.Value.ToString());
+            }
+        }
     }
 
     public interface INintyControl : IBaseControl
@@ -861,5 +951,7 @@ namespace WiinUPro
         void ApplyInput(INintrollerState state); // TODO: I have forgotten what I want to use this for
         void UpdateVisual(INintrollerState state);
         void ChangeLEDs(bool one, bool two, bool three, bool four);
+        void SetInputTooltip(string inputName, string tooltip);
+        void ClearTooltips();
     }
 }

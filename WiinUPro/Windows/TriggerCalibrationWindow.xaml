@@ -6,12 +6,13 @@
         xmlns:local="clr-namespace:WiinUPro.Windows"
         xmlns:WiinUPro="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="Trigger Calibration" Height="290" Width="262" Background="{StaticResource BackgroundMain}" MinWidth="262" MinHeight="290" MaxWidth="300" MaxHeight="320">
+        Title="Trigger Calibration" Height="290" Width="262" Background="{StaticResource BackgroundMain}" MinWidth="262" MinHeight="290" MaxWidth="300" MaxHeight="320" Loaded="Window_Loaded"
+        Uid="File_Filter_TrigCal">
     <Grid Background="{StaticResource BackgroundSub}" Margin="8">
-        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9.6,10.4" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click" Style="{StaticResource AcceptButton}"/>
-        <Button x:Name="cancelBtn" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,90.6,10.4" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click" Style="{StaticResource WarningButton}"/>
-        <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="114,151,0,0" VerticalAlignment="Top" Width="76" Click="loadBtn_Click" Style="{StaticResource BasicButton}"/>
-        <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="30,151,0,0" VerticalAlignment="Top" Width="76" Click="saveBtn_Click" Style="{StaticResource BasicButton}"/>
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9.6,10.4" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click" Style="{StaticResource AcceptButton}" Uid="Button_Accept"/>
+        <Button x:Name="cancelBtn" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,90.6,10.4" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click" Style="{StaticResource WarningButton}" Uid="Button_Cancel"/>
+        <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="114,151,0,0" VerticalAlignment="Top" Width="76" Click="loadBtn_Click" Style="{StaticResource BasicButton}" Uid="Button_Load"/>
+        <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="30,151,0,0" VerticalAlignment="Top" Width="76" Click="saveBtn_Click" Style="{StaticResource BasicButton}" Uid="Button_Save"/>
         <Rectangle HorizontalAlignment="Left" Height="24" Margin="10,13,0,0" StrokeThickness="0" VerticalAlignment="Top" Width="200">
             <Rectangle.Fill>
                 <SolidColorBrush Color="{DynamicResource B250}"/>
@@ -42,9 +43,9 @@
                 <SolidColorBrush Color="{DynamicResource Green}"/>
             </Rectangle.Fill>
         </Rectangle>
-        <Label Content="Minimum" HorizontalAlignment="Left" Margin="7,74,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Width="99" HorizontalContentAlignment="Center"/>
+        <Label Content="Minimum" HorizontalAlignment="Left" Margin="7,74,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Width="99" HorizontalContentAlignment="Center" Uid="Calibration_Min"/>
         <WiinUPro:NumPicker x:Name="min" HorizontalAlignment="Left" Margin="6,97,0,0" VerticalAlignment="Top" Max="100" Min="0" Value="0" OnValueUpdate="MinUpdated" Width="100"/>
-        <Label Content="Maximum" HorizontalAlignment="Left" Margin="114,74,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Width="96" HorizontalContentAlignment="Center"/>
+        <Label Content="Maximum" HorizontalAlignment="Left" Margin="114,74,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Width="96" HorizontalContentAlignment="Center" Uid="Calibration_Max"/>
         <WiinUPro:NumPicker x:Name="max" HorizontalAlignment="Left" Margin="112,97,0,0" VerticalAlignment="Top" Max="100" Min="0" Value="31" OnValueUpdate="MaxUpdated" Width="100"/>
     </Grid>
 </Window>

@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DeviceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DummyDevice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Globalization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\DeviceListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\NativeImports.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\WinBtStream.cs" />
