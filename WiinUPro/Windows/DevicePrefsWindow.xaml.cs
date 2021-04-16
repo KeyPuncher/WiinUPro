@@ -1,15 +1,8 @@
 ﻿using NintrollerLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Shared;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace WiinUPro.Windows
@@ -179,6 +172,11 @@ namespace WiinUPro.Windows
                 lastIndex = comboExtProfile.SelectedIndex;
                 extProfile.Text = _modifiedPrefs.extensionProfiles[lastIndex];
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Globalization.ApplyTranslations(this);
         }
     }
 }

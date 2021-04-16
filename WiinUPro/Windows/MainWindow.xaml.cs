@@ -391,6 +391,21 @@ namespace WiinUPro
             {
                 AppPrefs.Instance.language = settingLanguage.SelectedIndex;
                 Globalization.SetSelectedLanguage(settingLanguage.SelectedIndex);
+
+                // This will apply some translations but not all since some are created in code instead of being tagged on the xaml
+                Globalization.ApplyTranslations(this);
+                if (tabControl.Items.Count > 1)
+                {
+                    for (int i = 1; i < tabControl.Items.Count; ++i)
+                    {
+                        Globalization.ApplyTranslations(tabControl.Items[i] as DependencyObject);
+                    }
+                }
+
+                MessageBox.Show(
+                    Globalization.Translate("Restart_Msg"),
+                    Globalization.Translate("Restart"),
+                    MessageBoxButton.OK);
             }
         }
 

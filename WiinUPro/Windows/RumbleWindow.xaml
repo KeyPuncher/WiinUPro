@@ -5,17 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro.Windows"
         mc:Ignorable="d"
-        Title="Add or Remove Rumble" Height="200" Width="270" MinHeight="200" MinWidth="270" Background="{StaticResource BackgroundMain}">
+        Title="Add or Remove Rumble" Height="200" Width="270" MinHeight="200" MinWidth="270" Background="{StaticResource BackgroundMain}" Uid="Rumble_Popup_Title" Loaded="Window_Loaded">
     <Grid Background="{StaticResource BackgroundSub}" Margin="10">
-        <Label Content="Select Virtual Devices for rumble input." FontWeight="Bold" Foreground="{StaticResource TextBody}" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <ScrollViewer Height="95" Margin="20,26,0,0" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="136">
+        <Label Content="Select Virtual Devices for rumble input." FontWeight="Bold" Foreground="{StaticResource TextBody}" HorizontalAlignment="Left" VerticalAlignment="Top" Uid="Rumble_Popup_Label"/>
+        <ScrollViewer Height="95" Margin="20,26,0,0" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Width="200">
             <WrapPanel ItemHeight="20">
-                <CheckBox x:Name="xDeviceA" Content="Xbox Controller 1" Style="{StaticResource CheckBoxStyle}"/>
-                <CheckBox x:Name="xDeviceB" Content="Xbox Controller 2" Style="{StaticResource CheckBoxStyle}"/>
-                <CheckBox x:Name="xDeviceC" Content="Xbox Controller 3" Style="{StaticResource CheckBoxStyle}"/>
-                <CheckBox x:Name="xDeviceD" Content="Xbox Controller 4" Style="{StaticResource CheckBoxStyle}"/>
+                <CheckBox x:Name="xDeviceA" Content="Xbox Controller 1" Style="{StaticResource CheckBoxStyle}" Uid="Rumble_Controller_Label_1" Width="192"/>
+                <CheckBox x:Name="xDeviceB" Content="Xbox Controller 2" Style="{StaticResource CheckBoxStyle}" Uid="Rumble_Controller_Label_2" Width="192"/>
+                <CheckBox x:Name="xDeviceC" Content="Xbox Controller 3" Style="{StaticResource CheckBoxStyle}" Uid="Rumble_Controller_Label_3" Width="192"/>
+                <CheckBox x:Name="xDeviceD" Content="Xbox Controller 4" Style="{StaticResource CheckBoxStyle}" Uid="Rumble_Controller_Label_4" Width="192"/>
             </WrapPanel>
         </ScrollViewer>
-        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}" Margin="0,0,5,5"/>
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}" Margin="0,0,5,5" Uid="Button_Accept"/>
     </Grid>
 </Window>

@@ -94,10 +94,10 @@
                             <Label x:Name="xlabel4" Content="Device 4: Disconnected" HorizontalAlignment="Left" Margin="5.8,108,0,0" VerticalAlignment="Top" Width="144" FontSize="10.667" />
                         </Grid>
                     </GroupBox>
-                    <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Width="58" Click="btnRefresh_Click" Style="{StaticResource BasicButton}" Uid="Refresh_Btn"/>
-                    <Button x:Name="btnSync" Content="Sync" HorizontalAlignment="Left" Margin="73,6,0,0" VerticalAlignment="Top" Width="36" Click="btnSync_Click" Style="{StaticResource BasicButton}" Uid="Sync_Btn"/>
-                    <Label x:Name="label" Content="(Windows BT Stack Only)" HorizontalAlignment="Left" Margin="114,3,0,0" VerticalAlignment="Top" Uid="Sync_Note"/>
-                    <Label x:Name="versionLabel" Content="" HorizontalAlignment="Right" Margin="0,0,4,0" VerticalAlignment="Top" FontSize="10" Padding="0" Uid="Devices_Group"/>
+                    <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Width="74" Click="btnRefresh_Click" Style="{StaticResource BasicButton}" Uid="Refresh_Btn"/>
+                    <Button x:Name="btnSync" Content="Sync" HorizontalAlignment="Left" Margin="89,6,0,0" VerticalAlignment="Top" Width="53" Click="btnSync_Click" Style="{StaticResource BasicButton}" Uid="Sync_Btn"/>
+                    <Label x:Name="label" Content="(Windows BT Stack Only)" HorizontalAlignment="Left" Margin="147,3,0,0" VerticalAlignment="Top" Uid="Sync_Note"/>
+                    <Label x:Name="versionLabel" Content="" HorizontalAlignment="Right" Margin="0,0,4,0" VerticalAlignment="Top" FontSize="10" Padding="0"/>
                 </Grid>
             </TabItem>
         </TabControl>

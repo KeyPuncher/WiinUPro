@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Shared;
+using System.Windows;
 
 namespace WiinUPro.Windows
 {
@@ -34,6 +35,11 @@ namespace WiinUPro.Windows
             Result[3] = xDeviceD.IsChecked ?? false;
 
             Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Globalization.ApplyTranslations(this);
         }
     }
 }
