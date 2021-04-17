@@ -411,7 +411,7 @@ namespace WiinUPro
 
         private void settingMinimizeOnClose_Checked(object sender, RoutedEventArgs e)
         {
-            AppPrefs.Instance.minimizeOnClose = settingMinimizeOnClose.IsChecked ?? false;
+            AppPrefs.Instance.minimizeToTray = settingMinimizeOnClose.IsChecked ?? false;
         }
         private void settingProfileQueuing_Checked(object sender, RoutedEventArgs e)
         {
@@ -661,7 +661,7 @@ namespace WiinUPro
             }
 
             // Check Minimize To System Tray
-            settingMinimizeOnClose.IsChecked = AppPrefs.Instance.minimizeOnClose;
+            settingMinimizeOnClose.IsChecked = AppPrefs.Instance.minimizeToTray;
 
             // Check Profile Queuing
             settingProfileQueuing.IsChecked = AppPrefs.Instance.profileQueuing;
@@ -695,7 +695,7 @@ namespace WiinUPro
             // Currently only minimizing if option is selected.
             // Users may not want to have it minimize to tray all the time.
             // Contemplating if minimize on close should be another option or not...
-            if (AppPrefs.Instance.minimizeOnClose)
+            if (AppPrefs.Instance.minimizeToTray)
             {
                 trayIcon.Visibility = Visibility.Visible;
                 Hide();
