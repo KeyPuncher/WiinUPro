@@ -127,10 +127,6 @@ namespace WiinUPro
                 case INPUT_NAMES.GCN_CONTROLLER.Y: Y.ToolTip = tooltip; break;
                 case INPUT_NAMES.GCN_CONTROLLER.Z: Z.ToolTip = tooltip; break;
                 case INPUT_NAMES.GCN_CONTROLLER.START: START.ToolTip = tooltip; break;
-                case INPUT_NAMES.GCN_CONTROLLER.UP: dpadUp.ToolTip = tooltip; break;
-                case INPUT_NAMES.GCN_CONTROLLER.LEFT: dpadLeft.ToolTip = tooltip; break;
-                case INPUT_NAMES.GCN_CONTROLLER.RIGHT: dpadRight.ToolTip = tooltip; break;
-                case INPUT_NAMES.GCN_CONTROLLER.DOWN: dpadDown.ToolTip = tooltip; break;
                 case INPUT_NAMES.GCN_CONTROLLER.LT: UpdateTooltipLine(L, tooltip, 0); break;
                 case INPUT_NAMES.GCN_CONTROLLER.LFULL: UpdateTooltipLine(L, tooltip, 1); break;
                 case INPUT_NAMES.GCN_CONTROLLER.RT: UpdateTooltipLine(R, tooltip, 0); break;
@@ -143,33 +139,55 @@ namespace WiinUPro
                 case INPUT_NAMES.GCN_CONTROLLER.C_LEFT: UpdateTooltipLine(cStick, tooltip, 1); break;
                 case INPUT_NAMES.GCN_CONTROLLER.C_RIGHT: UpdateTooltipLine(cStick, tooltip, 2); break;
                 case INPUT_NAMES.GCN_CONTROLLER.C_DOWN: UpdateTooltipLine(cStick, tooltip, 3); break;
+                case INPUT_NAMES.GCN_CONTROLLER.UP: 
+                    dpadUp.ToolTip = tooltip;
+                    UpdateTooltipLine(dpadCenter, tooltip, 0);
+                    break;
+                case INPUT_NAMES.GCN_CONTROLLER.LEFT: 
+                    dpadLeft.ToolTip = tooltip;
+                    UpdateTooltipLine(dpadCenter, tooltip, 1); 
+                    break;
+                case INPUT_NAMES.GCN_CONTROLLER.RIGHT: 
+                    dpadRight.ToolTip = tooltip;
+                    UpdateTooltipLine(dpadCenter, tooltip, 2); 
+                    break;
+                case INPUT_NAMES.GCN_CONTROLLER.DOWN: 
+                    dpadDown.ToolTip = tooltip;
+                    UpdateTooltipLine(dpadCenter, tooltip, 3); 
+                    break;
             }
         }
 
         public void ClearTooltips()
         {
-            A.ToolTip = "UNSET";
-            B.ToolTip = "UNSET";
-            X.ToolTip = "UNSET";
-            Y.ToolTip = "UNSET";
-            Z.ToolTip = "UNSET";
-            START.ToolTip = "UNSET";
-            dpadUp.ToolTip = "UNSET";
-            dpadLeft.ToolTip = "UNSET";
-            dpadRight.ToolTip = "UNSET";
-            dpadDown.ToolTip = "UNSET";
-            UpdateTooltipLine(L, "UNSET", 0);
-            UpdateTooltipLine(L, "UNSET", 1);
-            UpdateTooltipLine(R, "UNSET", 0);
-            UpdateTooltipLine(R, "UNSET", 1);
-            UpdateTooltipLine(joystick, "UNSET", 0);
-            UpdateTooltipLine(joystick, "UNSET", 1);
-            UpdateTooltipLine(joystick, "UNSET", 2);
-            UpdateTooltipLine(joystick, "UNSET", 3);
-            UpdateTooltipLine(cStick, "UNSET", 0);
-            UpdateTooltipLine(cStick, "UNSET", 1);
-            UpdateTooltipLine(cStick, "UNSET", 2);
-            UpdateTooltipLine(cStick, "UNSET", 3);
+            string unsetText = Globalization.Translate("Input_Unset");
+
+            A.ToolTip = unsetText;
+            B.ToolTip = unsetText;
+            X.ToolTip = unsetText;
+            Y.ToolTip = unsetText;
+            Z.ToolTip = unsetText;
+            START.ToolTip = unsetText;
+            dpadUp.ToolTip = unsetText;
+            dpadLeft.ToolTip = unsetText;
+            dpadRight.ToolTip = unsetText;
+            dpadDown.ToolTip = unsetText;
+            UpdateTooltipLine(L, unsetText, 0);
+            UpdateTooltipLine(L, unsetText, 1);
+            UpdateTooltipLine(R, unsetText, 0);
+            UpdateTooltipLine(R, unsetText, 1);
+            UpdateTooltipLine(joystick, unsetText, 0);
+            UpdateTooltipLine(joystick, unsetText, 1);
+            UpdateTooltipLine(joystick, unsetText, 2);
+            UpdateTooltipLine(joystick, unsetText, 3);
+            UpdateTooltipLine(cStick, unsetText, 0);
+            UpdateTooltipLine(cStick, unsetText, 1);
+            UpdateTooltipLine(cStick, unsetText, 2);
+            UpdateTooltipLine(cStick, unsetText, 3);
+            UpdateTooltipLine(dpadCenter, unsetText, 0);
+            UpdateTooltipLine(dpadCenter, unsetText, 1);
+            UpdateTooltipLine(dpadCenter, unsetText, 2);
+            UpdateTooltipLine(dpadCenter, unsetText, 3);
         }
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)

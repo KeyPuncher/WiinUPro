@@ -70,7 +70,7 @@ namespace WiinUPro
         public override string ToString()
         {
             if (Assignments.Count == 0)
-                return "UNSET";
+                return Shared.Globalization.Translate("Input_Unset");
 
             StringBuilder sb = new StringBuilder(Assignments[0].GetDisplayName());
 

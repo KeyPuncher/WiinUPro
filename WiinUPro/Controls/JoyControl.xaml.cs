@@ -741,7 +741,7 @@ namespace WiinUPro
                 _assignments[dropShift.SelectedIndex].Add(_selectedInput, _clipboard);
             }
 
-            _controller?.SetInputTooltip(_selectedInput, "UNSET");
+            _controller?.SetInputTooltip(_selectedInput, Globalization.Translate("Input_Unset"));
         }
 
         private void ClearMenu_Click(object sender, RoutedEventArgs e)
@@ -751,7 +751,7 @@ namespace WiinUPro
                 _assignments[dropShift.SelectedIndex].Remove(_selectedInput);
             }
 
-            _controller?.SetInputTooltip(_selectedInput, "UNSET");
+            _controller?.SetInputTooltip(_selectedInput, Globalization.Translate("Input_Unset"));
         }
         #endregion
 

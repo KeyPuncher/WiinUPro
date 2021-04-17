@@ -892,7 +892,7 @@ namespace WiinUPro
                 if (_assignments[dropShift.SelectedIndex].ContainsKey(item))
                     _assignments[dropShift.SelectedIndex].Remove(item);
 
-                _controller?.SetInputTooltip(item, "UNSET");
+                _controller?.SetInputTooltip(item, Globalization.Translate("Input_Unset"));
             }
         }
         

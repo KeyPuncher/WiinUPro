@@ -103,6 +103,7 @@
     "Input_Slow": [ "Slow", "Test100" ],
     "Input_Turbo": [ "Turbo", "Test101" ],
     "Input_Turbo_Rate": [ "Turbo Rate", "Test102" ],
+    "Input_Unset": [ "UNSET", "TEST" ],
     "Input_Window": [ "Inputs WIndow", "Test103" ],
     "Input_X": [ "Xbox 360", "Test104" ],
     "Input_X_Device": [ "Device {0}:", "Test105" ],

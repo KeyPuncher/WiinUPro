@@ -182,10 +182,6 @@ namespace WiinUPro
             {
                 switch (inputName)
                 {
-                    case "pov0N": upBtn.ToolTip = tooltip; break;
-                    case "pov0L": leftBtn.ToolTip = tooltip; break;
-                    case "pov0R": rightBtn.ToolTip = tooltip; break;
-                    case "pov0S": downBtn.ToolTip = tooltip; break;
                     case "Y+": UpdateTooltipLine(leftStickButton, tooltip, 0); break;
                     case "X-": UpdateTooltipLine(leftStickButton, tooltip, 1); break;
                     case "X+": UpdateTooltipLine(leftStickButton, tooltip, 2); break;
@@ -194,38 +190,60 @@ namespace WiinUPro
                     case "RotationX-": UpdateTooltipLine(rightStickButton, tooltip, 1); break;
                     case "RotationX+": UpdateTooltipLine(rightStickButton, tooltip, 2); break;
                     case "RotationY-": UpdateTooltipLine(rightStickButton, tooltip, 3); break;
+                    case "pov0N": 
+                        upBtn.ToolTip = tooltip;
+                        UpdateTooltipLine(center, tooltip, 0);
+                        break;
+                    case "pov0L": 
+                        leftBtn.ToolTip = tooltip;
+                        UpdateTooltipLine(center, tooltip, 1); 
+                        break;
+                    case "pov0R": 
+                        rightBtn.ToolTip = tooltip;
+                        UpdateTooltipLine(center, tooltip, 2); 
+                        break;
+                    case "pov0S": 
+                        downBtn.ToolTip = tooltip;
+                        UpdateTooltipLine(center, tooltip, 3); 
+                        break;
                 }
             }
         }
 
         public void ClearTooltips()
         {
-            bBtn.ToolTip = "UNSET";
-            aBtn.ToolTip = "UNSET";
-            yBtn.ToolTip = "UNSET";
-            xBtn.ToolTip = "UNSET";
-            lBtn.ToolTip = "UNSET";
-            rBtn.ToolTip = "UNSET";
-            zlBtn.ToolTip = "UNSET";
-            zrBtn.ToolTip = "UNSET";
-            minusBtn.ToolTip = "UNSET";
-            plusBtn.ToolTip = "UNSET";
-            homeBtn.ToolTip = "UNSET";
-            shareBtn.ToolTip = "UNSET";
-            upBtn.ToolTip = "UNSET";
-            leftBtn.ToolTip = "UNSET";
-            rightBtn.ToolTip = "UNSET";
-            downBtn.ToolTip = "UNSET";
-            UpdateTooltipLine(leftStickButton, "UNSET", 0);
-            UpdateTooltipLine(leftStickButton, "UNSET", 1);
-            UpdateTooltipLine(leftStickButton, "UNSET", 2);
-            UpdateTooltipLine(leftStickButton, "UNSET", 3);
-            UpdateTooltipLine(leftStickButton, "UNSET", 4);
-            UpdateTooltipLine(leftStickButton, "UNSET", 0);
-            UpdateTooltipLine(leftStickButton, "UNSET", 1);
-            UpdateTooltipLine(leftStickButton, "UNSET", 2);
-            UpdateTooltipLine(leftStickButton, "UNSET", 3);
-            UpdateTooltipLine(leftStickButton, "UNSET", 4);
+            string unsetText = Globalization.Translate("Input_Unset");
+
+            bBtn.ToolTip = unsetText;
+            aBtn.ToolTip = unsetText;
+            yBtn.ToolTip = unsetText;
+            xBtn.ToolTip = unsetText;
+            lBtn.ToolTip = unsetText;
+            rBtn.ToolTip = unsetText;
+            zlBtn.ToolTip = unsetText;
+            zrBtn.ToolTip = unsetText;
+            minusBtn.ToolTip = unsetText;
+            plusBtn.ToolTip = unsetText;
+            homeBtn.ToolTip = unsetText;
+            shareBtn.ToolTip = unsetText;
+            upBtn.ToolTip = unsetText;
+            leftBtn.ToolTip = unsetText;
+            rightBtn.ToolTip = unsetText;
+            downBtn.ToolTip = unsetText;
+            UpdateTooltipLine(leftStickButton, unsetText, 0);
+            UpdateTooltipLine(leftStickButton, unsetText, 1);
+            UpdateTooltipLine(leftStickButton, unsetText, 2);
+            UpdateTooltipLine(leftStickButton, unsetText, 3);
+            UpdateTooltipLine(leftStickButton, unsetText, 4);
+            UpdateTooltipLine(leftStickButton, unsetText, 0);
+            UpdateTooltipLine(leftStickButton, unsetText, 1);
+            UpdateTooltipLine(leftStickButton, unsetText, 2);
+            UpdateTooltipLine(leftStickButton, unsetText, 3);
+            UpdateTooltipLine(leftStickButton, unsetText, 4);
+            UpdateTooltipLine(center, unsetText, 0);
+            UpdateTooltipLine(center, unsetText, 1);
+            UpdateTooltipLine(center, unsetText, 2);
+            UpdateTooltipLine(center, unsetText, 3);
         }
 
         protected override void OpenSelectedInput(object sender, RoutedEventArgs e)
@@ -270,11 +288,18 @@ namespace WiinUPro
             CallEvent_OnInputSelected(input);
         }
 
-        protected override void QuickAssign(string prefix, string type)
+        private string[] GetQuickInputSet()
         {
             string[] dir = new string[4];
 
-            if (_menuOwnerTag == "swpR")
+            if (_menuOwnerTag == "pov")
+            {
+                dir[0] = "pov0N";
+                dir[1] = "pov0L";
+                dir[2] = "pov0R";
+                dir[3] = "pov0S";
+            }
+            else if (_menuOwnerTag == "swpR")
             {
                 dir[0] = "RotationY+";
                 dir[1] = "RotationY-";
@@ -288,6 +313,13 @@ namespace WiinUPro
                 dir[2] = "X-";
                 dir[3] = "X+";
             }
+
+            return dir;
+        }
+
+        protected override void QuickAssign(string prefix, string type)
+        {
+            string[] dir = GetQuickInputSet();
 
             Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
 
@@ -340,22 +372,7 @@ namespace WiinUPro
                             break;
                     }
 
-                    string[] dir = new string[4];
-
-                    if (_menuOwnerTag == "swpR")
-                    {
-                        dir[0] = "RotationY+";
-                        dir[1] = "RotationY-";
-                        dir[2] = "RotationX-";
-                        dir[3] = "RotationX+";
-                    }
-                    else
-                    {
-                        dir[0] = "Y+";
-                        dir[1] = "Y-";
-                        dir[2] = "X-";
-                        dir[3] = "X+";
-                    }
+                    string[] dir = GetQuickInputSet();
 
                     Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
                     args.Add(dir[0], new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp, speed) }));

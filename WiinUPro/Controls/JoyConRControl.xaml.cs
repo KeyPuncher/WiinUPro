@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Shared;
 using SharpDX.DirectInput;
 
 namespace WiinUPro
@@ -118,19 +119,21 @@ namespace WiinUPro
 
         public void ClearTooltips()
         {
-            aBtn.ToolTip = "UNSET";
-            xBtn.ToolTip = "UNSET";
-            bBtn.ToolTip = "UNSET";
-            yBtn.ToolTip = "UNSET";
-            slBtn.ToolTip = "UNSET";
-            srBtn.ToolTip = "UNSET";
-            plusBtn.ToolTip = "UNSET";
-            homeBtn.ToolTip = "UNSET";
-            UpdateTooltipLine(joyStickButton, "UNSET", 0);
-            UpdateTooltipLine(joyStickButton, "UNSET", 1);
-            UpdateTooltipLine(joyStickButton, "UNSET", 2);
-            UpdateTooltipLine(joyStickButton, "UNSET", 3);
-            UpdateTooltipLine(joyStickButton, "UNSET", 4);
+            string unsetText = Globalization.Translate("Input_Unset");
+
+            aBtn.ToolTip = unsetText;
+            xBtn.ToolTip = unsetText;
+            bBtn.ToolTip = unsetText;
+            yBtn.ToolTip = unsetText;
+            slBtn.ToolTip = unsetText;
+            srBtn.ToolTip = unsetText;
+            plusBtn.ToolTip = unsetText;
+            homeBtn.ToolTip = unsetText;
+            UpdateTooltipLine(joyStickButton, unsetText, 0);
+            UpdateTooltipLine(joyStickButton, unsetText, 1);
+            UpdateTooltipLine(joyStickButton, unsetText, 2);
+            UpdateTooltipLine(joyStickButton, unsetText, 3);
+            UpdateTooltipLine(joyStickButton, unsetText, 4);
         }
 
         protected void SetupMenuForPad()

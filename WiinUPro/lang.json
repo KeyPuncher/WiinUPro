@@ -103,6 +103,7 @@
     "Input_Slow": [ "Slow", "Lento", "Lent" ],
     "Input_Turbo": [ "Turbo", "Turbo", "Turbo" ],
     "Input_Turbo_Rate": [ "Turbo Rate", "Velocidad de Turbo", "Vitesse du turbo" ],
+    "Input_Unset": [ "UNSET", "", "" ],
     "Input_Window": [ "Inputs WIndow", "Ventana de Entradas", "Fenêtre d'entrées" ],
     "Input_X": [ "Xbox 360", "Xbox 360", "XBox 360" ],
     "Input_X_Device": [ "Device {0}:", "Dispositivo {0}:", "Dispositif {0}" ],

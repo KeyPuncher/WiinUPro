@@ -93,7 +93,7 @@ namespace WiinUPro
                 Display(ccBtnDown, cc.Down);
                 Display(ccBtnRight, cc.Right);
                 Display(ccBtnLeft, cc.Left);
-                ccPadCenter.Opacity = cc.Up || cc.Down || cc.Left || cc.Right ? 1 : 0;
+                Display(ccPadCenter, cc.Up || cc.Down || cc.Left || cc.Right);
                 Display(ccBtnHome, cc.Home);
                 Display(ccBtnSelect, cc.Select);
                 Display(ccBtnStart, cc.Start);
@@ -134,7 +134,7 @@ namespace WiinUPro
                 Display(ccpBtnDown, ccp.Down);
                 Display(ccpBtnRight, ccp.Right);
                 Display(ccpBtnLeft, ccp.Left);
-                ccpPadCenter.Opacity = ccp.Up || ccp.Down || ccp.Left || ccp.Right ? 1 : 0;
+                Display(ccpPadCenter, ccp.Up || ccp.Down || ccp.Left || ccp.Right);
                 Display(ccpBtnHome, ccp.Home);
                 Display(ccpBtnSelect, ccp.Select);
                 Display(ccpBtnStart, ccp.Start);
@@ -218,14 +218,26 @@ namespace WiinUPro
                 case INPUT_NAMES.WIIMOTE.PLUS: wBtnPlus.ToolTip = tooltip; break;
                 case INPUT_NAMES.WIIMOTE.MINUS: wBtnMinus.ToolTip = tooltip; break;
                 case INPUT_NAMES.WIIMOTE.HOME: wBtnHome.ToolTip = tooltip; break;
-                case INPUT_NAMES.WIIMOTE.UP: wBtnUp.ToolTip = tooltip; break;
-                case INPUT_NAMES.WIIMOTE.LEFT: wBtnLeft.ToolTip = tooltip; break;
-                case INPUT_NAMES.WIIMOTE.RIGHT: wBtnRight.ToolTip = tooltip; break;
-                case INPUT_NAMES.WIIMOTE.DOWN: wBtnDown.ToolTip = tooltip; break;
                 case INPUT_NAMES.WIIMOTE.IR_UP: UpdateTooltipLine(irCanvas, tooltip, 0); break;
                 case INPUT_NAMES.WIIMOTE.IR_LEFT: UpdateTooltipLine(irCanvas, tooltip, 1); break;
                 case INPUT_NAMES.WIIMOTE.IR_RIGHT: UpdateTooltipLine(irCanvas, tooltip, 2); break;
                 case INPUT_NAMES.WIIMOTE.IR_DOWN: UpdateTooltipLine(irCanvas, tooltip, 3); break;
+                case INPUT_NAMES.WIIMOTE.UP: 
+                    wBtnUp.ToolTip = tooltip;
+                    UpdateTooltipLine(wCenterPad, tooltip, 0);
+                    break;
+                case INPUT_NAMES.WIIMOTE.LEFT: 
+                    wBtnLeft.ToolTip = tooltip;
+                    UpdateTooltipLine(wCenterPad, tooltip, 1); 
+                    break;
+                case INPUT_NAMES.WIIMOTE.RIGHT: 
+                    wBtnRight.ToolTip = tooltip;
+                    UpdateTooltipLine(wCenterPad, tooltip, 2); 
+                    break;
+                case INPUT_NAMES.WIIMOTE.DOWN: 
+                    wBtnDown.ToolTip = tooltip;
+                    UpdateTooltipLine(wCenterPad, tooltip, 3); 
+                    break;
 
                 case INPUT_NAMES.NUNCHUK.C: nBtnC.ToolTip = tooltip; break;
                 case INPUT_NAMES.NUNCHUK.Z: nBtnZ.ToolTip = tooltip; break;
@@ -243,10 +255,6 @@ namespace WiinUPro
                 case INPUT_NAMES.CLASSIC_CONTROLLER.HOME: ccBtnHome.ToolTip = tooltip; break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER.START: ccBtnStart.ToolTip = tooltip; break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER.SELECT: ccBtnSelect.ToolTip = tooltip; break;
-                case INPUT_NAMES.CLASSIC_CONTROLLER.UP: ccBtnUp.ToolTip = tooltip; break;
-                case INPUT_NAMES.CLASSIC_CONTROLLER.LEFT: ccBtnLeft.ToolTip = tooltip; break;
-                case INPUT_NAMES.CLASSIC_CONTROLLER.RIGHT: ccBtnRight.ToolTip = tooltip; break;
-                case INPUT_NAMES.CLASSIC_CONTROLLER.DOWN: ccBtnDown.ToolTip = tooltip; break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER.LT: UpdateTooltipLine(ccL, tooltip, 0); break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER.LFULL: UpdateTooltipLine(ccL, tooltip, 1); break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER.RT: UpdateTooltipLine(ccR, tooltip, 0); break;
@@ -259,6 +267,22 @@ namespace WiinUPro
                 case INPUT_NAMES.CLASSIC_CONTROLLER.RLEFT: UpdateTooltipLine(ccRightStick, tooltip, 1); break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER.RRIGHT: UpdateTooltipLine(ccRightStick, tooltip, 2); break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER.RDOWN: UpdateTooltipLine(ccRightStick, tooltip, 3); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.UP: 
+                    ccBtnUp.ToolTip = tooltip;
+                    UpdateTooltipLine(ccPadCenter, tooltip, 0);
+                    break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.LEFT: 
+                    ccBtnLeft.ToolTip = tooltip;
+                    UpdateTooltipLine(ccPadCenter, tooltip, 1); 
+                    break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.RIGHT: 
+                    ccBtnRight.ToolTip = tooltip;
+                    UpdateTooltipLine(ccPadCenter, tooltip, 2); 
+                    break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER.DOWN: 
+                    ccBtnDown.ToolTip = tooltip;
+                    UpdateTooltipLine(ccPadCenter, tooltip, 3); 
+                    break;
 
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.A: ccpBtnA.ToolTip = tooltip; break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.B: ccpBtnB.ToolTip = tooltip; break;
@@ -271,10 +295,6 @@ namespace WiinUPro
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.HOME: ccpBtnHome.ToolTip = tooltip; break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.START: ccpBtnStart.ToolTip = tooltip; break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.SELECT: ccpBtnSelect.ToolTip = tooltip; break;
-                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.UP: ccpBtnUp.ToolTip = tooltip; break;
-                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LEFT: ccpBtnLeft.ToolTip = tooltip; break;
-                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RIGHT: ccpBtnRight.ToolTip = tooltip; break;
-                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.DOWN: ccpBtnDown.ToolTip = tooltip; break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LUP: UpdateTooltipLine(ccpLeftStick, tooltip, 0); break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LLEFT: UpdateTooltipLine(ccpLeftStick, tooltip, 1); break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LRIGHT: UpdateTooltipLine(ccpLeftStick, tooltip, 2); break;
@@ -283,6 +303,22 @@ namespace WiinUPro
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RLEFT: UpdateTooltipLine(ccpRightStick, tooltip, 1); break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RRIGHT: UpdateTooltipLine(ccpRightStick, tooltip, 2); break;
                 case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RDOWN: UpdateTooltipLine(ccpRightStick, tooltip, 3); break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.UP: 
+                    ccpBtnUp.ToolTip = tooltip;
+                    UpdateTooltipLine(ccpPadCenter, tooltip, 0);
+                    break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.LEFT: 
+                    ccpBtnLeft.ToolTip = tooltip;
+                    UpdateTooltipLine(ccpPadCenter, tooltip, 1);
+                    break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.RIGHT: 
+                    ccpBtnRight.ToolTip = tooltip;
+                    UpdateTooltipLine(ccpPadCenter, tooltip, 2); 
+                    break;
+                case INPUT_NAMES.CLASSIC_CONTROLLER_PRO.DOWN: 
+                    ccpBtnDown.ToolTip = tooltip;
+                    UpdateTooltipLine(ccpPadCenter, tooltip, 3); 
+                    break;
 
                 case INPUT_NAMES.GUITAR.BLUE: gBtnBlue.ToolTip = tooltip; break;
                 case INPUT_NAMES.GUITAR.ORANGE: gBtnOrange.ToolTip = tooltip; break;
@@ -314,104 +350,106 @@ namespace WiinUPro
 
         public void ClearTooltips()
         {
-            wBtnA.ToolTip = "UNSET";
-            wBtnB.ToolTip = "UNSET";
-            wBtnOne.ToolTip = "UNSET";
-            wBtnTwo.ToolTip = "UNSET";
-            wBtnPlus.ToolTip = "UNSET";
-            wBtnMinus.ToolTip = "UNSET";
-            wBtnHome.ToolTip = "UNSET";
-            wBtnUp.ToolTip = "UNSET";
-            wBtnLeft.ToolTip = "UNSET";
-            wBtnRight.ToolTip = "UNSET";
-            wBtnDown.ToolTip = "UNSET";
-            UpdateTooltipLine(irCanvas, "UNSET", 0);
-            UpdateTooltipLine(irCanvas, "UNSET", 1);
-            UpdateTooltipLine(irCanvas, "UNSET", 2);
-            UpdateTooltipLine(irCanvas, "UNSET", 3);
+            string unsetText = Globalization.Translate("Input_Unset");
 
-            nBtnC.ToolTip = "UNSET";
-            nBtnZ.ToolTip = "UNSET";
-            UpdateTooltipLine(nJoy, "UNSET", 0);
-            UpdateTooltipLine(nJoy, "UNSET", 1);
-            UpdateTooltipLine(nJoy, "UNSET", 2);
-            UpdateTooltipLine(nJoy, "UNSET", 3);
+            wBtnA.ToolTip = unsetText;
+            wBtnB.ToolTip = unsetText;
+            wBtnOne.ToolTip = unsetText;
+            wBtnTwo.ToolTip = unsetText;
+            wBtnPlus.ToolTip = unsetText;
+            wBtnMinus.ToolTip = unsetText;
+            wBtnHome.ToolTip = unsetText;
+            wBtnUp.ToolTip = unsetText;
+            wBtnLeft.ToolTip = unsetText;
+            wBtnRight.ToolTip = unsetText;
+            wBtnDown.ToolTip = unsetText;
+            UpdateTooltipLine(irCanvas, unsetText, 0);
+            UpdateTooltipLine(irCanvas, unsetText, 1);
+            UpdateTooltipLine(irCanvas, unsetText, 2);
+            UpdateTooltipLine(irCanvas, unsetText, 3);
 
-            ccBtnA.ToolTip = "UNSET";
-            ccBtnB.ToolTip = "UNSET";
-            ccBtnX.ToolTip = "UNSET";
-            ccBtnY.ToolTip = "UNSET";
-            ccBtnZL.ToolTip = "UNSET";
-            ccBtnZR.ToolTip = "UNSET";
-            ccBtnHome.ToolTip = "UNSET";
-            ccBtnStart.ToolTip = "UNSET";
-            ccBtnSelect.ToolTip = "UNSET";
-            ccBtnUp.ToolTip = "UNSET";
-            ccBtnLeft.ToolTip = "UNSET";
-            ccBtnRight.ToolTip = "UNSET";
-            ccBtnDown.ToolTip = "UNSET";
-            UpdateTooltipLine(ccL, "UNSET", 0);
-            UpdateTooltipLine(ccL, "UNSET", 1);
-            UpdateTooltipLine(ccR, "UNSET", 0);
-            UpdateTooltipLine(ccR, "UNSET", 1);
-            UpdateTooltipLine(ccLeftStick, "UNSET", 0);
-            UpdateTooltipLine(ccLeftStick, "UNSET", 1);
-            UpdateTooltipLine(ccLeftStick, "UNSET", 2);
-            UpdateTooltipLine(ccLeftStick, "UNSET", 3);
-            UpdateTooltipLine(ccRightStick, "UNSET", 0);
-            UpdateTooltipLine(ccRightStick, "UNSET", 1);
-            UpdateTooltipLine(ccRightStick, "UNSET", 2);
-            UpdateTooltipLine(ccRightStick, "UNSET", 3);
+            nBtnC.ToolTip = unsetText;
+            nBtnZ.ToolTip = unsetText;
+            UpdateTooltipLine(nJoy, unsetText, 0);
+            UpdateTooltipLine(nJoy, unsetText, 1);
+            UpdateTooltipLine(nJoy, unsetText, 2);
+            UpdateTooltipLine(nJoy, unsetText, 3);
 
-            ccpBtnA.ToolTip = "UNSET";
-            ccpBtnB.ToolTip = "UNSET";
-            ccpBtnX.ToolTip = "UNSET";
-            ccpBtnY.ToolTip = "UNSET";
-            ccpBtnL.ToolTip = "UNSET";
-            ccpBtnR.ToolTip = "UNSET";
-            ccpBtnZL.ToolTip = "UNSET";
-            ccpBtnZR.ToolTip = "UNSET";
-            ccpBtnHome.ToolTip = "UNSET";
-            ccpBtnStart.ToolTip = "UNSET";
-            ccpBtnSelect.ToolTip = "UNSET";
-            ccpBtnUp.ToolTip = "UNSET";
-            ccpBtnLeft.ToolTip = "UNSET";
-            ccpBtnRight.ToolTip = "UNSET";
-            ccpBtnDown.ToolTip = "UNSET";
-            UpdateTooltipLine(ccpLeftStick, "UNSET", 0);
-            UpdateTooltipLine(ccpLeftStick, "UNSET", 1);
-            UpdateTooltipLine(ccpLeftStick, "UNSET", 2);
-            UpdateTooltipLine(ccpLeftStick, "UNSET", 3);
-            UpdateTooltipLine(ccpRightStick, "UNSET", 0);
-            UpdateTooltipLine(ccpRightStick, "UNSET", 1);
-            UpdateTooltipLine(ccpRightStick, "UNSET", 2);
-            UpdateTooltipLine(ccpRightStick, "UNSET", 3);
+            ccBtnA.ToolTip = unsetText;
+            ccBtnB.ToolTip = unsetText;
+            ccBtnX.ToolTip = unsetText;
+            ccBtnY.ToolTip = unsetText;
+            ccBtnZL.ToolTip = unsetText;
+            ccBtnZR.ToolTip = unsetText;
+            ccBtnHome.ToolTip = unsetText;
+            ccBtnStart.ToolTip = unsetText;
+            ccBtnSelect.ToolTip = unsetText;
+            ccBtnUp.ToolTip = unsetText;
+            ccBtnLeft.ToolTip = unsetText;
+            ccBtnRight.ToolTip = unsetText;
+            ccBtnDown.ToolTip = unsetText;
+            UpdateTooltipLine(ccL, unsetText, 0);
+            UpdateTooltipLine(ccL, unsetText, 1);
+            UpdateTooltipLine(ccR, unsetText, 0);
+            UpdateTooltipLine(ccR, unsetText, 1);
+            UpdateTooltipLine(ccLeftStick, unsetText, 0);
+            UpdateTooltipLine(ccLeftStick, unsetText, 1);
+            UpdateTooltipLine(ccLeftStick, unsetText, 2);
+            UpdateTooltipLine(ccLeftStick, unsetText, 3);
+            UpdateTooltipLine(ccRightStick, unsetText, 0);
+            UpdateTooltipLine(ccRightStick, unsetText, 1);
+            UpdateTooltipLine(ccRightStick, unsetText, 2);
+            UpdateTooltipLine(ccRightStick, unsetText, 3);
 
-            gBtnBlue.ToolTip = "UNSET";
-            gBtnOrange.ToolTip = "UNSET";
-            gBtnYellow.ToolTip = "UNSET";
-            gBtnGreen.ToolTip = "UNSET";
-            gBtnRed.ToolTip = "UNSET";
-            gTouch1.ToolTip = "UNSET";
-            gTouch2.ToolTip = "UNSET";
-            gTouch3.ToolTip = "UNSET";
-            gTouch4.ToolTip = "UNSET";
-            gTouch5.ToolTip = "UNSET";
-            gBtnPlus.ToolTip = "UNSET";
-            gBtnPlus.ToolTip = "UNSET";
-            gBtnStrumUp.ToolTip = "UNSET";
-            gBtnStrumDown.ToolTip = "UNSET";
-            UpdateTooltipLine(gWhammy, "UNSET", 0);
-            UpdateTooltipLine(gWhammy, "UNSET", 1);
-            UpdateTooltipLine(gStick, "UNSET", 0);
-            UpdateTooltipLine(gStick, "UNSET", 1);
-            UpdateTooltipLine(gStick, "UNSET", 2);
-            UpdateTooltipLine(gStick, "UNSET", 3);
+            ccpBtnA.ToolTip = unsetText;
+            ccpBtnB.ToolTip = unsetText;
+            ccpBtnX.ToolTip = unsetText;
+            ccpBtnY.ToolTip = unsetText;
+            ccpBtnL.ToolTip = unsetText;
+            ccpBtnR.ToolTip = unsetText;
+            ccpBtnZL.ToolTip = unsetText;
+            ccpBtnZR.ToolTip = unsetText;
+            ccpBtnHome.ToolTip = unsetText;
+            ccpBtnStart.ToolTip = unsetText;
+            ccpBtnSelect.ToolTip = unsetText;
+            ccpBtnUp.ToolTip = unsetText;
+            ccpBtnLeft.ToolTip = unsetText;
+            ccpBtnRight.ToolTip = unsetText;
+            ccpBtnDown.ToolTip = unsetText;
+            UpdateTooltipLine(ccpLeftStick, unsetText, 0);
+            UpdateTooltipLine(ccpLeftStick, unsetText, 1);
+            UpdateTooltipLine(ccpLeftStick, unsetText, 2);
+            UpdateTooltipLine(ccpLeftStick, unsetText, 3);
+            UpdateTooltipLine(ccpRightStick, unsetText, 0);
+            UpdateTooltipLine(ccpRightStick, unsetText, 1);
+            UpdateTooltipLine(ccpRightStick, unsetText, 2);
+            UpdateTooltipLine(ccpRightStick, unsetText, 3);
 
-            takL.ToolTip = "UNSET";
-            takR.ToolTip = "UNSET";
-            takRimL.ToolTip = "UNSET";
-            takRimR.ToolTip = "UNSET";
+            gBtnBlue.ToolTip = unsetText;
+            gBtnOrange.ToolTip = unsetText;
+            gBtnYellow.ToolTip = unsetText;
+            gBtnGreen.ToolTip = unsetText;
+            gBtnRed.ToolTip = unsetText;
+            gTouch1.ToolTip = unsetText;
+            gTouch2.ToolTip = unsetText;
+            gTouch3.ToolTip = unsetText;
+            gTouch4.ToolTip = unsetText;
+            gTouch5.ToolTip = unsetText;
+            gBtnPlus.ToolTip = unsetText;
+            gBtnPlus.ToolTip = unsetText;
+            gBtnStrumUp.ToolTip = unsetText;
+            gBtnStrumDown.ToolTip = unsetText;
+            UpdateTooltipLine(gWhammy, unsetText, 0);
+            UpdateTooltipLine(gWhammy, unsetText, 1);
+            UpdateTooltipLine(gStick, unsetText, 0);
+            UpdateTooltipLine(gStick, unsetText, 1);
+            UpdateTooltipLine(gStick, unsetText, 2);
+            UpdateTooltipLine(gStick, unsetText, 3);
+
+            takL.ToolTip = unsetText;
+            takR.ToolTip = unsetText;
+            takRimL.ToolTip = unsetText;
+            takRimR.ToolTip = unsetText;
         }
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)
@@ -529,7 +567,7 @@ namespace WiinUPro
             Display(wBtnMinus, wiimote.buttons.Minus);
             Display(wBtnPlus, wiimote.buttons.Plus);
             Display(wBtnHome, wiimote.buttons.Home);
-            wCenterPad.Opacity = wiimote.buttons.Up || wiimote.buttons.Down || wiimote.buttons.Left || wiimote.buttons.Right ? 1 : 0;
+            Display(wCenterPad, wiimote.buttons.Up || wiimote.buttons.Down || wiimote.buttons.Left || wiimote.buttons.Right);
 
             irPoint1.Visibility = wiimote.irSensor.point1.visible ? Visibility.Visible : Visibility.Collapsed;
             irPoint2.Visibility = wiimote.irSensor.point2.visible ? Visibility.Visible : Visibility.Collapsed;
