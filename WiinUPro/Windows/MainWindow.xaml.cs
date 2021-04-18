@@ -573,7 +573,7 @@ namespace WiinUPro
                 if (ScpDirector.Access.DisconnectDevice(ScpDirector.XInput_Device.Device_A))
                 {
                     btnRemoveXinput.IsEnabled = false;
-                    xlabel4.Content = Globalization.TranslateFormat("XInput_Device_Num", "4", Globalization.Translate("Status_Disconnected"));
+                    xlabel1.Content = Globalization.TranslateFormat("XInput_Device_Num", "1", Globalization.Translate("Status_Disconnected"));
                 }
             }
         }
