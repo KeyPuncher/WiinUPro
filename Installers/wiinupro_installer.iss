@@ -29,6 +29,7 @@ ArchitecturesInstallIn64BitMode=x64
 WizardStyle=modern
 WizardSmallImageFile=WiinUPro.bmp
 SetupIconFile=wup_install.ico
+UninstallDisplayIcon=wup_uninstall.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -103,6 +104,7 @@ Source: "..\vJoy\x64\vJoyInterfaceWrap.dll"; DestDir: "{app}"; Components: main;
 Source: "..\vJoy\x86\vJoyInterface.dll"; DestDir: "{app}"; Components: main; Check: not Is64BitInstallMode; Flags: ignoreversion
 Source: "..\vJoy\x86\vJoyInterfaceWrap.dll"; DestDir: "{app}"; Components: main; Check: not Is64BitInstallMode; Flags: ignoreversion
 ;Source: "..\WiinUPro\ReadMe.txt"; DestDir: "{app}"; Components: main; Flags: ignoreversion isreadme
+Source: "wup_uninstall.ico"; DestDir: "{app}"; DestName: "uninstall.ico"; Components: main; Flags: ignoreversion
 Source: "Drivers\SCP_Driver\*"; DestDir: "{app}\SCP_Driver"; Components: scp; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "Drivers\Xbox360_32Eng_7.exe"; DestDir: "{app}"; DestName: "Xbox360Driver.exe"; Components: xbox; Check: IsWindows7OrAbove and not Is64BitInstallMode; Flags: ignoreversion
 Source: "Drivers\Xbox360_64Eng_7.exe"; DestDir: "{app}"; DestName: "Xbox360Driver.exe"; Components: xbox; Check: IsWindows7OrAbove and Is64BitInstallMode; Flags: ignoreversion
@@ -116,7 +118,8 @@ Source: "Drivers\zadig_2.1.2.gcn.exe"; DestDir: "{app}"; Components: gcn; Flags:
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 ;Name: "{group}\ReadMe"; Filename: "{app}\ReadMe.txt"
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; IconFilename: "{app}\uninstall.ico"
+;Name: "{group}\Uninstall WiinUPro"; Filename: "{uninstallexe}"; IconFilename: "{app}\uninstall.ico"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 

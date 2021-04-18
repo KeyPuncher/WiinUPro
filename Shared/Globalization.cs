@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,12 +16,14 @@ namespace Shared
         {
             public bool hasData;
             public string[] languages;
+            public string[] cultures;
             public Dictionary<string, string[]> translations;
         }
         
         public static void SetText(Data data)
         {
             _data = data;
+            System.Diagnostics.Debug.WriteLine(data.languages[1]);
         }
 
         public static void SetSelectedLanguage(int index)
@@ -27,6 +31,12 @@ namespace Shared
             if (index >= 0 && index < _data.languages.Length)
             {
                 _selectedLanguage = index;
+            }
+
+            if (index >= 0 && index < _data.cultures.Length)
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(_data.cultures[index]);
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo(_data.cultures[index]);
             }
         }
 
@@ -50,9 +60,13 @@ namespace Shared
 
             if (!string.IsNullOrEmpty(element.Uid))
             {
-                if (target is TextBlock)
+                if (element is TextBlock)
                 {
                     ((TextBlock)element).Text = Translate(element.Uid);
+                }
+                else if (element is TextBox)
+                {
+                    ((TextBox)element).Text = Translate(element.Uid);
                 }
                 else if (element is GroupBox)
                 {
@@ -75,6 +89,14 @@ namespace Shared
             if (element is FrameworkElement && ((FrameworkElement)element).ContextMenu != null)
             {
                 ApplyTranslations(((FrameworkElement)element).ContextMenu);
+            }
+
+            if (element is ComboBox)
+            {
+                foreach (var child in ((ComboBox) element).Items)
+                {
+                    ApplyTranslations(child as UIElement);
+                }
             }
 
             int childCount = VisualTreeHelper.GetChildrenCount(target);

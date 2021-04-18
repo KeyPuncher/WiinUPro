@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="InputsWindow" Height="420.237" Width="935.8" Background="{StaticResource BackgroundMain}" Closing="Window_Closing">
+        Title="Inputs Window" Height="420.237" Width="935.8" Background="{StaticResource BackgroundMain}" Closing="Window_Closing"
+        Uid="Input_Window" Loaded="Window_Loaded">
     <Grid>
         <TabControl x:Name="tabControl" Margin="0,0,0.4,31.6" Background="{StaticResource BackgroundSub}">
             <TabControl.Resources>
@@ -36,9 +37,9 @@
             </TabControl.Resources>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Keyboard" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                    <TextBlock Text="Keyboard" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Keyboard"></TextBlock>
                 </TabItem.Header>
-                <Grid x:Name="keyboardGrid" Background="Transparent">
+                <Grid x:Name="keyboardGrid" Background="Transparent" Loaded="Element_Loaded">
                     <!-- Key Buttons -->
                     <Button Content="ESC" Tag="VK_ESCAPE" Margin="10,0,0,0" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
                     <Button Content="F1"  Tag="VK_F1"  Margin="78,0,0,0"  Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
@@ -186,21 +187,21 @@
                     <Button Content="Prt" Tag="VK_SNAPSHOT" Margin="680,94,0,0" ToolTip="Print Screen" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
                     <Button Content="Scr" Tag="VK_SCROLL" Margin="680,141,0,0" ToolTip="Scroll Break" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
                     <Button Content="PBr" Tag="VK_PAUSE" Margin="680,188,0,0" ToolTip="Pause Break" Click="ToggleKey" Width="{StaticResource KeySize}" Height="{StaticResource KeySize}" Style="{StaticResource KeyButton}"/>
-                    <CheckBox x:Name="keyTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                    <CheckBox x:Name="keyTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Turbo"/>
                     <Slider x:Name="keyTurboRate" HorizontalAlignment="Left" Margin="167,291,0,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="5" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
-                    <Label x:Name="label" Content="Turbo Rate" HorizontalAlignment="Left" Margin="85,286,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
-                    <CheckBox x:Name="keyInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="396,292,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
-                    <TextBox x:Name="detectBox" HorizontalAlignment="Left" Height="23" Margin="730,289,0,0" TextWrapping="Wrap" Text="Click for key detection" VerticalAlignment="Top" Width="184" IsReadOnly="True" KeyDown="detectBox_KeyDown" Foreground="#FF444444"/>
-                    <Label Content="Fast" HorizontalAlignment="Left" Margin="350,300,0,0" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
-                    <Label Content="Slow" HorizontalAlignment="Left" Margin="162,300,0,0" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                    <Label x:Name="label" Content="Turbo Rate" HorizontalAlignment="Left" Margin="85,286,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Turbo_Rate"/>
+                    <CheckBox x:Name="keyInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="396,292,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Invert"/>
+                    <TextBox x:Name="detectBox" HorizontalAlignment="Left" Height="23" Margin="730,289,0,0" TextWrapping="Wrap" Text="Click for key detection" VerticalAlignment="Top" Width="184" IsReadOnly="True" KeyDown="detectBox_KeyDown" Foreground="#FF444444" Uid="Input_Keyboard_Detect"/>
+                    <Label Content="Fast" HorizontalAlignment="Left" Margin="350,300,0,0" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Fast"/>
+                    <Label Content="Slow" HorizontalAlignment="Left" Margin="162,300,0,0" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Slow"/>
                 </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Mouse" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                    <TextBlock Text="Mouse" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Mouse"></TextBlock>
                 </TabItem.Header>
-                <Grid Background="Transparent">
-                    <GroupBox x:Name="groupBox" Header="Movement" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
+                <Grid Background="Transparent" Loaded="Element_Loaded">
+                    <GroupBox x:Name="groupBox" Header="Movement" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}" Uid="Input_Mouse_Movement">
                         <Grid x:Name="mouseMovGrid">
                             <Button x:Name="mouseDown" HorizontalAlignment="Left" Margin="84,104,0,0" VerticalAlignment="Top" Width="42" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseDirection" Tag="MoveDown" Style="{StaticResource KeyButton}">
                                 <Image Source="/WiinUPro;component/Images/SelectArrow_black.png" Margin="0,4" RenderTransformOrigin="0.5,0.5">
@@ -242,43 +243,43 @@
                                 </Image>
                             </Button>
                             <Slider x:Name="mMovementRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="0.1" Value="1" Maximum="3" SmallChange="1" IsSnapToTickEnabled="True" TickFrequency="0.1" Style="{StaticResource BasicSliderStyle}"/>
-                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
-                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
-                            <Label Content="Movement Speed" HorizontalAlignment="Left" Margin="10,0,0,38" Height="26" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Fast"/>
+                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Slow"/>
+                            <Label Content="Movement Speed" HorizontalAlignment="Left" Margin="10,0,0,38" Height="26" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Mouse_Move_Speed"/>
                             <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="124,0,0,43" TextWrapping="Wrap" Text="{Binding ElementName=mMovementRate, Path=Value, StringFormat={}{0:P0}}" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox1" Header="Buttons" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}">
+                    <GroupBox x:Name="groupBox1" Header="Buttons" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}" Uid="Input_Mouse_Buttons">
                         <Grid x:Name="mouseBtnGrid">
-                            <Button Content="L" HorizontalAlignment="Left" Margin="44,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left" Style="{StaticResource KeyButton}"/>
-                            <Button Content="M" HorizontalAlignment="Left" Margin="91,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle" Style="{StaticResource KeyButton}"/>
-                            <Button Content="R" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Right" Style="{StaticResource KeyButton}"/>
-                            <CheckBox x:Name="mButtonTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                            <Button Content="L" HorizontalAlignment="Left" Margin="44,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Left"/>
+                            <Button Content="M" HorizontalAlignment="Left" Margin="91,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Middle"/>
+                            <Button Content="R" HorizontalAlignment="Left" Margin="138,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Right" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Right"/>
+                            <CheckBox x:Name="mButtonTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Turbo"/>
                             <Slider x:Name="mButtonTurboRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
                             <Label Content="Turbo Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
-                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
-                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
-                            <CheckBox x:Name="mButtonInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="126,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Fast"/>
+                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Slow"/>
+                            <CheckBox x:Name="mButtonInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="126,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Invert"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox2" Header="Scroll" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Height="304" Width="240"  Style="{StaticResource GroupBoxStyle}">
+                    <GroupBox x:Name="groupBox2" Header="Scroll" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Height="304" Width="240"  Style="{StaticResource GroupBoxStyle}" Uid="Input_Mouse_Scroll">
                         <Grid x:Name="mouseScrollGrid">
-                            <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up" Style="{StaticResource KeyButton}"/>
-                            <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down" Style="{StaticResource KeyButton}"/>
-                            <CheckBox x:Name="mScrollContinuousCheck" Content="Continuous" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                            <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Scroll_Up"/>
+                            <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Scroll_Down"/>
+                            <CheckBox x:Name="mScrollContinuousCheck" Content="Continuous" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Mouse_Scroll_Continuous"/>
                             <Slider x:Name="mScrollRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
-                            <Label Content="Scroll Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
-                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
-                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
+                            <Label Content="Scroll Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Mouse_Scroll_Rate"/>
+                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Fast"/>
+                            <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Slow"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Xbox 360" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                    <TextBlock Text="Xbox 360" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_X"></TextBlock>
                 </TabItem.Header>
-                <Grid Background="Transparent">
+                <Grid Background="Transparent" Loaded="Element_Loaded">
                     <Button Content="Connect" HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputConnect_Click" Visibility="Hidden"/>
                     <Button Content="Disconnect" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="100" Height="32" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="xInputDisconnect_Click" Visibility="Hidden"/>
                     <Grid x:Name="xboxGrid" HorizontalAlignment="Left" Width="924" Height="322" VerticalAlignment="Top">
@@ -408,30 +409,30 @@
                             <Image x:Name="xRLeft" HorizontalAlignment="Left" Height="33" VerticalAlignment="Top" Width="26" Source="/WiinUPro;component/Images/SelectArrow.png" MouseLeftButtonDown="ToggleXInputAxis" Tag="RX_Lo" ToolTip="Right Stick Left" RenderTransformOrigin="0.5,0.5" Opacity="0" />
                         </Border>
                     </Grid>
-                    <ComboBox x:Name="deviceSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" SelectedIndex="0" SelectionChanged="deviceSelection_SelectionChanged" FontWeight="Bold">
-                        <ListBoxItem Content="Device A"/>
-                        <ListBoxItem Content="Device B"/>
-                        <ListBoxItem Content="Device C"/>
-                        <ListBoxItem Content="Device D"/>
+                    <ComboBox x:Name="deviceSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="119" SelectedIndex="0" SelectionChanged="deviceSelection_SelectionChanged" FontWeight="Bold">
+                        <ListBoxItem Content="Device A" Uid="Input_X_Device_A"/>
+                        <ListBoxItem Content="Device B" Uid="Input_X_Device_B"/>
+                        <ListBoxItem Content="Device C" Uid="Input_X_Device_C"/>
+                        <ListBoxItem Content="Device D" Uid="Input_X_Device_D"/>
                     </ComboBox>
-                    <GroupBox x:Name="groupXBtns" Header="Button Options" HorizontalAlignment="Left" Margin="581,18,0,0" VerticalAlignment="Top" Height="114" Width="239"  Style="{StaticResource GroupBoxStyle}">
+                    <GroupBox x:Name="groupXBtns" Header="Button Options" HorizontalAlignment="Left" Margin="581,18,0,0" VerticalAlignment="Top" Height="114" Width="239"  Style="{StaticResource GroupBoxStyle}" Uid="Input_X_Options">
                         <Grid>
-                            <CheckBox x:Name="xTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
-                            <Slider x:Name="xTurboRate" HorizontalAlignment="Left" Margin="10,61,-47,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
-                            <Label Content="Turbo Rate" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
-                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,70,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
-                            <Label Content="Slow" HorizontalAlignment="Left" Margin="5,70,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}"/>
-                            <CheckBox x:Name="xInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
+                            <CheckBox x:Name="xTurboCheck" Content="Turbo" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Turbo"/>
+                            <Slider x:Name="xTurboRate" HorizontalAlignment="Left" Margin="10,61,-47,0" VerticalAlignment="Top" Width="205" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}" Uid="Input_Turbo"/>
+                            <Label Content="Turbo Rate" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Turbo_Rate"/>
+                            <Label Content="Fast" HorizontalAlignment="Left" Margin="190,70,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Fast"/>
+                            <Label Content="Slow" HorizontalAlignment="Left" Margin="5,70,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Slow"/>
+                            <CheckBox x:Name="xInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Invert"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Joystick" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                    <TextBlock Text="Joystick" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Joystick"></TextBlock>
                 </TabItem.Header>
-                <Grid Background="Transparent">
-                    <Label x:Name="vJoyOffLabel" Content="vJoy is not available" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Visibility="Visible" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
+                <Grid Background="Transparent" Loaded="Element_Loaded">
+                    <Label x:Name="vJoyOffLabel" Content="vJoy is not available" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Visibility="Visible" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Uid="Input_Joystick_None"/>
                     <ComboBox x:Name="joystickSelection" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="joystickSelection_SelectionChanged" Visibility="Collapsed"/>
                     <StackPanel x:Name="groupStack" HorizontalAlignment="Left" Height="272" Margin="10,37,0,0" VerticalAlignment="Top" Width="902" Orientation="Horizontal">
                         <GroupBox x:Name="joyBtnGroup" Header="Buttons" HorizontalAlignment="Left" VerticalAlignment="Top" Height="267" Width="254" Visibility="Collapsed"  Style="{StaticResource GroupBoxStyle}">
@@ -452,34 +453,34 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Shift" FontWeight="Bold" Foreground="{StaticResource TextHeader}"></TextBlock>
+                    <TextBlock Text="Shift" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Shift"></TextBlock>
                 </TabItem.Header>
-                <Grid Background="Transparent">
+                <Grid Background="Transparent" Loaded="Element_Loaded">
                     <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,35,0,0" VerticalAlignment="Top" Height="212" Width="220"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
-                            <RadioButton x:Name="radioNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="ShiftHold" IsChecked="True" Style="{StaticResource RadioButtonStyle}" />
-                            <RadioButton x:Name="radioRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
-                            <RadioButton x:Name="radioBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
-                            <RadioButton x:Name="radioGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}"/>
+                            <RadioButton x:Name="radioNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="ShiftHold" IsChecked="True" Style="{StaticResource RadioButtonStyle}" Uid="Shift_None"/>
+                            <RadioButton x:Name="radioRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}" Uid="Shift_1"/>
+                            <RadioButton x:Name="radioBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}" Uid="Shift_2"/>
+                            <RadioButton x:Name="radioGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}" Uid="Shift_3"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="shiftToggleGroup" Header="                 " HorizontalAlignment="Left" Margin="302,35,0,0" VerticalAlignment="Top" Height="212" Width="241" IsEnabled="False"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
-                            <CheckBox x:Name="checkNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
-                            <CheckBox x:Name="checkRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
-                            <CheckBox x:Name="checkBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
-                            <CheckBox x:Name="checkGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}"/>
+                            <CheckBox x:Name="checkNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}" Uid="Shift_None"/>
+                            <CheckBox x:Name="checkRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}" Uid="Shift_1"/>
+                            <CheckBox x:Name="checkBlue" Content="Blue" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}" Uid="Shift_2"/>
+                            <CheckBox x:Name="checkGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}" Uid="Shift_3"/>
                         </Grid>
                     </GroupBox>
-                    <RadioButton x:Name="radioHold" Content="Hold" HorizontalAlignment="Left" Margin="49,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsChecked="True" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}"/>
-                    <RadioButton x:Name="radioToggle" Content="Toggle" HorizontalAlignment="Left" Margin="311,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}"/>
+                    <RadioButton x:Name="radioHold" Content="Hold" HorizontalAlignment="Left" Margin="49,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsChecked="True" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}" Uid="Input_Shift_Hold"/>
+                    <RadioButton x:Name="radioToggle" Content="Toggle" HorizontalAlignment="Left" Margin="311,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}" Uid="Input_Shift_Toggle"/>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9,3" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,3" Click="cancelBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource WarningButton}"/>
-        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,3" Click="clearBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource CautionButton}"/>
-        <CheckBox x:Name="rumbleOnPress" Content="Rumble On Press" HorizontalAlignment="Left" Margin="708,0,0,7" VerticalAlignment="Bottom" Style="{StaticResource CheckBoxStyle}" FontWeight="Normal">
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9,3" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}" Uid="Button_Accept"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,3" Click="cancelBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource WarningButton}" Uid="Button_Cancel"/>
+        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,3" Click="clearBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource CautionButton}" Uid="Input_Clear"/>
+        <CheckBox x:Name="rumbleOnPress" Content="Rumble On Press" HorizontalAlignment="Left" Margin="708,0,0,7" VerticalAlignment="Bottom" Style="{StaticResource CheckBoxStyle}" FontWeight="Normal" Uid="Input_Rumble">
             <CheckBox.Foreground>
                 <SolidColorBrush Color="{DynamicResource B250}"/>
             </CheckBox.Foreground>

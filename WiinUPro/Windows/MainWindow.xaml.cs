@@ -391,12 +391,27 @@ namespace WiinUPro
             {
                 AppPrefs.Instance.language = settingLanguage.SelectedIndex;
                 Globalization.SetSelectedLanguage(settingLanguage.SelectedIndex);
+
+                // This will apply some translations but not all since some are created in code instead of being tagged on the xaml
+                Globalization.ApplyTranslations(this);
+                if (tabControl.Items.Count > 1)
+                {
+                    for (int i = 1; i < tabControl.Items.Count; ++i)
+                    {
+                        Globalization.ApplyTranslations(tabControl.Items[i] as DependencyObject);
+                    }
+                }
+
+                MessageBox.Show(
+                    Globalization.Translate("Restart_Msg"),
+                    Globalization.Translate("Restart"),
+                    MessageBoxButton.OK);
             }
         }
 
         private void settingMinimizeOnClose_Checked(object sender, RoutedEventArgs e)
         {
-            AppPrefs.Instance.minimizeOnClose = settingMinimizeOnClose.IsChecked ?? false;
+            AppPrefs.Instance.minimizeToTray = settingMinimizeOnClose.IsChecked ?? false;
         }
         private void settingProfileQueuing_Checked(object sender, RoutedEventArgs e)
         {
@@ -646,7 +661,7 @@ namespace WiinUPro
             }
 
             // Check Minimize To System Tray
-            settingMinimizeOnClose.IsChecked = AppPrefs.Instance.minimizeOnClose;
+            settingMinimizeOnClose.IsChecked = AppPrefs.Instance.minimizeToTray;
 
             // Check Profile Queuing
             settingProfileQueuing.IsChecked = AppPrefs.Instance.profileQueuing;
@@ -680,7 +695,7 @@ namespace WiinUPro
             // Currently only minimizing if option is selected.
             // Users may not want to have it minimize to tray all the time.
             // Contemplating if minimize on close should be another option or not...
-            if (AppPrefs.Instance.minimizeOnClose)
+            if (AppPrefs.Instance.minimizeToTray)
             {
                 trayIcon.Visibility = Visibility.Visible;
                 Hide();

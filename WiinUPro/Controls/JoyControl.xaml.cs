@@ -40,7 +40,7 @@ namespace WiinUPro
                     return "Switch Pro";
                 case JoystickType.Generic:
                 default:
-                    return "Generic Joystick";
+                    return Globalization.Translate("Controller_Generic");
             }
         }
 
@@ -741,7 +741,7 @@ namespace WiinUPro
                 _assignments[dropShift.SelectedIndex].Add(_selectedInput, _clipboard);
             }
 
-            _controller?.SetInputTooltip(_selectedInput, "UNSET");
+            _controller?.SetInputTooltip(_selectedInput, Globalization.Translate("Input_Unset"));
         }
 
         private void ClearMenu_Click(object sender, RoutedEventArgs e)
@@ -751,7 +751,7 @@ namespace WiinUPro
                 _assignments[dropShift.SelectedIndex].Remove(_selectedInput);
             }
 
-            _controller?.SetInputTooltip(_selectedInput, "UNSET");
+            _controller?.SetInputTooltip(_selectedInput, Globalization.Translate("Input_Unset"));
         }
         #endregion
 
@@ -774,7 +774,7 @@ namespace WiinUPro
             {
                 _buttonGroup = new GroupBox()
                 {
-                    Header = "Buttons",
+                    Header = Globalization.Translate("Joystick_Buttons_Group"),
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Width = 174,
@@ -847,7 +847,7 @@ namespace WiinUPro
             {
                 _axisGroup = new GroupBox()
                 {
-                    Header = "Axes",
+                    Header = Globalization.Translate("Joystick_Axes_Group"),
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Width = 244,
@@ -868,7 +868,7 @@ namespace WiinUPro
                 #region D-Pads
                 _povGroup = new GroupBox()
                 {
-                    Header = "Directional Pads",
+                    Header = Globalization.Translate("Joystick_Dpad_Group"),
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Top,
                     Width = 244,
@@ -1034,7 +1034,7 @@ namespace WiinUPro
                 Tag = offset.ToString(),
                 Content = new TextBlock
                 {
-                    Text = "Calibrate",
+                    Text = Globalization.Translate("Joystick_Calibrate"),
                     TextDecorations = TextDecorations.Underline,
                     Foreground = new SolidColorBrush(Colors.DarkBlue)
                 }

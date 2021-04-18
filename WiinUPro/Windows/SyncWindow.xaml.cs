@@ -209,6 +209,7 @@ namespace WiinUPro.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Globalization.ApplyTranslations(this);
             Task t = new Task(() => Sync());
             t.Start();
         }

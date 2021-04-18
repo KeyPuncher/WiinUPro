@@ -5,31 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro.Windows"
         mc:Ignorable="d"
-        Title="Device Properties" Height="345" Width="240" MinHeight="300" MinWidth="240" Background="{StaticResource BackgroundMain}">
+        Title="Device Properties" Height="345" Width="240" MinHeight="300" MinWidth="240" Background="{StaticResource BackgroundMain}" Uid="Properties_Title" Loaded="Window_Loaded">
     <Grid Background="{StaticResource BackgroundSub}" Margin="10">
-        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,10,10" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,10" Click="cancelBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource WarningButton}"/>
+        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,10,10" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}" Uid="Button_Accept"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,10" Click="cancelBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource WarningButton}" Uid="Button_Cancel"/>
         <Label x:Name="deviceID" Content="" Margin="0,-6,-1,0" VerticalAlignment="Top" FontSize="8" Foreground="{DynamicResource TextBody}"/>
-        <Label x:Name="labelNickname" Content="Nickname:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+        <Label x:Name="labelNickname" Content="Nickname:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Properties_Nickname"/>
         <TextBox x:Name="nickname" Height="23" Margin="10,36,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF444444"/>
-        <CheckBox x:Name="autoConnect" Content="Auto Connect" Margin="0,16,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}"/>
-        <Label x:Name="labelDefaultProfile" Content="Default Profile:" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+        <CheckBox x:Name="autoConnect" Content="Auto Connect" Margin="0,16,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Properties_Auto_Connect"/>
+        <Label x:Name="labelDefaultProfile" Content="Default Profile:" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Properties_Profile"/>
         <TextBox x:Name="defaultProfile" Height="23" Margin="10,89,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF444444"/>
         <Button x:Name="btnDefaultProfile" Content=". . ." HorizontalAlignment="Right" Margin="0,66,10,0" VerticalAlignment="Top" Width="32" Style="{StaticResource BasicButton}" Click="btnDefaultProfile_Click"/>
-        <Label x:Name="labelDefaultCalibrations" Content="Default Calibrations:" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+        <Label x:Name="labelDefaultCalibrations" Content="Default Calibrations:" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Properties_Calibrations"/>
         <ScrollViewer x:Name="calibrationViewer" Margin="10,221,10,39" VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical" x:Name="calibrationWrap">
             </StackPanel>
         </ScrollViewer>
         <ComboBox x:Name="comboExtProfile" Margin="12,140,0,0" VerticalAlignment="Top" SelectedIndex="0" Height="24" HorizontalAlignment="Left" Width="146" SelectionChanged="comboExtProfSelect_SelectionChanged">
-            <ComboBoxItem Content="No Extension"/>
+            <ComboBoxItem Content="No Extension" Uid="Properties_Extension_None"/>
             <ComboBoxItem Content="Nunchuk"/>
             <ComboBoxItem Content="Classic Controller"/>
             <ComboBoxItem Content="Classic Controller Pro"/>
             <ComboBoxItem Content="Guitar"/>
             <ComboBoxItem Content="Taiko Drum"/>
         </ComboBox>
-        <Label x:Name="labelExtProfile" Content="Extension Specific Profile:" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+        <Label x:Name="labelExtProfile" Content="Extension Specific Profile:" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Properties_Extension_Profile"/>
         <TextBox x:Name="extProfile" Height="23" Margin="10,167,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="#FF444444"/>
         <Button x:Name="btnExtProfile" Content=". . ." HorizontalAlignment="Right" Margin="0,144,10,0" VerticalAlignment="Top" Width="32" Style="{StaticResource BasicButton}" Click="btnExtProfile_Click"/>
     </Grid>

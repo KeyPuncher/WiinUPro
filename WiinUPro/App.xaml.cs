@@ -22,8 +22,11 @@ namespace WiinUPro
 #endif
             }
         }
-
+#if DEBUG
+        const string GLOBALIZATION_DATA_PATH = "./lang_test.json";
+#else
         const string GLOBALIZATION_DATA_PATH = "./lang.json";
+#endif
 
         internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";
         internal const string JOY_CAL_FILTER = "Joystick Calibration|*.joy";

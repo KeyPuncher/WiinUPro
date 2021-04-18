@@ -112,6 +112,25 @@ namespace WiinUPro
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
         }
 
+        protected void SetupAnalogMenuForDpad()
+        {
+            int i = 0;
+            for (; i < 4; ++i)
+            {
+                (_analogMenu.Items[i] as MenuItem).Visibility = Visibility.Visible;
+            }
+
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+        }
+
         protected void SetupAnalogMenuForTrigger()
         {
             int i = 0;
@@ -257,6 +276,19 @@ namespace WiinUPro
             {
                 _menuOwnerTag = item.Tag as string;
                 SetupAnalogMenuForJoystick(true);
+                _analogMenuInput = _inputPrefix + (item.Tag as string);
+                _analogMenu.IsOpen = true;
+            }
+        }
+
+        protected virtual void OpenDpadMenu(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as FrameworkElement;
+
+            if (item != null)
+            {
+                _menuOwnerTag = item.Tag as string;
+                SetupAnalogMenuForDpad();
                 _analogMenuInput = _inputPrefix + (item.Tag as string);
                 _analogMenu.IsOpen = true;
             }

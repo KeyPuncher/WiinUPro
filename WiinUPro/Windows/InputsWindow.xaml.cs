@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using InputManager;
 using ScpControl;
+using Shared;
 
 namespace WiinUPro
 {
@@ -1233,6 +1234,16 @@ namespace WiinUPro
             var split = axis.ToString().Split('_');
             positive = split[1] == "Pos";
             return (HID_USAGES)Enum.Parse(typeof(HID_USAGES), "HID_USAGE_" + split[0]);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Globalization.ApplyTranslations(this);
+        }
+
+        private void Element_Loaded(object sender, RoutedEventArgs e)
+        {
+            Globalization.ApplyTranslations(sender as UIElement);
         }
     }
 }

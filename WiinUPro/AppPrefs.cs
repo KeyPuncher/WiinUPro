@@ -69,7 +69,7 @@ namespace WiinUPro
         public bool useToshibaMode;
         public bool suppressConnectionLost;
         public bool autoAddXInputDevices;
-        public bool minimizeOnClose;
+        public bool minimizeToTray;
         public bool profileQueuing;
         public int language;
 

@@ -58,7 +58,7 @@ namespace WiinUPro
                 Display(dpadDown, pro.Down);
                 Display(dpadLeft, pro.Left);
                 Display(dpadRight, pro.Right);
-                dpadCenter.Opacity = (pro.Up || pro.Down || pro.Left || pro.Right) ? 1 : 0;
+                Display(dpadCenter, (pro.Up || pro.Down || pro.Left || pro.Right));
                 Display(homeBtn, pro.Home);
                 Display(plusBtn, pro.Plus);
                 Display(minusBtn, pro.Minus);
@@ -92,10 +92,6 @@ namespace WiinUPro
                 case INPUT_NAMES.PRO_CONTROLLER.HOME: homeBtn.ToolTip = tooltip; break;
                 case INPUT_NAMES.PRO_CONTROLLER.START: plusBtn.ToolTip = tooltip; break;
                 case INPUT_NAMES.PRO_CONTROLLER.SELECT: minusBtn.ToolTip = tooltip; break;
-                case INPUT_NAMES.PRO_CONTROLLER.UP: dpadUp.ToolTip = tooltip; break;
-                case INPUT_NAMES.PRO_CONTROLLER.LEFT: dpadLeft.ToolTip = tooltip; break;
-                case INPUT_NAMES.PRO_CONTROLLER.RIGHT: dpadRight.ToolTip = tooltip; break;
-                case INPUT_NAMES.PRO_CONTROLLER.DOWN: dpadDown.ToolTip = tooltip; break;
                 case INPUT_NAMES.PRO_CONTROLLER.LUP: UpdateTooltipLine(leftStickBtn, tooltip, 0); break;
                 case INPUT_NAMES.PRO_CONTROLLER.LLEFT: UpdateTooltipLine(leftStickBtn, tooltip, 1); break;
                 case INPUT_NAMES.PRO_CONTROLLER.LRIGHT: UpdateTooltipLine(leftStickBtn, tooltip, 2); break;
@@ -106,36 +102,58 @@ namespace WiinUPro
                 case INPUT_NAMES.PRO_CONTROLLER.RRIGHT: UpdateTooltipLine(rightStickBtn, tooltip, 2); break;
                 case INPUT_NAMES.PRO_CONTROLLER.RDOWN: UpdateTooltipLine(rightStickBtn, tooltip, 3); break;
                 case INPUT_NAMES.PRO_CONTROLLER.RS: UpdateTooltipLine(rightStickBtn, tooltip, 4); break;
+                case INPUT_NAMES.PRO_CONTROLLER.UP: 
+                    dpadUp.ToolTip = tooltip;
+                    UpdateTooltipLine(dpadCenter, tooltip, 0);
+                    break;
+                case INPUT_NAMES.PRO_CONTROLLER.LEFT: 
+                    dpadLeft.ToolTip = tooltip;
+                    UpdateTooltipLine(dpadCenter, tooltip, 1); 
+                    break;
+                case INPUT_NAMES.PRO_CONTROLLER.RIGHT: 
+                    dpadRight.ToolTip = tooltip;
+                    UpdateTooltipLine(dpadCenter, tooltip, 2); 
+                    break;
+                case INPUT_NAMES.PRO_CONTROLLER.DOWN: 
+                    dpadDown.ToolTip = tooltip;
+                    UpdateTooltipLine(dpadCenter, tooltip, 3); 
+                    break;
             }
         }
 
         public void ClearTooltips()
         {
-            aBtn.ToolTip = "UNSET";
-            bBtn.ToolTip = "UNSET";
-            xBtn.ToolTip = "UNSET";
-            yBtn.ToolTip = "UNSET";
-            lBtn.ToolTip = "UNSET";
-            rBtn.ToolTip = "UNSET";
-            zlBtn.ToolTip = "UNSET";
-            zrBtn.ToolTip = "UNSET";
-            homeBtn.ToolTip = "UNSET";
-            plusBtn.ToolTip = "UNSET";
-            minusBtn.ToolTip = "UNSET";
-            dpadUp.ToolTip = "UNSET";
-            dpadLeft.ToolTip = "UNSET";
-            dpadRight.ToolTip = "UNSET";
-            dpadDown.ToolTip = "UNSET";
-            UpdateTooltipLine(leftStickBtn, "UNSET", 0);
-            UpdateTooltipLine(leftStickBtn, "UNSET", 1);
-            UpdateTooltipLine(leftStickBtn, "UNSET", 2);
-            UpdateTooltipLine(leftStickBtn, "UNSET", 3);
-            UpdateTooltipLine(leftStickBtn, "UNSET", 4);
-            UpdateTooltipLine(rightStickBtn, "UNSET", 0);
-            UpdateTooltipLine(rightStickBtn, "UNSET", 1);
-            UpdateTooltipLine(rightStickBtn, "UNSET", 2);
-            UpdateTooltipLine(rightStickBtn, "UNSET", 3);
-            UpdateTooltipLine(rightStickBtn, "UNSET", 4);
+            string unsetText = Globalization.Translate("Input_Unset");
+
+            aBtn.ToolTip = unsetText;
+            bBtn.ToolTip = unsetText;
+            xBtn.ToolTip = unsetText;
+            yBtn.ToolTip = unsetText;
+            lBtn.ToolTip = unsetText;
+            rBtn.ToolTip = unsetText;
+            zlBtn.ToolTip = unsetText;
+            zrBtn.ToolTip = unsetText;
+            homeBtn.ToolTip = unsetText;
+            plusBtn.ToolTip = unsetText;
+            minusBtn.ToolTip = unsetText;
+            dpadUp.ToolTip = unsetText;
+            dpadLeft.ToolTip = unsetText;
+            dpadRight.ToolTip = unsetText;
+            dpadDown.ToolTip = unsetText;
+            UpdateTooltipLine(leftStickBtn, unsetText, 0);
+            UpdateTooltipLine(leftStickBtn, unsetText, 1);
+            UpdateTooltipLine(leftStickBtn, unsetText, 2);
+            UpdateTooltipLine(leftStickBtn, unsetText, 3);
+            UpdateTooltipLine(leftStickBtn, unsetText, 4);
+            UpdateTooltipLine(rightStickBtn, unsetText, 0);
+            UpdateTooltipLine(rightStickBtn, unsetText, 1);
+            UpdateTooltipLine(rightStickBtn, unsetText, 2);
+            UpdateTooltipLine(rightStickBtn, unsetText, 3);
+            UpdateTooltipLine(rightStickBtn, unsetText, 4);
+            UpdateTooltipLine(dpadCenter, unsetText, 0);
+            UpdateTooltipLine(dpadCenter, unsetText, 1);
+            UpdateTooltipLine(dpadCenter, unsetText, 2);
+            UpdateTooltipLine(dpadCenter, unsetText, 3);
         }
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)

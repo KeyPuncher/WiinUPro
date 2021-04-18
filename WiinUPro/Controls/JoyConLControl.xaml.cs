@@ -118,19 +118,21 @@ namespace WiinUPro
 
         public void ClearTooltips()
         {
-            leftBtn.ToolTip = "UNSET";
-            downBtn.ToolTip = "UNSET";
-            upBtn.ToolTip = "UNSET";
-            rightBtn.ToolTip = "UNSET";
-            slBtn.ToolTip = "UNSET";
-            srBtn.ToolTip = "UNSET";
-            minusBtn.ToolTip = "UNSET";
-            shareBtn.ToolTip = "UNSET";
-            UpdateTooltipLine(joyStickButton, "UNSET", 0);
-            UpdateTooltipLine(joyStickButton, "UNSET", 1);
-            UpdateTooltipLine(joyStickButton, "UNSET", 2);
-            UpdateTooltipLine(joyStickButton, "UNSET", 3);
-            UpdateTooltipLine(joyStickButton, "UNSET", 4);
+            string unsetText = Shared.Globalization.Translate("Input_Unset");
+
+            leftBtn.ToolTip = unsetText;
+            downBtn.ToolTip = unsetText;
+            upBtn.ToolTip = unsetText;
+            rightBtn.ToolTip = unsetText;
+            slBtn.ToolTip = unsetText;
+            srBtn.ToolTip = unsetText;
+            minusBtn.ToolTip = unsetText;
+            shareBtn.ToolTip = unsetText;
+            UpdateTooltipLine(joyStickButton, unsetText, 0);
+            UpdateTooltipLine(joyStickButton, unsetText, 1);
+            UpdateTooltipLine(joyStickButton, unsetText, 2);
+            UpdateTooltipLine(joyStickButton, unsetText, 3);
+            UpdateTooltipLine(joyStickButton, unsetText, 4);
         }
 
         protected void SetupMenuForPad()
