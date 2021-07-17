@@ -207,7 +207,7 @@ namespace WiinUSoft
                     {
                         Thread.Sleep(5000);
                         if (_refreshToken.IsCancellationRequested) break;
-                        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => Refresh()));
+                        Application.Current?.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => Refresh()));
                     }
 
                     _refreshing = false;
@@ -462,6 +462,11 @@ namespace WiinUSoft
             void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
         }
         #endregion
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _refreshToken?.Cancel();
+        }
     }
 
     class ShowWindowCommand : ICommand
