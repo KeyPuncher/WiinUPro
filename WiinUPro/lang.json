@@ -166,7 +166,7 @@
     "Sync_No_Bluetooth": [ "No Bluetooth Radios Found.", "No se Encontraron Dispositivos Bluetooth", "Périphérique Bluetooth introuvable" ],
     "Sync_Note": [ "(Windows BT Stack Only)", "(Bluetooth de Windows 10)", "(Pile Bluetooth de Windows uniquement)" ],
     "Sync_Pairing": [ "Sending Pairing Code...", "Enviando código de Sincronización...", "Envoi du code d'apairage..." ],
-    "Sync_Searching": [ "Searching...", "Buscando Dispositivos...", "Recherce..." ],
+    "Sync_Searching": [ "Searching...", "Buscando Dispositivos...", "Recherche..." ],
     "Sync_Service": [ "Installing Service...", "Registrando Dispositivo...", "Installation du service..." ],
     "Sync_Success": [ "Successfully Paired!", "Conexión Exitosa!", "Apairage réussi !" ],
     "Sync_Title": [ "Sync Controllers", "Conectar Mandos", "Syncroniser des manettes" ],
