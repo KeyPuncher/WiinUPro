@@ -943,7 +943,7 @@ namespace WiinUPro
 
                 foreach (var assignment in _assignments[dropShift.SelectedIndex])
                 {
-                    _controller.SetInputTooltip(assignment.Key, assignment.Value.ToString());
+                    _controller.SetInputTooltip(assignment.Key, assignment.Value?.ToString() ?? "");
                 }
             }
         }
