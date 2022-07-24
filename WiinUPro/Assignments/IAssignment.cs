@@ -72,12 +72,22 @@ namespace WiinUPro
             if (Assignments.Count == 0)
                 return Shared.Globalization.Translate("Input_Unset");
 
-            StringBuilder sb = new StringBuilder(Assignments[0].GetDisplayName());
+            StringBuilder sb = new StringBuilder();
 
-            for (int i = 1; i < Assignments.Count; ++i)
+            for (int i = 0; i < Assignments.Count; ++i)
             {
-                sb.Append("|");
-                sb.Append(Assignments[i].GetDisplayName());
+                var assignment = Assignments[i];
+
+                if (assignment != null)
+                {
+                    sb.Append(assignment.GetDisplayName());
+                    sb.Append("|");
+                }
+            }
+
+            if (sb.Length > 0)
+            {
+                sb.Remove(sb.Length - 1, 1);
             }
 
             return sb.ToString();
