@@ -1,5 +1,5 @@
 ======================
-WiinUSoft 3.4
+WiinUSoft 3.5
 ======================
 
  WiinUSoft is a program that allows you to use your Nintendo
@@ -40,6 +40,12 @@ Supported Controllers
 ======================
 Change Log
 ======================
+
+ = version 3.5 =
+ - Fixed Wiimote input not being processed when Nunchuk is plugged in.
+ - Fixed exception when the application closes during an auto refresh cycle.
+ - Outputting error code on Bluetooth radio failures.
+ - Fixed IR sensor vertical input.
 
  = version 3.4 =
  - Fixed iterating through different Bluetooth radios
