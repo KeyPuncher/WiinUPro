@@ -75,7 +75,7 @@ Is this still in development?
 * It's unclear, I know.
 I come back to this project in random bursts when I feel like life has opened up and that I feel like I can spend time on it again and help random people on the internet who stil use it.
 I would love to finish it and finally release WiinUSoft 1.0, but it just feels so far away. There's so many other projects I wish to work on as well, but time does not permit.
-Heck, it's mid 2023 and I'm just now adding a readme after being on Github since 2017. I first created my little side project here two decades ago.
+Heck, it's mid 2023 and I'm just now adding a readme after being on Github since 2017. I first created my little side project here a decade ago.
 
 Will there be more to WiinUSoft?
 * WiinUSoft is for the most part done. Aside from some technical upgrades, 3.5 is the version that will be around for a while until WiinUPro becomes feature complete, then features can trickle over.
