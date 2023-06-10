@@ -1,6 +1,6 @@
 ;Inno Setup 6
 #define MyAppName "WiinUSoft"
-#define MyAppVersion "3.4"
+#define MyAppVersion "3.5"
 #define MyAppPublisher "Justin Keys"
 #define MyAppURL "https://github.com/KeyPuncher/WiinUPro/releases"
 #define MyAppExeName "WiinUSoft.exe"
@@ -73,7 +73,6 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: "..\WiinUSoft\bin\Release\WiinUSoft.exe"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUSoft\bin\Release\Nintroller.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
-Source: "..\WiinUSoft\bin\Release\RestSharp.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUSoft\bin\Release\ScpControl.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "..\WiinUSoft\bin\Release\Hardcodet.Wpf.TaskbarNotification.dll"; Components: main; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\WiinUSoft\ReadMe.txt"; DestDir: "{app}"; Components: main; Flags: ignoreversion isreadme
