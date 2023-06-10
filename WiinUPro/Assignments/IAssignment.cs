@@ -38,7 +38,7 @@ namespace WiinUPro
 
         public bool Add(IAssignment assignment)
         {
-            if (Assignments.Contains(assignment))
+            if (assignment == null || Assignments.Contains(assignment))
             {
                 return false;
             }
@@ -53,7 +53,7 @@ namespace WiinUPro
         {
             foreach (var assignment in Assignments.ToArray())
             {
-                assignment.Apply(value);
+                assignment?.Apply(value);
             }
         }
 
