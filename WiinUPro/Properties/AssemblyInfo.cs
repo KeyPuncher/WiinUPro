@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WiinUPro")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -43,12 +43,9 @@ using System.Windows;
 //
 //      Major Version
 //      Minor Version 
-//      Build Number
-//      Revision
+//      Patch Number
+//      Revision <- Updated by pre-build script using git commit count.
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 // When updating, the last number should be 190 + the number of commits in GitHub + 1 for this commit + # of unpushed local commits.
-[assembly: AssemblyVersion("0.9.7.703")]
-[assembly: AssemblyFileVersion("0.9.7.703")]
+[assembly: AssemblyVersion("0.9.7.727")]
+[assembly: AssemblyFileVersion("0.9.7.727")]

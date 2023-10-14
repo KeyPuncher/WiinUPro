@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WiinUSoft")]
-[assembly: AssemblyCopyright("Copyright © 2014 - 2022")]
+[assembly: AssemblyCopyright("Copyright © 2014 - 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -43,11 +43,8 @@ using System.Windows;
 //
 //      Major Version
 //      Minor Version 
-//      Build Number
-//      Revision
+//      Patch Number
+//      Revision <- Updated by pre-build script using git commit count.
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.5.1.724")]
-[assembly: AssemblyFileVersion("3.5.1.724")]
+[assembly: AssemblyVersion("3.5.1.727")]
+[assembly: AssemblyFileVersion("3.5.1.727")]

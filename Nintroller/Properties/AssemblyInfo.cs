@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -25,11 +25,8 @@ using System.Runtime.InteropServices;
 //
 //      Major Version
 //      Minor Version 
-//      Build Number
-//      Revision
+//      Patch Number
+//      Revision <- Updated by pre-build script using git commit count.
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.7.3.694")]
-[assembly: AssemblyFileVersion("2.7.3.694")]
+[assembly: AssemblyVersion("2.7.3.727")]
+[assembly: AssemblyFileVersion("2.7.3.727")]
