@@ -27,7 +27,12 @@ namespace NintrollerLib
         /// Called when the connection loss is detected.
         /// </summary>
         public event EventHandler<DisconnectedEventArgs>        Disconnected    = delegate { };
-        
+
+        /// <summary>
+        /// Meant for Debugging. Reports the raw data before parsing.
+        /// </summary>
+        public event Action<byte[]> RawUpdate = null;
+
         // General
         private bool               _connected                   = false;
         private bool               _proControllerUSupport       = true;
@@ -526,6 +531,8 @@ namespace NintrollerLib
 
                 // Must be called for each BeginRead()
                 _stream.EndRead(data);
+
+                RawUpdate?.Invoke(result);
 
                 if (_currentType == ControllerType.Other)
                 {

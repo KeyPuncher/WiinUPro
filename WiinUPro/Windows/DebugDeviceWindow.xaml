@@ -1,0 +1,14 @@
+﻿<Window x:Class="WiinUPro.Windows.DebugDeviceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WiinUPro.Windows"
+        mc:Ignorable="d"
+        Title="Debug" Height="450" Width="800">
+    <Grid>
+        <TextBox x:Name="display" HorizontalAlignment="Center" Height="367" Margin="0,10,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="762" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" UndoLimit="0" AllowDrop="False" VerticalScrollBarVisibility="Visible"/>
+        <Button x:Name="copyBtn" Content="Copy" HorizontalAlignment="Left" Margin="701,382,0,0" VerticalAlignment="Top" Width="80" Click="copyBtn_Click"/>
+        <Button x:Name="captureBtn" Content="Capture" HorizontalAlignment="Left" Margin="605,382,0,0" VerticalAlignment="Top" Width="80" Click="captureBtn_Click"/>
+    </Grid>
+</Window>

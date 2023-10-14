@@ -269,6 +269,17 @@ namespace WiinUPro
 
             ConnectClick?.Invoke(this, result);
         }
+
+        private void debug_Click(object sender, RoutedEventArgs e)
+        {
+            connectBtn_Click(sender, e);
+
+            if (Ninty.Connected)
+            {
+                var debugger = new Windows.DebugDeviceWindow(Ninty._nintroller);
+                debugger.Show();
+            }
+        }
     }
 
     public interface IDeviceControl

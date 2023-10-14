@@ -120,6 +120,9 @@
     <Compile Include="Windows\AxisCalibrationWindow.xaml.cs">
       <DependentUpon>AxisCalibrationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\DebugDeviceWindow.xaml.cs">
+      <DependentUpon>DebugDeviceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DevicePrefsWindow.xaml.cs">
       <DependentUpon>DevicePrefsWindow.xaml</DependentUpon>
     </Compile>
@@ -176,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AxisCalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DebugDeviceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
