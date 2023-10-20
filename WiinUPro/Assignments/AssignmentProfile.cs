@@ -107,55 +107,51 @@ namespace WiinUPro
             {
                 AssignmentInfo info = new AssignmentInfo();
 
-                if (a is KeyboardAssignment)
+                switch (a)
                 {
-                    info.type = AssignmentType.Keyboard;
-                    info.keyboardAssignment = (KeyboardAssignment)a;
-                }
-                else if (a is MouseAssignment)
-                {
-                    info.type = AssignmentType.Mouse;
-                    info.mouseAssignment = (MouseAssignment)a;
-                }
-                else if (a is MouseButtonAssignment)
-                {
-                    info.type = AssignmentType.MouseButton;
-                    info.mouseButtonAssignment = (MouseButtonAssignment)a;
-                }
-                else if (a is MouseScrollAssignment)
-                {
-                    info.type = AssignmentType.MouseScroll;
-                    info.mouseScrollAssignment = (MouseScrollAssignment)a;
-                }
-                else if (a is ShiftAssignment)
-                {
-                    info.type = AssignmentType.Shift;
-                    info.shiftAssignment = (ShiftAssignment)a;
-                }
-                else if (a is XInputAxisAssignment)
-                {
-                    info.type = AssignmentType.XboxAxis;
-                    info.xinputAxisAssignment = (XInputAxisAssignment)a;
-                }
-                else if (a is XInputButtonAssignment)
-                {
-                    info.type = AssignmentType.XboxButton;
-                    info.xinputButtonAssignment = (XInputButtonAssignment)a;
-                }
-                else if (a is VJoyButtonAssignment)
-                {
-                    info.type = AssignmentType.VJoyButton;
-                    info.vjoyButtonAssignment = (VJoyButtonAssignment)a;
-                }
-                else if (a is VJoyAxisAssignment)
-                {
-                    info.type = AssignmentType.VJoyAxis;
-                    info.vjoyAxisAssignment = (VJoyAxisAssignment)a;
-                }
-                else if (a is VJoyPOVAssignment)
-                {
-                    info.type = AssignmentType.VJoyPOV;
-                    info.vjoyPOVAssignment = (VJoyPOVAssignment)a;
+                    case KeyboardAssignment _:
+                        info.type = AssignmentType.Keyboard;
+                        info.keyboardAssignment = (KeyboardAssignment)a;
+                        break;
+                    case MouseAssignment _:
+                        info.type = AssignmentType.Mouse;
+                        info.mouseAssignment = (MouseAssignment)a;
+                        break;
+                    case MouseButtonAssignment _:
+                        info.type = AssignmentType.MouseButton;
+                        info.mouseButtonAssignment = (MouseButtonAssignment)a;
+                        break;
+                    case MouseScrollAssignment _:
+                        info.type = AssignmentType.MouseScroll;
+                        info.mouseScrollAssignment = (MouseScrollAssignment)a;
+                        break;
+                    case ShiftAssignment _:
+                        info.type = AssignmentType.Shift;
+                        info.shiftAssignment = (ShiftAssignment)a;
+                        break;
+                    case XInputAxisAssignment _:
+                        info.type = AssignmentType.XboxAxis;
+                        info.xinputAxisAssignment = (XInputAxisAssignment)a;
+                        break;
+                    case XInputButtonAssignment _:
+                        info.type = AssignmentType.XboxButton;
+                        info.xinputButtonAssignment = (XInputButtonAssignment)a;
+                        break;
+                    case VJoyButtonAssignment _:
+                        info.type = AssignmentType.VJoyButton;
+                        info.vjoyButtonAssignment = (VJoyButtonAssignment)a;
+                        break;
+                    case VJoyAxisAssignment _:
+                        info.type = AssignmentType.VJoyAxis;
+                        info.vjoyAxisAssignment = (VJoyAxisAssignment)a;
+                        break;
+                    case VJoyPOVAssignment _:
+                        info.type = AssignmentType.VJoyPOV;
+                        info.vjoyPOVAssignment = (VJoyPOVAssignment)a;
+                        break;
+                    default:
+                        info.type = AssignmentType.Undefined;
+                        break;
                 }
 
                 collection.Add(info);
@@ -204,6 +200,7 @@ namespace WiinUPro
 
     public enum AssignmentType
     {
+        Undefined = -1,
         Keyboard,
         Mouse,
         MouseButton,
