@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using Shared;
 using Shared.Windows;
@@ -13,190 +11,89 @@ namespace WiinUPro.Windows
     /// </summary>
     public partial class SyncWindow : Window
     {
-        bool cancelled = false;
+        WinBtConnector connector;
+        CancellationTokenSource cancellationToken;
 
         public SyncWindow()
         {
+            connector = new WinBtConnector(DeviceSupported, ConnectionUpdate, Completed);
             InitializeComponent();
         }
 
-        public void Sync()
+        private WinBtConnector.ConnectType DeviceSupported(string deviceName)
         {
-            Guid HIDServiceClass = Guid.Parse(NativeImports.HID_GUID);
-            List<IntPtr> btRadios = new List<IntPtr>();
-            int pairedCount = 0;
-            IntPtr foundRadio;
-            IntPtr handle;
-            NativeImports.BLUETOOTH_FIND_RADIO_PARAMS radioParams = new NativeImports.BLUETOOTH_FIND_RADIO_PARAMS();
+            if (deviceName.StartsWith("Nintendo RVL"))
+                return WinBtConnector.ConnectType.WiiLike;
 
-            radioParams.Initialize();
-
-            handle = NativeImports.BluetoothFindFirstRadio(ref radioParams, out foundRadio);
-            bool next = handle != IntPtr.Zero;
-
-            do
-            {
-                if (foundRadio != IntPtr.Zero)
-                {
-                    btRadios.Add(foundRadio);
-                }
-
-                next = NativeImports.BluetoothFindNextRadio(ref handle, out foundRadio);
-            }
-            while (next);
-            
-            if (btRadios.Count > 0)
-            {
-                Prompt(Globalization.Translate("Sync_Searching"));
-
-                while (pairedCount == 0 && !cancelled)
-                {
-                    for (int r = 0; r < btRadios.Count; r++)
-                    {
-                        IntPtr found;
-                        NativeImports.BLUETOOTH_RADIO_INFO radioInfo = new NativeImports.BLUETOOTH_RADIO_INFO();
-                        NativeImports.BLUETOOTH_DEVICE_INFO deviceInfo = new NativeImports.BLUETOOTH_DEVICE_INFO();
-                        NativeImports.BLUETOOTH_DEVICE_SEARCH_PARAMS searchParams = new NativeImports.BLUETOOTH_DEVICE_SEARCH_PARAMS();
-
-                        radioInfo.Initialize();
-                        deviceInfo.Initialize();
-                        searchParams.Initialize();
-
-                        uint getInfoError = NativeImports.BluetoothGetRadioInfo(btRadios[r], ref radioInfo);
-                        
-                        // Success
-                        if (getInfoError == 0)
-                        {
-                            searchParams.fReturnAuthenticated = false;
-                            searchParams.fReturnRemembered = false;
-                            searchParams.fReturnConnected = false;
-                            searchParams.fReturnUnknown = true;
-                            searchParams.fIssueInquiry = true;
-                            searchParams.cTimeoutMultiplier = 2;
-                            searchParams.hRadio = btRadios[r];
-
-                            found = NativeImports.BluetoothFindFirstDevice(ref searchParams, ref deviceInfo);
-
-                            if (found != IntPtr.Zero)
-                            {
-                                do
-                                {
-                                    bool controller = SupportedDevice(deviceInfo.szName);
-                                    bool wiiDevice = deviceInfo.szName.StartsWith("Nintendo RVL");
-                                    
-                                    if (controller || wiiDevice)
-                                    {
-                                        Prompt(Globalization.TranslateFormat("Sync_Found", deviceInfo.szName));
-
-                                        StringBuilder password = new StringBuilder();
-                                        uint pcService = 16;
-                                        Guid[] guids = new Guid[16];
-                                        bool success = true;
-
-                                        if (deviceInfo.fRemembered)
-                                        {
-                                            // Remove current pairing
-                                            Prompt(Globalization.TranslateFormat("Sync_Unpairing"));
-                                            uint errForget = NativeImports.BluetoothRemoveDevice(ref deviceInfo.Address);
-                                            success = errForget == 0;
-                                        }
-
-                                        if (wiiDevice)
-                                        {
-                                            // use MAC address of BT radio as pin
-                                            var bytes = BitConverter.GetBytes(radioInfo.address);
-                                            for (int i = 0; i < 6; i++)
-                                            {
-                                                password.Append((char)bytes[i]);
-                                            }
-
-                                            if (success)
-                                            {
-                                                Prompt(Globalization.Translate("Sync_Pairing"));
-                                                var errPair = NativeImports.BluetoothAuthenticateDevice(IntPtr.Zero, btRadios[r], ref deviceInfo, password.ToString(), 6);
-                                                success = errPair == 0;
-                                            }
-
-                                            if (success)
-                                            {
-                                                Prompt(Globalization.Translate("Sync_Service"));
-                                                var errService = NativeImports.BluetoothEnumerateInstalledServices(btRadios[r], ref deviceInfo, ref pcService, guids);
-                                                success = errService == 0;
-                                            }
-
-                                            if (success)
-                                            {
-                                                Prompt(Globalization.Translate("Sync_HID"));
-                                                var errActivate = NativeImports.BluetoothSetServiceState(btRadios[r], ref deviceInfo, ref HIDServiceClass, 0x01);
-                                                success = errActivate == 0;
-                                            }
-
-                                            if (success)
-                                            {
-                                                Prompt(Globalization.Translate("Sync_Success"));
-                                                pairedCount += 1;
-                                            }
-                                            else
-                                            {
-                                                Prompt(Globalization.Translate("Sync_Failure"));
-                                            }
-                                        }
-                                        else
-                                        {
-                                            Prompt(Globalization.Translate("Sync_Finish"));
-                                            var err = NativeImports.BluetoothAuthenticateDeviceEx(IntPtr.Zero, btRadios[r], ref deviceInfo, null, NativeImports.AUTHENTICATION_REQUIREMENTS.MITMProtectionNotRequired);
-
-                                            if (err == 0)
-                                            {
-                                                Prompt(Globalization.Translate("Sync_Success"));
-                                                pairedCount += 1;
-                                            }
-                                            else
-                                            {
-                                                Prompt(Globalization.Translate("Sync_Incomplete"));
-                                            }
-                                        }
-                                    }
-                                }
-                                while (NativeImports.BluetoothFindNextDevice(found, ref deviceInfo));
-                            }
-                        }
-                        else
-                        {
-                            // Failed to get Bluetooth Radio Info
-                            Prompt(Globalization.Translate("Sync_Bluetooth_Failed"));
-                        }
-                    }
-                }
-
-                // Close Opened Radios
-                foreach (var openRadio in btRadios)
-                {
-                    NativeImports.CloseHandle(openRadio);
-                }
-            }
-            else
-            {
-                // No Bluetooth Radios found
-                Prompt(Globalization.Translate("Sync_No_Bluetooth"));
-                System.Threading.Thread.Sleep(3000);
-            }
-
-            NativeImports.BluetoothFindRadioClose(handle);
-
-            Dispatcher.BeginInvoke((Action)(() => Close()));
-        }
-
-        public bool SupportedDevice(string deviceName)
-        {
             switch (deviceName)
             {
-                case "Pro Controller": return true;
-                case "Joy-Con (L)": return true;
-                case "Joy-Con (R)": return true;
+                case "Pro Controller":
+                case "Joy-Con (L)":
+                case "Joy-Con (R)":
+                    return WinBtConnector.ConnectType.Unauthenticated;
             }
 
-            return false;
+            return WinBtConnector.ConnectType.Unsupported;
+        }
+
+        private void ConnectionUpdate(WinBtConnector.StatusUpdate status, string message)
+        {
+            switch (status)
+            {
+                case WinBtConnector.StatusUpdate.Complete:
+                    Prompt(Globalization.Translate("Sync_Finish"));
+                    break;
+                case WinBtConnector.StatusUpdate.NoRadios:
+                    Prompt(Globalization.Translate("Sync_No_Bluetooth"));
+                    break;
+                case WinBtConnector.StatusUpdate.Searching:
+                    Prompt(Globalization.Translate("Sync_Searching"));
+                    break;
+                case WinBtConnector.StatusUpdate.DeviceFound:
+                    Prompt(Globalization.TranslateFormat("Sync_Found", message));
+                    break;
+                case WinBtConnector.StatusUpdate.Unpairing:
+                    Prompt(Globalization.TranslateFormat("Sync_Unpairing"));
+                    break;
+                case WinBtConnector.StatusUpdate.Pairing:
+                    Prompt(Globalization.Translate("Sync_Pairing") + $" {message}");
+                    break;
+                case WinBtConnector.StatusUpdate.CheckingServices:
+                    Prompt(Globalization.Translate("Sync_Service"));
+                    break;
+                case WinBtConnector.StatusUpdate.SettingService:
+                    Prompt(Globalization.Translate("Sync_HID"));
+                    break;
+                case WinBtConnector.StatusUpdate.Success:
+                    Prompt(Globalization.Translate("Sync_Success"));
+                    break;
+                case WinBtConnector.StatusUpdate.Error_RadioInfo:
+                    Prompt(Globalization.Translate("Sync_Bluetooth_Failed") + $" Code {message}");
+                    break;
+                case WinBtConnector.StatusUpdate.Error_Unpairing:
+                    Prompt(Globalization.Translate("Sync_Incomplete") + $" Code {message} (Unpairing)");
+                    break;
+                case WinBtConnector.StatusUpdate.Error_Pairing:
+                    Prompt(Globalization.Translate("Sync_Failure") + $" Code {message}");
+                    break;
+                case WinBtConnector.StatusUpdate.Error_CheckingServices:
+                    Prompt(Globalization.Translate("Sync_Incomplete") + $" Code {message} (Services 1)");
+                    break;
+                case WinBtConnector.StatusUpdate.Error_SettingService:
+                    Prompt(Globalization.Translate("Sync_Incomplete") + $" Code {message} (Services 2)");
+                    break;
+            }
+        }
+
+        private void Completed()
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    Close();
+                }));
+            }
         }
 
         private void Prompt(string text)
@@ -210,19 +107,26 @@ namespace WiinUPro.Windows
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Globalization.ApplyTranslations(this);
-            Task t = new Task(() => Sync());
-            t.Start();
+            cancellationToken = new CancellationTokenSource();
+            connector.BeginSync(cancellationToken.Token);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            cancelled = true;
+            cancellationToken.Cancel();
         }
 
         private void cancel_Click(object sender, RoutedEventArgs e)
         {
-            Prompt(Globalization.Translate("Sync_Cancel"));
-            cancelled = true;
+            if (connector.IsRunning)
+            {
+                Prompt(Globalization.Translate("Sync_Cancel"));
+                cancellationToken.Cancel();
+            }
+            else
+            {
+                Close();
+            }
         }
     }
 }

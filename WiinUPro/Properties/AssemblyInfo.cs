@@ -47,5 +47,5 @@ using System.Windows;
 //      Revision <- Updated by pre-build script using git commit count.
 //
 // When updating, the last number should be 190 + the number of commits in GitHub + 1 for this commit + # of unpushed local commits.
-[assembly: AssemblyVersion("0.9.7.728")]
-[assembly: AssemblyFileVersion("0.9.7.728")]
+[assembly: AssemblyVersion("0.9.7.732")]
+[assembly: AssemblyFileVersion("0.9.7.732")]

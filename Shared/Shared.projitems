@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Globalization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\DeviceListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\NativeImports.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\WinBtConnector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\WinBtStream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\WinUsbStream.cs" />
   </ItemGroup>

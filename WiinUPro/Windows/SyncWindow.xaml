@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro.Windows"
         mc:Ignorable="d"
-        Title="Sync Controllers" Height="173.371" Width="300" Loaded="Window_Loaded" Icon="/WiinUPro;component/app.ico" Closing="Window_Closing" Background="{StaticResource BackgroundMain}"
+        Title="Sync Controllers" Height="274.171" Width="300" Loaded="Window_Loaded" Icon="/WiinUPro;component/app.ico" Closing="Window_Closing" Background="{StaticResource BackgroundMain}"
         Uid="Sync_Title">
     <Grid>
         <TextBox x:Name="status" Margin="10,10,10,35" TextWrapping="Wrap" Text="" Background="{StaticResource BackgroundSub}" Foreground="{StaticResource TextBody}"/>

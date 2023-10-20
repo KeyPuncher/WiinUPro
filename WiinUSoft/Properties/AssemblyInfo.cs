@@ -46,5 +46,5 @@ using System.Windows;
 //      Patch Number
 //      Revision <- Updated by pre-build script using git commit count.
 //
-[assembly: AssemblyVersion("3.5.1.727")]
-[assembly: AssemblyFileVersion("3.5.1.727")]
+[assembly: AssemblyVersion("3.5.1.732")]
+[assembly: AssemblyFileVersion("3.5.1.732")]
