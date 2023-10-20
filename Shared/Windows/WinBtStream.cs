@@ -20,7 +20,6 @@ using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using static Shared.Windows.NativeImports;
 using NintrollerLib;
-using System.Threading.Tasks;
 
 namespace Shared.Windows
 {
