@@ -32,9 +32,9 @@
         <Grid x:Name="wiimoteGrid">
             <GroupBox x:Name="groupAcc" Header="Accelerometer" HorizontalAlignment="Left" Margin="10,148,0,0" VerticalAlignment="Top" Height="111" Width="145">
                 <Grid Margin="-4,0,-4,-4">
-                    <Slider x:Name="sliderAccX" HorizontalAlignment="Left" Margin="3,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="AccX"/>
-                    <Slider x:Name="sliderAccY" HorizontalAlignment="Left" Margin="3,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="AccY"/>
-                    <Slider x:Name="sliderAccZ" HorizontalAlignment="Left" Margin="3,70,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeAnalog" Tag="AccX"/>
+                    <Slider x:Name="sliderAccX" HorizontalAlignment="Left" Margin="3,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeWiiAnalog" Tag="AccX"/>
+                    <Slider x:Name="sliderAccY" HorizontalAlignment="Left" Margin="3,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeWiiAnalog" Tag="AccY"/>
+                    <Slider x:Name="sliderAccZ" HorizontalAlignment="Left" Margin="3,70,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ChangeWiiAnalog" Tag="AccZ"/>
                     <Label Content="X" HorizontalAlignment="Left" Margin="120,4,0,0" VerticalAlignment="Top"/>
                     <Label Content="Y" HorizontalAlignment="Left" Margin="120,35,0,0" VerticalAlignment="Top"/>
                     <Label Content="Z" HorizontalAlignment="Left" Margin="120,63,0,0" VerticalAlignment="Top"/>
@@ -49,6 +49,7 @@
                 <ComboBoxItem Content="Guitar"/>
                 <ComboBoxItem Content="Taiko Drum"/>
             </ComboBox>
+            <GroupBox HorizontalAlignment="Left" Height="84" Header="Infrared" Margin="14,264,0,0" VerticalAlignment="Top" Width="141"/>
         </Grid>
         <GroupBox x:Name="groupNun" Header="Nunchuk" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="226" Visibility="Hidden">
             <Grid Margin="-4,0,2,-2">

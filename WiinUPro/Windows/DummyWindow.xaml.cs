@@ -26,20 +26,20 @@ namespace WiinUPro.Windows
         {
             InitializeComponent();
             Device = device;
-            SwitchType(Device.DeviceType);
+            SwitchType(Device.DeviceType, true);
         }
 
-        public void SwitchType(ControllerType newType)
+        public void SwitchType(ControllerType newType, bool init = false)
         {
             Title = newType.ToString();
 
             switch (newType)
             {
                 case ControllerType.Wiimote:
-                    if (Device.State == null || !(Device.State is Wiimote))
+                    if (init || Device.State == null || !(Device.State is Wiimote))
                     {
-                        var wiiIR = Calibrations.Defaults.WiimoteDefault.irSensor;
-                        var wiiAcc = Calibrations.Defaults.WiimoteDefault.accelerometer;
+                        var wiiIR = Calibrations.None.WiimoteRaw.irSensor;
+                        var wiiAcc = Calibrations.None.WiimoteRaw.accelerometer;
                         wiiAcc.rawX = wiiAcc.centerX;
                         wiiAcc.rawY = wiiAcc.centerY;
                         wiiAcc.rawZ = wiiAcc.centerZ;
@@ -62,7 +62,7 @@ namespace WiinUPro.Windows
                     break;
 
                 case ControllerType.Nunchuk:
-                    if (Device.State == null || !isNunchuk)
+                    if (init || Device.State == null || !isNunchuk)
                     {
                         var nunJoystick = Calibrations.Defaults.NunchukDefault.joystick;
                         nunJoystick.rawX = nunJoystick.centerX;
@@ -90,7 +90,7 @@ namespace WiinUPro.Windows
                     break;
 
                 case ControllerType.ClassicController:
-                    if (Device.State == null || !isClassic)
+                    if (init || Device.State == null || !isClassic)
                     {
                         var ccLJoy = Calibrations.Defaults.ClassicControllerDefault.LJoy;
                         ccLJoy.rawX = ccLJoy.centerX;
@@ -121,7 +121,7 @@ namespace WiinUPro.Windows
                     break;
 
                 case ControllerType.ClassicControllerPro:
-                    if (Device.State == null || !isClassicPro)
+                    if (init || Device.State == null || !isClassicPro)
                     {
                         var ccpLJoy = Calibrations.Defaults.ClassicControllerProDefault.LJoy;
                         ccpLJoy.rawX = ccpLJoy.centerX;
@@ -148,7 +148,7 @@ namespace WiinUPro.Windows
                     break;
 
                 case ControllerType.ProController:
-                    if (Device.State == null || !isPro)
+                    if (init || Device.State == null || !isPro)
                     {
                         var proLJoy = Calibrations.Defaults.ProControllerDefault.LJoy;
                         proLJoy.rawX = proLJoy.centerX;
@@ -175,7 +175,7 @@ namespace WiinUPro.Windows
                     break;
 
                 case ControllerType.Guitar:
-                    if (Device.State == null || !isGuitar)
+                    if (init || Device.State == null || !isGuitar)
                     {
                         var gJoy = Calibrations.Defaults.GuitarDefault.joystick;
                         gJoy.rawX = gJoy.centerX;
@@ -200,7 +200,7 @@ namespace WiinUPro.Windows
                     break;
 
                 case ControllerType.TaikoDrum:
-                    if (Device.State == null || !isTaiko)
+                    if (init || Device.State == null || !isTaiko)
                         Device.State = new TaikoDrum();
                     groupCore.Visibility = Visibility.Visible;
                     wiimoteGrid.Visibility = Visibility.Visible;
@@ -215,7 +215,7 @@ namespace WiinUPro.Windows
 
 
                 case ControllerType.Other:
-                    if (Device.State == null || !isGCN)
+                    if (init || Device.State == null || !isGCN)
                     {
                         var gJoy = Calibrations.Defaults.GameCubeControllerDefault.joystick;
                         var gCJoy = Calibrations.Defaults.GameCubeControllerDefault.cStick;

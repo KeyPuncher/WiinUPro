@@ -258,6 +258,7 @@ namespace Shared
             value = buffer.Length;
 
             byte[] coreBtns = GetCoreButtons();
+            byte[] acc = GetAccelerometer();
 
             if (_nextQueue.Count > 0)
                 NextReport = _nextQueue.Dequeue();
@@ -354,6 +355,9 @@ namespace Shared
                     buffer[0] = 0x31;
                     buffer[1] = coreBtns[0];
                     buffer[2] = coreBtns[1];
+                    buffer[3] = acc[0];
+                    buffer[4] = acc[1];
+                    buffer[5] = acc[2];
                     break;
 
                 case InputReport.BtnsExt: // 32 BB BB EE EE EE EE EE EE EE EE
@@ -367,6 +371,9 @@ namespace Shared
                     buffer[0] = 0x33;
                     buffer[1] = coreBtns[0];
                     buffer[2] = coreBtns[1];
+                    buffer[3] = acc[0];
+                    buffer[4] = acc[1];
+                    buffer[5] = acc[2];
                     break;
 
                 case InputReport.BtnsExtB: // 34 BB BB EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE 
@@ -380,6 +387,9 @@ namespace Shared
                     buffer[0] = 0x35;
                     buffer[1] = coreBtns[0];
                     buffer[2] = coreBtns[1];
+                    buffer[3] = acc[0];
+                    buffer[4] = acc[1];
+                    buffer[5] = acc[2];
                     Array.Copy(GetExtension(), 0, buffer, 6, 16);
                     break;
 
@@ -394,6 +404,9 @@ namespace Shared
                     buffer[0] = 0x37;
                     buffer[1] = coreBtns[0];
                     buffer[2] = coreBtns[1];
+                    buffer[3] = acc[0];
+                    buffer[4] = acc[1];
+                    buffer[5] = acc[2];
                     Array.Copy(GetExtension(), 0, buffer, 16, 6);
                     break;
 
@@ -531,6 +544,36 @@ namespace Shared
         protected byte[] GetAccelerometer()
         {
             byte[] buf = new byte[3];
+            Accelerometer acc;
+
+            switch (DeviceType)
+            {
+                case ControllerType.Wiimote:
+                    acc = ((Wiimote)State).accelerometer;
+                    break;
+
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                case ControllerType.ClassicController:
+                case ControllerType.ClassicControllerPro:
+                case ControllerType.MotionPlus:
+                case ControllerType.MotionPlusCC:
+                case ControllerType.MotionPlusNunchuk:
+                case ControllerType.Guitar:
+                case ControllerType.TaikoDrum:
+                //case ControllerType.Drums:
+                //case ControllerType.TurnTable:
+                //case ControllerType.DrawTablet:
+                    acc = ((IWiimoteExtension)State).wiimote.accelerometer;
+                    break;
+
+                default:
+                    return buf;
+            }
+
+            buf[0] = (byte)acc.rawX;
+            buf[1] = (byte)acc.rawY;
+            buf[2] = (byte)acc.rawZ;
 
             return buf;
         }
