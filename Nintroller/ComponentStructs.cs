@@ -156,11 +156,19 @@ namespace NintrollerLib
     {
         public int rawX, rawY, rawZ;
 
+        // Degrees per second on each axis
+        public double XSpeed, YSpeed, ZSpeed;
+
+        // The current calculated angle for each axis.
+        public double XAngle, YAngle, ZAngle;
+
         private Joystick joyConversion;
 
         public void Parse(byte[] input, int offset = 0)
         {
             InputReport type = (InputReport)input[0];
+
+            // TODO: In order to calculate the angle we need an offset form Zero values and sensitivity levels.
         }
     }
 
