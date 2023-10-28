@@ -374,6 +374,7 @@ namespace Shared
                     buffer[3] = acc[0];
                     buffer[4] = acc[1];
                     buffer[5] = acc[2];
+                    Array.Copy(GetExtendedIR(), 0, buffer, 6, 12);
                     break;
 
                 case InputReport.BtnsExtB: // 34 BB BB EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE 
@@ -397,6 +398,7 @@ namespace Shared
                     buffer[0] = 0x36;
                     buffer[1] = coreBtns[0];
                     buffer[2] = coreBtns[1];
+                    Array.Copy(GetBasicIR(), 0, buffer, 3, 10);
                     Array.Copy(GetExtension(), 0, buffer, 13, 9);
                     break;
 
@@ -407,6 +409,7 @@ namespace Shared
                     buffer[3] = acc[0];
                     buffer[4] = acc[1];
                     buffer[5] = acc[2];
+                    Array.Copy(GetBasicIR(), 0, buffer, 6, 10);
                     Array.Copy(GetExtension(), 0, buffer, 16, 6);
                     break;
 
@@ -578,16 +581,149 @@ namespace Shared
             return buf;
         }
 
-        protected byte[] Get9ByteIR()
+        protected byte[] GetBasicIR()
         {
-            byte[] buf = new byte[9];
+            byte[] buf = new byte[10];
+            IR ir = default;
+
+            switch (DeviceType)
+            {
+                case ControllerType.Wiimote:
+                    ir = ((Wiimote)State).irSensor;
+                    break;
+
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                case ControllerType.ClassicController:
+                case ControllerType.ClassicControllerPro:
+                case ControllerType.MotionPlus:
+                case ControllerType.MotionPlusCC:
+                case ControllerType.MotionPlusNunchuk:
+                    //case ControllerType.Guitar:
+                    //case ControllerType.TaikoDrum:
+                    //case ControllerType.Drums:
+                    //case ControllerType.TurnTable:
+                    //case ControllerType.DrawTablet:
+                    ir = ((IWiimoteExtension)State).wiimote.irSensor;
+                    break;
+
+                default:
+                    return buf;
+            }
+
+            Array.Copy(GetBasicIRPacket(ir.point1, ir.point2), 0, buf, 0, 5);
+            Array.Copy(GetBasicIRPacket(ir.point3, ir.point4), 0, buf, 5, 5);
 
             return buf;
         }
 
-        protected byte[] Get10ByteIR()
+        private byte[] GetBasicIRPacket(IRPoint pointA, IRPoint pointB)
         {
-            byte[] buf = new byte[10];
+            byte[] buf = new byte[5];
+
+            if (pointA.visible)
+            {
+                buf[0] = (byte)(pointA.rawX & 0xFF);
+                buf[1] = (byte)(pointA.rawY & 0xFF);
+                buf[2] |= (byte)((pointA.rawY & 0b11_0000_0000) >> 2);
+                buf[2] |= (byte)((pointA.rawX & 0b11_0000_0000) >> 4);
+            }
+            else
+            {
+                buf[0] = 0xFF;
+                buf[1] = 0xFF;
+                buf[2] = 0xF0;
+            }
+
+            if (pointB.visible)
+            {
+                buf[2] |= (byte)((pointB.rawY & 0b11_0000_0000) >> 6);
+                buf[2] |= (byte)((pointB.rawX & 0b11_0000_0000) >> 8);
+                buf[3] = (byte)(pointB.rawX & 0xFF);
+                buf[4] = (byte)(pointB.rawY & 0xFF);
+            }
+            else
+            {
+                buf[2] |= 0x0F;
+                buf[3] = 0xFF;
+                buf[4] = 0xFF;
+            }
+
+            return buf;
+        }
+
+        protected byte[] GetExtendedIR()
+        {
+            byte[] buf = new byte[12];
+            IR ir = default;
+
+            switch (DeviceType)
+            {
+                case ControllerType.Wiimote:
+                    ir = ((Wiimote)State).irSensor;
+                    break;
+
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                case ControllerType.ClassicController:
+                case ControllerType.ClassicControllerPro:
+                case ControllerType.MotionPlus:
+                case ControllerType.MotionPlusCC:
+                case ControllerType.MotionPlusNunchuk:
+                    //case ControllerType.Guitar:
+                    //case ControllerType.TaikoDrum:
+                    //case ControllerType.Drums:
+                    //case ControllerType.TurnTable:
+                    //case ControllerType.DrawTablet:
+                    ir = ((IWiimoteExtension)State).wiimote.irSensor;
+                    break;
+
+                default:
+                    return buf;
+            }
+
+            Array.Copy(GetExtendedIRPoint(ir.point1), 0, buf, 0, 3);
+            Array.Copy(GetExtendedIRPoint(ir.point2), 0, buf, 3, 3);
+            Array.Copy(GetExtendedIRPoint(ir.point3), 0, buf, 6, 3);
+            Array.Copy(GetExtendedIRPoint(ir.point4), 0, buf, 9, 3);
+
+            return buf;
+        }
+
+        private byte[] GetExtendedIRPoint(IRPoint point)
+        {
+            byte[] buf = new byte[3];
+
+            if (point.visible)
+            {
+                buf[0] = (byte)(point.rawX & 0xFF);
+                buf[1] = (byte)(point.rawY & 0xFF);
+                buf[2] |= (byte)((point.rawY & 0b11_0000_0000) >> 2);
+                buf[2] |= (byte)((point.rawX & 0b11_0000_0000) >> 4);
+                buf[2] |= (byte)(point.size & 0x0F);
+            }
+            else
+            {
+                buf[0] = 0xFF;
+                buf[1] = 0xFF;
+                buf[2] = 0xFF;
+            }
+
+            return buf;
+        }
+
+        protected byte[] GetFullIR()
+        {
+            byte[] buf = new byte[18];
+
+            var extended = GetExtendedIR();
+
+            Array.Copy(extended, 0, buf, 0, 3);
+            Array.Copy(extended, 3, buf, 9, 3);
+            Array.Copy(extended, 6, buf, 18, 3);
+            Array.Copy(extended, 9, buf, 27, 3);
+
+            // TODO: X & Y min/max & intensity setting for each point
 
             return buf;
         }

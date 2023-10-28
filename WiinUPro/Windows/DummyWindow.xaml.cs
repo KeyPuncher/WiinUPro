@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using NintrollerLib;
 using Shared;
 
@@ -833,6 +834,83 @@ namespace WiinUPro.Windows
             return ApplyToSelectedPort(gcn, controller);
         }
 
+        #endregion
+
+        #region IR Modification
+        private void ChangeIR(string setting, double value)
+        {
+            Wiimote wiimote;
+
+            if (isWiimote)
+            {
+                wiimote = (Wiimote)Device.State;
+            }
+            else if (Device.State is IWiimoteExtension)
+            {
+                wiimote = ((IWiimoteExtension)Device.State).wiimote;
+            }
+            else
+            {
+                return;
+            }
+            
+            switch (setting)
+            {
+                case "IR_1X":
+                    wiimote.irSensor.point1.rawX = CalculateRaw(0, 1023, (float)value);
+                    break;
+
+                case "IR_1Y":
+                    wiimote.irSensor.point1.rawY = CalculateRaw(0, 767, (float)value);
+                    break;
+
+                case "IR_2X":
+                    wiimote.irSensor.point2.rawX = CalculateRaw(0, 1023, (float)value);
+                    break;
+
+                case "IR_2Y":
+                    wiimote.irSensor.point2.rawY = CalculateRaw(0, 767, (float)value);
+                    break;
+
+                case "IR_Size":
+                    wiimote.irSensor.point1.size = (int)value;
+                    wiimote.irSensor.point2.size = (int)value;
+                    break;
+
+                case "IR_1V":
+                    wiimote.irSensor.point1.visible = value > 0.5 ? true : false;
+                    break;
+
+                case "IR_2V":
+                    wiimote.irSensor.point2.visible = value > 0.5 ? true : false;
+                    break;
+            }
+
+            if (isWiimote)
+            {
+                Device.State = wiimote;
+            }
+            else
+            {
+                ((IWiimoteExtension)Device.State).wiimote = wiimote;
+            }
+        }
+
+        private void IR_UpdateBoolean(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                ChangeIR(checkBox.Tag.ToString(), (checkBox.IsChecked ?? false) ? 1 : 0);
+            }
+        }
+
+        private void IR_UpdateDouble(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (sender is Slider slider)
+            {
+                ChangeIR(slider.Tag.ToString(), slider.Value);
+            }
+        }
         #endregion
 
         private void WiimoteExtensionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

@@ -49,7 +49,20 @@
                 <ComboBoxItem Content="Guitar"/>
                 <ComboBoxItem Content="Taiko Drum"/>
             </ComboBox>
-            <GroupBox HorizontalAlignment="Left" Height="84" Header="Infrared" Margin="14,264,0,0" VerticalAlignment="Top" Width="141"/>
+            <GroupBox HorizontalAlignment="Left" Height="84" Header="Infrared" Margin="14,262,0,0" VerticalAlignment="Top" Width="468">
+                <Grid>
+                    <Slider x:Name="sliderIR1X" HorizontalAlignment="Left" Margin="18,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="False" TickPlacement="BottomRight" ValueChanged="IR_UpdateDouble" Tag="IR_1X"/>
+                    <Slider x:Name="sliderIR1Y" HorizontalAlignment="Left" Margin="18,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="False" TickPlacement="BottomRight" ValueChanged="IR_UpdateDouble" Tag="IR_1Y"/>
+                    <Label Content="X" HorizontalAlignment="Left" Margin="0,4,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Y" HorizontalAlignment="Left" Margin="0,35,0,0" VerticalAlignment="Top"/>
+                    <Slider x:Name="sliderIR2X" HorizontalAlignment="Right" Margin="18,10,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="False" TickPlacement="BottomRight" ValueChanged="IR_UpdateDouble" Tag="IR_2X"/>
+                    <Slider x:Name="sliderIR2Y" HorizontalAlignment="Right" Margin="18,39,0,0" VerticalAlignment="Top" Width="112" Maximum="1" Minimum="-1" TickFrequency="0.1" IsSnapToTickEnabled="False" TickPlacement="BottomRight" ValueChanged="IR_UpdateDouble" Tag="IR_2Y"/>
+                    <Label Content="Size" HorizontalAlignment="Left" Margin="164,35,0,0" VerticalAlignment="Top"/>
+                    <Slider x:Name="sliderIRSize" HorizontalAlignment="Left" Margin="200,39,0,0" VerticalAlignment="Top" Width="112" Maximum="15" Minimum="0" TickFrequency="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="IR_UpdateDouble" Tag="IR_Size"/>
+                    <CheckBox x:Name="checkIR1Visible" Content="Point 1 Visible" HorizontalAlignment="Left" Margin="139,12,0,0" VerticalAlignment="Top" Click="IR_UpdateBoolean" Tag="IR_1V"/>
+                    <CheckBox x:Name="checkIR2Visible" Content="Point 2 Visible" HorizontalAlignment="Left" Margin="247,12,0,0" VerticalAlignment="Top" Click="IR_UpdateBoolean" FlowDirection="RightToLeft" Tag="IR_2V"/>
+                </Grid>
+            </GroupBox>
         </Grid>
         <GroupBox x:Name="groupNun" Header="Nunchuk" HorizontalAlignment="Left" Margin="155,10,0,0" VerticalAlignment="Top" Height="104" Width="226" Visibility="Hidden">
             <Grid Margin="-4,0,2,-2">
