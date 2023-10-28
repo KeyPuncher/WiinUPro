@@ -830,6 +830,24 @@ namespace WiinUPro
 
             Windows.IRCalibrationWindow irCal = new Windows.IRCalibrationWindow(lastIR);
             _openIRWindow = irCal;
+
+#if DEBUG
+            if (DeviceID.StartsWith("Dummy"))
+            {
+                irCal.Closed += (obj, args) =>
+                {
+                    if (irCal.Apply)
+                    {
+                        OnIRCalibrated?.Invoke(irCal.Calibration, irCal.FileName);
+                    }
+
+                    _openIRWindow = null;
+                };
+                irCal.Show();
+                return;
+            }
+#endif
+
             irCal.ShowDialog();
 
             if (irCal.Apply)
