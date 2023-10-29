@@ -42,6 +42,11 @@ namespace WiinUPro.Windows
             _buffer[_current] = obj;
             _latest = _current;
             _current += 1;
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                live.Text = BitConverter.ToString(obj) + "\n";
+            }));
         }
 
         private void captureBtn_Click(object sender, RoutedEventArgs e)

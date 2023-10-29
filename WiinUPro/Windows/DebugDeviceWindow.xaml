@@ -5,10 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiinUPro.Windows"
         mc:Ignorable="d"
-        Title="Debug" Height="450" Width="800">
+        Title="Debug" Height="450" Width="640" MinWidth="640">
     <Grid>
-        <TextBox x:Name="display" HorizontalAlignment="Center" Height="367" Margin="0,10,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="762" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" UndoLimit="0" AllowDrop="False" VerticalScrollBarVisibility="Visible"/>
-        <Button x:Name="copyBtn" Content="Copy" HorizontalAlignment="Left" Margin="701,382,0,0" VerticalAlignment="Top" Width="80" Click="copyBtn_Click"/>
-        <Button x:Name="captureBtn" Content="Capture" HorizontalAlignment="Left" Margin="605,382,0,0" VerticalAlignment="Top" Width="80" Click="captureBtn_Click"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="73*"/>
+            <ColumnDefinition Width="467*"/>
+            <ColumnDefinition Width="260*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="display" Margin="19,10,19,57" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" UndoLimit="0" AllowDrop="False" VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="3"/>
+        <Button x:Name="copyBtn" Content="Copy" Margin="0,0,19,32" Click="copyBtn_Click" Grid.Column="2" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="80"/>
+        <Button x:Name="captureBtn" Content="Capture" Margin="0,0,115,32" Click="captureBtn_Click" Grid.Column="2" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="80"/>
+        <TextBox x:Name="live" Margin="19,0,209,32" TextWrapping="Wrap" IsReadOnly="True" Grid.ColumnSpan="3" Height="18" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
