@@ -120,7 +120,7 @@
                     boundingArea = new SquareBoundry()
                     {
                         center_x = 512,
-                        center_y = 512,
+                        center_y = 768 / 2,
                         width = 0,
                         height = 0
                     }
@@ -362,9 +362,9 @@
                     boundingArea = new SquareBoundry()
                     {
                         center_x = 512,
-                        center_y = 512,
+                        center_y = 768 / 2,
                         width = 64,
-                        height = 64
+                        height = 48
                     }
                 }
             };
@@ -619,9 +619,9 @@
                     boundingArea = new SquareBoundry()
                     {
                         center_x = 512,
-                        center_y = 512,
+                        center_y = 768 / 2,
                         width = 128,
-                        height = 128
+                        height = 96
                     }
                 }
             };
@@ -880,9 +880,9 @@
                     boundingArea = new SquareBoundry()
                     {
                         center_x = 512,
-                        center_y = 512,
+                        center_y = 768 / 2,
                         width = 192,
-                        height = 192
+                        height = 144
                     }
                 }
             };
@@ -1122,9 +1122,9 @@
                     boundingArea = new SquareBoundry()
                     {
                         center_x = 512,
-                        center_y = 512,
+                        center_y = 768 / 2,
                         width = 224,
-                        height = 224
+                        height = 168
                     }
                 }
             };

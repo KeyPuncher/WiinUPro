@@ -45,10 +45,12 @@ namespace NintrollerLib
             if (Utils.ReportContainsAccelerometer(reportType))
                 accelerometer.Parse(data, 3);
 
-            if (reportType == InputReport.BtnsAccIR || reportType == InputReport.BtnsAccIRExt)
-                irSensor.Parse(data, 6);
-            else if (reportType == InputReport.BtnsIRExt)
-                irSensor.Parse(data, 3);
+            if (reportType == InputReport.BtnsAccIR) // 12 bytes
+                irSensor.Parse(data, 6, false);
+            else if (reportType == InputReport.BtnsIRExt) // 10 bytes
+                irSensor.Parse(data, 3, true);
+            else if (reportType == InputReport.BtnsAccIRExt) // 10 bytes
+                irSensor.Parse(data, 6, true);
 
             accelerometer.Normalize();
         }

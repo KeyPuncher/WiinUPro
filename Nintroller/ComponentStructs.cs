@@ -187,7 +187,8 @@ namespace NintrollerLib
     }
 
     /// <summary>
-    /// Collection of IR sensor data
+    /// Collection of IR sensor data.
+    /// IR resolution is 1024x768
     /// </summary>
     public struct IR : INintrollerParsable, INintrollerNormalizable
     {
@@ -212,55 +213,61 @@ namespace NintrollerLib
         /// </summary>
         public INintrollerBounds boundingArea;
 
+        public void Parse(byte[] input, int offset = 0)
+        {
+            Parse(input, offset, offset == 3);
+        }
+
         /// <summary>
         /// Parse IR sensor data
         /// </summary>
         /// <param name="input"></param>
         /// <param name="offset"></param>
-        public void Parse(byte[] input, int offset = 0)
+        /// <param name="basic"></param>
+        public void Parse(byte[] input, int offset, bool basic)
         {
-            point1.rawX = input[offset    ] | ((input[offset + 2] >> 4) & 0x03) << 8;
-            point1.rawY = input[offset + 1] | ((input[offset + 2] >> 6) & 0x03) << 8;
+            point1.rawX = input[offset    ] | ((input[offset + 2] & 0b_0011_0000) << 4);
+            point1.rawY = input[offset + 1] | ((input[offset + 2] & 0b_1100_0000) << 2);
 
-            if (input.Length - offset == 12) // InputReport.BtnsAccIR
-            {
-                // Extended Mode
-                point2.rawX = input[offset +  3] | ((input[offset +  5] >> 4) & 0x03) << 8;
-                point2.rawY = input[offset +  4] | ((input[offset +  5] >> 6) & 0x03) << 8;
-                point3.rawX = input[offset +  6] | ((input[offset +  8] >> 4) & 0x03) << 8;
-                point3.rawY = input[offset +  7] | ((input[offset +  8] >> 6) & 0x03) << 8;
-                point4.rawX = input[offset +  9] | ((input[offset + 11] >> 4) & 0x03) << 8;
-                point4.rawY = input[offset + 10] | ((input[offset + 11] >> 6) & 0x03) << 8;
-
-                point1.size = input[offset +  2] & 0x0F;
-                point2.size = input[offset +  5] & 0x0F;
-                point3.size = input[offset +  8] & 0x0F;
-                point4.size = input[offset + 11] & 0x0F;
-
-                point1.visible = !(input[offset    ] == 0xFF && input[offset +  1] == 0xFF && input[offset +  2] == 0xFF);
-                point2.visible = !(input[offset + 3] == 0xFF && input[offset +  4] == 0xFF && input[offset +  5] == 0xFF);
-                point3.visible = !(input[offset + 6] == 0xFF && input[offset +  7] == 0xFF && input[offset +  8] == 0xFF);
-                point4.visible = !(input[offset + 9] == 0xFF && input[offset + 10] == 0xFF && input[offset + 11] == 0xFF);
-            }
-            else
+            if (basic)
             {
                 // Basic Mode
-                point2.rawX = input[offset + 3] | ((input[offset + 2] >> 0) & 0x03) << 8;
-                point2.rawY = input[offset + 4] | ((input[offset + 2] >> 2) & 0x03) << 8;
-                point3.rawX = input[offset + 5] | ((input[offset + 7] >> 4) & 0x03) << 8;
-                point3.rawY = input[offset + 6] | ((input[offset + 7] >> 6) & 0x03) << 8;
-                point4.rawX = input[offset + 8] | ((input[offset + 7] >> 0) & 0x03) << 8;
-                point4.rawY = input[offset + 9] | ((input[offset + 7] >> 2) & 0x03) << 8;
+                point2.rawX = input[offset + 3] | ((input[offset + 2] & 0b_0000_0011) << 8);
+                point2.rawY = input[offset + 4] | ((input[offset + 2] & 0b_0000_1100) << 6);
+                point3.rawX = input[offset + 5] | ((input[offset + 7] & 0b_0011_0000) << 4);
+                point3.rawY = input[offset + 6] | ((input[offset + 7] & 0b_1100_0000) << 2);
+                point4.rawX = input[offset + 8] | ((input[offset + 7] & 0b_0000_0011) << 8);
+                point4.rawY = input[offset + 9] | ((input[offset + 7] & 0b_0000_1100) << 6);
 
                 point1.size = 0x00;
                 point2.size = 0x00;
                 point3.size = 0x00;
                 point4.size = 0x00;
 
-                point1.visible = !(input[offset    ] == 0xFF && input[offset + 1] == 0xFF);
+                point1.visible = !(input[offset] == 0xFF && input[offset + 1] == 0xFF);
                 point2.visible = !(input[offset + 3] == 0xFF && input[offset + 4] == 0xFF);
                 point3.visible = !(input[offset + 5] == 0xFF && input[offset + 6] == 0xFF);
                 point4.visible = !(input[offset + 8] == 0xFF && input[offset + 9] == 0xFF);
+            }
+            else
+            {
+                // Extended Mode
+                point2.rawX = input[offset +  3] | ((input[offset +  5] & 0b_0011_0000) << 4);
+                point2.rawY = input[offset +  4] | ((input[offset +  5] & 0b_1100_0000) << 2);
+                point3.rawX = input[offset +  6] | ((input[offset +  8] & 0b_0011_0000) << 4);
+                point3.rawY = input[offset +  7] | ((input[offset +  8] & 0b_1100_0000) << 2);
+                point4.rawX = input[offset +  9] | ((input[offset + 11] & 0b_0011_0000) << 4);
+                point4.rawY = input[offset + 10] | ((input[offset + 11] & 0b_1100_0000) << 2);
+
+                point1.size = input[offset +  2] & 0x0F;
+                point2.size = input[offset +  5] & 0x0F;
+                point3.size = input[offset +  8] & 0x0F;
+                point4.size = input[offset + 11] & 0x0F;
+
+                point1.visible = !(input[offset    ] == 0xFF && input[offset +  1] == 0xFF);
+                point2.visible = !(input[offset + 3] == 0xFF && input[offset +  4] == 0xFF);
+                point3.visible = !(input[offset + 6] == 0xFF && input[offset +  7] == 0xFF);
+                point4.visible = !(input[offset + 9] == 0xFF && input[offset + 10] == 0xFF);
             }
         }
 

@@ -65,7 +65,7 @@ namespace WiinUPro.Windows
             IR visual = update;
             visual.Normalize();
             Canvas.SetLeft(output, (visual.X + 1)/2 * 1023 - output.Width / 2);
-            Canvas.SetTop(output, (-visual.Y + 1)/2 * 1023 - output.Height / 2);
+            Canvas.SetTop(output, (-visual.Y + 1)/2 * 767 - output.Height / 2);
         }
         
         private void BoxUpdated(int ignore)

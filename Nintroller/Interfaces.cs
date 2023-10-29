@@ -18,6 +18,7 @@ namespace NintrollerLib
         Wiimote wiimote { get; set;  }
     }
 
+    // TODO: I likely don't need this interface. Also clashes with IR
     public interface INintrollerParsable
     {
         void Parse(byte[] input, int offset = 0);
