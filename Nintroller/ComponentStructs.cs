@@ -623,4 +623,76 @@ namespace NintrollerLib
             return false;
         }
     }
+
+    public struct RectangularZone
+    {
+        /// <summary>
+        /// Makes up where the expected center pont is.
+        /// </summary>
+        public int centerX, centerY;
+        /// <summary>
+        /// Defines the area in which the output is (0, 0).
+        /// </summary>
+        public int deadX, deadY, deadWidth, deadHeight;
+        /// <summary>
+        /// Defines the outter space where the output is (1, 1).
+        /// </summary>
+        public int limitMinX, limitMaxX, limitMinY, limitMaxY;
+        
+        public (float X, float Y) Evaluate(int rawX, int rawY)
+        {
+            var result = (X: 0f, Y: 0f);
+
+            // Deadzone check
+            if (rawX > (deadX - deadWidth / 2) && rawX < (deadX + deadWidth / 2))
+            {
+                if (rawY > (deadY - deadHeight / 2) && rawY < (deadY + deadWidth / 2))
+                {
+                    return result;
+                }
+            }
+
+            // Evaluate X
+            if (rawX >= limitMaxX)
+            {
+                result.X = 1f;
+            }
+            else if (rawX <= limitMinX)
+            {
+                result.X = -1f;
+            }
+            else if (rawX > centerX)
+            {
+                float range = limitMaxX - centerX;
+                result.X = range == 0 ? 0 : (limitMaxX - rawX) / range;
+            }
+            else
+            {
+                float range = centerX - limitMinX;
+                result.X = range == 0 ? 0 : (rawX - limitMinX) / range;
+            }
+
+            // Evaluate Y
+            if (rawY >= limitMaxY)
+            {
+                result.Y = 1f;
+            }
+            else if (rawY <= limitMinY)
+            {
+                result.Y = -1f;
+            }
+            else if (rawY > centerY)
+            {
+                float range = limitMaxY - centerY;
+                result.Y = range == 0 ? 0 : (limitMaxY - rawX) / range;
+            }
+            else
+            {
+                float range = centerY - limitMinY;
+                result.Y = range == 0 ? 0 : (rawY - limitMinY) / range;
+            }
+
+            return result;
+        }
+    }
 }
