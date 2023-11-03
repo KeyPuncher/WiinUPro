@@ -44,6 +44,10 @@ namespace WiinUPro.Windows
                         wiiAcc.rawX = wiiAcc.centerX;
                         wiiAcc.rawY = wiiAcc.centerY;
                         wiiAcc.rawZ = wiiAcc.centerZ;
+                        wiiIR.point1.rawX = 512;
+                        wiiIR.point1.rawY = 384;
+                        wiiIR.point2.rawX = 512;
+                        wiiIR.point2.rawY = 384;
 
                         Device.State = new Wiimote
                         {

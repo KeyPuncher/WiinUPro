@@ -10,14 +10,14 @@
     <Window.Background>
         <StaticResource ResourceKey="BackgroundMain"/>
     </Window.Background>
-    <Grid>
+    <Grid Background="{StaticResource BackgroundSub}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="550*"/>
             <ColumnDefinition Width="343*"/>
         </Grid.ColumnDefinitions>
         <Viewbox Grid.Column="0" Margin="0,0,9.4,0">
-            <Canvas Width="1023" Height="1023">
-                <Rectangle x:Name="box" Canvas.Top="384" Canvas.Left="384" StrokeThickness="0" Width="256" Height="256" >
+            <Canvas Width="1023" Height="763" Background="{StaticResource BackgroundMain}">
+                <Rectangle x:Name="box" Canvas.Top="343" Canvas.Left="460" StrokeThickness="0" Width="102" Height="77" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Rectangle.Fill>
                         <SolidColorBrush Color="{StaticResource B550}"/>
                     </Rectangle.Fill>
@@ -42,7 +42,7 @@
                         <SolidColorBrush Color="{StaticResource RedDark}"/>
                     </Ellipse.Fill>
                 </Ellipse>
-                <Ellipse x:Name="output" StrokeThickness="0" Canvas.Top="506" Canvas.Left="506" Width="12" Height="12">
+                <Ellipse x:Name="output" StrokeThickness="0" Canvas.Top="375" Canvas.Left="505" Width="12" Height="12">
                     <Ellipse.Fill>
                         <SolidColorBrush Color="{DynamicResource Green}"/>
                     </Ellipse.Fill>
@@ -58,11 +58,11 @@
                     </Grid.ColumnDefinitions>
                     <WiinUPro:NumPicker x:Name="boxX" HorizontalAlignment="Left" Margin="35,10,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="256" OnValueUpdate="BoxUpdated" Grid.ColumnSpan="2"/>
                     <Label x:Name="label" Content="X" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
-                    <WiinUPro:NumPicker x:Name="boxY" HorizontalAlignment="Left" Margin="35,48,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="256" OnValueUpdate="BoxUpdated" Grid.ColumnSpan="2"/>
+                    <WiinUPro:NumPicker x:Name="boxY" HorizontalAlignment="Left" Margin="35,48,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="192" OnValueUpdate="BoxUpdated" Grid.ColumnSpan="2"/>
                     <Label x:Name="label_Copy" Content="Y" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold"/>
-                    <WiinUPro:NumPicker x:Name="boxWidth" HorizontalAlignment="Left" Margin="126.1,10,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="384" OnValueUpdate="BoxUpdated" Grid.Column="1"/>
+                    <WiinUPro:NumPicker x:Name="boxWidth" HorizontalAlignment="Left" Margin="126.1,10,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="102" OnValueUpdate="BoxUpdated" Grid.Column="1"/>
                     <Label x:Name="label_Copy1" Content="Width" HorizontalAlignment="Left" Margin="81.1,10,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Grid.Column="1" Uid="Calibration_IR_Width"/>
-                    <WiinUPro:NumPicker x:Name="boxHeight" HorizontalAlignment="Left" Margin="126.1,48,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="384" OnValueUpdate="BoxUpdated" Grid.Column="1"/>
+                    <WiinUPro:NumPicker x:Name="boxHeight" HorizontalAlignment="Left" Margin="126.1,48,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="77" OnValueUpdate="BoxUpdated" Grid.Column="1"/>
                     <Label x:Name="label_Copy2" Content="Height" HorizontalAlignment="Left" Margin="78.1,50,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Grid.Column="1" Uid="Calibration_IR_Heigth"/>
                 </Grid>
             </GroupBox>

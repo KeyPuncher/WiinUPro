@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace NintrollerLib
 {
@@ -309,9 +308,9 @@ namespace NintrollerLib
                     boundingArea = new SquareBoundry()
                     {
                         center_x = 512,
-                        center_y = 512,
+                        center_y = 384,
                         width = 128,
-                        height = 128
+                        height = 96
                     };
                 }
 
@@ -323,7 +322,7 @@ namespace NintrollerLib
                 else
                 {
                     X = (midPoint.rawX - 512) / -256f;
-                    Y = (midPoint.rawY - 512) / -256f;
+                    Y = (midPoint.rawY - 384) / -192f;
                 }
             }
             else
