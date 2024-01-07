@@ -15,6 +15,8 @@ Find the latest *WiinUPro* or *WiinUSoft* Release.
 Expand Assets.
 Then download either the \_setup.exe or .zip file.
 
+**Note**: Also requires [Visual C++ Redistributable for Visual Studio 2012 Update 4](https://www.microsoft.com/en-us/download/details.aspx?id=30679)
+
 # WiinUSoft
 This is for people who just want their Nintendo controllers to behave like regular Windows compatible controllers.
 With the help of some drivers (part of the installer setup) it will translate the inputs of one of your connected Nintendo Wii/U familiy controllers to an emulated XInput controller.
