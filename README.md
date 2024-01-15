@@ -67,6 +67,11 @@ Fun stuff and useful for creating configurations for games that utilize a lot of
 ## Informational Videos:
 [Youtube Tutorial Playlist](https://www.youtube.com/playlist?list=PLGGq1CxIWfVZkVLS2zDx1_O7VqjxdMHZ7)
 
+## Language Support
+WiinUPro currently has translations for *English, Español, Français, Polski, and Deutsch.
+
+If you are someone who would like to add translations for another language, (first of all thanks) you can view the required translations in this [Google Doc Spreadsheet](https://docs.google.com/spreadsheets/d/1GBMtDP-JgyXad1y14ACACvXAcUiwBWiiSj1K1h9dmSs/edit?usp=sharing). Once you've added translations for a new language, create a ticket for that support work to be added to the software.
+
 # Other Questions You May or May Not Ask
 How do I pronounce this?
 * Doesn't matter. I say Win-You-Pro but technically it's spelt like Wing-You-Pro.
