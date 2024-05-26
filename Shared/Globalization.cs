@@ -23,7 +23,6 @@ namespace Shared
         public static void SetText(Data data)
         {
             _data = data;
-            System.Diagnostics.Debug.WriteLine(data.languages[1]);
         }
 
         public static void SetSelectedLanguage(int index)

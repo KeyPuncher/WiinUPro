@@ -6,7 +6,7 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:WiinUPro"
         mc:Ignorable="d"
-        Title="WiinUPro" Height="520" Width="500" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}" 
+        Title="WiinUPro" Height="520" Width="582" MinWidth="480" MinHeight="320" Icon="/WiinUPro;component/app.ico" Background="{StaticResource BackgroundMain}" 
         Loaded="Window_Loaded" Closing="Window_Closing" StateChanged="Window_StateChanged">
     <Grid>
         <Grid.Resources>
