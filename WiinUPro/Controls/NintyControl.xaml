@@ -11,11 +11,11 @@
             when disconnect is pressed remove this tab 
             Add calibrate button
         -->
-        <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="9,30,0,0" VerticalAlignment="Top" Width="75" Click="btnDisconnect_Click" Style="{StaticResource WarningButton}" Uid="Controller_Disconnect"/>
-        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnSave_Click" Style="{StaticResource AcceptButton}" Uid="Controller_Save_Profile"/>
-        <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnLoad_Click" Style="{StaticResource CautionButton}" Uid="Controller_Load_Profile"/>
-        <Button x:Name="btnAddRumble" Content="+/- Rumble" Margin="0,30,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnAddRumble_Click" Style="{StaticResource BasicButton}" Uid="Controller_Rumble"/>
-        <Button x:Name="btnPrefs" Content="Options" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="btnPrefs_Click" Style="{StaticResource BasicButton}" Uid="Controller_Options"/>
+        <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="9,30,0,0" VerticalAlignment="Top" Click="btnDisconnect_Click" Style="{StaticResource WarningButton}" Uid="Controller_Disconnect" MinWidth="75" Height="20"/>
+        <Button x:Name="btnSave" Content="Save Profile" Margin="0,5,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btnSave_Click" Style="{StaticResource AcceptButton}" Uid="Controller_Save_Profile" MinWidth="75" Height="20"/>
+        <Button x:Name="btnLoad" Content="Load Profile" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btnLoad_Click" Style="{StaticResource CautionButton}" Uid="Controller_Load_Profile" MinWidth="75" Height="20"/>
+        <Button x:Name="btnAddRumble" Content="+/- Rumble" Margin="0,30,90,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btnAddRumble_Click" Style="{StaticResource BasicButton}" Uid="Controller_Rumble" MinWidth="75" Height="20"/>
+        <Button x:Name="btnPrefs" Content="Options" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btnPrefs_Click" Style="{StaticResource BasicButton}" Uid="Controller_Options" MinWidth="75" Height="20"/>
         <Viewbox x:Name="_view" Margin="0,62,-0.5,0" />
         <Label Content="Shift State" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top" Width="74" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Uid="Controller_Shift_State"/>
         <ComboBox x:Name="dropShift" HorizontalAlignment="Left" Margin="89,0,0,0" VerticalAlignment="Top" SelectedIndex="0" Padding="0,3,5,3" Width="76" SelectionChanged="dropShift_SelectionChanged">

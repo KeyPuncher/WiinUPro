@@ -246,10 +246,10 @@
                             <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Fast"/>
                             <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Slow"/>
                             <Label Content="Movement Speed" HorizontalAlignment="Left" Margin="10,0,0,38" Height="26" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Mouse_Move_Speed"/>
-                            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="124,0,0,43" TextWrapping="Wrap" Text="{Binding ElementName=mMovementRate, Path=Value, StringFormat={}{0:P0}}" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+                            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="186,0,0,43" TextWrapping="Wrap" Text="{Binding ElementName=mMovementRate, Path=Value, StringFormat={}{0:P0}}" VerticalAlignment="Bottom" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="groupBox1" Header="Buttons" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Height="304" Width="240" Style="{StaticResource GroupBoxStyle}" Uid="Input_Mouse_Buttons">
+                    <GroupBox x:Name="groupBox1" Header="Buttons" HorizontalAlignment="Left" Margin="255,10,0,0" VerticalAlignment="Top" Height="304" Width="241" Style="{StaticResource GroupBoxStyle}" Uid="Input_Mouse_Buttons">
                         <Grid x:Name="mouseBtnGrid">
                             <Button Content="L" HorizontalAlignment="Left" Margin="44,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Left" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Left"/>
                             <Button Content="M" HorizontalAlignment="Left" Margin="91,10,0,0" VerticalAlignment="Top" Width="42" Height="88" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseButton" Tag="Middle" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Middle"/>
@@ -259,13 +259,13 @@
                             <Label Content="Turbo Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
                             <Label Content="Fast" HorizontalAlignment="Left" Margin="190,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Fast"/>
                             <Label Content="Slow" HorizontalAlignment="Left" Margin="10,261,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Slow"/>
-                            <CheckBox x:Name="mButtonInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="126,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Invert"/>
+                            <CheckBox x:Name="mButtonInverseCheck" Content="Inverse Input" Margin="0,190,10,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Invert" HorizontalAlignment="Right"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox x:Name="groupBox2" Header="Scroll" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Height="304" Width="240"  Style="{StaticResource GroupBoxStyle}" Uid="Input_Mouse_Scroll">
                         <Grid x:Name="mouseScrollGrid">
-                            <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Scroll_Up"/>
-                            <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Width="98" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Scroll_Down"/>
+                            <Button Content="Scroll Up" HorizontalAlignment="Left" Margin="62,10,0,0" VerticalAlignment="Top" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Up" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Scroll_Up" MinWidth="98"/>
+                            <Button Content="Scroll Down" HorizontalAlignment="Left" Margin="62,57,0,0" VerticalAlignment="Top" Height="42" Background="#FFCDCDCD" BorderBrush="#FF212121" FontWeight="Bold" FontSize="16" Click="ToggleMouseScroll" Tag="Down" Style="{StaticResource KeyButton}" Uid="Input_Mouse_Scroll_Down" MinWidth="98"/>
                             <CheckBox x:Name="mScrollContinuousCheck" Content="Continuous" HorizontalAlignment="Left" Margin="14,190,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Mouse_Scroll_Continuous"/>
                             <Slider x:Name="mScrollRate" HorizontalAlignment="Left" Margin="14,0,0,8" VerticalAlignment="Bottom" Width="204" Minimum="1" Value="10" Maximum="20" SmallChange="1" IsDirectionReversed="True" IsSnapToTickEnabled="True" Style="{StaticResource BasicSliderStyle}"/>
                             <Label Content="Scroll Rate" HorizontalAlignment="Left" Margin="10,0,0,38" VerticalAlignment="Bottom" Height="26" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Mouse_Scroll_Rate"/>
@@ -422,7 +422,7 @@
                             <Label Content="Turbo Rate" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Turbo_Rate"/>
                             <Label Content="Fast" HorizontalAlignment="Left" Margin="190,70,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Fast"/>
                             <Label Content="Slow" HorizontalAlignment="Left" Margin="5,70,0,-3" VerticalAlignment="Top" FontSize="10" Foreground="{DynamicResource TextBody}" Uid="Input_Slow"/>
-                            <CheckBox x:Name="xInverseCheck" Content="Inverse Input" HorizontalAlignment="Left" Margin="126,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Invert"/>
+                            <CheckBox x:Name="xInverseCheck" Content="Inverse Input" Margin="0,10,9,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Uid="Input_Invert" HorizontalAlignment="Right"/>
                         </Grid>
                     </GroupBox>
                 </Grid>
@@ -477,13 +477,17 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,9,3" Width="76" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}" Uid="Button_Accept"/>
-        <Button x:Name="cancelBtn" Content="Cancel" Margin="10,0,0,3" Click="cancelBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource WarningButton}" Uid="Button_Cancel"/>
-        <Button x:Name="clearBtn" Content="Clear" Margin="99,0,0,3" Click="clearBtn_Click" Height="22" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="75" Style="{StaticResource CautionButton}" Uid="Input_Clear"/>
-        <CheckBox x:Name="rumbleOnPress" Content="Rumble On Press" HorizontalAlignment="Left" Margin="708,0,0,7" VerticalAlignment="Bottom" Style="{StaticResource CheckBoxStyle}" FontWeight="Normal" Uid="Input_Rumble">
-            <CheckBox.Foreground>
-                <SolidColorBrush Color="{DynamicResource B250}"/>
-            </CheckBox.Foreground>
-        </CheckBox>
+        <StackPanel Margin="8,0,0,3" Orientation="Horizontal" HorizontalAlignment="Left" Height="24" VerticalAlignment="Bottom">
+            <Button x:Name="cancelBtn" Content="Cancel"  Click="cancelBtn_Click" Height="22" VerticalAlignment="Bottom" Style="{StaticResource WarningButton}" Uid="Button_Cancel" MinWidth="76"/>
+            <Button x:Name="clearBtn" Margin="8,0,0,0" Content="Clear" Click="clearBtn_Click" Height="22" VerticalAlignment="Bottom"  Style="{StaticResource CautionButton}" Uid="Input_Clear" MinWidth="76"/>
+        </StackPanel>
+        <StackPanel Margin="0,0,10,2" Orientation="Horizontal" HorizontalAlignment="Right" Width="458" FlowDirection="RightToLeft" Height="24" VerticalAlignment="Bottom">
+            <Button x:Name="acceptBtn" Margin="0,0,10,0" Content="Accept" Click="acceptBtn_Click" Height="24" VerticalAlignment="Bottom" Style="{StaticResource AcceptButton}" Uid="Button_Accept" MinWidth="76"/>
+            <CheckBox x:Name="rumbleOnPress" Margin="0,0,0,4" Content="Rumble On Press" VerticalAlignment="Bottom" Style="{StaticResource CheckBoxStyle}" FontWeight="Normal" Uid="Input_Rumble">
+                <CheckBox.Foreground>
+                    <SolidColorBrush Color="{DynamicResource B250}"/>
+                </CheckBox.Foreground>
+            </CheckBox>
+        </StackPanel>
     </Grid>
 </Window>

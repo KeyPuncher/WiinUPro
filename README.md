@@ -15,6 +15,8 @@ Find the latest *WiinUPro* or *WiinUSoft* Release.
 Expand Assets.
 Then download either the \_setup.exe or .zip file.
 
+**Note**: Also requires [Visual C++ Redistributable for Visual Studio 2012 Update 4](https://www.microsoft.com/en-us/download/details.aspx?id=30679)
+
 # WiinUSoft
 This is for people who just want their Nintendo controllers to behave like regular Windows compatible controllers.
 With the help of some drivers (part of the installer setup) it will translate the inputs of one of your connected Nintendo Wii/U familiy controllers to an emulated XInput controller.
@@ -64,6 +66,11 @@ Fun stuff and useful for creating configurations for games that utilize a lot of
 
 ## Informational Videos:
 [Youtube Tutorial Playlist](https://www.youtube.com/playlist?list=PLGGq1CxIWfVZkVLS2zDx1_O7VqjxdMHZ7)
+
+## Language Support
+WiinUPro currently has translations for *English, Español, Français, Polski, and Deutsch.
+
+If you are someone who would like to add translations for another language, (first of all thanks) you can view the required translations in this [Google Doc Spreadsheet](https://docs.google.com/spreadsheets/d/1GBMtDP-JgyXad1y14ACACvXAcUiwBWiiSj1K1h9dmSs/edit?usp=sharing). Once you've added translations for a new language, create a ticket for that support work to be added to the software.
 
 # Other Questions You May or May Not Ask
 How do I pronounce this?
