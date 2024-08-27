@@ -15,7 +15,11 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "InputManager", "InputManage
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{123CEBE5-8D00-4CCB-906E-AC69E0A57219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftPadCore", "ShiftPadCore\ShiftPadCore.csproj", "{E9E975DD-2BB0-4734-B219-D78663F9E1E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShiftPadCore", "ShiftPadCore\ShiftPadCore.csproj", "{E9E975DD-2BB0-4734-B219-D78663F9E1E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftPad.Wii", "ShiftPad.Wii\ShiftPad.Wii.csproj", "{E4A9309F-8AC9-46D0-AEC7-E81AA0617B86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftPad.WUP", "ShiftPad.WUP\ShiftPad.WUP.csproj", "{8B72DBE9-D470-4A89-8BBE-4DB30869627D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,14 @@ Global
 		{E9E975DD-2BB0-4734-B219-D78663F9E1E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9E975DD-2BB0-4734-B219-D78663F9E1E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9E975DD-2BB0-4734-B219-D78663F9E1E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4A9309F-8AC9-46D0-AEC7-E81AA0617B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4A9309F-8AC9-46D0-AEC7-E81AA0617B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4A9309F-8AC9-46D0-AEC7-E81AA0617B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4A9309F-8AC9-46D0-AEC7-E81AA0617B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B72DBE9-D470-4A89-8BBE-4DB30869627D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B72DBE9-D470-4A89-8BBE-4DB30869627D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B72DBE9-D470-4A89-8BBE-4DB30869627D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B72DBE9-D470-4A89-8BBE-4DB30869627D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

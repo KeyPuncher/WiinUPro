@@ -13,7 +13,7 @@
         /// <summary>
         /// The specific type of this gamepad (variable).
         /// </summary>
-        public uint SubType { get; }
+        public ulong SubType { get; }
         /// <summary>
         /// Denotes if the gamepad is open for communication.
         /// </summary>
