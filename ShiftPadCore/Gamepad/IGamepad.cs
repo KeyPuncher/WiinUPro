@@ -5,7 +5,7 @@
         /// <summary>
         /// The name or nickname of the gamepad.
         /// </summary>
-        public string Name { get; }
+        public string Name { get; set; }
         /// <summary>
         /// The class of gamepad (fixed).
         /// </summary>
