@@ -4,7 +4,7 @@
     {
         // Status Reports
         Status = 0x20,
-        ReadMem = 0x21,
+        ReadMemory = 0x21,
         Acknowledge = 0x22,
 
         // Data Reports

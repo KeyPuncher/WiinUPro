@@ -5,6 +5,7 @@
         Unknown = 0,
         Discovered,
         Disconnected,
+        Connecting,
         Connected
     }
 }
