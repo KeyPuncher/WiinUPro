@@ -32,8 +32,6 @@ namespace ShiftPad.Wii
             _dataStream = dataStream;
             _reader = new ContinuoursReader(dataStream, REPORT_LENGTH, ReadCallback);
             _responseReports = new ConcurrentDictionary<InputReport, byte[]>();
-            _responseReports[InputReport.Status] = null;    // TODO: This is auto sent when extension is changed, handle
-            _responseReports[InputReport.ReadMemory] = null;
         }
 
         private void ReadCallback(byte[] data)
@@ -47,22 +45,15 @@ namespace ShiftPad.Wii
             if (reportyType == InputReport.Acknowledge)
             {
                 var acknowledgedReport = (InputReport)data[3];
-
-                if (data[4] == ACKNOWLEDGEMENT_SUCCESS)
+                if (_responseReports.TryUpdate(acknowledgedReport, data, null))
                 {
-                    // TODO: yay success
-                }
-                else
-                {
-                    bool error = data[4] == ACKNOWLEDGEMENT_ERROR;
-                    // TODO: boo, error or unknown
+                    return;
                 }
             }
 
             // Check if response is being waited on.
-            if (_responseReports.ContainsKey(reportyType))
+            if (_responseReports.TryUpdate(reportyType, data, null))
             {
-                _responseReports[reportyType] = data;
                 return;
             }
 
@@ -76,32 +67,50 @@ namespace ShiftPad.Wii
             }
         }
 
+        private AcknowledgementErrorCode AcknowledgementCheck(byte[] data)
+        {
+            return (AcknowledgementErrorCode)data[4];
+        }
+
         private void ProcessConnectingReport(byte[] data)
         {
             //
         }
 
-        private async Task<byte[]> GetResponse(InputReport report)
+        private async Task<byte[]> ResponseRequest(InputReport report)
         {
+            // Yield if another action is waiting the same report.
+            while (_responseReports.ContainsKey(report))
+            {
+                await Task.Yield();
+                if (!ConnectedOrConnecting)
+                {
+                    _responseReports.Remove(report, out _);
+                    return new byte[REPORT_LENGTH];
+                }
+            }
+
             byte[] bytes;
             while (!_responseReports.TryGetValue(report, out bytes) || bytes == null)
             {
                 await Task.Yield();
                 if (!ConnectedOrConnecting)
                 {
+                    _responseReports.Remove(report, out _);
                     return new byte[REPORT_LENGTH];
                 }
             }
 
-            _responseReports[report] = null;
+            _ = _responseReports.Remove(report, out _);
             return bytes;
         }
 
         public async Task StatusReport()
         {
             byte[] buffer = new byte[2];
+            var response = ResponseRequest(InputReport.Status);
             await WriteReport(OutputReport.StatusRequest, buffer);
-            var status = await GetResponse(InputReport.Status);
+            var status = await response;
 
             _battery = status[6];
             bool lowBattery = (status[3] & 0x01) != 0;
@@ -136,8 +145,9 @@ namespace ShiftPad.Wii
 
         private async Task<byte[]> MemoryRead(byte[] report)
         {
+            var response = ResponseRequest(InputReport.ReadMemory);
             await WriteReport(OutputReport.ReadMemory, report);
-            return await GetResponse(InputReport.ReadMemory);
+            return await response;
         }
 
         private async Task<byte[]> MemoryRead(int address, short size)
@@ -209,6 +219,9 @@ namespace ShiftPad.Wii
             _connectionStatus = ConnectionStatus.Connecting;
 
             await _reader.StartReading();
+            await StatusReport();
+
+            // TODO: Check if now ready
 
             _connectionStatus = ConnectionStatus.Connected;
             return true;
