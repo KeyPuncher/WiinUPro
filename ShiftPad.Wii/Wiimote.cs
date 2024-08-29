@@ -1,8 +1,6 @@
 ﻿using ShiftPad.Core.Gamepad;
 using ShiftPad.Core.Utility;
 using ShiftPad.Wii.Communication;
-using System;
-using System.Collections.Concurrent;
 
 namespace ShiftPad.Wii
 {
@@ -22,7 +20,8 @@ namespace ShiftPad.Wii
         private byte _rumbleByte = 0x00;
         private byte _battery = 0x00; // TODO: Battery Class
 
-        private ConcurrentDictionary<InputReport, byte[]> _responseReports;
+        private ResponseBuffer<InputReport, byte[]> _responseBuffer;
+        private CancellationTokenSource _connectionCancellationToken;
         private Logger _logger = Logger.GetInstance(typeof(Wiimote));
 
         private bool ConnectedOrConnecting => _connectionStatus == ConnectionStatus.Connecting || _connectionStatus == ConnectionStatus.Connected;
@@ -31,7 +30,8 @@ namespace ShiftPad.Wii
         {
             _dataStream = dataStream;
             _reader = new ContinuoursReader(dataStream, REPORT_LENGTH, ReadCallback);
-            _responseReports = new ConcurrentDictionary<InputReport, byte[]>();
+            _responseBuffer = new ResponseBuffer<InputReport, byte[]>(new byte[REPORT_LENGTH]);
+            _connectionCancellationToken = new CancellationTokenSource();
         }
 
         private void ReadCallback(byte[] data)
@@ -45,14 +45,14 @@ namespace ShiftPad.Wii
             if (reportyType == InputReport.Acknowledge)
             {
                 var acknowledgedReport = (InputReport)data[3];
-                if (_responseReports.TryUpdate(acknowledgedReport, data, null))
+                if (_responseBuffer.SetResponse(acknowledgedReport, data))
                 {
                     return;
                 }
             }
 
             // Check if response is being waited on.
-            if (_responseReports.TryUpdate(reportyType, data, null))
+            if (_responseBuffer.SetResponse(reportyType, data))
             {
                 return;
             }
@@ -77,38 +77,10 @@ namespace ShiftPad.Wii
             //
         }
 
-        private async Task<byte[]> ResponseRequest(InputReport report)
-        {
-            // Yield if another action is waiting the same report.
-            while (_responseReports.ContainsKey(report))
-            {
-                await Task.Yield();
-                if (!ConnectedOrConnecting)
-                {
-                    _responseReports.Remove(report, out _);
-                    return new byte[REPORT_LENGTH];
-                }
-            }
-
-            byte[] bytes;
-            while (!_responseReports.TryGetValue(report, out bytes) || bytes == null)
-            {
-                await Task.Yield();
-                if (!ConnectedOrConnecting)
-                {
-                    _responseReports.Remove(report, out _);
-                    return new byte[REPORT_LENGTH];
-                }
-            }
-
-            _ = _responseReports.Remove(report, out _);
-            return bytes;
-        }
-
         public async Task StatusReport()
         {
             byte[] buffer = new byte[2];
-            var response = ResponseRequest(InputReport.Status);
+            var response = _responseBuffer.MakeRequest(InputReport.Status, _connectionCancellationToken.Token);
             await WriteReport(OutputReport.StatusRequest, buffer);
             var status = await response;
 
@@ -145,7 +117,7 @@ namespace ShiftPad.Wii
 
         private async Task<byte[]> MemoryRead(byte[] report)
         {
-            var response = ResponseRequest(InputReport.ReadMemory);
+            var response = _responseBuffer.MakeRequest(InputReport.ReadMemory, _connectionCancellationToken.Token);
             await WriteReport(OutputReport.ReadMemory, report);
             return await response;
         }
@@ -216,7 +188,9 @@ namespace ShiftPad.Wii
                 return false;
             }
 
+            _connectionCancellationToken.Cancel();
             _connectionStatus = ConnectionStatus.Connecting;
+            _connectionCancellationToken = new CancellationTokenSource();
 
             await _reader.StartReading();
             await StatusReport();
@@ -230,6 +204,7 @@ namespace ShiftPad.Wii
         public Task Disconnect()
         {
             _reader.StopReading();
+            _connectionCancellationToken.Cancel();
             _connectionStatus = ConnectionStatus.Disconnected;
             return Task.CompletedTask;
         }
