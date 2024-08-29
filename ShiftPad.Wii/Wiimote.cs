@@ -10,10 +10,17 @@ namespace ShiftPad.Wii
     {
         private const int REPORT_LENGTH = 22;
         private const int MEMORY_READ_LENGTH = 7;
+        private const int ACKNOWLEDGEMENT_SUCCESS = 0x00;
+        private const int ACKNOWLEDGEMENT_ERROR = 0x03;
+        private const int REGISTER_EXTENSION_TYPE_2 = 0x04a400fe;
+        private const int REGISTER_EXTENSION_TYPE_2_LENGTH = 1;
+
+        public bool AlwaysCheckExtension { get; set; } = false;
 
         private Stream _dataStream;
         private ContinuoursReader _reader;
         private byte _rumbleByte = 0x00;
+        private byte _battery = 0x00; // TODO: Battery Class
 
         private ConcurrentDictionary<InputReport, byte[]> _responseReports;
         private Logger _logger = Logger.GetInstance(typeof(Wiimote));
@@ -25,6 +32,7 @@ namespace ShiftPad.Wii
             _dataStream = dataStream;
             _reader = new ContinuoursReader(dataStream, REPORT_LENGTH, ReadCallback);
             _responseReports = new ConcurrentDictionary<InputReport, byte[]>();
+            _responseReports[InputReport.Status] = null;    // TODO: This is auto sent when extension is changed, handle
             _responseReports[InputReport.ReadMemory] = null;
         }
 
@@ -34,6 +42,24 @@ namespace ShiftPad.Wii
             OnRawUpdate?.Invoke(this, data);
 
             InputReport reportyType = (InputReport)data[0];
+
+            // Check if this is an acknowledgement.
+            if (reportyType == InputReport.Acknowledge)
+            {
+                var acknowledgedReport = (InputReport)data[3];
+
+                if (data[4] == ACKNOWLEDGEMENT_SUCCESS)
+                {
+                    // TODO: yay success
+                }
+                else
+                {
+                    bool error = data[4] == ACKNOWLEDGEMENT_ERROR;
+                    // TODO: boo, error or unknown
+                }
+            }
+
+            // Check if response is being waited on.
             if (_responseReports.ContainsKey(reportyType))
             {
                 _responseReports[reportyType] = data;
@@ -67,6 +93,7 @@ namespace ShiftPad.Wii
                 }
             }
 
+            _responseReports[report] = null;
             return bytes;
         }
 
@@ -74,10 +101,30 @@ namespace ShiftPad.Wii
         {
             byte[] buffer = new byte[2];
             await WriteReport(OutputReport.StatusRequest, buffer);
+            var status = await GetResponse(InputReport.Status);
+
+            _battery = status[6];
+            bool lowBattery = (status[3] & 0x01) != 0;
+            if (lowBattery)
+            {
+                _bateryStatus = BateryStatus.Low;
+            }
+
+            // Extention not always detected for some controllers (Pro Controller U)
+            bool extensionDetected = AlwaysCheckExtension || (status[3] & 0x02) != 0;
+            if (extensionDetected)
+            {
+                var extensionReport = await MemoryRead(REGISTER_EXTENSION_TYPE_2, REGISTER_EXTENSION_TYPE_2_LENGTH);
+                
+            }
+            else
+            {
+                // setup as wiimote
+            }
         }
 
-        #region Reading Device Memory
-        private byte[] PrepareReadMemoryBuffer(int address, int bufferSize)
+        #region Device Memory Access
+        private byte[] PrepareMemoryBuffer(int address, int bufferSize)
         {
             byte[] buffer = new byte[bufferSize];
             buffer[1] = (byte)(0xFF & (address >> 24));
@@ -87,26 +134,35 @@ namespace ShiftPad.Wii
             return buffer;
         }
 
-        public async Task<byte[]> MemoryRead(byte[] report)
+        private async Task<byte[]> MemoryRead(byte[] report)
         {
             await WriteReport(OutputReport.ReadMemory, report);
             return await GetResponse(InputReport.ReadMemory);
         }
 
-        public async Task<byte[]> MemoryRead(int address, short size)
+        private async Task<byte[]> MemoryRead(int address, short size)
         {
-            var buffer = PrepareReadMemoryBuffer(address, MEMORY_READ_LENGTH);
+            var buffer = PrepareMemoryBuffer(address, MEMORY_READ_LENGTH);
             buffer[5] = (byte)(0xFF & (size >> 8));
             buffer[6] = (byte)(0xFF & size);
             return await MemoryRead(buffer);
         }
 
-        public async Task<byte[]> MemoryRead(int address, byte[] data)
+        private async Task<byte[]> MemoryRead(int address, byte[] data)
         {
-            var buffer = PrepareReadMemoryBuffer(address, REPORT_LENGTH);
+            var buffer = PrepareMemoryBuffer(address, REPORT_LENGTH);
             buffer[5] = (byte)data.Length;
             Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, REPORT_LENGTH - 6));
             return await MemoryRead(buffer);
+        }
+
+        private async void MemoryWrite(int address, byte[] data)
+        {
+            var buffer = PrepareMemoryBuffer(address, REPORT_LENGTH);
+            buffer[5] = (byte)data.Length;
+            Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, REPORT_LENGTH - 6));
+            await WriteReport(OutputReport.WriteMemory, buffer);
+            // TODO: This will be a report acknowledgement
         }
         #endregion
 
