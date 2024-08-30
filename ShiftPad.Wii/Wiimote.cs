@@ -10,10 +10,15 @@ namespace ShiftPad.Wii
         private const int MEMORY_READ_LENGTH = 7;
         private const int ACKNOWLEDGEMENT_SUCCESS = 0x00;
         private const int ACKNOWLEDGEMENT_ERROR = 0x03;
+        private const int REGISTER_EXTENSION_TYPE_1 = 0x04a400fa;
+        private const int REGISTER_EXTENSION_TYPE_1_LENGTH = 6;
         private const int REGISTER_EXTENSION_TYPE_2 = 0x04a400fe;
         private const int REGISTER_EXTENSION_TYPE_2_LENGTH = 1;
+        private const int REGISTER_EXTENSION_INIT_1 = 0x04a400f0;
+        private const int REGISTER_EXTENSION_INIT_2 = 0x04a400fb;
 
         public bool AlwaysCheckExtension { get; set; } = false;
+        public bool InfaredCameraEnabled => false; // TODO
 
         private Stream _dataStream;
         private ContinuoursReader _reader;
@@ -101,7 +106,41 @@ namespace ShiftPad.Wii
             if (extensionDetected)
             {
                 var extensionReport = await MemoryRead(REGISTER_EXTENSION_TYPE_2, REGISTER_EXTENSION_TYPE_2_LENGTH);
-                
+                if (extensionReport == null)
+                {
+                    return false;
+                }
+
+                if (!await MemoryWrite(REGISTER_EXTENSION_INIT_1, [0x55]))
+                {
+                    return false;
+                }
+
+                if (!await MemoryWrite(REGISTER_EXTENSION_INIT_2, [0x00]))
+                {
+                    return false;
+                }
+
+                extensionReport = await MemoryRead(REGISTER_EXTENSION_TYPE_1, REGISTER_EXTENSION_TYPE_1_LENGTH);
+
+                if (extensionReport == null)
+                {
+                    return false;
+                }
+
+                long typeBytes =
+                    (extensionReport[6] << 40) |
+                    (extensionReport[7] << 32) |
+                    (extensionReport[8] << 24) |
+                    (extensionReport[9] << 16) |
+                    (extensionReport[10] << 8) |
+                    (extensionReport[11]);
+
+                WiiExtensionType controllerType = (WiiExtensionType)typeBytes;
+
+                _logger.LogInfo($"Extension Type {controllerType}");
+
+                SetControllerType(controllerType);
             }
             else
             {
@@ -110,6 +149,47 @@ namespace ShiftPad.Wii
 
             return true;
         }
+
+        public void SetControllerType(WiiExtensionType extensionType)
+        {
+            var reportType = GetReportType(extensionType);
+        }
+
+        private InputReport GetReportType(WiiExtensionType extensionType)
+        {
+            switch (extensionType)
+            {
+                case WiiExtensionType.Wiimote:
+                    return InfaredCameraEnabled ? InputReport.BtnsAccIR : InputReport.BtnsAcc;
+                
+                case WiiExtensionType.Nunchuk:
+                case WiiExtensionType.NunchukB:
+                case WiiExtensionType.MotionPlus:
+                case WiiExtensionType.MotionPlusNunchuk:
+                case WiiExtensionType.MotionPlusNunchukB:
+                case WiiExtensionType.TaikoDrum:
+                    return InfaredCameraEnabled ? InputReport.BtnsAccIRExt : InputReport.BtnsAccExt;
+
+                case WiiExtensionType.ClassicController:
+                case WiiExtensionType.ClassicControllerPro:
+                    return InfaredCameraEnabled ? InputReport.BtnsIRExt : InputReport.BtnsExt;
+
+                case WiiExtensionType.Guitar:
+                case WiiExtensionType.Drums:
+                case WiiExtensionType.TurnTable:
+                case WiiExtensionType.DrawTablet:
+                    return InputReport.BtnsAccExt;
+
+                case WiiExtensionType.BalanceBoard:
+                    return InputReport.ExtOnly;
+
+                case WiiExtensionType.PartiallyInserted:
+                default:
+                    _logger.LogInfo($"Unhandled extenstion type {(long)extensionType:X12}");
+                    return InputReport.BtnsOnly;
+            }
+        }
+
 
         #region Device Memory Access
         private byte[] PrepareMemoryBuffer(int address, int bufferSize)
@@ -152,13 +232,17 @@ namespace ShiftPad.Wii
             return await MemoryRead(buffer);
         }
 
-        private async void MemoryWrite(int address, byte[] data)
+        private async Task<bool> MemoryWrite(int address, byte[] data)
         {
             var buffer = PrepareMemoryBuffer(address, REPORT_LENGTH);
             buffer[5] = (byte)data.Length;
             Array.Copy(data, 0, buffer, 6, Math.Min(data.Length, REPORT_LENGTH - 6));
+
+            var response = _responseBuffer.MakeRequest(InputReport.Acknowledge);
             await WriteReport(OutputReport.WriteMemory, buffer);
-            // TODO: This will be a report acknowledgement
+
+            var result = await response;
+            return result.success && (AcknowledgementCheck(result.value) == AcknowledgementErrorCode.Success);
         }
         #endregion
 
