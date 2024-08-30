@@ -7,14 +7,24 @@ namespace ShiftPad.Core.Utility
         where ReturnType : class?
     {
         private ConcurrentDictionary<TargetType, ReturnType?> _dictionary = new();
-        private ReturnType _defaultValue;
+        private CancellationTokenSource _internalCancellationToken;
 
-        public ResponseBuffer(ReturnType defulatValue)
+        public ResponseBuffer()
         {
-            _defaultValue = defulatValue;
+            _internalCancellationToken = new CancellationTokenSource();
         }
 
-        public async Task<ReturnType> MakeRequest(TargetType target, CancellationToken cancellationToken)
+        public void Cancel()
+        {
+            _internalCancellationToken.Cancel();
+        }
+
+        public Task<(bool success, ReturnType? value)> MakeRequest(TargetType target)
+        {
+            return MakeRequest(target, _internalCancellationToken.Token);
+        }
+
+        public async Task<(bool success, ReturnType? value)> MakeRequest(TargetType target, CancellationToken cancellationToken)
         {
             // Yield if another request is waiting for this response.
             while (_dictionary.ContainsKey(target))
@@ -23,7 +33,7 @@ namespace ShiftPad.Core.Utility
                 if (cancellationToken.IsCancellationRequested)
                 {
                     _dictionary.Remove(target, out _);
-                    return _defaultValue;
+                    return (false, null);
                 }
             }
 
@@ -34,12 +44,12 @@ namespace ShiftPad.Core.Utility
                 if (cancellationToken.IsCancellationRequested)
                 {
                     _dictionary.Remove(target, out _);
-                    return _defaultValue;
+                    return (false, null);
                 }
             }
 
             _ = _dictionary.Remove(target, out _);
-            return value;
+            return (true, value);
         }
 
         public bool SetResponse(TargetType target, ReturnType value)

@@ -21,7 +21,6 @@ namespace ShiftPad.Wii
         private byte _battery = 0x00; // TODO: Battery Class
 
         private ResponseBuffer<InputReport, byte[]> _responseBuffer;
-        private CancellationTokenSource _connectionCancellationToken;
         private Logger _logger = Logger.GetInstance(typeof(Wiimote));
 
         private bool ConnectedOrConnecting => _connectionStatus == ConnectionStatus.Connecting || _connectionStatus == ConnectionStatus.Connected;
@@ -30,8 +29,7 @@ namespace ShiftPad.Wii
         {
             _dataStream = dataStream;
             _reader = new ContinuoursReader(dataStream, REPORT_LENGTH, ReadCallback);
-            _responseBuffer = new ResponseBuffer<InputReport, byte[]>(new byte[REPORT_LENGTH]);
-            _connectionCancellationToken = new CancellationTokenSource();
+            _responseBuffer = new ResponseBuffer<InputReport, byte[]>();
         }
 
         private void ReadCallback(byte[] data)
@@ -77,12 +75,19 @@ namespace ShiftPad.Wii
             //
         }
 
-        public async Task StatusReport()
+        public async Task<bool> StatusReport()
         {
             byte[] buffer = new byte[2];
-            var response = _responseBuffer.MakeRequest(InputReport.Status, _connectionCancellationToken.Token);
+            var response = _responseBuffer.MakeRequest(InputReport.Status);
             await WriteReport(OutputReport.StatusRequest, buffer);
-            var status = await response;
+            var result = await response;
+
+            if (!result.success)
+            {
+                return false;
+            }
+
+            var status = result.value;
 
             _battery = status[6];
             bool lowBattery = (status[3] & 0x01) != 0;
@@ -102,6 +107,8 @@ namespace ShiftPad.Wii
             {
                 // setup as wiimote
             }
+
+            return true;
         }
 
         #region Device Memory Access
@@ -117,9 +124,16 @@ namespace ShiftPad.Wii
 
         private async Task<byte[]> MemoryRead(byte[] report)
         {
-            var response = _responseBuffer.MakeRequest(InputReport.ReadMemory, _connectionCancellationToken.Token);
+            var response = _responseBuffer.MakeRequest(InputReport.ReadMemory);
             await WriteReport(OutputReport.ReadMemory, report);
-            return await response;
+            var result = await response;
+            
+            if (result.success)
+            {
+                return result.value;
+            }
+
+            return new byte[REPORT_LENGTH];
         }
 
         private async Task<byte[]> MemoryRead(int address, short size)
@@ -188,13 +202,16 @@ namespace ShiftPad.Wii
                 return false;
             }
 
-            _connectionCancellationToken.Cancel();
             _connectionStatus = ConnectionStatus.Connecting;
-            _connectionCancellationToken = new CancellationTokenSource();
 
             await _reader.StartReading();
-            await StatusReport();
 
+            if (!await StatusReport())
+            {
+                _connectionStatus = ConnectionStatus.Discovered;
+                return false;
+            }
+            
             // TODO: Check if now ready
 
             _connectionStatus = ConnectionStatus.Connected;
@@ -204,8 +221,9 @@ namespace ShiftPad.Wii
         public Task Disconnect()
         {
             _reader.StopReading();
-            _connectionCancellationToken.Cancel();
+            _responseBuffer.Cancel();
             _connectionStatus = ConnectionStatus.Disconnected;
+            _responseBuffer = new ResponseBuffer<InputReport, byte[]>();
             return Task.CompletedTask;
         }
 
