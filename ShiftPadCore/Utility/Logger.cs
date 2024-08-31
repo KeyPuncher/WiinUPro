@@ -71,6 +71,7 @@
             _logOutput = logOutput;
         }
 
+        public void LogDebug(string message) => Log(message, LogLevel.Debug);
         public void LogInfo(string message) => Log(message, LogLevel.Info);
         public void LogWarning(string message) => Log(message, LogLevel.Warning);
         public void LogError(string message) => Log(message, LogLevel.Error);

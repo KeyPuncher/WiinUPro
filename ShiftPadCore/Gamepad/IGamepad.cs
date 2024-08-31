@@ -1,4 +1,6 @@
-﻿namespace ShiftPad.Core.Gamepad
+﻿using ShiftPad.Core.Battery;
+
+namespace ShiftPad.Core.Gamepad
 {
     public interface IGamepad
     {
@@ -23,9 +25,9 @@
         /// </summary>
         public IGamepadCalibration Calibration { get; }
         /// <summary>
-        /// Indicates the gamepad's battery level.
+        /// Information about the gamepad's battery.
         /// </summary>
-        public BateryStatus Bettery { get; }
+        public IBateryState Bettery { get; }
 
         /// <summary>
         /// Fires when the gamepad's state changes.

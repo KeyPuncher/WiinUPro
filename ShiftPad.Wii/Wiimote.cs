@@ -1,4 +1,5 @@
-﻿using ShiftPad.Core.Gamepad;
+﻿using ShiftPad.Core.Battery;
+using ShiftPad.Core.Gamepad;
 using ShiftPad.Core.Utility;
 using ShiftPad.Wii.Communication;
 using ShiftPad.Wii.Infared;
@@ -23,6 +24,7 @@ namespace ShiftPad.Wii
         private const int REGISTER_IR_SENSITIVITY_1 = 0x04b00000;
         private const int REGISTER_IR_SENSITIVITY_2 = 0x04b0001a;
         private const int REGISTER_IR_MODE = 0x04b00033;
+        private const float PERCENTAGE_RATIO = 100f / 192f;
 
         public bool AlwaysCheckExtension { get; set; } = false;
         public bool InfaredCameraEnabled { get; private set; } = false;
@@ -30,7 +32,6 @@ namespace ShiftPad.Wii
         private Stream _dataStream;
         private ContinuoursReader _reader;
         private byte _rumbleByte = 0x00;
-        private byte _battery = 0x00; // TODO: Battery Class
         private WiiExtensionType _extensionType = WiiExtensionType.Unknown;
 
         private ResponseBuffer<InputReport, byte[]> _responseBuffer;
@@ -43,6 +44,7 @@ namespace ShiftPad.Wii
             _dataStream = dataStream;
             _reader = new ContinuoursReader(dataStream, REPORT_LENGTH, ReadCallback);
             _responseBuffer = new ResponseBuffer<InputReport, byte[]>();
+            _bateryState = new BatteryStandard(PERCENTAGE_RATIO);
         }
 
         private void ReadCallback(byte[] data)
@@ -102,11 +104,11 @@ namespace ShiftPad.Wii
 
             var status = result.value;
 
-            _battery = status[6];
+            _bateryState.Update(status[6]);
             bool lowBattery = (status[3] & 0x01) != 0;
             if (lowBattery)
             {
-                _bateryStatus = BateryStatus.Low;
+                _logger.LogDebug($"Battery Low and state is {_bateryState.Status}");
             }
 
             // Extention not always detected for some controllers (Pro Controller U)
@@ -387,7 +389,7 @@ namespace ShiftPad.Wii
         public ulong SubType => _subType;
         public ConnectionStatus Connection => _connectionStatus;
         public IGamepadCalibration Calibration => _calibration;
-        public BateryStatus Bettery => _bateryStatus;
+        public IBateryState Bettery => _bateryState;
 
         public event Action<IGamepad, IGamepadState> OnStateUpdate;
         public event Action<IGamepad> OnDisconnected;
@@ -398,7 +400,7 @@ namespace ShiftPad.Wii
         private ulong _subType = Classifications.Wiimote;
         private ConnectionStatus _connectionStatus;
         private IGamepadCalibration _calibration;
-        private BateryStatus _bateryStatus;
+        private BatteryStandard _bateryState;
 
         public async Task<bool> Connect()
         {
