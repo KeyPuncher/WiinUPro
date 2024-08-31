@@ -1,6 +1,7 @@
 ﻿using ShiftPad.Core.Gamepad;
 using ShiftPad.Core.Utility;
 using ShiftPad.Wii.Communication;
+using ShiftPad.Wii.Infared;
 
 namespace ShiftPad.Wii
 {
@@ -8,6 +9,8 @@ namespace ShiftPad.Wii
     {
         private const int REPORT_LENGTH = 22;
         private const int MEMORY_READ_LENGTH = 7;
+        private const int SET_REPORT_TYPE_LENGTH = 3;
+        private const int SET_INFARED_LENGTH = 2;
         private const int ACKNOWLEDGEMENT_SUCCESS = 0x00;
         private const int ACKNOWLEDGEMENT_ERROR = 0x03;
         private const int REGISTER_EXTENSION_TYPE_1 = 0x04a400fa;
@@ -16,14 +19,19 @@ namespace ShiftPad.Wii
         private const int REGISTER_EXTENSION_TYPE_2_LENGTH = 1;
         private const int REGISTER_EXTENSION_INIT_1 = 0x04a400f0;
         private const int REGISTER_EXTENSION_INIT_2 = 0x04a400fb;
+        private const int REGISTER_IR = 0x04b00030;
+        private const int REGISTER_IR_SENSITIVITY_1 = 0x04b00000;
+        private const int REGISTER_IR_SENSITIVITY_2 = 0x04b0001a;
+        private const int REGISTER_IR_MODE = 0x04b00033;
 
         public bool AlwaysCheckExtension { get; set; } = false;
-        public bool InfaredCameraEnabled => false; // TODO
+        public bool InfaredCameraEnabled { get; private set; } = false;
 
         private Stream _dataStream;
         private ContinuoursReader _reader;
         private byte _rumbleByte = 0x00;
         private byte _battery = 0x00; // TODO: Battery Class
+        private WiiExtensionType _extensionType = WiiExtensionType.Unknown;
 
         private ResponseBuffer<InputReport, byte[]> _responseBuffer;
         private Logger _logger = Logger.GetInstance(typeof(Wiimote));
@@ -140,19 +148,28 @@ namespace ShiftPad.Wii
 
                 _logger.LogInfo($"Extension Type {controllerType}");
 
-                SetControllerType(controllerType);
+                await SetControllerType(controllerType);
             }
             else
             {
-                // setup as wiimote
+                await SetControllerType(WiiExtensionType.Wiimote);
             }
 
             return true;
         }
 
-        public void SetControllerType(WiiExtensionType extensionType)
+        public async Task SetControllerType(WiiExtensionType extensionType)
         {
             var reportType = GetReportType(extensionType);
+
+            if (extensionType != _extensionType)
+            {
+                // TODO: Get default calibration for controller
+                // Set internal controller state
+            }
+
+            // Apply report type
+            await SetReportType(reportType, continuoursMode: true);
         }
 
         private InputReport GetReportType(WiiExtensionType extensionType)
@@ -190,6 +207,101 @@ namespace ShiftPad.Wii
             }
         }
 
+        public async Task EnableInfaredCamera(InfaredCameraMode mode, InfaredCameraSensitivity sensitivity)
+        {
+            byte[] buffer = new byte[SET_INFARED_LENGTH];
+            buffer[1] = 0x04;
+            
+            await WriteReport(OutputReport.IREnable, buffer);
+            await WriteReport(OutputReport.IREnable2, buffer);
+
+            var request = _responseBuffer.MakeRequest(InputReport.Acknowledge);
+            await MemoryWrite(REGISTER_IR, [0x08]);
+            var result = await request;
+            if (!result.success)
+                return;
+
+            byte[] sensitivityBlock1;
+            byte[] sensitivityBlock2;
+
+            switch (sensitivity)
+            {
+                case InfaredCameraSensitivity.Level1:
+                    sensitivityBlock1 = [0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x64, 0x00, 0xFE];
+                    sensitivityBlock2 = [0xFD, 0x05];
+                    break;
+                case InfaredCameraSensitivity.Level2:
+                    sensitivityBlock1 = [0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0x96, 0x00, 0xB4];
+                    sensitivityBlock2 = [0xB3, 0x04];
+                    break;
+                case InfaredCameraSensitivity.Level3:
+                default:
+                    sensitivityBlock1 = [0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xaa, 0x00, 0x64];
+                    sensitivityBlock2 = [0x63, 0x03];
+                    break;
+                case InfaredCameraSensitivity.Level4:
+                    sensitivityBlock1 = [0x02, 0x00, 0x00, 0x71, 0x01, 0x00, 0xc8, 0x00, 0x36];
+                    sensitivityBlock2 = [0x35, 0x03];
+                    break;
+                case InfaredCameraSensitivity.Level5:
+                    sensitivityBlock1 = [0x07, 0x00, 0x00, 0x71, 0x01, 0x00, 0x72, 0x00, 0x20];
+                    sensitivityBlock2 = [0x1F, 0x03];
+                    break;
+                case InfaredCameraSensitivity.Custom:
+                    sensitivityBlock1 = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0xC0];
+                    sensitivityBlock2 = [0x40, 0x00];
+                    break;
+                case InfaredCameraSensitivity.CustomHigh:
+                    sensitivityBlock1 = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x90, 0x00, 0x41];
+                    sensitivityBlock2 = [0x40, 0x00];
+                    break;
+                case InfaredCameraSensitivity.CustomMax:
+                    sensitivityBlock1 = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x0C];
+                    sensitivityBlock2 = [0x00, 0x00];
+                    break;
+            }
+
+            request = _responseBuffer.MakeRequest(InputReport.Acknowledge);
+            await MemoryWrite(REGISTER_IR_SENSITIVITY_1, sensitivityBlock1);
+            result = await request;
+            if (!result.success)
+                return;
+
+            request = _responseBuffer.MakeRequest(InputReport.Acknowledge);
+            await MemoryWrite(REGISTER_IR_SENSITIVITY_2, sensitivityBlock2);
+            result = await request;
+            if (!result.success)
+                return;
+
+            request = _responseBuffer.MakeRequest(InputReport.Acknowledge);
+            await MemoryWrite(REGISTER_IR_MODE, [(byte)mode]);
+            result = await request;
+            if (!result.success)
+                return;
+
+            request = _responseBuffer.MakeRequest(InputReport.Acknowledge);
+            await MemoryWrite(REGISTER_IR, [0x08]);
+            result = await request;
+            if (!result.success)
+                return;
+
+            InfaredCameraEnabled = true;
+
+            var reportType = GetReportType(_extensionType);
+            await SetReportType(reportType, continuoursMode: true);
+        }
+
+        public async Task DisableInfaredCamera()
+        {
+            byte[] buffer = new byte[SET_INFARED_LENGTH];
+            await WriteReport(OutputReport.IREnable, buffer);
+            await WriteReport(OutputReport.IREnable2, buffer);
+            
+            InfaredCameraEnabled = false;
+            
+            var reportType = GetReportType(_extensionType);
+            await SetReportType(reportType, continuoursMode: true);
+        }
 
         #region Device Memory Access
         private byte[] PrepareMemoryBuffer(int address, int bufferSize)
@@ -252,6 +364,15 @@ namespace ShiftPad.Wii
             report[0] = (byte)reportType;
             report[1] |= _rumbleByte;
             await _dataStream.WriteAsync(report);
+        }
+
+        private async Task SetReportType(InputReport reportType, bool continuoursMode)
+        {
+            byte[] buffer = new byte[SET_REPORT_TYPE_LENGTH];
+            buffer[1] = (byte)(continuoursMode ? 0x04 : 0x00);
+            buffer[2] = (byte)reportType;
+
+            await WriteReport(OutputReport.DataReportMode, buffer);
         }
         #endregion
 
