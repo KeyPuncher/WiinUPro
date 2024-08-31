@@ -624,6 +624,12 @@ namespace NintrollerLib
         }
     }
 
+    public struct ZonePoint
+    {
+        public float X;
+        public float Y;
+    }
+
     public struct RectangularZone
     {
         /// <summary>
@@ -639,9 +645,9 @@ namespace NintrollerLib
         /// </summary>
         public int limitMinX, limitMaxX, limitMinY, limitMaxY;
         
-        public (float X, float Y) Evaluate(int rawX, int rawY)
+        public ZonePoint Evaluate(int rawX, int rawY)
         {
-            var result = (X: 0f, Y: 0f);
+            var result = new ZonePoint { X = 0, Y = 0 };
 
             // Deadzone check
             if (rawX > (deadX - deadWidth / 2) && rawX < (deadX + deadWidth / 2))

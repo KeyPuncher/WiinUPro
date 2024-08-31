@@ -1,6 +1,6 @@
 ;Inno Setup 6
 #define MyAppName "WiinUPro"
-#define MyAppVersion "0.9.7"
+#define MyAppVersion "0.9.8"
 #define MyAppPublisher "Justin Keys"
 #define MyAppURL "https://github.com/KeyPuncher/WiinUPro/releases"
 #define MyAppExeName "WiinUPro.exe"
@@ -67,7 +67,7 @@ english.ComponentGCN=Game Cube Adapter Driver (Must be Plugged in)
 french.InstallAll=Tout installer
 french.InstallSome=Choisir
 french.ComponentXbox=Xbox 360 Controller Driver (Requis sous Windows XP/Vista/and 7)
-french.ComponentGCN=Game Cube Adapter Driver (Doit être branché)
+french.ComponentGCN=Game Cube Adapter Driver (Doit ï¿½tre branchï¿½)
 spanish.InstallAll=Instalar todo
 spanish.InstallSome=Escoger
 spanish.ComponentXbox=Xbox 360 Controller Driver (Requerido para Windows XP/Vista/7)
