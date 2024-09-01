@@ -30,7 +30,7 @@ namespace ShiftPad.Wii
         public bool InfaredCameraEnabled { get; private set; } = false;
 
         private Stream _dataStream;
-        private ContinuoursReader _reader;
+        private ContinuousReader _reader;
         private byte _rumbleByte = 0x00;
         private WiiExtensionType _extensionType = WiiExtensionType.Unknown;
 
@@ -42,7 +42,7 @@ namespace ShiftPad.Wii
         public Wiimote(Stream dataStream)
         {
             _dataStream = dataStream;
-            _reader = new ContinuoursReader(dataStream, REPORT_LENGTH, ReadCallback);
+            _reader = new ContinuousReader(dataStream, REPORT_LENGTH, ReadCallback);
             _responseBuffer = new ResponseBuffer<InputReport, byte[]>();
             _bateryState = new BatteryStandard(PERCENTAGE_RATIO);
         }
@@ -74,20 +74,15 @@ namespace ShiftPad.Wii
             {
                 //
             }
-            else if (_connectionStatus == ConnectionStatus.Connecting)
+            else
             {
-                ProcessConnectingReport(data);
+                _logger.LogDebug($"Got unhandled report {reportyType} before connected.");
             }
         }
 
         private AcknowledgementErrorCode AcknowledgementCheck(byte[] data)
         {
             return (AcknowledgementErrorCode)data[4];
-        }
-
-        private void ProcessConnectingReport(byte[] data)
-        {
-            //
         }
 
         public async Task<bool> StatusReport()

@@ -3,14 +3,14 @@
     /// <summary>
     /// Helper class to instigate continous and repeated stream reading.
     /// </summary>
-    public class ContinuoursReader
+    public class ContinuousReader
     {
         private Stream _stream;
         private int _bufferSize;
         private Action<byte[]> _callback;
         private CancellationTokenSource _cancellationToken;
 
-        public ContinuoursReader(Stream stream, int bufferSize, Action<byte[]> callback)
+        public ContinuousReader(Stream stream, int bufferSize, Action<byte[]> callback)
         {
             _stream = stream;
             _bufferSize = bufferSize;
