@@ -71,7 +71,9 @@ namespace Shared
                     }
                     else
                     {
-                        ConfigureWiimote(new Wiimote());
+                        var wState = new Wiimote();
+                        wState.SetCalibration(Calibrations.CalibrationPreset.Default);
+                        ConfigureWiimote(wState);
                     }
                     break;
 

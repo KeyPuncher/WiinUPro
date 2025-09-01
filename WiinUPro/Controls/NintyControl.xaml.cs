@@ -134,7 +134,7 @@ namespace WiinUPro
                         _dummy = new DummyDevice(Calibrations.Defaults.ProControllerDefault);
                     }
 
-                    _nintroller = new Nintroller(_dummy, _dummy.DeviceType);
+                    _nintroller = new Nintroller(_dummy, ControllerType.Unknown);
                 }
 
                 var dumWin = new Windows.DummyWindow(_dummy);
@@ -179,7 +179,7 @@ namespace WiinUPro
                     UpdateAlignment();
 
                     success = true;
-                    _nintroller.SetReportType(InputReport.ExtOnly, true);
+                    _nintroller.SetDefaultReportType();
                 }
                 else
                 {
