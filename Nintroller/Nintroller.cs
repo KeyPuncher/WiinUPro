@@ -471,6 +471,48 @@ namespace NintrollerLib
             }
         }
 
+        /// <summary>
+        /// Changes the device's reporting type based on the controller type.
+        /// </summary>
+        public void SetDefaultReportType()
+        {
+            var type = _forceType == ControllerType.Unknown ? _currentType : _forceType;
+            var report = InputReport.ExtOnly;
+
+            switch (type)
+            {
+                case ControllerType.Wiimote:
+                    report = InputReport.BtnsAccIR;
+                    break;
+
+                case ControllerType.MotionPlus:
+                case ControllerType.MotionPlusNunchuk:
+                    report = InputReport.BtnsAccIRExt;
+                    break;
+
+                case ControllerType.Nunchuk:
+                case ControllerType.NunchukB:
+                case ControllerType.ClassicController:
+                case ControllerType.ClassicControllerPro:
+                case ControllerType.MotionPlusCC:
+                case ControllerType.Guitar:
+                    report = InputReport.BtnsAccExt;
+                    break;
+
+                case ControllerType.Drums:
+                case ControllerType.TaikoDrum:
+                case ControllerType.TurnTable:
+                case ControllerType.DrawTablet:
+                case ControllerType.ProController:
+                case ControllerType.BalanceBoard:
+                default:
+                    report = InputReport.ExtOnly;
+                    break;
+            }
+
+            SetReportType(report, true);
+        }
+
         // Performs an asynchronous read
         private void ReadAsync()
         {

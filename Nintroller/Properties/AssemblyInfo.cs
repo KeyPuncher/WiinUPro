@@ -28,5 +28,5 @@ using System.Runtime.InteropServices;
 //      Patch Number
 //      Revision <- Updated by pre-build script using git commit count.
 //
-[assembly: AssemblyVersion("2.7.3.747")]
-[assembly: AssemblyFileVersion("2.7.3.747")]
+[assembly: AssemblyVersion("2.7.3.748")]
+[assembly: AssemblyFileVersion("2.7.3.748")]
