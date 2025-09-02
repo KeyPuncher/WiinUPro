@@ -7,7 +7,7 @@ WiinUPro does all the things, and WiinUSoft is only for making them act like XIn
 
 **Note**: Only official Nintendo controllers are officially supported in this unofficial software.
 
-***Side Note***: Most of what these programs can do can also be accomplished with Steam. They actually have a paid team to implement that stuff and there's quite a bit of funcitonality, if you can figure out where to find all of it.
+***Side Note***: Most of what these programs can do can also be accomplished with Steam. They actually have a paid team to implement that stuff and there's quite a bit of functionality, if you can figure out where to find all of it.
 
 # I'll Read this stuff Later/Never, Gimmie my download link
 If you already know what you want, head over to the [Releases Section](https://github.com/KeyPuncher/WiinUPro/releases). 
@@ -16,6 +16,52 @@ Expand Assets.
 Then download either the \_setup.exe or .zip file.
 
 **Note**: Also requires [Visual C++ Redistributable for Visual Studio 2012 Update 4](https://www.microsoft.com/en-us/download/details.aspx?id=30679)
+
+# I'm lost, where should I start from?
+WiinUPro and WiinUSoft are provided in two forms: zip (portable) and exe (installer).
+Read following sections to know which one fits best your needs.
+
+## Option 1: emulating keystrokes with WiinUPro
+Simplest (and most compatible) choice: map controller buttons to
+keyboard. No need to install anything. [Download](https://github.com/KeyPuncher/WiinUPro/releases)
+and extract portable `WiinUPro_*_.zip`, then open `32|64-bit/WiinUPro.exe`. Pair,
+connect and add a controller. Then just map buttons to keystrokes and start
+playing. You can also save and load profiles, to easily switch between mappings
+(e.g., for different games. Analog sticks can be used as if they were digital
+(either toggled or not - no intermediate states).
+
+## Option 2: emulating XBox 360 controller with WiinUSoft 
+For more features (vibration, full analog support), you'll need your device to
+be recognized as an actual controller (an XBox 360 controller,
+internally known as XInput controller). In that case,
+[download](https://github.com/KeyPuncher/WiinUPro/releases)
+and run the installer for either WiinUSoft or WiinUPro.
+WiinU**Soft** is the way to go if you only need the XInput feature and no
+keyboard mapping. During the installation process, you'll need to include
+component SCP Driver. Please, read the [SCP section below](#scp_driver).
+
+## Option 3: all-in-one with WiinUPro
+To be able to emulate both keystrokes AND Xbox 360 controller, you'll need to
+*install* WiinU**Pro** (just running the portable version is not enough). By
+installing it, you'll be able to do the job of WiinUSoft as well.
+During the installation process, you'll need to include
+component SCP Driver. Please, read the [SCP section below](#scp_driver).
+
+## Option 4: WiinUPro for keystrokes, WiinUSoft for XInput
+The last, fully-fledged option is to adopt both WiinUPro and WiinUSoft. This may
+be useful if you need WiinUPro features, but prefer the user experience of
+WiinUSoft for XInput emulation. You can fully install either WiinUPro or
+WiinUSoft and just run the portable version of the other app.
+During the installation process, you'll need to include
+component SCP Driver. Please, read the [SCP section below](#scp_driver).
+
+## SCP Driver
+The **SCP Driver** component is required in two scenarios: 1) for WiinUSoft to work at all;
+2) for WiinUPro to emulate XInput.
+
+SCP Driver and other (optional) components will be automatically presented to
+you during the installation process of either app. The portable (zip) version
+contains these components as separate folders, to be installed manually.
 
 # WiinUSoft
 This is for people who just want their Nintendo controllers to behave like regular Windows compatible controllers.
