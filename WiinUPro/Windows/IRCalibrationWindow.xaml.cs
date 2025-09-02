@@ -34,9 +34,9 @@ namespace WiinUPro.Windows
             _irCalibration.topBounds = current.topBounds;
             _irCalibration.bottomBounds = current.bottomBounds;
             _irCalibration.offscreenBehavior = current.offscreenBehavior;
-            _irCalibration.minVisiblePoints = (int)current.minimumVisiblePoints;
+            _irCalibration.minVisiblePoints = current.minimumVisiblePoints;
 
-            minVisiblePoints.SelectedIndex = _irCalibration.minVisiblePoints;
+            minVisiblePoints.SelectedIndex = (int)_irCalibration.minVisiblePoints;
 
             switch (current.offscreenBehavior)
             {
@@ -83,10 +83,10 @@ namespace WiinUPro.Windows
             point3.Opacity = update.point3.visible ? 1 : 0;
             point4.Opacity = update.point4.visible ? 1 : 0;
 
-            Canvas.SetLeft(point1, update.point1.rawX - point1.Width / 2);
-            Canvas.SetLeft(point2, update.point2.rawX - point2.Width / 2);
-            Canvas.SetLeft(point3, update.point3.rawX - point3.Width / 2);
-            Canvas.SetLeft(point4, update.point4.rawX - point4.Width / 2);
+            Canvas.SetLeft(point1, 1023 - update.point1.rawX - point1.Width / 2);
+            Canvas.SetLeft(point2, 1023 - update.point2.rawX - point2.Width / 2);
+            Canvas.SetLeft(point3, 1023 - update.point3.rawX - point3.Width / 2);
+            Canvas.SetLeft(point4, 1023 - update.point4.rawX - point4.Width / 2);
 
             Canvas.SetTop(point1, update.point1.rawY - point1.Height / 2);
             Canvas.SetTop(point2, update.point2.rawY - point2.Height / 2);
@@ -162,7 +162,14 @@ namespace WiinUPro.Windows
         private void visiblePoints_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!set) return;
-            _irCalibration.minVisiblePoints = minVisiblePoints.SelectedIndex;
+            if (minVisiblePoints.SelectedIndex == 1)
+            {
+                _irCalibration.minVisiblePoints = IRCamMinimumVisiblePoints.One;
+            }
+            else
+            {
+                _irCalibration.minVisiblePoints = IRCamMinimumVisiblePoints.Two;
+            }
         }
 
         private void acceptBtn_Click(object sender, RoutedEventArgs e)
@@ -232,6 +239,6 @@ namespace WiinUPro.Windows
         public SquareBoundry deadzone;
         public int leftBounds, rightBounds, topBounds, bottomBounds;
         public IRCamOffscreenBehavior offscreenBehavior;
-        public int minVisiblePoints;
+        public IRCamMinimumVisiblePoints minVisiblePoints;
     }
 }
