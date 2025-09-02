@@ -609,7 +609,7 @@ namespace WiinUPro
             wmCal.irSensor.topBounds = calibration.topBounds;
             wmCal.irSensor.bottomBounds = calibration.bottomBounds;
             wmCal.irSensor.offscreenBehavior = calibration.offscreenBehavior;
-            wmCal.irSensor.minimumVisiblePoints = (IRCamMinimumVisiblePoints)calibration.minVisiblePoints;
+            wmCal.irSensor.minimumVisiblePoints = calibration.minVisiblePoints;
             _nintroller.SetCalibration(wmCal);
 
             AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, App.CAL_WII_IR, file);

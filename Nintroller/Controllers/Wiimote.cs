@@ -132,6 +132,7 @@ namespace NintrollerLib
                 irSensor.topBounds = ((Wiimote)from).irSensor.topBounds;
                 irSensor.bottomBounds = ((Wiimote)from).irSensor.bottomBounds;
                 irSensor.offscreenBehavior = ((Wiimote)from).irSensor.offscreenBehavior;
+                irSensor.minimumVisiblePoints = ((Wiimote)from).irSensor.minimumVisiblePoints;
             }
             else if (from.GetType() == typeof(Nunchuk))
             {
@@ -142,6 +143,7 @@ namespace NintrollerLib
                 irSensor.topBounds = ((Nunchuk)from).wiimote.irSensor.topBounds;
                 irSensor.bottomBounds = ((Nunchuk)from).wiimote.irSensor.bottomBounds;
                 irSensor.offscreenBehavior = ((Nunchuk)from).wiimote.irSensor.offscreenBehavior;
+                irSensor.minimumVisiblePoints = ((Nunchuk)from).wiimote.irSensor.minimumVisiblePoints;
             }
             else if (from.GetType() == typeof(ClassicController))
             {
@@ -152,6 +154,7 @@ namespace NintrollerLib
                 irSensor.topBounds = ((ClassicController)from).wiimote.irSensor.topBounds;
                 irSensor.bottomBounds = ((ClassicController)from).wiimote.irSensor.bottomBounds;
                 irSensor.offscreenBehavior = ((ClassicController)from).wiimote.irSensor.offscreenBehavior;
+                irSensor.minimumVisiblePoints = ((ClassicController)from).wiimote.irSensor.minimumVisiblePoints;
             }
             else if (from.GetType() == typeof(ClassicControllerPro))
             {
@@ -162,6 +165,7 @@ namespace NintrollerLib
                 irSensor.topBounds = ((ClassicControllerPro)from).wiimote.irSensor.topBounds;
                 irSensor.bottomBounds = ((ClassicControllerPro)from).wiimote.irSensor.bottomBounds;
                 irSensor.offscreenBehavior = ((ClassicControllerPro)from).wiimote.irSensor.offscreenBehavior;
+                irSensor.minimumVisiblePoints = ((ClassicControllerPro)from).wiimote.irSensor.minimumVisiblePoints;
             }
         }
 

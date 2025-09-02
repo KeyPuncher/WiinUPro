@@ -291,18 +291,19 @@ namespace NintrollerLib
             if (point2.visible) visiblePoints += 1;
             // TODO: work with more points
 
-            if (minimumVisiblePoints == IRCamMinimumVisiblePoints.Default)
+            var viz = minimumVisiblePoints;
+            if (viz == IRCamMinimumVisiblePoints.Default)
             {
-                minimumVisiblePoints = IRCamMinimumVisiblePoints.Two;
+                viz = IRCamMinimumVisiblePoints.Two;
             }
 
-            if (minimumVisiblePoints == IRCamMinimumVisiblePoints.One && visiblePoints < 1)
+            if (viz == IRCamMinimumVisiblePoints.One && visiblePoints < 1)
             {
                 SetFallback();
                 return;
             }
 
-            if (minimumVisiblePoints == IRCamMinimumVisiblePoints.Two && visiblePoints < 2)
+            if (viz == IRCamMinimumVisiblePoints.Two && visiblePoints < 2)
             {
                 SetFallback();
                 return;
@@ -346,17 +347,17 @@ namespace NintrollerLib
                 {
                     if (midPoint.rawX < leftBounds)
                     {
-                        X = -1f;
+                        X = 1f;
                     }
                     else if (midPoint.rawX > rightBounds)
                     {
-                        X = 1f;
+                        X = -1f;
                     }
                     else
                     {
                         float size = rightBounds - leftBounds;
                         if (size != 0)
-                            X = ((midPoint.rawX - leftBounds) / size * 2f) - 1f;
+                            X = 1f - ((midPoint.rawX - leftBounds) / size * 2f);
                     }
 
                     if (midPoint.rawY < topBounds)
