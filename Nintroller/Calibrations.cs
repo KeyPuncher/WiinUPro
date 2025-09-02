@@ -117,13 +117,17 @@
 
                 irSensor = new IR()
                 {
-                    boundingArea = new SquareBoundry()
+                    deadArea = new SquareBoundry()
                     {
                         center_x = 512,
                         center_y = 768 / 2,
                         width = 0,
                         height = 0
-                    }
+                    },
+                    leftBounds = 0,
+                    rightBounds = 1023,
+                    topBounds = 0,
+                    bottomBounds = 767
                 }
             };
 
@@ -359,13 +363,17 @@
 
                 irSensor = new IR()
                 {
-                    boundingArea = new SquareBoundry()
+                    deadArea = new SquareBoundry()
                     {
                         center_x = 512,
                         center_y = 768 / 2,
                         width = 64,
                         height = 48
-                    }
+                    },
+                    leftBounds = 4,
+                    rightBounds = 1019,
+                    topBounds = 3,
+                    bottomBounds = 764
                 }
             };
 
@@ -616,13 +624,17 @@
 
                 irSensor = new IR()
                 {
-                    boundingArea = new SquareBoundry()
+                    deadArea = new SquareBoundry()
                     {
                         center_x = 512,
                         center_y = 768 / 2,
                         width = 128,
                         height = 96
-                    }
+                    },
+                    leftBounds = 20,
+                    rightBounds = 1003,
+                    topBounds = 15,
+                    bottomBounds = 752
                 }
             };
 
@@ -877,13 +889,17 @@
 
                 irSensor = new IR()
                 {
-                    boundingArea = new SquareBoundry()
+                    deadArea = new SquareBoundry()
                     {
                         center_x = 512,
                         center_y = 768 / 2,
                         width = 192,
                         height = 144
-                    }
+                    },
+                    leftBounds = 50,
+                    rightBounds = 973,
+                    topBounds = 42,
+                    bottomBounds = 725
                 }
             };
 
@@ -1119,13 +1135,17 @@
 
                 irSensor = new IR()
                 {
-                    boundingArea = new SquareBoundry()
+                    deadArea = new SquareBoundry()
                     {
                         center_x = 512,
                         center_y = 768 / 2,
                         width = 224,
                         height = 168
-                    }
+                    },
+                    leftBounds = 100,
+                    rightBounds = 923,
+                    topBounds = 75,
+                    bottomBounds = 692
                 }
             };
 

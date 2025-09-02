@@ -47,7 +47,7 @@
     <Compile Include="DeviceManagement.cs" />
     <Compile Include="Calibrations.cs" />
     <Compile Include="ComponentStructs.cs" />
-    <Compile Include="Enumerators.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Controllers\GameCubeAdapter.cs" />
     <Compile Include="Controllers\Guitar.cs" />
     <Compile Include="INPUT_NAMES.cs" />

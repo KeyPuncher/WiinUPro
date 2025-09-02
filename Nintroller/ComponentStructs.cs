@@ -45,17 +45,17 @@ namespace NintrollerLib
 
             if (type != InputReport.ExtOnly)
             {
-                A     = (input[offset + 1] & 0x08) != 0;
-                B     = (input[offset + 1] & 0x04) != 0;
-                One   = (input[offset + 1] & 0x02) != 0;
-                Two   = (input[offset + 1] & 0x01) != 0;
-                Home  = (input[offset + 1] & 0x80) != 0;
+                A = (input[offset + 1] & 0x08) != 0;
+                B = (input[offset + 1] & 0x04) != 0;
+                One = (input[offset + 1] & 0x02) != 0;
+                Two = (input[offset + 1] & 0x01) != 0;
+                Home = (input[offset + 1] & 0x80) != 0;
                 Minus = (input[offset + 1] & 0x10) != 0;
-                Plus  = (input[offset + 0] & 0x10) != 0;
-                Up    = (input[offset + 0] & 0x08) != 0;
-                Down  = (input[offset + 0] & 0x04) != 0;
+                Plus = (input[offset + 0] & 0x10) != 0;
+                Up = (input[offset + 0] & 0x08) != 0;
+                Down = (input[offset + 0] & 0x04) != 0;
                 Right = (input[offset + 0] & 0x02) != 0;
-                Left  = (input[offset + 0] & 0x01) != 0;
+                Left = (input[offset + 0] & 0x01) != 0;
             }
         }
     }
@@ -198,11 +198,11 @@ namespace NintrollerLib
         /// <summary>
         /// Calculated rotation angle
         /// </summary>
-        public float rotation;
+        //public float rotation;
         /// <summary>
         /// Distance between points 1 and 2
         /// </summary>
-        public float distance;
+        //spublic float distance;
         /// <summary>
         /// Normalized pointer position
         /// </summary>
@@ -210,7 +210,19 @@ namespace NintrollerLib
         /// <summary>
         /// Area in which normalization returns 0
         /// </summary>
-        public INintrollerBounds boundingArea;
+        public INintrollerBounds deadArea;
+        /// <summary>
+        /// Area in which everything outside of it is "out of bounds" resulting in max value.
+        /// </summary>
+        public int leftBounds, rightBounds, topBounds, bottomBounds;
+        /// <summary>
+        /// How the values should be set when no points are visible.
+        /// </summary>
+        public IRCamOffscreenBehavior offscreenBehavior;
+        /// <summary>
+        /// How many points need to be visible to produce output.
+        /// </summary>
+        public IRCamMinimumVisiblePoints minimumVisiblePoints;
 
         public void Parse(byte[] input, int offset = 0)
         {
@@ -225,7 +237,7 @@ namespace NintrollerLib
         /// <param name="basic"></param>
         public void Parse(byte[] input, int offset, bool basic)
         {
-            point1.rawX = input[offset    ] | ((input[offset + 2] & 0b_0011_0000) << 4);
+            point1.rawX = input[offset] | ((input[offset + 2] & 0b_0011_0000) << 4);
             point1.rawY = input[offset + 1] | ((input[offset + 2] & 0b_1100_0000) << 2);
 
             if (basic)
@@ -251,21 +263,21 @@ namespace NintrollerLib
             else
             {
                 // Extended Mode
-                point2.rawX = input[offset +  3] | ((input[offset +  5] & 0b_0011_0000) << 4);
-                point2.rawY = input[offset +  4] | ((input[offset +  5] & 0b_1100_0000) << 2);
-                point3.rawX = input[offset +  6] | ((input[offset +  8] & 0b_0011_0000) << 4);
-                point3.rawY = input[offset +  7] | ((input[offset +  8] & 0b_1100_0000) << 2);
-                point4.rawX = input[offset +  9] | ((input[offset + 11] & 0b_0011_0000) << 4);
+                point2.rawX = input[offset + 3] | ((input[offset + 5] & 0b_0011_0000) << 4);
+                point2.rawY = input[offset + 4] | ((input[offset + 5] & 0b_1100_0000) << 2);
+                point3.rawX = input[offset + 6] | ((input[offset + 8] & 0b_0011_0000) << 4);
+                point3.rawY = input[offset + 7] | ((input[offset + 8] & 0b_1100_0000) << 2);
+                point4.rawX = input[offset + 9] | ((input[offset + 11] & 0b_0011_0000) << 4);
                 point4.rawY = input[offset + 10] | ((input[offset + 11] & 0b_1100_0000) << 2);
 
-                point1.size = input[offset +  2] & 0x0F;
-                point2.size = input[offset +  5] & 0x0F;
-                point3.size = input[offset +  8] & 0x0F;
+                point1.size = input[offset + 2] & 0x0F;
+                point2.size = input[offset + 5] & 0x0F;
+                point3.size = input[offset + 8] & 0x0F;
                 point4.size = input[offset + 11] & 0x0F;
 
-                point1.visible = !(input[offset    ] == 0xFF && input[offset +  1] == 0xFF);
-                point2.visible = !(input[offset + 3] == 0xFF && input[offset +  4] == 0xFF);
-                point3.visible = !(input[offset + 6] == 0xFF && input[offset +  7] == 0xFF);
+                point1.visible = !(input[offset] == 0xFF && input[offset + 1] == 0xFF);
+                point2.visible = !(input[offset + 3] == 0xFF && input[offset + 4] == 0xFF);
+                point3.visible = !(input[offset + 6] == 0xFF && input[offset + 7] == 0xFF);
                 point4.visible = !(input[offset + 9] == 0xFF && input[offset + 10] == 0xFF);
             }
         }
@@ -275,12 +287,24 @@ namespace NintrollerLib
         /// </summary>
         public void Normalize()
         {
-            if (!point1.visible && !point2.visible)
+            int visiblePoints = point1.visible ? 1 : 0;
+            if (point2.visible) visiblePoints += 1;
+            // TODO: work with more points
+
+            if (minimumVisiblePoints == IRCamMinimumVisiblePoints.Default)
             {
-                X = 0;
-                Y = 0;
-                rotation = 0;
-                distance = 0;
+                minimumVisiblePoints = IRCamMinimumVisiblePoints.Two;
+            }
+
+            if (minimumVisiblePoints == IRCamMinimumVisiblePoints.One && visiblePoints < 1)
+            {
+                SetFallback();
+                return;
+            }
+
+            if (minimumVisiblePoints == IRCamMinimumVisiblePoints.Two && visiblePoints < 2)
+            {
+                SetFallback();
                 return;
             }
 
@@ -288,8 +312,8 @@ namespace NintrollerLib
 
             if (point1.visible && point2.visible)
             {
-                midPoint.rawX = point1.rawX + (point2.rawX - point1.rawX)/2;
-                midPoint.rawY = point1.rawY + (point2.rawY - point1.rawY)/2;
+                midPoint.rawX = point1.rawX + (point2.rawX - point1.rawX) / 2;
+                midPoint.rawY = point1.rawY + (point2.rawY - point1.rawY) / 2;
                 midPoint.visible = true;
             }
             else if (point1.visible)
@@ -303,9 +327,9 @@ namespace NintrollerLib
 
             if (midPoint.visible)
             {
-                if (boundingArea == null)
+                if (deadArea == null)
                 {
-                    boundingArea = new SquareBoundry()
+                    deadArea = new SquareBoundry()
                     {
                         center_x = 512,
                         center_y = 384,
@@ -314,18 +338,64 @@ namespace NintrollerLib
                     };
                 }
 
-                if (/*boundingArea != null && */boundingArea.InBounds(midPoint.rawX, midPoint.rawY))
+                if (deadArea.InBounds(midPoint.rawX, midPoint.rawY))
                 {
-                    X = 0;
-                    Y = 0;
+                    SetFallback();
                 }
-                else
+                else if (deadArea is SquareBoundry square)
                 {
-                    X = (midPoint.rawX - 512) / -256f;
-                    Y = (midPoint.rawY - 384) / -192f;
+                    if (midPoint.rawX < leftBounds)
+                    {
+                        X = 1f;
+                    }
+                    else if (midPoint.rawX > rightBounds)
+                    {
+                        X = -1f;
+                    }
+                    else if (midPoint.rawX > square.center_x)
+                    {
+                        var offset = square.center_x + square.width / 2f;
+                        var size = rightBounds - offset;
+                        X = (offset - midPoint.rawX) / size;
+                    }
+                    else
+                    {
+                        var offset = square.center_x - square.width / 2f;
+                        var size = offset - leftBounds;
+                        X = (offset - midPoint.rawX) / size;
+                    }
+
+                    if (midPoint.rawY < topBounds)
+                    {
+                        Y = 1f;
+                    }
+                    else if (midPoint.rawY > bottomBounds)
+                    {
+                        Y = -1f;
+                    }
+                    else if (midPoint.rawY > square.center_y)
+                    {
+                        var offset = square.center_y + square.height / 2f;
+                        var size = bottomBounds - offset;
+                        Y = (offset - midPoint.rawY) / size;
+                    }
+                    else
+                    {
+                        var offset = square.center_y - square.height / 2f;
+                        var size = offset - topBounds;
+                        Y = (offset - midPoint.rawY) / size;
+                    }
                 }
             }
             else
+            {
+                SetFallback();
+            }
+        }
+
+        private void SetFallback()
+        {
+            if (offscreenBehavior == IRCamOffscreenBehavior.ReturnToCenter)
             {
                 X = 0;
                 Y = 0;

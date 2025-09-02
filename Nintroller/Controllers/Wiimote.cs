@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -127,22 +126,42 @@ namespace NintrollerLib
             if (from.GetType() == typeof(Wiimote))
             {
                 accelerometer.Calibrate(((Wiimote)from).accelerometer);
-                irSensor.boundingArea = ((Wiimote)from).irSensor.boundingArea;
+                irSensor.deadArea = ((Wiimote)from).irSensor.deadArea;
+                irSensor.leftBounds = ((Wiimote)from).irSensor.leftBounds;
+                irSensor.rightBounds = ((Wiimote)from).irSensor.rightBounds;
+                irSensor.topBounds = ((Wiimote)from).irSensor.topBounds;
+                irSensor.bottomBounds = ((Wiimote)from).irSensor.bottomBounds;
+                irSensor.offscreenBehavior = ((Wiimote)from).irSensor.offscreenBehavior;
             }
             else if (from.GetType() == typeof(Nunchuk))
             {
                 accelerometer.Calibrate(((Nunchuk)from).wiimote.accelerometer);
-                irSensor.boundingArea = ((Nunchuk)from).wiimote.irSensor.boundingArea;
+                irSensor.deadArea = ((Nunchuk)from).wiimote.irSensor.deadArea;
+                irSensor.leftBounds = ((Nunchuk)from).wiimote.irSensor.leftBounds;
+                irSensor.rightBounds = ((Nunchuk)from).wiimote.irSensor.rightBounds;
+                irSensor.topBounds = ((Nunchuk)from).wiimote.irSensor.topBounds;
+                irSensor.bottomBounds = ((Nunchuk)from).wiimote.irSensor.bottomBounds;
+                irSensor.offscreenBehavior = ((Nunchuk)from).wiimote.irSensor.offscreenBehavior;
             }
             else if (from.GetType() == typeof(ClassicController))
             {
                 accelerometer.Calibrate(((ClassicController)from).wiimote.accelerometer);
-                irSensor.boundingArea = ((ClassicController)from).wiimote.irSensor.boundingArea;
+                irSensor.deadArea = ((ClassicController)from).wiimote.irSensor.deadArea;
+                irSensor.leftBounds = ((ClassicController)from).wiimote.irSensor.leftBounds;
+                irSensor.rightBounds = ((ClassicController)from).wiimote.irSensor.rightBounds;
+                irSensor.topBounds = ((ClassicController)from).wiimote.irSensor.topBounds;
+                irSensor.bottomBounds = ((ClassicController)from).wiimote.irSensor.bottomBounds;
+                irSensor.offscreenBehavior = ((ClassicController)from).wiimote.irSensor.offscreenBehavior;
             }
             else if (from.GetType() == typeof(ClassicControllerPro))
             {
                 accelerometer.Calibrate(((ClassicControllerPro)from).wiimote.accelerometer);
-                irSensor.boundingArea = ((ClassicControllerPro)from).wiimote.irSensor.boundingArea;
+                irSensor.deadArea = ((ClassicControllerPro)from).wiimote.irSensor.deadArea;
+                irSensor.leftBounds = ((ClassicControllerPro)from).wiimote.irSensor.leftBounds;
+                irSensor.rightBounds = ((ClassicControllerPro)from).wiimote.irSensor.rightBounds;
+                irSensor.topBounds = ((ClassicControllerPro)from).wiimote.irSensor.topBounds;
+                irSensor.bottomBounds = ((ClassicControllerPro)from).wiimote.irSensor.bottomBounds;
+                irSensor.offscreenBehavior = ((ClassicControllerPro)from).wiimote.irSensor.offscreenBehavior;
             }
         }
 
@@ -185,6 +204,40 @@ namespace NintrollerLib
                         }
                     }
                 }
+                else if (component.StartsWith("ir"))
+                {
+                    string[] irConfig = component.Split(new char[] { '|' });
+
+                    for (int r = 0; r < irConfig.Length; r++)
+                    {
+                        if (int.TryParse(irConfig[r], out int value))
+                        {
+                            switch (r)
+                            {
+                                case 1: irSensor.offscreenBehavior = (IRCamOffscreenBehavior)value; break;
+                                case 2: irSensor.minimumVisiblePoints = (IRCamMinimumVisiblePoints)value; break;
+                            }
+                        }
+                    }
+                }
+                else if (component.StartsWith("irArea"))
+                {
+                    string[] irArea = component.Split(new char[] { '|' });
+
+                    for (int r = 0; r < irArea.Length; r++)
+                    {
+                        if (int.TryParse(irArea[r], out int value))
+                        {
+                            switch (r)
+                            {
+                                case 1: irSensor.leftBounds = value; break;
+                                case 2: irSensor.rightBounds = value; break;
+                                case 3: irSensor.topBounds = value; break;
+                                case 4: irSensor.bottomBounds = value; break;
+                            }
+                        }
+                    }
+                }
                 else if (component.StartsWith("irSqr"))
                 {
                     SquareBoundry sBoundry = new SquareBoundry();
@@ -205,7 +258,7 @@ namespace NintrollerLib
                         }
                     }
 
-                    irSensor.boundingArea = sBoundry;
+                    irSensor.deadArea = sBoundry;
                 }
                 else if (component.StartsWith("irCir"))
                 {
@@ -226,7 +279,7 @@ namespace NintrollerLib
                         }
                     }
 
-                    irSensor.boundingArea = sBoundry;
+                    irSensor.deadArea = sBoundry;
                 }
             }
         }
@@ -236,6 +289,7 @@ namespace NintrollerLib
         /// String is in the following format 
         /// -wm:acc|centerX|minX|minY|deadX|centerY|[...]:ir
         /// </summary>
+        /// <remarks>I guess I didn't want to use JSON ??</remarks>
         /// <returns>String representing the Wiimote's calibration settings.</returns>
         public string GetCalibrationString()
         {
@@ -256,21 +310,31 @@ namespace NintrollerLib
                     sb.Append("|"); sb.Append(accelerometer.minZ);
                     sb.Append("|"); sb.Append(accelerometer.maxZ);
                     sb.Append("|"); sb.Append(accelerometer.deadZ);
-                
-            if (irSensor.boundingArea != null)
+
+                sb.Append(":ir");
+                    sb.Append("|"); sb.Append((int)irSensor.offscreenBehavior);
+                    sb.Append("|"); sb.Append((int)irSensor.minimumVisiblePoints);
+
+                sb.Append(":irArea");
+                    sb.Append("|"); sb.Append(irSensor.leftBounds);
+                    sb.Append("|"); sb.Append(irSensor.rightBounds);
+                    sb.Append("|"); sb.Append(irSensor.topBounds);
+                    sb.Append("|"); sb.Append(irSensor.bottomBounds);
+
+            if (irSensor.deadArea != null)
             {
-                if (irSensor.boundingArea is SquareBoundry)
+                if (irSensor.deadArea is SquareBoundry)
                 {
-                    SquareBoundry sqr = (SquareBoundry)irSensor.boundingArea;
+                    SquareBoundry sqr = (SquareBoundry)irSensor.deadArea;
                     sb.Append(":irSqr");
                         sb.Append("|"); sb.Append(sqr.center_x);
                         sb.Append("|"); sb.Append(sqr.center_y);
                         sb.Append("|"); sb.Append(sqr.width);
                         sb.Append("|"); sb.Append(sqr.height);
                 }
-                else if (irSensor.boundingArea is CircularBoundry)
+                else if (irSensor.deadArea is CircularBoundry)
                 {
-                    CircularBoundry cir = (CircularBoundry)irSensor.boundingArea;
+                    CircularBoundry cir = (CircularBoundry)irSensor.deadArea;
                     sb.Append(":irCir");
                         sb.Append("|"); sb.Append(cir.center_x);
                         sb.Append("|"); sb.Append(cir.center_y);
