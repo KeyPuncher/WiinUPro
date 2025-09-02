@@ -51,6 +51,7 @@
     "Context_Quick": [ "Quick Assignment", "Test48" ],
     "Context_Quick_Arrows": [ "Arrows", "Test49" ],
     "Context_Quick_Mouse": [ "Mouse", "Test50" ],
+    "Context_Quick_Mouse_Pointer": [ "As Mouse", "Test50.5" ],
     "Context_Quick_Mouse_100": [ "100% Speed", "Test51" ],
     "Context_Quick_Mouse_150": [ "150% Speed", "Test52" ],
     "Context_Quick_Mouse_200": [ "200% Speed", "Test53" ],

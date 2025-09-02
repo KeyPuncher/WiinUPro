@@ -314,7 +314,7 @@ namespace WiinUPro
                         IR ir;
                         if (App.LoadFromFile<IR>(calibrationFile.Value, out ir))
                         {
-                            wmCalibration.irSensor.boundingArea = ir.boundingArea;
+                            wmCalibration.irSensor.deadArea = ir.deadArea;
                         }
                         break;
                 }
@@ -603,7 +603,13 @@ namespace WiinUPro
         private void _nintroller_IRCalibrated(Windows.IRCalibration calibration, string file = "")
         {
             var wmCal = _nintroller.StoredCalibrations.WiimoteCalibration;
-            wmCal.irSensor.boundingArea = calibration.boundry;
+            wmCal.irSensor.deadArea = calibration.deadzone;
+            wmCal.irSensor.leftBounds = calibration.leftBounds;
+            wmCal.irSensor.rightBounds = calibration.rightBounds;
+            wmCal.irSensor.topBounds = calibration.topBounds;
+            wmCal.irSensor.bottomBounds = calibration.bottomBounds;
+            wmCal.irSensor.offscreenBehavior = calibration.offscreenBehavior;
+            wmCal.irSensor.minimumVisiblePoints = (IRCamMinimumVisiblePoints)calibration.minVisiblePoints;
             _nintroller.SetCalibration(wmCal);
 
             AppPrefs.Instance.PromptToSaveCalibration(_info.DevicePath, App.CAL_WII_IR, file);

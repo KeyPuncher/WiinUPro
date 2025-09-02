@@ -59,6 +59,10 @@ namespace WiinUPro
             (quickAssign.Items[2] as MenuItem).Click += QuickAssign_Click;
             _analogMenu.Items.Add(quickAssign);
 
+            var mousePointer = new MenuItem { Header = Globalization.Translate("Context_Quick_Mouse_Pointer"), Tag = "Pointer" };
+            mousePointer.Click += QuickAssignMouseAbsolute_Click;
+            _analogMenu.Items.Add(mousePointer);
+
             _analogMenu.Items.Add(new Separator());
 
             // Create menu items for IR camera
@@ -106,6 +110,7 @@ namespace WiinUPro
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Visible;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Visible;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
@@ -125,6 +130,7 @@ namespace WiinUPro
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Visible;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
@@ -142,6 +148,7 @@ namespace WiinUPro
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
             (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Collapsed;
+            (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as Separator).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
@@ -162,7 +169,7 @@ namespace WiinUPro
                 (_analogMenu.Items[i] as MenuItem).Visibility = Visibility.Collapsed;
             }
             
-            for (; i < 13; ++i)
+            for (; i < _analogMenu.Items.Count; ++i)
             {
                 ((Control)_analogMenu.Items[i]).Visibility = Visibility.Visible;
             }
@@ -329,7 +336,7 @@ namespace WiinUPro
         {
             Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
 
-            if (type == "Mouse")
+            if (type == Globalization.Translate("Context_Quick_Mouse"))
             {
                 args.Add(prefix + "UP", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveUp) }));
                 args.Add(prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new MouseAssignment(MouseInput.MoveDown) }));
@@ -343,7 +350,7 @@ namespace WiinUPro
                 args.Add(prefix + "LEFT", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_A) }));
                 args.Add(prefix + "RIGHT", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.K_D) }));
             }
-            else if (type == "Arrows")
+            else if (type == Globalization.Translate("Context_Quick_Arrows"))
             {
                 args.Add(prefix + "UP", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_UP) }));
                 args.Add(prefix + "DOWN", new AssignmentCollection(new List<IAssignment> { new KeyboardAssignment(InputManager.VirtualKeyCode.VK_DOWN) }));
@@ -404,6 +411,11 @@ namespace WiinUPro
                     CallEvent_OnQuickAssign(args);
                 }
             }
+        }
+
+        protected virtual void QuickAssignMouseAbsolute_Click(object sender, RoutedEventArgs e)
+        {
+            // To be overriden in WiiControl.
         }
 
         protected virtual void SetIRCamMode_Click(object sender, RoutedEventArgs e)

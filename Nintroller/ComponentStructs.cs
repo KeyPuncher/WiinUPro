@@ -346,23 +346,17 @@ namespace NintrollerLib
                 {
                     if (midPoint.rawX < leftBounds)
                     {
-                        X = 1f;
+                        X = -1f;
                     }
                     else if (midPoint.rawX > rightBounds)
                     {
-                        X = -1f;
-                    }
-                    else if (midPoint.rawX > square.center_x)
-                    {
-                        var offset = square.center_x + square.width / 2f;
-                        var size = rightBounds - offset;
-                        X = (offset - midPoint.rawX) / size;
+                        X = 1f;
                     }
                     else
                     {
-                        var offset = square.center_x - square.width / 2f;
-                        var size = offset - leftBounds;
-                        X = (offset - midPoint.rawX) / size;
+                        float size = rightBounds - leftBounds;
+                        if (size != 0)
+                            X = ((midPoint.rawX - leftBounds) / size * 2f) - 1f;
                     }
 
                     if (midPoint.rawY < topBounds)
@@ -373,18 +367,13 @@ namespace NintrollerLib
                     {
                         Y = -1f;
                     }
-                    else if (midPoint.rawY > square.center_y)
-                    {
-                        var offset = square.center_y + square.height / 2f;
-                        var size = bottomBounds - offset;
-                        Y = (offset - midPoint.rawY) / size;
-                    }
                     else
                     {
-                        var offset = square.center_y - square.height / 2f;
-                        var size = offset - topBounds;
-                        Y = (offset - midPoint.rawY) / size;
+                        float size = bottomBounds - topBounds;
+                        if (size != 0)
+                            Y = 1f - ((midPoint.rawY - topBounds) / size * 2f);
                     }
+
                 }
             }
             else

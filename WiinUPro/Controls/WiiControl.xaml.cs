@@ -222,6 +222,8 @@ namespace WiinUPro
                 case INPUT_NAMES.WIIMOTE.IR_LEFT: UpdateTooltipLine(irCanvas, tooltip, 1); break;
                 case INPUT_NAMES.WIIMOTE.IR_RIGHT: UpdateTooltipLine(irCanvas, tooltip, 2); break;
                 case INPUT_NAMES.WIIMOTE.IR_DOWN: UpdateTooltipLine(irCanvas, tooltip, 3); break;
+                case INPUT_NAMES.WIIMOTE.IR_X: UpdateTooltipLine(irCanvas, tooltip, 4); break;
+                case INPUT_NAMES.WIIMOTE.IR_Y: UpdateTooltipLine(irCanvas, tooltip, 5); break;
                 case INPUT_NAMES.WIIMOTE.UP: 
                     wBtnUp.ToolTip = tooltip;
                     UpdateTooltipLine(wCenterPad, tooltip, 0);
@@ -367,6 +369,8 @@ namespace WiinUPro
             UpdateTooltipLine(irCanvas, unsetText, 1);
             UpdateTooltipLine(irCanvas, unsetText, 2);
             UpdateTooltipLine(irCanvas, unsetText, 3);
+            UpdateTooltipLine(irCanvas, unsetText, 4);
+            UpdateTooltipLine(irCanvas, unsetText, 5);
 
             nBtnC.ToolTip = unsetText;
             nBtnZ.ToolTip = unsetText;
@@ -454,7 +458,7 @@ namespace WiinUPro
 
         public void ChangeLEDs(bool one, bool two, bool three, bool four)
         {
-            // Update
+            // TODO: Add LED images & Update
         }
 
         public void XboxAssign(ScpDirector.XInput_Device device = ScpDirector.XInput_Device.Device_A)
@@ -625,7 +629,7 @@ namespace WiinUPro
             base.CallEvent_OnQuickAssign(collection);
         }
 
-        private void QuickAssignMouseAbsolute_Click(object sender, RoutedEventArgs e)
+        protected override void QuickAssignMouseAbsolute_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, AssignmentCollection> args = new Dictionary<string, AssignmentCollection>();
             args.Add(INPUT_NAMES.WIIMOTE.IR_X, new AssignmentCollection(new List<IAssignment> { new MouseAbsoluteAssignment(MousePosition.X) }));

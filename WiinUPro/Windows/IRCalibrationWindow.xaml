@@ -15,13 +15,18 @@
             <ColumnDefinition Width="550*"/>
             <ColumnDefinition Width="343*"/>
         </Grid.ColumnDefinitions>
-        <Viewbox Grid.Column="0" Margin="0,0,9.4,0">
+        <Viewbox Grid.Column="0" Margin="0,0,0,0">
             <Canvas Width="1023" Height="763" Background="{StaticResource BackgroundMain}">
                 <Rectangle x:Name="box" Canvas.Top="343" Canvas.Left="460" StrokeThickness="0" Width="102" Height="77" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Rectangle.Fill>
                         <SolidColorBrush Color="{StaticResource B550}"/>
                     </Rectangle.Fill>
                 </Rectangle>
+              <Rectangle x:Name="area" Canvas.Top="10" Canvas.Left="10" StrokeThickness="1" Width="1003" Height="748" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Rectangle.Stroke>
+                  <SolidColorBrush Color="{StaticResource Yellow}"/>
+                </Rectangle.Stroke>
+              </Rectangle>
                 <Ellipse x:Name="point1" StrokeThickness="0" Canvas.Top="0" Canvas.Left="0" Width="10" Height="10" Opacity="0">
                     <Ellipse.Fill>
                         <SolidColorBrush Color="{StaticResource RedDark}"/>
@@ -50,7 +55,7 @@
             </Canvas>
         </Viewbox>
         <Grid  Background="{StaticResource BackgroundSub}" Grid.Column="1">
-            <GroupBox x:Name="groupBox" Header="Box" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="108" Width="298" Style="{StaticResource GroupBoxStyle}" Uid="Calibration_IR_Box">
+            <GroupBox x:Name="groupBox" Header="Box" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="108" Width="298" Style="{StaticResource GroupBoxStyle}" Uid="Calibration_IR_Dead_Box">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="61*"/>
@@ -66,19 +71,46 @@
                     <Label x:Name="label_Copy2" Content="Height" HorizontalAlignment="Left" Margin="78.1,50,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Grid.Column="1" Uid="Calibration_IR_Heigth"/>
                 </Grid>
             </GroupBox>
-            <GroupBox x:Name="groupOffscreen" Header="When Off Screen" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Height="78" Width="297" Style="{StaticResource GroupBoxStyle}" IsEnabled="False" Uid="Calibration_IR_Screen">
+          <GroupBox x:Name="groupArea" Header="Area" HorizontalAlignment="Left" Margin="10,124,0,0" VerticalAlignment="Top" Height="108" Width="298" Style="{StaticResource GroupBoxStyle}" Uid="Calibration_IR_Box">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="61*"/>
+                <ColumnDefinition Width="225*"/>
+              </Grid.ColumnDefinitions>
+              <WiinUPro:NumPicker x:Name="areaLeft" HorizontalAlignment="Left" Margin="35,10,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="256" OnValueUpdate="AreaUpdated" Grid.ColumnSpan="2"/>
+              <Label x:Name="areaLabel" Content="Left" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Uid="Calibration_IR_Left"/>
+              <WiinUPro:NumPicker x:Name="areaRight" HorizontalAlignment="Left" Margin="35,48,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="192" OnValueUpdate="AreaUpdated" Grid.ColumnSpan="2"/>
+              <Label x:Name="areaLabel_Copy" Content="Right" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Uid="Calibration_IR_Right"/>
+              <WiinUPro:NumPicker x:Name="areaTop" HorizontalAlignment="Left" Margin="126.1,10,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="102" OnValueUpdate="AreaUpdated" Grid.Column="1"/>
+              <Label x:Name="areaLabel_Copy1" Content="Top" HorizontalAlignment="Left" Margin="81.1,10,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Grid.Column="1" Uid="Calibration_IR_Top"/>
+              <WiinUPro:NumPicker x:Name="areaBottom" HorizontalAlignment="Left" Margin="126.1,48,0,0" VerticalAlignment="Top" Max="1020" Min="0" Value="77" OnValueUpdate="AreaUpdated" Grid.Column="1"/>
+              <Label x:Name="areaLabel_Copy2" Content="Bottom" HorizontalAlignment="Left" Margin="78.1,50,0,0" VerticalAlignment="Top" Foreground="{StaticResource TextHeader}" FontWeight="Bold" Grid.Column="1" Uid="Calibration_IR_Bottom"/>
+            </Grid>
+          </GroupBox>
+            <GroupBox x:Name="groupOffscreen" Header="When Off Screen" HorizontalAlignment="Left" Margin="10,232,0,0" VerticalAlignment="Top" Height="78" Width="297" Style="{StaticResource GroupBoxStyle}" Uid="Calibration_IR_Screen">
                 <Grid>
                     <RadioButton x:Name="radioLast" Content="Use last good point" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="offScreen" IsChecked="True" Style="{StaticResource RadioButtonStyle}" Checked="ScreenBehaviorChange" Uid="Calibration_IR_Last_Good"/>
                     <RadioButton x:Name="radioCenter" Content="Return to center" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="offScreen" Style="{StaticResource RadioButtonStyle}" Checked="ScreenBehaviorChange" Uid="Calibration_IR_Center"/>
                 </Grid>
             </GroupBox>
+          <GroupBox x:Name="groupMinPoints" Header="Minimum Visible Points" HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top" Height="64" Width="297" Style="{StaticResource GroupBoxStyle}" Uid="Calibration_IR_Points">
+            <Grid>
+              <ComboBox x:Name="minVisiblePoints" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="265" SelectionChanged="visiblePoints_SelectionChanged">
+                <ComboBoxItem Content="Default" Uid="Calibration_IR_Points_Default"/>
+                <ComboBoxItem Content="One" Uid="Calibration_IR_Points_One"/>
+                <ComboBoxItem Content="Two" Uid="Calibration_IR_Points_Two"/>
+              </ComboBox>
+            </Grid>
+          </GroupBox>
+          <!--
             <Label Content="Jitter Reduction" HorizontalAlignment="Left" Margin="10,221,0,0" VerticalAlignment="Top" Height="26" Width="102" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Calibration_IR_Jitter"/>
             <Slider x:Name="jitterSlider" HorizontalAlignment="Left" Margin="23,248,0,0" VerticalAlignment="Top" Width="285" Height="34" TickPlacement="BottomRight" Maximum="10" Interval="1" ValueChanged="jitterSlider_ValueChanged" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True" Style="{StaticResource BasicSliderStyle}" IsEnabled="False"/>
             <Label x:Name="jitterLabel" Content="0 %" HorizontalAlignment="Left" Margin="248,221,0,0" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Right" FontWeight="Bold" Foreground="{StaticResource TextHeader}"/>
+          -->
             <Button x:Name="acceptBtn" Content="Accept" HorizontalAlignment="Right" Margin="0,0,16.4,9.8" VerticalAlignment="Bottom" Width="76" Click="acceptBtn_Click" Style="{StaticResource AcceptButton}" Uid="Button_Accept"/>
             <Button x:Name="cancelBtn" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,104.4,9.8" VerticalAlignment="Bottom" Width="74" Click="cancelBtn_Click" Style="{StaticResource WarningButton}" Uid="Button_Cancel"/>
-            <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="195,0,0,199.8" VerticalAlignment="Bottom" Width="76" Click="loadBtn_Click" Style="{StaticResource BasicButton}" Uid="Button_Load"/>
-            <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="72,0,0,200.8" VerticalAlignment="Bottom" Width="76" Click="saveBtn_Click" Style="{StaticResource BasicButton}" Uid="Button_Save"/>
+            <Button x:Name="loadBtn" Content="Load" HorizontalAlignment="Left" Margin="195,0,0,100" VerticalAlignment="Bottom" Width="76" Click="loadBtn_Click" Style="{StaticResource BasicButton}" Uid="Button_Load"/>
+            <Button x:Name="saveBtn" Content="Save" HorizontalAlignment="Left" Margin="72,0,0,100" VerticalAlignment="Bottom" Width="76" Click="saveBtn_Click" Style="{StaticResource BasicButton}" Uid="Button_Save"/>
         </Grid>
     </Grid>
 </Window>

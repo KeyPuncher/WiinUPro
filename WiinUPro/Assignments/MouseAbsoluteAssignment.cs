@@ -1,4 +1,6 @@
-﻿namespace WiinUPro
+﻿using System;
+
+namespace WiinUPro
 {
     public class MouseAbsoluteAssignment : IAssignment
     {
@@ -6,6 +8,8 @@
         static float yPosition = 0.5f;
 
         public MousePosition Input { get; set; }
+
+        private float _lastValue = float.MinValue;
 
         public MouseAbsoluteAssignment() { }
 
@@ -16,14 +20,23 @@
 
         public void Apply(float value)
         {
+            if (_lastValue == value)
+            {
+                // Note, this will allow the pointer to be moved when the wiimote is set aside.
+                return;
+            }
+
+            _lastValue = value;
+            float output = (Math.Min(1f, Math.Max(-1f, value)) + 1f) / 2f;
+
             switch (Input)
             {
                 case MousePosition.X:
-                    xPosition = value;
+                    xPosition = output;
                     break;
 
                 case MousePosition.Y:
-                    yPosition = value;
+                        yPosition = output;
                     break;
 
                 case MousePosition.Center:

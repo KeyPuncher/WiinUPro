@@ -842,7 +842,7 @@ namespace WiinUSoft
                     _calibrations.WiimoteCalibration.accelerometer.minZ    = group3_min.Value;
                     _calibrations.WiimoteCalibration.accelerometer.maxZ    = group3_max.Value;
                     _calibrations.WiimoteCalibration.accelerometer.deadZ   = group3_dead.Value;
-                    _calibrations.WiimoteCalibration.irSensor.boundingArea = new SquareBoundry
+                    _calibrations.WiimoteCalibration.irSensor.deadArea = new SquareBoundry
                     {
                         center_x = group5_centerX.Value,
                         center_y = group5_centerY.Value,
