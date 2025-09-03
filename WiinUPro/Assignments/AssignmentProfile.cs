@@ -81,6 +81,10 @@ namespace WiinUPro
                     {
                         (assignment as ShiftAssignment).SetControl(device);
                     }
+                    else if (assignment is RumbleAssignment rAssignment && device != null)
+                    {
+                        rAssignment.SetCallback(device.AddRumble);
+                    }
                 }
 
                 mapping.Add(pair.input, pair.GetCollection());
@@ -149,6 +153,10 @@ namespace WiinUPro
                         info.type = AssignmentType.VJoyPOV;
                         info.vjoyPOVAssignment = (VJoyPOVAssignment)a;
                         break;
+                    case RumbleAssignment _:
+                        info.type = AssignmentType.Rumble;
+                        info.rumbleAssignment = (RumbleAssignment)a;
+                        break;
                     default:
                         info.type = AssignmentType.Undefined;
                         break;
@@ -176,6 +184,7 @@ namespace WiinUPro
                     case AssignmentType.VJoyButton:  result.Add(c.vjoyButtonAssignment); break;
                     case AssignmentType.VJoyAxis:    result.Add(c.vjoyAxisAssignment); break;
                     case AssignmentType.VJoyPOV:     result.Add(c.vjoyPOVAssignment); break;
+                    case AssignmentType.Rumble:      result.Add(c.rumbleAssignment); break;
                 }
             }
 
@@ -196,6 +205,7 @@ namespace WiinUPro
         public VJoyButtonAssignment vjoyButtonAssignment;
         public VJoyAxisAssignment vjoyAxisAssignment;
         public VJoyPOVAssignment vjoyPOVAssignment;
+        public RumbleAssignment rumbleAssignment;
     }
 
     public enum AssignmentType
@@ -210,6 +220,7 @@ namespace WiinUPro
         XboxButton,
         VJoyButton,
         VJoyAxis,
-        VJoyPOV
+        VJoyPOV,
+        Rumble
     }
 }

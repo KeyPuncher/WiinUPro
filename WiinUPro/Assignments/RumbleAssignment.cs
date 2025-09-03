@@ -4,13 +4,17 @@ namespace WiinUPro
 {
     public class RumbleAssignment : IAssignment
     {
-        public Action<bool> Callback { get; protected set; }
-
+        private Action<bool> _callback;
         private bool lastState = false;
 
         public RumbleAssignment(Action<bool> callback)
         {
-            Callback = callback;
+            _callback = callback;
+        }
+
+        public void SetCallback(Action<bool> callback)
+        {
+            _callback = callback;
         }
 
         public void Apply(float value)
@@ -20,7 +24,7 @@ namespace WiinUPro
             if (newState != lastState)
             {
                 lastState = newState;
-                Callback(newState);
+                _callback(newState);
             }
         }
 
@@ -28,7 +32,7 @@ namespace WiinUPro
         {
             if (assignment is RumbleAssignment)
             {
-                return Callback == (assignment as RumbleAssignment).Callback;
+                return _callback == (assignment as RumbleAssignment)._callback;
             }
             else
             {
