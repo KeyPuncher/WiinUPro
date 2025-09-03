@@ -1,6 +1,6 @@
 ;Inno Setup 6
 #define MyAppName "WiinUPro"
-#define MyAppVersion "0.9.8"
+#define MyAppVersion "0.9.9"
 #define MyAppPublisher "Justin Keys"
 #define MyAppURL "https://github.com/KeyPuncher/WiinUPro/releases"
 #define MyAppExeName "WiinUPro.exe"
