@@ -216,13 +216,25 @@ namespace WiinUPro
                 prefs.icon = img;
                 AppPrefs.Instance.SaveDevicePrefs(prefs);
 
-                if (extIndex != -1 && !string.IsNullOrEmpty(prefs.extensionProfiles[extIndex]))
+                string profileToLoad = string.Empty;
+
+                if (extIndex > -1 && prefs.extensionProfiles.Length > extIndex && !string.IsNullOrEmpty(prefs.extensionProfiles[extIndex]))
                 {
-                    Ninty.LoadProfile(prefs.extensionProfiles[extIndex]);
+                    profileToLoad = prefs.extensionProfiles[extIndex] ?? string.Empty;
                 }
                 else if (!string.IsNullOrEmpty(prefs.defaultProfile))
                 {
-                    Ninty.LoadProfile(prefs.defaultProfile);
+                    profileToLoad = prefs.defaultProfile ?? string.Empty;
+                }
+
+                if (AppPrefs.Instance.autoAddXInputDevices && AppPrefs.Instance.profileQueuing)
+                {
+                    profileToLoad = GetQueuedProfile(profileToLoad);
+                }
+
+                if (!string.IsNullOrWhiteSpace(profileToLoad))
+                {
+                    Ninty.LoadProfile(profileToLoad);
                 }
             }
 
@@ -233,6 +245,44 @@ namespace WiinUPro
             else
 #endif
                 nickname.Content = deviceName;
+        }
+
+        private string GetQueuedProfile(string originalProfile)
+        {
+            string baseName = string.Empty;
+            if (originalProfile.ToLower().EndsWith("_x1.wup"))
+            {
+                var i = originalProfile.ToLower().LastIndexOf("_x1.wup");
+                baseName = originalProfile.Substring(0, i);
+            }
+            else if (originalProfile.ToLower().EndsWith(".wup"))
+            {
+                var i = originalProfile.ToLower().LastIndexOf(".wup");
+                baseName = originalProfile.Substring(0, i);
+            }
+
+            // early out
+            if (string.IsNullOrEmpty(baseName))
+            {
+                return originalProfile;
+            }
+
+            // Figure out how many devices are already taken
+            int deviceNum = (int)ScpDirector.XInput_Device.Device_A;
+            for (; deviceNum <= (int)ScpDirector.XInput_Device.Device_D; deviceNum += 1)
+            {
+                if (ScpDirector.Access.IsConnected((ScpDirector.XInput_Device)deviceNum))
+                    continue;
+
+                var targetProfile = $"{baseName}_x{deviceNum}.wup";
+                if (System.IO.File.Exists(targetProfile))
+                {
+                    _ = ScpDirector.Access.ConnectDevice((ScpDirector.XInput_Device)deviceNum);
+                    return targetProfile;
+                }
+            }
+
+            return originalProfile;
         }
 
         public void AutoConnect()

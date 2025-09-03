@@ -421,22 +421,8 @@ namespace WiinUPro
             
             if (loadedProfile != null)
             {
-                if (AppPrefs.Instance.autoAddXInputDevices && AppPrefs.Instance.profileQueuing)
-                {
-                    string[] fileNameParts = fileName.Split('_');
-                    string fileNameEnding = fileNameParts[fileNameParts.Length - 1].Replace(".wup", "");
-
-                    if (int.TryParse(fileNameEnding, out int profileNum)
-                        && profileNum >= (int)ScpDirector.XInput_Device.Device_A
-                        && profileNum <= (int)ScpDirector.XInput_Device.Device_D
-                        && ScpDirector.Access.IsConnected((ScpDirector.XInput_Device)profileNum)
-                        && !_rumbleSubscriptions[profileNum - 1])
-                    {
-                        LoadProfile(fileName.Replace($"{profileNum}.wup", $"{profileNum+1}.wup"));
-                        return;
-                    }
-                }
                 _assignments = loadedProfile.ToAssignmentArray(this);
+
                 // Reads rumble device settings
                 for (byte i = 0; i < 4; i++)
                 {
@@ -449,6 +435,7 @@ namespace WiinUPro
                         ScpDirector.Access.UnSubscribeToRumble((ScpDirector.XInput_Device)(i + 1), ApplyRumble);
                     }
                 }
+
                 _rumbleSubscriptions = loadedProfile.RumbleDevices;
                 OnRumbleSubscriptionChange?.Invoke(_rumbleSubscriptions);
                 RefreshToolTips();

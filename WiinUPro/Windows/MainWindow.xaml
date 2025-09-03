@@ -80,7 +80,7 @@
                             <CheckBox x:Name="settingAutoAddXInputDevices" Content="Auto Add XInput Devices" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingAutoAddXInputDevices_Checked" Uid="Settings_XInput"
                                       ToolTip="Automatically connect emulated XInput Devices based on device rumble configurations."/>
                             <CheckBox x:Name="settingProfileQueuing" Content="Profile Queuing" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="settingProfileQueuing_Checked" IsEnabled="False" Uid="Settings_ProfileQ"
-                                      ToolTip="Profiles whose names end with &quot;_№&quot; (for example &quot;Nunchuk_Xinput_IR_1.wup&quot;) will be automatically switched between depending on the currently connected devices.&#x0a;The number should correspond with the selected rumble controller of the profile. This functionality is only available for Nintendo controllers."/>
+                                      ToolTip="Profiles whose names end with &quot;_x[number]&quot; (for example &quot;Nunchuk_Xinput_IR_x1.wup&quot;) will be automatically switched between depending on the currently connected devices.&#x0a;The number should correspond with the selected rumble controller of the profile. This functionality is only available for Nintendo controllers."/>
                             <ComboBox x:Name="settingLanguage" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Width="165" SelectionChanged="settingLanguage_SelectionChanged"/>
                         </Grid>
                     </GroupBox>
