@@ -247,7 +247,32 @@ namespace WiinUPro
             _view.Child = null;
             _controller = null;
 
+            if (AppPrefs.Instance.autoAddXInputDevices)
+            {
+                DisconnectXInput();
+            }
+
             OnDisconnect?.Invoke();
+        }
+
+        private void DisconnectXInput()
+        {
+            // Only disconnect if associated with exactly 1 device.
+            int count = 0;
+            int index = 0;
+            for (int i = 0; i < _rumbleSubscriptions.Length; i++)
+            {
+                if (_rumbleSubscriptions[i])
+                {
+                    count += 1;
+                    index = i;
+                }
+            }
+
+            if (count == 1)
+            {
+                ScpDirector.Access.DisconnectDevice((ScpDirector.XInput_Device)(index + 1));
+            }
         }
 
         public void AddRumble(bool state)
