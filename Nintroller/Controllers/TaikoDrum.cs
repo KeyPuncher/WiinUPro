@@ -14,10 +14,14 @@ namespace NintrollerLib
 
             if (offset > 0)
             {
-                rimRight =    (data[offset] & 0x08) == 0;
-                centerRight = (data[offset] & 0x10) == 0;
-                rimLeft =     (data[offset] & 0x20) == 0;
-                centerLeft =  (data[offset] & 0x40) == 0;
+                // other bits must be set like so:
+                if ((data[offset] & 0b_1000_0111) == 0b_1000_0111)
+                {
+                    rimRight = (data[offset] & 0x08) == 0;
+                    centerRight = (data[offset] & 0x10) == 0;
+                    rimLeft = (data[offset] & 0x20) == 0;
+                    centerLeft = (data[offset] & 0x40) == 0;
+                }
             }
 
             wiimote = new Wiimote(data, wiimote);
