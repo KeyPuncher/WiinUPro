@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.36324.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiinUSoft", "WiinUSoft\WiinUSoft.csproj", "{4ED3CDAC-B467-497B-A80D-AAB4A395A7EE}"
 EndProject
@@ -15,11 +15,24 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "InputManager", "InputManage
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{123CEBE5-8D00-4CCB-906E-AC69E0A57219}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{FC462CE8-7328-4D08-A128-E8145164B265}"
+	ProjectSection(SolutionItems) = preProject
+		prebuild_version_update.ps1 = prebuild_version_update.ps1
+		Installers\wiinupro_installer.iss = Installers\wiinupro_installer.iss
+		Installers\wiinusoft_installer.iss = Installers\wiinusoft_installer.iss
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{A4E83EC0-199E-4EB8-AA81-AF0F81D25A1D}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Shared\Shared.projitems*{6551dfe7-aeec-4bf9-beed-58ff87388fd0}*SharedItemsImports = 4
 		Shared\Shared.projitems*{123cebe5-8d00-4ccb-906e-ac69e0a57219}*SharedItemsImports = 13
 		Shared\Shared.projitems*{4ed3cdac-b467-497b-a80d-aab4a395a7ee}*SharedItemsImports = 4
+		Shared\Shared.projitems*{6551dfe7-aeec-4bf9-beed-58ff87388fd0}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,5 +62,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68AE86D1-0214-40CA-9558-D4A5F2A4F9BB}
 	EndGlobalSection
 EndGlobal
