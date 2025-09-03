@@ -120,6 +120,14 @@ namespace WiinUPro
             }
         }
 
+        public void DisconnectAll()
+        {
+            foreach (var instance in _xInstances)
+            {
+                instance.Disconnect();
+            }
+        }
+
         public bool IsConnected(XInput_Device device)
         {
             return _xInstances[(int)device - 1].PluggedIn;

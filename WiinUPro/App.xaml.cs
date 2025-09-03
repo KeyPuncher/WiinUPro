@@ -115,6 +115,17 @@ namespace WiinUPro
             }
 
             Shared.Globalization.SetSelectedLanguage(AppPrefs.Instance.language);
+
+            // Attempt to cleanup any lingering virtual devices if there's a crash.
+            AppDomain.CurrentDomain.UnhandledException += (s, args) =>
+            {
+                ScpDirector.Access.DisconnectAll();
+            };
+        }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            ScpDirector.Access.DisconnectAll();
         }
     }
 }

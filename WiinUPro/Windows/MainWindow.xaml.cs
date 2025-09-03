@@ -675,6 +675,9 @@ namespace WiinUPro
             DeviceListener.Instance.UnregisterDeviceNotification();
             DeviceListener.Instance.OnDevicesUpdated -= WindowsDevicesChanged;
 
+            // Disconnect all XInput devices
+            ScpDirector.Access.DisconnectAll();
+
             // Save preferences
             AppPrefs.Save();
         }

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WiinUPro"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             StartupUri="Windows\MainWindow.xaml" Startup="Application_Startup">
+             StartupUri="Windows\MainWindow.xaml" Startup="Application_Startup" Exit="Application_Exit">
     <Application.Resources>
         <!--#region Colors-->
         <!-- Color Palette Based on https://dribbble.com/shots/2318226-Colors -->
