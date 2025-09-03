@@ -121,24 +121,20 @@ If you are someone who would like to add translations for another language, (fir
 # Other Questions You May or May Not Ask
 How do I pronounce this?
 * Doesn't matter. I say Win-You-Pro but technically it's spelt like Wing-You-Pro.
-I derrived it from the short version Windows - Win, mixed in Wii - Wiin, added the U from Wii U - WiinU, and the focus was the Wii U's Pro Controller (the whole point why I mad the thing) so added on Pro = WiinUPro.
+I derrived it from the short version Windows - Win, mixed in Wii - Wiin, added the U from Wii U - WiinU, and the focus was the Wii U's Pro Controller (the whole point why I made the thing) so added on Pro = WiinUPro.
 Soft from WiinUSoft is a play on Lite versions of software. I don't consider it a "Lite" version because it's not restricted functionality, it's just meant for a different audience.
 
 Is this still in development?
 * It's unclear, I know.
-I come back to this project in random bursts when I feel like life has opened up and that I feel like I can spend time on it again and help random people on the internet who stil use it.
-I would love to finish it and finally release WiinUSoft 1.0, but it just feels so far away. There's so many other projects I wish to work on as well, but time does not permit.
-Heck, it's mid 2023 and I'm just now adding a readme after being on Github since 2017. I first created my little side project here a decade ago.
+I come back to this project in random bursts when I feel like life has opened up and that I feel like I can spend time on it again and help random people on the internet who still use it.
+I do really want to finally release WiinUSoft 1.0, and I think it's close now!
 
 Will there be more to WiinUSoft?
 * WiinUSoft is for the most part done. Aside from some technical upgrades, 3.5 is the version that will be around for a while until WiinUPro becomes feature complete, then features can trickle over.
 
 What else is on the roadmap for WiinUPro?
-* Roadmap is used very loosely here FYI.
-I really really want to add easy to configure and use gyro controls and IR calibration.
-Sure it has some IR support now, but calibration could be so much easier.
-Plus IR could be obsolete with the motion plus capabilities.
-I have ideas, it just requires a lot of work and short bursts don't work well for that sort of level of changes. I did start a branch though.
+* Now that there's some IR support (celebrate!), the only thing left is motion controls.
+I'm not going to do anything too fancy because I'm suddently motivated to finally hit version 1.0, but basically gyro aiming and tilt controls.
 
 What's the reason for the long periods of hiatus?
 * Life stuff. If I include pets there's 6 other beings in my home I take care of.
@@ -153,17 +149,21 @@ Is the Website coming back?
 I even consider the Google Sites one to be dead. Unsure of how people find their way there actually.
 I still get drive requests to download a really old version of WiinUSoft.
 Github is space for this project now.
-I have dreamnt about designing a web page for the project but ultimately it's more busy work that'd get in the way of progress.
+I have dreamnt about designing a web page for the project but ultimately it's more busy work that'd get in the way of progress (but maybe).
 
-You mentioned other projects?
-* There are many things I've been wanting to do that I've thought about for years, decades, and even minutes.
-Nothing to report on most them. I've had to come to terms with abandoning some, for example a handheld retro pi I started 8 years ago I've finally let go of even after all the work of only think left to do is make the case and wire up the joysticks.
-Most recent nearly completed one was a custom split keyboard of my own liking.
-Was going to be modular so you can hot swap out one side of it for gaming reasons.
-I had the full qwerty keyboard working, in case and all but some wiring issues happened (I think?) and one side stopped talking to the other so that's been set aside for some months now.
-Going to have to redesign the case and make a circuit board this time to avoid wireing mishaps.
-Another one is I started working on a Game Boy emulator. My first emulator yet.
-I know there are tons out there but I've always wanted to learn how to make one and I want to do it my way.
-Plus it's very important for me to understand how the Game Boy works for a dream project of mine.
+Are you going to add Switch 2 Controller Support?
+* Not to this project.
 
-What is this a blog? No more questions. I'll probably have to come back and prune this stuff out at some point. I'm in the wrong region to say this but, Cheers.
+Why not?
+* Because this project is hard to update. It may be the second iteration of the codebase and perhaps a little better than my original beta release, but it's still not great.
+I'm a much more experienced engineer now, and I have aspirations to make software that is far more maintainable.
+New controllers will continue to be released over time with different functionality and whatnot, it's unreasonable to keep coming back to this one and updating it in its current state.
+So I've started writing a new software from scratch, one that is much more modular and aiming to support plugins to make it far easier to add new controller support.
+Plus with the plugin approach, you won't have to install a new version every time a new controller is added to be supported, you would just download the plugin that adds that controller, probably through UI from the software itself.
+
+What else do you do?
+* I make games! I most recently participated in the GMTK 2025 Game Jam, where I helped produce a small game called [It's OverMan!](https://gamesovercoffee.itch.io/its-overman).
+It was a fun experience, and long long long before that I made my first game to get my feet wet [Mega Maze](https://store.steampowered.com/app/658210/Mega_Maze) and even published it on Wii U.
+Publishing is a pain! Both these games are free if you need some time to kill.
+Currently, I can only make games in two ways; (i) via a Game Jam and (ii) via personal un-released projects. This is due to work restrictions.
+There's also other personal projects I like to do, but I'm getting better at focusing on one thing at a time, so I really do want the WiinUPro success to be the next thing to release after version 1.0.
