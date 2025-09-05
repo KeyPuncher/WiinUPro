@@ -27,7 +27,7 @@ keyboard. No need to install anything. [Download](https://github.com/KeyPuncher/
 and extract portable `WiinUPro_*_.zip`, then open `32|64-bit/WiinUPro.exe`. Pair,
 connect and add a controller. Then just map buttons to keystrokes and start
 playing. You can also save and load profiles, to easily switch between mappings
-(e.g., for different games. Analog sticks can be used as if they were digital
+(e.g., for different games). Analog sticks can be used as if they were digital
 (either toggled or not - no intermediate states).
 
 ## Option 2: emulating XBox 360 controller with WiinUSoft 
@@ -38,14 +38,14 @@ internally known as XInput controller). In that case,
 and run the installer for either WiinUSoft or WiinUPro.
 WiinU**Soft** is the way to go if you only need the XInput feature and no
 keyboard mapping. During the installation process, you'll need to include
-component SCP Driver. Please, read the [SCP section below](#scp_driver).
+component SCP Driver. Please, read the [SCP Driver section below](#scp-driver).
 
 ## Option 3: all-in-one with WiinUPro
 To be able to emulate both keystrokes AND Xbox 360 controller, you'll need to
 *install* WiinU**Pro** (just running the portable version is not enough). By
 installing it, you'll be able to do the job of WiinUSoft as well.
 During the installation process, you'll need to include
-component SCP Driver. Please, read the [SCP section below](#scp_driver).
+component SCP Driver. Please, read the [SCP Driver section below](#scp-driver).
 
 ## Option 4: WiinUPro for keystrokes, WiinUSoft for XInput
 The last, fully-fledged option is to adopt both WiinUPro and WiinUSoft. This may
@@ -53,11 +53,11 @@ be useful if you need WiinUPro features, but prefer the user experience of
 WiinUSoft for XInput emulation. You can fully install either WiinUPro or
 WiinUSoft and just run the portable version of the other app.
 During the installation process, you'll need to include
-component SCP Driver. Please, read the [SCP section below](#scp_driver).
+component SCP Driver. Please, read the [SCP Driver section below](#scp-driver).
 
 ## SCP Driver
-The **SCP Driver** component is required in two scenarios: 1) for WiinUSoft to work at all;
-2) for WiinUPro to emulate XInput.
+**SCP (Scarlet Crush Production) Driver** component is required in two
+scenarios: 1) for WiinUSoft to work at all; 2) for WiinUPro to emulate XInput.
 
 SCP Driver and other (optional) components will be automatically presented to
 you during the installation process of either app. The portable (zip) version
