@@ -23,9 +23,9 @@ namespace WiinUPro
             }
         }
 #if DEBUG
-        const string GLOBALIZATION_DATA_PATH = "./lang_test.json";
+        static string GLOBALIZATION_DATA_PATH = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lang_test.json");
 #else
-        const string GLOBALIZATION_DATA_PATH = "./lang.json";
+        static string GLOBALIZATION_DATA_PATH = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lang.json");
 #endif
 
         internal const string PROFILE_FILTER = "WiinUPro Profile|*.wup";

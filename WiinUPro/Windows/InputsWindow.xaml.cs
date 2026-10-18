@@ -41,6 +41,7 @@ namespace WiinUPro
         {
             InitializeComponent();
             Result = new AssignmentCollection();
+            SetShiftUIEnabled(false);
 
             keyStyle = (Style)Application.Current.Resources["KeyButton"];
             keySelectedStyle = (Style)Application.Current.Resources["KeyButtonActive"];
@@ -92,32 +93,15 @@ namespace WiinUPro
             // If this collection is only a shift assignment, populate the shift tab
             if (collection.ShiftAssignment)
             {
-                ShiftAssignment shifty = collection.Assignments[0] as ShiftAssignment;
-                radioToggle.IsChecked = shifty.Toggles;
+                LoadShiftStates(collection.GetShift());
 
-                if (shifty.Toggles)
+                if (collection.Assignments.Count == 1)
                 {
-                    checkNone.IsChecked  = shifty.ToggleStates.Contains(ShiftState.None);
-                    checkRed.IsChecked   = shifty.ToggleStates.Contains(ShiftState.Red);
-                    checkBlue.IsChecked  = shifty.ToggleStates.Contains(ShiftState.Blue);
-                    checkGreen.IsChecked = shifty.ToggleStates.Contains(ShiftState.Green);
-
-                    shiftToggleGroup.IsEnabled = true;
-                    shiftHoldGroup.IsEnabled = false;
+                    // Pure shift collection: only show the shift tab
+                    tabControl.SelectedIndex = 4;
+                    return;
                 }
-                else
-                {
-                    switch (shifty.TargetState)
-                    {
-                        case ShiftState.None:  radioNone.IsChecked = true; break;
-                        case ShiftState.Red:   radioRed.IsChecked = true; break;
-                        case ShiftState.Blue:  radioBlue.IsChecked = true; break;
-                        case ShiftState.Green: radioGreen.IsChecked = true; break;
-                    }
-                }
-
-                tabControl.SelectedIndex = 4;
-                return;
+                // Combined collection (key + shift): keep going so other assignments load too
             }
 
             // Show a tab where the user has assignments chosen
@@ -300,6 +284,7 @@ namespace WiinUPro
                 else if (item is ShiftAssignment)
                 {
                     hasShift = true;
+                    LoadShiftStates(collection.GetShift());
                 }
             }
 
@@ -816,9 +801,9 @@ namespace WiinUPro
             {
                 Result.Add(new RumbleAssignment(_control.AddRumble));
             }
-            
-            // If on the Shift Tab, that is the only assignments that can be had
-            if (tabControl.SelectedIndex == 4)
+
+            // Add the Shift assignment if the Apply Shift option is checked
+            if (applyShiftCheck.IsChecked ?? false)
             {
                 var shifty = new ShiftAssignment(_control);
                 shifty.Toggles = radioToggle.IsChecked ?? false;
@@ -844,6 +829,12 @@ namespace WiinUPro
                     {
                         shifty.ToggleStates.Add(ShiftState.Green);
                     }
+
+                    if (shifty.ToggleStates.Count == 0)
+                    {
+                        MessageBox.Show(Shared.Globalization.Translate("Input_Shift_Toggle_Empty"));
+                        return;
+                    }
                 }
                 else
                 {
@@ -867,79 +858,77 @@ namespace WiinUPro
 
                 Result.Add(shifty);
             }
-            else
+
+            foreach (var key in _selectedKeys)
             {
-                foreach (var key in _selectedKeys)
+                Result.Add(new KeyboardAssignment(key)
                 {
-                    Result.Add(new KeyboardAssignment(key)
-                    {
-                        TurboEnabled = keyTurboCheck.IsChecked ?? false,
-                        TurboRate = (int)keyTurboRate.Value * 50,
-                        InverseInput = keyInverseCheck.IsChecked ?? false
-                    });
-                }
+                    TurboEnabled = keyTurboCheck.IsChecked ?? false,
+                    TurboRate = (int)keyTurboRate.Value * 50,
+                    InverseInput = keyInverseCheck.IsChecked ?? false
+                });
+            }
 
-                foreach (var mDir in _selectedMouseDirections)
-                {
-                    Result.Add(new MouseAssignment(mDir, (float)mMovementRate.Value));
-                }
+            foreach (var mDir in _selectedMouseDirections)
+            {
+                Result.Add(new MouseAssignment(mDir, (float)mMovementRate.Value));
+            }
 
-                foreach (var mBtn in _selectedMouseButtons)
+            foreach (var mBtn in _selectedMouseButtons)
+            {
+                Result.Add(new MouseButtonAssignment(mBtn)
                 {
-                    Result.Add(new MouseButtonAssignment(mBtn)
-                    {
-                        TurboEnabled = mButtonTurboCheck.IsChecked ?? false,
-                        TurboRate = (int)mButtonTurboRate.Value * 50,
-                        InverseInput = mButtonInverseCheck.IsChecked ?? false
-                    });
-                }
+                    TurboEnabled = mButtonTurboCheck.IsChecked ?? false,
+                    TurboRate = (int)mButtonTurboRate.Value * 50,
+                    InverseInput = mButtonInverseCheck.IsChecked ?? false
+                });
+            }
 
-                foreach (var mScroll in _selectedMouseScroll)
+            foreach (var mScroll in _selectedMouseScroll)
+            {
+                Result.Add(new MouseScrollAssignment(mScroll)
                 {
-                    Result.Add(new MouseScrollAssignment(mScroll)
-                    {
-                        Continuous = mScrollContinuousCheck.IsChecked ?? false,
-                        ScrollRate = (int)mScrollRate.Value * 50
-                    });
-                }
+                    Continuous = mScrollContinuousCheck.IsChecked ?? false,
+                    ScrollRate = (int)mScrollRate.Value * 50
+                });
+            }
 
-                foreach (var xBtn in _selectedXInputButtons)
+            foreach (var xBtn in _selectedXInputButtons)
+            {
+                Result.Add(new XInputButtonAssignment(xBtn, _selectedDevice)
                 {
-                    Result.Add(new XInputButtonAssignment(xBtn, _selectedDevice)
-                    {
-                        TurboEnabled = xTurboCheck.IsChecked ?? false,
-                        TurboRate = (int)xTurboRate.Value * 50,
-                        InverseInput = xInverseCheck.IsChecked ?? false
-                    });
-                }
+                    TurboEnabled = xTurboCheck.IsChecked ?? false,
+                    TurboRate = (int)xTurboRate.Value * 50,
+                    InverseInput = xInverseCheck.IsChecked ?? false
+                });
+            }
 
-                foreach (var xAxis in _selectedXInputAxes)
-                {
-                    Result.Add(new XInputAxisAssignment(xAxis, _selectedDevice));
-                }
+            foreach (var xAxis in _selectedXInputAxes)
+            {
+                Result.Add(new XInputAxisAssignment(xAxis, _selectedDevice));
+            }
 
-                uint vDevice = 1;
-                if (joystickSelection.SelectedIndex > -1)
-                {
-                    uint.TryParse(joystickSelection.SelectedValue.ToString().Replace("Joystick ", ""), out vDevice);
-                    VJoyDirector.Access.AquireDevice(vDevice);
-                }
+            uint vDevice = 1;
+            if (joystickSelection.SelectedIndex > -1)
+            {
+                uint.TryParse(joystickSelection.SelectedValue.ToString().Replace("Joystick ", ""), out vDevice);
+                VJoyDirector.Access.AquireDevice(vDevice);
+            }
 
-                foreach (var vBtn in _selectedVJoyButtons)
-                {
-                    Result.Add(new VJoyButtonAssignment(vBtn, vDevice));
-                }
+            foreach (var vBtn in _selectedVJoyButtons)
+            {
+                Result.Add(new VJoyButtonAssignment(vBtn, vDevice));
+            }
 
-                foreach (var vAxis in _selectedVJoyAxes)
-                {
-                    bool p = false;
-                    Result.Add(new VJoyAxisAssignment(ToHidAxis(vAxis, out p), p, vDevice));
-                }
+            foreach (var vAxis in _selectedVJoyAxes)
+            {
+                bool p = false;
+                Result.Add(new VJoyAxisAssignment(ToHidAxis(vAxis, out p), p, vDevice));
+            }
 
-                foreach (var vPOV in _selectedVJoyPOVs)
-                {
-                    Result.Add(new VJoyPOVAssignment(vPOV, vDevice));
-                }
+            foreach (var vPOV in _selectedVJoyPOVs)
+            {
+                Result.Add(new VJoyPOVAssignment(vPOV, vDevice));
             }
 
             Apply = true;
@@ -995,6 +984,52 @@ namespace WiinUPro
                 shiftToggleGroup.IsEnabled = true;
                 shiftHoldGroup.IsEnabled = false;
             }
+        }
+
+        private void LoadShiftStates(ShiftAssignment shifty)
+        {
+            if (shifty == null)
+            {
+                return;
+            }
+
+            applyShiftCheck.IsChecked = true;
+            SetShiftUIEnabled(true);
+            radioHold.IsChecked = !shifty.Toggles;
+            radioToggle.IsChecked = shifty.Toggles;
+
+            if (shifty.Toggles)
+            {
+                checkNone.IsChecked  = shifty.ToggleStates.Contains(ShiftState.None);
+                checkRed.IsChecked   = shifty.ToggleStates.Contains(ShiftState.Red);
+                checkBlue.IsChecked  = shifty.ToggleStates.Contains(ShiftState.Blue);
+                checkGreen.IsChecked = shifty.ToggleStates.Contains(ShiftState.Green);
+            }
+            else
+            {
+                switch (shifty.TargetState)
+                {
+                    case ShiftState.None:  radioNone.IsChecked = true; break;
+                    case ShiftState.Red:   radioRed.IsChecked = true; break;
+                    case ShiftState.Blue:  radioBlue.IsChecked = true; break;
+                    case ShiftState.Green: radioGreen.IsChecked = true; break;
+                }
+            }
+        }
+
+        private void SetShiftUIEnabled(bool enabled)
+        {
+            radioHold.IsEnabled = enabled;
+            radioToggle.IsEnabled = enabled;
+
+            bool toggles = radioToggle.IsChecked ?? false;
+            shiftToggleGroup.IsEnabled = enabled && toggles;
+            shiftHoldGroup.IsEnabled = enabled && !toggles;
+        }
+
+        private void ApplyShiftCheckChanged(object sender, RoutedEventArgs e)
+        {
+            SetShiftUIEnabled(applyShiftCheck.IsChecked ?? false);
         }
 
         private void detectBox_KeyDown(object sender, KeyEventArgs e)

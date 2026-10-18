@@ -22,8 +22,17 @@ namespace WiinUPro
         {
             get
             {
-                return Assignments.Count == 1 && Assignments[0] is ShiftAssignment;
+                return Assignments.Exists(a => a is ShiftAssignment);
             }
+        }
+
+        /// <summary>
+        /// Gets the first ShiftAssignment in the collection (if any).
+        /// A collection can now contain a key assignment and a shift assignment together.
+        /// </summary>
+        public ShiftAssignment GetShift()
+        {
+            return Assignments.Find(a => a is ShiftAssignment) as ShiftAssignment;
         }
 
         public AssignmentCollection()

@@ -540,13 +540,13 @@ namespace WiinUPro
 
             if (_assignments[targetShiftIndex].ContainsKey(key))
             {
-                // If replacing a Shift Assignment, clear others that were set from the code below
-                if (_assignments[targetShiftIndex][key].Assignments.Count == 1 && _assignments[targetShiftIndex][key].Assignments[0] is ShiftAssignment)
+                // If replacing an assignment with a Shift in it, clear others that were set from the code below
+                var priorShift = _assignments[targetShiftIndex][key].GetShift();
+                if (priorShift != null)
                 {
-                    var shift = _assignments[targetShiftIndex][key].Assignments[0] as ShiftAssignment;
-                    if (shift.Toggles)
+                    if (priorShift.Toggles)
                     {
-                        foreach (var state in shift.ToggleStates)
+                        foreach (var state in priorShift.ToggleStates)
                         {
                             if ((int)state != targetShiftIndex)
                             {
@@ -554,9 +554,9 @@ namespace WiinUPro
                             }
                         }
                     }
-                    else if ((int)shift.TargetState != targetShiftIndex)
+                    else if ((int)priorShift.TargetState != targetShiftIndex)
                     {
-                        _assignments[(int)shift.TargetState].Remove(key);
+                        _assignments[(int)priorShift.TargetState].Remove(key);
                     }
                 }
 
@@ -568,20 +568,20 @@ namespace WiinUPro
             }
 
             // Shift assignments need to be the same on each ShiftIndex
-            if (win.Result.ShiftAssignment)
-            {
-                var shift = win.Result.Assignments[0] as ShiftAssignment;
+            var resultShift = win.Result.GetShift();
 
-                if (shift.Toggles)
+            if (resultShift != null)
+            {
+                if (resultShift.Toggles)
                 {
-                    foreach (var state in shift.ToggleStates)
+                    foreach (var state in resultShift.ToggleStates)
                     {
                         InputSet(state, key, win.Result);
                     }
                 }
                 else
                 {
-                    InputSet(shift.TargetState, key, win.Result);
+                    InputSet(resultShift.TargetState, key, win.Result);
                 }
             }
 

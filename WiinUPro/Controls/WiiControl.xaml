@@ -31,12 +31,14 @@
                         <Ellipse x:Name="irPoint1" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
                         <Ellipse x:Name="irPoint2" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
                         <Ellipse x:Name="irPoint3" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
-                        <Ellipse x:Name="irPoint4" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
-                    </Canvas>
-                </Grid>
-            </Canvas>
-        </Viewbox>
-        <!-- Nunchuck -->
+                            <Ellipse x:Name="irPoint4" Fill="{StaticResource IRSensorPoint}" Height="5" Canvas.Left="0" StrokeThickness="0" Canvas.Top="0" Width="5" Visibility="Hidden"/>
+                        </Canvas>
+                        <!-- Battery Level -->
+                        <TextBlock x:Name="batteryLabel" Canvas.Left="430" Canvas.Top="122" Text="Battery: --%" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextBody}" Visibility="Hidden"/>
+                    </Grid>
+                </Canvas>
+            </Viewbox>
+            <!-- Nunchuck -->
         <Viewbox x:Name="viewNunchuk" Width="200" Visibility="Collapsed">
             <Canvas Width="277" Height="1104" Background="Transparent">
                 <Grid Margin="0,0,0,0">

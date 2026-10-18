@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +16,7 @@ namespace WiinUPro
         public event Delegates.BoolArrDel OnChangeLEDs;
         public event Action<IRCamMode> OnChangeCameraMode;
         public event Action<IRCamSensitivity> OnChangeCameraSensitivty;
+        public event Action<bool> OnChangeSensorBar; // true = Above the TV, false = Below
         public event Delegates.JoystickDel OnJoystickCalibrated;
         public event Delegates.TriggerDel OnTriggerCalibrated;
         public event Windows.IRCalibrationWindow.IRCalibrationDel OnIRCalibrated;
@@ -648,12 +649,13 @@ namespace WiinUPro
 
             if (item != null)
             {
-                var header = item.Header as string;
+                // The Tag holds the enum name so this works in any language
+                var tag = item.Tag as string;
 
-                if (header != null)
+                if (tag != null)
                 {
                     IRCamMode camMode = IRCamMode.Off;
-                    if (Enum.TryParse(header, out camMode))
+                    if (Enum.TryParse(tag, out camMode))
                     {
                         OnChangeCameraMode?.Invoke(camMode);
                     }
@@ -667,17 +669,50 @@ namespace WiinUPro
 
             if (item != null)
             {
-                var header = item.Header as string;
+                // The Tag holds the enum name so this works in any language
+                var tag = item.Tag as string;
 
-                if (header != null)
+                if (tag != null)
                 {
                     IRCamSensitivity camSen = IRCamSensitivity.Level3;
-                    if (Enum.TryParse(header.Replace(" ", ""), out camSen))
+                    if (Enum.TryParse(tag, out camSen))
                     {
                         OnChangeCameraSensitivty?.Invoke(camSen);
                     }
                 }
             }
+        }
+
+        protected override void SetIRSensorPosition_Click(object sender, RoutedEventArgs e)
+        {
+            var item = sender as MenuItem;
+
+            if (item != null)
+            {
+                // The Tag holds the position so this works in any language
+                var tag = item.Tag as string;
+
+                if (tag == "Up")
+                {
+                    OnChangeSensorBar?.Invoke(true);
+                }
+                else if (tag == "Down")
+                {
+                    OnChangeSensorBar?.Invoke(false);
+                }
+            }
+        }
+
+        public override void SetBattery(int percent)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                batteryLabel.Text = string.Format("{0}: {1}%", Globalization.Translate("Device_Battery"), percent);
+                batteryLabel.Visibility = Visibility.Visible;
+                batteryLabel.Foreground = percent <= 20
+                    ? System.Windows.Media.Brushes.Red
+                    : (System.Windows.Media.Brush)FindResource("TextBody");
+            }));
         }
 
         protected override void OpenJoystickMenu(object sender, MouseButtonEventArgs e)

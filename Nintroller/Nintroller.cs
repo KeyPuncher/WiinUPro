@@ -22,7 +22,10 @@ namespace NintrollerLib
         /// <summary>
         /// Called when the controller's battery get low.
         /// </summary>
-        public event EventHandler<LowBatteryEventArgs>          LowBattery      = delegate { };
+        public event EventHandler<LowBatteryEventArgs>          LowBattery      = delegate
+{ };
+        public event EventHandler<BatteryChangeEventArgs>       BatteryChange   = delegate
+{ };
         /// <summary>
         /// Called when the connection loss is detected.
         /// </summary>
@@ -43,8 +46,9 @@ namespace NintrollerLib
         private IRCamMode          _irMode                      = IRCamMode.Off;
         private IRCamSensitivity   _irSensitivity               = IRCamSensitivity.Level3;
         private byte               _rumbleBit                   = 0x00;
-        private byte               _battery                     = 0x00;
-        private bool               _batteryLow                  = false;
+        private byte  _battery    = 0x00;
+        private bool  _batteryLow = false;
+        private int   _lastBatteryPercent = -1;
         private bool               _led1, _led2, _led3, _led4;
 
         // Read/Writing Variables
@@ -299,6 +303,29 @@ namespace NintrollerLib
                             return BatteryStatus.VeryLow;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// The approximate battery level as a percentage (0-100).
+        /// Only as up to date as the last Status report received.
+        /// </summary>
+        public int BatteryPercent
+        {
+            get
+            {
+                int percent;
+
+                if (_currentType == ControllerType.ProController)
+                {
+                    percent = (int)(2f * ((float)_battery - 205f));
+                }
+                else
+                {
+                    percent = (int)(100f * (float)_battery / 192f);
+                }
+
+                return Math.Max(0, Math.Min(100, percent));
             }
         }
 
@@ -761,6 +788,15 @@ namespace NintrollerLib
                                 LowBattery(this, new LowBatteryEventArgs(BatteryStatus.VeryLow));
                             }
 
+                            _batteryLow = lowBattery;
+
+                            int batteryPercent = BatteryPercent;
+                            if (batteryPercent != _lastBatteryPercent)
+                            {
+                                _lastBatteryPercent = batteryPercent;
+                                BatteryChange(this, new BatteryChangeEventArgs(batteryPercent));
+                            }
+
                             // LED
                             // TODO: LED Check - we probably don't want this one
                             //_led1 = (report[3] & 0x10) != 0;
@@ -801,6 +837,10 @@ namespace NintrollerLib
 
                                 // and set report
                                 SetReportType(InputReport.BtnsAccIR);
+
+                                // IR camera on by default
+                                _irMode = IRCamMode.Basic;
+                                EnableIR();
                             }
                             break;
                     }
@@ -1735,6 +1775,26 @@ namespace NintrollerLib
         public LowBatteryEventArgs(BatteryStatus level)
         {
             batteryLevel = level;
+        }
+    }
+
+    /// <summary>
+    /// Class for battery level change event.
+    /// </summary>
+    public class BatteryChangeEventArgs : EventArgs
+    {
+        /// <summary>
+        /// The current battery level as a percentage (0-100).
+        /// </summary>
+        public int percent;
+
+        /// <summary>
+        /// Create an instance with the changed battery percentage.
+        /// </summary>
+        /// <param name="batteryPercent">Current battery percentage.</param>
+        public BatteryChangeEventArgs(int batteryPercent)
+        {
+            percent = batteryPercent;
         }
     }
 

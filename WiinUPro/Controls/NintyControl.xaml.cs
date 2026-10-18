@@ -34,6 +34,15 @@ namespace WiinUPro
 
         private bool[] _rumbleSubscriptions = new bool[4];
 
+        // IR Sensor Bar position (true = Bar is below the TV, invert Y)
+        private bool _IRBarBelow = false;
+
+        // Periodic battery status polling
+        private System.Windows.Threading.DispatcherTimer _batteryTimer;
+
+        // Low battery alarm state (sound the alarm once, reset when battery recovers)
+        private bool _batteryAlarmOn = false;
+
         // For Testing
         internal Shared.DummyDevice _dummy;
 
@@ -158,6 +167,7 @@ namespace WiinUPro
             _nintroller.StateUpdate += _nintroller_StateUpdate;
             _nintroller.ExtensionChange += _nintroller_ExtensionChange;
             _nintroller.LowBattery += _nintroller_LowBattery;
+            _nintroller.BatteryChange += _nintroller_BatteryChange;
 
             // TODO: Seems OpenConnection() can still succeed on toshiba w/o device connected
             if (_dummy != null || _stream.OpenConnection())
@@ -180,6 +190,7 @@ namespace WiinUPro
 
                     success = true;
                     _nintroller.SetDefaultReportType();
+                    StartBatteryTimer();
                 }
                 else
                 {
@@ -215,7 +226,13 @@ namespace WiinUPro
             _nintroller.StateUpdate -= _nintroller_StateUpdate;
             _nintroller.ExtensionChange -= _nintroller_ExtensionChange;
             _nintroller.LowBattery -= _nintroller_LowBattery;
+            _nintroller.BatteryChange -= _nintroller_BatteryChange;
             _nintroller.Disconnected -= _nintroller_Disconnected;
+
+            if (_batteryTimer != null)
+            {
+                _batteryTimer.Stop();
+            }
 
             if (_stream != null)
                 _stream.Close();
@@ -386,6 +403,11 @@ namespace WiinUPro
                     {
                         _nintroller.IRSensitivity = sen;
                     };
+                    ((WiiControl)_controller).OnChangeSensorBar += (isAbove) =>
+                    {
+                        // Above the TV = normal, Below the TV = invert the IR Y axis
+                        _IRBarBelow = !isAbove;
+                    };
                     ((WiiControl)_controller).OnJoystickCalibrated += _nintroller_JoystickCalibrated;
                     ((WiiControl)_controller).OnTriggerCalibrated += _nintroller_TriggerCalibrated;
                     ((WiiControl)_controller).OnIRCalibrated += _nintroller_IRCalibrated;
@@ -480,9 +502,66 @@ namespace WiinUPro
         private void _nintroller_LowBattery(object sender, LowBatteryEventArgs e)
         {
             // Indicate that this controller's battery is low
-            System.Speech.Synthesis.SpeechSynthesizer s = new System.Speech.Synthesis.SpeechSynthesizer();
-            s.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Female);
-            s.SpeakAsync("Low Battery");
+            SoundBatteryAlarm();
+        }
+
+        private void _nintroller_BatteryChange(object sender, BatteryChangeEventArgs e)
+        {
+            if (_controller != null)
+            {
+                Dispatcher.BeginInvoke(new Action(() => _controller.SetBattery(e.percent)));
+            }
+
+            // Sound the alarm when the battery gets low, only once until it recovers
+            if (e.percent <= 20 && !_batteryAlarmOn)
+            {
+                _batteryAlarmOn = true;
+                SoundBatteryAlarm();
+            }
+            else if (e.percent > 25)
+            {
+                _batteryAlarmOn = false;
+            }
+        }
+
+        private void SoundBatteryAlarm()
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                // Beeping alarm so the user knows the controller is about to die
+                System.Threading.Tasks.Task.Run(new Action(() =>
+                {
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        try { Console.Beep(1400, 350); }
+                        catch (Exception) { }
+                        System.Threading.Thread.Sleep(150);
+                    }
+                }));
+
+                System.Speech.Synthesis.SpeechSynthesizer s = new System.Speech.Synthesis.SpeechSynthesizer();
+                s.SelectVoiceByHints(System.Speech.Synthesis.VoiceGender.Female);
+                s.SpeakAsync(Globalization.Translate("Alert_Battery_Low"));
+            }));
+        }
+
+        private void StartBatteryTimer()
+        {
+            if (_batteryTimer == null)
+            {
+                _batteryTimer = new System.Windows.Threading.DispatcherTimer(System.Windows.Threading.DispatcherPriority.Background);
+                _batteryTimer.Interval = TimeSpan.FromSeconds(30);
+                _batteryTimer.Tick += (s, e) =>
+                {
+                    // Periodic status request keeps the battery level up to date
+                    if (_nintroller != null)
+                    {
+                        _nintroller.GetStatus();
+                    }
+                };
+            }
+
+            _batteryTimer.Start();
         }
 
         private void _nintroller_Disconnected(object sender, DisconnectedEventArgs e)
@@ -526,9 +605,17 @@ namespace WiinUPro
                 foreach (var input in e.state.ToArray())
                 {
                     //System.Diagnostics.Debug.WriteLine(string.Format("{0} :\t\t{1}", input.Key, input.Value));
+                    float value = input.Value;
+
+                    // Sensor Bar below the TV: the pointer behaves inverted vertically
+                    if (_IRBarBelow && input.Key == INPUT_NAMES.WIIMOTE.IR_Y)
+                    {
+                        value = -value;
+                    }
+
                     if (_assignments[ShiftIndex].ContainsKey(input.Key))
                     {
-                        _assignments[ShiftIndex][input.Key].ApplyAll(input.Value);
+                        _assignments[ShiftIndex][input.Key].ApplyAll(value);
                     }
                 }
             }
@@ -815,13 +902,13 @@ namespace WiinUPro
 
             if (_assignments[targetShiftIndex].ContainsKey(key))
             {
-                // If replacing a Shift Assignment, clear others that were set from the code below
-                if (_assignments[targetShiftIndex][key].Assignments.Count == 1 && _assignments[targetShiftIndex][key].Assignments[0] is ShiftAssignment)
+                // If replacing an assignment with a Shift in it, clear others that were set from the code below
+                var priorShift = _assignments[targetShiftIndex][key].GetShift();
+                if (priorShift != null)
                 {
-                    var shift = _assignments[targetShiftIndex][key].Assignments[0] as ShiftAssignment;
-                    if (shift.Toggles)
+                    if (priorShift.Toggles)
                     {
-                        foreach (var state in shift.ToggleStates)
+                        foreach (var state in priorShift.ToggleStates)
                         {
                             if ((int)state != targetShiftIndex)
                             {
@@ -829,9 +916,9 @@ namespace WiinUPro
                             }
                         }
                     }
-                    else if ((int)shift.TargetState != targetShiftIndex)
+                    else if ((int)priorShift.TargetState != targetShiftIndex)
                     {
-                        _assignments[(int)shift.TargetState].Remove(key);
+                        _assignments[(int)priorShift.TargetState].Remove(key);
                     }
                 }
 
@@ -843,20 +930,20 @@ namespace WiinUPro
             }
 
             // Shift assignments need to be the same on each ShiftIndex
-            if (win.Result.ShiftAssignment)
-            {
-                var shift = win.Result.Assignments[0] as ShiftAssignment;
+            var resultShift = win.Result.GetShift();
 
-                if (shift.Toggles)
+            if (resultShift != null)
+            {
+                if (resultShift.Toggles)
                 {
-                    foreach (var state in shift.ToggleStates)
+                    foreach (var state in resultShift.ToggleStates)
                     {
                         InputSet(state, key, win.Result);
                     }
                 }
                 else
                 {
-                    InputSet(shift.TargetState, key, win.Result);
+                    InputSet(resultShift.TargetState, key, win.Result);
                 }
             }
 
@@ -975,5 +1062,6 @@ namespace WiinUPro
         void ChangeLEDs(bool one, bool two, bool three, bool four);
         void SetInputTooltip(string inputName, string tooltip);
         void ClearTooltips();
+        void SetBattery(int percent);
     }
 }

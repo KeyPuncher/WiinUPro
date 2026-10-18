@@ -66,22 +66,23 @@ namespace WiinUPro
             _analogMenu.Items.Add(new Separator());
 
             // Create menu items for IR camera
+            // The Tag holds the enum name so the click handlers work in any language
             var irMode = new MenuItem { Header = Globalization.Translate("Context_IR_Mode") };
             {
-                irMode.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Basic") });
-                irMode.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Wide") });
-                irMode.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Full") });
-                irMode.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Off") });
+                irMode.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Basic"), Tag = "Basic" });
+                irMode.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Wide"), Tag = "Wide" });
+                irMode.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Full"), Tag = "Full" });
+                irMode.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Off"), Tag = "Off" });
             }
             foreach (var irModeItem in irMode.Items)
                 (irModeItem as MenuItem).Click += SetIRCamMode_Click;
             var irLevel = new MenuItem { Header = Globalization.Translate("Context_IR_Level") };
             {
-                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_1") });
-                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_2") });
-                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_3") });
-                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_4") });
-                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_5") });
+                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_1"), Tag = "Level1" });
+                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_2"), Tag = "Level2" });
+                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_3"), Tag = "Level3" });
+                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_4"), Tag = "Level4" });
+                irLevel.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Level_5"), Tag = "Level5" });
             }
             foreach (var irLevelItem in irLevel.Items)
                 (irLevelItem as MenuItem).Click += SetIRCamSensitivity_Click;
@@ -92,7 +93,18 @@ namespace WiinUPro
             var calibrationItem = new MenuItem { Header = Globalization.Translate("Context_Calibrate") };
             calibrationItem.Click += CalibrateInput_Click;
             _analogMenu.Items.Add(calibrationItem);
-            
+
+            // Add IR Sensor Bar position menu item
+            // The Tag holds the position so the click handlers work in any language
+            var irBar = new MenuItem { Header = Globalization.Translate("Context_IR_Bar") };
+            {
+                irBar.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Bar_Up"), Tag = "Up" });
+                irBar.Items.Add(new MenuItem { Header = Globalization.Translate("Context_IR_Bar_Down"), Tag = "Down" });
+            }
+            foreach (var irBarItem in irBar.Items)
+                (irBarItem as MenuItem).Click += SetIRSensorPosition_Click;
+            _analogMenu.Items.Add(irBar);
+
             ContextMenu = _analogMenu;
             ContextMenuService.SetIsEnabled(this, false);
         }
@@ -115,6 +127,11 @@ namespace WiinUPro
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+
+            if (_analogMenu.Items.Count > 14)
+            {
+                (_analogMenu.Items[14] as MenuItem).Visibility = Visibility.Collapsed;
+            }
         }
 
         protected void SetupAnalogMenuForDpad()
@@ -135,6 +152,11 @@ namespace WiinUPro
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
+
+            if (_analogMenu.Items.Count > 14)
+            {
+                (_analogMenu.Items[14] as MenuItem).Visibility = Visibility.Collapsed;
+            }
         }
 
         protected void SetupAnalogMenuForTrigger()
@@ -154,6 +176,11 @@ namespace WiinUPro
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Collapsed;
             (_analogMenu.Items[i++] as MenuItem).Visibility = Visibility.Visible;
+
+            if (_analogMenu.Items.Count > 14)
+            {
+                (_analogMenu.Items[14] as MenuItem).Visibility = Visibility.Collapsed;
+            }
         }
 
         protected void SetupAnalogMenuForIRCam()
@@ -426,6 +453,16 @@ namespace WiinUPro
         protected virtual void SetIRCamSensitivity_Click(object sender, RoutedEventArgs e)
         {
             // To be overriden in WiiControl.
+        }
+
+        protected virtual void SetIRSensorPosition_Click(object sender, RoutedEventArgs e)
+        {
+            // To be overriden in WiiControl.
+        }
+
+        public virtual void SetBattery(int percent)
+        {
+            // To be overriden when a controller's battery can be displayed.
         }
 
         protected virtual void CalibrateInput_Click(object sender, RoutedEventArgs e)

@@ -456,7 +456,8 @@
                     <TextBlock Text="Shift" FontWeight="Bold" Foreground="{StaticResource TextHeader}" Uid="Input_Shift"></TextBlock>
                 </TabItem.Header>
                 <Grid Background="Transparent" Loaded="Element_Loaded">
-                    <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,35,0,0" VerticalAlignment="Top" Height="212" Width="220"  Style="{StaticResource GroupBoxStyle}">
+                    <CheckBox x:Name="applyShiftCheck" Content="Apply Shift" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Style="{StaticResource CheckBoxStyle}" Click="ApplyShiftCheckChanged" Uid="Input_Apply_Shift"/>
+                    <GroupBox x:Name="shiftHoldGroup" Header="              " HorizontalAlignment="Left" Margin="41,60,0,0" VerticalAlignment="Top" Height="187" Width="220"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <RadioButton x:Name="radioNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="ShiftHold" IsChecked="True" Style="{StaticResource RadioButtonStyle}" Uid="Shift_None"/>
                             <RadioButton x:Name="radioRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}" Uid="Shift_1"/>
@@ -464,7 +465,7 @@
                             <RadioButton x:Name="radioGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" GroupName="ShiftHold" Style="{StaticResource RadioButtonStyle}" Uid="Shift_3"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox x:Name="shiftToggleGroup" Header="                 " HorizontalAlignment="Left" Margin="302,35,0,0" VerticalAlignment="Top" Height="212" Width="241" IsEnabled="False"  Style="{StaticResource GroupBoxStyle}">
+                    <GroupBox x:Name="shiftToggleGroup" Header="                 " HorizontalAlignment="Left" Margin="302,60,0,0" VerticalAlignment="Top" Height="187" Width="241" IsEnabled="False"  Style="{StaticResource GroupBoxStyle}">
                         <Grid>
                             <CheckBox x:Name="checkNone" Content="None" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}" Uid="Shift_None"/>
                             <CheckBox x:Name="checkRed" Content="Red" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}" Uid="Shift_1"/>
@@ -472,8 +473,8 @@
                             <CheckBox x:Name="checkGreen" Content="Green" HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" IsChecked="True" Style="{StaticResource CheckBoxStyle}" Uid="Shift_3"/>
                         </Grid>
                     </GroupBox>
-                    <RadioButton x:Name="radioHold" Content="Hold" HorizontalAlignment="Left" Margin="49,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsChecked="True" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}" Uid="Input_Shift_Hold"/>
-                    <RadioButton x:Name="radioToggle" Content="Toggle" HorizontalAlignment="Left" Margin="311,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}" Uid="Input_Shift_Toggle"/>
+                    <RadioButton x:Name="radioHold" Content="Hold" HorizontalAlignment="Left" Margin="49,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsChecked="True" IsEnabled="False" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}" Uid="Input_Shift_Hold"/>
+                    <RadioButton x:Name="radioToggle" Content="Toggle" HorizontalAlignment="Left" Margin="311,38,0,0" VerticalAlignment="Top" GroupName="ShiftType" IsEnabled="False" Click="ChangeShiftType" Style="{StaticResource RadioButtonStyle}" Uid="Input_Shift_Toggle"/>
                 </Grid>
             </TabItem>
         </TabControl>
